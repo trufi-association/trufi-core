@@ -30,3 +30,4 @@ dev_dependencies:
   mocktail: ^1.0.4
 
 flutter:
+  generate: true

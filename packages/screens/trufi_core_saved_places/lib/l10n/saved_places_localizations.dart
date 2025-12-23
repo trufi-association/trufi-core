@@ -47,12 +47,12 @@ import 'saved_places_localizations_es.dart';
 ///
 /// iOS applications define key application metadata, including supported
 /// locales, in an Info.plist file that is built into the application bundle.
-/// To configure the locales supported by your app, you'll need to edit this
+/// To configure the locales supported by your app, you’ll need to edit this
 /// file.
 ///
-/// First, open your project's ios/Runner.xcworkspace Xcode workspace file.
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
 /// Then, in the Project Navigator, open the Info.plist file under the Runner
-/// project's Runner folder.
+/// project’s Runner folder.
 ///
 /// Next, select the Information Property List item, select Add Item from the
 /// Editor menu, then select Localizations from the pop-up menu.
@@ -63,15 +63,20 @@ import 'saved_places_localizations_es.dart';
 /// be consistent with the languages listed in the SavedPlacesLocalizations.supportedLocales
 /// property.
 abstract class SavedPlacesLocalizations {
-  SavedPlacesLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  SavedPlacesLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static SavedPlacesLocalizations? of(BuildContext context) {
-    return Localizations.of<SavedPlacesLocalizations>(context, SavedPlacesLocalizations);
+    return Localizations.of<SavedPlacesLocalizations>(
+      context,
+      SavedPlacesLocalizations,
+    );
   }
 
-  static const LocalizationsDelegate<SavedPlacesLocalizations> delegate = _SavedPlacesLocalizationsDelegate();
+  static const LocalizationsDelegate<SavedPlacesLocalizations> delegate =
+      _SavedPlacesLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,242 +88,248 @@ abstract class SavedPlacesLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
-    Locale('es')
+    Locale('es'),
   ];
 
-  /// Menu title for saved places
+  /// No description provided for @menuSavedPlaces.
   ///
   /// In en, this message translates to:
   /// **'Your Places'**
   String get menuSavedPlaces;
 
-  /// Screen title for saved places
+  /// No description provided for @yourPlaces.
   ///
   /// In en, this message translates to:
   /// **'Your Places'**
   String get yourPlaces;
 
-  /// Home location label
+  /// No description provided for @home.
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
 
-  /// Work location label
+  /// No description provided for @work.
   ///
   /// In en, this message translates to:
   /// **'Work'**
   String get work;
 
-  /// Favorites section title
+  /// No description provided for @favorites.
   ///
   /// In en, this message translates to:
   /// **'Favorites'**
   String get favorites;
 
-  /// Custom places section title
+  /// No description provided for @customPlaces.
   ///
   /// In en, this message translates to:
-  /// **'Custom Places'**
+  /// **'Favorites'**
   String get customPlaces;
 
-  /// Recent places section title
+  /// No description provided for @recentPlaces.
   ///
   /// In en, this message translates to:
   /// **'Recent'**
   String get recentPlaces;
 
-  /// Default places section title
+  /// No description provided for @defaultPlaces.
   ///
   /// In en, this message translates to:
   /// **'Default Places'**
   String get defaultPlaces;
 
-  /// Set home address prompt
+  /// No description provided for @setHome.
   ///
   /// In en, this message translates to:
   /// **'Set home address'**
   String get setHome;
 
-  /// Set work address prompt
+  /// No description provided for @setWork.
   ///
   /// In en, this message translates to:
   /// **'Set work address'**
   String get setWork;
 
-  /// Edit place label
+  /// No description provided for @editPlace.
   ///
   /// In en, this message translates to:
   /// **'Edit place'**
   String get editPlace;
 
-  /// Remove place label
+  /// No description provided for @removePlace.
   ///
   /// In en, this message translates to:
   /// **'Remove place'**
   String get removePlace;
 
-  /// Remove place confirmation message
+  /// No description provided for @removePlaceConfirmation.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this place?'**
   String get removePlaceConfirmation;
 
-  /// Cancel button text
+  /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
 
-  /// Remove button text
+  /// No description provided for @remove.
   ///
   /// In en, this message translates to:
   /// **'Remove'**
   String get remove;
 
-  /// Save button text
+  /// No description provided for @save.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
 
-  /// Name field label
+  /// No description provided for @name.
   ///
   /// In en, this message translates to:
   /// **'Name'**
   String get name;
 
-  /// Enter name placeholder
+  /// No description provided for @enterName.
   ///
   /// In en, this message translates to:
   /// **'Enter name'**
   String get enterName;
 
-  /// Name required validation message
+  /// No description provided for @nameRequired.
   ///
   /// In en, this message translates to:
   /// **'Name is required'**
   String get nameRequired;
 
-  /// Select icon title
+  /// No description provided for @selectIcon.
   ///
   /// In en, this message translates to:
   /// **'Select Icon'**
   String get selectIcon;
 
-  /// Clear history button text
+  /// No description provided for @clearHistory.
   ///
   /// In en, this message translates to:
   /// **'Clear'**
   String get clearHistory;
 
-  /// No places saved message
+  /// No description provided for @noPlacesSaved.
   ///
   /// In en, this message translates to:
   /// **'No places saved yet'**
   String get noPlacesSaved;
 
-  /// Add place button text
+  /// No description provided for @addPlace.
   ///
   /// In en, this message translates to:
   /// **'Add Place'**
   String get addPlace;
 
-  /// Choose on map option
+  /// No description provided for @chooseOnMap.
   ///
   /// In en, this message translates to:
   /// **'Choose on map'**
   String get chooseOnMap;
 
-  /// Search location placeholder
+  /// No description provided for @searchLocation.
   ///
   /// In en, this message translates to:
   /// **'Search location'**
   String get searchLocation;
 
-  /// Type label
+  /// No description provided for @type.
   ///
   /// In en, this message translates to:
   /// **'Type'**
   String get type;
 
-  /// Location label
+  /// No description provided for @location.
   ///
   /// In en, this message translates to:
   /// **'Location'**
   String get location;
 
-  /// No location selected message
+  /// No description provided for @noLocationSelected.
   ///
   /// In en, this message translates to:
   /// **'No location selected'**
   String get noLocationSelected;
 
-  /// Location required validation message
+  /// No description provided for @locationRequired.
   ///
   /// In en, this message translates to:
   /// **'Location is required'**
   String get locationRequired;
 
-  /// Change button text
-  ///
-  /// In en, this message translates to:
-  /// **'Change'**
-  String get change;
-
-  /// Location selected message
+  /// No description provided for @locationSelected.
   ///
   /// In en, this message translates to:
   /// **'Location selected'**
   String get locationSelected;
 
-  /// Tap to select location hint
+  /// No description provided for @tapToSelectLocation.
   ///
   /// In en, this message translates to:
   /// **'Tap to select on map'**
   String get tapToSelectLocation;
+
+  /// No description provided for @change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get change;
 }
 
-class _SavedPlacesLocalizationsDelegate extends LocalizationsDelegate<SavedPlacesLocalizations> {
+class _SavedPlacesLocalizationsDelegate
+    extends LocalizationsDelegate<SavedPlacesLocalizations> {
   const _SavedPlacesLocalizationsDelegate();
 
   @override
   Future<SavedPlacesLocalizations> load(Locale locale) {
-    return SynchronousFuture<SavedPlacesLocalizations>(lookupSavedPlacesLocalizations(locale));
+    return SynchronousFuture<SavedPlacesLocalizations>(
+      lookupSavedPlacesLocalizations(locale),
+    );
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_SavedPlacesLocalizationsDelegate old) => false;
 }
 
 SavedPlacesLocalizations lookupSavedPlacesLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return SavedPlacesLocalizationsDe();
-    case 'en': return SavedPlacesLocalizationsEn();
-    case 'es': return SavedPlacesLocalizationsEs();
+    case 'de':
+      return SavedPlacesLocalizationsDe();
+    case 'en':
+      return SavedPlacesLocalizationsEn();
+    case 'es':
+      return SavedPlacesLocalizationsEs();
   }
 
   throw FlutterError(
     'SavedPlacesLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

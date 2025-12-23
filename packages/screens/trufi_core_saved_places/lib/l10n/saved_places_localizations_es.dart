@@ -1,8 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'saved_places_localizations.dart';
 
-/// The translations for Spanish (`es`).
+// ignore_for_file: type=lint
+
+/// The translations for Spanish Castilian (`es`).
 class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
-  SavedPlacesLocalizationsEs([super.locale = 'es']);
+  SavedPlacesLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
   String get menuSavedPlaces => 'Tus Lugares';
@@ -41,7 +45,8 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
   String get removePlace => 'Eliminar lugar';
 
   @override
-  String get removePlaceConfirmation => '¿Estás seguro de que quieres eliminar este lugar?';
+  String get removePlaceConfirmation =>
+      '¿Estás seguro de que quieres eliminar este lugar?';
 
   @override
   String get cancel => 'Cancelar';
@@ -92,11 +97,11 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
   String get locationRequired => 'La ubicación es requerida';
 
   @override
-  String get change => 'Cambiar';
-
-  @override
   String get locationSelected => 'Ubicación seleccionada';
 
   @override
   String get tapToSelectLocation => 'Toca para seleccionar en el mapa';
+
+  @override
+  String get change => 'Cambiar';
 }

@@ -1,8 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'saved_places_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class SavedPlacesLocalizationsEn extends SavedPlacesLocalizations {
-  SavedPlacesLocalizationsEn([super.locale = 'en']);
+  SavedPlacesLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
   String get menuSavedPlaces => 'Your Places';
@@ -41,7 +45,8 @@ class SavedPlacesLocalizationsEn extends SavedPlacesLocalizations {
   String get removePlace => 'Remove place';
 
   @override
-  String get removePlaceConfirmation => 'Are you sure you want to remove this place?';
+  String get removePlaceConfirmation =>
+      'Are you sure you want to remove this place?';
 
   @override
   String get cancel => 'Cancel';
@@ -92,11 +97,11 @@ class SavedPlacesLocalizationsEn extends SavedPlacesLocalizations {
   String get locationRequired => 'Location is required';
 
   @override
-  String get change => 'Change';
-
-  @override
   String get locationSelected => 'Location selected';
 
   @override
   String get tapToSelectLocation => 'Tap to select on map';
+
+  @override
+  String get change => 'Change';
 }
