@@ -1,0 +1,6 @@
+arb-dir: lib/l10n
+template-arb-file: core_en.arb
+output-dir: src/l10n
+output-localization-file: core_localizations.dart
+output-class: CoreLocalizations
+nullable-getter: false
