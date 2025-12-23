@@ -1,4 +1,2 @@
-library trufi_core_settings;
-
-export 'src/settings_screen.dart';
-export 'src/l10n/settings_localizations.dart';
+export 'settings_screen.dart';
+export './l10n/settings_localizations.dart';
