@@ -68,11 +68,11 @@ abstract class FeedbackLocalizations {
 
   final String localeName;
 
-  static FeedbackLocalizations? of(BuildContext context) {
+  static FeedbackLocalizations of(BuildContext context) {
     return Localizations.of<FeedbackLocalizations>(
       context,
       FeedbackLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<FeedbackLocalizations> delegate =

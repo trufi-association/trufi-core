@@ -68,8 +68,8 @@ abstract class FaresLocalizations {
 
   final String localeName;
 
-  static FaresLocalizations? of(BuildContext context) {
-    return Localizations.of<FaresLocalizations>(context, FaresLocalizations);
+  static FaresLocalizations of(BuildContext context) {
+    return Localizations.of<FaresLocalizations>(context, FaresLocalizations)!;
   }
 
   static const LocalizationsDelegate<FaresLocalizations> delegate =
