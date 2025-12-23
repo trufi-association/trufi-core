@@ -57,6 +57,3 @@ export 'src/saved_places/repository/search_locations_repository_impl.dart';
 
 // Saved Places - Cubit
 export 'src/saved_places/cubit/search_locations_cubit.dart';
-
-// Saved Places - Translations
-export 'src/saved_places/translations/saved_places_localizations.dart';
