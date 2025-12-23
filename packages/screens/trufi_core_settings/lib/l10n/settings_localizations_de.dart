@@ -21,6 +21,9 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get settingsTheme => 'Design';
 
   @override
+  String get settingsSelectTheme => 'Wählen Sie Ihr bevorzugtes Design:';
+
+  @override
   String get settingsThemeLight => 'Heller Modus';
 
   @override
@@ -28,9 +31,6 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
 
   @override
   String get settingsThemeSystem => 'Systemstandard';
-
-  @override
-  String get settingsSelectTheme => 'Wählen Sie Ihr bevorzugtes Design:';
 
   @override
   String get settingsMap => 'Karte';

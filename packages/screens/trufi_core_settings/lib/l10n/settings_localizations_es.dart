@@ -21,6 +21,9 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get settingsTheme => 'Tema';
 
   @override
+  String get settingsSelectTheme => 'Selecciona tu tema preferido:';
+
+  @override
   String get settingsThemeLight => 'Modo Claro';
 
   @override
@@ -28,9 +31,6 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
 
   @override
   String get settingsThemeSystem => 'Predeterminado del Sistema';
-
-  @override
-  String get settingsSelectTheme => 'Selecciona tu tema preferido:';
 
   @override
   String get settingsMap => 'Mapa';
