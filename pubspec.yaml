@@ -1,7 +1,6 @@
 name: trufi_core_mono
 environment:
   sdk: ^3.10.0
-  flutter: ">=3.0.0 <4.0.0"
 
 workspace:
   - apps/example
@@ -37,15 +36,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 melos:
-
-  command:
-    bootstrap:
-      runPubGetInParallel: true
-      environment:
-        sdk: ^3.10.0
-        flutter: ">=3.0.0 <4.0.0"
-      dev_dependencies:
-        flutter_lints: ^6.0.0
   scripts:
     analyze:
       run: flutter analyze --no-fatal-infos
@@ -56,8 +46,24 @@ melos:
       description: Format all Dart files
 
     test:
-      run: flutter test
+      exec: flutter test
       description: Run tests for all packages
+      packageFilters:
+        dirExists: test
+
+    build:
+      name: Generate Build files
+      run: dart run build_runner build --delete-conflicting-outputs
+      exec:
+        concurrency: 6
+      packageFilters:
+        dependsOn: build_runner
+
+    l10n:
+      name: Generate Translation files
+      exec: flutter gen-l10n
+      packageFilters:
+        dependsOn: flutter_localizations
 
     gen-l10n:
       run: |
