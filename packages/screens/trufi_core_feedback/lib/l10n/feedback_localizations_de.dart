@@ -1,10 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'feedback_localizations.dart';
 
 // ignore_for_file: type=lint
 
 /// The translations for German (`de`).
 class FeedbackLocalizationsDe extends FeedbackLocalizations {
-  FeedbackLocalizationsDe([super.locale = 'de']);
+  FeedbackLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
   String get menuFeedback => 'Feedback';
@@ -13,7 +15,8 @@ class FeedbackLocalizationsDe extends FeedbackLocalizations {
   String get feedbackTitle => 'Wir freuen uns über Ihr Feedback!';
 
   @override
-  String get feedbackContent => 'Ihr Feedback hilft uns, die App zu verbessern und bessere Informationen zum öffentlichen Nahverkehr für alle in der Stadt bereitzustellen.';
+  String get feedbackContent =>
+      'Ihr Feedback hilft uns, die App zu verbessern und bessere Informationen zum öffentlichen Nahverkehr für alle in der Stadt bereitzustellen.';
 
   @override
   String get feedbackWhatWeWant => 'Worüber wir gerne hören würden';
