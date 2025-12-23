@@ -105,12 +105,12 @@ class _SavedPlacesScreenContent extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title ?? localization?.yourPlaces ?? 'Your Places'),
+        title: Text(title ?? localization.yourPlaces),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => _showAddPlaceDialog(context),
-            tooltip: localization?.addPlace ?? 'Add Place',
+            tooltip: localization.addPlace,
           ),
         ],
       ),
@@ -161,15 +161,12 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(localization?.removePlace ?? 'Remove Place'),
-        content: Text(
-          localization?.removePlaceConfirmation ??
-              'Are you sure you want to remove "${place.name}"?',
-        ),
+        title: Text(localization.removePlace),
+        content: Text(localization.removePlaceConfirmation(place.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(localization?.cancel ?? 'Cancel'),
+            child: Text(localization.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -177,8 +174,10 @@ class _SavedPlacesScreenContent extends StatelessWidget {
               Navigator.of(dialogContext).pop();
             },
             child: Text(
-              localization?.remove ?? 'Remove',
-              style: TextStyle(color: Theme.of(dialogContext).colorScheme.error),
+              localization.remove,
+              style: TextStyle(
+                color: Theme.of(dialogContext).colorScheme.error,
+              ),
             ),
           ),
         ],

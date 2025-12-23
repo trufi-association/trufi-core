@@ -41,6 +41,12 @@ melos:
       run: flutter analyze --no-fatal-infos
       description: Run Flutter analyze on all packages
 
+    ci:analyze:
+      run: flutter analyze --no-fatal-infos --no-fatal-warnings 
+      exec:
+        concurrency: 1
+
+
     format:
       run: dart format .
       description: Format all Dart files

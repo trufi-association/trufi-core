@@ -12,7 +12,16 @@
   "setWork": "Set work address",
   "editPlace": "Edit place",
   "removePlace": "Remove place",
-  "removePlaceConfirmation": "Are you sure you want to remove this place?",
+  "removePlaceConfirmation": "Are you sure you want to remove {placeName}?",
+  "@removePlaceConfirmation": {
+    "description": "Confirmation message shown when a user tries to delete a place.",
+    "placeholders": {
+      "placeName": {
+        "type": "String",
+        "example": "Central Park"
+      }
+    }
+  },
   "cancel": "Cancel",
   "remove": "Remove",
   "save": "Save",

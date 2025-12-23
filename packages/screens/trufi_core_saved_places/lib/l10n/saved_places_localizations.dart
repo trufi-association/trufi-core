@@ -175,11 +175,11 @@ abstract class SavedPlacesLocalizations {
   /// **'Remove place'**
   String get removePlace;
 
-  /// No description provided for @removePlaceConfirmation.
+  /// Confirmation message shown when a user tries to delete a place.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to remove this place?'**
-  String get removePlaceConfirmation;
+  /// **'Are you sure you want to remove {placeName}?'**
+  String removePlaceConfirmation(String placeName);
 
   /// No description provided for @cancel.
   ///

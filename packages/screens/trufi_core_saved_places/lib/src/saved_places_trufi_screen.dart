@@ -21,10 +21,7 @@ class SavedPlacesConfig {
   /// Callback when a place is selected
   final void Function(SavedPlace place)? onPlaceSelected;
 
-  const SavedPlacesConfig({
-    this.repository,
-    this.onPlaceSelected,
-  });
+  const SavedPlacesConfig({this.repository, this.onPlaceSelected});
 }
 
 /// Saved Places screen module for TrufiApp integration
@@ -39,7 +36,7 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
   }
 
   SavedPlacesTrufiScreen({SavedPlacesConfig? config})
-      : config = config ?? const SavedPlacesConfig() {
+    : config = config ?? const SavedPlacesConfig() {
     _repository = this.config.repository ?? SavedPlacesRepositoryImpl();
   }
 
@@ -55,31 +52,30 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        ...SavedPlacesLocalizations.localizationsDelegates,
-      ];
+    ...SavedPlacesLocalizations.localizationsDelegates,
+  ];
 
   @override
-  List<Locale> get supportedLocales => SavedPlacesLocalizations.supportedLocales;
+  List<Locale> get supportedLocales =>
+      SavedPlacesLocalizations.supportedLocales;
 
   @override
   List<SingleChildWidget> get providers => [
-        BlocProvider<SavedPlacesCubit>(
-          create: (_) => SavedPlacesCubit(repository: _repository)..initialize(),
-        ),
-      ];
+    BlocProvider<SavedPlacesCubit>(
+      create: (_) => SavedPlacesCubit(repository: _repository)..initialize(),
+    ),
+  ];
 
   @override
-  ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.bookmark,
-        order: 50,
-      );
+  ScreenMenuItem? get menuItem =>
+      const ScreenMenuItem(icon: Icons.bookmark, order: 50);
 
   @override
   bool get hasOwnAppBar => true;
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return SavedPlacesLocalizations.of(context)?.menuSavedPlaces ?? 'Your Places';
+    return SavedPlacesLocalizations.of(context).menuSavedPlaces;
   }
 
   @override
@@ -96,9 +92,7 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
 class _SavedPlacesScreenWidget extends StatelessWidget {
   final SavedPlacesConfig config;
 
-  const _SavedPlacesScreenWidget({
-    required this.config,
-  });
+  const _SavedPlacesScreenWidget({required this.config});
 
   Future<({double latitude, double longitude})?> _openMapPicker(
     BuildContext context, {
@@ -112,11 +106,11 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => ChooseOnMapScreen(
           configuration: ChooseOnMapConfiguration(
-            title: SavedPlacesLocalizations.of(context)?.chooseOnMap ?? 'Choose on Map',
+            title: SavedPlacesLocalizations.of(context).chooseOnMap,
             initialLatitude: initialLatitude ?? defaultCenter.latitude,
             initialLongitude: initialLongitude ?? defaultCenter.longitude,
             initialZoom: 15,
-            confirmButtonText: SavedPlacesLocalizations.of(context)?.save ?? 'Confirm Location',
+            confirmButtonText: SavedPlacesLocalizations.of(context).save,
           ),
         ),
       ),
@@ -202,14 +196,14 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                localization?.removePlace ?? 'Remove Place',
+                localization.removePlace,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                '${localization?.removePlaceConfirmation ?? "Are you sure you want to remove"} "${place.name}"?',
+                '${localization.removePlaceConfirmation} "${place.name}"?',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
@@ -227,7 +221,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(localization?.cancel ?? 'Cancel'),
+                      child: Text(localization.cancel),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -245,7 +239,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(localization?.remove ?? 'Remove'),
+                      child: Text(localization.remove),
                     ),
                   ),
                 ],
@@ -279,7 +273,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
           children: [
             // Modern header
             _SavedPlacesHeader(
-              title: localization?.yourPlaces ?? 'Your Places',
+              title: localization.yourPlaces,
               onMenuPressed: () => _tryOpenDrawer(context),
               onAddPressed: () {
                 HapticFeedback.lightImpact();
@@ -291,7 +285,8 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
               child: SavedPlacesList(
                 onPlaceTap: config.onPlaceSelected,
                 onPlaceEdit: (place) => _showEditPlaceDialog(context, place),
-                onPlaceDelete: (place) => _showDeleteConfirmation(context, place),
+                onPlaceDelete: (place) =>
+                    _showDeleteConfirmation(context, place),
               ),
             ),
           ],

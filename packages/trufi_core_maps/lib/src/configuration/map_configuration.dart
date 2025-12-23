@@ -52,5 +52,5 @@ class MapConfiguration {
 
 /// Cubit for managing map configuration state.
 class MapConfigurationCubit extends Cubit<MapConfiguration> {
-  MapConfigurationCubit(MapConfiguration initialState) : super(initialState);
+  MapConfigurationCubit(super.initialState);
 }

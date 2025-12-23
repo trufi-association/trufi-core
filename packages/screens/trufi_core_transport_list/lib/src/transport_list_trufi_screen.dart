@@ -43,11 +43,12 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        ...TransportListLocalizations.localizationsDelegates,
-      ];
+    ...TransportListLocalizations.localizationsDelegates,
+  ];
 
   @override
-  List<Locale> get supportedLocales => TransportListLocalizations.supportedLocales;
+  List<Locale> get supportedLocales =>
+      TransportListLocalizations.supportedLocales;
 
   @override
   List<SingleChildWidget> get providers => [];
@@ -56,15 +57,12 @@ class TransportListTrufiScreen extends TrufiScreen {
   bool get hasOwnAppBar => true;
 
   @override
-  ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.directions_bus,
-        order: 1,
-      );
+  ScreenMenuItem? get menuItem =>
+      const ScreenMenuItem(icon: Icons.directions_bus, order: 1);
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return TransportListLocalizations.of(context)?.menuTransportList ??
-        'Routes';
+    return TransportListLocalizations.of(context).menuTransportList;
   }
 }
 
@@ -113,13 +111,17 @@ class _TransportListScreenWidgetState
           context,
           routeCode: route.code,
           getRouteDetails: _dataProvider.getRouteDetails,
-          mapBuilder: (context, routeDetails, registerMapMoveCallback,
-                  registerStopSelectionCallback) =>
-              _RouteMapView(
-            route: routeDetails,
-            registerMapMoveCallback: registerMapMoveCallback,
-            registerStopSelectionCallback: registerStopSelectionCallback,
-          ),
+          mapBuilder:
+              (
+                context,
+                routeDetails,
+                registerMapMoveCallback,
+                registerStopSelectionCallback,
+              ) => _RouteMapView(
+                route: routeDetails,
+                registerMapMoveCallback: registerMapMoveCallback,
+                registerStopSelectionCallback: registerStopSelectionCallback,
+              ),
         );
       },
     );
@@ -162,10 +164,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
 
   void _moveToLocation(double latitude, double longitude) {
     _mapController?.setCameraPosition(
-      TrufiCameraPosition(
-        target: LatLng(latitude, longitude),
-        zoom: 16,
-      ),
+      TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
     );
   }
 
@@ -209,8 +208,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
     _routeLayer!.setRoute(route);
 
     // Fit camera to route bounds
-    final points =
-        route.geometry!.map((p) => LatLng(p.latitude, p.longitude)).toList();
+    final points = route.geometry!
+        .map((p) => LatLng(p.latitude, p.longitude))
+        .toList();
 
     if (points.length > 1) {
       _fitCameraLayer?.setFitPoints(points);
@@ -224,10 +224,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
   }
 
   Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
-    return engine.buildMap(
-      controller: _mapController!,
-      isDarkMode: isDarkMode,
-    );
+    return engine.buildMap(controller: _mapController!, isDarkMode: isDarkMode);
   }
 
   @override
@@ -258,10 +255,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
         return Stack(
           children: [
             // Map (full area)
-            _buildMap(
-              mapEngineManager.currentEngine,
-              isDarkMode: isDarkMode,
-            ),
+            _buildMap(mapEngineManager.currentEngine, isDarkMode: isDarkMode),
 
             // Map controls (right side, below top bar)
             Positioned(
@@ -295,12 +289,16 @@ class _RouteMapViewState extends State<_RouteMapView> {
                           scale: outOfFocus ? 1.0 : 0.8,
                           duration: const Duration(milliseconds: 200),
                           child: Material(
-                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.95),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surface.withValues(alpha: 0.95),
                             borderRadius: BorderRadius.circular(12),
                             elevation: 2,
                             shadowColor: Colors.black26,
                             child: InkWell(
-                              onTap: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                              onTap: outOfFocus
+                                  ? _fitCameraLayer!.reFitCamera
+                                  : null,
                               borderRadius: BorderRadius.circular(12),
                               child: Container(
                                 width: 44,
@@ -309,7 +307,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
                                 child: Icon(
                                   Icons.crop_free_rounded,
                                   size: 22,
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -350,16 +350,19 @@ class _RouteLayer extends TrufiLayer {
     if (route.geometry == null || route.geometry!.isEmpty) return;
 
     final routeColor = route.backgroundColor ?? Colors.blue;
-    final points =
-        route.geometry!.map((p) => LatLng(p.latitude, p.longitude)).toList();
+    final points = route.geometry!
+        .map((p) => LatLng(p.latitude, p.longitude))
+        .toList();
 
     // Add route line
-    addLine(TrufiLine(
-      id: 'route-line',
-      position: points,
-      color: routeColor,
-      lineWidth: 5,
-    ));
+    addLine(
+      TrufiLine(
+        id: 'route-line',
+        position: points,
+        color: routeColor,
+        lineWidth: 5,
+      ),
+    );
 
     // Add stop markers
     _updateStopMarkers(route);
@@ -392,54 +395,62 @@ class _RouteLayer extends TrufiLayer {
       // Skip origin, destination, and selected - they have special markers
       if (isFirst || isLast || isSelected) continue;
 
-      addMarker(TrufiMarker(
-        id: 'stop-$i',
-        position: LatLng(stop.latitude, stop.longitude),
-        widget: _StopMarker(color: routeColor),
-        size: const Size(12, 12),
-        layerLevel: 1,
-        imageKey: intermediateImageKey,
-      ));
+      addMarker(
+        TrufiMarker(
+          id: 'stop-$i',
+          position: LatLng(stop.latitude, stop.longitude),
+          widget: _StopMarker(color: routeColor),
+          size: const Size(12, 12),
+          layerLevel: 1,
+          imageKey: intermediateImageKey,
+        ),
+      );
     }
 
     // Add origin marker (green circle) - unless it's selected
     final firstStop = stops.first;
     if (_selectedStopIndex != 0) {
-      addMarker(TrufiMarker(
-        id: 'origin-marker',
-        position: LatLng(firstStop.latitude, firstStop.longitude),
-        widget: const _OriginMarker(),
-        size: const Size(24, 24),
-        layerLevel: 3,
-        imageKey: 'origin_marker',
-      ));
+      addMarker(
+        TrufiMarker(
+          id: 'origin-marker',
+          position: LatLng(firstStop.latitude, firstStop.longitude),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
+          layerLevel: 3,
+          imageKey: 'origin_marker',
+        ),
+      );
     }
 
     // Add destination marker (red pin) - unless it's selected
     final lastStop = stops.last;
     if (_selectedStopIndex != stops.length - 1) {
-      addMarker(TrufiMarker(
-        id: 'destination-marker',
-        position: LatLng(lastStop.latitude, lastStop.longitude),
-        widget: const _DestinationMarker(),
-        size: const Size(32, 32),
-        alignment: Alignment.topCenter,
-        layerLevel: 3,
-        imageKey: 'destination_marker',
-      ));
+      addMarker(
+        TrufiMarker(
+          id: 'destination-marker',
+          position: LatLng(lastStop.latitude, lastStop.longitude),
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
+          alignment: Alignment.topCenter,
+          layerLevel: 3,
+          imageKey: 'destination_marker',
+        ),
+      );
     }
 
     // Add selected stop marker with higher priority
     if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
       final selectedStop = stops[_selectedStopIndex!];
-      addMarker(TrufiMarker(
-        id: 'selected-stop',
-        position: LatLng(selectedStop.latitude, selectedStop.longitude),
-        widget: _SelectedStopMarker(color: routeColor),
-        size: const Size(24, 24),
-        layerLevel: 10,
-        imageKey: selectedImageKey,
-      ));
+      addMarker(
+        TrufiMarker(
+          id: 'selected-stop',
+          position: LatLng(selectedStop.latitude, selectedStop.longitude),
+          widget: _SelectedStopMarker(color: routeColor),
+          size: const Size(24, 24),
+          layerLevel: 10,
+          imageKey: selectedImageKey,
+        ),
+      );
     }
   }
 }
@@ -458,10 +469,7 @@ class _StopMarker extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: color,
-          width: 2,
-        ),
+        border: Border.all(color: color, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.25),
@@ -514,11 +522,7 @@ class _DestinationMarker extends StatelessWidget {
       color: _color,
       size: 32,
       shadows: [
-        Shadow(
-          color: Colors.black38,
-          blurRadius: 4,
-          offset: Offset(0, 2),
-        ),
+        Shadow(color: Colors.black38, blurRadius: 4, offset: Offset(0, 2)),
       ],
     );
   }
@@ -538,10 +542,7 @@ class _SelectedStopMarker extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-          width: 3,
-        ),
+        border: Border.all(color: Colors.white, width: 3),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),
