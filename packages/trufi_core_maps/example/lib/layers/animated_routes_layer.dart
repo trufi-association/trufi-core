@@ -100,7 +100,7 @@ class AnimatedRoutesLayer extends TrufiLayer {
           size: const Size(24, 24),
           alignment: Alignment.center,
           layerLevel: layerLevel + 1,
-          imageKey: 'route_start_${color.toARGB32()}',
+          imageCacheKey: 'route_start_${color.toARGB32()}',
         ),
       );
 
@@ -113,7 +113,7 @@ class AnimatedRoutesLayer extends TrufiLayer {
           size: const Size(24, 24),
           alignment: Alignment.center,
           layerLevel: layerLevel + 1,
-          imageKey: 'route_end_${color.toARGB32()}',
+          imageCacheKey: 'route_end_${color.toARGB32()}',
         ),
       );
     }

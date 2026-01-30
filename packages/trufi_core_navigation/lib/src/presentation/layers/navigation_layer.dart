@@ -66,7 +66,7 @@ class NavigationLayer extends TrufiLayer {
       widget: _UserLocationMarker(isGpsWeak: state.isGpsWeak),
       size: const Size(48, 48),
       layerLevel: 100,
-      imageKey: 'nav_user_location_${state.isGpsWeak}',
+      imageCacheKey: 'nav_user_location_${state.isGpsWeak}',
     ));
   }
 
@@ -243,7 +243,7 @@ class NavigationLayer extends TrufiLayer {
           widget: const _OriginMarkerWidget(),
           size: const Size(24, 24),
           layerLevel: 3,
-          imageKey: 'nav_origin_marker',
+          imageCacheKey: 'nav_origin_marker',
         ));
       }
     }
@@ -259,7 +259,7 @@ class NavigationLayer extends TrufiLayer {
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
           layerLevel: 3,
-          imageKey: 'nav_destination_marker',
+          imageCacheKey: 'nav_destination_marker',
         ));
       }
     }

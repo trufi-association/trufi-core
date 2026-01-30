@@ -97,7 +97,7 @@ class POICategoryLayer extends TrufiLayer {
               position: poi.position,
               size: const Size(30, 30),
               layerLevel: layerLevel,
-              imageKey: 'poi_${category.name}',
+              imageCacheKey: 'poi_${category.name}',
               widget: _buildMarkerWidget(poi),
             ))
         .toList();

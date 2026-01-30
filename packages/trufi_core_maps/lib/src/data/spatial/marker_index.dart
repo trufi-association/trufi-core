@@ -107,9 +107,26 @@ class MarkerIndex {
     }
   }
 
+  /// Bulk upsert markers with automatic optimization.
+  /// If adding many markers (>25% of current size), rebuilds the entire index
+  /// which is more efficient than individual inserts (O(n log n) vs O(n²)).
   void upsertMany(Iterable<TrufiMarker> markers) {
-    for (final m in markers) {
-      upsert(m);
+    final list = markers.toList();
+    if (list.isEmpty) return;
+
+    // If adding many markers relative to current size, rebuild is more efficient
+    // Individual upsert is O(n) per item due to list insertion
+    // Full rebuild is O(n log n) total
+    final threshold = (_byLat.length / 4).clamp(10, 100).toInt();
+    if (list.length > threshold) {
+      for (final m in list) {
+        _byId[m.id] = m;
+      }
+      rebuild(_byId.values.toList());
+    } else {
+      for (final m in list) {
+        upsert(m);
+      }
     }
   }
 
@@ -117,6 +134,26 @@ class MarkerIndex {
     final m = _byId.remove(markerId);
     if (m == null) return;
     _removeFromByLat(markerId, m.position.latitude);
+  }
+
+  /// Bulk remove markers by ID with automatic optimization.
+  /// If removing many markers (>25% of current size), rebuilds the entire index.
+  void removeMany(Iterable<String> markerIds) {
+    final ids = markerIds.toSet();
+    if (ids.isEmpty) return;
+
+    final threshold = (_byLat.length / 4).clamp(10, 100).toInt();
+    if (ids.length > threshold) {
+      // Bulk removal: faster to filter and rebuild
+      for (final id in ids) {
+        _byId.remove(id);
+      }
+      rebuild(_byId.values.toList());
+    } else {
+      for (final id in ids) {
+        remove(id);
+      }
+    }
   }
 
   List<TrufiMarker> all() => _byId.values.toList(growable: false);

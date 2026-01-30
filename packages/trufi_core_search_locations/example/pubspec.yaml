@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   latlong2: ^0.9.1
-  provider: ^6.1.2
+  provider: ^6.1.5+1
   trufi_core_search_locations:
     path: ../
   trufi_core_maps:

@@ -16,7 +16,7 @@ class TrufiMarker {
     this.size = const Size(30, 30),
     this.rotation = 0,
     this.alignment = Alignment.center,
-    this.imageKey,
+    this.imageCacheKey,
     this.metersRadius,
   });
 
@@ -59,7 +59,7 @@ class TrufiMarker {
   ///   imageKey: 'vehicle_${Colors.blue.toARGB32()}_${Icons.bus.codePoint}',
   /// )
   /// ```
-  final String? imageKey;
+  final String? imageCacheKey;
 
   TrufiMarker copyWith({
     String? id,
@@ -71,7 +71,7 @@ class TrufiMarker {
     Size? size,
     double? rotation,
     Alignment? alignment,
-    String? imageKey,
+    String? imageCacheKey,
     double? metersRadius,
   }) {
     return TrufiMarker(
@@ -84,7 +84,7 @@ class TrufiMarker {
       size: size ?? this.size,
       rotation: rotation ?? this.rotation,
       alignment: alignment ?? this.alignment,
-      imageKey: imageKey ?? this.imageKey,
+      imageCacheKey: imageCacheKey ?? this.imageCacheKey,
       metersRadius: metersRadius ?? this.metersRadius,
     );
   }

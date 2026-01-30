@@ -381,7 +381,7 @@ class _RouteLayer extends TrufiLayer {
     if (stops.isEmpty) return;
 
     final routeColor = route.backgroundColor ?? Colors.blue;
-    // Create stable imageKeys based on visual properties (color + isTerminal + isSelected)
+    // Create stable imageCacheKeys based on visual properties (color + isTerminal + isSelected)
     final colorHex = routeColor.toARGB32().toRadixString(16);
     final intermediateImageKey = 'stop_intermediate_$colorHex';
     final selectedImageKey = 'stop_selected_$colorHex';
@@ -402,7 +402,7 @@ class _RouteLayer extends TrufiLayer {
           widget: _StopMarker(color: routeColor),
           size: const Size(12, 12),
           layerLevel: 1,
-          imageKey: intermediateImageKey,
+          imageCacheKey: intermediateImageKey,
         ),
       );
     }
@@ -417,7 +417,7 @@ class _RouteLayer extends TrufiLayer {
           widget: const _OriginMarker(),
           size: const Size(24, 24),
           layerLevel: 3,
-          imageKey: 'origin_marker',
+          imageCacheKey: 'origin_marker',
         ),
       );
     }
@@ -433,7 +433,7 @@ class _RouteLayer extends TrufiLayer {
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
           layerLevel: 3,
-          imageKey: 'destination_marker',
+          imageCacheKey: 'destination_marker',
         ),
       );
     }
@@ -448,7 +448,7 @@ class _RouteLayer extends TrufiLayer {
           widget: _SelectedStopMarker(color: routeColor),
           size: const Size(24, 24),
           layerLevel: 10,
-          imageKey: selectedImageKey,
+          imageCacheKey: selectedImageKey,
         ),
       );
     }
