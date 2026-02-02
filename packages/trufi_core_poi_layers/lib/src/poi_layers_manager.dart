@@ -123,6 +123,9 @@ class POILayersManager extends ChangeNotifier {
     return subcats.contains(poi.subcategory);
   }
 
+  /// The controller that layers are currently registered with
+  TrufiMapController? _currentController;
+
   /// Initialize the manager by loading POI data and creating layers.
   ///
   /// This method:
@@ -130,11 +133,21 @@ class POILayersManager extends ChangeNotifier {
   /// 2. Creates a POICategoryLayer for each category
   /// 3. Sets up layer visibility based on current state
   ///
+  /// If called with a different controller after initial setup, it will
+  /// re-create layers on the new controller.
+  ///
   /// Parameters:
   /// - [mapController]: The TrufiMapController to create layers on
   ///
   /// Returns a Future that completes when initialization is done.
   Future<void> initialize(TrufiMapController mapController) async {
+    // Check if we need to re-register layers on a new controller
+    if (_initialized && _currentController != mapController) {
+      debugPrint('🔄 POILayersManager: Controller changed, re-registering layers');
+      await _reRegisterLayers(mapController);
+      return;
+    }
+
     if (_initialized) {
       debugPrint('⚠️ POILayersManager already initialized');
       return;
@@ -168,6 +181,7 @@ class POILayersManager extends ChangeNotifier {
       _updateLayerVisibility();
 
       _initialized = true;
+      _currentController = mapController;
 
       debugPrint(
           '✅ POILayersManager initialized with ${_layers.length} layers');
@@ -182,6 +196,33 @@ class POILayersManager extends ChangeNotifier {
       debugPrint('Stack trace: $stackTrace');
       rethrow;
     }
+  }
+
+  /// Re-register existing layers on a new controller.
+  /// Called when the map controller changes (e.g., after navigation).
+  Future<void> _reRegisterLayers(TrufiMapController newController) async {
+    debugPrint('🔄 Re-registering ${_layers.length} POI layers on new controller');
+
+    // Clear old layers and create new ones with the same data
+    final oldLayers = List<POICategoryLayer>.from(_layers);
+    _layers.clear();
+
+    for (final oldLayer in oldLayers) {
+      final newLayer = POICategoryLayer(
+        controller: newController,
+        category: oldLayer.category,
+        pois: oldLayer.pois,
+        poiFilter: (poi) => isPOIEnabled(poi),
+      );
+      _layers.add(newLayer);
+    }
+
+    // Apply visibility state
+    _updateLayerVisibility();
+    _currentController = newController;
+
+    debugPrint('✅ Re-registered ${_layers.length} POI layers');
+    notifyListeners();
   }
 
   /// Update layer visibility based on current state

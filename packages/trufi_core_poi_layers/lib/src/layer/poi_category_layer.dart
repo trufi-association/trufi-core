@@ -9,7 +9,6 @@ import '../models/poi_category.dart';
 /// This layer displays POIs for one specific category with:
 /// - Pre-loaded data: Receives POIs directly at construction
 /// - External visibility control: Use `visible` property to show/hide
-/// - Zoom-based visibility: POIs only show when zoom >= category.minZoom
 /// - Independent lifecycle: Each category is a separate layer instance
 /// - Hierarchical support: Can have a parent layer for UI organization
 ///
@@ -37,15 +36,9 @@ class POICategoryLayer extends TrufiLayer {
   /// POIs for this category (pre-loaded)
   final List<POI> _pois;
 
-  /// Reference to the map controller for zoom listening
-  final TrufiMapController _controller;
-
   /// Optional filter to determine which POIs should be shown.
   /// If null, all POIs are shown when the layer is visible.
   bool Function(POI poi)? poiFilter;
-
-  /// Track whether we're currently showing markers (zoom >= minZoom)
-  bool _zoomVisible = false;
 
   POICategoryLayer({
     required TrufiMapController controller,
@@ -54,36 +47,18 @@ class POICategoryLayer extends TrufiLayer {
     String? parentId,
     this.poiFilter,
   })  : _pois = pois,
-        _controller = controller,
         super(
           controller,
           id: 'poi_${category.name}',
           layerLevel: 100 + int.parse(category.weight),
           parentId: parentId,
-        ) {
-    // Listen to zoom changes
-    _controller.cameraPositionNotifier.addListener(_onCameraChanged);
-    // Initialize zoom visibility based on current zoom
-    final currentZoom = _controller.cameraPositionNotifier.value.zoom;
-    _zoomVisible = currentZoom >= category.minZoom;
-  }
+        );
 
-  void _onCameraChanged() {
-    final zoom = _controller.cameraPositionNotifier.value.zoom;
-    final shouldBeVisible = zoom >= category.minZoom;
-    if (shouldBeVisible != _zoomVisible) {
-      _zoomVisible = shouldBeVisible;
-      debugPrint(
-          '🔍 POI ${category.name}: zoom=${zoom.toStringAsFixed(1)}, minZoom=${category.minZoom}, visible=$_zoomVisible');
-      updateMarkers();
-    }
-  }
-
-  /// Update markers based on current POI data, filter, and zoom level.
+  /// Update markers based on current POI data and filter.
   /// Call this after changing visibility or poiFilter.
   void updateMarkers() {
-    // Don't show markers if layer is not visible or zoom is below minimum
-    if (!visible || !_zoomVisible) {
+    // Don't show markers if layer is not visible
+    if (!visible) {
       setMarkers([]);
       return;
     }
@@ -98,13 +73,14 @@ class POICategoryLayer extends TrufiLayer {
               size: const Size(30, 30),
               layerLevel: layerLevel,
               imageCacheKey: 'poi_${category.name}',
+              allowOverlap: false,
               widget: _buildMarkerWidget(poi),
             ))
         .toList();
 
     setMarkers(markers);
     debugPrint(
-        '📍 POICategoryLayer: ${category.name} - ${markers.length} markers visible');
+        '📍 POICategoryLayer: ${category.name} - ${markers.length} markers');
   }
 
   /// Build marker widget for a POI
@@ -140,13 +116,4 @@ class POICategoryLayer extends TrufiLayer {
 
   /// Get all POIs in this layer
   List<POI> get pois => _pois;
-
-  /// Whether the current zoom level allows showing this layer
-  bool get isZoomVisible => _zoomVisible;
-
-  @override
-  void dispose() {
-    _controller.cameraPositionNotifier.removeListener(_onCameraChanged);
-    super.dispose();
-  }
 }
