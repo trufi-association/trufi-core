@@ -1,63 +1,69 @@
 {
-  "generated": "2025-12-23T06:53:43.119Z",
-  "source": "cochabamba.osm.pbf",
+  "generated": "2026-02-02T06:55:38.489Z",
+  "source": "overpass-api:-17.45,-66.25,-17.3,-66.1",
+  "bbox": {
+    "south": -17.45,
+    "west": -66.25,
+    "north": -17.3,
+    "east": -66.1
+  },
   "categories": [
     {
       "name": "healthcare",
       "displayName": "Healthcare",
-      "count": 856,
+      "count": 785,
       "subcategories": [
         {
           "name": "hospital",
           "displayName": "Hospitals",
-          "count": 45
+          "count": 32
         },
         {
           "name": "clinic",
           "displayName": "Clinics & Doctors",
-          "count": 162
+          "count": 146
         },
         {
           "name": "pharmacy",
           "displayName": "Pharmacies",
-          "count": 381
+          "count": 358
         },
         {
           "name": "dentist",
           "displayName": "Dentists",
-          "count": 123
+          "count": 119
         },
         {
           "name": "veterinary",
           "displayName": "Veterinary",
-          "count": 68
+          "count": 50
         },
         {
           "name": "other",
           "displayName": "Other Healthcare",
-          "count": 77
+          "count": 80
         }
       ]
     },
     {
       "name": "education",
       "displayName": "Education",
-      "count": 635,
+      "count": 571,
       "subcategories": [
         {
           "name": "school",
           "displayName": "Schools",
-          "count": 423
+          "count": 371
         },
         {
           "name": "university",
           "displayName": "Universities & Colleges",
-          "count": 109
+          "count": 96
         },
         {
           "name": "kindergarten",
           "displayName": "Kindergartens",
-          "count": 57
+          "count": 58
         },
         {
           "name": "library",
@@ -69,12 +75,12 @@
     {
       "name": "transport",
       "displayName": "Transport",
-      "count": 1170,
+      "count": 874,
       "subcategories": [
         {
           "name": "public_transit",
           "displayName": "Public Transit",
-          "count": 1105
+          "count": 814
         },
         {
           "name": "railway",
@@ -84,12 +90,12 @@
         {
           "name": "airport",
           "displayName": "Airport",
-          "count": 3
+          "count": 2
         },
         {
           "name": "taxi",
           "displayName": "Taxi & Car Rental",
-          "count": 62
+          "count": 58
         },
         {
           "name": "ferry",
@@ -101,108 +107,108 @@
     {
       "name": "food",
       "displayName": "Food & Drink",
-      "count": 1335,
+      "count": 1254,
       "subcategories": [
         {
           "name": "restaurant",
           "displayName": "Restaurants",
-          "count": 609
+          "count": 553
         },
         {
           "name": "cafe",
           "displayName": "Cafes",
-          "count": 125
+          "count": 126
         },
         {
           "name": "fast_food",
           "displayName": "Fast Food",
-          "count": 486
+          "count": 465
         },
         {
           "name": "bar",
           "displayName": "Bars & Pubs",
-          "count": 62
+          "count": 59
         },
         {
           "name": "ice_cream",
           "displayName": "Ice Cream",
-          "count": 53
+          "count": 51
         }
       ]
     },
     {
       "name": "shopping",
       "displayName": "Shopping",
-      "count": 1523,
+      "count": 1447,
       "subcategories": [
         {
           "name": "supermarket",
           "displayName": "Supermarkets",
-          "count": 1208
+          "count": 1153
         },
         {
           "name": "mall",
           "displayName": "Shopping Malls",
-          "count": 35
+          "count": 33
         },
         {
           "name": "food_shop",
           "displayName": "Food Shops",
-          "count": 183
+          "count": 182
         },
         {
           "name": "marketplace",
           "displayName": "Marketplaces",
-          "count": 97
+          "count": 79
         }
       ]
     },
     {
       "name": "tourism",
       "displayName": "Tourism",
-      "count": 919,
+      "count": 824,
       "subcategories": [
         {
           "name": "accommodation",
           "displayName": "Accommodation",
-          "count": 134
+          "count": 131
         },
         {
           "name": "culture",
           "displayName": "Cultural Sites",
-          "count": 280
+          "count": 233
         },
         {
           "name": "attraction",
           "displayName": "Attractions",
-          "count": 238
+          "count": 218
         },
         {
           "name": "information",
           "displayName": "Tourist Information",
-          "count": 103
+          "count": 91
         },
         {
           "name": "historic",
           "displayName": "Historic Sites",
-          "count": 164
+          "count": 151
         }
       ]
     },
     {
       "name": "finance",
       "displayName": "Finance",
-      "count": 449,
+      "count": 421,
       "subcategories": [
         {
           "name": "bank",
           "displayName": "Banks",
-          "count": 186
+          "count": 167
         },
         {
           "name": "atm",
           "displayName": "ATMs",
-          "count": 249
+          "count": 240
         },
         {
           "name": "exchange",
@@ -214,17 +220,17 @@
     {
       "name": "emergency",
       "displayName": "Emergency",
-      "count": 105,
+      "count": 86,
       "subcategories": [
         {
           "name": "police",
           "displayName": "Police",
-          "count": 93
+          "count": 76
         },
         {
           "name": "fire",
           "displayName": "Fire Station",
-          "count": 8
+          "count": 6
         },
         {
           "name": "ambulance",
@@ -236,22 +242,22 @@
     {
       "name": "recreation",
       "displayName": "Recreation",
-      "count": 1466,
+      "count": 2050,
       "subcategories": [
         {
           "name": "park",
           "displayName": "Parks & Gardens",
-          "count": 782
+          "count": 897
         },
         {
           "name": "playground",
           "displayName": "Playgrounds",
-          "count": 264
+          "count": 291
         },
         {
           "name": "sports",
           "displayName": "Sports Facilities",
-          "count": 285
+          "count": 735
         },
         {
           "name": "entertainment",
@@ -261,24 +267,24 @@
         {
           "name": "community",
           "displayName": "Community Centers",
-          "count": 56
+          "count": 48
         }
       ]
     },
     {
       "name": "religion",
       "displayName": "Religion",
-      "count": 266
+      "count": 254
     },
     {
       "name": "government",
       "displayName": "Government & Public Services",
-      "count": 199,
+      "count": 180,
       "subcategories": [
         {
           "name": "administration",
           "displayName": "Government Offices",
-          "count": 186
+          "count": 168
         },
         {
           "name": "embassy",
@@ -288,10 +294,10 @@
         {
           "name": "post",
           "displayName": "Post Offices",
-          "count": 13
+          "count": 12
         }
       ]
     }
   ],
-  "total": 8923
+  "total": 8746
 }

@@ -19,11 +19,17 @@ class ItineraryList extends StatelessWidget {
   onStartNavigation;
   final LocationService? locationService;
 
+  /// When true, the list will shrink to fit content and disable its own scrolling.
+  /// Use this when the list is inside a parent scrollable (e.g., bottom sheet).
+  /// When false (default), the list will scroll independently.
+  final bool shrinkWrap;
+
   const ItineraryList({
     super.key,
     this.onItineraryDetails,
     this.onStartNavigation,
     this.locationService,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -60,69 +66,68 @@ class ItineraryList extends StatelessWidget {
           );
         }
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 4),
-            ...itineraries.asMap().entries.map((entry) {
-              final index = entry.key;
-              final itinerary = entry.value;
-              final isSelected = itinerary == state.selectedItinerary;
+        // Use ListView.builder for proper scrolling in side panel and bottom sheet
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          shrinkWrap: shrinkWrap,
+          // When shrinkWrap is true, disable scrolling so parent handles it
+          physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
+          itemCount: itineraries.length,
+          itemBuilder: (context, index) {
+            final itinerary = itineraries[index];
+            final isSelected = itinerary == state.selectedItinerary;
 
-              return TweenAnimationBuilder<double>(
-                key: ValueKey('itinerary-$index'),
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: Duration(milliseconds: 200 + (index * 50)),
-                curve: Curves.easeOutCubic,
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 20 * (1 - value)),
-                    child: Opacity(opacity: value, child: child),
-                  );
-                },
-                child: ItineraryCard(
-                  itinerary: itinerary,
-                  isSelected: isSelected,
-                  onTap: () => cubit.selectItinerary(itinerary),
-                  onDetailsTap: onItineraryDetails != null
-                      ? () => onItineraryDetails!(itinerary)
-                      : null,
-                  onStartNavigation:
-                      onStartNavigation != null && locationService != null
-                      ? () => onStartNavigation!(
-                          context,
-                          itinerary,
-                          locationService!,
-                        )
-                      : null,
-                ),
-              );
-            }),
-            const SizedBox(height: 8),
-          ],
+            return TweenAnimationBuilder<double>(
+              key: ValueKey('itinerary-$index'),
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: Duration(milliseconds: 200 + (index * 50)),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: Opacity(opacity: value, child: child),
+                );
+              },
+              child: ItineraryCard(
+                itinerary: itinerary,
+                isSelected: isSelected,
+                onTap: () => cubit.selectItinerary(itinerary),
+                onDetailsTap: onItineraryDetails != null
+                    ? () => onItineraryDetails!(itinerary)
+                    : null,
+                onStartNavigation:
+                    onStartNavigation != null && locationService != null
+                    ? () => onStartNavigation!(
+                        context,
+                        itinerary,
+                        locationService!,
+                      )
+                    : null,
+              ),
+            );
+          },
         );
       },
     );
   }
 
   Widget _buildShimmerLoading(ThemeData theme) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 8),
-        ...List.generate(3, (index) {
-          return TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: Duration(milliseconds: 300 + (index * 100)),
-            curve: Curves.easeOut,
-            builder: (context, value, child) {
-              return Opacity(opacity: value * 0.7, child: child);
-            },
-            child: _ShimmerCard(theme: theme, delay: index * 200),
-          );
-        }),
-        const SizedBox(height: 8),
-      ],
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      shrinkWrap: shrinkWrap,
+      physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: Duration(milliseconds: 300 + (index * 100)),
+          curve: Curves.easeOut,
+          builder: (context, value, child) {
+            return Opacity(opacity: value * 0.7, child: child);
+          },
+          child: _ShimmerCard(theme: theme, delay: index * 200),
+        );
+      },
     );
   }
 

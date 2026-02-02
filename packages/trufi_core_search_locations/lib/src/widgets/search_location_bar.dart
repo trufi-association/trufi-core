@@ -46,6 +46,10 @@ class SearchLocationBar extends StatelessWidget {
   /// Whether to show the menu button.
   final bool showMenuButton;
 
+  /// Whether to show the shadow around the card.
+  /// Set to false when the SearchBar is inside a panel/container that already has its own shadow.
+  final bool showShadow;
+
   const SearchLocationBar({
     super.key,
     required this.state,
@@ -59,25 +63,26 @@ class SearchLocationBar extends StatelessWidget {
     this.onClearLocation,
     this.onRoutingSettings,
     this.showMenuButton = true,
+    this.showShadow = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: showShadow
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : null,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -85,9 +90,17 @@ class SearchLocationBar extends StatelessWidget {
           color: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: isPortrait
-                ? _buildPortraitLayout(context, theme)
-                : _buildLandscapeLayout(context, theme),
+            // Use width-based layout instead of orientation
+            // This ensures proper layout in side panels and narrow containers
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Use portrait (vertical) layout if width < 500px
+                final useVerticalLayout = constraints.maxWidth < 500;
+                return useVerticalLayout
+                    ? _buildPortraitLayout(context, theme)
+                    : _buildLandscapeLayout(context, theme);
+              },
+            ),
           ),
         ),
       ),

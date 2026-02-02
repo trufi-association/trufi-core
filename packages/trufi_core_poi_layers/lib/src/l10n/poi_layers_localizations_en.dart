@@ -15,6 +15,9 @@ class POILayersLocalizationsEn extends POILayersLocalizations {
   String get goHere => 'Go here';
 
   @override
+  String get setAsOrigin => 'From here';
+
+  @override
   String get pointsOfInterest => 'Points of Interest';
 
   @override

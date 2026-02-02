@@ -21,6 +21,7 @@ import 'models/poi_category.dart';
 /// - Creates and manages layer instances for each category
 /// - Synchronizes layer visibility with internal state
 /// - Notifies listeners when state changes
+/// - Manages POI selection state for detail panel
 ///
 /// Example usage:
 /// ```dart
@@ -36,6 +37,11 @@ import 'models/poi_category.dart';
 ///
 /// // Watch for changes in settings
 /// final poiManager = context.watch<POILayersManager>();
+///
+/// // Handle POI selection
+/// if (poiManager.selectedPOI != null) {
+///   // Show POI detail panel
+/// }
 /// ```
 class POILayersManager extends ChangeNotifier {
   /// Storage key for persisting enabled subcategories
@@ -58,6 +64,9 @@ class POILayersManager extends ChangeNotifier {
 
   /// Whether initialization is complete
   bool _initialized = false;
+
+  /// Currently selected POI (for detail panel)
+  POI? _selectedPOI;
 
   /// Creates a POILayersManager.
   ///
@@ -90,6 +99,12 @@ class POILayersManager extends ChangeNotifier {
 
   /// Get all POI layers
   List<POICategoryLayer> get layers => List.unmodifiable(_layers);
+
+  /// Get currently selected POI (for detail panel)
+  POI? get selectedPOI => _selectedPOI;
+
+  /// Whether a POI is currently selected
+  bool get hasSelectedPOI => _selectedPOI != null;
 
   /// Get current enabled subcategories (for settings UI)
   Map<POICategory, Set<String>> get enabledSubcategories =>
@@ -398,6 +413,74 @@ class POILayersManager extends ChangeNotifier {
       }
     }
     return pois;
+  }
+
+  /// Select a POI to show in the detail panel.
+  ///
+  /// Pass null to clear the selection.
+  /// Also highlights the POI's polygon if it's an area POI.
+  void selectPOI(POI? poi) {
+    if (_selectedPOI == poi) return;
+
+    // Clear previous highlight
+    if (_selectedPOI != null) {
+      _updatePOIHighlight(_selectedPOI!, false);
+    }
+
+    _selectedPOI = poi;
+
+    // Set new highlight
+    if (poi != null) {
+      _updatePOIHighlight(poi, true);
+    }
+
+    notifyListeners();
+  }
+
+  /// Update the highlight state for a POI's polygon
+  void _updatePOIHighlight(POI poi, bool highlighted) {
+    final layer = _layers.where((l) => l.category == poi.category).firstOrNull;
+    if (layer != null) {
+      layer.highlightedPOI = highlighted ? poi : null;
+    }
+  }
+
+  /// Clear the currently selected POI.
+  void clearSelection() {
+    if (_selectedPOI == null) return;
+
+    // Clear highlight
+    _updatePOIHighlight(_selectedPOI!, false);
+
+    _selectedPOI = null;
+    notifyListeners();
+  }
+
+  /// Try to select a POI from a map tap position.
+  ///
+  /// Uses the map controller to find markers at the tap position,
+  /// then looks up the corresponding POI.
+  ///
+  /// Returns true if a POI was selected, false otherwise.
+  bool trySelectPOIAtPosition(TrufiMapController controller, dynamic position) {
+    final markers = controller.pickMarkersAt(
+      position,
+      hitboxPx: 40.0,
+      globalLimit: 1,
+    );
+
+    if (markers.isEmpty) {
+      clearSelection();
+      return false;
+    }
+
+    final poi = findPOIByMarkerId(markers.first.id);
+    if (poi != null) {
+      selectPOI(poi);
+      return true;
+    }
+
+    return false;
   }
 
   /// Get subcategories for a specific category.

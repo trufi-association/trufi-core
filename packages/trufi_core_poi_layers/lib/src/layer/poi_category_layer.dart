@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 import '../models/poi.dart';
@@ -11,6 +13,7 @@ import '../models/poi_category.dart';
 /// - External visibility control: Use `visible` property to show/hide
 /// - Independent lifecycle: Each category is a separate layer instance
 /// - Hierarchical support: Can have a parent layer for UI organization
+/// - Polygon rendering: Shows outlines for area POIs
 ///
 /// Example usage:
 /// ```dart
@@ -40,6 +43,9 @@ class POICategoryLayer extends TrufiLayer {
   /// If null, all POIs are shown when the layer is visible.
   bool Function(POI poi)? poiFilter;
 
+  /// Currently highlighted POI (for selection styling)
+  POI? _highlightedPOI;
+
   POICategoryLayer({
     required TrufiMapController controller,
     required this.category,
@@ -54,12 +60,23 @@ class POICategoryLayer extends TrufiLayer {
           parentId: parentId,
         );
 
-  /// Update markers based on current POI data and filter.
+  /// Set the highlighted POI (for selection styling)
+  set highlightedPOI(POI? poi) {
+    if (_highlightedPOI == poi) return;
+    _highlightedPOI = poi;
+    _updatePolygons();
+  }
+
+  /// Get currently highlighted POI
+  POI? get highlightedPOI => _highlightedPOI;
+
+  /// Update markers and polygons based on current POI data and filter.
   /// Call this after changing visibility or poiFilter.
   void updateMarkers() {
     // Don't show markers if layer is not visible
     if (!visible) {
       setMarkers([]);
+      setLines([]);
       return;
     }
 
@@ -72,17 +89,69 @@ class POICategoryLayer extends TrufiLayer {
               position: poi.position,
               size: const Size(30, 30),
               layerLevel: layerLevel,
-              imageCacheKey: 'poi_${category.name}',
+              // Cache by POI type to reuse same icon for same type
+              imageCacheKey: 'poi_icon_${poi.type.name}',
               allowOverlap: false,
               widget: _buildMarkerWidget(poi),
             ))
         .toList();
 
     setMarkers(markers);
+
+    // Update polygon outlines for area POIs
+    _updatePolygons();
   }
 
-  /// Build marker widget for a POI
+  /// Update polygon outlines for area POIs
+  void _updatePolygons() {
+    if (!visible) {
+      setLines([]);
+      return;
+    }
+
+    final filteredPOIs =
+        poiFilter != null ? _pois.where(poiFilter!) : _pois;
+
+    final polygonLines = <TrufiLine>[];
+
+    for (final poi in filteredPOIs) {
+      if (poi.isArea && poi.polygonPoints != null && poi.polygonPoints!.isNotEmpty) {
+        final isHighlighted = _highlightedPOI?.id == poi.id;
+
+        // Convert LatLng to latlng.LatLng for TrufiLine
+        final points = poi.polygonPoints!
+            .map((p) => latlng.LatLng(p.latitude, p.longitude))
+            .toList();
+
+        // Create polygon outline
+        polygonLines.add(TrufiLine(
+          id: 'poi_polygon_${category.name}_${poi.id}',
+          position: points,
+          color: isHighlighted
+              ? category.color
+              : category.color.withValues(alpha: 0.6),
+          lineWidth: isHighlighted ? 4.0 : 2.0,
+          layerLevel: isHighlighted ? layerLevel + 1 : layerLevel - 1,
+        ));
+      }
+    }
+
+    setLines(polygonLines);
+  }
+
+  /// Build marker widget for a POI using its SVG icon if available
   Widget _buildMarkerWidget(POI poi) {
+    final svgString = poi.properties['icon'] as String?;
+
+    if (svgString != null && svgString.isNotEmpty) {
+      return SvgPicture.string(
+        svgString,
+        width: 30,
+        height: 30,
+      );
+    }
+
+    // Fallback to category icon if no SVG available
     return Container(
       width: 30,
       height: 30,

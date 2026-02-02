@@ -7,12 +7,14 @@ import '../models/poi.dart';
 /// Panel showing POI details when tapped
 class POIDetailPanel extends StatelessWidget {
   final POI poi;
+  final VoidCallback? onSetAsOrigin;
   final VoidCallback? onSetAsDestination;
   final VoidCallback? onClose;
 
   const POIDetailPanel({
     super.key,
     required this.poi,
+    this.onSetAsOrigin,
     this.onSetAsDestination,
     this.onClose,
   });
@@ -20,7 +22,7 @@ class POIDetailPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = POILayersLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -126,15 +128,37 @@ class POIDetailPanel extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Action button
-          if (onSetAsDestination != null)
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: onSetAsDestination,
-                icon: const Icon(Icons.directions),
-                label: Text(l10n.goHere),
-              ),
+          // Action buttons
+          if (onSetAsOrigin != null || onSetAsDestination != null)
+            Row(
+              children: [
+                if (onSetAsOrigin != null)
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: onSetAsOrigin,
+                      icon: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4CAF50),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                      label: Text(l10n.setAsOrigin),
+                    ),
+                  ),
+                if (onSetAsOrigin != null && onSetAsDestination != null)
+                  const SizedBox(width: 8),
+                if (onSetAsDestination != null)
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: onSetAsDestination,
+                      icon: const Icon(Icons.place, size: 18),
+                      label: Text(l10n.goHere),
+                    ),
+                  ),
+              ],
             ),
         ],
       ),

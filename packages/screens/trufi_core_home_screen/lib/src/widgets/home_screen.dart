@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,6 +88,12 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     // Listen to location updates
     _locationService.addListener(_onLocationUpdate);
+    // Listen to POI selection changes
+    widget.config.poiLayersManager?.addListener(_onPOISelectionChanged);
+  }
+
+  void _onPOISelectionChanged() {
+    if (mounted) setState(() {});
   }
 
   @override
@@ -242,6 +249,7 @@ class _HomeScreenState extends State<HomeScreen>
   void dispose() {
     _sharedRouteNotifier?.removeListener(_onSharedRouteChanged);
     _locationService.removeListener(_onLocationUpdate);
+    widget.config.poiLayersManager?.removeListener(_onPOISelectionChanged);
     _locationService.dispose();
     _sheetController.dispose();
     _mapController?.dispose();
@@ -623,7 +631,25 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  void _onMapClick(LatLng position) {
+    // Try to select a POI at the tap position
+    final poiManager = widget.config.poiLayersManager;
+    if (poiManager != null && _mapController != null) {
+      final selected =
+          poiManager.trySelectPOIAtPosition(_mapController!, position);
+      if (selected) {
+        // POI was selected, panel will show automatically
+        return;
+      }
+    }
+    // Clear POI selection if tapping elsewhere
+    widget.config.poiLayersManager?.clearSelection();
+  }
+
   void _onMapLongPress(LatLng position) async {
+    // Clear POI selection when long pressing
+    widget.config.poiLayersManager?.clearSelection();
+
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -771,6 +797,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
     return engine.buildMap(
       controller: _mapController!,
+      onMapClick: _onMapClick,
       onMapLongClick: _onMapLongPress,
       isDarkMode: isDarkMode,
     );
@@ -833,82 +860,111 @@ class _HomeScreenState extends State<HomeScreen>
 
               final isDarkMode = theme.brightness == Brightness.dark;
 
+              // Responsive layout: use side panel for wide screens (≥600px)
+              final isWideScreen = constraints.maxWidth >= 600;
+              final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
+
+              // Update camera padding for side panel layout (panel on LEFT)
+              if (isWideScreen) {
+                _fitCameraLayer?.updatePadding(
+                  EdgeInsets.only(
+                    top: 30,
+                    bottom: 30,
+                    left: sidePanelWidth + 30,
+                    right: 30,
+                  ),
+                );
+              }
+
               return Stack(
                 children: [
-                  // Map (full screen)
-                  Positioned.fill(
+                  // Map - adjusts for side panel on LEFT on wide screens
+                  Positioned(
+                    top: 0,
+                    left: isWideScreen ? sidePanelWidth : 0,
+                    bottom: 0,
+                    right: 0,
                     child: _buildMap(
                       mapEngineManager.currentEngine,
                       isDarkMode: isDarkMode,
                     ),
                   ),
 
-                  // SearchLocationBar at top
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: SafeArea(
-                      bottom: false,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SearchLocationBar(
-                              state: locationState,
-                              configuration: SearchLocationBarConfiguration(
-                                originHintText: l10n.searchOrigin,
-                                destinationHintText: l10n.searchDestination,
-                              ),
-                              onSearch: _showSearchScreen,
-                              onOriginSelected: _onOriginSelected,
-                              onDestinationSelected: _onDestinationSelected,
-                              onSwap: _onSwapLocations,
-                              onReset: _onReset,
-                              onClearLocation: _onClearLocation,
-                              onRoutingSettings: _onRoutingSettings,
-                              onMenuPressed: widget.onMenuPressed,
-                            ),
-                            // Departure time chip (visible when locations are set)
-                            if (state.fromPlace != null ||
-                                state.toPlace != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: _DepartureTimeChip(
-                                  onTimeChanged: _fetchPlanIfReady,
+                  // Wide screens: always show left panel with SearchBar
+                  if (isWideScreen)
+                    _buildSidePanel(
+                      state,
+                      theme,
+                      sidePanelWidth,
+                      locationState: locationState,
+                      l10n: l10n,
+                    ),
+
+                  // Narrow screens: SearchBar floats on top of map
+                  if (!isWideScreen)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: SafeArea(
+                        bottom: false,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SearchLocationBar(
+                                state: locationState,
+                                configuration: SearchLocationBarConfiguration(
+                                  originHintText: l10n.searchOrigin,
+                                  destinationHintText: l10n.searchDestination,
                                 ),
+                                onSearch: _showSearchScreen,
+                                onOriginSelected: _onOriginSelected,
+                                onDestinationSelected: _onDestinationSelected,
+                                onSwap: _onSwapLocations,
+                                onReset: _onReset,
+                                onClearLocation: _onClearLocation,
+                                onRoutingSettings: _onRoutingSettings,
+                                onMenuPressed: widget.onMenuPressed,
                               ),
-                          ],
+                              // Departure time chip (visible when locations are set)
+                              if (state.fromPlace != null ||
+                                  state.toPlace != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: _DepartureTimeChip(
+                                    onTimeChanged: _fetchPlanIfReady,
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+
+                  // Floating action buttons (map controls) - always on right side of map
+                  _buildMapControls(
+                    context,
+                    mapEngineManager,
+                    hasResults,
+                    sidePanelOffset: 0, // No offset needed, panel is on left
                   ),
 
-                  // Floating action buttons (map controls)
-                  _buildMapControls(context, mapEngineManager, hasResults),
+                  // Narrow screens: bottom sheet for results
+                  // Hide when POI is selected (POI panel takes priority)
+                  if (!isWideScreen &&
+                      hasResults &&
+                      widget.config.poiLayersManager?.selectedPOI == null)
+                    _buildBottomSheet(state, theme, constraints),
 
-                  // Draggable bottom sheet for itineraries
-                  if (hasResults)
-                    TrufiBottomSheet(
-                      controller: _sheetController,
-                      initialChildSize: _sheetMidSize,
-                      minChildSize: _sheetMinSize,
-                      maxChildSize: _sheetMaxSize,
-                      snap: true,
-                      snapSizes: const [_sheetMinSize, _sheetMidSize],
-                      onHeightChanged: (height) {
-                        final maxHeight = constraints.maxHeight;
-                        _fitCameraLayer?.updatePadding(
-                          EdgeInsets.only(
-                            bottom: math.min(maxHeight * 0.5, height),
-                            left: 30,
-                            right: 30,
-                            top: 120,
-                          ),
-                        );
-                      },
-                      child: _buildBottomSheetContent(state, theme),
+                  // POI detail panel (narrow screens) - shows at bottom, replaces results
+                  if (!isWideScreen &&
+                      widget.config.poiLayersManager?.selectedPOI != null)
+                    _buildPOIDetailPanel(
+                      widget.config.poiLayersManager!.selectedPOI!,
+                      theme,
+                      isWideScreen: false,
                     ),
                 ],
               );
@@ -922,10 +978,11 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildMapControls(
     BuildContext context,
     MapEngineManager mapEngineManager,
-    bool hasResults,
-  ) {
+    bool hasResults, {
+    double sidePanelOffset = 0,
+  }) {
     return Positioned(
-      right: 16,
+      right: 16 + sidePanelOffset,
       top: 0,
       child: SafeArea(
         bottom: false,
@@ -995,8 +1052,9 @@ class _HomeScreenState extends State<HomeScreen>
           behavior: HitTestBehavior.opaque,
           child: _buildSummaryRow(state, theme),
         ),
-        // Itinerary list
+        // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
         ItineraryList(
+          shrinkWrap: true,
           onItineraryDetails: widget.onItineraryDetails,
           onStartNavigation: widget.onStartNavigation != null
               ? (context, itinerary, locationService) {
@@ -1186,6 +1244,515 @@ class _HomeScreenState extends State<HomeScreen>
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutCubic,
     );
+  }
+
+  // ============================================================
+  // Responsive Layout Methods
+  // ============================================================
+
+  /// Calculates the side panel width based on screen width.
+  /// Returns different widths for different screen sizes.
+  double _getSidePanelWidth(double screenWidth) {
+    if (screenWidth >= 1200) return 420;
+    if (screenWidth >= 900) return 380;
+    return 340;
+  }
+
+  /// Builds the side panel for wide screens (≥600px).
+  /// Panel is positioned on the LEFT side and includes the SearchBar.
+  Widget _buildSidePanel(
+    RoutePlannerState state,
+    ThemeData theme,
+    double width, {
+    required SearchLocationState locationState,
+    required HomeScreenLocalizations l10n,
+  }) {
+    final hasResults = state.plan != null || state.isLoading || state.hasError;
+
+    return Positioned(
+      top: 0,
+      left: 0, // Panel on LEFT
+      bottom: 0,
+      width: width,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(2, 0),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          right: false,
+          child: Column(
+            children: [
+              // SearchBar section - no shadow since it's inside the panel
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SearchLocationBar(
+                      state: locationState,
+                      configuration: SearchLocationBarConfiguration(
+                        originHintText: l10n.searchOrigin,
+                        destinationHintText: l10n.searchDestination,
+                      ),
+                      showShadow: false,
+                      onSearch: _showSearchScreen,
+                      onOriginSelected: _onOriginSelected,
+                      onDestinationSelected: _onDestinationSelected,
+                      onSwap: _onSwapLocations,
+                      onReset: _onReset,
+                      onClearLocation: _onClearLocation,
+                      onRoutingSettings: _onRoutingSettings,
+                      onMenuPressed: widget.onMenuPressed,
+                    ),
+                    // Departure time chip
+                    if (state.fromPlace != null || state.toPlace != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: _DepartureTimeChip(
+                          onTimeChanged: _fetchPlanIfReady,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              // Results section (only if there are results, loading, or error)
+              if (hasResults) ...[
+                // Results header with colored background
+                _buildSidePanelHeader(state, theme),
+                // Itinerary list - use Flexible when POI panel is shown
+                if (widget.config.poiLayersManager?.selectedPOI != null)
+                  Flexible(
+                    flex: 1,
+                    child: ItineraryList(
+                      onItineraryDetails: widget.onItineraryDetails,
+                      onStartNavigation: widget.onStartNavigation != null
+                          ? (context, itinerary, locationService) {
+                              _myLocationLayer?.clearMarkers();
+                              widget.onStartNavigation!(
+                                context,
+                                itinerary,
+                                locationService,
+                              );
+                            }
+                          : null,
+                      locationService: _locationService,
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ItineraryList(
+                      onItineraryDetails: widget.onItineraryDetails,
+                      onStartNavigation: widget.onStartNavigation != null
+                          ? (context, itinerary, locationService) {
+                              _myLocationLayer?.clearMarkers();
+                              widget.onStartNavigation!(
+                                context,
+                                itinerary,
+                                locationService,
+                              );
+                            }
+                          : null,
+                      locationService: _locationService,
+                    ),
+                  ),
+                // POI detail panel (wide screen)
+                if (widget.config.poiLayersManager?.selectedPOI != null)
+                  _buildPOIDetailPanel(
+                    widget.config.poiLayersManager!.selectedPOI!,
+                    theme,
+                    isWideScreen: true,
+                  ),
+              ],
+              // Empty state when no results
+              if (!hasResults) ...[
+                // POI detail panel when no results (wide screen)
+                if (widget.config.poiLayersManager?.selectedPOI != null)
+                  _buildPOIDetailPanel(
+                    widget.config.poiLayersManager!.selectedPOI!,
+                    theme,
+                    isWideScreen: true,
+                  ),
+                Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.search_rounded,
+                            size: 64,
+                            color: theme.colorScheme.outline,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Search for a route',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Enter origin and destination to find routes',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds the header for the side panel with route count, share, and close buttons.
+  Widget _buildSidePanelHeader(RoutePlannerState state, ThemeData theme) {
+    final l10n = HomeScreenLocalizations.of(context);
+    final itineraries = state.plan?.itineraries;
+    final routeCount = itineraries?.length ?? 0;
+
+    // Find selected itinerary index for sharing
+    final selectedIndex = state.selectedItinerary != null && itineraries != null
+        ? itineraries.indexOf(state.selectedItinerary!)
+        : null;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+        border: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.route_rounded,
+              color: theme.colorScheme.primary,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$routeCount ${routeCount == 1 ? 'route' : 'routes'} found',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (state.isLoading)
+                  Text(
+                    'Finding routes...',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                if (state.hasError)
+                  Text(
+                    state.error ?? l10n.errorNoRoutes,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ),
+          ),
+          // Share button
+          if (state.selectedItinerary != null &&
+              state.fromPlace != null &&
+              state.toPlace != null)
+            IconButton.filled(
+              icon: const Icon(Icons.share_rounded, size: 18),
+              style: IconButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                foregroundColor: theme.colorScheme.primary,
+              ),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                final appName = widget.config.appName ?? 'Trufi App';
+                ShareRouteService.shareRoute(
+                  from: state.fromPlace!,
+                  to: state.toPlace!,
+                  itinerary: state.selectedItinerary!,
+                  selectedItineraryIndex:
+                      selectedIndex != null && selectedIndex != -1
+                          ? selectedIndex
+                          : null,
+                  appName: appName,
+                  deepLinkScheme: widget.config.deepLinkScheme,
+                  strings: ShareRouteStrings(
+                    title: l10n.shareRouteTitle,
+                    origin: l10n.shareRouteOrigin,
+                    destination: l10n.shareRouteDestination,
+                    date: l10n.shareRouteDate,
+                    times: l10n.shareRouteTimes,
+                    duration: l10n.shareRouteDuration,
+                    itinerary: l10n.shareRouteItinerary,
+                    openInApp: l10n.shareRouteOpenInApp,
+                  ),
+                );
+              },
+              tooltip: 'Share',
+            ),
+          const SizedBox(width: 4),
+          // Close button
+          IconButton.filled(
+            icon: const Icon(Icons.close_rounded, size: 18),
+            style: IconButton.styleFrom(
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              foregroundColor: theme.colorScheme.onSurfaceVariant,
+            ),
+            onPressed: _onReset,
+            tooltip: 'Close',
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Builds the bottom sheet for narrow screens (<600px).
+  Widget _buildBottomSheet(
+    RoutePlannerState state,
+    ThemeData theme,
+    BoxConstraints constraints,
+  ) {
+    return TrufiBottomSheet(
+      controller: _sheetController,
+      initialChildSize: _sheetMidSize,
+      minChildSize: _sheetMinSize,
+      maxChildSize: _sheetMaxSize,
+      snap: true,
+      snapSizes: const [_sheetMinSize, _sheetMidSize],
+      onHeightChanged: (height) {
+        final maxHeight = constraints.maxHeight;
+        _fitCameraLayer?.updatePadding(
+          EdgeInsets.only(
+            bottom: math.min(maxHeight * 0.5, height),
+            left: 30,
+            right: 30,
+            top: 120,
+          ),
+        );
+      },
+      child: _buildBottomSheetContent(state, theme),
+    );
+  }
+
+  /// Builds the POI detail panel.
+  ///
+  /// - On narrow screens: Shows as a bottom panel that replaces/overlays the results sheet
+  /// - On wide screens: Shows below the results in the side panel
+  Widget _buildPOIDetailPanel(
+    POI poi,
+    ThemeData theme, {
+    required bool isWideScreen,
+  }) {
+    if (isWideScreen) {
+      final l10n = HomeScreenLocalizations.of(context);
+      // Wide screen: compact card style for side panel
+      return Container(
+        margin: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 8, 8),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: poi.category.color.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      poi.type.icon,
+                      color: poi.category.color,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          poi.displayName,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          poi.type.name,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () =>
+                        widget.config.poiLayersManager?.clearSelection(),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Details
+            if (poi.address != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        poi.address!,
+                        style: theme.textTheme.bodySmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            // Action buttons
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _setPoiAsOrigin(poi),
+                      icon: Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4CAF50),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                      label: Text(l10n.setAsOrigin),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: () => _setPoiAsDestination(poi),
+                      icon: const Icon(Icons.place, size: 16),
+                      label: Text(l10n.setAsDestination),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Narrow screen: bottom panel
+    // Use _JsonInteractionBlocker to prevent all interactions from reaching the map
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: _JsonInteractionBlocker(
+        child: SafeArea(
+          top: false,
+          child: POIDetailPanel(
+            poi: poi,
+            onClose: () => widget.config.poiLayersManager?.clearSelection(),
+            onSetAsOrigin: () => _setPoiAsOrigin(poi),
+            onSetAsDestination: () => _setPoiAsDestination(poi),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _setPoiAsOrigin(POI poi) {
+    final location = TrufiLocation(
+      description: poi.displayName,
+      latitude: poi.position.latitude,
+      longitude: poi.position.longitude,
+      address: poi.address,
+    );
+    final cubit = context.read<RoutePlannerCubit>();
+    cubit.setFromPlace(location);
+    widget.config.poiLayersManager?.clearSelection();
+    _fetchPlanIfReady();
+  }
+
+  void _setPoiAsDestination(POI poi) {
+    final location = TrufiLocation(
+      description: poi.displayName,
+      latitude: poi.position.latitude,
+      longitude: poi.position.longitude,
+      address: poi.address,
+    );
+    final cubit = context.read<RoutePlannerCubit>();
+    cubit.setToPlace(location);
+    widget.config.poiLayersManager?.clearSelection();
+    _fetchPlanIfReady();
   }
 }
 
@@ -2118,6 +2685,56 @@ class _MyLocationAccuracyCircle extends StatelessWidget {
         border: Border.all(
           color: const Color(0xFF4285F4).withValues(alpha: 0.3),
           width: 1,
+        ),
+      ),
+    );
+  }
+}
+
+/// Widget that blocks all pointer interactions from propagating to widgets below.
+/// This is needed on web where events would otherwise affect the map
+/// (clicks, drags, scroll) when interacting over panels.
+class _JsonInteractionBlocker extends StatelessWidget {
+  final Widget child;
+
+  const _JsonInteractionBlocker({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    // Use MouseRegion with opaque cursor to ensure the widget captures all mouse events
+    // Combined with Listener for scroll events and GestureDetector for touch/click
+    return MouseRegion(
+      // This makes the widget opaque to hit testing
+      opaque: true,
+      child: Listener(
+        // Capture all pointer events
+        onPointerDown: (_) {},
+        onPointerMove: (_) {},
+        onPointerUp: (_) {},
+        onPointerCancel: (_) {},
+        // Capture scroll events (mouse wheel on web)
+        onPointerSignal: (event) {
+          if (event is PointerScrollEvent) {
+            GestureBinding.instance.pointerSignalResolver.register(
+              event,
+              (event) {
+                // Do nothing - just claim the event to prevent map zoom
+              },
+            );
+          }
+        },
+        behavior: HitTestBehavior.opaque,
+        child: GestureDetector(
+          // Claim all gesture types to prevent them from reaching the map
+          // Note: onScale* handles both scale and pan gestures (pan is a subset of scale)
+          onTap: () {},
+          onDoubleTap: () {},
+          onLongPress: () {},
+          onScaleStart: (_) {},
+          onScaleUpdate: (_) {},
+          onScaleEnd: (_) {},
+          behavior: HitTestBehavior.opaque,
+          child: child,
         ),
       ),
     );
