@@ -143,7 +143,6 @@ class POILayersManager extends ChangeNotifier {
   Future<void> initialize(TrufiMapController mapController) async {
     // Check if we need to re-register layers on a new controller
     if (_initialized && _currentController != mapController) {
-      debugPrint('🔄 POILayersManager: Controller changed, re-registering layers');
       await _reRegisterLayers(mapController);
       return;
     }
@@ -201,8 +200,6 @@ class POILayersManager extends ChangeNotifier {
   /// Re-register existing layers on a new controller.
   /// Called when the map controller changes (e.g., after navigation).
   Future<void> _reRegisterLayers(TrufiMapController newController) async {
-    debugPrint('🔄 Re-registering ${_layers.length} POI layers on new controller');
-
     // Clear old layers and create new ones with the same data
     final oldLayers = List<POICategoryLayer>.from(_layers);
     _layers.clear();
@@ -221,7 +218,6 @@ class POILayersManager extends ChangeNotifier {
     _updateLayerVisibility();
     _currentController = newController;
 
-    debugPrint('✅ Re-registered ${_layers.length} POI layers');
     notifyListeners();
   }
 

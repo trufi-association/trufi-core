@@ -79,8 +79,6 @@ class POICategoryLayer extends TrufiLayer {
         .toList();
 
     setMarkers(markers);
-    debugPrint(
-        '📍 POICategoryLayer: ${category.name} - ${markers.length} markers');
   }
 
   /// Build marker widget for a POI

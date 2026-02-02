@@ -80,12 +80,8 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
   void _layersListener() {
     if (!_mapReady || _mapCtl == null) return;
 
-    final zoom = widget.controller.cameraPositionNotifier.value.zoom;
-    debugPrint('[MapLibre] _layersListener: zoom=${zoom.toStringAsFixed(1)}, syncInProgress=$_syncInProgress');
-
     // If sync is already in progress, mark as pending and return
     if (_syncInProgress) {
-      debugPrint('[MapLibre] _layersListener: SKIPPED (sync in progress)');
       _syncPending = true;
       return;
     }
@@ -99,17 +95,13 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     _syncPending = false;
 
     try {
-      final zoom = widget.controller.cameraPositionNotifier.value.zoom;
       final visibleLayers = widget.controller.visibleLayers;
-      debugPrint('[MapLibre] _runSync START: zoom=${zoom.toStringAsFixed(1)}, ${visibleLayers.length} visible layers');
       await _syncLayers(visibleLayers);
-      debugPrint('[MapLibre] _runSync END');
     } finally {
       _syncInProgress = false;
 
       // If another sync was requested while we were busy, run it now
       if (_syncPending && mounted) {
-        debugPrint('[MapLibre] _runSync: processing pending sync');
         _syncPending = false;
         _runSync();
       }
@@ -308,11 +300,6 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     // an empty FeatureCollection. Force a double-update to ensure clearing.
     final features = geojson['features'] as List;
 
-    // Debug: log what we're sending to MapLibre
-    if (layer.id.startsWith('poi_')) {
-      debugPrint('[MapLibre] _updateLayerData ${layer.id}: ${features.length} features');
-    }
-
     if (features.isEmpty) {
       // First set empty, then wait for frame to complete
       await ctl.setGeoJsonSource(layer.id, geojson);
@@ -399,21 +386,12 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
 
     // Collect unique images that need loading
     final toLoad = <(String, TrufiMarker)>[];
-    int reused = 0;
     for (final marker in markers) {
       final imageId = marker.imageCacheKey ?? '${marker.widget.hashCode}';
-      if (_loadedImages.contains(imageId)) {
-        reused++;
-      } else if (!_imageLoaders.containsKey(imageId) &&
+      if (!_loadedImages.contains(imageId) &&
+          !_imageLoaders.containsKey(imageId) &&
           !toLoad.any((e) => e.$1 == imageId)) {
         toLoad.add((imageId, marker));
-      }
-    }
-
-    if (toLoad.isNotEmpty) {
-      debugPrint('[MapLibre] Images: ${toLoad.length} new, $reused reused');
-      for (final (imageId, _) in toLoad) {
-        debugPrint('[MapLibre]   + $imageId');
       }
     }
 
@@ -485,7 +463,6 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         _mapCtl = ctl;
       },
       onStyleLoadedCallback: () async {
-        debugPrint('[MapLibre] onStyleLoadedCallback - style changed/loaded');
         _mapReady = true;
 
         // Clear all caches when style changes (theme switch, etc.)
@@ -495,13 +472,7 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         _sourceInit.clear();
 
         // Re-sync all layers with the new style
-        final allLayers = widget.controller.layersNotifier.value;
         final visibleLayers = widget.controller.visibleLayers;
-        debugPrint('[MapLibre] Total layers in controller: ${allLayers.length}');
-        for (final entry in allLayers.entries) {
-          debugPrint('[MapLibre]   - ${entry.key}: visible=${entry.value.visible}, markers=${entry.value.markers.length}');
-        }
-        debugPrint('[MapLibre] Re-syncing ${visibleLayers.length} visible layers after style change');
         await _syncLayers(visibleLayers);
       },
       onCameraIdle: _handleCameraIdle,
