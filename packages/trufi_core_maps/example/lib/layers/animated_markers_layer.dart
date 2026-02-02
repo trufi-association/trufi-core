@@ -268,13 +268,6 @@ class _VehicleMarkerWidget extends StatelessWidget {
         color: color,
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black38,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
       ),
       child: Center(
         child: Icon(icon, color: Colors.white, size: 18),

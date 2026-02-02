@@ -47,8 +47,9 @@ abstract class ImageTool {
 
     final renderView = RenderView(
       view: WidgetsBinding.instance.platformDispatcher.views.first,
-      configuration: ViewConfiguration.fromView(
-        WidgetsBinding.instance.platformDispatcher.views.first,
+      configuration: ViewConfiguration(
+        logicalConstraints: BoxConstraints.tight(size),
+        devicePixelRatio: devicePixelRatio,
       ),
       child: RenderPositionedBox(
         alignment: Alignment.center,

@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen>
   bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
+  bool _needsRouteRefresh = false;
 
   // GPS location service
   final LocationService _locationService = LocationService();
@@ -93,6 +94,45 @@ class _HomeScreenState extends State<HomeScreen>
     super.didChangeDependencies();
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();
+  }
+
+  @override
+  void deactivate() {
+    // Mark that we need to refresh the route when returning
+    _needsRouteRefresh = true;
+    super.deactivate();
+  }
+
+  @override
+  void activate() {
+    super.activate();
+    // Refresh route when returning to this screen
+    if (_needsRouteRefresh) {
+      _needsRouteRefresh = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _refreshRouteIfNeeded();
+      });
+    }
+  }
+
+  void _refreshRouteIfNeeded() {
+    if (!mounted || _mapController == null) return;
+
+    final cubit = context.read<RoutePlannerCubit>();
+    final state = cubit.state;
+
+    // If there's a selected itinerary, ensure it's rendered on the map
+    // This handles the case when returning from another screen where
+    // MapLibre may have lost its internal layer state
+    if (state.selectedItinerary != null) {
+      // Force complete re-render by clearing and recreating the route layer
+      // This ensures MapLibre sources are properly re-initialized
+      _updateRouteOnMap(state.selectedItinerary);
+      _updateFitCameraPoints(state);
+    } else if (state.fromPlace != null || state.toPlace != null) {
+      // Update location markers if no route but places are set
+      _updateLocationMarkers(state);
+    }
   }
 
   void _setupSharedRouteListener() {

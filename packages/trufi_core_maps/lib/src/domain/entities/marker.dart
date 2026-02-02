@@ -18,6 +18,7 @@ class TrufiMarker {
     this.alignment = Alignment.center,
     this.imageCacheKey,
     this.metersRadius,
+    this.allowOverlap = false,
   });
 
   final String id;
@@ -29,6 +30,13 @@ class TrufiMarker {
   final Size size;
   final double rotation;
   final Alignment alignment;
+
+  /// Whether this marker should be visible when overlapping with other markers.
+  ///
+  /// When `false` (default), the marker may be hidden if it overlaps with
+  /// higher priority markers. When `true`, the marker is always visible
+  /// even if it overlaps with other markers.
+  final bool allowOverlap;
 
   /// Optional radius in meters for geo-scaled markers.
   /// When set, the marker size will scale with map zoom to represent
@@ -73,6 +81,7 @@ class TrufiMarker {
     Alignment? alignment,
     String? imageCacheKey,
     double? metersRadius,
+    bool? allowOverlap,
   }) {
     return TrufiMarker(
       id: id ?? this.id,
@@ -86,6 +95,7 @@ class TrufiMarker {
       alignment: alignment ?? this.alignment,
       imageCacheKey: imageCacheKey ?? this.imageCacheKey,
       metersRadius: metersRadius ?? this.metersRadius,
+      allowOverlap: allowOverlap ?? this.allowOverlap,
     );
   }
 

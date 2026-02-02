@@ -169,8 +169,9 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     MapLibreMapController ctl,
   ) async {
     try {
-      // Remove the three layers associated with this source
-      await ctl.removeLayer('${sourceId}_marker');
+      // Remove the layers associated with this source
+      await ctl.removeLayer('${sourceId}_marker_overlap');
+      await ctl.removeLayer('${sourceId}_marker_no_overlap');
       await ctl.removeLayer('${sourceId}_solid');
       await ctl.removeLayer('${sourceId}_dotted');
       // Remove the source
@@ -238,9 +239,30 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         enableInteraction: false,
       );
 
+      // Markers that hide when overlapping (allowOverlap: false)
       await ctl.addSymbolLayer(
         sourceId,
-        "${sourceId}_marker",
+        "${sourceId}_marker_no_overlap",
+        SymbolLayerProperties(
+          iconImage: ["get", "icon"],
+          iconSize: 1.0,
+          iconAllowOverlap: false,
+          iconOffset: ["get", "offset"],
+          iconRotate: ["get", "rotate"],
+          symbolSortKey: ["get", "layerLevel"],
+        ),
+        filter: [
+          "==",
+          ["get", "allowOverlap"],
+          false,
+        ],
+        enableInteraction: false,
+      );
+
+      // Markers that always show (allowOverlap: true)
+      await ctl.addSymbolLayer(
+        sourceId,
+        "${sourceId}_marker_overlap",
         SymbolLayerProperties(
           iconImage: ["get", "icon"],
           iconSize: 1.0,
@@ -249,6 +271,11 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
           iconRotate: ["get", "rotate"],
           symbolSortKey: ["get", "layerLevel"],
         ),
+        filter: [
+          "==",
+          ["get", "allowOverlap"],
+          true,
+        ],
         enableInteraction: false,
       );
 
@@ -321,6 +348,7 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
           "offset": offset,
           "rotate": marker.rotation,
           "layerLevel": marker.layerLevel,
+          "allowOverlap": marker.allowOverlap,
         },
       });
     }
