@@ -56,10 +56,18 @@ class LocationService extends ChangeNotifier {
   LocationPermissionStatus? _lastPermissionStatus;
   StreamSubscription<Position>? _positionStreamSubscription;
   bool _isTracking = false;
+  bool _isDisposed = false;
   LocationResult? _currentLocation;
 
   /// The last known position.
   Position? get lastKnownPosition => _lastKnownPosition;
+
+  /// Safe notify that checks if disposed first.
+  void _safeNotifyListeners() {
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
 
   /// The last checked permission status.
   LocationPermissionStatus? get lastPermissionStatus => _lastPermissionStatus;
@@ -80,13 +88,13 @@ class LocationService extends ChangeNotifier {
     final serviceEnabled = await isLocationServiceEnabled();
     if (!serviceEnabled) {
       _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
-      notifyListeners();
+      _safeNotifyListeners();
       return LocationPermissionStatus.serviceDisabled;
     }
 
     final permission = await Geolocator.checkPermission();
     _lastPermissionStatus = _mapPermission(permission);
-    notifyListeners();
+    _safeNotifyListeners();
     return _lastPermissionStatus!;
   }
 
@@ -97,13 +105,13 @@ class LocationService extends ChangeNotifier {
     final serviceEnabled = await isLocationServiceEnabled();
     if (!serviceEnabled) {
       _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
-      notifyListeners();
+      _safeNotifyListeners();
       return LocationPermissionStatus.serviceDisabled;
     }
 
     final permission = await Geolocator.requestPermission();
     _lastPermissionStatus = _mapPermission(permission);
-    notifyListeners();
+    _safeNotifyListeners();
     return _lastPermissionStatus!;
   }
 
@@ -129,7 +137,7 @@ class LocationService extends ChangeNotifier {
       );
 
       _lastKnownPosition = position;
-      notifyListeners();
+      _safeNotifyListeners();
 
       return LocationResult(
         latitude: position.latitude,
@@ -155,7 +163,7 @@ class LocationService extends ChangeNotifier {
       if (position == null) return null;
 
       _lastKnownPosition = position;
-      notifyListeners();
+      _safeNotifyListeners();
 
       return LocationResult(
         latitude: position.latitude,
@@ -232,7 +240,7 @@ class LocationService extends ChangeNotifier {
             longitude: position.longitude,
             accuracy: position.accuracy,
           );
-          notifyListeners();
+          _safeNotifyListeners();
         },
         onError: (error) {
           // Handle stream errors silently, tracking continues
@@ -254,12 +262,12 @@ class LocationService extends ChangeNotifier {
           longitude: initialPosition.longitude,
           accuracy: initialPosition.accuracy,
         );
-        notifyListeners();
+        _safeNotifyListeners();
       } catch (_) {
         // Ignore error, stream will provide updates
       }
 
-      notifyListeners();
+      _safeNotifyListeners();
       return true;
     } catch (e) {
       debugPrint('Failed to start location tracking: $e');
@@ -272,13 +280,16 @@ class LocationService extends ChangeNotifier {
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
     _isTracking = false;
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   /// Disposes of the service and stops any active tracking.
   @override
   void dispose() {
-    stopTracking();
+    _isDisposed = true;
+    _positionStreamSubscription?.cancel();
+    _positionStreamSubscription = null;
+    _isTracking = false;
     super.dispose();
   }
 

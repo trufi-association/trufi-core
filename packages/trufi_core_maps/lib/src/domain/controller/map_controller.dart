@@ -16,6 +16,7 @@ class TrufiMapController {
   final ValueNotifier<TrufiCameraPosition> cameraPositionNotifier;
   final ValueNotifier<Map<String, TrufiLayer>> layersNotifier;
   bool _mutateScheduled = false;
+  bool _isDisposed = false;
 
   List<TrufiLayer> get visibleLayers => layersNotifier.value.values
       .where((l) => l.visible)
@@ -70,11 +71,13 @@ class TrufiMapController {
 
   void mutateLayers() {
     // Debounce: only schedule one callback per frame
-    if (_mutateScheduled) return;
+    if (_mutateScheduled || _isDisposed) return;
     _mutateScheduled = true;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _mutateScheduled = false;
+      // Skip if disposed while waiting for the callback
+      if (_isDisposed) return;
       // Create a new map reference from the current state to trigger listeners
       layersNotifier.value = Map<String, TrufiLayer>.from(layersNotifier.value);
     });
@@ -166,10 +169,10 @@ class TrufiMapController {
   }
 
   void dispose() {
+    _isDisposed = true;
     for (final layer in layersNotifier.value.values.toList()) {
       layer.dispose();
     }
-    layersNotifier.value = <String, TrufiLayer>{};
     cameraPositionNotifier.dispose();
     layersNotifier.dispose();
   }

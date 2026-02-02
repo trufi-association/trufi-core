@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
@@ -27,6 +29,11 @@ export 'services/deep_link_service.dart' show SharedRoute, SharedRouteNotifier;
 Future<void> runTrufiApp(AppConfiguration config) async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Use path URL strategy for web (removes # from URLs)
+  if (kIsWeb) {
+    usePathUrlStrategy();
+  }
+
   // Run the app (initialization happens inside TrufiApp)
   runApp(TrufiApp(config: config));
 }
@@ -48,9 +55,22 @@ class _TrufiAppState extends State<TrufiApp> {
   late final SharedRouteNotifier _sharedRouteNotifier;
   DeepLinkService? _deepLinkService;
 
+  /// The initial route from the URL (captured before MaterialApp consumes it)
+  String? _initialRoute;
+
   @override
   void initState() {
     super.initState();
+
+    // Capture the initial route before it's lost during initialization
+    if (kIsWeb) {
+      _initialRoute =
+          WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+      if (_initialRoute == '/' || _initialRoute == null) {
+        _initialRoute = null; // Don't need to navigate if already at root
+      }
+    }
+
     _localeManager = LocaleManager(
       defaultLocale: widget.config.localeConfig.defaultLocale,
     );
@@ -60,6 +80,7 @@ class _TrufiAppState extends State<TrufiApp> {
     _router = AppRouter(
       screens: widget.config.screens,
       socialMediaLinks: widget.config.socialMediaLinks,
+      initialRoute: _initialRoute,
     );
     _sharedRouteNotifier = SharedRouteNotifier();
 

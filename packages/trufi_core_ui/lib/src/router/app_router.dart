@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,11 +11,15 @@ class AppRouter {
   final GlobalKey<NavigatorState> rootNavigatorKey;
   final GlobalKey<NavigatorState> shellNavigatorKey;
 
+  /// Initial route to navigate to (for web deep linking)
+  final String? initialRoute;
+
   GoRouter? _router;
 
   AppRouter({
     required this.screens,
     this.socialMediaLinks = const [],
+    this.initialRoute,
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
   }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
@@ -38,10 +43,34 @@ class AppRouter {
         )
         .toList();
 
+    // Add the /route deep link handler to the routes list
+    final allRoutes = [
+      ...routes,
+      // Special route for web deep linking (shared routes)
+      GoRoute(
+        path: '/route',
+        name: 'shared_route',
+        redirect: (context, state) {
+          // Parse and store the shared route
+          if (state.uri.queryParameters.isNotEmpty) {
+            final route = SharedRoute.fromUri(state.uri);
+            if (route != null) {
+              final notifier = Provider.of<SharedRouteNotifier>(
+                context,
+                listen: false,
+              );
+              notifier.setPendingRoute(route);
+            }
+          }
+          // Always redirect to home
+          return '/';
+        },
+      ),
+    ];
+
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: '/',
-      debugLogDiagnostics: true,
+      initialLocation: initialRoute ?? '/',
       routes: [
         ShellRoute(
           navigatorKey: shellNavigatorKey,
@@ -53,7 +82,7 @@ class AppRouter {
               child: child,
             );
           },
-          routes: routes.isEmpty ? [_defaultHomeRoute()] : routes,
+          routes: allRoutes.isEmpty ? [_defaultHomeRoute()] : allRoutes,
         ),
       ],
       errorBuilder: (context, state) => ErrorScreen(error: state.error),
