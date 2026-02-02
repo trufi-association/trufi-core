@@ -961,8 +961,16 @@ class _HomeScreenState extends State<HomeScreen>
 
           return LayoutBuilder(
             builder: (context, constraints) {
+              // Responsive layout: use side panel for wide screens (≥600px)
+              final isWideScreen = constraints.maxWidth >= 600;
+              final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
+
+              // Update viewport with actual map area size (excluding side panel on wide screens)
+              final mapWidth = isWideScreen
+                  ? constraints.maxWidth - sidePanelWidth
+                  : constraints.maxWidth;
               _fitCameraLayer?.updateViewport(
-                Size(constraints.maxWidth, constraints.maxHeight),
+                Size(mapWidth, constraints.maxHeight),
                 MediaQuery.of(context).viewPadding,
               );
 
@@ -971,17 +979,25 @@ class _HomeScreenState extends State<HomeScreen>
                 _viewportReady = true;
                 if (_pendingFitPoints != null &&
                     _pendingFitPoints!.isNotEmpty) {
-                  // Set initial padding considering search bar and expanded sheet
-                  final sheetHeight = constraints.maxHeight * _sheetMidSize;
-                  _fitCameraLayer?.updatePadding(
-                    EdgeInsets.only(
-                      top: 120, // SearchLocationBar height
-                      bottom: sheetHeight,
-                      left: 30,
-                      right: 30,
-                    ),
-                    recenter: false,
-                  );
+                  // Set initial padding based on screen type
+                  if (isWideScreen) {
+                    _fitCameraLayer?.updatePadding(
+                      const EdgeInsets.all(30),
+                      recenter: false,
+                    );
+                  } else {
+                    // Narrow screen: account for search bar and bottom sheet
+                    final sheetHeight = constraints.maxHeight * _sheetMidSize;
+                    _fitCameraLayer?.updatePadding(
+                      EdgeInsets.only(
+                        top: 120, // SearchLocationBar height
+                        bottom: sheetHeight,
+                        left: 30,
+                        right: 30,
+                      ),
+                      recenter: false,
+                    );
+                  }
                   _fitCameraLayer?.setFitPoints(_pendingFitPoints!);
                 }
               }
@@ -1020,19 +1036,12 @@ class _HomeScreenState extends State<HomeScreen>
 
               final isDarkMode = theme.brightness == Brightness.dark;
 
-              // Responsive layout: use side panel for wide screens (≥600px)
-              final isWideScreen = constraints.maxWidth >= 600;
-              final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
-
               // Update camera padding for side panel layout (panel on LEFT)
+              // Note: The map is already positioned to the right of the side panel,
+              // so we don't need to include sidePanelWidth in the padding.
               if (isWideScreen) {
                 _fitCameraLayer?.updatePadding(
-                  EdgeInsets.only(
-                    top: 30,
-                    bottom: 30,
-                    left: sidePanelWidth + 30,
-                    right: 30,
-                  ),
+                  const EdgeInsets.all(30),
                 );
               }
 
@@ -1109,6 +1118,7 @@ class _HomeScreenState extends State<HomeScreen>
                     mapEngineManager,
                     hasResults,
                     sidePanelOffset: 0, // No offset needed, panel is on left
+                    isWideScreen: isWideScreen,
                   ),
 
                   // Narrow screens: bottom sheet for results
@@ -1140,6 +1150,7 @@ class _HomeScreenState extends State<HomeScreen>
     MapEngineManager mapEngineManager,
     bool hasResults, {
     double sidePanelOffset = 0,
+    bool isWideScreen = false,
   }) {
     return Positioned(
       right: 16 + sidePanelOffset,
@@ -1147,7 +1158,8 @@ class _HomeScreenState extends State<HomeScreen>
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.only(top: 120), // Below SearchLocationBar
+          // On wide screens, no floating SearchBar so less top padding needed
+          padding: EdgeInsets.only(top: isWideScreen ? 16 : 120),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
