@@ -9,6 +9,7 @@ import '../../domain/entities/plan_location.dart';
 import '../../domain/entities/route.dart';
 import '../../domain/entities/transport_mode.dart';
 import '../graphql/polyline_decoder.dart';
+import '../utils/json_utils.dart';
 
 /// Parses OTP 2.4 standard GraphQL responses into domain entities.
 class Otp24ResponseParser {
@@ -16,59 +17,78 @@ class Otp24ResponseParser {
 
   /// Parses a plan response from OTP 2.4.
   static Plan parsePlan(Map<String, dynamic> json) {
+    print('[OTP24] parsePlan called with keys: ${json.keys.toList()}');
     final planData = json['plan'] as Map<String, dynamic>?;
     if (planData == null) {
+      print('[OTP24] planData is null, returning empty Plan');
       return const Plan();
     }
+    print('[OTP24] planData keys: ${planData.keys.toList()}');
 
-    return Plan(
-      from: _parsePlanLocation(planData['from']),
-      to: _parsePlanLocation(planData['to']),
-      itineraries: _parseItineraries(planData['itineraries']),
-    );
+    try {
+      final plan = Plan(
+        from: _parsePlanLocation(planData['from']),
+        to: _parsePlanLocation(planData['to']),
+        itineraries: _parseItineraries(planData['itineraries']),
+      );
+      print('[OTP24] Plan parsed successfully with ${plan.itineraries?.length ?? 0} itineraries');
+      return plan;
+    } catch (e, stack) {
+      print('[OTP24] Error parsing plan: $e');
+      print('[OTP24] Stack: $stack');
+      rethrow;
+    }
   }
 
   static PlanLocation? _parsePlanLocation(Map<String, dynamic>? json) {
     if (json == null) return null;
     return PlanLocation(
       name: json['name'] as String?,
-      latitude: (json['lat'] as num?)?.toDouble(),
-      longitude: (json['lon'] as num?)?.toDouble(),
+      latitude: json.getDouble('lat'),
+      longitude: json.getDouble('lon'),
     );
   }
 
   static List<Itinerary>? _parseItineraries(List<dynamic>? itineraries) {
     if (itineraries == null) return null;
-    return itineraries
-        .map((i) => _parseItinerary(i as Map<String, dynamic>))
-        .toList();
+    print('[OTP24] Parsing ${itineraries.length} itineraries');
+    return itineraries.asMap().entries.map((entry) {
+      print('[OTP24] Parsing itinerary ${entry.key}');
+      try {
+        return _parseItinerary(entry.value as Map<String, dynamic>);
+      } catch (e, stack) {
+        print('[OTP24] Error parsing itinerary ${entry.key}: $e');
+        print('[OTP24] Stack: $stack');
+        rethrow;
+      }
+    }).toList();
   }
 
   static Itinerary _parseItinerary(Map<String, dynamic> json) {
+    print('[OTP24] _parseItinerary keys: ${json.keys.toList()}');
+    print('[OTP24] Raw values - startTime: ${json['startTime']} (${json['startTime'].runtimeType}), duration: ${json['duration']} (${json['duration'].runtimeType})');
+
     final legs = (json['legs'] as List<dynamic>?)
             ?.map((l) => _parseLeg(l as Map<String, dynamic>))
             .toList() ??
         [];
 
-    // OTP 2.4 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
-    return Itinerary(
+    final itinerary = Itinerary(
       legs: legs,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: json['duration'] as int? ?? 0),
-      walkDistance: (json['walkDistance'] as num?)?.toDouble() ?? 0,
-      walkTime: Duration(seconds: json['walkTime'] as int? ?? 0),
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      walkDistance: json.getDoubleOr('walkDistance', 0),
+      walkTime: json.getDurationOr('walkTime'),
     );
+    print('[OTP24] Itinerary parsed: startTime=${itinerary.startTime}, duration=${itinerary.duration}');
+    return itinerary;
   }
 
   static Leg _parseLeg(Map<String, dynamic> json) {
+    print('[OTP24] _parseLeg keys: ${json.keys.toList()}');
+    print('[OTP24] Leg raw - mode: ${json['mode']}, startTime: ${json['startTime']} (${json['startTime']?.runtimeType}), distance: ${json['distance']} (${json['distance']?.runtimeType})');
+
     final mode = json['mode'] as String? ?? 'WALK';
     final encodedPoints = json['legGeometry']?['points'] as String?;
     final decodedPoints = encodedPoints != null
@@ -77,35 +97,35 @@ class Otp24ResponseParser {
 
     final routeData = json['route'] as Map<String, dynamic>?;
 
-    // OTP 2.4 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
-    return Leg(
-      mode: mode,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: (json['duration'] as num?)?.toInt() ?? 0),
-      distance: (json['distance'] as num?)?.toDouble() ?? 0,
-      transitLeg: json['transitLeg'] as bool? ?? false,
-      encodedPoints: encodedPoints,
-      decodedPoints: decodedPoints,
-      route: routeData != null ? _parseRoute(routeData) : null,
-      shortName: routeData?['shortName'] as String?,
-      routeLongName: routeData?['longName'] as String? ?? '',
-      agency: _parseAgencyFromRoute(routeData),
-      fromPlace: _parsePlace(json['from']),
-      toPlace: _parsePlace(json['to']),
-      intermediatePlaces: _parseIntermediatePlaces(json['intermediatePlaces']),
-      headsign: json['headsign'] as String?,
-      rentedBike: json['rentedBike'] as bool?,
-      interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
-      realtimeState: json['realTime'] == true ? null : null,
-    );
+    try {
+      final leg = Leg(
+        mode: mode,
+        startTime: json.getDateTimeOr('startTime', DateTime.now()),
+        endTime: json.getDateTimeOr('endTime', DateTime.now()),
+        duration: json.getDurationOr('duration'),
+        distance: json.getDoubleOr('distance', 0),
+        transitLeg: json['transitLeg'] as bool? ?? false,
+        encodedPoints: encodedPoints,
+        decodedPoints: decodedPoints,
+        route: routeData != null ? _parseRoute(routeData) : null,
+        shortName: routeData?['shortName'] as String?,
+        routeLongName: routeData?['longName'] as String? ?? '',
+        agency: _parseAgencyFromRoute(routeData),
+        fromPlace: _parsePlace(json['from']),
+        toPlace: _parsePlace(json['to']),
+        intermediatePlaces: _parseIntermediatePlaces(json['intermediatePlaces']),
+        headsign: json['headsign'] as String?,
+        rentedBike: json['rentedBike'] as bool?,
+        interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
+        realtimeState: json['realTime'] == true ? null : null,
+      );
+      print('[OTP24] Leg parsed: mode=$mode, distance=${leg.distance}');
+      return leg;
+    } catch (e, stack) {
+      print('[OTP24] Error parsing leg: $e');
+      print('[OTP24] Stack: $stack');
+      rethrow;
+    }
   }
 
   static Route _parseRoute(Map<String, dynamic> json) {
@@ -143,15 +163,11 @@ class Otp24ResponseParser {
     final stopData = json['stop'] as Map<String, dynamic>?;
     return Place(
       name: json['name'] as String? ?? '',
-      lat: (json['lat'] as num).toDouble(),
-      lon: (json['lon'] as num).toDouble(),
+      lat: json.getDoubleOr('lat', 0),
+      lon: json.getDoubleOr('lon', 0),
       stopId: stopData?['gtfsId'] as String?,
-      arrivalTime: json['arrivalTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-          : null,
-      departureTime: json['departureTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-          : null,
+      arrivalTime: json.getDateTime('arrivalTime'),
+      departureTime: json.getDateTime('departureTime'),
     );
   }
 
@@ -162,15 +178,11 @@ class Otp24ResponseParser {
       final stopData = json['stop'] as Map<String, dynamic>?;
       return Place(
         name: json['name'] as String? ?? '',
-        lat: (json['lat'] as num).toDouble(),
-        lon: (json['lon'] as num).toDouble(),
+        lat: json.getDoubleOr('lat', 0),
+        lon: json.getDoubleOr('lon', 0),
         stopId: stopData?['gtfsId'] as String?,
-        arrivalTime: json['arrivalTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-            : null,
-        departureTime: json['departureTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-            : null,
+        arrivalTime: json.getDateTime('arrivalTime'),
+        departureTime: json.getDateTime('departureTime'),
       );
     }).toList();
   }

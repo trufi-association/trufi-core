@@ -1,5 +1,6 @@
 import 'package:latlong2/latlong.dart';
 
+import '../../data/utils/json_utils.dart';
 import 'vertex_type.dart';
 
 /// A place in an itinerary (stop, station, etc.).
@@ -32,15 +33,11 @@ class Place {
   factory Place.fromJson(Map<String, dynamic> json) {
     return Place(
       name: json['name'] as String? ?? '',
-      lat: (json['lat'] as num).toDouble(),
-      lon: (json['lon'] as num).toDouble(),
+      lat: json.getDoubleOr('lat', 0),
+      lon: json.getDoubleOr('lon', 0),
       vertexType: VertexTypeExtension.fromString(json['vertexType'] as String?),
-      arrivalTime: json['arrivalTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-          : null,
-      departureTime: json['departureTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-          : null,
+      arrivalTime: json.getDateTime('arrivalTime'),
+      departureTime: json.getDateTime('departureTime'),
       stopId: json['stopId'] as String?,
       stopCode: json['stopCode'] as String?,
       platformCode: json['platformCode'] as String?,

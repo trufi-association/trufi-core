@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../data/graphql/polyline_decoder.dart';
+import '../../data/utils/json_utils.dart';
 import 'agency.dart';
 import 'place.dart';
 import 'realtime_state.dart';
@@ -73,10 +74,10 @@ class Leg extends Equatable {
 
     return Leg(
       mode: json['mode'] as String,
-      startTime: DateTime.fromMillisecondsSinceEpoch(json['startTime'] as int),
-      endTime: DateTime.fromMillisecondsSinceEpoch(json['endTime'] as int),
-      duration: Duration(seconds: json['duration'] as int),
-      distance: (json['distance'] as num).toDouble(),
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      distance: json.getDoubleOr('distance', 0),
       transitLeg: json['transitLeg'] as bool,
       encodedPoints: encodedPoints,
       decodedPoints: decodedPoints,

@@ -1214,6 +1214,7 @@ class _RouteLayer extends TrufiLayer {
   _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
 
   void setItinerary(routing.Itinerary itinerary) {
+    print('[RouteLayer] setItinerary called with ${itinerary.legs.length} legs');
     clearMarkers();
     clearLines();
 
@@ -1222,6 +1223,11 @@ class _RouteLayer extends TrufiLayer {
     // Add legs with improved styling
     for (int i = 0; i < itinerary.legs.length; i++) {
       final leg = itinerary.legs[i];
+      print('[RouteLayer] Leg $i: mode=${leg.mode}, decodedPoints=${leg.decodedPoints.length}, encodedPoints=${leg.encodedPoints?.length ?? 0}');
+      if (leg.decodedPoints.isNotEmpty) {
+        print('[RouteLayer] Leg $i first point: ${leg.decodedPoints.first}');
+        print('[RouteLayer] Leg $i last point: ${leg.decodedPoints.last}');
+      }
       if (leg.decodedPoints.isEmpty) continue;
 
       allPoints.addAll(leg.decodedPoints);
@@ -1304,7 +1310,10 @@ class _RouteLayer extends TrufiLayer {
       }
     }
 
+    print('[RouteLayer] Total allPoints: ${allPoints.length}');
     if (allPoints.isNotEmpty) {
+      print('[RouteLayer] First point: ${allPoints.first}');
+      print('[RouteLayer] Last point: ${allPoints.last}');
       // Add start marker (origin)
       addMarker(
         TrufiMarker(
@@ -1325,6 +1334,9 @@ class _RouteLayer extends TrufiLayer {
           alignment: Alignment.topCenter,
         ),
       );
+      print('[RouteLayer] Added start and end markers');
+    } else {
+      print('[RouteLayer] WARNING: No points to render!');
     }
   }
 

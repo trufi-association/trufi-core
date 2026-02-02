@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:graphql/client.dart';
 import 'package:gql/language.dart';
 
@@ -95,6 +97,9 @@ class Otp24PlanRepository implements PlanRepository {
     if (result.source?.isEager ?? false) {
       await Future.delayed(const Duration(milliseconds: 200));
     }
+
+    print('[OTP24 Repository] Raw response data:');
+    print(const JsonEncoder.withIndent('  ').convert(result.data));
 
     return Otp24ResponseParser.parsePlan(result.data!);
   }

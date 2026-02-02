@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../data/utils/json_utils.dart';
 import 'leg.dart';
 import 'route.dart';
 import 'transport_mode.dart';
@@ -46,20 +47,19 @@ class Itinerary extends Equatable {
         .map((e) => Leg.fromJson(e as Map<String, dynamic>))
         .toList();
 
-    // Colors are now assigned in the constructor
+    final emissionsData = json['emissionsPerPerson'] as Map<String, dynamic>?;
+
     return Itinerary(
       legs: parsedLegs,
-      startTime: DateTime.fromMillisecondsSinceEpoch(json['startTime'] as int),
-      endTime: DateTime.fromMillisecondsSinceEpoch(json['endTime'] as int),
-      walkTime: Duration(seconds: json['walkTime'] as int),
-      duration: Duration(seconds: json['duration'] as int),
-      walkDistance: (json['walkDistance'] as num).toDouble(),
-      transfers: json['transfers'] as int?,
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      walkTime: json.getDurationOr('walkTime'),
+      duration: json.getDurationOr('duration'),
+      walkDistance: json.getDoubleOr('walkDistance', 0),
+      transfers: json.getInt('transfers'),
       arrivedAtDestinationWithRentedBicycle:
           json['arrivedAtDestinationWithRentedBicycle'] as bool? ?? false,
-      emissionsPerPerson:
-          (json['emissionsPerPerson']?['emissionsPerPersonCo2'] as num?)
-              ?.toDouble(),
+      emissionsPerPerson: emissionsData?.getDouble('emissionsPerPersonCo2'),
     );
   }
 
