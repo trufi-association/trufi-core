@@ -31,6 +31,7 @@ dependencies:
   trufi_core_utils: ^1.0.0
   trufi_core_poi_layers: ^1.0.0
   share_plus: ^10.1.4
+  go_router: ^17.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
@@ -101,6 +103,8 @@ class _HomeScreenState extends State<HomeScreen>
     super.didChangeDependencies();
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();
+    // Parse URL parameters on first load (web only)
+    _parseUrlAndSetPlaces();
   }
 
   @override
@@ -110,37 +114,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.deactivate();
   }
 
-  @override
-  void activate() {
-    super.activate();
-    // Refresh route when returning to this screen
-    if (_needsRouteRefresh) {
-      _needsRouteRefresh = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _refreshRouteIfNeeded();
-      });
-    }
-  }
-
-  void _refreshRouteIfNeeded() {
-    if (!mounted || _mapController == null) return;
-
-    final cubit = context.read<RoutePlannerCubit>();
-    final state = cubit.state;
-
-    // If there's a selected itinerary, ensure it's rendered on the map
-    // This handles the case when returning from another screen where
-    // MapLibre may have lost its internal layer state
-    if (state.selectedItinerary != null) {
-      // Force complete re-render by clearing and recreating the route layer
-      // This ensures MapLibre sources are properly re-initialized
-      _updateRouteOnMap(state.selectedItinerary);
-      _updateFitCameraPoints(state);
-    } else if (state.fromPlace != null || state.toPlace != null) {
-      // Update location markers if no route but places are set
-      _updateLocationMarkers(state);
-    }
-  }
 
   void _setupSharedRouteListener() {
     // Try to get SharedRouteNotifier from context (it may not be available)
@@ -184,6 +157,153 @@ class _HomeScreenState extends State<HomeScreen>
     cubit.setFromPlace(fromPlace);
     cubit.setToPlace(toPlace);
     cubit.fetchPlan(selectedItineraryIndex: route.selectedItineraryIndex);
+  }
+
+  // ============================================================
+  // URL State Sync (Web)
+  // ============================================================
+
+  TrufiLocation? _lastUrlFrom;
+  TrufiLocation? _lastUrlTo;
+  routing.TimeMode? _lastUrlTimeMode;
+  DateTime? _lastUrlDateTime;
+  bool _urlParsed = false;
+
+  /// Updates the URL with current origin/destination and time settings (web only).
+  void _updateUrlWithPlaces(TrufiLocation? from, TrufiLocation? to) {
+    if (!kIsWeb) return;
+
+    // Get current time settings
+    routing.TimeMode? currentTimeMode;
+    DateTime? currentDateTime;
+    try {
+      final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
+      if (prefsManager != null) {
+        currentTimeMode = prefsManager.timeMode;
+        currentDateTime = prefsManager.dateTime;
+      }
+    } catch (_) {}
+
+    // Skip if nothing has changed
+    final placesChanged = _lastUrlFrom != from || _lastUrlTo != to;
+    final timeChanged = _lastUrlTimeMode != currentTimeMode ||
+        _lastUrlDateTime != currentDateTime;
+    if (!placesChanged && !timeChanged) return;
+
+    // Update tracking variables
+    _lastUrlFrom = from;
+    _lastUrlTo = to;
+    _lastUrlTimeMode = currentTimeMode;
+    _lastUrlDateTime = currentDateTime;
+
+    // Build query parameters
+    final params = <String, String>{};
+    if (from != null) {
+      params['from_lat'] = from.latitude.toStringAsFixed(6);
+      params['from_lng'] = from.longitude.toStringAsFixed(6);
+      if (from.description.isNotEmpty) {
+        params['from_name'] = from.description;
+      }
+    }
+    if (to != null) {
+      params['to_lat'] = to.latitude.toStringAsFixed(6);
+      params['to_lng'] = to.longitude.toStringAsFixed(6);
+      if (to.description.isNotEmpty) {
+        params['to_name'] = to.description;
+      }
+    }
+
+    // Add time settings (use already-fetched values)
+    if (currentTimeMode != null) {
+      params['time_mode'] = currentTimeMode.name;
+      if (currentTimeMode != routing.TimeMode.leaveNow &&
+          currentDateTime != null) {
+        params['time'] = currentDateTime.millisecondsSinceEpoch.toString();
+      }
+    }
+
+    // Update URL without navigation
+    try {
+      final uri = Uri(path: '/', queryParameters: params.isEmpty ? null : params);
+      GoRouter.of(context).replace(uri.toString());
+    } catch (e) {
+      debugPrint('HomeScreen: Error updating URL: $e');
+    }
+  }
+
+  /// Parses URL parameters and sets places (web only, called once on init).
+  Future<void> _parseUrlAndSetPlaces() async {
+    if (!kIsWeb || _urlParsed) return;
+    _urlParsed = true;
+
+    try {
+      final routerState = GoRouterState.of(context);
+      final params = routerState.uri.queryParameters;
+
+      if (params.isEmpty) return;
+
+      final cubit = context.read<RoutePlannerCubit>();
+
+      // Parse and apply time settings first
+      try {
+        final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
+        if (prefsManager != null) {
+          final timeModeStr = params['time_mode'];
+          if (timeModeStr != null) {
+            final timeMode = routing.TimeMode.values.firstWhere(
+              (m) => m.name == timeModeStr,
+              orElse: () => routing.TimeMode.leaveNow,
+            );
+            prefsManager.setTimeMode(timeMode);
+
+            // Parse datetime if not leaveNow
+            if (timeMode != routing.TimeMode.leaveNow) {
+              final timeMs = int.tryParse(params['time'] ?? '');
+              if (timeMs != null) {
+                prefsManager.setDateTime(
+                  DateTime.fromMillisecondsSinceEpoch(timeMs),
+                );
+              }
+            }
+          }
+        }
+      } catch (_) {
+        // RoutingPreferencesManager not available
+      }
+
+      // Parse origin
+      final fromLat = double.tryParse(params['from_lat'] ?? '');
+      final fromLng = double.tryParse(params['from_lng'] ?? '');
+      if (fromLat != null && fromLng != null) {
+        final fromPlace = TrufiLocation(
+          description: params['from_name'] ?? 'Origin',
+          latitude: fromLat,
+          longitude: fromLng,
+        );
+        await cubit.setFromPlace(fromPlace);
+        _lastUrlFrom = fromPlace;
+      }
+
+      // Parse destination
+      final toLat = double.tryParse(params['to_lat'] ?? '');
+      final toLng = double.tryParse(params['to_lng'] ?? '');
+      if (toLat != null && toLng != null) {
+        final toPlace = TrufiLocation(
+          description: params['to_name'] ?? 'Destination',
+          latitude: toLat,
+          longitude: toLng,
+        );
+        await cubit.setToPlace(toPlace);
+        _lastUrlTo = toPlace;
+      }
+
+      // Fetch plan if both are set
+      if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
+        await cubit.fetchPlan();
+      }
+    } catch (e) {
+      debugPrint('HomeScreen: Error parsing URL: $e');
+    }
   }
 
   /// Attempts to start GPS tracking automatically on app start.
@@ -769,7 +889,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (!mounted) return;
 
-    // TODO(md-weber): Organize that section a bit an check if we can write a test for it
+    final cubit = context.read<RoutePlannerCubit>();
 
     if (result == 'origin') {
       final location = TrufiLocation(
@@ -779,9 +899,11 @@ class _HomeScreenState extends State<HomeScreen>
         address:
             '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
       );
-      final cubit = context.read<RoutePlannerCubit>();
       await cubit.setFromPlace(location);
-      _fetchPlanIfReady();
+      // Check if both places are now set and fetch
+      if (cubit.state.toPlace != null) {
+        cubit.fetchPlan();
+      }
     } else if (result == 'destination') {
       final location = TrufiLocation(
         description: l10n.selectedLocation,
@@ -790,9 +912,11 @@ class _HomeScreenState extends State<HomeScreen>
         address:
             '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
       );
-      final cubit = context.read<RoutePlannerCubit>();
       await cubit.setToPlace(location);
-      _fetchPlanIfReady();
+      // Check if both places are now set and fetch
+      if (cubit.state.fromPlace != null) {
+        cubit.fetchPlan();
+      }
     }
   }
 
@@ -819,6 +943,8 @@ class _HomeScreenState extends State<HomeScreen>
           _updateRouteOnMap(state.selectedItinerary);
           _updateFitCameraPoints(state);
           _expandSheetIfNeeded(state);
+          // Update URL with current places (web only)
+          _updateUrlWithPlaces(state.fromPlace, state.toPlace);
         },
         builder: (context, state) {
           final locationState = SearchLocationState(
@@ -858,6 +984,38 @@ class _HomeScreenState extends State<HomeScreen>
                   );
                   _fitCameraLayer?.setFitPoints(_pendingFitPoints!);
                 }
+              }
+
+              // Ensure route is rendered when returning from another screen
+              // The BlocConsumer listener only fires on state changes, so if we
+              // navigate away and come back with the same state, we need to
+              // re-render the route manually.
+              final needsRouteRender = _needsRouteRefresh ||
+                  (state.selectedItinerary != null && _routeLayer == null);
+
+              if (_needsRouteRefresh) {
+                _needsRouteRefresh = false;
+                // Reset URL tracking to force URL restoration
+                _lastUrlFrom = null;
+                _lastUrlTo = null;
+                _lastUrlTimeMode = null;
+                _lastUrlDateTime = null;
+              }
+
+              if (needsRouteRender) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  if (state.selectedItinerary != null) {
+                    // Clear location markers first (they duplicate with route markers)
+                    _updateLocationMarkers(state);
+                    _updateRouteOnMap(state.selectedItinerary);
+                    _updateFitCameraPoints(state);
+                  } else if (state.fromPlace != null || state.toPlace != null) {
+                    _updateLocationMarkers(state);
+                  }
+                  // Restore URL with current state
+                  _updateUrlWithPlaces(state.fromPlace, state.toPlace);
+                });
               }
 
               final isDarkMode = theme.brightness == Brightness.dark;
@@ -960,7 +1118,7 @@ class _HomeScreenState extends State<HomeScreen>
                       widget.config.poiLayersManager?.selectedPOI == null)
                     _buildBottomSheet(state, theme, constraints),
 
-                  // POI detail panel (narrow screens) - shows at bottom, replaces results
+                  // POI detail panel (narrow screens only) - shows at bottom
                   if (!isWideScreen &&
                       widget.config.poiLayersManager?.selectedPOI != null)
                     _buildPOIDetailPanel(
@@ -1364,23 +1522,9 @@ class _HomeScreenState extends State<HomeScreen>
                       locationService: _locationService,
                     ),
                   ),
-                // POI detail panel (wide screen)
-                if (widget.config.poiLayersManager?.selectedPOI != null)
-                  _buildPOIDetailPanel(
-                    widget.config.poiLayersManager!.selectedPOI!,
-                    theme,
-                    isWideScreen: true,
-                  ),
               ],
               // Empty state when no results
-              if (!hasResults) ...[
-                // POI detail panel when no results (wide screen)
-                if (widget.config.poiLayersManager?.selectedPOI != null)
-                  _buildPOIDetailPanel(
-                    widget.config.poiLayersManager!.selectedPOI!,
-                    theme,
-                    isWideScreen: true,
-                  ),
+              if (!hasResults)
                 Expanded(
                   child: Center(
                     child: Padding(
@@ -1413,7 +1557,13 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                 ),
-              ],
+              // POI detail panel (wide screen) - always at bottom of side panel
+              if (widget.config.poiLayersManager?.selectedPOI != null)
+                _buildPOIDetailPanel(
+                  widget.config.poiLayersManager!.selectedPOI!,
+                  theme,
+                  isWideScreen: true,
+                ),
             ],
           ),
         ),
@@ -1572,15 +1722,16 @@ class _HomeScreenState extends State<HomeScreen>
   /// Builds the POI detail panel.
   ///
   /// - On narrow screens: Shows as a bottom panel that replaces/overlays the results sheet
-  /// - On wide screens: Shows below the results in the side panel
+  /// - On wide screens: Shows at the bottom of the side panel
   Widget _buildPOIDetailPanel(
     POI poi,
     ThemeData theme, {
     required bool isWideScreen,
   }) {
+    final l10n = HomeScreenLocalizations.of(context);
+
     if (isWideScreen) {
-      final l10n = HomeScreenLocalizations.of(context);
-      // Wide screen: compact card style for side panel
+      // Wide screen: compact card style at bottom of side panel
       return Container(
         margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -1779,7 +1930,7 @@ TrufiLocation _searchLocationToTrufiLocation(SearchLocation location) {
 
 /// Custom layer for displaying route on map with improved markers
 class _RouteLayer extends TrufiLayer {
-  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
+  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1000);
 
   void setItinerary(routing.Itinerary itinerary) {
     print(
@@ -1854,7 +2005,8 @@ class _RouteLayer extends TrufiLayer {
               icon: modeIcon,
             ),
             size: const Size(72, 28),
-            layerLevel: 0,
+            layerLevel: 2,
+            allowOverlap: true,
           ),
         );
       }
@@ -1876,7 +2028,8 @@ class _RouteLayer extends TrufiLayer {
               icon: Icons.directions_bike_rounded,
             ),
             size: const Size(72, 28),
-            layerLevel: 0,
+            layerLevel: 2,
+            allowOverlap: true,
           ),
         );
       }
@@ -1893,6 +2046,8 @@ class _RouteLayer extends TrufiLayer {
           position: allPoints.first,
           widget: const _OriginMarker(),
           size: const Size(24, 24),
+          layerLevel: 3,
+          allowOverlap: true,
         ),
       );
 
@@ -1904,6 +2059,8 @@ class _RouteLayer extends TrufiLayer {
           widget: const _DestinationMarker(),
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
+          layerLevel: 3,
+          allowOverlap: true,
         ),
       );
       print('[RouteLayer] Added start and end markers');
