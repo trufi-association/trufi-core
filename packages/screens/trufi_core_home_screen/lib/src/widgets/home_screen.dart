@@ -635,8 +635,10 @@ class _HomeScreenState extends State<HomeScreen>
     // Try to select a POI at the tap position
     final poiManager = widget.config.poiLayersManager;
     if (poiManager != null && _mapController != null) {
-      final selected =
-          poiManager.trySelectPOIAtPosition(_mapController!, position);
+      final selected = poiManager.trySelectPOIAtPosition(
+        _mapController!,
+        position,
+      );
       if (selected) {
         // POI was selected, panel will show automatically
         return;
@@ -1491,7 +1493,9 @@ class _HomeScreenState extends State<HomeScreen>
             IconButton.filled(
               icon: const Icon(Icons.share_rounded, size: 18),
               style: IconButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.1,
+                ),
                 foregroundColor: theme.colorScheme.primary,
               ),
               onPressed: () {
@@ -1503,8 +1507,8 @@ class _HomeScreenState extends State<HomeScreen>
                   itinerary: state.selectedItinerary!,
                   selectedItineraryIndex:
                       selectedIndex != null && selectedIndex != -1
-                          ? selectedIndex
-                          : null,
+                      ? selectedIndex
+                      : null,
                   appName: appName,
                   deepLinkScheme: widget.config.deepLinkScheme,
                   strings: ShareRouteStrings(
@@ -1710,20 +1714,17 @@ class _HomeScreenState extends State<HomeScreen>
     }
 
     // Narrow screen: bottom panel
-    // Use _JsonInteractionBlocker to prevent all interactions from reaching the map
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
-      child: _JsonInteractionBlocker(
-        child: SafeArea(
-          top: false,
-          child: POIDetailPanel(
-            poi: poi,
-            onClose: () => widget.config.poiLayersManager?.clearSelection(),
-            onSetAsOrigin: () => _setPoiAsOrigin(poi),
-            onSetAsDestination: () => _setPoiAsDestination(poi),
-          ),
+      child: SafeArea(
+        top: false,
+        child: POIDetailPanel(
+          poi: poi,
+          onClose: () => widget.config.poiLayersManager?.clearSelection(),
+          onSetAsOrigin: () => _setPoiAsOrigin(poi),
+          onSetAsDestination: () => _setPoiAsDestination(poi),
         ),
       ),
     );
@@ -1781,7 +1782,9 @@ class _RouteLayer extends TrufiLayer {
   _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
 
   void setItinerary(routing.Itinerary itinerary) {
-    print('[RouteLayer] setItinerary called with ${itinerary.legs.length} legs');
+    print(
+      '[RouteLayer] setItinerary called with ${itinerary.legs.length} legs',
+    );
     clearMarkers();
     clearLines();
 
@@ -1790,7 +1793,9 @@ class _RouteLayer extends TrufiLayer {
     // Add legs with improved styling
     for (int i = 0; i < itinerary.legs.length; i++) {
       final leg = itinerary.legs[i];
-      print('[RouteLayer] Leg $i: mode=${leg.mode}, decodedPoints=${leg.decodedPoints.length}, encodedPoints=${leg.encodedPoints?.length ?? 0}');
+      print(
+        '[RouteLayer] Leg $i: mode=${leg.mode}, decodedPoints=${leg.decodedPoints.length}, encodedPoints=${leg.encodedPoints?.length ?? 0}',
+      );
       if (leg.decodedPoints.isNotEmpty) {
         print('[RouteLayer] Leg $i first point: ${leg.decodedPoints.first}');
         print('[RouteLayer] Leg $i last point: ${leg.decodedPoints.last}');
@@ -2685,56 +2690,6 @@ class _MyLocationAccuracyCircle extends StatelessWidget {
         border: Border.all(
           color: const Color(0xFF4285F4).withValues(alpha: 0.3),
           width: 1,
-        ),
-      ),
-    );
-  }
-}
-
-/// Widget that blocks all pointer interactions from propagating to widgets below.
-/// This is needed on web where events would otherwise affect the map
-/// (clicks, drags, scroll) when interacting over panels.
-class _JsonInteractionBlocker extends StatelessWidget {
-  final Widget child;
-
-  const _JsonInteractionBlocker({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    // Use MouseRegion with opaque cursor to ensure the widget captures all mouse events
-    // Combined with Listener for scroll events and GestureDetector for touch/click
-    return MouseRegion(
-      // This makes the widget opaque to hit testing
-      opaque: true,
-      child: Listener(
-        // Capture all pointer events
-        onPointerDown: (_) {},
-        onPointerMove: (_) {},
-        onPointerUp: (_) {},
-        onPointerCancel: (_) {},
-        // Capture scroll events (mouse wheel on web)
-        onPointerSignal: (event) {
-          if (event is PointerScrollEvent) {
-            GestureBinding.instance.pointerSignalResolver.register(
-              event,
-              (event) {
-                // Do nothing - just claim the event to prevent map zoom
-              },
-            );
-          }
-        },
-        behavior: HitTestBehavior.opaque,
-        child: GestureDetector(
-          // Claim all gesture types to prevent them from reaching the map
-          // Note: onScale* handles both scale and pan gestures (pan is a subset of scale)
-          onTap: () {},
-          onDoubleTap: () {},
-          onLongPress: () {},
-          onScaleStart: (_) {},
-          onScaleUpdate: (_) {},
-          onScaleEnd: (_) {},
-          behavior: HitTestBehavior.opaque,
-          child: child,
         ),
       ),
     );

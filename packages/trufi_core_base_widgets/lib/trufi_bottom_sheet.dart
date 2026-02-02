@@ -13,7 +13,11 @@ import 'package:flutter/scheduler.dart';
 class TrufiBottomSheet extends StatefulWidget {
   /// Builder that provides the scroll controller for content that manages its own scrolling.
   /// Use this for ListView, GridView, or other scrollable content.
-  final Widget Function(BuildContext context, ScrollController scrollController)? builder;
+  final Widget Function(
+    BuildContext context,
+    ScrollController scrollController,
+  )?
+  builder;
 
   /// Simple content to display inside the bottom sheet.
   /// Will be wrapped in a SingleChildScrollView automatically.
@@ -53,7 +57,10 @@ class TrufiBottomSheet extends StatefulWidget {
     this.snap = false,
     this.snapSizes,
     this.controller,
-  }) : assert(builder != null || child != null, 'Either builder or child must be provided');
+  }) : assert(
+         builder != null || child != null,
+         'Either builder or child must be provided',
+       );
 
   @override
   State<TrufiBottomSheet> createState() => _TrufiBottomSheetState();
