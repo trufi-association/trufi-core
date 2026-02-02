@@ -276,6 +276,90 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Open in app:'**
   String get shareRouteOpenInApp;
+
+  /// Title for trip details screen
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Details'**
+  String get tripDetails;
+
+  /// Label for departure time
+  ///
+  /// In en, this message translates to:
+  /// **'Departure'**
+  String get departure;
+
+  /// Label for arrival time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get arrival;
+
+  /// Label for total distance
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get totalDistance;
+
+  /// Label for walking distance
+  ///
+  /// In en, this message translates to:
+  /// **'Walking'**
+  String get walking;
+
+  /// Section title for trip legs
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Steps'**
+  String get tripSteps;
+
+  /// Label before headsign destination
+  ///
+  /// In en, this message translates to:
+  /// **'Towards'**
+  String get towards;
+
+  /// Label for intermediate stops
+  ///
+  /// In en, this message translates to:
+  /// **'stops'**
+  String get stops;
+
+  /// Bike transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get bike;
+
+  /// Train transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Train'**
+  String get train;
+
+  /// Label for transfers count
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers'**
+  String get transfersLabel;
+
+  /// Label showing the transit agency operating a route
+  ///
+  /// In en, this message translates to:
+  /// **'Operated by {agency}'**
+  String operatedBy(String agency);
+
+  /// Button to view fare information
+  ///
+  /// In en, this message translates to:
+  /// **'View fares'**
+  String get viewFares;
+
+  /// CO2 emissions in grams
+  ///
+  /// In en, this message translates to:
+  /// **'{grams}g CO₂'**
+  String co2Emissions(String grams);
 }
 
 class _HomeScreenLocalizationsDelegate

@@ -167,11 +167,16 @@ class _HomeScreenState extends State<HomeScreen>
   TrufiLocation? _lastUrlTo;
   routing.TimeMode? _lastUrlTimeMode;
   DateTime? _lastUrlDateTime;
+  int? _lastUrlRouteIndex;
   bool _urlParsed = false;
+  bool _showDetailOnLoad = false;
 
-  /// Updates the URL with current origin/destination and time settings (web only).
-  void _updateUrlWithPlaces(TrufiLocation? from, TrufiLocation? to) {
+  /// Updates the URL with current state (web only).
+  void _updateUrlWithState(RoutePlannerState state) {
     if (!kIsWeb) return;
+
+    final from = state.fromPlace;
+    final to = state.toPlace;
 
     // Get current time settings
     routing.TimeMode? currentTimeMode;
@@ -184,17 +189,26 @@ class _HomeScreenState extends State<HomeScreen>
       }
     } catch (_) {}
 
+    // Calculate selected itinerary index
+    int? routeIndex;
+    if (state.selectedItinerary != null && state.plan?.itineraries != null) {
+      routeIndex = state.plan!.itineraries!.indexOf(state.selectedItinerary!);
+      if (routeIndex < 0) routeIndex = null;
+    }
+
     // Skip if nothing has changed
     final placesChanged = _lastUrlFrom != from || _lastUrlTo != to;
     final timeChanged = _lastUrlTimeMode != currentTimeMode ||
         _lastUrlDateTime != currentDateTime;
-    if (!placesChanged && !timeChanged) return;
+    final routeChanged = _lastUrlRouteIndex != routeIndex;
+    if (!placesChanged && !timeChanged && !routeChanged) return;
 
     // Update tracking variables
     _lastUrlFrom = from;
     _lastUrlTo = to;
     _lastUrlTimeMode = currentTimeMode;
     _lastUrlDateTime = currentDateTime;
+    _lastUrlRouteIndex = routeIndex;
 
     // Build query parameters
     final params = <String, String>{};
@@ -213,13 +227,18 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
 
-    // Add time settings (use already-fetched values)
+    // Add time settings
     if (currentTimeMode != null) {
       params['time_mode'] = currentTimeMode.name;
       if (currentTimeMode != routing.TimeMode.leaveNow &&
           currentDateTime != null) {
         params['time'] = currentDateTime.millisecondsSinceEpoch.toString();
       }
+    }
+
+    // Add selected route index
+    if (routeIndex != null && routeIndex >= 0) {
+      params['route'] = routeIndex.toString();
     }
 
     // Update URL without navigation
@@ -297,9 +316,16 @@ class _HomeScreenState extends State<HomeScreen>
         _lastUrlTo = toPlace;
       }
 
+      // Parse route index (selected itinerary)
+      final routeIndex = int.tryParse(params['route'] ?? '');
+
       // Fetch plan if both are set
       if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
-        await cubit.fetchPlan();
+        // If a route index is specified, show details on load
+        if (routeIndex != null && routeIndex >= 0) {
+          _showDetailOnLoad = true;
+        }
+        await cubit.fetchPlan(selectedItineraryIndex: routeIndex);
       }
     } catch (e) {
       debugPrint('HomeScreen: Error parsing URL: $e');
@@ -943,8 +969,8 @@ class _HomeScreenState extends State<HomeScreen>
           _updateRouteOnMap(state.selectedItinerary);
           _updateFitCameraPoints(state);
           _expandSheetIfNeeded(state);
-          // Update URL with current places (web only)
-          _updateUrlWithPlaces(state.fromPlace, state.toPlace);
+          // Update URL with current state (web only)
+          _updateUrlWithState(state);
         },
         builder: (context, state) {
           final locationState = SearchLocationState(
@@ -1030,7 +1056,7 @@ class _HomeScreenState extends State<HomeScreen>
                     _updateLocationMarkers(state);
                   }
                   // Restore URL with current state
-                  _updateUrlWithPlaces(state.fromPlace, state.toPlace);
+                  _updateUrlWithState(state);
                 });
               }
 
@@ -1227,6 +1253,12 @@ class _HomeScreenState extends State<HomeScreen>
         // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
         ItineraryList(
           shrinkWrap: true,
+          showDetailOnLoad: _showDetailOnLoad,
+          onDetailStateChanged: (isShowing) {
+            if (!isShowing) {
+              _showDetailOnLoad = false;
+            }
+          },
           onItineraryDetails: widget.onItineraryDetails,
           onStartNavigation: widget.onStartNavigation != null
               ? (context, itinerary, locationService) {
@@ -1503,6 +1535,12 @@ class _HomeScreenState extends State<HomeScreen>
                   Flexible(
                     flex: 1,
                     child: ItineraryList(
+                      showDetailOnLoad: _showDetailOnLoad,
+                      onDetailStateChanged: (isShowing) {
+                        if (!isShowing) {
+                          _showDetailOnLoad = false;
+                        }
+                      },
                       onItineraryDetails: widget.onItineraryDetails,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
@@ -1520,6 +1558,12 @@ class _HomeScreenState extends State<HomeScreen>
                 else
                   Expanded(
                     child: ItineraryList(
+                      showDetailOnLoad: _showDetailOnLoad,
+                      onDetailStateChanged: (isShowing) {
+                        if (!isShowing) {
+                          _showDetailOnLoad = false;
+                        }
+                      },
                       onItineraryDetails: widget.onItineraryDetails,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {

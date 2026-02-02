@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
@@ -7,16 +8,17 @@ import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
 import '../../l10n/home_screen_localizations.dart';
 import 'itinerary_card.dart';
+import 'itinerary_detail_screen.dart';
 
-/// List of itinerary options with improved loading states.
-class ItineraryList extends StatelessWidget {
+/// List of itinerary options with inline detail view.
+/// When an itinerary is tapped, shows details inline replacing the list.
+class ItineraryList extends StatefulWidget {
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
   final void Function(
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )?
-  onStartNavigation;
+  )? onStartNavigation;
   final LocationService? locationService;
 
   /// When true, the list will shrink to fit content and disable its own scrolling.
@@ -24,13 +26,46 @@ class ItineraryList extends StatelessWidget {
   /// When false (default), the list will scroll independently.
   final bool shrinkWrap;
 
+  /// When true, automatically shows details for the selected itinerary on first load.
+  /// Used when opening from a deep link URL with a specific route.
+  final bool showDetailOnLoad;
+
+  /// Callback when detail view state changes (shown/hidden).
+  final void Function(bool isShowingDetail)? onDetailStateChanged;
+
   const ItineraryList({
     super.key,
     this.onItineraryDetails,
     this.onStartNavigation,
     this.locationService,
     this.shrinkWrap = false,
+    this.showDetailOnLoad = false,
+    this.onDetailStateChanged,
   });
+
+  @override
+  State<ItineraryList> createState() => _ItineraryListState();
+}
+
+class _ItineraryListState extends State<ItineraryList> {
+  routing.Itinerary? _detailItinerary;
+  bool _hasAutoShownDetail = false;
+
+  void _showDetails(routing.Itinerary itinerary) {
+    HapticFeedback.selectionClick();
+    setState(() {
+      _detailItinerary = itinerary;
+    });
+    widget.onDetailStateChanged?.call(true);
+  }
+
+  void _hideDetails() {
+    HapticFeedback.lightImpact();
+    setState(() {
+      _detailItinerary = null;
+    });
+    widget.onDetailStateChanged?.call(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,46 +101,97 @@ class ItineraryList extends StatelessWidget {
           );
         }
 
-        // Use ListView.builder for proper scrolling in side panel and bottom sheet
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          shrinkWrap: shrinkWrap,
-          // When shrinkWrap is true, disable scrolling so parent handles it
-          physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
-          itemCount: itineraries.length,
-          itemBuilder: (context, index) {
-            final itinerary = itineraries[index];
-            final isSelected = itinerary == state.selectedItinerary;
+        // Auto-show detail on first load if requested (e.g., from URL)
+        if (widget.showDetailOnLoad &&
+            !_hasAutoShownDetail &&
+            state.selectedItinerary != null) {
+          _hasAutoShownDetail = true;
+          // Use post-frame callback to avoid setState during build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                _detailItinerary = state.selectedItinerary;
+              });
+              widget.onDetailStateChanged?.call(true);
+            }
+          });
+        }
 
-            return TweenAnimationBuilder<double>(
-              key: ValueKey('itinerary-$index'),
-              tween: Tween(begin: 0.0, end: 1.0),
-              duration: Duration(milliseconds: 200 + (index * 50)),
-              curve: Curves.easeOutCubic,
-              builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(0, 20 * (1 - value)),
-                  child: Opacity(opacity: value, child: child),
-                );
-              },
-              child: ItineraryCard(
-                itinerary: itinerary,
-                isSelected: isSelected,
-                onTap: () => cubit.selectItinerary(itinerary),
-                onDetailsTap: onItineraryDetails != null
-                    ? () => onItineraryDetails!(itinerary)
-                    : null,
-                onStartNavigation:
-                    onStartNavigation != null && locationService != null
-                    ? () => onStartNavigation!(
-                        context,
-                        itinerary,
-                        locationService!,
-                      )
-                    : null,
-              ),
+        // Show detail view if an itinerary is selected for details
+        if (_detailItinerary != null) {
+          return _buildDetailView(context, _detailItinerary!);
+        }
+
+        // Show list view
+        return _buildListView(context, itineraries, state, cubit);
+      },
+    );
+  }
+
+  Widget _buildDetailView(BuildContext context, routing.Itinerary itinerary) {
+    return ItineraryDetailContent(
+      itinerary: itinerary,
+      shrinkWrap: widget.shrinkWrap,
+      onBack: _hideDetails,
+      onStartNavigation:
+          widget.onStartNavigation != null && widget.locationService != null
+              ? () => widget.onStartNavigation!(
+                    context,
+                    itinerary,
+                    widget.locationService!,
+                  )
+              : null,
+    );
+  }
+
+  Widget _buildListView(
+    BuildContext context,
+    List<routing.Itinerary> itineraries,
+    RoutePlannerState state,
+    RoutePlannerCubit cubit,
+  ) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      shrinkWrap: widget.shrinkWrap,
+      physics: widget.shrinkWrap ? const NeverScrollableScrollPhysics() : null,
+      itemCount: itineraries.length,
+      itemBuilder: (context, index) {
+        final itinerary = itineraries[index];
+        final isSelected = itinerary == state.selectedItinerary;
+
+        return TweenAnimationBuilder<double>(
+          key: ValueKey('itinerary-$index'),
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: Duration(milliseconds: 200 + (index * 50)),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, 20 * (1 - value)),
+              child: Opacity(opacity: value, child: child),
             );
           },
+          child: ItineraryCard(
+            itinerary: itinerary,
+            isSelected: isSelected,
+            onTap: () {
+              cubit.selectItinerary(itinerary);
+              // Show details inline or use custom callback
+              if (widget.onItineraryDetails != null) {
+                widget.onItineraryDetails!(itinerary);
+              } else {
+                _showDetails(itinerary);
+              }
+            },
+            onDetailsTap: null,
+            onStartNavigation:
+                widget.onStartNavigation != null && widget.locationService != null
+                    ? () => widget.onStartNavigation!(
+                          context,
+                          itinerary,
+                          widget.locationService!,
+                        )
+                    : null,
+          ),
         );
       },
     );
@@ -114,8 +200,8 @@ class ItineraryList extends StatelessWidget {
   Widget _buildShimmerLoading(ThemeData theme) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      shrinkWrap: shrinkWrap,
-      physics: shrinkWrap ? const NeverScrollableScrollPhysics() : null,
+      shrinkWrap: widget.shrinkWrap,
+      physics: widget.shrinkWrap ? const NeverScrollableScrollPhysics() : null,
       itemCount: 3,
       itemBuilder: (context, index) {
         return TweenAnimationBuilder<double>(

@@ -28,5 +28,19 @@
   "shareRouteTimes": "Salida: {departure} → Llegada: {arrival}",
   "shareRouteDuration": "Duración: {duration}",
   "shareRouteItinerary": "Ruta: {summary}",
-  "shareRouteOpenInApp": "Abrir en la app:"
+  "shareRouteOpenInApp": "Abrir en la app:",
+  "tripDetails": "Detalles del viaje",
+  "departure": "Salida",
+  "arrival": "Llegada",
+  "totalDistance": "Distancia",
+  "walking": "Caminando",
+  "tripSteps": "Pasos del viaje",
+  "towards": "Hacia",
+  "stops": "paradas",
+  "bike": "Bicicleta",
+  "train": "Tren",
+  "transfersLabel": "Transbordos",
+  "operatedBy": "Operado por {agency}",
+  "viewFares": "Ver tarifas",
+  "co2Emissions": "{grams}g CO₂"
 }

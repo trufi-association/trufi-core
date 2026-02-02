@@ -207,5 +207,73 @@
   "shareRouteOpenInApp": "Open in app:",
   "@shareRouteOpenInApp": {
     "description": "Label before deep link URL"
+  },
+  "tripDetails": "Trip Details",
+  "@tripDetails": {
+    "description": "Title for trip details screen"
+  },
+  "departure": "Departure",
+  "@departure": {
+    "description": "Label for departure time"
+  },
+  "arrival": "Arrival",
+  "@arrival": {
+    "description": "Label for arrival time"
+  },
+  "totalDistance": "Distance",
+  "@totalDistance": {
+    "description": "Label for total distance"
+  },
+  "walking": "Walking",
+  "@walking": {
+    "description": "Label for walking distance"
+  },
+  "tripSteps": "Trip Steps",
+  "@tripSteps": {
+    "description": "Section title for trip legs"
+  },
+  "towards": "Towards",
+  "@towards": {
+    "description": "Label before headsign destination"
+  },
+  "stops": "stops",
+  "@stops": {
+    "description": "Label for intermediate stops"
+  },
+  "bike": "Bike",
+  "@bike": {
+    "description": "Bike transport mode"
+  },
+  "train": "Train",
+  "@train": {
+    "description": "Train transport mode"
+  },
+  "transfersLabel": "Transfers",
+  "@transfersLabel": {
+    "description": "Label for transfers count"
+  },
+  "operatedBy": "Operated by {agency}",
+  "@operatedBy": {
+    "description": "Label showing the transit agency operating a route",
+    "placeholders": {
+      "agency": {
+        "type": "String",
+        "example": "Metro Transit"
+      }
+    }
+  },
+  "viewFares": "View fares",
+  "@viewFares": {
+    "description": "Button to view fare information"
+  },
+  "co2Emissions": "{grams}g CO₂",
+  "@co2Emissions": {
+    "description": "CO2 emissions in grams",
+    "placeholders": {
+      "grams": {
+        "type": "String",
+        "example": "245"
+      }
+    }
   }
 }

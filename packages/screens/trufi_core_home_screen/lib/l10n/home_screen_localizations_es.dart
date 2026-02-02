@@ -129,4 +129,50 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
 
   @override
   String get shareRouteOpenInApp => 'Abrir en la app:';
+
+  @override
+  String get tripDetails => 'Detalles del viaje';
+
+  @override
+  String get departure => 'Salida';
+
+  @override
+  String get arrival => 'Llegada';
+
+  @override
+  String get totalDistance => 'Distancia';
+
+  @override
+  String get walking => 'Caminando';
+
+  @override
+  String get tripSteps => 'Pasos del viaje';
+
+  @override
+  String get towards => 'Hacia';
+
+  @override
+  String get stops => 'paradas';
+
+  @override
+  String get bike => 'Bicicleta';
+
+  @override
+  String get train => 'Tren';
+
+  @override
+  String get transfersLabel => 'Transbordos';
+
+  @override
+  String operatedBy(String agency) {
+    return 'Operado por $agency';
+  }
+
+  @override
+  String get viewFares => 'Ver tarifas';
+
+  @override
+  String co2Emissions(String grams) {
+    return '${grams}g CO₂';
+  }
 }
