@@ -1,5 +1,9 @@
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 
 import '../l10n/transport_list_localizations.dart';
@@ -24,12 +28,17 @@ class TransportDetailScreen extends StatefulWidget {
   mapBuilder;
   final Uri? shareBaseUri;
 
+  /// Base path for URL updates (web only). Example: '/routes'
+  /// When set, the URL will be updated to include the route ID as a query parameter.
+  final String? basePath;
+
   const TransportDetailScreen({
     super.key,
     required this.routeCode,
     required this.getRouteDetails,
     this.mapBuilder,
     this.shareBaseUri,
+    this.basePath,
   });
 
   static Future<void> show(
@@ -45,6 +54,7 @@ class TransportDetailScreen extends StatefulWidget {
     )?
     mapBuilder,
     Uri? shareBaseUri,
+    String? basePath,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
@@ -54,6 +64,7 @@ class TransportDetailScreen extends StatefulWidget {
               getRouteDetails: getRouteDetails,
               mapBuilder: mapBuilder,
               shareBaseUri: shareBaseUri,
+              basePath: basePath,
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
@@ -116,6 +127,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           _isLoading = false;
         });
         _fadeController.forward();
+        // Update URL with route ID (web only)
+        _updateUrlWithRouteId();
       }
     } catch (e) {
       if (mounted) {
@@ -130,6 +143,21 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           ),
         );
       }
+    }
+  }
+
+  /// Updates the URL with the route ID (web only).
+  void _updateUrlWithRouteId() {
+    if (!kIsWeb || widget.basePath == null) return;
+
+    try {
+      final uri = Uri(
+        path: widget.basePath,
+        queryParameters: {'id': widget.routeCode},
+      );
+      GoRouter.of(context).replace(uri.toString());
+    } catch (e) {
+      debugPrint('TransportDetailScreen: Error updating URL: $e');
     }
   }
 
@@ -309,6 +337,13 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     );
   }
 
+  /// Returns the side panel width based on screen width.
+  double _getSidePanelWidth(double screenWidth) {
+    if (screenWidth >= 1200) return 420;
+    if (screenWidth >= 900) return 380;
+    return 340;
+  }
+
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -333,6 +368,238 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
       );
     }
 
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Responsive layout: use side panel for wide screens (≥600px)
+        final isWideScreen = constraints.maxWidth >= 600;
+        final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
+
+        if (isWideScreen) {
+          return _buildWideLayout(
+            context,
+            theme,
+            colorScheme,
+            sidePanelWidth,
+          );
+        } else {
+          return _buildNarrowLayout(context, theme, colorScheme);
+        }
+      },
+    );
+  }
+
+  /// Builds the layout for wide screens with side panel on the left.
+  Widget _buildWideLayout(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    double sidePanelWidth,
+  ) {
+    return Stack(
+      children: [
+        // Map - positioned to the right of side panel
+        Positioned(
+          top: 0,
+          left: sidePanelWidth,
+          bottom: 0,
+          right: 0,
+          child: widget.mapBuilder != null
+              ? FadeTransition(
+                  opacity: _fadeController,
+                  child: widget.mapBuilder!(
+                    context,
+                    _route,
+                    (callback) => _mapMoveCallback = callback,
+                    (callback) => _stopSelectionCallback = callback,
+                  ),
+                )
+              : Container(
+                  color: colorScheme.surfaceContainerLow,
+                  child: Center(
+                    child: Icon(
+                      Icons.map_outlined,
+                      size: 64,
+                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                    ),
+                  ),
+                ),
+        ),
+
+        // Side panel on the left
+        _buildSidePanel(context, theme, colorScheme, sidePanelWidth),
+
+        // Top bar with route info - only over the map area
+        Positioned(
+          top: 0,
+          left: sidePanelWidth,
+          right: 0,
+          child: _buildTopBarContent(context, theme, colorScheme),
+        ),
+      ],
+    );
+  }
+
+  /// Builds the side panel for wide screens.
+  Widget _buildSidePanel(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    double width,
+  ) {
+    final routeColor = _route?.backgroundColor ?? colorScheme.primary;
+    final textColor = _route?.textColor ?? Colors.white;
+
+    return Positioned(
+      top: 0,
+      left: 0,
+      bottom: 0,
+      width: width,
+      child: Container(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(2, 0),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          right: false,
+          child: Column(
+            children: [
+              // Header with back button and route info
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    // Back button
+                    Material(
+                      color: colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(12),
+                      child: InkWell(
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.pop(context);
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            color: colorScheme.onSurface,
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Route badge
+                    if (_route != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: routeColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (_route!.modeIcon != null) ...[
+                              IconTheme(
+                                data: IconThemeData(
+                                  color: textColor,
+                                  size: 16,
+                                ),
+                                child: _route!.modeIcon!,
+                              ),
+                              const SizedBox(width: 4),
+                            ],
+                            Text(
+                              _route!.displayName,
+                              style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(width: 12),
+                    // Route name
+                    if (_route != null && _route!.longNamePrefix.isNotEmpty)
+                      Expanded(
+                        child: Text(
+                          _route!.longNamePrefix,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    else
+                      const Spacer(),
+                    // Share button
+                    if (_route != null && widget.shareBaseUri != null)
+                      Material(
+                        color: colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                            _shareRoute();
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            width: 44,
+                            height: 44,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.share_rounded,
+                              color: colorScheme.onSurface,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              // Stops content - scrollable
+              Expanded(
+                child: _SidePanelStopsContent(
+                  route: _route!,
+                  selectedStopIndex: _selectedStopIndex,
+                  onStopTap: (index, lat, lng) {
+                    HapticFeedback.selectionClick();
+                    setState(() => _selectedStopIndex = index);
+                    _mapMoveCallback?.call(lat, lng);
+                    _stopSelectionCallback?.call(index);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds the layout for narrow screens with bottom sheet.
+  Widget _buildNarrowLayout(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
     return Stack(
       children: [
         // Map
@@ -389,6 +656,28 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     );
   }
 
+  /// Builds just the content of the top bar (for wide screen layout).
+  Widget _buildTopBarContent(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
+    return SafeArea(
+      bottom: false,
+      left: false,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Only show share button on the map area for wide screens
+            // (back button and route info are in the side panel)
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Simple back button for loading/error states
   Widget _buildBackButton(BuildContext context, ColorScheme colorScheme) {
     return Positioned(
@@ -438,6 +727,57 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
+  }
+}
+
+/// Content for the stops bottom sheet
+/// Helper class for calculating route distance.
+class _RouteDistanceCalculator {
+  /// Calculates the total distance of the route in kilometers using Haversine formula.
+  static double calculate(
+    List<({double latitude, double longitude})>? geometry,
+  ) {
+    if (geometry == null || geometry.length < 2) return 0;
+
+    double totalDistance = 0;
+    for (int i = 0; i < geometry.length - 1; i++) {
+      totalDistance += _haversineDistance(
+        geometry[i].latitude,
+        geometry[i].longitude,
+        geometry[i + 1].latitude,
+        geometry[i + 1].longitude,
+      );
+    }
+    return totalDistance;
+  }
+
+  /// Haversine formula to calculate distance between two coordinates in km.
+  static double _haversineDistance(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+  ) {
+    const earthRadius = 6371.0; // km
+    final dLat = _toRadians(lat2 - lat1);
+    final dLon = _toRadians(lon2 - lon1);
+    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(lat1)) *
+            math.cos(_toRadians(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+    final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    return earthRadius * c;
+  }
+
+  static double _toRadians(double degrees) => degrees * math.pi / 180;
+
+  /// Formats distance for display.
+  static String format(double km) {
+    if (km < 1) {
+      return '${(km * 1000).round()} m';
+    }
+    return '${km.toStringAsFixed(1)} km';
   }
 }
 
@@ -508,13 +848,16 @@ class _StopsSheetContent extends StatelessWidget {
     ColorScheme colorScheme,
     List<TransportStop> stops,
   ) {
+    final routeColor = route.backgroundColor ?? colorScheme.primary;
+    final distance = _RouteDistanceCalculator.calculate(route.geometry);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Origin/Destination header (Google Maps style)
         if (route.hasOriginDestination)
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -590,37 +933,75 @@ class _StopsSheetContent extends StatelessWidget {
             ),
           ),
 
-        // Stops count header with divider
+        // Route statistics
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: routeColor.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: routeColor.withValues(alpha: 0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                // Distance
+                Expanded(
+                  child: _StatItem(
+                    icon: Icons.straighten_rounded,
+                    label: 'Distance',
+                    value: _RouteDistanceCalculator.format(distance),
+                    color: routeColor,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 32,
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+                ),
+                // Stops
+                Expanded(
+                  child: _StatItem(
+                    icon: Icons.pin_drop_rounded,
+                    label: 'Stops',
+                    value: '${stops.length}',
+                    color: routeColor,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 32,
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+                ),
+                // Mode
+                Expanded(
+                  child: _StatItem(
+                    icon: route.modeIcon != null
+                        ? null
+                        : Icons.directions_bus_rounded,
+                    customIcon: route.modeIcon,
+                    label: 'Mode',
+                    value: route.modeName ?? 'Bus',
+                    color: routeColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Stops header with divider
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
           child: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.location_on_rounded,
-                      size: 14,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${stops.length} stops',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+              Text(
+                'Stops',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(width: 12),
@@ -896,4 +1277,272 @@ class _DottedLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Content for the side panel stops list (wide screens).
+class _SidePanelStopsContent extends StatelessWidget {
+  final TransportRouteDetails route;
+  final int? selectedStopIndex;
+  final void Function(int index, double lat, double lng)? onStopTap;
+
+  const _SidePanelStopsContent({
+    required this.route,
+    this.selectedStopIndex,
+    this.onStopTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final stops = route.stops ?? [];
+    final routeColor = route.backgroundColor ?? colorScheme.primary;
+    final distance = _RouteDistanceCalculator.calculate(route.geometry);
+
+    return Column(
+      children: [
+        // Origin/Destination header (Google Maps style)
+        if (route.hasOriginDestination)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Timeline indicators (green dot, dotted line, red dot)
+                Column(
+                  children: [
+                    // Green origin dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.green.shade700,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    // Dotted line
+                    CustomPaint(
+                      size: const Size(2, 28),
+                      painter: _DottedLinePainter(
+                        color: colorScheme.outlineVariant,
+                      ),
+                    ),
+                    // Red destination dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.red.shade700,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                // Origin and destination text
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Origin
+                      Text(
+                        route.longNameStart,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 16),
+                      // Destination
+                      Text(
+                        route.longNameLast,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // Route statistics cards
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: routeColor.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: routeColor.withValues(alpha: 0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                // Distance
+                Expanded(
+                  child: _StatItem(
+                    icon: Icons.straighten_rounded,
+                    label: 'Distance',
+                    value: _RouteDistanceCalculator.format(distance),
+                    color: routeColor,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 32,
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+                ),
+                // Stops
+                Expanded(
+                  child: _StatItem(
+                    icon: Icons.pin_drop_rounded,
+                    label: 'Stops',
+                    value: '${stops.length}',
+                    color: routeColor,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 32,
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+                ),
+                // Mode
+                Expanded(
+                  child: _StatItem(
+                    icon: route.modeIcon != null
+                        ? null
+                        : Icons.directions_bus_rounded,
+                    customIcon: route.modeIcon,
+                    label: 'Mode',
+                    value: route.modeName ?? 'Bus',
+                    color: routeColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Stops header with divider
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+          child: Row(
+            children: [
+              Text(
+                'Stops',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Divider(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Scrollable stops list
+        Expanded(
+          child: stops.isEmpty
+              ? const _EmptyStopsInline()
+              : ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: stops.length,
+                  itemBuilder: (context, index) {
+                    final stop = stops[index];
+                    final isFirst = index == 0;
+                    final isLast = index == stops.length - 1;
+                    final isSelected = selectedStopIndex == index;
+                    final routeColor =
+                        route.backgroundColor ?? colorScheme.primary;
+
+                    return _StopTimelineItem(
+                      stop: stop,
+                      isFirst: isFirst,
+                      isLast: isLast,
+                      isSelected: isSelected,
+                      routeColor: routeColor,
+                      onTap: onStopTap != null
+                          ? () {
+                              HapticFeedback.selectionClick();
+                              onStopTap!(index, stop.latitude, stop.longitude);
+                            }
+                          : null,
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Statistic item widget for route info display.
+class _StatItem extends StatelessWidget {
+  final IconData? icon;
+  final Widget? customIcon;
+  final String label;
+  final String value;
+  final Color color;
+
+  const _StatItem({
+    this.icon,
+    this.customIcon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (customIcon != null)
+          IconTheme(
+            data: IconThemeData(color: color, size: 20),
+            child: customIcon!,
+          )
+        else if (icon != null)
+          Icon(icon, size: 20, color: color),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
 }

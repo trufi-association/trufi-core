@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
@@ -80,6 +82,7 @@ class _TransportListScreenWidgetState
     extends State<_TransportListScreenWidget> {
   late final TransportListDataProvider _dataProvider;
   late final TransportListCache _cache;
+  bool _urlParsed = false;
 
   @override
   void initState() {
@@ -96,10 +99,55 @@ class _TransportListScreenWidgetState
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Parse URL parameters on first load (web only)
+    _parseUrlAndOpenRoute();
+  }
+
+  @override
   void dispose() {
     _dataProvider.dispose();
     _cache.dispose();
     super.dispose();
+  }
+
+  /// Parses URL parameters and opens route detail if id is present (web only).
+  void _parseUrlAndOpenRoute() {
+    if (!kIsWeb || _urlParsed) return;
+    _urlParsed = true;
+
+    try {
+      final routerState = GoRouterState.of(context);
+      final params = routerState.uri.queryParameters;
+      final routeId = params['id'];
+
+      if (routeId != null && routeId.isNotEmpty) {
+        // Open route detail screen after frame is built
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          TransportDetailScreen.show(
+            context,
+            routeCode: routeId,
+            getRouteDetails: _dataProvider.getRouteDetails,
+            basePath: '/routes',
+            mapBuilder: (
+              context,
+              routeDetails,
+              registerMapMoveCallback,
+              registerStopSelectionCallback,
+            ) =>
+                _RouteMapView(
+                  route: routeDetails,
+                  registerMapMoveCallback: registerMapMoveCallback,
+                  registerStopSelectionCallback: registerStopSelectionCallback,
+                ),
+          );
+        });
+      }
+    } catch (e) {
+      debugPrint('TransportListScreen: Error parsing URL: $e');
+    }
   }
 
   @override
@@ -111,6 +159,7 @@ class _TransportListScreenWidgetState
           context,
           routeCode: route.code,
           getRouteDetails: _dataProvider.getRouteDetails,
+          basePath: '/routes',
           mapBuilder:
               (
                 context,
