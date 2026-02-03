@@ -8,12 +8,14 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'l10n/core_localizations.dart';
+import 'overlay/overlay_container.dart';
 import 'router/app_router.dart';
 import 'services/deep_link_service.dart';
 
 export 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     show
         AppConfiguration,
+        AppOverlayManager,
         TrufiScreen,
         ScreenMenuItem,
         ScreenThemeData,
@@ -51,6 +53,7 @@ class TrufiApp extends StatefulWidget {
 class _TrufiAppState extends State<TrufiApp> {
   late final LocaleManager _localeManager;
   late final ThemeManager _themeManager;
+  late final OverlayManager _overlayManager;
   late final AppRouter _router;
   late final SharedRouteNotifier _sharedRouteNotifier;
   DeepLinkService? _deepLinkService;
@@ -76,6 +79,9 @@ class _TrufiAppState extends State<TrufiApp> {
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,
+    );
+    _overlayManager = OverlayManager(
+      appOverlayManagers: widget.config.appOverlayManagers,
     );
     _router = AppRouter(
       screens: widget.config.screens,
@@ -140,11 +146,12 @@ class _TrufiAppState extends State<TrufiApp> {
       providers: [
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
+        ChangeNotifierProvider.value(value: _overlayManager),
         ChangeNotifierProvider.value(value: _sharedRouteNotifier),
         ...widget.config.providers,
         ...screenProviders,
       ],
-      // Layer 2: Initialize screens and providers with loading screen
+      // Layer 2: Initialize screens and managers with loading screen
       child: AppInitializer(
         screens: widget.config.screens,
         providers: widget.config.providers,
@@ -164,13 +171,14 @@ class _TrufiAppState extends State<TrufiApp> {
   }
 }
 
-/// Widget that initializes screens before showing the app.
+/// Widget that initializes screens and managers before showing the app.
 ///
 /// This widget handles the app initialization phase by:
-/// 1. Initializing all screen modules (each screen is responsible for initializing its own providers)
-/// 2. Showing a loading screen during initialization
-/// 3. Showing an error screen with retry if initialization fails
-/// 4. Showing the child widget once initialization completes
+/// 1. Initializing all app managers (OnboardingManager, etc.)
+/// 2. Initializing all screen modules (each screen is responsible for initializing its own providers)
+/// 3. Showing a loading screen during initialization
+/// 4. Showing an error screen with retry if initialization fails
+/// 5. Showing the child widget once initialization completes
 ///
 /// You can customize the UI via [loadingScreenBuilder], [errorScreenBuilder],
 /// or completely override the flow with [customBuilder].
@@ -204,7 +212,8 @@ class _AppInitializerState extends State<AppInitializer> {
   @override
   void initState() {
     super.initState();
-    _initialize();
+    // Start initialization after first frame when context is available
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initialize());
   }
 
   Future<void> _initialize() async {
@@ -249,16 +258,21 @@ class _AppInitializerState extends State<AppInitializer> {
     return _buildDefaultInitializer();
   }
 
-  /// Performs the actual initialization of screens.
+  /// Performs the actual initialization of managers and screens.
   /// This can be called by custom builders.
-  ///
-  /// Each screen's initialize() method should initialize any providers it needs.
   Future<void> _performInitialization() async {
+    final overlayManager = OverlayManager.read(context);
+
+    // Initialize all AppOverlayManagers
+    await overlayManager.initializeManagers();
+
     // Initialize all screen modules
-    // Each screen is responsible for initializing its own providers
     for (final screen in widget.screens) {
       await screen.initialize();
     }
+
+    // Notify managers that app is ready so they can push overlays
+    overlayManager.notifyAppReady();
   }
 
   Widget _buildDefaultInitializer() {
@@ -384,6 +398,11 @@ class _TrufiMaterialApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      builder: (context, child) {
+        return OverlayContainer(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

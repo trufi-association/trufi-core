@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'app_overlay_manager.dart';
 import 'trufi_screen.dart';
 import 'trufi_theme_config.dart';
 import 'trufi_locale_config.dart';
@@ -126,6 +127,23 @@ class AppConfiguration {
   /// ```
   final List<SingleChildWidget> providers;
 
+  /// App-level appOverlayManagers that need async initialization.
+  ///
+  /// These appOverlayManagers will be:
+  /// 1. Automatically injected as ChangeNotifierProviders
+  /// 2. Initialized during the app initialization phase (before screens)
+  /// 3. Available throughout the app via Provider
+  ///
+  /// Example:
+  /// ```dart
+  /// appOverlayManagers: [
+  ///   OnboardingManager(),
+  ///   PrivacyConsentManager(),
+  ///   MyCustomManager(),
+  /// ]
+  /// ```
+  final List<AppOverlayManager> appOverlayManagers;
+
 
   /// Optional custom loading screen builder.
   ///
@@ -160,6 +178,7 @@ class AppConfiguration {
     this.socialMediaLinks = const [],
     this.deepLinkScheme,
     this.providers = const [],
+    this.appOverlayManagers = const [],
     this.loadingScreenBuilder,
     this.errorScreenBuilder,
     this.appInitializerBuilder,

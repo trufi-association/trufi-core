@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   trufi_core_custom_material: ^1.0.0
+  pointer_interceptor: ^0.10.1+2
 
 dev_dependencies:
   flutter_test:

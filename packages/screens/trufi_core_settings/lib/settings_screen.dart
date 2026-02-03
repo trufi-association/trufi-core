@@ -5,6 +5,7 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'l10n/settings_localizations.dart';
+import 'overlay/privacy_consent/privacy_consent_manager.dart';
 
 /// Settings screen module
 class SettingsTrufiScreen extends TrufiScreen {
@@ -220,6 +221,14 @@ class _SettingsContentState extends State<_SettingsContent>
           _buildAnimatedItem(
             index: 2,
             child: const _MapSettingsCard(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Privacy settings card
+          _buildAnimatedItem(
+            index: 3,
+            child: const _PrivacySettingsCard(),
           ),
         ],
       ),
@@ -760,6 +769,139 @@ class _MapOptionTile extends StatelessWidget {
                         color: colorScheme.onPrimary,
                       )
                     : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Privacy settings card with toggle
+class _PrivacySettingsCard extends StatelessWidget {
+  const _PrivacySettingsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final settingsL10n = SettingsLocalizations.of(context);
+    final overlayManager = OverlayManager.watch(context);
+    final privacyConsentManager =
+        overlayManager.getManager<PrivacyConsentManager>();
+
+    // If no PrivacyConsentManager is available, don't show this card
+    if (privacyConsentManager == null) {
+      return const SizedBox.shrink();
+    }
+
+    return _SettingsCard(
+      icon: Icons.privacy_tip_rounded,
+      iconColor: Colors.orange,
+      title: settingsL10n.settingsPrivacy,
+      subtitle: settingsL10n.settingsPrivacySubtitle,
+      child: _PrivacyToggleTile(
+        title: settingsL10n.settingsPrivacyShareData,
+        description: settingsL10n.settingsPrivacyShareDataDescription,
+        isEnabled: privacyConsentManager.isAccepted,
+        onToggle: (value) {
+          HapticFeedback.selectionClick();
+          if (value) {
+            privacyConsentManager.acceptConsent();
+          } else {
+            privacyConsentManager.declineConsent();
+          }
+        },
+      ),
+    );
+  }
+}
+
+/// Toggle tile for privacy settings
+class _PrivacyToggleTile extends StatelessWidget {
+  final String title;
+  final String description;
+  final bool isEnabled;
+  final ValueChanged<bool> onToggle;
+
+  const _PrivacyToggleTile({
+    required this.title,
+    required this.description,
+    required this.isEnabled,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isEnabled
+          ? colorScheme.primaryContainer.withValues(alpha: 0.5)
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: () => onToggle(!isEnabled),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isEnabled
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Icon
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isEnabled
+                      ? colorScheme.primary.withValues(alpha: 0.15)
+                      : colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.analytics_rounded,
+                  color: isEnabled
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      description,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Switch
+              Switch.adaptive(
+                value: isEnabled,
+                onChanged: onToggle,
               ),
             ],
           ),

@@ -42,5 +42,6 @@ class CoreLocalizationsDe extends CoreLocalizations {
   String get errorGeneric => 'Ein Fehler ist aufgetreten';
 
   @override
-  String get errorNetwork => 'Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.';
+  String get errorNetwork =>
+      'Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.';
 }

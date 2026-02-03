@@ -15,6 +15,7 @@ workspace:
   - packages/trufi_core_routing_ui
   - packages/trufi_core_search_locations
   - packages/trufi_core_ui
+  - packages/trufi_core_notifications
 
   # Screen Packages
   - packages/screens/trufi_core_about

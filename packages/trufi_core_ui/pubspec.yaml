@@ -23,6 +23,8 @@ dependencies:
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
   url_launcher: ^6.3.2
+  shared_preferences: ^2.5.3
+  pointer_interceptor: ^0.10.1+2
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,26 @@
 {
   "@@locale": "es",
 
-  "settingsTitle": "Configuración",
+  "onboardingTitle": "Bienvenido!",
+  "onboardingSubtitle": "Vamos a configurar tus preferencias",
+  "onboardingLanguageTitle": "Elige tu idioma",
+  "onboardingThemeTitle": "Elige tu tema",
+  "onboardingThemeLight": "Claro",
+  "onboardingThemeDark": "Oscuro",
+  "onboardingThemeSystem": "Sistema",
+  "onboardingMapTitle": "Elige tu estilo de mapa",
+  "onboardingComplete": "Comenzar",
+
+  "privacyConsentTitle": "Ayuda a mejorar Trufi",
+  "privacyConsentSubtitle": "Ayudanos a mejorar la app compartiendo datos de uso anonimos",
+  "privacyConsentInfoTitle": "Que recopilamos",
+  "privacyConsentInfoLogs": "Registros de errores para ayudarnos a corregir fallos",
+  "privacyConsentInfoRoutes": "Busquedas de rutas para mejorar los datos de transporte",
+  "privacyConsentInfoAnonymous": "Todos los datos son completamente anonimos",
+  "privacyConsentAccept": "Aceptar y continuar",
+  "privacyConsentDecline": "No, gracias",
+
+  "settingsTitle": "Configuracion",
   "settingsLanguage": "Idioma",
   "settingsSelectLanguage": "Selecciona tu idioma preferido:",
   "settingsTheme": "Tema",
@@ -10,5 +29,10 @@
   "settingsThemeDark": "Modo Oscuro",
   "settingsThemeSystem": "Predeterminado del Sistema",
   "settingsMap": "Mapa",
-  "settingsSelectMapType": "Selecciona tu tipo de mapa preferido:"
+  "settingsSelectMapType": "Selecciona tu tipo de mapa preferido:",
+
+  "settingsPrivacy": "Privacidad",
+  "settingsPrivacySubtitle": "Ayuda a mejorar la app",
+  "settingsPrivacyShareData": "Compartir datos de uso anonimos",
+  "settingsPrivacyShareDataDescription": "Ayudanos a corregir errores y mejorar los datos de transporte"
 }

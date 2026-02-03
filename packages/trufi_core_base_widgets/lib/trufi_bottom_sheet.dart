@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// A draggable bottom sheet widget with built-in styling and height change notifications.
 ///
@@ -96,32 +97,36 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
           return LayoutBuilder(
             builder: (context, constraints) {
               _onHeightChanged(constraints.maxHeight);
-              return Container(
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16),
+              // PointerInterceptor prevents platform views (maps) from
+              // capturing touch events meant for this sheet on web
+              return PointerInterceptor(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(40),
+                        blurRadius: 16,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(40),
-                      blurRadius: 16,
-                      offset: const Offset(0, -4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    const _SheetGrabber(),
-                    Expanded(
-                      child: widget.builder != null
-                          ? widget.builder!(context, scrollController)
-                          : SingleChildScrollView(
-                              controller: scrollController,
-                              child: widget.child,
-                            ),
-                    ),
-                  ],
+                  child: Column(
+                    children: [
+                      const _SheetGrabber(),
+                      Expanded(
+                        child: widget.builder != null
+                            ? widget.builder!(context, scrollController)
+                            : SingleChildScrollView(
+                                controller: scrollController,
+                                child: widget.child,
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

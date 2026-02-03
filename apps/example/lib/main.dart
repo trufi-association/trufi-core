@@ -22,6 +22,16 @@ void main() {
     AppConfiguration(
       appName: 'Trufi App',
       deepLinkScheme: 'trufiapp',
+      appOverlayManagers: [
+        OnboardingManager(
+          overlayBuilder: (onComplete) =>
+              OnboardingSheet(onComplete: onComplete),
+        ),
+        PrivacyConsentManager(
+          overlayBuilder: (onAccept, onDecline) =>
+              PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
+        ),
+      ],
       socialMediaLinks: const [
         SocialMediaLink(
           url: 'https://facebook.com/trufiapp',

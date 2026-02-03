@@ -15,9 +15,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.2
+  provider: ^6.1.5+1
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
   trufi_core_maps: ^1.0.0
+  pointer_interceptor: ^0.10.1+2
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
