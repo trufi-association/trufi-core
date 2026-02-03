@@ -11,5 +11,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "routeNotFound": "Linie nicht gefunden",
+  "routeLoadError": "Die Linie konnte nicht geladen werden",
+  "buttonGoBack": "Zurück"
 }

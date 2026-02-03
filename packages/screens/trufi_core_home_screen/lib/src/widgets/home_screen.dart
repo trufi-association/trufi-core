@@ -710,6 +710,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _showPermissionDeniedDialog() {
     final theme = Theme.of(context);
+    final l10n = HomeScreenLocalizations.of(context);
 
     showDialog<void>(
       context: context,
@@ -718,23 +719,21 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             Icon(Icons.location_off_rounded, color: theme.colorScheme.error),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Location Permission')),
+            Expanded(child: Text(l10n.locationPermissionTitle)),
           ],
         ),
-        content: const Text(
-          'Location permission is permanently denied. Please enable it in your device settings to use this feature.',
-        ),
+        content: Text(l10n.locationPermissionDeniedMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.buttonCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
               _locationService.openAppSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(l10n.buttonOpenSettings),
           ),
         ],
       ),
@@ -743,6 +742,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _showLocationDisabledDialog() {
     final theme = Theme.of(context);
+    final l10n = HomeScreenLocalizations.of(context);
 
     showDialog<void>(
       context: context,
@@ -754,23 +754,21 @@ class _HomeScreenState extends State<HomeScreen>
               color: theme.colorScheme.error,
             ),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Location Disabled')),
+            Expanded(child: Text(l10n.locationDisabledTitle)),
           ],
         ),
-        content: const Text(
-          'Location services are disabled on your device. Please enable them to use this feature.',
-        ),
+        content: Text(l10n.locationDisabledMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.buttonCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
               _locationService.openLocationSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(l10n.buttonOpenSettings),
           ),
         ],
       ),
@@ -1589,14 +1587,14 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Search for a route',
+                            l10n.searchForRoute,
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Enter origin and destination to find routes',
+                            l10n.searchForRouteHint,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.outline,
                             ),
@@ -1662,14 +1660,14 @@ class _HomeScreenState extends State<HomeScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$routeCount ${routeCount == 1 ? 'route' : 'routes'} found',
+                  l10n.routesFound(routeCount),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (state.isLoading)
                   Text(
-                    'Finding routes...',
+                    l10n.findingRoutes,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.primary,
                     ),
@@ -1723,7 +1721,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 );
               },
-              tooltip: 'Share',
+              tooltip: l10n.tooltipShare,
             ),
           const SizedBox(width: 4),
           // Close button
@@ -1734,7 +1732,7 @@ class _HomeScreenState extends State<HomeScreen>
               foregroundColor: theme.colorScheme.onSurfaceVariant,
             ),
             onPressed: _onReset,
-            tooltip: 'Close',
+            tooltip: l10n.tooltipClose,
           ),
         ],
       ),
@@ -2347,6 +2345,7 @@ class _DepartureTimeChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
     final manager = routing.RoutingPreferencesManager.maybeWatch(context);
 
     if (manager == null) return const SizedBox.shrink();
@@ -2376,7 +2375,7 @@ class _DepartureTimeChip extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  _getTimeModeLabel(timeMode, dateTime),
+                  _getTimeModeLabel(timeMode, dateTime, l10n),
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: colorScheme.onSurface,
                     fontWeight: FontWeight.w500,
@@ -2407,24 +2406,24 @@ class _DepartureTimeChip extends StatelessWidget {
     }
   }
 
-  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime) {
+  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime, HomeScreenLocalizations l10n) {
     switch (mode) {
       case routing.TimeMode.leaveNow:
-        return 'Leave now';
+        return l10n.leaveNow;
       case routing.TimeMode.departAt:
         if (dateTime != null) {
-          return 'Depart ${_formatDateTime(dateTime)}';
+          return l10n.departAtTime(_formatDateTime(dateTime, l10n));
         }
-        return 'Depart at...';
+        return l10n.departAt;
       case routing.TimeMode.arriveBy:
         if (dateTime != null) {
-          return 'Arrive by ${_formatDateTime(dateTime)}';
+          return l10n.arriveByTime(_formatDateTime(dateTime, l10n));
         }
-        return 'Arrive by...';
+        return l10n.arriveBy;
     }
   }
 
-  String _formatDateTime(DateTime dt) {
+  String _formatDateTime(DateTime dt, HomeScreenLocalizations l10n) {
     final now = DateTime.now();
     final isToday =
         dt.year == now.year && dt.month == now.month && dt.day == now.day;
@@ -2437,7 +2436,7 @@ class _DepartureTimeChip extends StatelessWidget {
     if (isToday) {
       return time;
     } else if (isTomorrow) {
-      return 'Tomorrow $time';
+      return l10n.tomorrowWithTime(time);
     } else {
       return '${dt.day}/${dt.month} $time';
     }
@@ -2487,6 +2486,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -2518,10 +2518,12 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                     size: 24,
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    'When do you want to travel?',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      l10n.whenDoYouWantToTravel,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -2535,7 +2537,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                 children: [
                   _TimeModeOption(
                     icon: Icons.access_time_rounded,
-                    label: 'Leave now',
+                    label: l10n.leaveNow,
                     isSelected: _selectedMode == routing.TimeMode.leaveNow,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.leaveNow);
@@ -2544,7 +2546,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.departure_board_rounded,
-                    label: 'Depart at',
+                    label: l10n.departAt.replaceAll('...', ''),
                     isSelected: _selectedMode == routing.TimeMode.departAt,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.departAt);
@@ -2553,7 +2555,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.schedule_rounded,
-                    label: 'Arrive by',
+                    label: l10n.arriveBy.replaceAll('...', ''),
                     isSelected: _selectedMode == routing.TimeMode.arriveBy,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.arriveBy);
@@ -2572,7 +2574,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                     Expanded(
                       child: _DateTimeButton(
                         icon: Icons.calendar_today_rounded,
-                        label: _formatDate(_selectedDateTime),
+                        label: _formatDate(_selectedDateTime, l10n),
                         onTap: () => _selectDate(context),
                       ),
                     ),
@@ -2596,7 +2598,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                 child: FilledButton.icon(
                   onPressed: _applyChanges,
                   icon: const Icon(Icons.check_rounded),
-                  label: const Text('Apply'),
+                  label: Text(l10n.buttonApply),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
@@ -2612,29 +2614,29 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
     );
   }
 
-  String _formatDate(DateTime dt) {
+  String _formatDate(DateTime dt, HomeScreenLocalizations l10n) {
     final now = DateTime.now();
     final isToday =
         dt.year == now.year && dt.month == now.month && dt.day == now.day;
     final isTomorrow =
         dt.year == now.year && dt.month == now.month && dt.day == now.day + 1;
 
-    if (isToday) return 'Today';
-    if (isTomorrow) return 'Tomorrow';
+    if (isToday) return l10n.today;
+    if (isTomorrow) return l10n.tomorrow;
 
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+    final months = [
+      l10n.monthJan,
+      l10n.monthFeb,
+      l10n.monthMar,
+      l10n.monthApr,
+      l10n.monthMay,
+      l10n.monthJun,
+      l10n.monthJul,
+      l10n.monthAug,
+      l10n.monthSep,
+      l10n.monthOct,
+      l10n.monthNov,
+      l10n.monthDec,
     ];
     return '${months[dt.month - 1]} ${dt.day}';
   }

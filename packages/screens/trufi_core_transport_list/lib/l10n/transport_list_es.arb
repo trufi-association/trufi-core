@@ -11,5 +11,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "routeNotFound": "Ruta no encontrada",
+  "routeLoadError": "No se pudo cargar la ruta",
+  "buttonGoBack": "Volver"
 }

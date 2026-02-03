@@ -44,4 +44,27 @@ class CoreLocalizationsDe extends CoreLocalizations {
   @override
   String get errorNetwork =>
       'Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.';
+
+  @override
+  String get errorInitialization => 'App konnte nicht initialisiert werden';
+
+  @override
+  String get actionRetry => 'Erneut versuchen';
+
+  @override
+  String get errorPageNotFound => 'Seite nicht gefunden';
+
+  @override
+  String get actionGoHome => 'Zur Startseite';
+
+  @override
+  String get titleError => 'Fehler';
+
+  @override
+  String unreadCount(int count) {
+    return '$count ungelesen';
+  }
+
+  @override
+  String get markAllAsRead => 'Alle als gelesen markieren';
 }

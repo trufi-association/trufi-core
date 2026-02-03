@@ -43,4 +43,27 @@ class CoreLocalizationsEs extends CoreLocalizations {
 
   @override
   String get errorNetwork => 'Error de red. Por favor verifica tu conexión.';
+
+  @override
+  String get errorInitialization => 'Error al inicializar la aplicación';
+
+  @override
+  String get actionRetry => 'Reintentar';
+
+  @override
+  String get errorPageNotFound => 'Página no encontrada';
+
+  @override
+  String get actionGoHome => 'Ir al inicio';
+
+  @override
+  String get titleError => 'Error';
+
+  @override
+  String unreadCount(int count) {
+    return '$count sin leer';
+  }
+
+  @override
+  String get markAllAsRead => 'Marcar todo como leído';
 }

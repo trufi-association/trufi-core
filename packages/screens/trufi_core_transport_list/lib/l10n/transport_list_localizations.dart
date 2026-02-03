@@ -132,6 +132,24 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'{count} stops'**
   String stops(int count);
+
+  /// Error title when route cannot be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Route not found'**
+  String get routeNotFound;
+
+  /// Error message when route fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'The route could not be loaded'**
+  String get routeLoadError;
+
+  /// Go back button label
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get buttonGoBack;
 }
 
 class _TransportListLocalizationsDelegate

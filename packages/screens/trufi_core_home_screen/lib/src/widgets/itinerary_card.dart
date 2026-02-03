@@ -71,7 +71,7 @@ class ItineraryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderRow(ThemeData theme, HomeScreenLocalizations? l10n) {
+  Widget _buildHeaderRow(ThemeData theme, HomeScreenLocalizations l10n) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -127,7 +127,7 @@ class ItineraryCard extends StatelessWidget {
               onStartNavigation!();
             },
             icon: const Icon(Icons.navigation_rounded, size: 16),
-            label: const Text('Go'),
+            label: Text(l10n.buttonGo),
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               visualDensity: VisualDensity.compact,
@@ -177,7 +177,7 @@ class ItineraryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFooterRow(ThemeData theme, HomeScreenLocalizations? l10n) {
+  Widget _buildFooterRow(ThemeData theme, HomeScreenLocalizations l10n) {
     final walkingLegs = itinerary.legs.where(
       (leg) => leg.transportMode == routing.TransportMode.walk,
     );
@@ -223,7 +223,7 @@ class ItineraryCard extends StatelessWidget {
               onDetailsTap!();
             },
             icon: const Icon(Icons.info_outline_rounded, size: 18),
-            label: const Text('Details'),
+            label: Text(l10n.buttonDetails),
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               visualDensity: VisualDensity.compact,
@@ -233,23 +233,22 @@ class ItineraryCard extends StatelessWidget {
     );
   }
 
-  String _formatDuration(Duration duration, HomeScreenLocalizations? l10n) {
+  String _formatDuration(Duration duration, HomeScreenLocalizations l10n) {
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
 
     if (hours > 0) {
-      return l10n?.durationHoursMinutes(hours, minutes) ??
-          '${hours}h ${minutes}min';
+      return l10n.durationHoursMinutes(hours, minutes);
     }
-    return l10n?.durationMinutes(minutes) ?? '$minutes min';
+    return l10n.durationMinutes(minutes);
   }
 
-  String _formatDistance(int meters, HomeScreenLocalizations? l10n) {
+  String _formatDistance(int meters, HomeScreenLocalizations l10n) {
     if (meters < 1000) {
-      return l10n?.distanceMeters(meters) ?? '$meters m';
+      return l10n.distanceMeters(meters);
     }
     final km = (meters / 1000).toStringAsFixed(1);
-    return l10n?.distanceKilometers(km) ?? '$km km';
+    return l10n.distanceKilometers(km);
   }
 }
 

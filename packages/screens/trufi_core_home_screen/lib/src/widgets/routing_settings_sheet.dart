@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
+import '../../l10n/home_screen_localizations.dart';
+
 /// Shows the routing settings bottom sheet.
 /// Returns `true` if the user tapped "Apply" to confirm changes.
 Future<bool?> showRoutingSettingsSheet(BuildContext context) {
@@ -22,6 +24,7 @@ class RoutingSettingsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -53,7 +56,7 @@ class RoutingSettingsSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Route Settings',
+                  l10n.routeSettings,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -65,7 +68,7 @@ class RoutingSettingsSheet extends StatelessWidget {
                     manager?.reset();
                     HapticFeedback.lightImpact();
                   },
-                  child: const Text('Reset'),
+                  child: Text(l10n.buttonReset),
                 ),
               ],
             ),
@@ -104,7 +107,7 @@ class RoutingSettingsSheet extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
                 icon: const Icon(Icons.check_rounded),
-                label: const Text('Apply'),
+                label: Text(l10n.buttonApply),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -132,6 +135,8 @@ class _AccessibilitySection extends StatelessWidget {
 
     if (manager == null) return const SizedBox.shrink();
 
+    final l10n = HomeScreenLocalizations.of(context);
+
     return _SettingsCard(
       child: SwitchListTile(
         contentPadding: EdgeInsets.zero,
@@ -143,13 +148,13 @@ class _AccessibilitySection extends StatelessWidget {
               size: 24,
             ),
             const SizedBox(width: 12),
-            const Text('Wheelchair accessible'),
+            Text(l10n.wheelchairAccessible),
           ],
         ),
         subtitle: Text(
           manager.wheelchair
-              ? 'Routes avoid stairs and steep slopes'
-              : 'Include all routes',
+              ? l10n.wheelchairAccessibleOn
+              : l10n.wheelchairAccessibleOff,
           style: theme.textTheme.bodySmall?.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),
@@ -176,6 +181,8 @@ class _WalkSpeedSection extends StatelessWidget {
 
     if (manager == null) return const SizedBox.shrink();
 
+    final l10n = HomeScreenLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -188,7 +195,7 @@ class _WalkSpeedSection extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Walking speed',
+              l10n.walkingSpeed,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -205,7 +212,7 @@ class _WalkSpeedSection extends StatelessWidget {
                   right: level != WalkSpeedLevel.fast ? 8 : 0,
                 ),
                 child: _SpeedChip(
-                  label: _getSpeedLabel(level),
+                  label: _getSpeedLabel(level, l10n),
                   icon: _getSpeedIcon(level),
                   isSelected: isSelected,
                   onTap: () {
@@ -221,14 +228,14 @@ class _WalkSpeedSection extends StatelessWidget {
     );
   }
 
-  String _getSpeedLabel(WalkSpeedLevel level) {
+  String _getSpeedLabel(WalkSpeedLevel level, HomeScreenLocalizations l10n) {
     switch (level) {
       case WalkSpeedLevel.slow:
-        return 'Slow';
+        return l10n.speedSlow;
       case WalkSpeedLevel.normal:
-        return 'Normal';
+        return l10n.speedNormal;
       case WalkSpeedLevel.fast:
-        return 'Fast';
+        return l10n.speedFast;
     }
   }
 
@@ -315,6 +322,7 @@ class _MaxWalkDistanceSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
     final manager = RoutingPreferencesManager.maybeWatch(context);
 
     if (manager == null) return const SizedBox.shrink();
@@ -334,7 +342,7 @@ class _MaxWalkDistanceSection extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Maximum walking distance',
+              l10n.maxWalkDistance,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -349,6 +357,7 @@ class _MaxWalkDistanceSection extends StatelessWidget {
             final isSelected = currentDistance == distance;
             return _DistanceChip(
               distance: distance,
+              noLimitLabel: l10n.noLimit,
               isSelected: isSelected,
               onTap: () {
                 HapticFeedback.selectionClick();
@@ -365,11 +374,13 @@ class _MaxWalkDistanceSection extends StatelessWidget {
 /// Distance selection chip.
 class _DistanceChip extends StatelessWidget {
   final double? distance;
+  final String noLimitLabel;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _DistanceChip({
     required this.distance,
+    required this.noLimitLabel,
     required this.isSelected,
     required this.onTap,
   });
@@ -380,7 +391,7 @@ class _DistanceChip extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     final label = distance == null
-        ? 'No limit'
+        ? noLimitLabel
         : distance! >= 1000
             ? '${(distance! / 1000).toStringAsFixed(1)} km'
             : '${distance!.toInt()} m';
@@ -425,6 +436,7 @@ class _TransportModesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
     final manager = RoutingPreferencesManager.maybeWatch(context);
 
     if (manager == null) return const SizedBox.shrink();
@@ -441,7 +453,7 @@ class _TransportModesSection extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Transport modes',
+              l10n.transportModes,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -456,7 +468,7 @@ class _TransportModesSection extends StatelessWidget {
             _TransportModeChip(
               mode: RoutingMode.transit,
               icon: Icons.directions_bus_rounded,
-              label: 'Transit',
+              label: l10n.modeTransit,
               isSelected: manager.transportModes.contains(RoutingMode.transit),
               onTap: () {
                 HapticFeedback.selectionClick();
@@ -466,7 +478,7 @@ class _TransportModesSection extends StatelessWidget {
             _TransportModeChip(
               mode: RoutingMode.walk,
               icon: Icons.directions_walk_rounded,
-              label: 'Walk',
+              label: l10n.walk,
               isSelected: manager.transportModes.contains(RoutingMode.walk),
               onTap: () {
                 HapticFeedback.selectionClick();
@@ -476,7 +488,7 @@ class _TransportModesSection extends StatelessWidget {
             _TransportModeChip(
               mode: RoutingMode.bicycle,
               icon: Icons.directions_bike_rounded,
-              label: 'Bicycle',
+              label: l10n.modeBicycle,
               isSelected: manager.transportModes.contains(RoutingMode.bicycle),
               onTap: () {
                 HapticFeedback.selectionClick();

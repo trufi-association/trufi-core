@@ -171,6 +171,48 @@ abstract class CoreLocalizations {
   /// In en, this message translates to:
   /// **'Network error. Please check your connection.'**
   String get errorNetwork;
+
+  /// Error message when app fails to initialize
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to initialize app'**
+  String get errorInitialization;
+
+  /// Retry button text
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get actionRetry;
+
+  /// Error message for 404 pages
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get errorPageNotFound;
+
+  /// Go to home page button
+  ///
+  /// In en, this message translates to:
+  /// **'Go Home'**
+  String get actionGoHome;
+
+  /// Generic error title
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get titleError;
+
+  /// Number of unread notifications
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String unreadCount(int count);
+
+  /// Button to mark all notifications as read
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get markAllAsRead;
 }
 
 class _CoreLocalizationsDelegate

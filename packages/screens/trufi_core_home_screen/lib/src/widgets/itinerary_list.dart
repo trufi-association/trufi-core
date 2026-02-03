@@ -254,12 +254,12 @@ class _ItineraryListState extends State<ItineraryList> {
             onPressed: () {
               context.read<RoutePlannerCubit>().fetchPlan();
             },
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.refresh_rounded, size: 18),
-                SizedBox(width: 8),
-                Text('Try again'),
+                const Icon(Icons.refresh_rounded, size: 18),
+                const SizedBox(width: 8),
+                Text(l10n.buttonTryAgain),
               ],
             ),
           ),

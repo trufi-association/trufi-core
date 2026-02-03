@@ -175,4 +175,197 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   String co2Emissions(String grams) {
     return '${grams}g CO₂';
   }
+
+  @override
+  String get locationPermissionTitle => 'Standortberechtigung';
+
+  @override
+  String get locationPermissionDeniedMessage =>
+      'Die Standortberechtigung wurde dauerhaft verweigert. Bitte aktiviere sie in den Geräteeinstellungen, um diese Funktion zu nutzen.';
+
+  @override
+  String get locationDisabledTitle => 'Standort deaktiviert';
+
+  @override
+  String get locationDisabledMessage =>
+      'Die Standortdienste sind auf deinem Gerät deaktiviert. Bitte aktiviere sie, um diese Funktion zu nutzen.';
+
+  @override
+  String get buttonCancel => 'Abbrechen';
+
+  @override
+  String get buttonOpenSettings => 'Einstellungen öffnen';
+
+  @override
+  String get buttonApply => 'Anwenden';
+
+  @override
+  String get searchForRoute => 'Nach einer Route suchen';
+
+  @override
+  String get searchForRouteHint =>
+      'Gib Start und Ziel ein, um Routen zu finden';
+
+  @override
+  String get tooltipShare => 'Teilen';
+
+  @override
+  String get tooltipClose => 'Schließen';
+
+  @override
+  String get leaveNow => 'Jetzt losfahren';
+
+  @override
+  String get departAt => 'Abfahrt um...';
+
+  @override
+  String departAtTime(String time) {
+    return 'Abfahrt $time';
+  }
+
+  @override
+  String get arriveBy => 'Ankunft bis...';
+
+  @override
+  String arriveByTime(String time) {
+    return 'Ankunft bis $time';
+  }
+
+  @override
+  String get today => 'Heute';
+
+  @override
+  String get tomorrow => 'Morgen';
+
+  @override
+  String tomorrowWithTime(String time) {
+    return 'Morgen $time';
+  }
+
+  @override
+  String get whenDoYouWantToTravel => 'Wann möchtest du reisen?';
+
+  @override
+  String routesFound(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Routen gefunden',
+      one: '1 Route gefunden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get monthJan => 'Jan';
+
+  @override
+  String get monthFeb => 'Feb';
+
+  @override
+  String get monthMar => 'Mär';
+
+  @override
+  String get monthApr => 'Apr';
+
+  @override
+  String get monthMay => 'Mai';
+
+  @override
+  String get monthJun => 'Jun';
+
+  @override
+  String get monthJul => 'Jul';
+
+  @override
+  String get monthAug => 'Aug';
+
+  @override
+  String get monthSep => 'Sep';
+
+  @override
+  String get monthOct => 'Okt';
+
+  @override
+  String get monthNov => 'Nov';
+
+  @override
+  String get monthDec => 'Dez';
+
+  @override
+  String get buttonGo => 'Los';
+
+  @override
+  String get buttonDetails => 'Details';
+
+  @override
+  String get buttonTryAgain => 'Erneut versuchen';
+
+  @override
+  String get buttonReset => 'Zurücksetzen';
+
+  @override
+  String get routeSettings => 'Routeneinstellungen';
+
+  @override
+  String get wheelchairAccessible => 'Rollstuhlgerecht';
+
+  @override
+  String get wheelchairAccessibleOn =>
+      'Routen vermeiden Treppen und steile Hänge';
+
+  @override
+  String get wheelchairAccessibleOff => 'Alle Routen einschließen';
+
+  @override
+  String get walkingSpeed => 'Gehgeschwindigkeit';
+
+  @override
+  String get speedSlow => 'Langsam';
+
+  @override
+  String get speedNormal => 'Normal';
+
+  @override
+  String get speedFast => 'Schnell';
+
+  @override
+  String get maxWalkDistance => 'Maximale Gehstrecke';
+
+  @override
+  String get noLimit => 'Kein Limit';
+
+  @override
+  String get transportModes => 'Verkehrsmittel';
+
+  @override
+  String get modeTransit => 'ÖPNV';
+
+  @override
+  String get modeBicycle => 'Fahrrad';
+
+  @override
+  String get exitNavigation => 'Navigation beenden';
+
+  @override
+  String get exitNavigationTitle => 'Navigation beenden?';
+
+  @override
+  String get exitNavigationMessage =>
+      'Bist du sicher, dass du die Navigation dieser Route beenden möchtest?';
+
+  @override
+  String get buttonExit => 'Beenden';
+
+  @override
+  String get arrivedMessage => 'Du bist angekommen!';
+
+  @override
+  String get buttonRetry => 'Erneut versuchen';
+
+  @override
+  String get buttonSettings => 'Einstellungen';
+
+  @override
+  String get findingRoutes => 'Routen werden gesucht...';
 }
