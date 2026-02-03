@@ -1,7 +1,7 @@
-/// A Flutter package for map rendering with support for flutter_map and maplibre_gl.
+/// A Flutter package for map rendering with maplibre_gl.
 ///
 /// This package follows a 3-layer architecture:
-/// - **Presentation Layer**: Map widgets (TrufiMap, TrufiFlutterMap, TrufiMapLibreMap)
+/// - **Presentation Layer**: Map widgets (TrufiMap, TrufiMapLibreMap)
 /// - **Domain Layer**: Business logic (TrufiMapController, TrufiLayer, entities)
 /// - **Data Layer**: Data access (tile fetching, spatial indexing, utilities)
 /// - **Configuration**: Map configuration, markers, and copyright
@@ -13,7 +13,6 @@ library;
 export 'src/configuration/map_configuration.dart';
 export 'src/configuration/marker_configuration.dart';
 export 'src/configuration/map_copyright.dart';
-export 'src/configuration/map_tile_provider.dart';
 export 'src/configuration/map_layer/map_layer.dart';
 export 'src/configuration/map_layer/map_layer_local_storage.dart';
 export 'src/configuration/map_layer/map_layers_cubit.dart';
@@ -23,7 +22,6 @@ export 'src/configuration/markers/to_marker.dart';
 export 'src/configuration/markers/my_location_marker.dart';
 export 'src/configuration/map_engine/trufi_map_engine.dart';
 export 'src/configuration/map_engine/maplibre_engine.dart';
-export 'src/configuration/map_engine/flutter_map_engine.dart';
 export 'src/configuration/map_engine/map_engine_manager.dart';
 export 'src/configuration/map_engine/default_map_engines.dart';
 
@@ -51,7 +49,6 @@ export 'src/domain/layers/fit_camera_layer.dart';
 // PRESENTATION LAYER - Map Widgets
 // ============================================
 export 'src/presentation/map/trufi_map.dart';
-export 'src/presentation/map/flutter_map.dart';
 export 'src/presentation/map/maplibre_map.dart';
 
 // ============================================

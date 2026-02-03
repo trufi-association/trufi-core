@@ -272,8 +272,8 @@ class _RouteMapViewState extends State<_RouteMapView> {
     super.dispose();
   }
 
-  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
-    return engine.buildMap(controller: _mapController!, isDarkMode: isDarkMode);
+  Widget _buildMap(ITrufiMapEngine engine) {
+    return engine.buildMap(controller: _mapController!);
   }
 
   @override
@@ -296,15 +296,13 @@ class _RouteMapViewState extends State<_RouteMapView> {
           Size(constraints.maxWidth, constraints.maxHeight),
           adjustedPadding,
         );
-        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
         // Calculate safe offset to avoid overlapping with TransportDetailScreen topbar
         final topOffset = viewPadding.top + 70;
 
         return Stack(
           children: [
             // Map (full area)
-            _buildMap(mapEngineManager.currentEngine, isDarkMode: isDarkMode),
+            _buildMap(mapEngineManager.currentEngine),
 
             // Map controls (right side, below top bar)
             Positioned(

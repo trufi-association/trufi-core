@@ -19,12 +19,17 @@ class POILayersExampleApp extends StatelessWidget {
   const POILayersExampleApp({super.key});
 
   static final List<ITrufiMapEngine> mapEngines = [
-    const FlutterMapEngine(
-      tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      userAgentPackageName: 'com.example.trufi_core_poi_layers_example',
+    const MapLibreEngine(
+      engineId: 'maplibre_liberty',
+      styleString: 'https://tiles.openfreemap.org/styles/liberty',
+      displayName: 'Liberty',
+      displayDescription: 'Mapa vectorial claro',
     ),
     const MapLibreEngine(
-      styleString: 'https://tiles.openfreemap.org/styles/liberty',
+      engineId: 'maplibre_dark',
+      styleString: 'https://tiles.openfreemap.org/styles/dark',
+      displayName: 'Dark',
+      displayDescription: 'Mapa vectorial oscuro',
     ),
   ];
 

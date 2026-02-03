@@ -16,7 +16,6 @@ dependencies:
   dio: ^5.9.0
   equatable: ^2.0.8
   flutter_bloc: ^9.1.1
-  flutter_map: ^8.2.2
   flutter_svg: ^2.2.3
   latlong2: ^0.9.1
   maplibre: ^0.3.3+2

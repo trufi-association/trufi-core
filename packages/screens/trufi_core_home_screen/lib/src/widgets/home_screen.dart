@@ -946,12 +946,11 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
+  Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
       controller: _mapController!,
       onMapClick: _onMapClick,
       onMapLongClick: _onMapLongPress,
-      isDarkMode: isDarkMode,
     );
   }
 
@@ -1060,8 +1059,6 @@ class _HomeScreenState extends State<HomeScreen>
                 });
               }
 
-              final isDarkMode = theme.brightness == Brightness.dark;
-
               // Update camera padding for side panel layout (panel on LEFT)
               // Note: The map is already positioned to the right of the side panel,
               // so we don't need to include sidePanelWidth in the padding.
@@ -1079,10 +1076,7 @@ class _HomeScreenState extends State<HomeScreen>
                     left: isWideScreen ? sidePanelWidth : 0,
                     bottom: 0,
                     right: 0,
-                    child: _buildMap(
-                      mapEngineManager.currentEngine,
-                      isDarkMode: isDarkMode,
-                    ),
+                    child: _buildMap(mapEngineManager.currentEngine),
                   ),
 
                   // Wide screens: always show left panel with SearchBar

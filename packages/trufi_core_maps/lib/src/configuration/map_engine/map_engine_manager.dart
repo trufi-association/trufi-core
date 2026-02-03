@@ -58,7 +58,18 @@ class MapEngineManager extends ChangeNotifier {
 
   Future<void> _loadSavedEngine() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedId = prefs.getString(_storageKey);
+    var savedId = prefs.getString(_storageKey);
+
+    // Migration: old engine IDs to new IDs
+    if (savedId == 'maplibre') {
+      savedId = 'maplibre_liberty';
+      await prefs.setString(_storageKey, savedId);
+    } else if (savedId == 'fluttermap') {
+      // FlutterMap removed, migrate to Liberty
+      savedId = 'maplibre_liberty';
+      await prefs.setString(_storageKey, savedId);
+    }
+
     if (savedId != null) {
       final index = _engines.indexWhere((e) => e.id == savedId);
       if (index != -1 && index != _currentIndex) {

@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart' as latlng;
 import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
+import 'engines/flutter_map_engine.dart';
 import 'layers/animated_markers_layer.dart';
 import 'layers/animated_routes_layer.dart';
 import 'layers/click_markers_layer.dart';

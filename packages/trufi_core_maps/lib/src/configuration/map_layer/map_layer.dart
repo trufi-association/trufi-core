@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+
+import '../../domain/entities/marker.dart';
 
 /// Abstract class for custom map layers.
 ///
@@ -18,7 +19,7 @@ abstract class MapLayer {
 
   Widget? buildLayerOptionsBackground(int zoom);
 
-  List<Marker>? buildLayerMarkers(int zoom);
+  List<TrufiMarker>? buildLayerMarkers(int zoom);
 
   String name(BuildContext context);
 

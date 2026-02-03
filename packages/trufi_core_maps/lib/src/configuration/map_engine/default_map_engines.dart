@@ -1,23 +1,22 @@
-import 'flutter_map_engine.dart';
 import 'maplibre_engine.dart';
 import 'trufi_map_engine.dart';
 
 /// Default map engines for Trufi apps.
 ///
-/// Both engines support automatic dark mode switching when [isDarkMode]
-/// is passed to [buildMap].
+/// Two MapLibre styles are available:
+/// - Liberty: Light vector map style
+/// - Dark: Dark vector map style for night viewing
 const List<ITrufiMapEngine> defaultMapEngines = [
   MapLibreEngine(
+    engineId: 'maplibre_liberty',
     styleString: 'https://tiles.openfreemap.org/styles/liberty',
-    darkStyleString: 'https://tiles.openfreemap.org/styles/dark',
-    displayName: 'MapLibre GL',
-    displayDescription: 'Vector map with Liberty style',
+    displayName: 'Liberty',
+    displayDescription: 'Mapa vectorial claro',
   ),
-  FlutterMapEngine(
-    tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    // Uses color filter for dark mode (no native dark tiles for OSM standard)
-    userAgentPackageName: 'com.trufi.app',
-    displayName: 'OpenStreetMap',
-    displayDescription: 'Standard OSM raster tiles',
+  MapLibreEngine(
+    engineId: 'maplibre_dark',
+    styleString: 'https://tiles.openfreemap.org/styles/dark',
+    displayName: 'Dark',
+    displayDescription: 'Mapa vectorial oscuro',
   ),
 ];
