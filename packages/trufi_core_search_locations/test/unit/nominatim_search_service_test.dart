@@ -32,6 +32,7 @@ void main() {
     setUp(() {
       mockHttpClient = MockHttpClient();
       service = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
         client: mockHttpClient,
       );
@@ -107,6 +108,7 @@ void main() {
 
       test('includes language parameter when specified', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           language: 'es',
           client: mockHttpClient,
@@ -127,6 +129,7 @@ void main() {
 
       test('includes country codes when specified', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           countryCodes: ['de', 'at'],
           client: mockHttpClient,
@@ -147,6 +150,7 @@ void main() {
 
       test('includes bounding box when specified', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           boundingBox: TestConfig.berlinBoundingBox,
           client: mockHttpClient,
@@ -168,6 +172,7 @@ void main() {
 
       test('includes bias location viewbox when specified', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           biasLatitude: TestConfig.berlinCenterLat,
           biasLongitude: TestConfig.berlinCenterLon,
@@ -190,6 +195,7 @@ void main() {
 
       test('respects limit parameter', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           limit: 5,
           client: mockHttpClient,
@@ -338,6 +344,7 @@ void main() {
 
       test('includes language parameter when specified', () async {
         service = NominatimSearchService(
+          baseUrl: TestConfig.nominatimEndpoint,
           userAgent: TestConfig.nominatimUserAgent,
           language: 'de',
           client: mockHttpClient,

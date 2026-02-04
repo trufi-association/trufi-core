@@ -9,19 +9,37 @@ import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show OtpConfiguration, OtpVersion;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 import 'package:trufi_core_ui/trufi_core_ui.dart';
 
+// ============ CONFIGURATION ============
+const _otpConfiguration = OtpConfiguration(
+  endpoint: 'https://otp-240.trufi-core.trufi.dev',
+  version: OtpVersion.v2_4,
+);
+const _photonUrl = 'https://photon.komoot.io';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
+const _appName = 'Trufi App';
+const _deepLinkScheme = 'trufiapp';
+const _cityName = 'Cochabamba';
+const _countryName = 'Bolivia';
+const _emailContact = 'info@trufi-association.org';
+const _feedbackUrl = 'https://www.trufi-association.org/feedback/';
+const _facebookUrl = 'https://facebook.com/trufiapp';
+const _xTwitterUrl = 'https://x.com/trufiapp';
+const _instagramUrl = 'https://instagram.com/trufiapp';
+// ========================================
 
 void main() {
   runTrufiApp(
     AppConfiguration(
-      appName: 'Trufi App',
-      deepLinkScheme: 'trufiapp',
+      appName: _appName,
+      deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
       appOverlayManagers: [
         OnboardingManager(
@@ -35,17 +53,17 @@ void main() {
       ],
       socialMediaLinks: const [
         SocialMediaLink(
-          url: 'https://facebook.com/trufiapp',
+          url: _facebookUrl,
           icon: Icons.facebook,
           label: 'Facebook',
         ),
         SocialMediaLink(
-          url: 'https://x.com/trufiapp',
+          url: _xTwitterUrl,
           icon: Icons.close,
           label: 'X (Twitter)',
         ),
         SocialMediaLink(
-          url: 'https://instagram.com/trufiapp',
+          url: _instagramUrl,
           icon: Icons.camera_alt_outlined,
           label: 'Instagram',
         ),
@@ -60,6 +78,7 @@ void main() {
         BlocProvider(
           create: (_) => SearchLocationsCubit(
             searchLocationService: PhotonSearchService(
+              baseUrl: _photonUrl,
               biasLatitude: _defaultCenter.latitude,
               biasLongitude: _defaultCenter.longitude,
             ),
@@ -69,9 +88,9 @@ void main() {
       screens: [
         HomeScreenTrufiScreen(
           config: HomeScreenConfig(
-            otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
-            appName: 'Trufi App',
-            deepLinkScheme: 'trufiapp',
+            otpConfiguration: _otpConfiguration,
+            appName: _appName,
+            deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
           ),
           onStartNavigation: (context, itinerary, locationService) {
@@ -85,9 +104,7 @@ void main() {
         ),
         SavedPlacesTrufiScreen(),
         TransportListTrufiScreen(
-          config: TransportListOtpConfig(
-            otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
-          ),
+          otpConfiguration: _otpConfiguration,
         ),
         FaresTrufiScreen(
           config: FaresConfig(
@@ -119,16 +136,16 @@ void main() {
         ),
         FeedbackTrufiScreen(
           config: FeedbackConfig(
-            feedbackUrl: 'https://www.trufi-association.org/feedback/',
+            feedbackUrl: _feedbackUrl,
           ),
         ),
         SettingsTrufiScreen(),
         AboutTrufiScreen(
           config: AboutScreenConfig(
-            appName: 'Trufi App',
-            cityName: 'Cochabamba',
-            countryName: 'Bolivia',
-            emailContact: 'info@trufi-association.org',
+            appName: _appName,
+            cityName: _cityName,
+            countryName: _countryName,
+            emailContact: _emailContact,
           ),
         ),
       ],

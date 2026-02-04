@@ -19,6 +19,8 @@ dependencies:
     path: ../../../trufi_core_search_locations
   trufi_core_poi_layers:
     path: ../../../trufi_core_poi_layers
+  trufi_core_routing:
+    path: ../../../trufi_core_routing
   flutter_bloc: ^9.1.1
   latlong2: ^0.9.1
   provider: ^6.0.0

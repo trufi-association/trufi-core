@@ -44,7 +44,7 @@ class NominatimSearchService implements SearchLocationService {
   final http.Client _client;
 
   NominatimSearchService({
-    this.baseUrl = 'https://nominatim.openstreetmap.org',
+    required this.baseUrl,
     required this.userAgent,
     this.language,
     this.limit = 10,

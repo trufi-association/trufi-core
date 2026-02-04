@@ -16,6 +16,7 @@ void main() {
 
     setUp(() {
       service = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
       );
     });
@@ -49,6 +50,7 @@ void main() {
 
     test('search respects limit parameter', () async {
       final limitedService = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
         limit: 3,
       );
@@ -64,6 +66,7 @@ void main() {
 
     test('search with language returns localized results', () async {
       final germanService = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
         language: 'de',
       );
@@ -88,6 +91,7 @@ void main() {
 
     test('search with country codes filters results', () async {
       final boliviaService = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
         countryCodes: ['bo'],
       );
@@ -112,6 +116,7 @@ void main() {
 
     test('search with bias location prioritizes nearby results', () async {
       final biasedService = NominatimSearchService(
+        baseUrl: TestConfig.nominatimEndpoint,
         userAgent: TestConfig.nominatimUserAgent,
         biasLatitude: TestConfig.berlinCenterLat,
         biasLongitude: TestConfig.berlinCenterLon,

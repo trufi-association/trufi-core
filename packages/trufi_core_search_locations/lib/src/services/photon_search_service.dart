@@ -32,7 +32,7 @@ class PhotonSearchService implements SearchLocationService {
   final http.Client _client;
 
   PhotonSearchService({
-    this.baseUrl = 'https://photon.komoot.io',
+    required this.baseUrl,
     this.language,
     this.biasLatitude,
     this.biasLongitude,

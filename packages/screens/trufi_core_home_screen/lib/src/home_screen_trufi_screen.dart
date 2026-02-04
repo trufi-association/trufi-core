@@ -52,9 +52,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     _repository = repository ?? HomeScreenRepositoryImpl();
     _requestService =
         requestService ??
-        RoutingRequestPlanService(
-          routing.OtpConfiguration(endpoint: config.otpEndpoint),
-        );
+        RoutingRequestPlanService(config.otpConfiguration);
     _routingPreferencesManager = routing.RoutingPreferencesManager();
   }
 

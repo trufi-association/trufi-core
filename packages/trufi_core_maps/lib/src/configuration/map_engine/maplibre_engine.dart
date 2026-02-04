@@ -42,7 +42,7 @@ class MapLibreEngine implements ITrufiMapEngine {
   final Widget? preview;
 
   const MapLibreEngine({
-    this.styleString = 'https://demotiles.maplibre.org/style.json',
+    required this.styleString,
     this.engineId,
     this.displayName,
     this.displayDescription,

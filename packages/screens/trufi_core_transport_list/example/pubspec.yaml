@@ -16,6 +16,8 @@ dependencies:
     path: ../
   trufi_core_maps:
     path: ../../../trufi_core_maps
+  trufi_core_routing:
+    path: ../../../trufi_core_routing
 
 dependency_overrides:
   trufi_core_base_widgets:
