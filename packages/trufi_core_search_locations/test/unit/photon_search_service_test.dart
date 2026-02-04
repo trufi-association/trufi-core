@@ -31,7 +31,10 @@ void main() {
 
     setUp(() {
       mockHttpClient = MockHttpClient();
-      service = PhotonSearchService(client: mockHttpClient);
+      service = PhotonSearchService(
+        baseUrl: TestConfig.photonEndpoint,
+        client: mockHttpClient,
+      );
     });
 
     tearDown(() {
@@ -95,6 +98,7 @@ void main() {
 
       test('includes language parameter when specified', () async {
         service = PhotonSearchService(
+          baseUrl: TestConfig.photonEndpoint,
           language: 'de',
           client: mockHttpClient,
         );
@@ -114,6 +118,7 @@ void main() {
 
       test('includes bias coordinates when specified', () async {
         service = PhotonSearchService(
+          baseUrl: TestConfig.photonEndpoint,
           biasLatitude: TestConfig.berlinCenterLat,
           biasLongitude: TestConfig.berlinCenterLon,
           client: mockHttpClient,
@@ -141,6 +146,7 @@ void main() {
 
       test('includes bounding box when specified', () async {
         service = PhotonSearchService(
+          baseUrl: TestConfig.photonEndpoint,
           boundingBox: TestConfig.berlinBoundingBox,
           client: mockHttpClient,
         );
@@ -160,6 +166,7 @@ void main() {
 
       test('respects limit parameter', () async {
         service = PhotonSearchService(
+          baseUrl: TestConfig.photonEndpoint,
           limit: 5,
           client: mockHttpClient,
         );
@@ -380,6 +387,7 @@ void main() {
 
       test('includes language parameter when specified', () async {
         service = PhotonSearchService(
+          baseUrl: TestConfig.photonEndpoint,
           language: 'es',
           client: mockHttpClient,
         );

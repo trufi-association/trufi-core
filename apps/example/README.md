@@ -86,13 +86,76 @@ flutter run
 
 ## Configuration
 
-The app is configured to use:
-- **OTP Endpoint**: `https://otp-240.trufi-core.trufi.dev`
+All configuration is at the top of [lib/main.dart](lib/main.dart). Modify these values for your deployment:
+
+### Required Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `_otpConfiguration` | OTP server endpoint and version for route planning |
+| `_photonUrl` | Geocoding service URL for location search |
+| `_defaultCenter` | Initial map coordinates (latitude, longitude) |
+
+### OTP Version
+
+**IMPORTANT:** The `OtpVersion` must match your OTP server exactly:
+
+| Version | API Type | Notes |
+|---------|----------|-------|
+| `OtpVersion.v1_5` | REST | Legacy servers |
+| `OtpVersion.v2_4` | GraphQL | Most common |
+| `OtpVersion.v2_8` | GraphQL | Latest, with emissions support |
+
+Using the wrong version will cause routing errors.
+
+### App Identity
+
+| Parameter | Description |
+|-----------|-------------|
+| `_appName` | Display name in UI and shared routes |
+| `_deepLinkScheme` | URL scheme for deep links (e.g., `trufiapp://route/...`) |
+| `_cityName` | City name for About screen |
+| `_countryName` | Country name for About screen |
+| `_emailContact` | Support email |
+
+### URLs
+
+| Parameter | Description |
+|-----------|-------------|
+| `_feedbackUrl` | User feedback form URL |
+| `_facebookUrl` | Facebook page URL |
+| `_xTwitterUrl` | X (Twitter) profile URL |
+| `_instagramUrl` | Instagram profile URL |
+
+### Geocoding Services
+
+Two geocoding services are available:
+
+**PhotonSearchService** (default):
+```dart
+PhotonSearchService(
+  baseUrl: 'https://photon.komoot.io',  // Required
+  biasLatitude: -17.39,                  // Optional: prioritize nearby results
+  biasLongitude: -66.16,
+)
+```
+
+**NominatimSearchService** (alternative):
+```dart
+NominatimSearchService(
+  baseUrl: 'https://nominatim.openstreetmap.org',  // Required
+  userAgent: 'MyApp/1.0',                          // Required
+  countryCodes: ['bo'],                            // Optional: filter by country
+)
+```
+
+### Current Values
+
+- **OTP Endpoint**: `https://otp-240.trufi-core.trufi.dev` (v2.4)
 - **Default Location**: Cochabamba, Bolivia (-17.3988354, -66.1626903)
-- **Map Engines**: MapLibre GL and Flutter Map
+- **Map Engines**: MapLibre (Liberty and Dark styles)
 - **Deep Link Scheme**: `trufiapp://`
 - **POI Layers**: Tourism, Food, and Transport categories enabled by default
-- **POI Data**: Sample GeoJSON data for Cochabamba included in `assets/pois/`
 
 ## Dependencies
 

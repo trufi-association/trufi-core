@@ -15,7 +15,7 @@ void main() {
     late PhotonSearchService service;
 
     setUp(() {
-      service = PhotonSearchService();
+      service = PhotonSearchService(baseUrl: TestConfig.photonEndpoint);
     });
 
     tearDown(() {
@@ -46,7 +46,10 @@ void main() {
     });
 
     test('search respects limit parameter', () async {
-      final limitedService = PhotonSearchService(limit: 3);
+      final limitedService = PhotonSearchService(
+        baseUrl: TestConfig.photonEndpoint,
+        limit: 3,
+      );
 
       try {
         final results = await limitedService.search('Restaurant Berlin');
@@ -58,7 +61,10 @@ void main() {
     });
 
     test('search with language returns localized results', () async {
-      final germanService = PhotonSearchService(language: 'de');
+      final germanService = PhotonSearchService(
+        baseUrl: TestConfig.photonEndpoint,
+        language: 'de',
+      );
 
       try {
         final results = await germanService.search('Berlin');
@@ -71,6 +77,7 @@ void main() {
 
     test('search with bias location prioritizes nearby results', () async {
       final biasedService = PhotonSearchService(
+        baseUrl: TestConfig.photonEndpoint,
         biasLatitude: TestConfig.berlinCenterLat,
         biasLongitude: TestConfig.berlinCenterLon,
       );
@@ -91,6 +98,7 @@ void main() {
 
     test('search with bounding box limits results', () async {
       final boundedService = PhotonSearchService(
+        baseUrl: TestConfig.photonEndpoint,
         boundingBox: TestConfig.berlinBoundingBox,
       );
 

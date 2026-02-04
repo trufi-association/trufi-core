@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final SearchLocationService _searchService = PhotonSearchService(
+    baseUrl: 'https://photon.komoot.io',
     biasLatitude: -17.3920,
     biasLongitude: -66.1575,
     limit: 15,

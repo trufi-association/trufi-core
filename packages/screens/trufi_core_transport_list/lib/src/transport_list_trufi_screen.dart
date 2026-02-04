@@ -16,22 +16,11 @@ import 'transport_detail_screen.dart';
 import 'transport_list_content.dart';
 import 'transport_list_data_provider.dart';
 
-/// Configuration for the Transport List screen with OTP integration
-class TransportListOtpConfig {
-  final String otpEndpoint;
-  final OtpVersion otpVersion;
-
-  const TransportListOtpConfig({
-    required this.otpEndpoint,
-    this.otpVersion = OtpVersion.v2_4,
-  });
-}
-
 /// Transport List screen module for TrufiApp integration with OTP and Map support
 class TransportListTrufiScreen extends TrufiScreen {
-  final TransportListOtpConfig config;
+  final OtpConfiguration otpConfiguration;
 
-  TransportListTrufiScreen({required this.config});
+  TransportListTrufiScreen({required this.otpConfiguration});
 
   @override
   String get id => 'transport_list';
@@ -41,7 +30,7 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   Widget Function(BuildContext context) get builder =>
-      (_) => _TransportListScreenWidget(config: config);
+      (_) => _TransportListScreenWidget(otpConfiguration: otpConfiguration);
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
@@ -69,9 +58,9 @@ class TransportListTrufiScreen extends TrufiScreen {
 }
 
 class _TransportListScreenWidget extends StatefulWidget {
-  final TransportListOtpConfig config;
+  final OtpConfiguration otpConfiguration;
 
-  const _TransportListScreenWidget({required this.config});
+  const _TransportListScreenWidget({required this.otpConfiguration});
 
   @override
   State<_TransportListScreenWidget> createState() =>
@@ -90,10 +79,7 @@ class _TransportListScreenWidgetState
     _cache = TransportListCache();
     _cache.initialize();
     _dataProvider = OtpTransportDataProvider(
-      otpConfiguration: OtpConfiguration(
-        endpoint: widget.config.otpEndpoint,
-        version: widget.config.otpVersion,
-      ),
+      otpConfiguration: widget.otpConfiguration,
       cache: _cache,
     );
   }
