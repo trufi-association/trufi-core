@@ -83,12 +83,25 @@ class Otp28PlanRepository implements PlanRepository {
     final result = await _client.query(query);
 
     if (result.hasException && result.data == null) {
-      if (result.exception!.graphqlErrors.isNotEmpty) {
+      final exception = result.exception!;
+
+      // GraphQL errors (server-side validation errors)
+      if (exception.graphqlErrors.isNotEmpty) {
         throw Otp28Exception(
-          'Bad request: ${result.exception!.graphqlErrors.first.message}',
+          'GraphQL error: ${exception.graphqlErrors.first.message}',
         );
       }
-      throw Otp28Exception('No internet connection');
+
+      // Link exception (network, parsing, etc.)
+      if (exception.linkException != null) {
+        final linkEx = exception.linkException!;
+        final originalException = linkEx.originalException;
+        throw Otp28Exception(
+          'Network error: ${originalException ?? linkEx.toString()}',
+        );
+      }
+
+      throw Otp28Exception('Unknown error: $exception');
     }
 
     // Handle eager cache responses

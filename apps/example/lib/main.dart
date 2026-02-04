@@ -19,10 +19,10 @@ import 'package:trufi_core_ui/trufi_core_ui.dart';
 
 // ============ CONFIGURATION ============
 const _otpConfiguration = OtpConfiguration(
-  endpoint: 'https://otp-240.trufi-core.trufi.dev',
-  version: OtpVersion.v2_4,
+  endpoint: 'https://otp.trufi.app',
+  version: OtpVersion.v2_8,
 );
-const _photonUrl = 'https://photon.komoot.io';
+const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
 const _deepLinkScheme = 'trufiapp';
@@ -33,6 +33,33 @@ const _feedbackUrl = 'https://www.trufi-association.org/feedback/';
 const _facebookUrl = 'https://facebook.com/trufiapp';
 const _xTwitterUrl = 'https://x.com/trufiapp';
 const _instagramUrl = 'https://instagram.com/trufiapp';
+
+const List<ITrufiMapEngine> _mapEngines = [
+  MapLibreEngine(
+    engineId: 'osm_bright',
+    styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
+    displayName: 'OSM Bright',
+    displayDescription: 'Mapa claro',
+  ),
+  MapLibreEngine(
+    engineId: 'osm_liberty',
+    styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
+    displayName: 'OSM Liberty',
+    displayDescription: 'Mapa estándar',
+  ),
+  MapLibreEngine(
+    engineId: 'dark_matter',
+    styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
+    displayName: 'Dark Matter',
+    displayDescription: 'Mapa oscuro',
+  ),
+  MapLibreEngine(
+    engineId: 'fiord_color',
+    styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
+    displayName: 'Fiord Color',
+    displayDescription: 'Mapa colorido',
+  ),
+];
 // ========================================
 
 void main() {
@@ -71,7 +98,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (_) => MapEngineManager(
-            engines: defaultMapEngines,
+            engines: _mapEngines,
             defaultCenter: _defaultCenter,
           ),
         ),

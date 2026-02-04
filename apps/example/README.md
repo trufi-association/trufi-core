@@ -151,9 +151,10 @@ NominatimSearchService(
 
 ### Current Values
 
-- **OTP Endpoint**: `https://otp-240.trufi-core.trufi.dev` (v2.4)
+- **OTP Endpoint**: `https://otp.trufi.app` (v2.8)
+- **Photon**: `https://photon.trufi.app`
+- **Map Tiles**: `https://maps.trufi.app` (OSM Bright, OSM Liberty, Dark Matter, Fiord Color)
 - **Default Location**: Cochabamba, Bolivia (-17.3988354, -66.1626903)
-- **Map Engines**: MapLibre (Liberty and Dark styles)
 - **Deep Link Scheme**: `trufiapp://`
 - **POI Layers**: Tourism, Food, and Transport categories enabled by default
 
