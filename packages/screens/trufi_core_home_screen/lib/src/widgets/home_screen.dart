@@ -2851,6 +2851,7 @@ class _MyLocationLayer extends TrufiLayer {
         widget: const _MyLocationMarker(),
         size: const Size(24, 24),
         layerLevel: 1,
+        allowOverlap: true,
       ),
     );
   }
@@ -2869,18 +2870,6 @@ class _MyLocationMarker extends StatelessWidget {
         color: const Color(0xFF4285F4), // Google blue
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4285F4).withValues(alpha: 0.4),
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
     );
   }
