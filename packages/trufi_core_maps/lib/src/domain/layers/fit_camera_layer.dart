@@ -47,7 +47,6 @@ class FitCameraLayer extends IFitCameraLayer {
   FitCameraLayer(
     super.controller, {
     EdgeInsets padding = EdgeInsets.zero,
-    @Deprecated('devicePixelRatio is no longer used') double devicePixelRatio = 1.0,
     this.showCornerDots = false,
     this.debugFlag = false,
   }) : _padding = padding,

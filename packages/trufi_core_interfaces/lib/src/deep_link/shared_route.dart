@@ -24,9 +24,14 @@ class SharedRoute {
   });
 
   /// Parse a deep link URI into a SharedRoute
-  /// Expected format: trufiapp://route?fromLat=...&fromLng=...&fromName=...&toLat=...&toLng=...&toName=...&time=...&itinerary=...
+  /// Supported formats:
+  /// - Custom scheme: trufiapp://route?fromLat=...&fromLng=...&fromName=...&toLat=...&toLng=...&toName=...
+  /// - Web URL: https://example.com/route?fromLat=...&fromLng=...&fromName=...&toLat=...&toLng=...&toName=...
   static SharedRoute? fromUri(Uri uri) {
-    if (uri.host != 'route') return null;
+    // Support both custom scheme (host == 'route') and web URLs (path == '/route')
+    final isCustomScheme = uri.host == 'route';
+    final isWebRoute = uri.path == '/route' || uri.path.endsWith('/route');
+    if (!isCustomScheme && !isWebRoute) return null;
 
     final params = uri.queryParameters;
 

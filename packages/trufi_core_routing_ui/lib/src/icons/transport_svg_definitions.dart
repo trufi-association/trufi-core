@@ -1,4 +1,4 @@
-/// SVG definitions for transport icons.
+// SVG definitions for transport icons.
 
 String waitSvg({String color = '#000000'}) => '''
 <svg id="icon-icon_wait" viewBox="0 0 18 18">

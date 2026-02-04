@@ -59,5 +59,46 @@
   "errorNetwork": "Network error. Please check your connection.",
   "@errorNetwork": {
     "description": "Network error message"
+  },
+
+  "errorInitialization": "Failed to initialize app",
+  "@errorInitialization": {
+    "description": "Error message when app fails to initialize"
+  },
+
+  "actionRetry": "Retry",
+  "@actionRetry": {
+    "description": "Retry button text"
+  },
+
+  "errorPageNotFound": "Page not found",
+  "@errorPageNotFound": {
+    "description": "Error message for 404 pages"
+  },
+
+  "actionGoHome": "Go Home",
+  "@actionGoHome": {
+    "description": "Go to home page button"
+  },
+
+  "titleError": "Error",
+  "@titleError": {
+    "description": "Generic error title"
+  },
+
+  "unreadCount": "{count} unread",
+  "@unreadCount": {
+    "description": "Number of unread notifications",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "markAllAsRead": "Mark all as read",
+  "@markAllAsRead": {
+    "description": "Button to mark all notifications as read"
   }
 }

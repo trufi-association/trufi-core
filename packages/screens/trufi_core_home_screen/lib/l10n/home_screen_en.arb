@@ -207,5 +207,353 @@
   "shareRouteOpenInApp": "Open in app:",
   "@shareRouteOpenInApp": {
     "description": "Label before deep link URL"
+  },
+  "tripDetails": "Trip Details",
+  "@tripDetails": {
+    "description": "Title for trip details screen"
+  },
+  "departure": "Departure",
+  "@departure": {
+    "description": "Label for departure time"
+  },
+  "arrival": "Arrival",
+  "@arrival": {
+    "description": "Label for arrival time"
+  },
+  "totalDistance": "Distance",
+  "@totalDistance": {
+    "description": "Label for total distance"
+  },
+  "walking": "Walking",
+  "@walking": {
+    "description": "Label for walking distance"
+  },
+  "tripSteps": "Trip Steps",
+  "@tripSteps": {
+    "description": "Section title for trip legs"
+  },
+  "towards": "Towards",
+  "@towards": {
+    "description": "Label before headsign destination"
+  },
+  "stops": "stops",
+  "@stops": {
+    "description": "Label for intermediate stops"
+  },
+  "bike": "Bike",
+  "@bike": {
+    "description": "Bike transport mode"
+  },
+  "train": "Train",
+  "@train": {
+    "description": "Train transport mode"
+  },
+  "transfersLabel": "Transfers",
+  "@transfersLabel": {
+    "description": "Label for transfers count"
+  },
+  "operatedBy": "Operated by {agency}",
+  "@operatedBy": {
+    "description": "Label showing the transit agency operating a route",
+    "placeholders": {
+      "agency": {
+        "type": "String",
+        "example": "Metro Transit"
+      }
+    }
+  },
+  "viewFares": "View fares",
+  "@viewFares": {
+    "description": "Button to view fare information"
+  },
+  "co2Emissions": "{grams}g CO₂",
+  "@co2Emissions": {
+    "description": "CO2 emissions in grams",
+    "placeholders": {
+      "grams": {
+        "type": "String",
+        "example": "245"
+      }
+    }
+  },
+  "locationPermissionTitle": "Location Permission",
+  "@locationPermissionTitle": {
+    "description": "Title for location permission denied dialog"
+  },
+  "locationPermissionDeniedMessage": "Location permission is permanently denied. Please enable it in your device settings to use this feature.",
+  "@locationPermissionDeniedMessage": {
+    "description": "Message when location permission is permanently denied"
+  },
+  "locationDisabledTitle": "Location Disabled",
+  "@locationDisabledTitle": {
+    "description": "Title for location services disabled dialog"
+  },
+  "locationDisabledMessage": "Location services are disabled on your device. Please enable them to use this feature.",
+  "@locationDisabledMessage": {
+    "description": "Message when location services are disabled"
+  },
+  "buttonCancel": "Cancel",
+  "@buttonCancel": {
+    "description": "Cancel button label"
+  },
+  "buttonOpenSettings": "Open Settings",
+  "@buttonOpenSettings": {
+    "description": "Open settings button label"
+  },
+  "buttonApply": "Apply",
+  "@buttonApply": {
+    "description": "Apply button label"
+  },
+  "searchForRoute": "Search for a route",
+  "@searchForRoute": {
+    "description": "Empty state title when no route is searched"
+  },
+  "searchForRouteHint": "Enter origin and destination to find routes",
+  "@searchForRouteHint": {
+    "description": "Empty state hint when no route is searched"
+  },
+  "tooltipShare": "Share",
+  "@tooltipShare": {
+    "description": "Tooltip for share button"
+  },
+  "tooltipClose": "Close",
+  "@tooltipClose": {
+    "description": "Tooltip for close button"
+  },
+  "leaveNow": "Leave now",
+  "@leaveNow": {
+    "description": "Time mode option for leaving immediately"
+  },
+  "departAt": "Depart at...",
+  "@departAt": {
+    "description": "Time mode option for departing at specific time"
+  },
+  "departAtTime": "Depart {time}",
+  "@departAtTime": {
+    "description": "Label showing departure at specific time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "arriveBy": "Arrive by...",
+  "@arriveBy": {
+    "description": "Time mode option for arriving by specific time"
+  },
+  "arriveByTime": "Arrive by {time}",
+  "@arriveByTime": {
+    "description": "Label showing arrival by specific time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "15:00"
+      }
+    }
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Label for today's date"
+  },
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Label for tomorrow's date"
+  },
+  "tomorrowWithTime": "Tomorrow {time}",
+  "@tomorrowWithTime": {
+    "description": "Label for tomorrow with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "whenDoYouWantToTravel": "When do you want to travel?",
+  "@whenDoYouWantToTravel": {
+    "description": "Header for time picker sheet"
+  },
+  "routesFound": "{count, plural, =1{1 route found} other{{count} routes found}}",
+  "@routesFound": {
+    "description": "Number of routes found",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "monthJan": "Jan",
+  "@monthJan": {
+    "description": "Short name for January"
+  },
+  "monthFeb": "Feb",
+  "@monthFeb": {
+    "description": "Short name for February"
+  },
+  "monthMar": "Mar",
+  "@monthMar": {
+    "description": "Short name for March"
+  },
+  "monthApr": "Apr",
+  "@monthApr": {
+    "description": "Short name for April"
+  },
+  "monthMay": "May",
+  "@monthMay": {
+    "description": "Short name for May"
+  },
+  "monthJun": "Jun",
+  "@monthJun": {
+    "description": "Short name for June"
+  },
+  "monthJul": "Jul",
+  "@monthJul": {
+    "description": "Short name for July"
+  },
+  "monthAug": "Aug",
+  "@monthAug": {
+    "description": "Short name for August"
+  },
+  "monthSep": "Sep",
+  "@monthSep": {
+    "description": "Short name for September"
+  },
+  "monthOct": "Oct",
+  "@monthOct": {
+    "description": "Short name for October"
+  },
+  "monthNov": "Nov",
+  "@monthNov": {
+    "description": "Short name for November"
+  },
+  "monthDec": "Dec",
+  "@monthDec": {
+    "description": "Short name for December"
+  },
+  "buttonGo": "Go",
+  "@buttonGo": {
+    "description": "Go button to start navigation"
+  },
+  "buttonDetails": "Details",
+  "@buttonDetails": {
+    "description": "Details button to view trip details"
+  },
+  "buttonTryAgain": "Try again",
+  "@buttonTryAgain": {
+    "description": "Try again button after error"
+  },
+  "buttonReset": "Reset",
+  "@buttonReset": {
+    "description": "Reset button label"
+  },
+  "routeSettings": "Route Settings",
+  "@routeSettings": {
+    "description": "Title for route settings sheet"
+  },
+  "wheelchairAccessible": "Wheelchair accessible",
+  "@wheelchairAccessible": {
+    "description": "Wheelchair accessibility option"
+  },
+  "wheelchairAccessibleOn": "Routes avoid stairs and steep slopes",
+  "@wheelchairAccessibleOn": {
+    "description": "Description when wheelchair mode is on"
+  },
+  "wheelchairAccessibleOff": "Include all routes",
+  "@wheelchairAccessibleOff": {
+    "description": "Description when wheelchair mode is off"
+  },
+  "walkingSpeed": "Walking speed",
+  "@walkingSpeed": {
+    "description": "Walking speed section title"
+  },
+  "speedSlow": "Slow",
+  "@speedSlow": {
+    "description": "Slow walking speed option"
+  },
+  "speedNormal": "Normal",
+  "@speedNormal": {
+    "description": "Normal walking speed option"
+  },
+  "speedFast": "Fast",
+  "@speedFast": {
+    "description": "Fast walking speed option"
+  },
+  "maxWalkDistance": "Maximum walking distance",
+  "@maxWalkDistance": {
+    "description": "Maximum walking distance section title"
+  },
+  "noLimit": "No limit",
+  "@noLimit": {
+    "description": "No limit option for walking distance"
+  },
+  "transportModes": "Transport modes",
+  "@transportModes": {
+    "description": "Transport modes section title"
+  },
+  "modeTransit": "Transit",
+  "@modeTransit": {
+    "description": "Transit transport mode"
+  },
+  "modeBicycle": "Bicycle",
+  "@modeBicycle": {
+    "description": "Bicycle transport mode"
+  },
+  "exitNavigation": "Exit Navigation",
+  "@exitNavigation": {
+    "description": "Exit navigation button label"
+  },
+  "exitNavigationTitle": "Exit Navigation?",
+  "@exitNavigationTitle": {
+    "description": "Exit navigation confirmation dialog title"
+  },
+  "exitNavigationMessage": "Are you sure you want to stop navigating this route?",
+  "@exitNavigationMessage": {
+    "description": "Exit navigation confirmation message"
+  },
+  "buttonExit": "Exit",
+  "@buttonExit": {
+    "description": "Exit button label"
+  },
+  "arrivedMessage": "You have arrived!",
+  "@arrivedMessage": {
+    "description": "Message when navigation is complete"
+  },
+  "buttonRetry": "Retry",
+  "@buttonRetry": {
+    "description": "Retry button label"
+  },
+  "buttonSettings": "Settings",
+  "@buttonSettings": {
+    "description": "Settings button label"
+  },
+  "findingRoutes": "Finding routes...",
+  "@findingRoutes": {
+    "description": "Loading message while searching for routes"
+  },
+  "moreDepartures": "+{count} more",
+  "@moreDepartures": {
+    "description": "Badge showing number of additional departure times",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "otherDepartures": "Other departures",
+  "@otherDepartures": {
+    "description": "Header for alternative departure times section"
+  },
+  "departsAt": "Departs {time}",
+  "@departsAt": {
+    "description": "Label showing departure time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
   }
 }

@@ -103,6 +103,108 @@ abstract class SettingsLocalizations {
     Locale('es'),
   ];
 
+  /// Onboarding screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome!'**
+  String get onboardingTitle;
+
+  /// Onboarding screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s set up your preferences'**
+  String get onboardingSubtitle;
+
+  /// Language selection title in onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your language'**
+  String get onboardingLanguageTitle;
+
+  /// Theme selection title in onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your theme'**
+  String get onboardingThemeTitle;
+
+  /// Light theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get onboardingThemeLight;
+
+  /// Dark theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get onboardingThemeDark;
+
+  /// System theme option
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get onboardingThemeSystem;
+
+  /// Map selection title in onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your map style'**
+  String get onboardingMapTitle;
+
+  /// Button to complete onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingComplete;
+
+  /// Privacy consent dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Help Improve Trufi'**
+  String get privacyConsentTitle;
+
+  /// Privacy consent dialog subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Help us improve the app by sharing anonymous usage data'**
+  String get privacyConsentSubtitle;
+
+  /// Title for the information section
+  ///
+  /// In en, this message translates to:
+  /// **'What we collect'**
+  String get privacyConsentInfoTitle;
+
+  /// Description of log collection
+  ///
+  /// In en, this message translates to:
+  /// **'Error logs to help us fix bugs and crashes'**
+  String get privacyConsentInfoLogs;
+
+  /// Description of route data collection
+  ///
+  /// In en, this message translates to:
+  /// **'Route searches to improve transit data quality'**
+  String get privacyConsentInfoRoutes;
+
+  /// Privacy assurance message
+  ///
+  /// In en, this message translates to:
+  /// **'All data is completely anonymous'**
+  String get privacyConsentInfoAnonymous;
+
+  /// Button to accept privacy consent
+  ///
+  /// In en, this message translates to:
+  /// **'Accept & Continue'**
+  String get privacyConsentAccept;
+
+  /// Button to decline privacy consent
+  ///
+  /// In en, this message translates to:
+  /// **'No Thanks'**
+  String get privacyConsentDecline;
+
   /// Settings screen title
   ///
   /// In en, this message translates to:
@@ -162,6 +264,30 @@ abstract class SettingsLocalizations {
   /// In en, this message translates to:
   /// **'Select your preferred map type:'**
   String get settingsSelectMapType;
+
+  /// Privacy settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get settingsPrivacy;
+
+  /// Privacy settings subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Help improve the app'**
+  String get settingsPrivacySubtitle;
+
+  /// Toggle label for sharing anonymous data
+  ///
+  /// In en, this message translates to:
+  /// **'Share anonymous usage data'**
+  String get settingsPrivacyShareData;
+
+  /// Description of what data sharing does
+  ///
+  /// In en, this message translates to:
+  /// **'Help us fix bugs and improve transit data'**
+  String get settingsPrivacyShareDataDescription;
 }
 
 class _SettingsLocalizationsDelegate

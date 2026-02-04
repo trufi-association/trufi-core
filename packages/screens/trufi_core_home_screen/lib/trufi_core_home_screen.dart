@@ -41,6 +41,7 @@ export 'src/cubit/route_planner_cubit.dart';
 // Widgets
 export 'src/widgets/home_screen.dart';
 export 'src/widgets/itinerary_card.dart';
+export 'src/widgets/itinerary_detail_screen.dart';
 export 'src/widgets/itinerary_list.dart';
 
 // TrufiScreen Integration

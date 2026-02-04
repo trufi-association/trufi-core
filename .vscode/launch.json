@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "example (Chrome)",
+      "type": "dart",
+      "request": "launch",
+      "program": "apps/example/lib/main.dart",
+      "args": [
+        "--web-port",
+        "3000"
+      ]
+    },
+    {
+      "name": "example (Chrome - Release)",
+      "type": "dart",
+      "request": "launch",
+      "program": "apps/example/lib/main.dart",
+      "flutterMode": "release",
+      "args": [
+        "--web-port",
+        "3000"
+      ]
+    },
+    {
+      "name": "example (Android)",
+      "type": "dart",
+      "request": "launch",
+      "program": "apps/example/lib/main.dart"
+    },
+    {
+      "name": "example (iOS)",
+      "type": "dart",
+      "request": "launch",
+      "program": "apps/example/lib/main.dart"
+    }
+  ]
+}

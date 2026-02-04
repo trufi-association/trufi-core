@@ -12,5 +12,12 @@
   "actionCancel": "Cancelar",
   "actionConfirm": "Confirmar",
   "errorGeneric": "Ocurrió un error",
-  "errorNetwork": "Error de red. Por favor verifica tu conexión."
+  "errorNetwork": "Error de red. Por favor verifica tu conexión.",
+  "errorInitialization": "Error al inicializar la aplicación",
+  "actionRetry": "Reintentar",
+  "errorPageNotFound": "Página no encontrada",
+  "actionGoHome": "Ir al inicio",
+  "titleError": "Error",
+  "unreadCount": "{count} sin leer",
+  "markAllAsRead": "Marcar todo como leído"
 }

@@ -1,4 +1,5 @@
 import 'itinerary.dart';
+import 'itinerary_group.dart';
 import 'plan_location.dart';
 
 /// A trip plan containing itineraries from origin to destination.
@@ -7,12 +8,18 @@ class Plan {
     this.from,
     this.to,
     this.itineraries,
+    this.groupedItineraries,
     this.type,
   });
 
   final PlanLocation? from;
   final PlanLocation? to;
   final List<Itinerary>? itineraries;
+
+  /// Itineraries grouped by route pattern.
+  /// Each group contains itineraries that use the same routes/stops but differ in timing.
+  final List<ItineraryGroup>? groupedItineraries;
+
   final String? type;
 
   /// Creates a [Plan] from JSON.
@@ -48,12 +55,14 @@ class Plan {
     PlanLocation? from,
     PlanLocation? to,
     List<Itinerary>? itineraries,
+    List<ItineraryGroup>? groupedItineraries,
     String? type,
   }) {
     return Plan(
       from: from ?? this.from,
       to: to ?? this.to,
       itineraries: itineraries ?? this.itineraries,
+      groupedItineraries: groupedItineraries ?? this.groupedItineraries,
       type: type ?? this.type,
     );
   }

@@ -144,9 +144,9 @@ class AnimatedMarkersLayer extends TrufiLayer {
 
   /// Updates all marker positions on the map.
   ///
-  /// ## Performance Note: imageKey
+  /// ## Performance Note: imageCacheKey
   ///
-  /// The [imageKey] is critical for MapLibre rendering performance.
+  /// The [imageCacheKey] is critical for MapLibre rendering performance.
   /// MapLibre converts each marker's widget to a PNG image and caches it
   /// using the widget's hashCode as the key. However, since widgets are
   /// recreated every frame, their hashCode changes each time, causing:
@@ -155,7 +155,7 @@ class AnimatedMarkersLayer extends TrufiLayer {
   /// 2. Multiple JNI calls to upload images to the native layer
   /// 3. Memory pressure from duplicate cached images
   ///
-  /// By providing a stable [imageKey] based on the visual properties
+  /// By providing a stable [imageCacheKey] based on the visual properties
   /// (color + icon), markers with identical appearance share the same
   /// cached image, regardless of how many times the widget is recreated.
   ///
@@ -177,7 +177,7 @@ class AnimatedMarkersLayer extends TrufiLayer {
           alignment: Alignment.center,
           layerLevel: layerLevel,
           // IMPORTANT: Stable key for image caching - see method docs above
-          imageKey: 'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
+          imageCacheKey: 'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
         ),
       );
     }
@@ -268,13 +268,6 @@ class _VehicleMarkerWidget extends StatelessWidget {
         color: color,
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black38,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
       ),
       child: Center(
         child: Icon(icon, color: Colors.white, size: 18),

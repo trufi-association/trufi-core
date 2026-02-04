@@ -115,6 +115,12 @@ abstract class POILayersLocalizations {
   /// **'Go here'**
   String get goHere;
 
+  /// Button to set POI as origin
+  ///
+  /// In en, this message translates to:
+  /// **'From here'**
+  String get setAsOrigin;
+
   /// General label for POI section
   ///
   /// In en, this message translates to:

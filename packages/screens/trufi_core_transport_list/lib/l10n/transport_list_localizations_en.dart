@@ -24,4 +24,13 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   String stops(int count) {
     return '$count stops';
   }
+
+  @override
+  String get routeNotFound => 'Route not found';
+
+  @override
+  String get routeLoadError => 'The route could not be loaded';
+
+  @override
+  String get buttonGoBack => 'Go back';
 }

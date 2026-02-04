@@ -12,6 +12,7 @@ import '../../domain/entities/step.dart';
 import '../../domain/entities/transport_mode.dart';
 import '../../domain/entities/vertex_type.dart';
 import '../graphql/polyline_decoder.dart';
+import '../utils/json_utils.dart';
 
 /// Parses OTP 2.8 standard GraphQL responses into domain entities.
 class Otp28ResponseParser {
@@ -35,8 +36,8 @@ class Otp28ResponseParser {
     if (json == null) return null;
     return PlanLocation(
       name: json['name'] as String?,
-      latitude: (json['lat'] as num?)?.toDouble(),
-      longitude: (json['lon'] as num?)?.toDouble(),
+      latitude: json.getDouble('lat'),
+      longitude: json.getDouble('lon'),
     );
   }
 
@@ -53,25 +54,17 @@ class Otp28ResponseParser {
             .toList() ??
         [];
 
-    // OTP 2.8 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     // Emissions data
     final emissionsData = json['emissionsPerPerson'] as Map<String, dynamic>?;
     final emissions = emissionsData?['co2'] as num?;
 
     return Itinerary(
       legs: legs,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: json['duration'] as int? ?? 0),
-      walkDistance: (json['walkDistance'] as num?)?.toDouble() ?? 0,
-      walkTime: Duration(seconds: json['walkTime'] as int? ?? 0),
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      walkDistance: json.getDoubleOr('walkDistance', 0),
+      walkTime: json.getDurationOr('walkTime'),
       arrivedAtDestinationWithRentedBicycle:
           json['arrivedAtDestinationWithRentedBicycle'] as bool? ?? false,
       emissionsPerPerson: emissions?.toDouble(),
@@ -87,20 +80,12 @@ class Otp28ResponseParser {
 
     final routeData = json['route'] as Map<String, dynamic>?;
 
-    // OTP 2.8 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     return Leg(
       mode: mode,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: (json['duration'] as num?)?.toInt() ?? 0),
-      distance: (json['distance'] as num?)?.toDouble() ?? 0,
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      distance: json.getDoubleOr('distance', 0),
       transitLeg: json['transitLeg'] as bool? ?? false,
       encodedPoints: encodedPoints,
       decodedPoints: decodedPoints,
@@ -161,18 +146,14 @@ class Otp28ResponseParser {
 
     return Place(
       name: json['name'] as String? ?? '',
-      lat: (json['lat'] as num).toDouble(),
-      lon: (json['lon'] as num).toDouble(),
+      lat: json.getDoubleOr('lat', 0),
+      lon: json.getDoubleOr('lon', 0),
       vertexType: VertexTypeExtension.fromString(json['vertexType'] as String?),
       stopId: stopData?['gtfsId'] as String?,
       stopCode: stopData?['code'] as String?,
       platformCode: stopData?['platformCode'] as String?,
-      arrivalTime: json['arrivalTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-          : null,
-      departureTime: json['departureTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-          : null,
+      arrivalTime: json.getDateTime('arrivalTime'),
+      departureTime: json.getDateTime('departureTime'),
       bikeRentalStationId: bikeRentalData?['stationId'] as String?,
     );
   }
@@ -184,17 +165,13 @@ class Otp28ResponseParser {
       final stopData = json['stop'] as Map<String, dynamic>?;
       return Place(
         name: json['name'] as String? ?? '',
-        lat: (json['lat'] as num).toDouble(),
-        lon: (json['lon'] as num).toDouble(),
+        lat: json.getDoubleOr('lat', 0),
+        lon: json.getDoubleOr('lon', 0),
         stopId: stopData?['gtfsId'] as String?,
         stopCode: stopData?['code'] as String?,
         platformCode: stopData?['platformCode'] as String?,
-        arrivalTime: json['arrivalTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-            : null,
-        departureTime: json['departureTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-            : null,
+        arrivalTime: json.getDateTime('arrivalTime'),
+        departureTime: json.getDateTime('departureTime'),
       );
     }).toList();
   }
@@ -204,14 +181,14 @@ class Otp28ResponseParser {
     return steps.map((s) {
       final json = s as Map<String, dynamic>;
       return Step(
-        distance: (json['distance'] as num?)?.toDouble() ?? 0,
+        distance: json.getDoubleOr('distance', 0),
         relativeDirection: json['relativeDirection'] as String?,
         absoluteDirection: json['absoluteDirection'] as String?,
         streetName: json['streetName'] as String?,
         stayOn: json['stayOn'] as bool?,
         area: json['area'] as bool?,
-        lat: (json['lat'] as num?)?.toDouble(),
-        lon: (json['lon'] as num?)?.toDouble(),
+        lat: json.getDouble('lat'),
+        lon: json.getDouble('lon'),
       );
     }).toList();
   }

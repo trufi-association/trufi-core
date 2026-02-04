@@ -20,37 +20,38 @@ class ClickMarkersLayer extends TrufiLayer {
       TrufiMarker(
         id: 'click-marker-$_markerCounter',
         position: position,
-        widget: _buildMarkerWidget(_markerCounter),
+        widget: _clickMarkerWidget,
         size: const Size(32, 32),
         alignment: Alignment.center,
         layerLevel: layerLevel,
+        // All click markers look identical, share the same cached image
+        imageCacheKey: 'click_marker_orange',
       ),
     ]);
   }
 
-  Widget _buildMarkerWidget(int index) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.orange.shade600,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: const Center(
-        child: Icon(
-          Icons.touch_app,
-          color: Colors.white,
-          size: 16,
+  // Single widget instance reused for all click markers
+  static final Widget _clickMarkerWidget = Container(
+    decoration: BoxDecoration(
+      color: Colors.orange.shade600,
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.white, width: 2),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black26,
+          blurRadius: 4,
+          offset: Offset(0, 2),
         ),
+      ],
+    ),
+    child: const Center(
+      child: Icon(
+        Icons.touch_app,
+        color: Colors.white,
+        size: 16,
       ),
-    );
-  }
+    ),
+  );
 
   void clearClickMarkers() {
     _points.clear();

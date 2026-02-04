@@ -4,6 +4,7 @@ export './src/trufi_core_module.dart';
 
 // Config
 export './src/config/app_configuration.dart';
+export './src/config/app_overlay_manager.dart';
 export './src/config/screen_menu_item.dart';
 export './src/config/screen_theme_data.dart';
 export './src/config/trufi_locale_config.dart';
@@ -25,6 +26,9 @@ export './src/places/my_places_provider.dart';
 
 // Storage interfaces
 export './src/storage/storage_service.dart';
+
+// Overlay interfaces
+export './src/overlay/overlay_service.dart';
 
 // Deep link
 export './src/deep_link/shared_route.dart';

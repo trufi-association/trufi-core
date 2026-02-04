@@ -276,6 +276,456 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Open in app:'**
   String get shareRouteOpenInApp;
+
+  /// Title for trip details screen
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Details'**
+  String get tripDetails;
+
+  /// Label for departure time
+  ///
+  /// In en, this message translates to:
+  /// **'Departure'**
+  String get departure;
+
+  /// Label for arrival time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get arrival;
+
+  /// Label for total distance
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get totalDistance;
+
+  /// Label for walking distance
+  ///
+  /// In en, this message translates to:
+  /// **'Walking'**
+  String get walking;
+
+  /// Section title for trip legs
+  ///
+  /// In en, this message translates to:
+  /// **'Trip Steps'**
+  String get tripSteps;
+
+  /// Label before headsign destination
+  ///
+  /// In en, this message translates to:
+  /// **'Towards'**
+  String get towards;
+
+  /// Label for intermediate stops
+  ///
+  /// In en, this message translates to:
+  /// **'stops'**
+  String get stops;
+
+  /// Bike transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get bike;
+
+  /// Train transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Train'**
+  String get train;
+
+  /// Label for transfers count
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers'**
+  String get transfersLabel;
+
+  /// Label showing the transit agency operating a route
+  ///
+  /// In en, this message translates to:
+  /// **'Operated by {agency}'**
+  String operatedBy(String agency);
+
+  /// Button to view fare information
+  ///
+  /// In en, this message translates to:
+  /// **'View fares'**
+  String get viewFares;
+
+  /// CO2 emissions in grams
+  ///
+  /// In en, this message translates to:
+  /// **'{grams}g CO₂'**
+  String co2Emissions(String grams);
+
+  /// Title for location permission denied dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Location Permission'**
+  String get locationPermissionTitle;
+
+  /// Message when location permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission is permanently denied. Please enable it in your device settings to use this feature.'**
+  String get locationPermissionDeniedMessage;
+
+  /// Title for location services disabled dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Location Disabled'**
+  String get locationDisabledTitle;
+
+  /// Message when location services are disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Location services are disabled on your device. Please enable them to use this feature.'**
+  String get locationDisabledMessage;
+
+  /// Cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get buttonCancel;
+
+  /// Open settings button label
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get buttonOpenSettings;
+
+  /// Apply button label
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get buttonApply;
+
+  /// Empty state title when no route is searched
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a route'**
+  String get searchForRoute;
+
+  /// Empty state hint when no route is searched
+  ///
+  /// In en, this message translates to:
+  /// **'Enter origin and destination to find routes'**
+  String get searchForRouteHint;
+
+  /// Tooltip for share button
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get tooltipShare;
+
+  /// Tooltip for close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get tooltipClose;
+
+  /// Time mode option for leaving immediately
+  ///
+  /// In en, this message translates to:
+  /// **'Leave now'**
+  String get leaveNow;
+
+  /// Time mode option for departing at specific time
+  ///
+  /// In en, this message translates to:
+  /// **'Depart at...'**
+  String get departAt;
+
+  /// Label showing departure at specific time
+  ///
+  /// In en, this message translates to:
+  /// **'Depart {time}'**
+  String departAtTime(String time);
+
+  /// Time mode option for arriving by specific time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrive by...'**
+  String get arriveBy;
+
+  /// Label showing arrival by specific time
+  ///
+  /// In en, this message translates to:
+  /// **'Arrive by {time}'**
+  String arriveByTime(String time);
+
+  /// Label for today's date
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Label for tomorrow's date
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// Label for tomorrow with time
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow {time}'**
+  String tomorrowWithTime(String time);
+
+  /// Header for time picker sheet
+  ///
+  /// In en, this message translates to:
+  /// **'When do you want to travel?'**
+  String get whenDoYouWantToTravel;
+
+  /// Number of routes found
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 route found} other{{count} routes found}}'**
+  String routesFound(int count);
+
+  /// Short name for January
+  ///
+  /// In en, this message translates to:
+  /// **'Jan'**
+  String get monthJan;
+
+  /// Short name for February
+  ///
+  /// In en, this message translates to:
+  /// **'Feb'**
+  String get monthFeb;
+
+  /// Short name for March
+  ///
+  /// In en, this message translates to:
+  /// **'Mar'**
+  String get monthMar;
+
+  /// Short name for April
+  ///
+  /// In en, this message translates to:
+  /// **'Apr'**
+  String get monthApr;
+
+  /// Short name for May
+  ///
+  /// In en, this message translates to:
+  /// **'May'**
+  String get monthMay;
+
+  /// Short name for June
+  ///
+  /// In en, this message translates to:
+  /// **'Jun'**
+  String get monthJun;
+
+  /// Short name for July
+  ///
+  /// In en, this message translates to:
+  /// **'Jul'**
+  String get monthJul;
+
+  /// Short name for August
+  ///
+  /// In en, this message translates to:
+  /// **'Aug'**
+  String get monthAug;
+
+  /// Short name for September
+  ///
+  /// In en, this message translates to:
+  /// **'Sep'**
+  String get monthSep;
+
+  /// Short name for October
+  ///
+  /// In en, this message translates to:
+  /// **'Oct'**
+  String get monthOct;
+
+  /// Short name for November
+  ///
+  /// In en, this message translates to:
+  /// **'Nov'**
+  String get monthNov;
+
+  /// Short name for December
+  ///
+  /// In en, this message translates to:
+  /// **'Dec'**
+  String get monthDec;
+
+  /// Go button to start navigation
+  ///
+  /// In en, this message translates to:
+  /// **'Go'**
+  String get buttonGo;
+
+  /// Details button to view trip details
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get buttonDetails;
+
+  /// Try again button after error
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get buttonTryAgain;
+
+  /// Reset button label
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get buttonReset;
+
+  /// Title for route settings sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Route Settings'**
+  String get routeSettings;
+
+  /// Wheelchair accessibility option
+  ///
+  /// In en, this message translates to:
+  /// **'Wheelchair accessible'**
+  String get wheelchairAccessible;
+
+  /// Description when wheelchair mode is on
+  ///
+  /// In en, this message translates to:
+  /// **'Routes avoid stairs and steep slopes'**
+  String get wheelchairAccessibleOn;
+
+  /// Description when wheelchair mode is off
+  ///
+  /// In en, this message translates to:
+  /// **'Include all routes'**
+  String get wheelchairAccessibleOff;
+
+  /// Walking speed section title
+  ///
+  /// In en, this message translates to:
+  /// **'Walking speed'**
+  String get walkingSpeed;
+
+  /// Slow walking speed option
+  ///
+  /// In en, this message translates to:
+  /// **'Slow'**
+  String get speedSlow;
+
+  /// Normal walking speed option
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get speedNormal;
+
+  /// Fast walking speed option
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get speedFast;
+
+  /// Maximum walking distance section title
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum walking distance'**
+  String get maxWalkDistance;
+
+  /// No limit option for walking distance
+  ///
+  /// In en, this message translates to:
+  /// **'No limit'**
+  String get noLimit;
+
+  /// Transport modes section title
+  ///
+  /// In en, this message translates to:
+  /// **'Transport modes'**
+  String get transportModes;
+
+  /// Transit transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Transit'**
+  String get modeTransit;
+
+  /// Bicycle transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Bicycle'**
+  String get modeBicycle;
+
+  /// Exit navigation button label
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Navigation'**
+  String get exitNavigation;
+
+  /// Exit navigation confirmation dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Navigation?'**
+  String get exitNavigationTitle;
+
+  /// Exit navigation confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to stop navigating this route?'**
+  String get exitNavigationMessage;
+
+  /// Exit button label
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get buttonExit;
+
+  /// Message when navigation is complete
+  ///
+  /// In en, this message translates to:
+  /// **'You have arrived!'**
+  String get arrivedMessage;
+
+  /// Retry button label
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get buttonRetry;
+
+  /// Settings button label
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get buttonSettings;
+
+  /// Loading message while searching for routes
+  ///
+  /// In en, this message translates to:
+  /// **'Finding routes...'**
+  String get findingRoutes;
+
+  /// Badge showing number of additional departure times
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String moreDepartures(int count);
+
+  /// Header for alternative departure times section
+  ///
+  /// In en, this message translates to:
+  /// **'Other departures'**
+  String get otherDepartures;
+
+  /// Label showing departure time
+  ///
+  /// In en, this message translates to:
+  /// **'Departs {time}'**
+  String departsAt(String time);
 }
 
 class _HomeScreenLocalizationsDelegate

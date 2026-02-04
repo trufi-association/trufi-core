@@ -11,5 +11,17 @@
         "type": "int"
       }
     }
+  },
+  "routeNotFound": "Route not found",
+  "@routeNotFound": {
+    "description": "Error title when route cannot be loaded"
+  },
+  "routeLoadError": "The route could not be loaded",
+  "@routeLoadError": {
+    "description": "Error message when route fails to load"
+  },
+  "buttonGoBack": "Go back",
+  "@buttonGoBack": {
+    "description": "Go back button label"
   }
 }

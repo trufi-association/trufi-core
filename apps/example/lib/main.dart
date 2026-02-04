@@ -22,6 +22,17 @@ void main() {
     AppConfiguration(
       appName: 'Trufi App',
       deepLinkScheme: 'trufiapp',
+      defaultLocale: Locale('es'),
+      appOverlayManagers: [
+        OnboardingManager(
+          overlayBuilder: (onComplete) =>
+              OnboardingSheet(onComplete: onComplete),
+        ),
+        PrivacyConsentManager(
+          overlayBuilder: (onAccept, onDecline) =>
+              PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
+        ),
+      ],
       socialMediaLinks: const [
         SocialMediaLink(
           url: 'https://facebook.com/trufiapp',
@@ -61,14 +72,7 @@ void main() {
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
             appName: 'Trufi App',
             deepLinkScheme: 'trufiapp',
-            poiLayersManager: POILayersManager(
-              assetsBasePath: 'assets/pois',
-              defaultEnabledSubcategories: {
-                POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
-                POICategory.food: {'restaurant', 'cafe'},
-                POICategory.transport: {'bus_station', 'bus_stop'},
-              },
-            ),
+            poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(

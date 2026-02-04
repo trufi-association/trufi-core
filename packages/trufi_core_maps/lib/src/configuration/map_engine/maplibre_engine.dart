@@ -12,26 +12,25 @@ import 'trufi_map_engine.dart';
 /// Example:
 /// ```dart
 /// MapLibreEngine(
+///   engineId: 'maplibre_liberty',
 ///   styleString: 'https://tiles.openfreemap.org/styles/liberty',
-///   darkStyleString: 'https://tiles.openfreemap.org/styles/dark', // optional
+///   displayName: 'Liberty',
 /// )
 /// ```
 class MapLibreEngine implements ITrufiMapEngine {
-  /// Style URL for MapLibre (light mode).
+  /// Style URL for MapLibre.
   ///
   /// Common styles:
   /// - OpenFreeMap Liberty: 'https://tiles.openfreemap.org/styles/liberty'
+  /// - OpenFreeMap Dark: 'https://tiles.openfreemap.org/styles/dark'
   /// - MapLibre Demo: 'https://demotiles.maplibre.org/style.json'
   final String styleString;
 
-  /// Style URL for dark mode (optional).
+  /// Custom engine ID (optional).
   ///
-  /// If not provided, the light style will be used for both modes.
-  ///
-  /// Common dark styles:
-  /// - OpenFreeMap Dark: 'https://tiles.openfreemap.org/styles/dark'
-  /// - Stadia Alidade Dark: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json'
-  final String? darkStyleString;
+  /// If not provided, defaults to 'maplibre'.
+  /// Use unique IDs when creating multiple MapLibreEngine instances.
+  final String? engineId;
 
   /// Custom display name (optional).
   final String? displayName;
@@ -44,14 +43,14 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   const MapLibreEngine({
     this.styleString = 'https://demotiles.maplibre.org/style.json',
-    this.darkStyleString,
+    this.engineId,
     this.displayName,
     this.displayDescription,
     this.preview,
   });
 
   @override
-  String get id => 'maplibre';
+  String get id => engineId ?? 'maplibre';
 
   @override
   String get name => displayName ?? 'Vector (MapLibre)';
@@ -77,13 +76,9 @@ class MapLibreEngine implements ITrufiMapEngine {
     void Function(LatLng)? onMapLongClick,
     bool isDarkMode = false,
   }) {
-    final effectiveStyle = isDarkMode && darkStyleString != null
-        ? darkStyleString!
-        : styleString;
-
     return TrufiMapLibreMap(
       controller: controller,
-      styleString: effectiveStyle,
+      styleString: styleString,
       onMapClick: onMapClick,
       onMapLongClick: onMapLongClick,
     );

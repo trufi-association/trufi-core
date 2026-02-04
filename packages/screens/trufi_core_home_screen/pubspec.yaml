@@ -15,12 +15,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.2
-  equatable: ^2.0.5
-  flutter_bloc: ^8.1.3
-  provider: ^6.1.5
+  equatable: ^2.0.8
+  flutter_bloc: ^9.1.1
+  provider: ^6.1.5+1
   async: ^2.11.0
   latlong2: ^0.9.1
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
   trufi_core_base_widgets: ^1.0.0
   trufi_core_interfaces: ^1.0.0
   trufi_core_maps: ^1.0.0
@@ -31,6 +31,7 @@ dependencies:
   trufi_core_utils: ^1.0.0
   trufi_core_poi_layers: ^1.0.0
   share_plus: ^10.1.4
+  go_router: ^17.0.1
 
 dev_dependencies:
   flutter_test:

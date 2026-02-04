@@ -3,10 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:latlong2/latlong.dart' as latlng;
-
-import '../../domain/entities/bounds.dart';
-import '../../domain/controller/map_controller.dart';
-import 'trufi_map.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 /// Convert meters to pixels at a given latitude and zoom level.
 /// Based on Web Mercator projection.

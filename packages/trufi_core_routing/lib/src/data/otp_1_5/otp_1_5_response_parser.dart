@@ -10,6 +10,7 @@ import '../../domain/entities/route.dart';
 import '../../domain/entities/transport_mode.dart';
 import '../../domain/entities/vertex_type.dart';
 import '../graphql/polyline_decoder.dart';
+import '../utils/json_utils.dart';
 
 /// Parses OTP 1.5 REST API JSON responses into domain entities.
 class Otp15ResponseParser {
@@ -33,8 +34,8 @@ class Otp15ResponseParser {
     if (json == null) return null;
     return PlanLocation(
       name: json['name'] as String?,
-      latitude: (json['lat'] as num?)?.toDouble(),
-      longitude: (json['lon'] as num?)?.toDouble(),
+      latitude: json.getDouble('lat'),
+      longitude: json.getDouble('lon'),
     );
   }
 
@@ -51,21 +52,13 @@ class Otp15ResponseParser {
             .toList() ??
         [];
 
-    // OTP 1.5 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     return Itinerary(
       legs: legs,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: json['duration'] as int? ?? 0),
-      walkDistance: (json['walkDistance'] as num?)?.toDouble() ?? 0,
-      walkTime: Duration(seconds: json['walkTime'] as int? ?? 0),
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      walkDistance: json.getDoubleOr('walkDistance', 0),
+      walkTime: json.getDurationOr('walkTime'),
     );
   }
 
@@ -76,20 +69,12 @@ class Otp15ResponseParser {
         ? PolylineDecoder.decode(encodedPoints)
         : <LatLng>[];
 
-    // OTP 1.5 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     return Leg(
       mode: mode,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: (json['duration'] as num?)?.toInt() ?? 0),
-      distance: (json['distance'] as num?)?.toDouble() ?? 0,
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      distance: json.getDoubleOr('distance', 0),
       transitLeg: json['transitLeg'] as bool? ?? false,
       encodedPoints: encodedPoints,
       decodedPoints: decodedPoints,
@@ -147,16 +132,12 @@ class Otp15ResponseParser {
 
     return Place(
       name: json['name'] as String? ?? '',
-      lat: (json['lat'] as num).toDouble(),
-      lon: (json['lon'] as num).toDouble(),
+      lat: json.getDoubleOr('lat', 0),
+      lon: json.getDoubleOr('lon', 0),
       stopId: json['stopId'] as String?,
       vertexType: vertexType,
-      arrivalTime: json['arrival'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['arrival'] as int)
-          : null,
-      departureTime: json['departure'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['departure'] as int)
-          : null,
+      arrivalTime: json.getDateTime('arrival'),
+      departureTime: json.getDateTime('departure'),
     );
   }
 
@@ -166,15 +147,11 @@ class Otp15ResponseParser {
       final json = s as Map<String, dynamic>;
       return Place(
         name: json['name'] as String? ?? '',
-        lat: (json['lat'] as num).toDouble(),
-        lon: (json['lon'] as num).toDouble(),
+        lat: json.getDoubleOr('lat', 0),
+        lon: json.getDoubleOr('lon', 0),
         stopId: json['stopId'] as String?,
-        arrivalTime: json['arrival'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['arrival'] as int)
-            : null,
-        departureTime: json['departure'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['departure'] as int)
-            : null,
+        arrivalTime: json.getDateTime('arrival'),
+        departureTime: json.getDateTime('departure'),
       );
     }).toList();
   }

@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
@@ -65,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
   bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
+  bool _needsRouteRefresh = false;
 
   // GPS location service
   final LocationService _locationService = LocationService();
@@ -86,6 +89,12 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     // Listen to location updates
     _locationService.addListener(_onLocationUpdate);
+    // Listen to POI selection changes
+    widget.config.poiLayersManager?.addListener(_onPOISelectionChanged);
+  }
+
+  void _onPOISelectionChanged() {
+    if (mounted) setState(() {});
   }
 
   @override
@@ -93,7 +102,17 @@ class _HomeScreenState extends State<HomeScreen>
     super.didChangeDependencies();
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();
+    // Parse URL parameters on first load (web only)
+    _parseUrlAndSetPlaces();
   }
+
+  @override
+  void deactivate() {
+    // Mark that we need to refresh the route when returning
+    _needsRouteRefresh = true;
+    super.deactivate();
+  }
+
 
   void _setupSharedRouteListener() {
     // Try to get SharedRouteNotifier from context (it may not be available)
@@ -137,6 +156,179 @@ class _HomeScreenState extends State<HomeScreen>
     cubit.setFromPlace(fromPlace);
     cubit.setToPlace(toPlace);
     cubit.fetchPlan(selectedItineraryIndex: route.selectedItineraryIndex);
+  }
+
+  // ============================================================
+  // URL State Sync (Web)
+  // ============================================================
+
+  TrufiLocation? _lastUrlFrom;
+  TrufiLocation? _lastUrlTo;
+  routing.TimeMode? _lastUrlTimeMode;
+  DateTime? _lastUrlDateTime;
+  int? _lastUrlRouteIndex;
+  bool _urlParsed = false;
+  bool _showDetailOnLoad = false;
+
+  /// Updates the URL with current state (web only).
+  void _updateUrlWithState(RoutePlannerState state) {
+    if (!kIsWeb) return;
+
+    final from = state.fromPlace;
+    final to = state.toPlace;
+
+    // Get current time settings
+    routing.TimeMode? currentTimeMode;
+    DateTime? currentDateTime;
+    try {
+      final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
+      if (prefsManager != null) {
+        currentTimeMode = prefsManager.timeMode;
+        currentDateTime = prefsManager.dateTime;
+      }
+    } catch (_) {}
+
+    // Calculate selected itinerary index
+    int? routeIndex;
+    if (state.selectedItinerary != null && state.plan?.itineraries != null) {
+      routeIndex = state.plan!.itineraries!.indexOf(state.selectedItinerary!);
+      if (routeIndex < 0) routeIndex = null;
+    }
+
+    // Skip if nothing has changed
+    final placesChanged = _lastUrlFrom != from || _lastUrlTo != to;
+    final timeChanged = _lastUrlTimeMode != currentTimeMode ||
+        _lastUrlDateTime != currentDateTime;
+    final routeChanged = _lastUrlRouteIndex != routeIndex;
+    if (!placesChanged && !timeChanged && !routeChanged) return;
+
+    // Update tracking variables
+    _lastUrlFrom = from;
+    _lastUrlTo = to;
+    _lastUrlTimeMode = currentTimeMode;
+    _lastUrlDateTime = currentDateTime;
+    _lastUrlRouteIndex = routeIndex;
+
+    // Build query parameters
+    final params = <String, String>{};
+    if (from != null) {
+      params['from_lat'] = from.latitude.toStringAsFixed(6);
+      params['from_lng'] = from.longitude.toStringAsFixed(6);
+      if (from.description.isNotEmpty) {
+        params['from_name'] = from.description;
+      }
+    }
+    if (to != null) {
+      params['to_lat'] = to.latitude.toStringAsFixed(6);
+      params['to_lng'] = to.longitude.toStringAsFixed(6);
+      if (to.description.isNotEmpty) {
+        params['to_name'] = to.description;
+      }
+    }
+
+    // Add time settings
+    if (currentTimeMode != null) {
+      params['time_mode'] = currentTimeMode.name;
+      if (currentTimeMode != routing.TimeMode.leaveNow &&
+          currentDateTime != null) {
+        params['time'] = currentDateTime.millisecondsSinceEpoch.toString();
+      }
+    }
+
+    // Add selected route index
+    if (routeIndex != null && routeIndex >= 0) {
+      params['route'] = routeIndex.toString();
+    }
+
+    // Update URL without navigation
+    try {
+      final uri = Uri(path: '/', queryParameters: params.isEmpty ? null : params);
+      GoRouter.of(context).replace(uri.toString());
+    } catch (e) {
+      debugPrint('HomeScreen: Error updating URL: $e');
+    }
+  }
+
+  /// Parses URL parameters and sets places (web only, called once on init).
+  Future<void> _parseUrlAndSetPlaces() async {
+    if (!kIsWeb || _urlParsed) return;
+    _urlParsed = true;
+
+    try {
+      final routerState = GoRouterState.of(context);
+      final params = routerState.uri.queryParameters;
+
+      if (params.isEmpty) return;
+
+      final cubit = context.read<RoutePlannerCubit>();
+
+      // Parse and apply time settings first
+      try {
+        final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
+        if (prefsManager != null) {
+          final timeModeStr = params['time_mode'];
+          if (timeModeStr != null) {
+            final timeMode = routing.TimeMode.values.firstWhere(
+              (m) => m.name == timeModeStr,
+              orElse: () => routing.TimeMode.leaveNow,
+            );
+            prefsManager.setTimeMode(timeMode);
+
+            // Parse datetime if not leaveNow
+            if (timeMode != routing.TimeMode.leaveNow) {
+              final timeMs = int.tryParse(params['time'] ?? '');
+              if (timeMs != null) {
+                prefsManager.setDateTime(
+                  DateTime.fromMillisecondsSinceEpoch(timeMs),
+                );
+              }
+            }
+          }
+        }
+      } catch (_) {
+        // RoutingPreferencesManager not available
+      }
+
+      // Parse origin
+      final fromLat = double.tryParse(params['from_lat'] ?? '');
+      final fromLng = double.tryParse(params['from_lng'] ?? '');
+      if (fromLat != null && fromLng != null) {
+        final fromPlace = TrufiLocation(
+          description: params['from_name'] ?? 'Origin',
+          latitude: fromLat,
+          longitude: fromLng,
+        );
+        await cubit.setFromPlace(fromPlace);
+        _lastUrlFrom = fromPlace;
+      }
+
+      // Parse destination
+      final toLat = double.tryParse(params['to_lat'] ?? '');
+      final toLng = double.tryParse(params['to_lng'] ?? '');
+      if (toLat != null && toLng != null) {
+        final toPlace = TrufiLocation(
+          description: params['to_name'] ?? 'Destination',
+          latitude: toLat,
+          longitude: toLng,
+        );
+        await cubit.setToPlace(toPlace);
+        _lastUrlTo = toPlace;
+      }
+
+      // Parse route index (selected itinerary)
+      final routeIndex = int.tryParse(params['route'] ?? '');
+
+      // Fetch plan if both are set
+      if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
+        // If a route index is specified, show details on load
+        if (routeIndex != null && routeIndex >= 0) {
+          _showDetailOnLoad = true;
+        }
+        await cubit.fetchPlan(selectedItineraryIndex: routeIndex);
+      }
+    } catch (e) {
+      debugPrint('HomeScreen: Error parsing URL: $e');
+    }
   }
 
   /// Attempts to start GPS tracking automatically on app start.
@@ -202,6 +394,7 @@ class _HomeScreenState extends State<HomeScreen>
   void dispose() {
     _sharedRouteNotifier?.removeListener(_onSharedRouteChanged);
     _locationService.removeListener(_onLocationUpdate);
+    widget.config.poiLayersManager?.removeListener(_onPOISelectionChanged);
     _locationService.dispose();
     _sheetController.dispose();
     _mapController?.dispose();
@@ -516,6 +709,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _showPermissionDeniedDialog() {
     final theme = Theme.of(context);
+    final l10n = HomeScreenLocalizations.of(context);
 
     showDialog<void>(
       context: context,
@@ -524,23 +718,21 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             Icon(Icons.location_off_rounded, color: theme.colorScheme.error),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Location Permission')),
+            Expanded(child: Text(l10n.locationPermissionTitle)),
           ],
         ),
-        content: const Text(
-          'Location permission is permanently denied. Please enable it in your device settings to use this feature.',
-        ),
+        content: Text(l10n.locationPermissionDeniedMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.buttonCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
               _locationService.openAppSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(l10n.buttonOpenSettings),
           ),
         ],
       ),
@@ -549,6 +741,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _showLocationDisabledDialog() {
     final theme = Theme.of(context);
+    final l10n = HomeScreenLocalizations.of(context);
 
     showDialog<void>(
       context: context,
@@ -560,30 +753,48 @@ class _HomeScreenState extends State<HomeScreen>
               color: theme.colorScheme.error,
             ),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Location Disabled')),
+            Expanded(child: Text(l10n.locationDisabledTitle)),
           ],
         ),
-        content: const Text(
-          'Location services are disabled on your device. Please enable them to use this feature.',
-        ),
+        content: Text(l10n.locationDisabledMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.buttonCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
               _locationService.openLocationSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(l10n.buttonOpenSettings),
           ),
         ],
       ),
     );
   }
 
+  void _onMapClick(LatLng position) {
+    // Try to select a POI at the tap position
+    final poiManager = widget.config.poiLayersManager;
+    if (poiManager != null && _mapController != null) {
+      final selected = poiManager.trySelectPOIAtPosition(
+        _mapController!,
+        position,
+      );
+      if (selected) {
+        // POI was selected, panel will show automatically
+        return;
+      }
+    }
+    // Clear POI selection if tapping elsewhere
+    widget.config.poiLayersManager?.clearSelection();
+  }
+
   void _onMapLongPress(LatLng position) async {
+    // Clear POI selection when long pressing
+    widget.config.poiLayersManager?.clearSelection();
+
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -701,7 +912,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (!mounted) return;
 
-    // TODO(md-weber): Organize that section a bit an check if we can write a test for it
+    final cubit = context.read<RoutePlannerCubit>();
 
     if (result == 'origin') {
       final location = TrufiLocation(
@@ -711,9 +922,11 @@ class _HomeScreenState extends State<HomeScreen>
         address:
             '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
       );
-      final cubit = context.read<RoutePlannerCubit>();
       await cubit.setFromPlace(location);
-      _fetchPlanIfReady();
+      // Check if both places are now set and fetch
+      if (cubit.state.toPlace != null) {
+        cubit.fetchPlan();
+      }
     } else if (result == 'destination') {
       final location = TrufiLocation(
         description: l10n.selectedLocation,
@@ -722,17 +935,19 @@ class _HomeScreenState extends State<HomeScreen>
         address:
             '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
       );
-      final cubit = context.read<RoutePlannerCubit>();
       await cubit.setToPlace(location);
-      _fetchPlanIfReady();
+      // Check if both places are now set and fetch
+      if (cubit.state.fromPlace != null) {
+        cubit.fetchPlan();
+      }
     }
   }
 
-  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
+  Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
       controller: _mapController!,
+      onMapClick: _onMapClick,
       onMapLongClick: _onMapLongPress,
-      isDarkMode: isDarkMode,
     );
   }
 
@@ -750,6 +965,8 @@ class _HomeScreenState extends State<HomeScreen>
           _updateRouteOnMap(state.selectedItinerary);
           _updateFitCameraPoints(state);
           _expandSheetIfNeeded(state);
+          // Update URL with current state (web only)
+          _updateUrlWithState(state);
         },
         builder: (context, state) {
           final locationState = SearchLocationState(
@@ -766,8 +983,16 @@ class _HomeScreenState extends State<HomeScreen>
 
           return LayoutBuilder(
             builder: (context, constraints) {
+              // Responsive layout: use side panel for wide screens (≥600px)
+              final isWideScreen = constraints.maxWidth >= 600;
+              final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
+
+              // Update viewport with actual map area size (excluding side panel on wide screens)
+              final mapWidth = isWideScreen
+                  ? constraints.maxWidth - sidePanelWidth
+                  : constraints.maxWidth;
               _fitCameraLayer?.updateViewport(
-                Size(constraints.maxWidth, constraints.maxHeight),
+                Size(mapWidth, constraints.maxHeight),
                 MediaQuery.of(context).viewPadding,
               );
 
@@ -776,99 +1001,157 @@ class _HomeScreenState extends State<HomeScreen>
                 _viewportReady = true;
                 if (_pendingFitPoints != null &&
                     _pendingFitPoints!.isNotEmpty) {
-                  // Set initial padding considering search bar and expanded sheet
-                  final sheetHeight = constraints.maxHeight * _sheetMidSize;
-                  _fitCameraLayer?.updatePadding(
-                    EdgeInsets.only(
-                      top: 120, // SearchLocationBar height
-                      bottom: sheetHeight,
-                      left: 30,
-                      right: 30,
-                    ),
-                    recenter: false,
-                  );
+                  // Set initial padding based on screen type
+                  if (isWideScreen) {
+                    _fitCameraLayer?.updatePadding(
+                      const EdgeInsets.all(30),
+                      recenter: false,
+                    );
+                  } else {
+                    // Narrow screen: account for search bar and bottom sheet
+                    final sheetHeight = constraints.maxHeight * _sheetMidSize;
+                    _fitCameraLayer?.updatePadding(
+                      EdgeInsets.only(
+                        top: 120, // SearchLocationBar height
+                        bottom: sheetHeight,
+                        left: 30,
+                        right: 30,
+                      ),
+                      recenter: false,
+                    );
+                  }
                   _fitCameraLayer?.setFitPoints(_pendingFitPoints!);
                 }
               }
 
-              final isDarkMode = theme.brightness == Brightness.dark;
+              // Ensure route is rendered when returning from another screen
+              // The BlocConsumer listener only fires on state changes, so if we
+              // navigate away and come back with the same state, we need to
+              // re-render the route manually.
+              final needsRouteRender = _needsRouteRefresh ||
+                  (state.selectedItinerary != null && _routeLayer == null);
+
+              if (_needsRouteRefresh) {
+                _needsRouteRefresh = false;
+                // Reset URL tracking to force URL restoration
+                _lastUrlFrom = null;
+                _lastUrlTo = null;
+                _lastUrlTimeMode = null;
+                _lastUrlDateTime = null;
+              }
+
+              if (needsRouteRender) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  if (state.selectedItinerary != null) {
+                    // Clear location markers first (they duplicate with route markers)
+                    _updateLocationMarkers(state);
+                    _updateRouteOnMap(state.selectedItinerary);
+                    _updateFitCameraPoints(state);
+                  } else if (state.fromPlace != null || state.toPlace != null) {
+                    _updateLocationMarkers(state);
+                  }
+                  // Restore URL with current state
+                  _updateUrlWithState(state);
+                });
+              }
+
+              // Update camera padding for side panel layout (panel on LEFT)
+              // Note: The map is already positioned to the right of the side panel,
+              // so we don't need to include sidePanelWidth in the padding.
+              if (isWideScreen) {
+                _fitCameraLayer?.updatePadding(
+                  const EdgeInsets.all(30),
+                );
+              }
 
               return Stack(
                 children: [
-                  // Map (full screen)
-                  Positioned.fill(
-                    child: _buildMap(
-                      mapEngineManager.currentEngine,
-                      isDarkMode: isDarkMode,
-                    ),
-                  ),
-
-                  // SearchLocationBar at top
+                  // Map - adjusts for side panel on LEFT on wide screens
                   Positioned(
                     top: 0,
-                    left: 0,
+                    left: isWideScreen ? sidePanelWidth : 0,
+                    bottom: 0,
                     right: 0,
-                    child: SafeArea(
-                      bottom: false,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SearchLocationBar(
-                              state: locationState,
-                              configuration: SearchLocationBarConfiguration(
-                                originHintText: l10n.searchOrigin,
-                                destinationHintText: l10n.searchDestination,
-                              ),
-                              onSearch: _showSearchScreen,
-                              onOriginSelected: _onOriginSelected,
-                              onDestinationSelected: _onDestinationSelected,
-                              onSwap: _onSwapLocations,
-                              onReset: _onReset,
-                              onClearLocation: _onClearLocation,
-                              onRoutingSettings: _onRoutingSettings,
-                              onMenuPressed: widget.onMenuPressed,
-                            ),
-                            // Departure time chip (visible when locations are set)
-                            if (state.fromPlace != null ||
-                                state.toPlace != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: _DepartureTimeChip(
-                                  onTimeChanged: _fetchPlanIfReady,
+                    child: _buildMap(mapEngineManager.currentEngine),
+                  ),
+
+                  // Wide screens: always show left panel with SearchBar
+                  if (isWideScreen)
+                    _buildSidePanel(
+                      state,
+                      theme,
+                      sidePanelWidth,
+                      locationState: locationState,
+                      l10n: l10n,
+                    ),
+
+                  // Narrow screens: SearchBar floats on top of map
+                  if (!isWideScreen)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: SafeArea(
+                        bottom: false,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SearchLocationBar(
+                                state: locationState,
+                                configuration: SearchLocationBarConfiguration(
+                                  originHintText: l10n.searchOrigin,
+                                  destinationHintText: l10n.searchDestination,
                                 ),
+                                onSearch: _showSearchScreen,
+                                onOriginSelected: _onOriginSelected,
+                                onDestinationSelected: _onDestinationSelected,
+                                onSwap: _onSwapLocations,
+                                onReset: _onReset,
+                                onClearLocation: _onClearLocation,
+                                onRoutingSettings: _onRoutingSettings,
+                                onMenuPressed: widget.onMenuPressed,
                               ),
-                          ],
+                              // Departure time chip (visible when locations are set)
+                              if (state.fromPlace != null ||
+                                  state.toPlace != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: _DepartureTimeChip(
+                                    onTimeChanged: _fetchPlanIfReady,
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+
+                  // Floating action buttons (map controls) - always on right side of map
+                  _buildMapControls(
+                    context,
+                    mapEngineManager,
+                    hasResults,
+                    sidePanelOffset: 0, // No offset needed, panel is on left
+                    isWideScreen: isWideScreen,
                   ),
 
-                  // Floating action buttons (map controls)
-                  _buildMapControls(context, mapEngineManager, hasResults),
+                  // Narrow screens: bottom sheet for results
+                  // Hide when POI is selected (POI panel takes priority)
+                  if (!isWideScreen &&
+                      hasResults &&
+                      widget.config.poiLayersManager?.selectedPOI == null)
+                    _buildBottomSheet(state, theme, constraints),
 
-                  // Draggable bottom sheet for itineraries
-                  if (hasResults)
-                    TrufiBottomSheet(
-                      controller: _sheetController,
-                      initialChildSize: _sheetMidSize,
-                      minChildSize: _sheetMinSize,
-                      maxChildSize: _sheetMaxSize,
-                      snap: true,
-                      snapSizes: const [_sheetMinSize, _sheetMidSize],
-                      onHeightChanged: (height) {
-                        final maxHeight = constraints.maxHeight;
-                        _fitCameraLayer?.updatePadding(
-                          EdgeInsets.only(
-                            bottom: math.min(maxHeight * 0.5, height),
-                            left: 30,
-                            right: 30,
-                            top: 120,
-                          ),
-                        );
-                      },
-                      child: _buildBottomSheetContent(state, theme),
+                  // POI detail panel (narrow screens only) - shows at bottom
+                  if (!isWideScreen &&
+                      widget.config.poiLayersManager?.selectedPOI != null)
+                    _buildPOIDetailPanel(
+                      widget.config.poiLayersManager!.selectedPOI!,
+                      theme,
+                      isWideScreen: false,
                     ),
                 ],
               );
@@ -882,15 +1165,18 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildMapControls(
     BuildContext context,
     MapEngineManager mapEngineManager,
-    bool hasResults,
-  ) {
+    bool hasResults, {
+    double sidePanelOffset = 0,
+    bool isWideScreen = false,
+  }) {
     return Positioned(
-      right: 16,
+      right: 16 + sidePanelOffset,
       top: 0,
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.only(top: 120), // Below SearchLocationBar
+          // On wide screens, no floating SearchBar so less top padding needed
+          padding: EdgeInsets.only(top: isWideScreen ? 16 : 120),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -955,8 +1241,15 @@ class _HomeScreenState extends State<HomeScreen>
           behavior: HitTestBehavior.opaque,
           child: _buildSummaryRow(state, theme),
         ),
-        // Itinerary list
+        // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
         ItineraryList(
+          shrinkWrap: true,
+          showDetailOnLoad: _showDetailOnLoad,
+          onDetailStateChanged: (isShowing) {
+            if (!isShowing) {
+              _showDetailOnLoad = false;
+            }
+          },
           onItineraryDetails: widget.onItineraryDetails,
           onStartNavigation: widget.onStartNavigation != null
               ? (context, itinerary, locationService) {
@@ -1147,6 +1440,521 @@ class _HomeScreenState extends State<HomeScreen>
       curve: Curves.easeOutCubic,
     );
   }
+
+  // ============================================================
+  // Responsive Layout Methods
+  // ============================================================
+
+  /// Calculates the side panel width based on screen width.
+  /// Returns different widths for different screen sizes.
+  double _getSidePanelWidth(double screenWidth) {
+    if (screenWidth >= 1200) return 420;
+    if (screenWidth >= 900) return 380;
+    return 340;
+  }
+
+  /// Builds the side panel for wide screens (≥600px).
+  /// Panel is positioned on the LEFT side and includes the SearchBar.
+  Widget _buildSidePanel(
+    RoutePlannerState state,
+    ThemeData theme,
+    double width, {
+    required SearchLocationState locationState,
+    required HomeScreenLocalizations l10n,
+  }) {
+    final hasResults = state.plan != null || state.isLoading || state.hasError;
+
+    return Positioned(
+      top: 0,
+      left: 0, // Panel on LEFT
+      bottom: 0,
+      width: width,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(2, 0),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          right: false,
+          child: Column(
+            children: [
+              // SearchBar section - no shadow since it's inside the panel
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SearchLocationBar(
+                      state: locationState,
+                      configuration: SearchLocationBarConfiguration(
+                        originHintText: l10n.searchOrigin,
+                        destinationHintText: l10n.searchDestination,
+                      ),
+                      showShadow: false,
+                      onSearch: _showSearchScreen,
+                      onOriginSelected: _onOriginSelected,
+                      onDestinationSelected: _onDestinationSelected,
+                      onSwap: _onSwapLocations,
+                      onReset: _onReset,
+                      onClearLocation: _onClearLocation,
+                      onRoutingSettings: _onRoutingSettings,
+                      onMenuPressed: widget.onMenuPressed,
+                    ),
+                    // Departure time chip
+                    if (state.fromPlace != null || state.toPlace != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: _DepartureTimeChip(
+                          onTimeChanged: _fetchPlanIfReady,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              // Results section (only if there are results, loading, or error)
+              if (hasResults) ...[
+                // Results header with colored background
+                _buildSidePanelHeader(state, theme),
+                // Itinerary list - use Flexible when POI panel is shown
+                if (widget.config.poiLayersManager?.selectedPOI != null)
+                  Flexible(
+                    flex: 1,
+                    child: ItineraryList(
+                      showDetailOnLoad: _showDetailOnLoad,
+                      onDetailStateChanged: (isShowing) {
+                        if (!isShowing) {
+                          _showDetailOnLoad = false;
+                        }
+                      },
+                      onItineraryDetails: widget.onItineraryDetails,
+                      onStartNavigation: widget.onStartNavigation != null
+                          ? (context, itinerary, locationService) {
+                              _myLocationLayer?.clearMarkers();
+                              widget.onStartNavigation!(
+                                context,
+                                itinerary,
+                                locationService,
+                              );
+                            }
+                          : null,
+                      locationService: _locationService,
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ItineraryList(
+                      showDetailOnLoad: _showDetailOnLoad,
+                      onDetailStateChanged: (isShowing) {
+                        if (!isShowing) {
+                          _showDetailOnLoad = false;
+                        }
+                      },
+                      onItineraryDetails: widget.onItineraryDetails,
+                      onStartNavigation: widget.onStartNavigation != null
+                          ? (context, itinerary, locationService) {
+                              _myLocationLayer?.clearMarkers();
+                              widget.onStartNavigation!(
+                                context,
+                                itinerary,
+                                locationService,
+                              );
+                            }
+                          : null,
+                      locationService: _locationService,
+                    ),
+                  ),
+              ],
+              // Empty state when no results
+              if (!hasResults)
+                Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.search_rounded,
+                            size: 64,
+                            color: theme.colorScheme.outline,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            l10n.searchForRoute,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            l10n.searchForRouteHint,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              // POI detail panel (wide screen) - always at bottom of side panel
+              if (widget.config.poiLayersManager?.selectedPOI != null)
+                _buildPOIDetailPanel(
+                  widget.config.poiLayersManager!.selectedPOI!,
+                  theme,
+                  isWideScreen: true,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds the header for the side panel with route count, share, and close buttons.
+  Widget _buildSidePanelHeader(RoutePlannerState state, ThemeData theme) {
+    final l10n = HomeScreenLocalizations.of(context);
+    final itineraries = state.plan?.itineraries;
+    final routeCount = itineraries?.length ?? 0;
+
+    // Find selected itinerary index for sharing
+    final selectedIndex = state.selectedItinerary != null && itineraries != null
+        ? itineraries.indexOf(state.selectedItinerary!)
+        : null;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+        border: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.route_rounded,
+              color: theme.colorScheme.primary,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.routesFound(routeCount),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (state.isLoading)
+                  Text(
+                    l10n.findingRoutes,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                if (state.hasError)
+                  Text(
+                    state.error ?? l10n.errorNoRoutes,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ),
+          ),
+          // Share button
+          if (state.selectedItinerary != null &&
+              state.fromPlace != null &&
+              state.toPlace != null)
+            IconButton.filled(
+              icon: const Icon(Icons.share_rounded, size: 18),
+              style: IconButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.1,
+                ),
+                foregroundColor: theme.colorScheme.primary,
+              ),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                final appName = widget.config.appName ?? 'Trufi App';
+                ShareRouteService.shareRoute(
+                  from: state.fromPlace!,
+                  to: state.toPlace!,
+                  itinerary: state.selectedItinerary!,
+                  selectedItineraryIndex:
+                      selectedIndex != null && selectedIndex != -1
+                      ? selectedIndex
+                      : null,
+                  appName: appName,
+                  deepLinkScheme: widget.config.deepLinkScheme,
+                  strings: ShareRouteStrings(
+                    title: l10n.shareRouteTitle,
+                    origin: l10n.shareRouteOrigin,
+                    destination: l10n.shareRouteDestination,
+                    date: l10n.shareRouteDate,
+                    times: l10n.shareRouteTimes,
+                    duration: l10n.shareRouteDuration,
+                    itinerary: l10n.shareRouteItinerary,
+                    openInApp: l10n.shareRouteOpenInApp,
+                  ),
+                );
+              },
+              tooltip: l10n.tooltipShare,
+            ),
+          const SizedBox(width: 4),
+          // Close button
+          IconButton.filled(
+            icon: const Icon(Icons.close_rounded, size: 18),
+            style: IconButton.styleFrom(
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              foregroundColor: theme.colorScheme.onSurfaceVariant,
+            ),
+            onPressed: _onReset,
+            tooltip: l10n.tooltipClose,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Builds the bottom sheet for narrow screens (<600px).
+  Widget _buildBottomSheet(
+    RoutePlannerState state,
+    ThemeData theme,
+    BoxConstraints constraints,
+  ) {
+    return TrufiBottomSheet(
+      controller: _sheetController,
+      initialChildSize: _sheetMidSize,
+      minChildSize: _sheetMinSize,
+      maxChildSize: _sheetMaxSize,
+      snap: true,
+      snapSizes: const [_sheetMinSize, _sheetMidSize],
+      onHeightChanged: (height) {
+        final maxHeight = constraints.maxHeight;
+        _fitCameraLayer?.updatePadding(
+          EdgeInsets.only(
+            bottom: math.min(maxHeight * 0.5, height),
+            left: 30,
+            right: 30,
+            top: 120,
+          ),
+        );
+      },
+      child: _buildBottomSheetContent(state, theme),
+    );
+  }
+
+  /// Builds the POI detail panel.
+  ///
+  /// - On narrow screens: Shows as a bottom panel that replaces/overlays the results sheet
+  /// - On wide screens: Shows at the bottom of the side panel
+  Widget _buildPOIDetailPanel(
+    POI poi,
+    ThemeData theme, {
+    required bool isWideScreen,
+  }) {
+    final l10n = HomeScreenLocalizations.of(context);
+
+    if (isWideScreen) {
+      // Wide screen: compact card style at bottom of side panel
+      return Container(
+        margin: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 8, 8),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: poi.category.color.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      poi.category.fallbackIcon,
+                      color: poi.category.color,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          poi.displayName,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          poi.subcategoryConfig?.displayName ??
+                              poi.subcategory ??
+                              poi.category.displayName,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () =>
+                        widget.config.poiLayersManager?.clearSelection(),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Details
+            if (poi.address != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        poi.address!,
+                        style: theme.textTheme.bodySmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            // Action buttons
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _setPoiAsOrigin(poi),
+                      icon: Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4CAF50),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                      label: Text(l10n.setAsOrigin),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: () => _setPoiAsDestination(poi),
+                      icon: const Icon(Icons.place, size: 16),
+                      label: Text(l10n.setAsDestination),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Narrow screen: bottom panel
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SafeArea(
+        top: false,
+        child: POIDetailPanel(
+          poi: poi,
+          onClose: () => widget.config.poiLayersManager?.clearSelection(),
+          onSetAsOrigin: () => _setPoiAsOrigin(poi),
+          onSetAsDestination: () => _setPoiAsDestination(poi),
+        ),
+      ),
+    );
+  }
+
+  void _setPoiAsOrigin(POI poi) {
+    final location = TrufiLocation(
+      description: poi.displayName,
+      latitude: poi.position.latitude,
+      longitude: poi.position.longitude,
+      address: poi.address,
+    );
+    final cubit = context.read<RoutePlannerCubit>();
+    cubit.setFromPlace(location);
+    widget.config.poiLayersManager?.clearSelection();
+    _fetchPlanIfReady();
+  }
+
+  void _setPoiAsDestination(POI poi) {
+    final location = TrufiLocation(
+      description: poi.displayName,
+      latitude: poi.position.latitude,
+      longitude: poi.position.longitude,
+      address: poi.address,
+    );
+    final cubit = context.read<RoutePlannerCubit>();
+    cubit.setToPlace(location);
+    widget.config.poiLayersManager?.clearSelection();
+    _fetchPlanIfReady();
+  }
 }
 
 // Helper functions to convert between location types
@@ -1171,7 +1979,7 @@ TrufiLocation _searchLocationToTrufiLocation(SearchLocation location) {
 
 /// Custom layer for displaying route on map with improved markers
 class _RouteLayer extends TrufiLayer {
-  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
+  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1000);
 
   void setItinerary(routing.Itinerary itinerary) {
     clearMarkers();
@@ -1236,7 +2044,8 @@ class _RouteLayer extends TrufiLayer {
               icon: modeIcon,
             ),
             size: const Size(72, 28),
-            layerLevel: 0,
+            layerLevel: 2,
+            allowOverlap: true,
           ),
         );
       }
@@ -1258,7 +2067,8 @@ class _RouteLayer extends TrufiLayer {
               icon: Icons.directions_bike_rounded,
             ),
             size: const Size(72, 28),
-            layerLevel: 0,
+            layerLevel: 2,
+            allowOverlap: true,
           ),
         );
       }
@@ -1272,6 +2082,8 @@ class _RouteLayer extends TrufiLayer {
           position: allPoints.first,
           widget: const _OriginMarker(),
           size: const Size(24, 24),
+          layerLevel: 3,
+          allowOverlap: true,
         ),
       );
 
@@ -1283,6 +2095,8 @@ class _RouteLayer extends TrufiLayer {
           widget: const _DestinationMarker(),
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
+          layerLevel: 3,
+          allowOverlap: true,
         ),
       );
     }
@@ -1516,6 +2330,7 @@ class _DepartureTimeChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
     final manager = routing.RoutingPreferencesManager.maybeWatch(context);
 
     if (manager == null) return const SizedBox.shrink();
@@ -1545,7 +2360,7 @@ class _DepartureTimeChip extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  _getTimeModeLabel(timeMode, dateTime),
+                  _getTimeModeLabel(timeMode, dateTime, l10n),
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: colorScheme.onSurface,
                     fontWeight: FontWeight.w500,
@@ -1576,24 +2391,24 @@ class _DepartureTimeChip extends StatelessWidget {
     }
   }
 
-  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime) {
+  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime, HomeScreenLocalizations l10n) {
     switch (mode) {
       case routing.TimeMode.leaveNow:
-        return 'Leave now';
+        return l10n.leaveNow;
       case routing.TimeMode.departAt:
         if (dateTime != null) {
-          return 'Depart ${_formatDateTime(dateTime)}';
+          return l10n.departAtTime(_formatDateTime(dateTime, l10n));
         }
-        return 'Depart at...';
+        return l10n.departAt;
       case routing.TimeMode.arriveBy:
         if (dateTime != null) {
-          return 'Arrive by ${_formatDateTime(dateTime)}';
+          return l10n.arriveByTime(_formatDateTime(dateTime, l10n));
         }
-        return 'Arrive by...';
+        return l10n.arriveBy;
     }
   }
 
-  String _formatDateTime(DateTime dt) {
+  String _formatDateTime(DateTime dt, HomeScreenLocalizations l10n) {
     final now = DateTime.now();
     final isToday =
         dt.year == now.year && dt.month == now.month && dt.day == now.day;
@@ -1606,7 +2421,7 @@ class _DepartureTimeChip extends StatelessWidget {
     if (isToday) {
       return time;
     } else if (isTomorrow) {
-      return 'Tomorrow $time';
+      return l10n.tomorrowWithTime(time);
     } else {
       return '${dt.day}/${dt.month} $time';
     }
@@ -1656,6 +2471,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -1687,10 +2503,12 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                     size: 24,
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    'When do you want to travel?',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      l10n.whenDoYouWantToTravel,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -1704,7 +2522,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                 children: [
                   _TimeModeOption(
                     icon: Icons.access_time_rounded,
-                    label: 'Leave now',
+                    label: l10n.leaveNow,
                     isSelected: _selectedMode == routing.TimeMode.leaveNow,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.leaveNow);
@@ -1713,7 +2531,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.departure_board_rounded,
-                    label: 'Depart at',
+                    label: l10n.departAt.replaceAll('...', ''),
                     isSelected: _selectedMode == routing.TimeMode.departAt,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.departAt);
@@ -1722,7 +2540,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.schedule_rounded,
-                    label: 'Arrive by',
+                    label: l10n.arriveBy.replaceAll('...', ''),
                     isSelected: _selectedMode == routing.TimeMode.arriveBy,
                     onTap: () {
                       setState(() => _selectedMode = routing.TimeMode.arriveBy);
@@ -1741,7 +2559,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                     Expanded(
                       child: _DateTimeButton(
                         icon: Icons.calendar_today_rounded,
-                        label: _formatDate(_selectedDateTime),
+                        label: _formatDate(_selectedDateTime, l10n),
                         onTap: () => _selectDate(context),
                       ),
                     ),
@@ -1765,7 +2583,7 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                 child: FilledButton.icon(
                   onPressed: _applyChanges,
                   icon: const Icon(Icons.check_rounded),
-                  label: const Text('Apply'),
+                  label: Text(l10n.buttonApply),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
@@ -1781,29 +2599,29 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
     );
   }
 
-  String _formatDate(DateTime dt) {
+  String _formatDate(DateTime dt, HomeScreenLocalizations l10n) {
     final now = DateTime.now();
     final isToday =
         dt.year == now.year && dt.month == now.month && dt.day == now.day;
     final isTomorrow =
         dt.year == now.year && dt.month == now.month && dt.day == now.day + 1;
 
-    if (isToday) return 'Today';
-    if (isTomorrow) return 'Tomorrow';
+    if (isToday) return l10n.today;
+    if (isTomorrow) return l10n.tomorrow;
 
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+    final months = [
+      l10n.monthJan,
+      l10n.monthFeb,
+      l10n.monthMar,
+      l10n.monthApr,
+      l10n.monthMay,
+      l10n.monthJun,
+      l10n.monthJul,
+      l10n.monthAug,
+      l10n.monthSep,
+      l10n.monthOct,
+      l10n.monthNov,
+      l10n.monthDec,
     ];
     return '${months[dt.month - 1]} ${dt.day}';
   }
@@ -2016,6 +2834,7 @@ class _MyLocationLayer extends TrufiLayer {
         widget: const _MyLocationMarker(),
         size: const Size(24, 24),
         layerLevel: 1,
+        allowOverlap: true,
       ),
     );
   }
@@ -2034,18 +2853,6 @@ class _MyLocationMarker extends StatelessWidget {
         color: const Color(0xFF4285F4), // Google blue
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4285F4).withValues(alpha: 0.4),
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
     );
   }

@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:maplibre_gl/maplibre_gl.dart' hide LatLngBounds;
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../../domain/entities/bounds.dart';
-import '../../domain/entities/camera.dart';
-import '../../domain/layers/trufi_layer.dart';
-import '../../domain/controller/map_controller.dart';
+import '../../data/spatial/marker_index.dart';
 import '../../data/utils/color_utils.dart';
 import '../../data/utils/image_tool.dart';
-import '../../data/spatial/marker_index.dart';
+import '../../domain/controller/map_controller.dart';
+import '../../domain/entities/bounds.dart';
+import '../../domain/entities/camera.dart';
+import '../../domain/entities/marker.dart';
+import '../../domain/layers/trufi_layer.dart';
 import 'trufi_map.dart';
 
 class TrufiMapLibreMap extends StatefulWidget implements TrufiMap {
@@ -167,8 +169,9 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     MapLibreMapController ctl,
   ) async {
     try {
-      // Remove the three layers associated with this source
-      await ctl.removeLayer('${sourceId}_marker');
+      // Remove the layers associated with this source
+      await ctl.removeLayer('${sourceId}_marker_overlap');
+      await ctl.removeLayer('${sourceId}_marker_no_overlap');
       await ctl.removeLayer('${sourceId}_solid');
       await ctl.removeLayer('${sourceId}_dotted');
       // Remove the source
@@ -236,9 +239,30 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         enableInteraction: false,
       );
 
+      // Markers that hide when overlapping (allowOverlap: false)
       await ctl.addSymbolLayer(
         sourceId,
-        "${sourceId}_marker",
+        "${sourceId}_marker_no_overlap",
+        SymbolLayerProperties(
+          iconImage: ["get", "icon"],
+          iconSize: 1.0,
+          iconAllowOverlap: false,
+          iconOffset: ["get", "offset"],
+          iconRotate: ["get", "rotate"],
+          symbolSortKey: ["get", "layerLevel"],
+        ),
+        filter: [
+          "==",
+          ["get", "allowOverlap"],
+          false,
+        ],
+        enableInteraction: false,
+      );
+
+      // Markers that always show (allowOverlap: true)
+      await ctl.addSymbolLayer(
+        sourceId,
+        "${sourceId}_marker_overlap",
         SymbolLayerProperties(
           iconImage: ["get", "icon"],
           iconSize: 1.0,
@@ -247,6 +271,11 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
           iconRotate: ["get", "rotate"],
           symbolSortKey: ["get", "layerLevel"],
         ),
+        filter: [
+          "==",
+          ["get", "allowOverlap"],
+          true,
+        ],
         enableInteraction: false,
       );
 
@@ -270,11 +299,12 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     // MapLibre GL sometimes doesn't properly clear symbols when updating to
     // an empty FeatureCollection. Force a double-update to ensure clearing.
     final features = geojson['features'] as List;
+
     if (features.isEmpty) {
-      // First set empty, then set again to force refresh
+      // First set empty, then wait for frame to complete
       await ctl.setGeoJsonSource(layer.id, geojson);
-      // Small delay to allow MapLibre to process the empty source
-      await Future<void>.delayed(const Duration(milliseconds: 16));
+      // Wait for end of frame instead of arbitrary delay
+      await SchedulerBinding.instance.endOfFrame;
     }
 
     await ctl.setGeoJsonSource(layer.id, geojson);
@@ -287,24 +317,22 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     return [dx, dy];
   }
 
+  /// Maximum concurrent image loading operations.
+  static const int _maxConcurrentImageLoads = 5;
+
   Future<Map<String, dynamic>> _buildGeoJsonForLayer(
     TrufiLayer layer,
     MapLibreMapController ctl,
   ) async {
-    final features = <Map<String, dynamic>>[];
     final markers = [...layer.markers];
+
+    // Load all images in parallel batches for better performance
+    await _loadImagesInBatches(markers, ctl);
+
+    // Build marker features (no await needed now, images are loaded)
+    final features = <Map<String, dynamic>>[];
     for (final marker in markers) {
-      // Use imageKey if provided, otherwise fall back to widget.hashCode
-      final imageId = marker.imageKey ?? '${marker.widget.hashCode}';
-
-      await _ensureImageLoaded(imageId, () async {
-        if (!mounted) return;
-        final bytes =
-            marker.widgetBytes ??
-            await ImageTool.widgetToBytes(marker, context);
-        await ctl.addImage(imageId, bytes);
-      });
-
+      final imageId = marker.imageCacheKey ?? '${marker.widget.hashCode}';
       final offset = _alignmentOffsetPx(marker.alignment, marker.size);
 
       features.add({
@@ -321,6 +349,7 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
           "offset": offset,
           "rotate": marker.rotation,
           "layerLevel": marker.layerLevel,
+          "allowOverlap": marker.allowOverlap,
         },
       });
     }
@@ -345,6 +374,56 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     }
 
     return {"type": "FeatureCollection", "features": features};
+  }
+
+  /// Loads marker images in parallel batches for better performance.
+  /// Uses [_maxConcurrentImageLoads] to limit concurrent operations.
+  Future<void> _loadImagesInBatches(
+    List<TrufiMarker> markers,
+    MapLibreMapController ctl,
+  ) async {
+    if (!mounted) return;
+
+    // Collect unique images that need loading
+    final toLoad = <(String, TrufiMarker)>[];
+    for (final marker in markers) {
+      final imageId = marker.imageCacheKey ?? '${marker.widget.hashCode}';
+      if (!_loadedImages.contains(imageId) &&
+          !_imageLoaders.containsKey(imageId) &&
+          !toLoad.any((e) => e.$1 == imageId)) {
+        toLoad.add((imageId, marker));
+      }
+    }
+
+    if (toLoad.isEmpty) return;
+
+    // Process in batches
+    for (var i = 0; i < toLoad.length; i += _maxConcurrentImageLoads) {
+      if (!mounted) return;
+
+      final batch = toLoad.skip(i).take(_maxConcurrentImageLoads);
+      await Future.wait(
+        batch.map((entry) => _loadSingleImage(entry.$1, entry.$2, ctl)),
+        eagerError: false, // Continue even if some fail
+      );
+    }
+  }
+
+  /// Loads a single marker image.
+  Future<void> _loadSingleImage(
+    String imageId,
+    TrufiMarker marker,
+    MapLibreMapController ctl,
+  ) async {
+    await _ensureImageLoaded(imageId, () async {
+      if (!mounted) return;
+
+      // Use pre-generated bytes if available, otherwise render widget to PNG
+      final bytes = marker.widgetBytes ??
+          await ImageTool.widgetToBytes(marker, context);
+
+      await ctl.addImage(imageId, bytes);
+    });
   }
 
   Future<void> _ensureImageLoaded(
@@ -386,13 +465,15 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
       onStyleLoadedCallback: () async {
         _mapReady = true;
 
+        // Clear all caches when style changes (theme switch, etc.)
         _initializedSources.clear();
         _imageLoaders.clear();
         _loadedImages.clear();
         _sourceInit.clear();
 
-        final layers = widget.controller.visibleLayers;
-        await _syncLayers(layers);
+        // Re-sync all layers with the new style
+        final visibleLayers = widget.controller.visibleLayers;
+        await _syncLayers(visibleLayers);
       },
       onCameraIdle: _handleCameraIdle,
       onMapLongClick: (point, coordinates) {

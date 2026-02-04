@@ -15,10 +15,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.2
-  equatable: ^2.0.5
+  equatable: ^2.0.8
   latlong2: ^0.9.1
-  flutter_map: ^7.0.2
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.1.1
+  flutter_svg: ^2.1.0
   trufi_core_interfaces:
     path: ../trufi_core_interfaces
   trufi_core_utils:

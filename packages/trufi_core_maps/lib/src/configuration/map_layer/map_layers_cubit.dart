@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 
+import '../../domain/entities/marker.dart';
 import 'map_layer.dart';
 import 'map_layer_local_storage.dart';
 part 'map_layers_state.dart';
@@ -81,7 +81,7 @@ class MapLayersCubit extends Cubit<MapLayersState> {
     _localStorage.save(state.layersSatus);
   }
 
-  List<Marker> markers(
+  List<TrufiMarker> markers(
     int zoom,
   ) {
     List<MapLayer> listSort = state.layers
@@ -91,7 +91,7 @@ class MapLayersCubit extends Cubit<MapLayersState> {
     listSort.sort((a, b) => a.weight.compareTo(b.weight));
     final allList =
         listSort.map((element) => element.buildLayerMarkers(zoom)).toList();
-    return allList.expand((list) => list ?? <Marker>[]).toList();
+    return allList.expand((list) => list ?? <TrufiMarker>[]).toList();
   }
 
   List<Widget> activeCustomLayers({

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-import '../../domain/controller/map_controller.dart';
-import '../../presentation/map/flutter_map.dart';
-import 'trufi_map_engine.dart';
+import '../maps/trufi_flutter_map.dart';
 
 /// FlutterMap (OpenStreetMap raster tiles) engine implementation.
 ///

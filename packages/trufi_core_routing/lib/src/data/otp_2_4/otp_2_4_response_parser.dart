@@ -9,6 +9,7 @@ import '../../domain/entities/plan_location.dart';
 import '../../domain/entities/route.dart';
 import '../../domain/entities/transport_mode.dart';
 import '../graphql/polyline_decoder.dart';
+import '../utils/json_utils.dart';
 
 /// Parses OTP 2.4 standard GraphQL responses into domain entities.
 class Otp24ResponseParser {
@@ -32,15 +33,15 @@ class Otp24ResponseParser {
     if (json == null) return null;
     return PlanLocation(
       name: json['name'] as String?,
-      latitude: (json['lat'] as num?)?.toDouble(),
-      longitude: (json['lon'] as num?)?.toDouble(),
+      latitude: json.getDouble('lat'),
+      longitude: json.getDouble('lon'),
     );
   }
 
   static List<Itinerary>? _parseItineraries(List<dynamic>? itineraries) {
     if (itineraries == null) return null;
     return itineraries
-        .map((i) => _parseItinerary(i as Map<String, dynamic>))
+        .map((entry) => _parseItinerary(entry as Map<String, dynamic>))
         .toList();
   }
 
@@ -50,21 +51,13 @@ class Otp24ResponseParser {
             .toList() ??
         [];
 
-    // OTP 2.4 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     return Itinerary(
       legs: legs,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: json['duration'] as int? ?? 0),
-      walkDistance: (json['walkDistance'] as num?)?.toDouble() ?? 0,
-      walkTime: Duration(seconds: json['walkTime'] as int? ?? 0),
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      walkDistance: json.getDoubleOr('walkDistance', 0),
+      walkTime: json.getDurationOr('walkTime'),
     );
   }
 
@@ -77,20 +70,12 @@ class Otp24ResponseParser {
 
     final routeData = json['route'] as Map<String, dynamic>?;
 
-    // OTP 2.4 returns times in milliseconds since epoch
-    final startTime = json['startTime'] as int?;
-    final endTime = json['endTime'] as int?;
-
     return Leg(
       mode: mode,
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : DateTime.now(),
-      endTime: endTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(endTime)
-          : DateTime.now(),
-      duration: Duration(seconds: (json['duration'] as num?)?.toInt() ?? 0),
-      distance: (json['distance'] as num?)?.toDouble() ?? 0,
+      startTime: json.getDateTimeOr('startTime', DateTime.now()),
+      endTime: json.getDateTimeOr('endTime', DateTime.now()),
+      duration: json.getDurationOr('duration'),
+      distance: json.getDoubleOr('distance', 0),
       transitLeg: json['transitLeg'] as bool? ?? false,
       encodedPoints: encodedPoints,
       decodedPoints: decodedPoints,
@@ -143,15 +128,11 @@ class Otp24ResponseParser {
     final stopData = json['stop'] as Map<String, dynamic>?;
     return Place(
       name: json['name'] as String? ?? '',
-      lat: (json['lat'] as num).toDouble(),
-      lon: (json['lon'] as num).toDouble(),
+      lat: json.getDoubleOr('lat', 0),
+      lon: json.getDoubleOr('lon', 0),
       stopId: stopData?['gtfsId'] as String?,
-      arrivalTime: json['arrivalTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-          : null,
-      departureTime: json['departureTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-          : null,
+      arrivalTime: json.getDateTime('arrivalTime'),
+      departureTime: json.getDateTime('departureTime'),
     );
   }
 
@@ -162,15 +143,11 @@ class Otp24ResponseParser {
       final stopData = json['stop'] as Map<String, dynamic>?;
       return Place(
         name: json['name'] as String? ?? '',
-        lat: (json['lat'] as num).toDouble(),
-        lon: (json['lon'] as num).toDouble(),
+        lat: json.getDoubleOr('lat', 0),
+        lon: json.getDoubleOr('lon', 0),
         stopId: stopData?['gtfsId'] as String?,
-        arrivalTime: json['arrivalTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['arrivalTime'] as int)
-            : null,
-        departureTime: json['departureTime'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['departureTime'] as int)
-            : null,
+        arrivalTime: json.getDateTime('arrivalTime'),
+        departureTime: json.getDateTime('departureTime'),
       );
     }).toList();
   }

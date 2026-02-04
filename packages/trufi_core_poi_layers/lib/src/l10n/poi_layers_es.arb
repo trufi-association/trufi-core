@@ -2,6 +2,7 @@
   "@@locale": "es",
   "poiLayersTitle": "Puntos de Interés",
   "goHere": "Ir aquí",
+  "setAsOrigin": "Desde aquí",
   "pointsOfInterest": "Puntos de Interés",
   "toggleLayersOnTheMap": "Activar capas en el mapa",
   "done": "Listo",

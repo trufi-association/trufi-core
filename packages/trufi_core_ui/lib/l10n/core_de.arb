@@ -12,5 +12,12 @@
   "actionCancel": "Abbrechen",
   "actionConfirm": "Bestätigen",
   "errorGeneric": "Ein Fehler ist aufgetreten",
-  "errorNetwork": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung."
+  "errorNetwork": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+  "errorInitialization": "App konnte nicht initialisiert werden",
+  "actionRetry": "Erneut versuchen",
+  "errorPageNotFound": "Seite nicht gefunden",
+  "actionGoHome": "Zur Startseite",
+  "titleError": "Fehler",
+  "unreadCount": "{count} ungelesen",
+  "markAllAsRead": "Alle als gelesen markieren"
 }

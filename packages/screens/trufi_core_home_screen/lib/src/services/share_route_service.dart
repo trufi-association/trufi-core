@@ -100,7 +100,7 @@ class ShareRouteService {
     return buffer.toString();
   }
 
-  /// Generates a deep link URL for the route
+  /// Generates a deep link URL for the route (custom scheme for mobile)
   static String generateDeepLink({
     required TrufiLocation from,
     required TrufiLocation to,
@@ -108,7 +108,57 @@ class ShareRouteService {
     int? selectedItineraryIndex,
     String scheme = 'trufiapp',
   }) {
-    final params = {
+    final params = _buildRouteParams(
+      from: from,
+      to: to,
+      itinerary: itinerary,
+      selectedItineraryIndex: selectedItineraryIndex,
+    );
+
+    final uri = Uri(
+      scheme: scheme,
+      host: 'route',
+      queryParameters: params,
+    );
+
+    return uri.toString();
+  }
+
+  /// Generates a web URL for the route (for sharing on web)
+  static String generateWebLink({
+    required TrufiLocation from,
+    required TrufiLocation to,
+    required routing.Itinerary itinerary,
+    int? selectedItineraryIndex,
+    required String baseUrl,
+  }) {
+    final params = _buildRouteParams(
+      from: from,
+      to: to,
+      itinerary: itinerary,
+      selectedItineraryIndex: selectedItineraryIndex,
+    );
+
+    final baseUri = Uri.parse(baseUrl);
+    final uri = Uri(
+      scheme: baseUri.scheme,
+      host: baseUri.host,
+      port: baseUri.hasPort ? baseUri.port : null,
+      path: '/route',
+      queryParameters: params,
+    );
+
+    return uri.toString();
+  }
+
+  /// Builds the query parameters for route sharing
+  static Map<String, String> _buildRouteParams({
+    required TrufiLocation from,
+    required TrufiLocation to,
+    required routing.Itinerary itinerary,
+    int? selectedItineraryIndex,
+  }) {
+    return {
       'fromLat': from.latitude.toString(),
       'fromLng': from.longitude.toString(),
       'fromName': from.description,
@@ -119,14 +169,6 @@ class ShareRouteService {
       if (selectedItineraryIndex != null)
         'itinerary': selectedItineraryIndex.toString(),
     };
-
-    final uri = Uri(
-      scheme: scheme,
-      host: 'route',
-      queryParameters: params,
-    );
-
-    return uri.toString();
   }
 
   /// Generates a summary of the route legs

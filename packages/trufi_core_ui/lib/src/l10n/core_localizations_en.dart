@@ -43,4 +43,27 @@ class CoreLocalizationsEn extends CoreLocalizations {
 
   @override
   String get errorNetwork => 'Network error. Please check your connection.';
+
+  @override
+  String get errorInitialization => 'Failed to initialize app';
+
+  @override
+  String get actionRetry => 'Retry';
+
+  @override
+  String get errorPageNotFound => 'Page not found';
+
+  @override
+  String get actionGoHome => 'Go Home';
+
+  @override
+  String get titleError => 'Error';
+
+  @override
+  String unreadCount(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
 }

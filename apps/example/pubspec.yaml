@@ -13,9 +13,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  flutter_bloc: ^8.1.6
-  provider: ^6.1.2
-  go_router: ^17.0.0
+  flutter_bloc: ^9.1.1
+  provider: ^6.1.5+1
+  go_router: ^17.0.1
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
   trufi_core_about: ^1.0.0
@@ -32,7 +32,8 @@ dependencies:
   trufi_core_navigation: ^1.0.0
   trufi_core_poi_layers: ^1.0.0
   latlong2: ^0.9.1
-  maplibre_gl: ^0.24.1
+  maplibre: ^0.3.3+2
+  maplibre_gl: ^0.25.0
 
 dev_dependencies:
   flutter_test:

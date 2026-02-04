@@ -150,7 +150,6 @@ class NavigationScreen extends StatefulWidget {
 
         return mapEngineManager.currentEngine.buildMap(
           controller: controller,
-          isDarkMode: Theme.of(ctx).brightness == Brightness.dark,
         );
       },
     );

@@ -24,4 +24,13 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String stops(int count) {
     return '$count Haltestellen';
   }
+
+  @override
+  String get routeNotFound => 'Linie nicht gefunden';
+
+  @override
+  String get routeLoadError => 'Die Linie konnte nicht geladen werden';
+
+  @override
+  String get buttonGoBack => 'Zurück';
 }

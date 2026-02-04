@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../l10n/poi_layers_localizations.dart';
-import '../l10n/poi_layers_localizations_ext.dart';
 import '../models/poi.dart';
 
 /// Panel showing POI details when tapped
 class POIDetailPanel extends StatelessWidget {
   final POI poi;
+  final VoidCallback? onSetAsOrigin;
   final VoidCallback? onSetAsDestination;
   final VoidCallback? onClose;
 
   const POIDetailPanel({
     super.key,
     required this.poi,
+    this.onSetAsOrigin,
     this.onSetAsDestination,
     this.onClose,
   });
@@ -20,7 +22,7 @@ class POIDetailPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = POILayersLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -55,19 +57,7 @@ class POIDetailPanel extends StatelessWidget {
           // Header with icon and name
           Row(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: poi.category.color.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  poi.type.icon,
-                  color: poi.category.color,
-                  size: 22,
-                ),
-              ),
+              _buildIcon(theme),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -82,7 +72,7 @@ class POIDetailPanel extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      l10n.poiType(poi.type.name),
+                      _getTypeDisplayName(context),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -126,19 +116,138 @@ class POIDetailPanel extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Action button
-          if (onSetAsDestination != null)
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: onSetAsDestination,
-                icon: const Icon(Icons.directions),
-                label: Text(l10n.goHere),
-              ),
+          // Action buttons
+          if (onSetAsOrigin != null || onSetAsDestination != null)
+            Row(
+              children: [
+                if (onSetAsOrigin != null)
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: onSetAsOrigin,
+                      icon: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4CAF50),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                      label: Text(l10n.setAsOrigin),
+                    ),
+                  ),
+                if (onSetAsOrigin != null && onSetAsDestination != null)
+                  const SizedBox(width: 8),
+                if (onSetAsDestination != null)
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: onSetAsDestination,
+                      icon: const Icon(Icons.place, size: 18),
+                      label: Text(l10n.goHere),
+                    ),
+                  ),
+              ],
             ),
         ],
       ),
     );
+  }
+
+  Widget _buildIcon(ThemeData theme) {
+    final color = poi.color;
+
+    // Try POI's own icon from properties
+    final poiSvgString = poi.properties['icon'] as String?;
+    if (poiSvgString != null && poiSvgString.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poiSvgString,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try subcategory icon from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig?.iconSvg != null && subConfig!.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          subConfig.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try category icon from metadata
+    if (poi.category.iconSvg != null && poi.category.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poi.category.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Fallback to Material icon
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        poi.category.fallbackIcon,
+        color: color,
+        size: 22,
+      ),
+    );
+  }
+
+  String _getTypeDisplayName(BuildContext context) {
+    final langCode = Localizations.localeOf(context).languageCode;
+
+    // Try subcategory displayName from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig != null) {
+      return subConfig.getLocalizedDisplayName(langCode);
+    }
+
+    // Try subcategory string formatted
+    if (poi.subcategory != null) {
+      return poi.subcategory!
+          .split('_')
+          .map((word) =>
+              word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+          .join(' ');
+    }
+
+    // Fallback to category displayName
+    return poi.category.getLocalizedDisplayName(langCode);
   }
 }
 

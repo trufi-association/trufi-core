@@ -16,7 +16,8 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   final TransitRouteRepository? _repository;
   final TransportListCache? _cache;
 
-  TransportListState _state = const TransportListState();
+  // Start with isLoading=true so shimmer shows immediately
+  TransportListState _state = const TransportListState(isLoading: true);
 
   /// In-memory cache of full route details (with geometry and stops)
   final Map<String, TransportRouteDetails> _detailsCache = {};

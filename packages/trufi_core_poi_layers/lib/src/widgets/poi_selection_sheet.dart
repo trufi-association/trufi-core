@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../l10n/poi_layers_localizations.dart';
-import '../l10n/poi_layers_localizations_ext.dart';
 import '../models/poi.dart';
 
 /// Bottom sheet for selecting from multiple nearby POIs.
@@ -39,7 +39,7 @@ class POISelectionSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = POILayersLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -127,7 +127,7 @@ class _POISelectionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = POILayersLocalizations.of(context)!;
+    final color = poi.color;
 
     return InkWell(
       onTap: onTap,
@@ -135,20 +135,8 @@ class _POISelectionTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            // Category icon
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: poi.category.color.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                poi.type.icon,
-                color: poi.category.color,
-                size: 20,
-              ),
-            ),
+            // Category/subcategory icon
+            _buildIcon(theme, color),
             const SizedBox(width: 12),
             // POI info
             Expanded(
@@ -164,7 +152,9 @@ class _POISelectionTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    l10n.categoryName(poi.category.name),
+                    poi.category.getLocalizedDisplayName(
+                      Localizations.localeOf(context).languageCode,
+                    ),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -178,6 +168,79 @@ class _POISelectionTile extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildIcon(ThemeData theme, Color color) {
+    // Try POI's own icon from properties
+    final poiSvgString = poi.properties['icon'] as String?;
+    if (poiSvgString != null && poiSvgString.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poiSvgString,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try subcategory icon from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig?.iconSvg != null && subConfig!.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          subConfig.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try category icon from metadata
+    if (poi.category.iconSvg != null && poi.category.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poi.category.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Fallback to Material icon
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        poi.category.fallbackIcon,
+        color: color,
+        size: 20,
       ),
     );
   }

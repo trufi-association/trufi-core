@@ -8,6 +8,10 @@
   "@goHere": {
     "description": "Button to set POI as destination"
   },
+  "setAsOrigin": "From here",
+  "@setAsOrigin": {
+    "description": "Button to set POI as origin"
+  },
   "pointsOfInterest": "Points of Interest",
   "@pointsOfInterest": {
     "description": "General label for POI section"

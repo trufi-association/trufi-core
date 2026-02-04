@@ -7,6 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../domain/entities/marker.dart';
 
+/// Utility for converting widgets and SVGs to PNG images.
+///
+/// Used by MapLibre to convert Flutter widgets to images for markers.
+/// Note: Caching is handled at the MapLibre level via `_loadedImages`,
+/// not here. This class just does the conversion.
 abstract class ImageTool {
   static Future<Uint8List> svgToPng(String svgString) async {
     final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
@@ -17,10 +22,14 @@ abstract class ImageTool {
     return data!.buffer.asUint8List();
   }
 
+  /// Converts a marker's widget to PNG bytes.
+  ///
+  /// Note: This method does NOT cache. Caching is handled by MapLibre
+  /// internally via `_loadedImages` in maplibre_map.dart.
   static Future<Uint8List> widgetToBytes(
     TrufiMarker marker,
     BuildContext context,
-  ) {
+  ) async {
     final mediaQuery = MediaQuery.of(context);
     return ImageTool.widgetToPng(
       marker.widget,
@@ -38,8 +47,9 @@ abstract class ImageTool {
 
     final renderView = RenderView(
       view: WidgetsBinding.instance.platformDispatcher.views.first,
-      configuration: ViewConfiguration.fromView(
-        WidgetsBinding.instance.platformDispatcher.views.first,
+      configuration: ViewConfiguration(
+        logicalConstraints: BoxConstraints.tight(size),
+        devicePixelRatio: devicePixelRatio,
       ),
       child: RenderPositionedBox(
         alignment: Alignment.center,

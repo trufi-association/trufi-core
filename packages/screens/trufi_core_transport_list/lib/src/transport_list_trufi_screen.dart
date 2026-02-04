@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
@@ -80,6 +82,7 @@ class _TransportListScreenWidgetState
     extends State<_TransportListScreenWidget> {
   late final TransportListDataProvider _dataProvider;
   late final TransportListCache _cache;
+  bool _urlParsed = false;
 
   @override
   void initState() {
@@ -96,10 +99,55 @@ class _TransportListScreenWidgetState
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Parse URL parameters on first load (web only)
+    _parseUrlAndOpenRoute();
+  }
+
+  @override
   void dispose() {
     _dataProvider.dispose();
     _cache.dispose();
     super.dispose();
+  }
+
+  /// Parses URL parameters and opens route detail if id is present (web only).
+  void _parseUrlAndOpenRoute() {
+    if (!kIsWeb || _urlParsed) return;
+    _urlParsed = true;
+
+    try {
+      final routerState = GoRouterState.of(context);
+      final params = routerState.uri.queryParameters;
+      final routeId = params['id'];
+
+      if (routeId != null && routeId.isNotEmpty) {
+        // Open route detail screen after frame is built
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          TransportDetailScreen.show(
+            context,
+            routeCode: routeId,
+            getRouteDetails: _dataProvider.getRouteDetails,
+            basePath: '/routes',
+            mapBuilder: (
+              context,
+              routeDetails,
+              registerMapMoveCallback,
+              registerStopSelectionCallback,
+            ) =>
+                _RouteMapView(
+                  route: routeDetails,
+                  registerMapMoveCallback: registerMapMoveCallback,
+                  registerStopSelectionCallback: registerStopSelectionCallback,
+                ),
+          );
+        });
+      }
+    } catch (e) {
+      debugPrint('TransportListScreen: Error parsing URL: $e');
+    }
   }
 
   @override
@@ -111,6 +159,7 @@ class _TransportListScreenWidgetState
           context,
           routeCode: route.code,
           getRouteDetails: _dataProvider.getRouteDetails,
+          basePath: '/routes',
           mapBuilder:
               (
                 context,
@@ -223,8 +272,8 @@ class _RouteMapViewState extends State<_RouteMapView> {
     super.dispose();
   }
 
-  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
-    return engine.buildMap(controller: _mapController!, isDarkMode: isDarkMode);
+  Widget _buildMap(ITrufiMapEngine engine) {
+    return engine.buildMap(controller: _mapController!);
   }
 
   @override
@@ -247,15 +296,13 @@ class _RouteMapViewState extends State<_RouteMapView> {
           Size(constraints.maxWidth, constraints.maxHeight),
           adjustedPadding,
         );
-        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
         // Calculate safe offset to avoid overlapping with TransportDetailScreen topbar
         final topOffset = viewPadding.top + 70;
 
         return Stack(
           children: [
             // Map (full area)
-            _buildMap(mapEngineManager.currentEngine, isDarkMode: isDarkMode),
+            _buildMap(mapEngineManager.currentEngine),
 
             // Map controls (right side, below top bar)
             Positioned(
@@ -381,7 +428,7 @@ class _RouteLayer extends TrufiLayer {
     if (stops.isEmpty) return;
 
     final routeColor = route.backgroundColor ?? Colors.blue;
-    // Create stable imageKeys based on visual properties (color + isTerminal + isSelected)
+    // Create stable imageCacheKeys based on visual properties (color + isTerminal + isSelected)
     final colorHex = routeColor.toARGB32().toRadixString(16);
     final intermediateImageKey = 'stop_intermediate_$colorHex';
     final selectedImageKey = 'stop_selected_$colorHex';
@@ -402,7 +449,7 @@ class _RouteLayer extends TrufiLayer {
           widget: _StopMarker(color: routeColor),
           size: const Size(12, 12),
           layerLevel: 1,
-          imageKey: intermediateImageKey,
+          imageCacheKey: intermediateImageKey,
         ),
       );
     }
@@ -417,7 +464,7 @@ class _RouteLayer extends TrufiLayer {
           widget: const _OriginMarker(),
           size: const Size(24, 24),
           layerLevel: 3,
-          imageKey: 'origin_marker',
+          imageCacheKey: 'origin_marker',
         ),
       );
     }
@@ -433,7 +480,7 @@ class _RouteLayer extends TrufiLayer {
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
           layerLevel: 3,
-          imageKey: 'destination_marker',
+          imageCacheKey: 'destination_marker',
         ),
       );
     }
@@ -448,7 +495,7 @@ class _RouteLayer extends TrufiLayer {
           widget: _SelectedStopMarker(color: routeColor),
           size: const Size(24, 24),
           layerLevel: 10,
-          imageKey: selectedImageKey,
+          imageCacheKey: selectedImageKey,
         ),
       );
     }

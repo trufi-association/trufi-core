@@ -16,8 +16,9 @@ class TrufiMarker {
     this.size = const Size(30, 30),
     this.rotation = 0,
     this.alignment = Alignment.center,
-    this.imageKey,
+    this.imageCacheKey,
     this.metersRadius,
+    this.allowOverlap = false,
   });
 
   final String id;
@@ -29,6 +30,13 @@ class TrufiMarker {
   final Size size;
   final double rotation;
   final Alignment alignment;
+
+  /// Whether this marker should be visible when overlapping with other markers.
+  ///
+  /// When `false` (default), the marker may be hidden if it overlaps with
+  /// higher priority markers. When `true`, the marker is always visible
+  /// even if it overlaps with other markers.
+  final bool allowOverlap;
 
   /// Optional radius in meters for geo-scaled markers.
   /// When set, the marker size will scale with map zoom to represent
@@ -59,7 +67,7 @@ class TrufiMarker {
   ///   imageKey: 'vehicle_${Colors.blue.toARGB32()}_${Icons.bus.codePoint}',
   /// )
   /// ```
-  final String? imageKey;
+  final String? imageCacheKey;
 
   TrufiMarker copyWith({
     String? id,
@@ -71,8 +79,9 @@ class TrufiMarker {
     Size? size,
     double? rotation,
     Alignment? alignment,
-    String? imageKey,
+    String? imageCacheKey,
     double? metersRadius,
+    bool? allowOverlap,
   }) {
     return TrufiMarker(
       id: id ?? this.id,
@@ -84,8 +93,9 @@ class TrufiMarker {
       size: size ?? this.size,
       rotation: rotation ?? this.rotation,
       alignment: alignment ?? this.alignment,
-      imageKey: imageKey ?? this.imageKey,
+      imageCacheKey: imageCacheKey ?? this.imageCacheKey,
       metersRadius: metersRadius ?? this.metersRadius,
+      allowOverlap: allowOverlap ?? this.allowOverlap,
     );
   }
 

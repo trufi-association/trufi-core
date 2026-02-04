@@ -1,14 +1,38 @@
 {
   "@@locale": "de",
 
+  "onboardingTitle": "Willkommen!",
+  "onboardingSubtitle": "Lass uns deine Einstellungen festlegen",
+  "onboardingLanguageTitle": "Wahle deine Sprache",
+  "onboardingThemeTitle": "Wahle dein Design",
+  "onboardingThemeLight": "Hell",
+  "onboardingThemeDark": "Dunkel",
+  "onboardingThemeSystem": "System",
+  "onboardingMapTitle": "Wahle deinen Kartenstil",
+  "onboardingComplete": "Los geht's",
+
+  "privacyConsentTitle": "Hilf uns, Trufi zu verbessern",
+  "privacyConsentSubtitle": "Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten teilst",
+  "privacyConsentInfoTitle": "Was wir sammeln",
+  "privacyConsentInfoLogs": "Fehlerprotokolle, um Absturze und Bugs zu beheben",
+  "privacyConsentInfoRoutes": "Routensuchen zur Verbesserung der Nahverkehrsdaten",
+  "privacyConsentInfoAnonymous": "Alle Daten sind vollstandig anonym",
+  "privacyConsentAccept": "Akzeptieren und fortfahren",
+  "privacyConsentDecline": "Nein, danke",
+
   "settingsTitle": "Einstellungen",
   "settingsLanguage": "Sprache",
-  "settingsSelectLanguage": "Wählen Sie Ihre bevorzugte Sprache:",
+  "settingsSelectLanguage": "Wahlen Sie Ihre bevorzugte Sprache:",
   "settingsTheme": "Design",
-  "settingsSelectTheme": "Wählen Sie Ihr bevorzugtes Design:",
+  "settingsSelectTheme": "Wahlen Sie Ihr bevorzugtes Design:",
   "settingsThemeLight": "Heller Modus",
   "settingsThemeDark": "Dunkler Modus",
   "settingsThemeSystem": "Systemstandard",
   "settingsMap": "Karte",
-  "settingsSelectMapType": "Wählen Sie Ihren bevorzugten Kartentyp:"
+  "settingsSelectMapType": "Wahlen Sie Ihren bevorzugten Kartentyp:",
+
+  "settingsPrivacy": "Datenschutz",
+  "settingsPrivacySubtitle": "Hilf uns, die App zu verbessern",
+  "settingsPrivacyShareData": "Anonyme Nutzungsdaten teilen",
+  "settingsPrivacyShareDataDescription": "Hilf uns, Fehler zu beheben und Nahverkehrsdaten zu verbessern"
 }
