@@ -13,6 +13,7 @@ library;
 // ============================================
 export 'src/domain/entities/agency.dart';
 export 'src/domain/entities/itinerary.dart';
+export 'src/domain/entities/itinerary_group.dart';
 export 'src/domain/entities/leg.dart';
 export 'src/domain/entities/place.dart';
 export 'src/domain/entities/plan.dart';
@@ -39,6 +40,11 @@ export 'src/domain/repositories/transit_route_repository.dart';
 // ============================================
 export 'src/domain/services/routing_service.dart';
 export 'src/domain/services/routing_preferences_manager.dart';
+
+// ============================================
+// DOMAIN LAYER - Utilities
+// ============================================
+export 'src/domain/utils/itinerary_signature.dart';
 
 // ============================================
 // DATA LAYER - GraphQL Utilities

@@ -367,4 +367,17 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
 
   @override
   String get findingRoutes => 'Finding routes...';
+
+  @override
+  String moreDepartures(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String get otherDepartures => 'Other departures';
+
+  @override
+  String departsAt(String time) {
+    return 'Departs $time';
+  }
 }

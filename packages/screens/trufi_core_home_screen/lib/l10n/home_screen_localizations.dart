@@ -708,6 +708,24 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Finding routes...'**
   String get findingRoutes;
+
+  /// Badge showing number of additional departure times
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String moreDepartures(int count);
+
+  /// Header for alternative departure times section
+  ///
+  /// In en, this message translates to:
+  /// **'Other departures'**
+  String get otherDepartures;
+
+  /// Label showing departure time
+  ///
+  /// In en, this message translates to:
+  /// **'Departs {time}'**
+  String departsAt(String time);
 }
 
 class _HomeScreenLocalizationsDelegate

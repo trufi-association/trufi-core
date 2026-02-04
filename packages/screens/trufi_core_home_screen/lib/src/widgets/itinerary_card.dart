@@ -13,6 +13,15 @@ class ItineraryCard extends StatelessWidget {
   final VoidCallback? onDetailsTap;
   final VoidCallback? onStartNavigation;
 
+  /// Number of additional departure times available (null = no alternatives)
+  final int? alternativeCount;
+
+  /// Whether the alternatives list is expanded
+  final bool isExpanded;
+
+  /// Callback to expand/collapse alternatives
+  final VoidCallback? onExpandTap;
+
   const ItineraryCard({
     super.key,
     required this.itinerary,
@@ -20,6 +29,9 @@ class ItineraryCard extends StatelessWidget {
     required this.onTap,
     this.onDetailsTap,
     this.onStartNavigation,
+    this.alternativeCount,
+    this.isExpanded = false,
+    this.onExpandTap,
   });
 
   @override
@@ -215,6 +227,15 @@ class ItineraryCard extends StatelessWidget {
             theme: theme,
           ),
         const Spacer(),
+        // Alternative departures badge/button
+        if (alternativeCount != null && alternativeCount! > 0)
+          _AlternativesBadge(
+            count: alternativeCount!,
+            isExpanded: isExpanded,
+            onTap: onExpandTap,
+            theme: theme,
+            l10n: l10n,
+          ),
         // Details button
         if (onDetailsTap != null)
           TextButton.icon(
@@ -397,6 +418,74 @@ class _InfoChip extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Badge showing number of alternative departure times
+class _AlternativesBadge extends StatelessWidget {
+  final int count;
+  final bool isExpanded;
+  final VoidCallback? onTap;
+  final ThemeData theme;
+  final HomeScreenLocalizations l10n;
+
+  const _AlternativesBadge({
+    required this.count,
+    required this.isExpanded,
+    this.onTap,
+    required this.theme,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap != null
+            ? () {
+                HapticFeedback.selectionClick();
+                onTap!();
+              }
+            : null,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.secondaryContainer,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.schedule_rounded,
+                size: 14,
+                color: theme.colorScheme.onSecondaryContainer,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                l10n.moreDepartures(count),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSecondaryContainer,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 2),
+              AnimatedRotation(
+                turns: isExpanded ? 0.5 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  Icons.expand_more_rounded,
+                  size: 16,
+                  color: theme.colorScheme.onSecondaryContainer,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

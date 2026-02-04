@@ -1,8 +1,10 @@
 import '../entities/itinerary.dart';
+import '../entities/itinerary_group.dart';
 import '../entities/plan.dart';
 import '../entities/routing_location.dart';
 import '../entities/transport_mode.dart';
 import '../repositories/plan_repository.dart';
+import '../utils/itinerary_signature.dart';
 
 /// High-level routing service that provides trip planning with business logic.
 class RoutingService {
@@ -14,6 +16,7 @@ class RoutingService {
   /// Fetches a trip plan, filtering out walk-only itineraries.
   ///
   /// If no transit itineraries are found, retries with default modes.
+  /// The returned plan includes both individual itineraries and grouped itineraries.
   Future<Plan> fetchPlan({
     required RoutingLocation from,
     required RoutingLocation to,
@@ -34,7 +37,9 @@ class RoutingService {
       plan = _filterWalkOnlyItineraries(plan);
     }
 
-    return plan;
+    // Group itineraries by route pattern
+    final grouped = groupItineraries(plan.itineraries ?? []);
+    return plan.copyWith(groupedItineraries: grouped);
   }
 
   /// Fetches additional itineraries for pagination.
@@ -58,7 +63,9 @@ class RoutingService {
       plan = _filterWalkOnlyItineraries(plan);
     }
 
-    return plan;
+    // Group itineraries by route pattern
+    final grouped = groupItineraries(plan.itineraries ?? []);
+    return plan.copyWith(groupedItineraries: grouped);
   }
 
   /// Filters out itineraries that only contain walking legs.
@@ -75,5 +82,40 @@ class RoutingService {
     return itinerary.legs.every(
       (leg) => leg.transportMode == TransportMode.walk,
     );
+  }
+
+  /// Groups itineraries by their route pattern.
+  ///
+  /// Itineraries that use the same buses, stops, and transfers are grouped together.
+  /// Each group has a representative (earliest departure) and a list of alternatives.
+  ///
+  /// Returns a list of [ItineraryGroup] sorted by the representative's start time.
+  List<ItineraryGroup> groupItineraries(List<Itinerary> itineraries) {
+    if (itineraries.isEmpty) return [];
+
+    final Map<String, List<Itinerary>> grouped = {};
+
+    for (final itinerary in itineraries) {
+      final signature = generateItinerarySignature(itinerary);
+      grouped.putIfAbsent(signature, () => []).add(itinerary);
+    }
+
+    final groups = grouped.entries.map((entry) {
+      // Sort by start time, pick earliest as representative
+      final sorted = List<Itinerary>.from(entry.value)
+        ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+      return ItineraryGroup(
+        representative: sorted.first,
+        alternatives: sorted,
+        signature: entry.key,
+      );
+    }).toList();
+
+    // Sort groups by representative's start time
+    groups.sort((a, b) =>
+        a.representative.startTime.compareTo(b.representative.startTime));
+
+    return groups;
   }
 }
