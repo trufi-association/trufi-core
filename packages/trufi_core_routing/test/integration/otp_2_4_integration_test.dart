@@ -87,7 +87,7 @@ void main() {
       );
 
       // Find a transit leg
-      ItineraryLeg? transitLeg;
+      Leg? transitLeg;
       for (final itinerary in plan.itineraries!) {
         for (final leg in itinerary.legs) {
           if (leg.transitLeg) {

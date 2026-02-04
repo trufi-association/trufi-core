@@ -80,7 +80,7 @@ class _TransportListContentState extends State<TransportListContent>
 
   @override
   Widget build(BuildContext context) {
-    final localization = TransportListLocalizations.of(context)!;
+    final localization = TransportListLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final state = widget.dataProvider.state;

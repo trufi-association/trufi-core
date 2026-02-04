@@ -13,7 +13,6 @@ class PolylineDecoder {
   /// In Dart web (JavaScript), bitwise operations on large numbers can produce
   /// unexpected results due to JS's 32-bit integer conversion.
   static List<LatLng> decode(String encoded) {
-    print('[PolylineDecoder] Decoding polyline with length: ${encoded.length}');
     final points = <LatLng>[];
     int index = 0;
     int lat = 0;
@@ -48,11 +47,6 @@ class PolylineDecoder {
       points.add(LatLng(lat / 1e5, lng / 1e5));
     }
 
-    print('[PolylineDecoder] Decoded ${points.length} points');
-    if (points.isNotEmpty) {
-      print('[PolylineDecoder] First point: ${points.first}');
-      print('[PolylineDecoder] Last point: ${points.last}');
-    }
     return points;
   }
 }

@@ -53,6 +53,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.micro: 'MICRO',
     TransportMode.miniBus: 'MINIBUS',
     TransportMode.lightRail: 'LIGHT RAIL',
+    // ignore: deprecated_member_use_from_same_package
     TransportMode.unknown: 'UNKNOWN',
   };
 

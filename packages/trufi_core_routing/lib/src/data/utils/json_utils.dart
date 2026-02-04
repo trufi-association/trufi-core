@@ -10,19 +10,14 @@
 /// See: https://dart.dev/resources/language/number-representation
 /// See: https://github.com/dart-lang/sdk/issues/46883
 
-/// Extension on Map<String, dynamic> for safe JSON value extraction.
+/// Extension on `Map<String, dynamic>` for safe JSON value extraction.
 extension JsonMapExtension on Map<String, dynamic> {
   /// Gets an int value, handling both int and double representations.
   /// Returns null if the key doesn't exist or value is null.
   int? getInt(String key) {
     final value = this[key];
     if (value == null) return null;
-    try {
-      return (value as num).toInt();
-    } catch (e) {
-      print('[JsonUtils] getInt error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    return (value as num).toInt();
   }
 
   /// Gets a double value, handling both int and double representations.
@@ -30,36 +25,21 @@ extension JsonMapExtension on Map<String, dynamic> {
   double? getDouble(String key) {
     final value = this[key];
     if (value == null) return null;
-    try {
-      return (value as num).toDouble();
-    } catch (e) {
-      print('[JsonUtils] getDouble error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    return (value as num).toDouble();
   }
 
   /// Gets an int value with a default, handling both int and double.
   int getIntOr(String key, int defaultValue) {
     final value = this[key];
     if (value == null) return defaultValue;
-    try {
-      return (value as num).toInt();
-    } catch (e) {
-      print('[JsonUtils] getIntOr error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    return (value as num).toInt();
   }
 
   /// Gets a double value with a default, handling both int and double.
   double getDoubleOr(String key, double defaultValue) {
     final value = this[key];
     if (value == null) return defaultValue;
-    try {
-      return (value as num).toDouble();
-    } catch (e) {
-      print('[JsonUtils] getDoubleOr error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    return (value as num).toDouble();
   }
 
   /// Gets a DateTime from milliseconds since epoch.
@@ -67,26 +47,16 @@ extension JsonMapExtension on Map<String, dynamic> {
   DateTime? getDateTime(String key) {
     final value = this[key];
     if (value == null) return null;
-    try {
-      final millis = (value as num).toInt();
-      return DateTime.fromMillisecondsSinceEpoch(millis);
-    } catch (e) {
-      print('[JsonUtils] getDateTime error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    final millis = (value as num).toInt();
+    return DateTime.fromMillisecondsSinceEpoch(millis);
   }
 
   /// Gets a DateTime from milliseconds since epoch, with a default.
   DateTime getDateTimeOr(String key, DateTime defaultValue) {
     final value = this[key];
     if (value == null) return defaultValue;
-    try {
-      final millis = (value as num).toInt();
-      return DateTime.fromMillisecondsSinceEpoch(millis);
-    } catch (e) {
-      print('[JsonUtils] getDateTimeOr error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    final millis = (value as num).toInt();
+    return DateTime.fromMillisecondsSinceEpoch(millis);
   }
 
   /// Gets a Duration from seconds.
@@ -94,25 +64,15 @@ extension JsonMapExtension on Map<String, dynamic> {
   Duration? getDuration(String key) {
     final value = this[key];
     if (value == null) return null;
-    try {
-      final seconds = (value as num).toInt();
-      return Duration(seconds: seconds);
-    } catch (e) {
-      print('[JsonUtils] getDuration error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    final seconds = (value as num).toInt();
+    return Duration(seconds: seconds);
   }
 
   /// Gets a Duration from seconds, with a default.
   Duration getDurationOr(String key, [Duration defaultValue = Duration.zero]) {
     final value = this[key];
     if (value == null) return defaultValue;
-    try {
-      final seconds = (value as num).toInt();
-      return Duration(seconds: seconds);
-    } catch (e) {
-      print('[JsonUtils] getDurationOr error for key "$key": value=$value (${value.runtimeType}), error=$e');
-      rethrow;
-    }
+    final seconds = (value as num).toInt();
+    return Duration(seconds: seconds);
   }
 }
