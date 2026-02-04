@@ -8,7 +8,7 @@
         "type": "Point",
         "coordinates": [
           -66.1561985,
-          -17.389104200000002
+          -17.3891042
         ]
       },
       "properties": {
@@ -69,7 +69,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15891180000001,
+          -66.1589118,
           -17.3882796
         ]
       },
@@ -98,7 +98,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15859420000001,
+          -66.1585942,
           -17.3928671
         ]
       },
@@ -133,8 +133,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15448380000001,
-          -17.387975800000003
+          -66.1544838,
+          -17.3879758
         ]
       },
       "properties": {
@@ -200,31 +200,11 @@
     },
     {
       "type": "Feature",
-      "id": 2545075817,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.28037160000001,
-          -17.397614200000003
-        ]
-      },
-      "properties": {
-        "id": 2545075817,
-        "name": "Correos de Bolivia",
-        "type": "post_office",
-        "category": "government",
-        "subcategory": "post",
-        "osmType": "node",
-        "amenity": "post_office"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 2592855322,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.17465010000001,
+          -66.1746501,
           -17.3814619
         ]
       },
@@ -253,7 +233,7 @@
         "type": "Point",
         "coordinates": [
           -66.1783944,
-          -17.414520600000003
+          -17.4145206
         ]
       },
       "properties": {
@@ -301,65 +281,6 @@
         "osmType": "node",
         "amenity": "post_office",
         "operator": "Transfer Latina"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2618638982,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.28047620000001,
-          -17.4079963
-        ]
-      },
-      "properties": {
-        "id": 2618638982,
-        "name": "Servicio General de Identificación Personal",
-        "type": "Quillacollo",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Quillacollo",
-        "addr:street": "Avenida Virgen de Urkupiña",
-        "admin_level": "2",
-        "branch": "Quillacollo",
-        "government": "register_office",
-        "office": "government",
-        "opening_hours": "Mo-Fr 07:00-15:00; Sa,Su,PH Off",
-        "operator": "Servicio General de Identificación Personal",
-        "operator:short": "SEGIP",
-        "operator:type": "public",
-        "phone": "800101102",
-        "short_name": "SEGIP",
-        "website": "https://www.segip.gob.bo/"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2712150826,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.0392812,
-          -17.4039661
-        ]
-      },
-      "properties": {
-        "id": 2712150826,
-        "name": "Gobierno Autónomo Muncipal de Sacaba",
-        "type": "townhall",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:street": "Calle 6 de Agosto",
-        "alt_name": "Alcaldía de Sacaba",
-        "amenity": "townhall",
-        "contact:email": "info@sacaba.gob.bo",
-        "contact:phone": "+591 4 4123456",
-        "contact:website": "http://sacaba.gob.bo/",
-        "operator": "GAMS",
-        "short_name": "GAMS"
       }
     },
     {
@@ -425,7 +346,7 @@
         "type": "Point",
         "coordinates": [
           -66.1570143,
-          -17.434414500000003
+          -17.4344145
         ]
       },
       "properties": {
@@ -446,8 +367,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14151410000001,
-          -17.400166600000002
+          -66.1415141,
+          -17.4001666
         ]
       },
       "properties": {
@@ -470,36 +391,11 @@
     },
     {
       "type": "Feature",
-      "id": 3640221442,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.125561,
-          -17.473920900000003
-        ]
-      },
-      "properties": {
-        "id": 3640221442,
-        "name": "Oficina Administrativa",
-        "type": "Cochabamba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Cochabamba",
-        "addr:neighbourhood": "K'ara K'ara",
-        "admin_level": "8",
-        "government": "administrative",
-        "level": "0",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 3686363794,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.17019640000001,
+          -66.1701964,
           -17.3835161
         ]
       },
@@ -528,7 +424,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14935870000001,
+          -66.1493587,
           -17.3881844
         ]
       },
@@ -553,33 +449,6 @@
         "phone": "+591 4 4221888",
         "short_name": "SEDES",
         "website": "https://gobernaciondecochabamba.bo/unidad/14"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 3717048446,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.2777715,
-          -17.3966315
-        ]
-      },
-      "properties": {
-        "id": 3717048446,
-        "name": "Servicio de Registro Cívico",
-        "type": "Quillacollo",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Quillacollo",
-        "addr:street": "Avenida General Camacho",
-        "admin_level": "7",
-        "alt_name": "SERECI Quillacollo",
-        "branch": "SERECI Oficina Regional Quillacollo",
-        "government": "register_office",
-        "office": "government",
-        "phone": "+591 44369456"
       }
     },
     {
@@ -614,38 +483,12 @@
     },
     {
       "type": "Feature",
-      "id": 3923891085,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.1469512,
-          -17.3869104
-        ]
-      },
-      "properties": {
-        "id": 3923891085,
-        "name": "Unidad de Salud Ambiental",
-        "type": "Cochabamba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Cochabamba",
-        "addr:housenumber": "445",
-        "addr:neighbourhood": "San Pedro",
-        "addr:street": "Calle Aurelio Melean",
-        "admin_level": "4",
-        "office": "government",
-        "operator": "SEDES"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 4008851194,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.11903960000001,
-          -17.378947800000002
+          -66.1190396,
+          -17.3789478
         ]
       },
       "properties": {
@@ -674,8 +517,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16551360000001,
-          -17.386684600000002
+          -66.1655136,
+          -17.3866846
         ]
       },
       "properties": {
@@ -697,35 +540,11 @@
     },
     {
       "type": "Feature",
-      "id": 4051112994,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.31379480000001,
-          -17.396424600000003
-        ]
-      },
-      "properties": {
-        "id": 4051112994,
-        "name": "Gobierno Autónomo Municipal deVinto",
-        "type": "townhall",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Vinto",
-        "alt_name": "Alcaldía de Vinto",
-        "amenity": "townhall",
-        "operator": "GAMV",
-        "short_name": "GAMV"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 4092055005,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.21866800000001,
+          -66.218668,
           -17.337693
         ]
       },
@@ -740,8 +559,14 @@
         "addr:street": "Calle Pablo Jaimes",
         "alt_name": "Alcaldia de Tiquipaya",
         "amenity": "townhall",
+        "contact:facebook": "https://www.facebook.com/oficial.gamtiquipaya",
         "operator": "Gobierno Autónomo Municipal de Tiquipaya",
-        "townhall:type": "city"
+        "operator:short": "GAMT",
+        "operator:type": "government",
+        "phone": "+591 4 4316726;+591 4 4317185;+591 4 4315257;+591 4 4316512",
+        "townhall:type": "city",
+        "website": "https://www.tiquipaya.gob.bo/",
+        "wheelchair": "yes"
       }
     },
     {
@@ -751,7 +576,7 @@
         "type": "Point",
         "coordinates": [
           -66.1854294,
-          -17.370634900000002
+          -17.3706349
         ]
       },
       "properties": {
@@ -822,7 +647,7 @@
         "type": "Point",
         "coordinates": [
           -66.1578174,
-          -17.385537000000003
+          -17.385537
         ]
       },
       "properties": {
@@ -852,7 +677,7 @@
         "type": "Point",
         "coordinates": [
           -66.1552108,
-          -17.387643800000003
+          -17.3876438
         ]
       },
       "properties": {
@@ -887,8 +712,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.24039610000001,
-          -17.388668900000003
+          -66.2403961,
+          -17.3886689
         ]
       },
       "properties": {
@@ -899,14 +724,21 @@
         "subcategory": "administration",
         "osmType": "node",
         "addr:city": "Colcapirhua",
+        "addr:neighbourhood": "Colcapirhua Central",
         "addr:street": "Calle Sucre",
         "alt_name": "Alcaldía de Colcapirhua",
         "amenity": "townhall",
+        "contact:facebook": "https://www.facebook.com/municipiodecolcapirhua",
         "email": "gamc@colcapirhua.gob.bo",
+        "opening_hours": "Mo-Fr 08:30-12:00-14:00-18:30,Sa-Su,PH Off",
         "operator": "Gobierno Autónomo Municipal de Colcapirhua",
+        "operator:short": "GAMC",
+        "operator:type": "government",
         "phone": "+591 4 4269983;+591 4 4269985",
+        "smoking": "no",
         "townhall:type": "city",
-        "website": "https://www.colcapirhua.gob.bo/"
+        "website": "https://www.colcapirhua.gob.bo/",
+        "wheelchair": "no"
       }
     },
     {
@@ -944,7 +776,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15298050000001,
+          -66.1529805,
           -17.38162
         ]
       },
@@ -973,8 +805,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.19969160000001,
-          -17.377315300000003
+          -66.1996916,
+          -17.3773153
         ]
       },
       "properties": {
@@ -995,7 +827,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.19967510000001,
+          -66.1996751,
           -17.3768409
         ]
       },
@@ -1019,7 +851,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15956600000001,
+          -66.159566,
           -17.3952436
         ]
       },
@@ -1056,7 +888,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16422680000001,
+          -66.1642268,
           -17.3722385
         ]
       },
@@ -1089,7 +921,7 @@
         "type": "Point",
         "coordinates": [
           -66.1612692,
-          -17.396090800000003
+          -17.3960908
         ]
       },
       "properties": {
@@ -1111,69 +943,6 @@
         "level": "0",
         "office": "government",
         "operator": "SIN"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 4768964711,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.2761686,
-          -17.390548600000002
-        ]
-      },
-      "properties": {
-        "id": 4768964711,
-        "name": "Servicio de Impuestos Nacionales",
-        "type": "Quillacollo",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Quillacollo",
-        "addr:housenumber": "391",
-        "addr:street": "Calle Mejillones",
-        "admin_level": "2",
-        "branch": "Gerencia Distrital Quillacollo",
-        "contact:facebook": "https://www.facebook.com/sinbolivia/",
-        "email": "informaciontributaria@impuestos.gob.bo",
-        "government": "tax",
-        "office": "government",
-        "opening_hours": "Mo-Fr 07:30-16:30",
-        "operator": "Servicio de Impuestos Nacionales",
-        "operator:short": "SIN",
-        "operator:type": "public",
-        "phone": "+591 4 4260052;800 10 3444",
-        "short_name": "SIN",
-        "website": "https://www.impuestos.gob.bo/"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 4768970847,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.0402598,
-          -17.403425900000002
-        ]
-      },
-      "properties": {
-        "id": 4768970847,
-        "name": "Servicio de Impuestos Nacionales",
-        "type": "8",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "admin_level": "8",
-        "contact:email": "informaciontributaria@impuestos.gob.bo",
-        "contact:website": "http://www.impuestos.gob.bo/",
-        "government": "tax",
-        "level": "0",
-        "loc_name": "Renta",
-        "office": "government",
-        "operator": "SIN",
-        "short_name": "SIN"
       }
     },
     {
@@ -1210,7 +979,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.12717140000001,
+          -66.1271714,
           -17.3767047
         ]
       },
@@ -1235,31 +1004,11 @@
     },
     {
       "type": "Feature",
-      "id": 4922947183,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.02262320000001,
-          -17.4032945
-        ]
-      },
-      "properties": {
-        "id": 4922947183,
-        "name": "SERECI Villa Obrajes",
-        "type": "SERECI Villa Obrajes",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 4925510937,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15996030000001,
+          -66.1599603,
           -17.3596177
         ]
       },
@@ -1317,7 +1066,7 @@
         "type": "Point",
         "coordinates": [
           -66.1558512,
-          -17.394272100000002
+          -17.3942721
         ]
       },
       "properties": {
@@ -1335,28 +1084,6 @@
         "level": "1",
         "office": "government",
         "operator": "Gobierno Autónomo Municipal de Cochabamba"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 4941079662,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.28045130000001,
-          -17.3973139
-        ]
-      },
-      "properties": {
-        "id": 4941079662,
-        "name": "Gobierno Autónomo Municipal de Quillacollo",
-        "type": "townhall",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "alt_name": "Alcaldía de Quillacollo",
-        "amenity": "townhall",
-        "operator": "GAMQ"
       }
     },
     {
@@ -1387,8 +1114,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16223020000001,
-          -17.387337600000002
+          -66.1622302,
+          -17.3873376
         ]
       },
       "properties": {
@@ -1413,7 +1140,7 @@
         "type": "Point",
         "coordinates": [
           -66.1579232,
-          -17.403040200000003
+          -17.4030402
         ]
       },
       "properties": {
@@ -1428,91 +1155,6 @@
         "admin_level": "2",
         "office": "government",
         "short_name": "ODECO"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 5047074320,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.01543860000001,
-          -17.405710600000003
-        ]
-      },
-      "properties": {
-        "id": 5047074320,
-        "name": "Sub Alcaldía Villa Obrajes",
-        "type": "9",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "admin_level": "9",
-        "alt_name": "Sub Alcaldía Distrito 7 Villa Obrajes",
-        "contact:website": "https://sacaba.gob.bo/index.php/k2-portfolio/item/44-subalcaldia-distrito-7",
-        "office": "government",
-        "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:30"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 5047098903,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.03496550000001,
-          -17.4037995
-        ]
-      },
-      "properties": {
-        "id": 5047098903,
-        "name": "Sub Alcaldía Sacaba",
-        "type": "9",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "admin_level": "9",
-        "contact:website": "https://sacaba.gob.bo/index.php/k2-portfolio/item/42-subalcaldia-distrito-1",
-        "office": "government",
-        "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:30"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 5080872674,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.16319800000001,
-          -17.454064600000002
-        ]
-      },
-      "properties": {
-        "id": 5080872674,
-        "name": "Servicio General de Identificación Personal",
-        "type": "Cochabamba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Cochabamba",
-        "addr:street": "Calle Lorenzo Suarez de Figueroa",
-        "admin_level": "2",
-        "air_conditioning": "no",
-        "baby_feeding": "no",
-        "barrier": "wall",
-        "branch": "Zona Sur",
-        "description": "Oficina para obtener y renovar el Documento Nacional de Identidad y la Licencia de Conducir.",
-        "government": "register_office",
-        "level": "0",
-        "office": "government",
-        "opening_hours": "Mo-Fr 07:00-15:00; Sa,Su,PH Off",
-        "operator": "Servicio General de Identificación Personal",
-        "operator:short": "SEGIP",
-        "operator:type": "government",
-        "phone": "800101102;+591 2 2117405",
-        "short_name": "SEGIP",
-        "website": "https://www.segip.gob.bo/",
-        "wheelchair": "yes"
       }
     },
     {
@@ -1572,7 +1214,7 @@
         "type": "Point",
         "coordinates": [
           -66.1575316,
-          -17.394060000000003
+          -17.39406
         ]
       },
       "properties": {
@@ -1597,7 +1239,7 @@
         "type": "Point",
         "coordinates": [
           -66.1591198,
-          -17.385630900000002
+          -17.3856309
         ]
       },
       "properties": {
@@ -1622,41 +1264,11 @@
     },
     {
       "type": "Feature",
-      "id": 5117996944,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.1465883,
-          -17.389112700000002
-        ]
-      },
-      "properties": {
-        "id": 5117996944,
-        "name": "Fondo Nacional de Desarrollo Integral",
-        "type": "Cochabamba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Cochabamba",
-        "addr:housenumber": "1190",
-        "addr:neighbourhood": "San Pedro",
-        "addr:street": "Calle Colombia",
-        "admin_level": "2",
-        "branch": "Regional Cochabamba",
-        "contact:facebook": "https://www.facebook.com/fonadin/",
-        "contact:website": "https://fonadin.gob.bo/",
-        "government": "economy",
-        "office": "government",
-        "short_name": "FONADIN"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 5139313929,
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15628620000001,
+          -66.1562862,
           -17.3875777
         ]
       },
@@ -1688,8 +1300,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16127580000001,
-          -17.387666900000003
+          -66.1612758,
+          -17.3876669
         ]
       },
       "properties": {
@@ -1886,8 +1498,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16058430000001,
-          -17.365048400000003
+          -66.1605843,
+          -17.3650484
         ]
       },
       "properties": {
@@ -1913,8 +1525,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.20014710000001,
-          -17.376890600000003
+          -66.2001471,
+          -17.3768906
         ]
       },
       "properties": {
@@ -1936,7 +1548,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15491750000001,
+          -66.1549175,
           -17.394131
         ]
       },
@@ -1959,7 +1571,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.18060840000001,
+          -66.1806084,
           -17.3882692
         ]
       },
@@ -1985,7 +1597,7 @@
         "type": "Point",
         "coordinates": [
           -66.1821367,
-          -17.393712200000003
+          -17.3937122
         ]
       },
       "properties": {
@@ -2035,7 +1647,7 @@
         "type": "Point",
         "coordinates": [
           -66.1523267,
-          -17.387937800000003
+          -17.3879378
         ]
       },
       "properties": {
@@ -2082,26 +1694,6 @@
     },
     {
       "type": "Feature",
-      "id": 6541268169,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.03801700000001,
-          -17.405533900000002
-        ]
-      },
-      "properties": {
-        "id": 6541268169,
-        "name": "Impuestos",
-        "type": "Impuestos",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 6545239715,
       "geometry": {
         "type": "Point",
@@ -2130,7 +1722,7 @@
         "type": "Point",
         "coordinates": [
           -66.2186994,
-          -17.336913600000003
+          -17.3369136
         ]
       },
       "properties": {
@@ -2181,8 +1773,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.17390180000001,
-          -17.380097300000003
+          -66.1739018,
+          -17.3800973
         ]
       },
       "properties": {
@@ -2192,49 +1784,6 @@
         "category": "government",
         "subcategory": "administration",
         "osmType": "node",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 7235348531,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.03975120000001,
-          -17.403881000000002
-        ]
-      },
-      "properties": {
-        "id": 7235348531,
-        "name": "Servicio de Registro Cívico SERECI",
-        "type": "Sacaba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Sacaba",
-        "office": "government",
-        "opening_hours": "Mo-Fr 07:00-20:00; Sa-Su 09:00-13:00"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 7352829016,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.0414975,
-          -17.411338800000003
-        ]
-      },
-      "properties": {
-        "id": 7352829016,
-        "name": "Administración",
-        "type": "yes",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "government": "yes",
         "office": "government"
       }
     },
@@ -2272,7 +1821,7 @@
         "type": "Point",
         "coordinates": [
           -66.1499558,
-          -17.392173300000003
+          -17.3921733
         ]
       },
       "properties": {
@@ -2296,8 +1845,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.13969390000001,
-          -17.400403700000002
+          -66.1396939,
+          -17.4004037
         ]
       },
       "properties": {
@@ -2317,34 +1866,12 @@
     },
     {
       "type": "Feature",
-      "id": 8298143701,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -66.2657535,
-          -17.357459300000002
-        ]
-      },
-      "properties": {
-        "id": 8298143701,
-        "name": "Servicio Municipal de Agua Potable y Alcantarillado",
-        "type": "Quillacollo",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "node",
-        "addr:city": "Quillacollo",
-        "government": "water_utility_company",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 8584400948,
       "geometry": {
         "type": "Point",
         "coordinates": [
           -66.1430503,
-          -17.387329700000002
+          -17.3873297
         ]
       },
       "properties": {
@@ -2376,7 +1903,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15851690000001,
+          -66.1585169,
           -17.3927286
         ]
       },
@@ -2405,7 +1932,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15542380000001,
+          -66.1554238,
           -17.3949715
         ]
       },
@@ -2431,7 +1958,7 @@
         "type": "Point",
         "coordinates": [
           -66.1719458,
-          -17.358794900000003
+          -17.3587949
         ]
       },
       "properties": {
@@ -2462,7 +1989,7 @@
         "type": "Point",
         "coordinates": [
           -66.1661004,
-          -17.395564500000003
+          -17.3955645
         ]
       },
       "properties": {
@@ -2489,7 +2016,7 @@
         "type": "Point",
         "coordinates": [
           -66.1577211,
-          -17.393577200000003
+          -17.3935772
         ]
       },
       "properties": {
@@ -2524,7 +2051,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16236210000001,
+          -66.1623621,
           -17.3814479
         ]
       },
@@ -2585,7 +2112,7 @@
         "type": "Point",
         "coordinates": [
           -66.128393,
-          -17.375163800000003
+          -17.3751638
         ]
       },
       "properties": {
@@ -2613,8 +2140,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14676440000001,
-          -17.400946400000002
+          -66.1467644,
+          -17.4009464
         ]
       },
       "properties": {
@@ -2637,8 +2164,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14540740000001,
-          -17.387509100000003
+          -66.1454074,
+          -17.3875091
         ]
       },
       "properties": {
@@ -2726,7 +2253,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15916010000001,
+          -66.1591601,
           -17.4000986
         ]
       },
@@ -2756,7 +2283,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15922850000001,
+          -66.1592285,
           -17.4001011
         ]
       },
@@ -2785,7 +2312,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.16362840000001,
+          -66.1636284,
           -17.3790142
         ]
       },
@@ -2814,8 +2341,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15924720000001,
-          -17.399716700000003
+          -66.1592472,
+          -17.3997167
         ]
       },
       "properties": {
@@ -2840,7 +2367,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15925440000001,
+          -66.1592544,
           -17.4001427
         ]
       },
@@ -2870,8 +2397,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15925440000001,
-          -17.400196400000002
+          -66.1592544,
+          -17.4001964
         ]
       },
       "properties": {
@@ -2930,7 +2457,7 @@
         "type": "Point",
         "coordinates": [
           -66.1593304,
-          -17.400576200000003
+          -17.4005762
         ]
       },
       "properties": {
@@ -3013,8 +2540,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14906780000001,
-          -17.391770700000002
+          -66.1490678,
+          -17.3917707
         ]
       },
       "properties": {
@@ -3077,8 +2604,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.17080800000001,
-          -17.388039900000003
+          -66.170808,
+          -17.3880399
         ]
       },
       "properties": {
@@ -3104,7 +2631,7 @@
         "type": "Point",
         "coordinates": [
           -66.1667477,
-          -17.366488200000003
+          -17.3664882
         ]
       },
       "properties": {
@@ -3156,7 +2683,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15671490000001,
+          -66.1567149,
           -17.3851465
         ]
       },
@@ -3180,7 +2707,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.21865000000001,
+          -66.21865,
           -17.3384727
         ]
       },
@@ -3205,7 +2732,7 @@
         "type": "Point",
         "coordinates": [
           -66.1862682,
-          -17.398091200000003
+          -17.3980912
         ]
       },
       "properties": {
@@ -3233,7 +2760,7 @@
         "type": "Point",
         "coordinates": [
           -66.1589697,
-          -17.390712500000003
+          -17.3907125
         ]
       },
       "properties": {
@@ -3271,7 +2798,7 @@
         "type": "Point",
         "coordinates": [
           -66.1419269,
-          -17.394206500000003
+          -17.3942065
         ]
       },
       "properties": {
@@ -3304,8 +2831,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15942390000001,
-          -17.399723400000003
+          -66.1594239,
+          -17.3997234
         ]
       },
       "properties": {
@@ -3334,7 +2861,7 @@
         "type": "Point",
         "coordinates": [
           -66.1475892,
-          -17.401275300000002
+          -17.4012753
         ]
       },
       "properties": {
@@ -3366,7 +2893,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.17716610000001,
+          -66.1771661,
           -17.3593897
         ]
       },
@@ -3394,8 +2921,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.15366990000001,
-          -17.386597100000003
+          -66.1536699,
+          -17.3865971
         ]
       },
       "properties": {
@@ -3459,8 +2986,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.14402270000001,
-          -17.413925600000002
+          -66.1440227,
+          -17.4139256
         ]
       },
       "properties": {
@@ -3490,8 +3017,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -66.10849110000001,
-          -17.384282000000002
+          -66.1084911,
+          -17.384282
         ]
       },
       "properties": {
@@ -3515,7 +3042,7 @@
         "type": "Point",
         "coordinates": [
           -66.1572395,
-          -17.385005500000002
+          -17.3850055
         ]
       },
       "properties": {
@@ -3556,6 +3083,66 @@
     },
     {
       "type": "Feature",
+      "id": 13351766697,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537053,
+          -17.3929325
+        ]
+      },
+      "properties": {
+        "id": 13351766697,
+        "name": "Registro Judicial de Antecedentes Penales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "admin_level": "2",
+        "branch": "REJAP Cochabamba",
+        "government": "justice",
+        "level": "0",
+        "office": "government",
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "short_name": "REJAP",
+        "website": "https://magistratura.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13372370549,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.146587,
+          -17.3891301
+        ]
+      },
+      "properties": {
+        "id": 13372370549,
+        "name": "Coordinación Departamental del Programa SAFCI - Mi Salud",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Edificio Revilla",
+        "addr:neighbourhood": "San Pedro",
+        "addr:street": "Calle Julio Arauco Prado",
+        "admin_level": "4",
+        "government": "medical",
+        "level": "4",
+        "office": "government",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
       "id": 70730471,
       "geometry": {
         "type": "Polygon",
@@ -3563,39 +3150,39 @@
           [
             [
               -66.1776488,
-              -17.409572100000002
+              -17.4095721
             ],
             [
               -66.1781783,
-              -17.410116400000003
+              -17.4101164
             ],
             [
               -66.1781692,
               -17.4103463
             ],
             [
-              -66.17816210000001,
+              -66.1781621,
               -17.410591
             ],
             [
-              -66.17815970000001,
-              -17.410665400000003
+              -66.1781597,
+              -17.4106654
             ],
             [
               -66.1781631,
               -17.4106843
             ],
             [
-              -66.17815630000001,
-              -17.411003100000002
+              -66.1781563,
+              -17.4110031
             ],
             [
               -66.1781471,
               -17.4111015
             ],
             [
-              -66.17824920000001,
-              -17.411112600000003
+              -66.1782492,
+              -17.4111126
             ],
             [
               -66.1787285,
@@ -3606,15 +3193,15 @@
               -17.4112341
             ],
             [
-              -66.17950970000001,
+              -66.1795097,
               -17.411248
             ],
             [
-              -66.17968880000001,
+              -66.1796888,
               -17.4112671
             ],
             [
-              -66.17963420000001,
+              -66.1796342,
               -17.4108255
             ],
             [
@@ -3623,14 +3210,14 @@
             ],
             [
               -66.1795745,
-              -17.410330000000002
+              -17.41033
             ],
             [
               -66.1795709,
-              -17.410183800000002
+              -17.4101838
             ],
             [
-              -66.17956810000001,
+              -66.1795681,
               -17.4100693
             ],
             [
@@ -3638,32 +3225,32 @@
               -17.4092477
             ],
             [
-              -66.17945950000001,
-              -17.409105200000003
+              -66.1794595,
+              -17.4091052
             ],
             [
-              -66.17945560000001,
+              -66.1794556,
               -17.4090703
             ],
             [
-              -66.17904920000001,
-              -17.409012800000003
+              -66.1790492,
+              -17.4090128
             ],
             [
-              -66.17882540000001,
-              -17.408979000000002
+              -66.1788254,
+              -17.408979
             ],
             [
               -66.1786608,
               -17.4089199
             ],
             [
-              -66.17852950000001,
+              -66.1785295,
               -17.4088427
             ],
             [
               -66.1784932,
-              -17.408871100000002
+              -17.4088711
             ],
             [
               -66.1784574,
@@ -3671,7 +3258,7 @@
             ],
             [
               -66.1784319,
-              -17.408885400000003
+              -17.4088854
             ],
             [
               -66.1784082,
@@ -3683,7 +3270,7 @@
             ],
             [
               -66.1776488,
-              -17.409572100000002
+              -17.4095721
             ]
           ]
         ]
@@ -3726,27 +3313,27 @@
               -17.3927814
             ],
             [
-              -66.15706780000001,
+              -66.1570678,
               -17.3927318
             ],
             [
               -66.1570152,
-              -17.392998700000003
+              -17.3929987
             ],
             [
               -66.1569632,
               -17.3932773
             ],
             [
-              -66.15713050000001,
+              -66.1571305,
               -17.3933052
             ],
             [
               -66.1572629,
-              -17.393327300000003
+              -17.3933273
             ],
             [
-              -66.15731210000001,
+              -66.1573121,
               -17.3930605
             ],
             [
@@ -3759,7 +3346,7 @@
             ],
             [
               -66.1573024,
-              -17.392837200000002
+              -17.3928372
             ],
             [
               -66.1573128,
@@ -3801,15 +3388,15 @@
           [
             [
               -66.1215906,
-              -17.379374100000003
+              -17.3793741
             ],
             [
-              -66.12155390000001,
-              -17.379390800000003
+              -66.1215539,
+              -17.3793908
             ],
             [
               -66.1213907,
-              -17.379465200000002
+              -17.3794652
             ],
             [
               -66.1210566,
@@ -3817,151 +3404,147 @@
             ],
             [
               -66.1208617,
-              -17.379453400000003
+              -17.3794534
             ],
             [
               -66.120491,
-              -17.379529400000003
+              -17.3795294
             ],
             [
-              -66.12016530000001,
+              -66.1201653,
               -17.3795219
             ],
             [
               -66.1197557,
-              -17.379445800000003
+              -17.3794458
             ],
             [
-              -66.1195708,
-              -17.379466800000003
+              -66.1196346,
+              -17.3793916
             ],
             [
-              -66.1194782,
-              -17.379443000000002
+              -66.1194594,
+              -17.3793642
             ],
             [
-              -66.1191744,
-              -17.379302300000003
+              -66.1192644,
+              -17.379288
             ],
             [
               -66.1190323,
-              -17.379155700000002
+              -17.3791557
             ],
             [
-              -66.11859980000001,
+              -66.1185998,
               -17.3789556
             ],
             [
-              -66.11847560000001,
-              -17.3789103
+              -66.1184153,
+              -17.3788266
             ],
             [
-              -66.11836000000001,
-              -17.378815300000003
+              -66.1182723,
+              -17.3787316
             ],
             [
-              -66.11804280000001,
-              -17.378721000000002
+              -66.1181387,
+              -17.3786294
             ],
             [
-              -66.11784890000001,
-              -17.378597000000003
+              -66.1179558,
+              -17.3785368
             ],
             [
-              -66.1176082,
-              -17.378497300000003
+              -66.1176521,
+              -17.3784371
             ],
             [
-              -66.11720650000001,
-              -17.378360500000003
+              -66.1173024,
+              -17.3783291
             ],
             [
-              -66.1173055,
-              -17.378170400000002
+              -66.117441,
+              -17.3782559
             ],
             [
-              -66.11759860000001,
-              -17.3780053
+              -66.117728,
+              -17.3780388
             ],
             [
-              -66.1177693,
-              -17.377913500000002
+              -66.1186876,
+              -17.3776494
             ],
             [
-              -66.11855050000001,
-              -17.377664600000003
-            ],
-            [
-              -66.11863430000001,
-              -17.3776379
-            ],
-            [
-              -66.1186639,
-              -17.3776285
-            ],
-            [
-              -66.1186966,
-              -17.377617400000002
+              -66.1187112,
+              -17.3776365
             ],
             [
               -66.119005,
               -17.3775128
             ],
             [
-              -66.1192535,
-              -17.377711100000003
-            ],
-            [
               -66.1193588,
               -17.3777951
             ],
             [
-              -66.11953410000001,
+              -66.119374,
+              -17.3778076
+            ],
+            [
+              -66.1194376,
+              -17.3778601
+            ],
+            [
+              -66.1195091,
+              -17.3779192
+            ],
+            [
+              -66.1195341,
               -17.3779399
             ],
             [
-              -66.12001400000001,
-              -17.378262000000003
+              -66.120014,
+              -17.378262
             ],
             [
-              -66.12017900000001,
-              -17.378359500000002
+              -66.120179,
+              -17.3783595
             ],
             [
-              -66.12020980000001,
-              -17.378367400000002
+              -66.1202098,
+              -17.3783674
             ],
             [
-              -66.12042290000001,
-              -17.378455300000002
+              -66.1204229,
+              -17.3784553
             ],
             [
-              -66.12044470000001,
+              -66.1204447,
               -17.3784625
             ],
             [
               -66.1205439,
-              -17.378508800000002
+              -17.3785088
             ],
             [
-              -66.12058900000001,
-              -17.378524300000002
+              -66.120589,
+              -17.3785243
             ],
             [
-              -66.12075300000001,
+              -66.120753,
               -17.3786068
             ],
             [
-              -66.12105480000001,
+              -66.1210548,
               -17.3787512
             ],
             [
               -66.1216613,
-              -17.379292900000003
+              -17.3792929
             ],
             [
               -66.1215906,
-              -17.379374100000003
+              -17.3793741
             ]
           ]
         ]
@@ -3976,14 +3559,16 @@
         "addr:city": "Cochabamba",
         "addr:street": "Calle Felipe Monrroy",
         "barrier": "wall",
-        "description": "La Empresa Municipal de Servicios de Aseo (EMSA) es responsable de brindar el Servicio de Aseo Urbano a la ciudad de Cochabamba.",
+        "description": "Empresa responsable de regular la limpieza de espacios públicos y privados, la recolección, transporte, tratamiento, y disposición final de los residuos sólidos de la ciudad de Cochabamba.",
         "government": "public_service",
         "office": "government",
         "operator": "Empresa Municipal de Servicios de Aseo",
         "operator:short": "EMSA",
         "operator:type": "public",
-        "phone": "+591 4 4298241",
+        "phone": "+591 4 492059;+591 4 4298241",
+        "related_law": "LM 1774/2025",
         "short_name": "EMSA",
+        "source": "Ley Municipal 1774/2025",
         "start_date": "1997-01-24",
         "website": "https://www.emsa.gob.bo/"
       }
@@ -3997,14 +3582,14 @@
           [
             [
               -66.1288121,
-              -17.418884700000003
+              -17.4188847
             ],
             [
               -66.1287618,
               -17.4188829
             ],
             [
-              -66.12870500000001,
+              -66.128705,
               -17.4188808
             ],
             [
@@ -4017,7 +3602,7 @@
             ],
             [
               -66.1287059,
-              -17.419021700000002
+              -17.4190217
             ],
             [
               -66.1287681,
@@ -4028,11 +3613,11 @@
               -17.4190359
             ],
             [
-              -66.12883590000001,
+              -66.1288359,
               -17.4190384
             ],
             [
-              -66.12883620000001,
+              -66.1288362,
               -17.4190298
             ],
             [
@@ -4040,7 +3625,7 @@
               -17.4190302
             ],
             [
-              -66.12885150000001,
+              -66.1288515,
               -17.4189435
             ],
             [
@@ -4053,7 +3638,7 @@
             ],
             [
               -66.1288121,
-              -17.418884700000003
+              -17.4188847
             ]
           ]
         ]
@@ -4091,19 +3676,19 @@
         "coordinates": [
           [
             [
-              -66.13596740000001,
-              -17.372940800000002
+              -66.1359674,
+              -17.3729408
             ],
             [
               -66.1359499,
-              -17.373066700000003
+              -17.3730667
             ],
             [
               -66.1359456,
-              -17.373098000000002
+              -17.373098
             ],
             [
-              -66.13610890000001,
+              -66.1361089,
               -17.3731183
             ],
             [
@@ -4112,7 +3697,7 @@
             ],
             [
               -66.1358991,
-              -17.373343700000003
+              -17.3733437
             ],
             [
               -66.1358757,
@@ -4139,12 +3724,12 @@
               -17.3729398
             ],
             [
-              -66.13585880000001,
+              -66.1358588,
               -17.3729447
             ],
             [
-              -66.13596740000001,
-              -17.372940800000002
+              -66.1359674,
+              -17.3729408
             ]
           ]
         ]
@@ -4184,18 +3769,18 @@
           [
             [
               -66.2263271,
-              -17.395124900000003
+              -17.3951249
             ],
             [
-              -66.22646680000001,
+              -66.2264668,
               -17.3963915
             ],
             [
               -66.226487,
-              -17.396648900000002
+              -17.3966489
             ],
             [
-              -66.22660210000001,
+              -66.2266021,
               -17.3976356
             ],
             [
@@ -4203,71 +3788,71 @@
               -17.3985512
             ],
             [
-              -66.22626980000001,
+              -66.2262698,
               -17.3992323
             ],
             [
-              -66.22622360000001,
+              -66.2262236,
               -17.3992718
             ],
             [
               -66.2262247,
-              -17.399307800000003
+              -17.3993078
             ],
             [
-              -66.22562590000001,
-              -17.399330600000003
+              -66.2256259,
+              -17.3993306
             ],
             [
-              -66.22554020000001,
+              -66.2255402,
               -17.3993061
             ],
             [
-              -66.22543470000001,
+              -66.2254347,
               -17.3993122
             ],
             [
-              -66.22543780000001,
+              -66.2254378,
               -17.3993265
             ],
             [
               -66.2253027,
-              -17.399335100000002
+              -17.3993351
             ],
             [
-              -66.22530230000001,
-              -17.399319000000002
+              -66.2253023,
+              -17.399319
             ],
             [
               -66.2252593,
-              -17.399319900000002
+              -17.3993199
             ],
             [
-              -66.22498230000001,
-              -17.399326300000002
+              -66.2249823,
+              -17.3993263
             ],
             [
-              -66.22495470000001,
+              -66.2249547,
               -17.3993274
             ],
             [
               -66.2249553,
-              -17.399345800000003
+              -17.3993458
             ],
             [
               -66.2242928,
-              -17.399369200000002
+              -17.3993692
             ],
             [
               -66.2242149,
-              -17.398526500000003
+              -17.3985265
             ],
             [
               -66.2240833,
-              -17.397185500000003
+              -17.3971855
             ],
             [
-              -66.22396880000001,
+              -66.2239688,
               -17.3960943
             ],
             [
@@ -4275,11 +3860,11 @@
               -17.3959285
             ],
             [
-              -66.22407700000001,
+              -66.224077,
               -17.3958835
             ],
             [
-              -66.22414020000001,
+              -66.2241402,
               -17.3959498
             ],
             [
@@ -4291,12 +3876,12 @@
               -17.3958908
             ],
             [
-              -66.22433120000001,
-              -17.395881600000003
+              -66.2243312,
+              -17.3958816
             ],
             [
               -66.2243591,
-              -17.395787700000003
+              -17.3957877
             ],
             [
               -66.2244469,
@@ -4312,38 +3897,38 @@
             ],
             [
               -66.2245918,
-              -17.395787600000002
+              -17.3957876
             ],
             [
-              -66.22470790000001,
-              -17.395744800000003
+              -66.2247079,
+              -17.3957448
             ],
             [
-              -66.22473000000001,
+              -66.22473,
               -17.3957367
             ],
             [
               -66.2247416,
-              -17.395680600000002
+              -17.3956806
             ],
             [
               -66.2247784,
-              -17.395637500000003
+              -17.3956375
             ],
             [
               -66.2252888,
               -17.3954567
             ],
             [
-              -66.22531690000001,
+              -66.2253169,
               -17.3954668
             ],
             [
               -66.225345,
-              -17.395456900000003
+              -17.3954569
             ],
             [
-              -66.22537790000001,
+              -66.2253779,
               -17.3954451
             ],
             [
@@ -4351,20 +3936,20 @@
               -17.3954208
             ],
             [
-              -66.22549210000001,
+              -66.2254921,
               -17.3954042
             ],
             [
-              -66.22550580000001,
+              -66.2255058,
               -17.3953776
             ],
             [
-              -66.22628250000001,
+              -66.2262825,
               -17.3951129
             ],
             [
               -66.2263271,
-              -17.395124900000003
+              -17.3951249
             ]
           ]
         ]
@@ -4407,8 +3992,8 @@
               -17.3736302
             ],
             [
-              -66.12870090000001,
-              -17.373623600000002
+              -66.1287009,
+              -17.3736236
             ],
             [
               -66.1287374,
@@ -4416,63 +4001,63 @@
             ],
             [
               -66.1287578,
-              -17.373673500000002
+              -17.3736735
             ],
             [
               -66.1287734,
-              -17.373791800000003
+              -17.3737918
             ],
             [
-              -66.12889870000001,
+              -66.1288987,
               -17.3747428
             ],
             [
               -66.1288239,
-              -17.374754600000003
+              -17.3747546
             ],
             [
               -66.1288268,
               -17.3747714
             ],
             [
-              -66.12885560000001,
+              -66.1288556,
               -17.3749463
             ],
             [
-              -66.12884580000001,
-              -17.375006000000003
+              -66.1288458,
+              -17.375006
             ],
             [
-              -66.12883160000001,
+              -66.1288316,
               -17.3750465
             ],
             [
               -66.1287836,
-              -17.375099300000002
+              -17.3750993
             ],
             [
               -66.12859,
               -17.3752293
             ],
             [
-              -66.12820640000001,
+              -66.1282064,
               -17.3754938
             ],
             [
               -66.1281708,
-              -17.375518300000003
+              -17.3755183
             ],
             [
-              -66.12814490000001,
-              -17.375486000000002
+              -66.1281449,
+              -17.375486
             ],
             [
               -66.128066,
-              -17.374952200000003
+              -17.3749522
             ],
             [
-              -66.12803330000001,
-              -17.374768600000003
+              -66.1280333,
+              -17.3747686
             ],
             [
               -66.1280201,
@@ -4483,8 +4068,8 @@
               -17.3744055
             ],
             [
-              -66.12789930000001,
-              -17.373866300000003
+              -66.1278993,
+              -17.3738663
             ],
             [
               -66.1278578,
@@ -4527,8 +4112,8 @@
               -17.3995821
             ],
             [
-              -66.15868680000001,
-              -17.399585000000002
+              -66.1586868,
+              -17.399585
             ],
             [
               -66.1587346,
@@ -4539,11 +4124,11 @@
               -17.3995888
             ],
             [
-              -66.15890230000001,
+              -66.1589023,
               -17.3995931
             ],
             [
-              -66.15942960000001,
+              -66.1594296,
               -17.3996092
             ],
             [
@@ -4551,8 +4136,8 @@
               -17.3996123
             ],
             [
-              -66.15999500000001,
-              -17.399621800000002
+              -66.159995,
+              -17.3996218
             ],
             [
               -66.1599848,
@@ -4560,86 +4145,86 @@
             ],
             [
               -66.1599807,
-              -17.399932600000003
+              -17.3999326
             ],
             [
-              -66.15989660000001,
-              -17.400787100000002
+              -66.1598966,
+              -17.4007871
             ],
             [
               -66.1598433,
-              -17.401187500000002
+              -17.4011875
             ],
             [
               -66.1597777,
-              -17.401574800000002
+              -17.4015748
             ],
             [
               -66.1597155,
-              -17.401737200000003
+              -17.4017372
             ],
             [
               -66.1594106,
               -17.4022143
             ],
             [
-              -66.15932860000001,
+              -66.1593286,
               -17.4029315
             ],
             [
-              -66.1592815,
-              -17.4033716
+              -66.1592718,
+              -17.4033276
             ],
             [
-              -66.15921200000001,
-              -17.4035939
+              -66.1591999,
+              -17.4035893
             ],
             [
-              -66.15915050000001,
-              -17.4037906
+              -66.1590971,
+              -17.4038601
             ],
             [
-              -66.1589464,
-              -17.404289000000002
+              -66.1589246,
+              -17.4043423
             ],
             [
-              -66.15888620000001,
-              -17.4043305
+              -66.1588571,
+              -17.4043838
             ],
             [
-              -66.15882060000001,
-              -17.404366900000003
+              -66.1587789,
+              -17.4044092
             ],
             [
-              -66.15873760000001,
-              -17.404388400000002
+              -66.1586824,
+              -17.4044086
             ],
             [
-              -66.1586654,
-              -17.4043947
-            ],
-            [
-              -66.15858270000001,
-              -17.404386600000002
+              -66.1585876,
+              -17.4043982
             ],
             [
               -66.1585161,
-              -17.404373500000002
+              -17.4043735
             ],
             [
-              -66.15847160000001,
+              -66.1584716,
               -17.4043469
             ],
             [
-              -66.1583676,
-              -17.404285
+              -66.1583555,
+              -17.4042873
             ],
             [
-              -66.15842020000001,
-              -17.404214500000002
+              -66.1584,
+              -17.4042509
             ],
             [
-              -66.15861910000001,
+              -66.1584202,
+              -17.4042145
+            ],
+            [
+              -66.1586191,
               -17.4037505
             ],
             [
@@ -4651,32 +4236,32 @@
               -17.4036307
             ],
             [
-              -66.15857390000001,
+              -66.1585739,
               -17.4035735
             ],
             [
               -66.1584844,
-              -17.403544500000002
+              -17.4035445
             ],
             [
               -66.1584086,
-              -17.403555100000002
+              -17.4035551
             ],
             [
-              -66.15834140000001,
-              -17.403588900000003
+              -66.1583414,
+              -17.4035889
             ],
             [
-              -66.15834860000001,
+              -66.1583486,
               -17.4035365
             ],
             [
               -66.1583531,
-              -17.403505900000003
+              -17.4035059
             ],
             [
-              -66.15844890000001,
-              -17.402782000000002
+              -66.1584489,
+              -17.402782
             ],
             [
               -66.1584976,
@@ -4691,23 +4276,27 @@
               -17.4015331
             ],
             [
-              -66.15861670000001,
+              -66.1586167,
               -17.4012943
             ],
             [
-              -66.15841470000001,
+              -66.1584147,
               -17.4012673
             ],
             [
               -66.1578551,
-              -17.401207300000003
+              -17.4012073
             ],
             [
-              -66.15769900000001,
-              -17.401193000000003
+              -66.157699,
+              -17.401193
             ],
             [
-              -66.15774490000001,
+              -66.1577187,
+              -17.4009893
+            ],
+            [
+              -66.1577449,
               -17.4007186
             ],
             [
@@ -4715,36 +4304,36 @@
               -17.4006437
             ],
             [
-              -66.15830670000001,
-              -17.400699200000002
+              -66.1583067,
+              -17.4006992
             ],
             [
-              -66.15854540000001,
-              -17.400720900000003
+              -66.1585454,
+              -17.4007209
             ],
             [
-              -66.15861650000001,
+              -66.1586165,
               -17.4007268
             ],
             [
               -66.1586154,
-              -17.400486400000002
+              -17.4004864
             ],
             [
               -66.1586197,
-              -17.399992400000002
+              -17.3999924
             ],
             [
               -66.1586235,
               -17.3998861
             ],
             [
-              -66.15862650000001,
-              -17.399802700000002
+              -66.1586265,
+              -17.3998027
             ],
             [
               -66.1586291,
-              -17.399727900000002
+              -17.3997279
             ],
             [
               -66.158634,
@@ -4788,52 +4377,52 @@
         "coordinates": [
           [
             [
-              -66.14778580000001,
+              -66.1477858,
               -17.4009378
             ],
             [
-              -66.14694730000001,
+              -66.1469473,
               -17.4008104
             ],
             [
-              -66.14648860000001,
+              -66.1464886,
               -17.4007407
             ],
             [
               -66.1464847,
-              -17.400764000000002
+              -17.400764
             ],
             [
               -66.1464626,
-              -17.400928200000003
+              -17.4009282
             ],
             [
               -66.146444,
               -17.4010488
             ],
             [
-              -66.14641130000001,
+              -66.1464113,
               -17.401257
             ],
             [
-              -66.14645180000001,
+              -66.1464518,
               -17.4012682
             ],
             [
-              -66.14654750000001,
-              -17.401302700000002
+              -66.1465475,
+              -17.4013027
             ],
             [
-              -66.14719840000001,
+              -66.1471984,
               -17.4016455
             ],
             [
-              -66.14741570000001,
-              -17.401751700000002
+              -66.1474157,
+              -17.4017517
             ],
             [
-              -66.14746670000001,
-              -17.401765800000003
+              -66.1474667,
+              -17.4017658
             ],
             [
               -66.1475343,
@@ -4852,23 +4441,23 @@
               -17.4016315
             ],
             [
-              -66.14777740000001,
+              -66.1477774,
               -17.401295
             ],
             [
               -66.1478395,
-              -17.401047900000002
+              -17.4010479
             ],
             [
-              -66.14783410000001,
-              -17.400994100000002
+              -66.1478341,
+              -17.4009941
             ],
             [
-              -66.14781260000001,
-              -17.400958300000003
+              -66.1478126,
+              -17.4009583
             ],
             [
-              -66.14778580000001,
+              -66.1477858,
               -17.4009378
             ]
           ]
@@ -4896,6 +4485,205 @@
     },
     {
       "type": "Feature",
+      "id": 472388107,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1775482,
+              -17.3688833
+            ],
+            [
+              -66.1772136,
+              -17.3688263
+            ],
+            [
+              -66.177221,
+              -17.3691457
+            ],
+            [
+              -66.1774812,
+              -17.3691418
+            ],
+            [
+              -66.1774986,
+              -17.3691316
+            ],
+            [
+              -66.1775107,
+              -17.3691098
+            ],
+            [
+              -66.1775482,
+              -17.3688833
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 472388107,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Santa Mónica",
+        "addr:street": "Calle Quilla",
+        "admin_level": "2",
+        "barrier": "wall",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 494015059,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1538547,
+              -17.3927946
+            ],
+            [
+              -66.153843,
+              -17.3928568
+            ],
+            [
+              -66.1538122,
+              -17.3930217
+            ],
+            [
+              -66.1537997,
+              -17.3930889
+            ],
+            [
+              -66.1536625,
+              -17.3930654
+            ],
+            [
+              -66.1537146,
+              -17.3927893
+            ],
+            [
+              -66.1537337,
+              -17.3927746
+            ],
+            [
+              -66.1537942,
+              -17.3927846
+            ],
+            [
+              -66.1538547,
+              -17.3927946
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 494015059,
+        "name": "Derechos Reales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "admin_level": "2",
+        "branch": "Cochabamba Centro",
+        "building": "office",
+        "building:levels": "1",
+        "contact:whatsapp": "+591 71160362",
+        "government": "cadaster",
+        "office": "government",
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "roof:shape": "gabled",
+        "short_name": "DDRR",
+        "website": "https://tramitesddrr.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 499430340,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1563802,
+              -17.3491756
+            ],
+            [
+              -66.1566372,
+              -17.3501206
+            ],
+            [
+              -66.1566941,
+              -17.3503413
+            ],
+            [
+              -66.155916,
+              -17.3505854
+            ],
+            [
+              -66.1558592,
+              -17.3506033
+            ],
+            [
+              -66.1558137,
+              -17.350422
+            ],
+            [
+              -66.155942,
+              -17.350385
+            ],
+            [
+              -66.1561158,
+              -17.3502319
+            ],
+            [
+              -66.1560521,
+              -17.3501407
+            ],
+            [
+              -66.1561543,
+              -17.3500947
+            ],
+            [
+              -66.1562245,
+              -17.3499112
+            ],
+            [
+              -66.1559748,
+              -17.3492752
+            ],
+            [
+              -66.1563802,
+              -17.3491756
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 499430340,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "barrier": "yes",
+        "government": "yes",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
       "id": 503889767,
       "geometry": {
         "type": "Polygon",
@@ -4907,18 +4695,18 @@
             ],
             [
               -66.166335,
-              -17.396657700000002
+              -17.3966577
             ],
             [
               -66.1662706,
-              -17.396659800000002
+              -17.3966598
             ],
             [
               -66.166235,
-              -17.396662000000003
+              -17.396662
             ],
             [
-              -66.16603520000001,
+              -66.1660352,
               -17.3966715
             ],
             [
@@ -4927,15 +4715,15 @@
             ],
             [
               -66.1659669,
-              -17.396672300000002
+              -17.3966723
             ],
             [
-              -66.16574050000001,
-              -17.396678700000002
+              -66.1657405,
+              -17.3966787
             ],
             [
               -66.1657184,
-              -17.396655000000003
+              -17.396655
             ],
             [
               -66.1657129,
@@ -4943,10 +4731,10 @@
             ],
             [
               -66.1658177,
-              -17.395611600000002
+              -17.3956116
             ],
             [
-              -66.16583560000001,
+              -66.1658356,
               -17.3955932
             ],
             [
@@ -4955,31 +4743,31 @@
             ],
             [
               -66.1661277,
-              -17.395542000000003
+              -17.395542
             ],
             [
               -66.1662118,
-              -17.395529900000003
+              -17.3955299
             ],
             [
-              -66.16639230000001,
-              -17.395504000000003
+              -66.1663923,
+              -17.395504
             ],
             [
               -66.1666794,
-              -17.395461800000003
+              -17.3954618
             ],
             [
               -66.1667073,
               -17.395592
             ],
             [
-              -66.16673300000001,
+              -66.166733,
               -17.3957115
             ],
             [
-              -66.16676310000001,
-              -17.395857300000003
+              -66.1667631,
+              -17.3958573
             ],
             [
               -66.1667889,
@@ -4987,26 +4775,26 @@
             ],
             [
               -66.1669239,
-              -17.395957000000003
+              -17.395957
             ],
             [
               -66.1669514,
-              -17.396088300000002
+              -17.3960883
             ],
             [
-              -66.16696830000001,
-              -17.396162200000003
+              -66.1669683,
+              -17.3961622
             ],
             [
-              -66.16695680000001,
+              -66.1669568,
               -17.3961614
             ],
             [
-              -66.16682610000001,
+              -66.1668261,
               -17.396166
             ],
             [
-              -66.16646820000001,
+              -66.1664682,
               -17.3961773
             ],
             [
@@ -5015,7 +4803,7 @@
             ],
             [
               -66.1664772,
-              -17.396493900000003
+              -17.3964939
             ],
             [
               -66.1664832,
@@ -5054,11 +4842,11 @@
         "coordinates": [
           [
             [
-              -66.14147080000001,
-              -17.446884400000002
+              -66.1414708,
+              -17.4468844
             ],
             [
-              -66.14145300000001,
+              -66.141453,
               -17.4468679
             ],
             [
@@ -5079,18 +4867,18 @@
             ],
             [
               -66.1410271,
-              -17.446808500000003
+              -17.4468085
             ],
             [
-              -66.14101310000001,
+              -66.1410131,
               -17.4470414
             ],
             [
               -66.1409991,
-              -17.447274200000003
+              -17.4472742
             ],
             [
-              -66.14102720000001,
+              -66.1410272,
               -17.4472965
             ],
             [
@@ -5102,8 +4890,8 @@
               -17.4472698
             ],
             [
-              -66.14147080000001,
-              -17.446884400000002
+              -66.1414708,
+              -17.4468844
             ]
           ]
         ]
@@ -5140,7 +4928,7 @@
               -17.386782
             ],
             [
-              -66.11084550000001,
+              -66.1108455,
               -17.3869267
             ],
             [
@@ -5152,15 +4940,15 @@
               -17.3871533
             ],
             [
-              -66.11144510000001,
+              -66.1114451,
               -17.3870426
             ],
             [
-              -66.11146020000001,
+              -66.1114602,
               -17.3870383
             ],
             [
-              -66.11139250000001,
+              -66.1113925,
               -17.3867954
             ],
             [
@@ -5191,53 +4979,6 @@
     },
     {
       "type": "Feature",
-      "id": 517122410,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.0736042,
-              -17.3927742
-            ],
-            [
-              -66.07365250000001,
-              -17.3931249
-            ],
-            [
-              -66.0733333,
-              -17.393165800000002
-            ],
-            [
-              -66.073277,
-              -17.3928049
-            ],
-            [
-              -66.0736042,
-              -17.3927742
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 517122410,
-        "name": "Sub Alcaldía Guadalupe",
-        "type": "townhall",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "addr:city": "Sacaba",
-        "addr:street": "Avenida Chapare",
-        "alt_name": "Sub Alcaldía Distrito 4 Guadalupe",
-        "amenity": "townhall",
-        "barrier": "wall",
-        "contact:website": "https://sacaba.gob.bo/index.php/k2-portfolio/item/23-subalcaldia-distrito-4",
-        "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:30",
-        "townhall:type": "district"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 545602264,
       "geometry": {
         "type": "Polygon",
@@ -5245,35 +4986,35 @@
           [
             [
               -66.1726584,
-              -17.408639500000003
+              -17.4086395
             ],
             [
               -66.1718565,
-              -17.409155900000002
+              -17.4091559
             ],
             [
               -66.1719619,
-              -17.409314100000003
+              -17.4093141
             ],
             [
               -66.1722584,
-              -17.409757600000002
+              -17.4097576
             ],
             [
-              -66.17228320000001,
+              -66.1722832,
               -17.4097684
             ],
             [
               -66.172312,
-              -17.409768000000003
+              -17.409768
             ],
             [
-              -66.17267310000001,
+              -66.1726731,
               -17.4095438
             ],
             [
-              -66.17265420000001,
-              -17.409515300000002
+              -66.1726542,
+              -17.4095153
             ],
             [
               -66.1725674,
@@ -5285,31 +5026,31 @@
             ],
             [
               -66.1725033,
-              -17.409360200000002
+              -17.4093602
             ],
             [
-              -66.17247540000001,
-              -17.409377900000003
+              -66.1724754,
+              -17.4093779
             ],
             [
-              -66.17232870000001,
+              -66.1723287,
               -17.4091571
             ],
             [
-              -66.17280810000001,
-              -17.408860500000003
+              -66.1728081,
+              -17.4088605
             ],
             [
               -66.1727886,
-              -17.408832800000003
+              -17.4088328
             ],
             [
-              -66.17267100000001,
-              -17.408665000000003
+              -66.172671,
+              -17.408665
             ],
             [
               -66.1726584,
-              -17.408639500000003
+              -17.4086395
             ]
           ]
         ]
@@ -5352,15 +5093,15 @@
               -17.3880385
             ],
             [
-              -66.15686550000001,
+              -66.1568655,
               -17.3880647
             ],
             [
               -66.1568539,
-              -17.388134800000003
+              -17.3881348
             ],
             [
-              -66.15683010000001,
+              -66.1568301,
               -17.3882717
             ],
             [
@@ -5368,7 +5109,7 @@
               -17.3881985
             ],
             [
-              -66.15634530000001,
+              -66.1563453,
               -17.3880222
             ],
             [
@@ -5376,16 +5117,16 @@
               -17.3879819
             ],
             [
-              -66.15638080000001,
+              -66.1563808,
               -17.387986
             ],
             [
               -66.1565315,
-              -17.388006800000003
+              -17.3880068
             ],
             [
               -66.1565552,
-              -17.387850800000002
+              -17.3878508
             ],
             [
               -66.1567215,
@@ -5413,6 +5154,63 @@
     },
     {
       "type": "Feature",
+      "id": 562300922,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.2011348,
+              -17.3537398
+            ],
+            [
+              -66.2006386,
+              -17.354216
+            ],
+            [
+              -66.2005894,
+              -17.3542634
+            ],
+            [
+              -66.2003356,
+              -17.3543473
+            ],
+            [
+              -66.200402,
+              -17.3544699
+            ],
+            [
+              -66.2006186,
+              -17.3548698
+            ],
+            [
+              -66.2014542,
+              -17.3543761
+            ],
+            [
+              -66.201325,
+              -17.354103
+            ],
+            [
+              -66.2011348,
+              -17.3537398
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 562300922,
+        "name": "",
+        "type": "fence",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "barrier": "fence",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
       "id": 603094718,
       "geometry": {
         "type": "Polygon",
@@ -5420,18 +5218,18 @@
           [
             [
               -66.1551206,
-              -17.388276400000002
+              -17.3882764
             ],
             [
               -66.1548503,
               -17.3882221
             ],
             [
-              -66.15482800000001,
-              -17.388217500000003
+              -66.154828,
+              -17.3882175
             ],
             [
-              -66.15481030000001,
+              -66.1548103,
               -17.3882146
             ],
             [
@@ -5440,11 +5238,11 @@
             ],
             [
               -66.1541854,
-              -17.387929900000003
+              -17.3879299
             ],
             [
-              -66.15419870000001,
-              -17.387870900000003
+              -66.1541987,
+              -17.3878709
             ],
             [
               -66.1542337,
@@ -5452,15 +5250,15 @@
             ],
             [
               -66.1544952,
-              -17.387756000000003
+              -17.387756
             ],
             [
               -66.1546165,
-              -17.387774200000003
+              -17.3877742
             ],
             [
               -66.1547529,
-              -17.387794600000003
+              -17.3877946
             ],
             [
               -66.1547616,
@@ -5472,14 +5270,14 @@
             ],
             [
               -66.1548253,
-              -17.387528300000003
+              -17.3875283
             ],
             [
               -66.1548532,
               -17.3875347
             ],
             [
-              -66.15488660000001,
+              -66.1548866,
               -17.3875424
             ],
             [
@@ -5492,23 +5290,23 @@
             ],
             [
               -66.1552367,
-              -17.387620000000002
+              -17.38762
             ],
             [
               -66.155247,
-              -17.387635000000003
+              -17.387635
             ],
             [
-              -66.15522370000001,
+              -66.1552237,
               -17.3877695
             ],
             [
               -66.1552193,
-              -17.387791200000002
+              -17.3877912
             ],
             [
               -66.1551206,
-              -17.388276400000002
+              -17.3882764
             ]
           ]
         ]
@@ -5535,196 +5333,29 @@
     },
     {
       "type": "Feature",
-      "id": 621533632,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.27653880000001,
-              -17.397389500000003
-            ],
-            [
-              -66.27658570000001,
-              -17.397770400000002
-            ],
-            [
-              -66.2758292,
-              -17.397812700000003
-            ],
-            [
-              -66.275777,
-              -17.397506500000002
-            ],
-            [
-              -66.2759439,
-              -17.3975139
-            ],
-            [
-              -66.27591260000001,
-              -17.3973148
-            ],
-            [
-              -66.2762596,
-              -17.397312300000003
-            ],
-            [
-              -66.2762622,
-              -17.3973471
-            ],
-            [
-              -66.2763431,
-              -17.3973446
-            ],
-            [
-              -66.2763379,
-              -17.3973969
-            ],
-            [
-              -66.27653880000001,
-              -17.397389500000003
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 621533632,
-        "name": "Dirección Distrital de Educación de Quillacollo",
-        "type": "Quillacollo",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "addr:city": "Quillacollo",
-        "addr:street": "Calle Fructuoso Mercado",
-        "admin_level": "4",
-        "barrier": "wall",
-        "email": "info@ddecochabamba.gob.bo",
-        "government": "education",
-        "office": "government",
-        "operator": "Dirección Departamental de Educación Cochabamba",
-        "operator:short": "DDE Cochabamba",
-        "operator:type": "public",
-        "phone": "+591 4 4263296",
-        "website": "https://www.ddecochabamba.gob.bo/"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 738683727,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.2713533,
-              -17.3914173
-            ],
-            [
-              -66.2712905,
-              -17.391899000000002
-            ],
-            [
-              -66.2712688,
-              -17.391924300000003
-            ],
-            [
-              -66.2707616,
-              -17.391869
-            ],
-            [
-              -66.2708003,
-              -17.391447300000003
-            ],
-            [
-              -66.2704042,
-              -17.3914058
-            ],
-            [
-              -66.27041080000001,
-              -17.3913675
-            ],
-            [
-              -66.27041630000001,
-              -17.3912851
-            ],
-            [
-              -66.27042730000001,
-              -17.391196100000002
-            ],
-            [
-              -66.2704525,
-              -17.390966600000002
-            ],
-            [
-              -66.2704539,
-              -17.390953900000003
-            ],
-            [
-              -66.2704549,
-              -17.3909448
-            ],
-            [
-              -66.2709186,
-              -17.391014000000002
-            ],
-            [
-              -66.2709234,
-              -17.3909932
-            ],
-            [
-              -66.2713726,
-              -17.391037
-            ],
-            [
-              -66.2713896,
-              -17.3910601
-            ],
-            [
-              -66.2713533,
-              -17.3914173
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 738683727,
-        "name": "Servicio Nacional de Sanidad Animal",
-        "type": "51",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "addr:housenumber": "51",
-        "addr:street": "Calle Cincinato Prada",
-        "barrier": "yes",
-        "office": "government",
-        "short_name": "SENASAG"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 775614072,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -66.19458610000001,
-              -17.340365000000002
+              -66.1945861,
+              -17.340365
             ],
             [
               -66.1947184,
-              -17.340646200000002
+              -17.3406462
             ],
             [
-              -66.19531020000001,
-              -17.340381200000003
+              -66.1953102,
+              -17.3403812
             ],
             [
-              -66.19522520000001,
+              -66.1952252,
               -17.3401937
             ],
             [
-              -66.19519910000001,
+              -66.1951991,
               -17.3401362
             ],
             [
@@ -5732,12 +5363,12 @@
               -17.3401144
             ],
             [
-              -66.19509140000001,
-              -17.340130000000002
+              -66.1950914,
+              -17.34013
             ],
             [
-              -66.19458610000001,
-              -17.340365000000002
+              -66.1945861,
+              -17.340365
             ]
           ]
         ]
@@ -5780,18 +5411,18 @@
             ],
             [
               -66.2068935,
-              -17.341981800000003
+              -17.3419818
             ],
             [
-              -66.20690300000001,
-              -17.342021300000003
+              -66.206903,
+              -17.3420213
             ],
             [
-              -66.20697720000001,
+              -66.2069772,
               -17.3423279
             ],
             [
-              -66.20700040000001,
+              -66.2070004,
               -17.3424237
             ],
             [
@@ -5820,48 +5451,48 @@
         "coordinates": [
           [
             [
-              -66.22138930000001,
-              -17.360704100000003
+              -66.2213893,
+              -17.3607041
             ],
             [
               -66.2208272,
-              -17.360961300000003
+              -17.3609613
             ],
             [
               -66.2205473,
               -17.3610894
             ],
             [
-              -66.21998040000001,
-              -17.361348800000002
+              -66.2199804,
+              -17.3613488
             ],
             [
               -66.2199276,
-              -17.361372900000003
+              -17.3613729
             ],
             [
-              -66.21978270000001,
+              -66.2197827,
               -17.3609563
             ],
             [
-              -66.21961490000001,
+              -66.2196149,
               -17.360474
             ],
             [
-              -66.22014610000001,
-              -17.360276300000002
+              -66.2201461,
+              -17.3602763
             ],
             [
               -66.220229,
-              -17.360528000000002
+              -17.360528
             ],
             [
               -66.2213366,
-              -17.360110900000002
+              -17.3601109
             ],
             [
-              -66.22138930000001,
-              -17.360704100000003
+              -66.2213893,
+              -17.3607041
             ]
           ]
         ]
@@ -5897,19 +5528,19 @@
               -17.4084797
             ],
             [
-              -66.10113310000001,
+              -66.1011331,
               -17.4087457
             ],
             [
-              -66.10116230000001,
+              -66.1011623,
               -17.4087539
             ],
             [
               -66.1013051,
-              -17.408799400000003
+              -17.4087994
             ],
             [
-              -66.10137590000001,
+              -66.1013759,
               -17.4088186
             ],
             [
@@ -5917,7 +5548,7 @@
               -17.4085441
             ],
             [
-              -66.10145680000001,
+              -66.1014568,
               -17.4085141
             ],
             [
@@ -5956,12 +5587,12 @@
         "coordinates": [
           [
             [
-              -66.16152980000001,
+              -66.1615298,
               -17.3916748
             ],
             [
-              -66.16137930000001,
-              -17.391653100000003
+              -66.1613793,
+              -17.3916531
             ],
             [
               -66.1613447,
@@ -5973,14 +5604,14 @@
             ],
             [
               -66.1613355,
-              -17.391769200000002
+              -17.3917692
             ],
             [
-              -66.16135700000001,
+              -66.161357,
               -17.3917809
             ],
             [
-              -66.16150900000001,
+              -66.161509,
               -17.3918043
             ],
             [
@@ -5988,7 +5619,7 @@
               -17.3917781
             ],
             [
-              -66.16152980000001,
+              -66.1615298,
               -17.3916748
             ]
           ]
@@ -6019,7 +5650,7 @@
           [
             [
               -66.1528428,
-              -17.388578000000003
+              -17.388578
             ],
             [
               -66.1528081,
@@ -6038,7 +5669,7 @@
               -17.3885265
             ],
             [
-              -66.15257860000001,
+              -66.1525786,
               -17.388594
             ],
             [
@@ -6047,7 +5678,7 @@
             ],
             [
               -66.1523609,
-              -17.388573400000002
+              -17.3885734
             ],
             [
               -66.1522697,
@@ -6063,47 +5694,47 @@
             ],
             [
               -66.1517678,
-              -17.388459500000003
+              -17.3884595
             ],
             [
-              -66.15174520000001,
+              -66.1517452,
               -17.3885666
             ],
             [
               -66.1517156,
-              -17.388707200000002
+              -17.3887072
             ],
             [
-              -66.15221980000001,
+              -66.1522198,
               -17.3888068
             ],
             [
               -66.1525891,
-              -17.388875000000002
+              -17.388875
             ],
             [
               -66.1526171,
-              -17.388742200000003
+              -17.3887422
             ],
             [
               -66.1526513,
-              -17.388748800000002
+              -17.3887488
             ],
             [
-              -66.15276200000001,
-              -17.388770400000002
+              -66.152762,
+              -17.3887704
             ],
             [
-              -66.15279170000001,
+              -66.1527917,
               -17.3887761
             ],
             [
-              -66.15281800000001,
-              -17.388670100000002
+              -66.152818,
+              -17.3886701
             ],
             [
               -66.1528428,
-              -17.388578000000003
+              -17.388578
             ]
           ]
         ]
@@ -6134,22 +5765,22 @@
           [
             [
               -66.1555438,
-              -17.390287400000002
+              -17.3902874
             ],
             [
               -66.1555991,
-              -17.389954300000003
+              -17.3899543
             ],
             [
               -66.155614,
-              -17.389862500000003
+              -17.3898625
             ],
             [
-              -66.15531920000001,
+              -66.1553192,
               -17.3898188
             ],
             [
-              -66.15530430000001,
+              -66.1553043,
               -17.3899106
             ],
             [
@@ -6158,7 +5789,7 @@
             ],
             [
               -66.1555438,
-              -17.390287400000002
+              -17.3902874
             ]
           ]
         ]
@@ -6193,35 +5824,35 @@
         "coordinates": [
           [
             [
-              -66.20682550000001,
-              -17.395580600000002
+              -66.2068255,
+              -17.3955806
             ],
             [
               -66.2067188,
-              -17.396108700000003
+              -17.3961087
             ],
             [
-              -66.20666600000001,
-              -17.396462300000003
+              -66.206666,
+              -17.3964623
             ],
             [
               -66.2065202,
-              -17.396449500000003
+              -17.3964495
             ],
             [
-              -66.20647670000001,
+              -66.2064767,
               -17.3967907
             ],
             [
               -66.2064739,
-              -17.396952900000002
+              -17.3969529
             ],
             [
-              -66.20624910000001,
-              -17.396952900000002
+              -66.2062491,
+              -17.3969529
             ],
             [
-              -66.20629810000001,
+              -66.2062981,
               -17.3956164
             ],
             [
@@ -6229,8 +5860,8 @@
               -17.3956151
             ],
             [
-              -66.20682550000001,
-              -17.395580600000002
+              -66.2068255,
+              -17.3955806
             ]
           ]
         ]
@@ -6261,10 +5892,10 @@
           [
             [
               -66.1590183,
-              -17.409238700000003
+              -17.4092387
             ],
             [
-              -66.15899010000001,
+              -66.1589901,
               -17.4093021
             ],
             [
@@ -6272,24 +5903,24 @@
               -17.4092926
             ],
             [
-              -66.15894870000001,
-              -17.409333200000003
+              -66.1589487,
+              -17.4093332
             ],
             [
               -66.1588553,
               -17.4092953
             ],
             [
-              -66.15879890000001,
+              -66.1587989,
               -17.4092725
             ],
             [
-              -66.15884510000001,
+              -66.1588451,
               -17.4091686
             ],
             [
               -66.1590183,
-              -17.409238700000003
+              -17.4092387
             ]
           ]
         ]
@@ -6323,39 +5954,39 @@
         "coordinates": [
           [
             [
-              -66.17128670000001,
-              -17.415565800000003
+              -66.1712867,
+              -17.4155658
             ],
             [
               -66.1706252,
-              -17.415936600000002
+              -17.4159366
             ],
             [
               -66.1706664,
-              -17.416362200000002
+              -17.4163622
             ],
             [
               -66.1706702,
-              -17.416401800000003
+              -17.4164018
             ],
             [
-              -66.17067080000001,
+              -66.1706708,
               -17.4164402
             ],
             [
-              -66.17119310000001,
+              -66.1711931,
               -17.416504
             ],
             [
               -66.1713814,
-              -17.415897100000002
+              -17.4158971
             ],
             [
               -66.1714482,
               -17.415866
             ],
             [
-              -66.17139730000001,
+              -66.1713973,
               -17.4157714
             ],
             [
@@ -6363,8 +5994,8 @@
               -17.4155932
             ],
             [
-              -66.17128670000001,
-              -17.415565800000003
+              -66.1712867,
+              -17.4155658
             ]
           ]
         ]
@@ -6399,115 +6030,6 @@
     },
     {
       "type": "Feature",
-      "id": 882167762,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.04793330000001,
-              -17.401899800000002
-            ],
-            [
-              -66.0477431,
-              -17.402031800000003
-            ],
-            [
-              -66.04760470000001,
-              -17.402172
-            ],
-            [
-              -66.0474059,
-              -17.402436
-            ],
-            [
-              -66.04714650000001,
-              -17.402631300000003
-            ],
-            [
-              -66.04700530000001,
-              -17.402738600000003
-            ],
-            [
-              -66.04736550000001,
-              -17.402799100000003
-            ],
-            [
-              -66.0478612,
-              -17.402782600000002
-            ],
-            [
-              -66.0483195,
-              -17.4027661
-            ],
-            [
-              -66.04793330000001,
-              -17.401899800000002
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 882167762,
-        "name": "Servicio General de Identificación Personal",
-        "type": "Sacaba",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "addr:city": "Sacaba",
-        "addr:street": "Avenida Incachaca",
-        "barrier": "wall",
-        "branch": "SEGIP Sacaba",
-        "government": "register_office",
-        "office": "government",
-        "opening_hours": "Mo-Fr 07:00-15:00",
-        "operator": "Servicio General de Identificación Personal",
-        "short_name": "SEGIP"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 883370867,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.0945602,
-              -17.371261800000003
-            ],
-            [
-              -66.0945681,
-              -17.3713859
-            ],
-            [
-              -66.0944807,
-              -17.371391000000003
-            ],
-            [
-              -66.0944728,
-              -17.3712668
-            ],
-            [
-              -66.0945602,
-              -17.371261800000003
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 883370867,
-        "name": "Administración",
-        "type": "yes",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "building": "yes",
-        "office": "administrative"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 884572788,
       "geometry": {
         "type": "Polygon",
@@ -6518,16 +6040,16 @@
               -17.4159659
             ],
             [
-              -66.15331400000001,
-              -17.417408700000003
+              -66.153314,
+              -17.4174087
             ],
             [
               -66.1538728,
               -17.4173316
             ],
             [
-              -66.15390140000001,
-              -17.416892100000002
+              -66.1539014,
+              -17.4168921
             ],
             [
               -66.1539315,
@@ -6575,7 +6097,7 @@
               -17.3913566
             ],
             [
-              -66.15895760000001,
+              -66.1589576,
               -17.391379
             ],
             [
@@ -6583,8 +6105,8 @@
               -17.3913885
             ],
             [
-              -66.15891260000001,
-              -17.391385200000002
+              -66.1589126,
+              -17.3913852
             ],
             [
               -66.1588404,
@@ -6592,18 +6114,18 @@
             ],
             [
               -66.1588504,
-              -17.391316200000002
+              -17.3913162
             ],
             [
               -66.1587933,
               -17.391307
             ],
             [
-              -66.15880100000001,
+              -66.158801,
               -17.3912635
             ],
             [
-              -66.15881230000001,
+              -66.1588123,
               -17.3912653
             ],
             [
@@ -6638,87 +6160,13 @@
     },
     {
       "type": "Feature",
-      "id": 888551488,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.3194345,
-              -17.390281400000003
-            ],
-            [
-              -66.31930940000001,
-              -17.3902427
-            ],
-            [
-              -66.3189815,
-              -17.3901387
-            ],
-            [
-              -66.3187613,
-              -17.390070400000003
-            ],
-            [
-              -66.31870500000001,
-              -17.390056100000002
-            ],
-            [
-              -66.3187425,
-              -17.3898283
-            ],
-            [
-              -66.31876670000001,
-              -17.3898155
-            ],
-            [
-              -66.318791,
-              -17.389802900000003
-            ],
-            [
-              -66.3190716,
-              -17.389894
-            ],
-            [
-              -66.3195096,
-              -17.3900356
-            ],
-            [
-              -66.31947190000001,
-              -17.390159200000003
-            ],
-            [
-              -66.3194345,
-              -17.390281400000003
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 888551488,
-        "name": "Dirección Distrital de Educación Vinto",
-        "type": "Vinto",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "way",
-        "addr:city": "Vinto",
-        "addr:street": "Calle Venezuela",
-        "admin_level": "8",
-        "barrier": "wall",
-        "government": "education",
-        "office": "government",
-        "short_name": "DDE Vinto"
-      }
-    },
-    {
-      "type": "Feature",
       "id": 900528201,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -66.15544990000001,
+              -66.1554499,
               -17.3869496
             ],
             [
@@ -6730,27 +6178,27 @@
               -17.3870222
             ],
             [
-              -66.15555180000001,
-              -17.387028200000003
+              -66.1555518,
+              -17.3870282
             ],
             [
               -66.1556013,
-              -17.387059100000002
+              -17.3870591
             ],
             [
               -66.1556716,
               -17.387103
             ],
             [
-              -66.15557550000001,
-              -17.387237000000002
+              -66.1555755,
+              -17.387237
             ],
             [
-              -66.15532420000001,
+              -66.1553242,
               -17.3871189
             ],
             [
-              -66.15544990000001,
+              -66.1554499,
               -17.3869496
             ]
           ]
@@ -6785,10 +6233,10 @@
           [
             [
               -66.1480319,
-              -17.379008000000002
+              -17.379008
             ],
             [
-              -66.14806680000001,
+              -66.1480668,
               -17.3790166
             ],
             [
@@ -6796,7 +6244,7 @@
               -17.3790273
             ],
             [
-              -66.14792940000001,
+              -66.1479294,
               -17.379697
             ],
             [
@@ -6805,7 +6253,7 @@
             ],
             [
               -66.1477823,
-              -17.379897200000002
+              -17.3798972
             ],
             [
               -66.1477588,
@@ -6813,19 +6261,19 @@
             ],
             [
               -66.1473694,
-              -17.379808200000003
+              -17.3798082
             ],
             [
-              -66.14729720000001,
-              -17.379792300000002
+              -66.1472972,
+              -17.3797923
             ],
             [
               -66.1473237,
-              -17.379679000000003
+              -17.379679
             ],
             [
               -66.1473369,
-              -17.379625500000003
+              -17.3796255
             ],
             [
               -66.1473576,
@@ -6833,23 +6281,23 @@
             ],
             [
               -66.1473696,
-              -17.379499000000003
+              -17.379499
             ],
             [
               -66.1474872,
-              -17.379526700000003
+              -17.3795267
             ],
             [
-              -66.14749230000001,
+              -66.1474923,
               -17.379507
             ],
             [
-              -66.14750240000001,
+              -66.1475024,
               -17.3795094
             ],
             [
               -66.1476681,
-              -17.379548300000003
+              -17.3795483
             ],
             [
               -66.1477112,
@@ -6860,16 +6308,16 @@
               -17.3793574
             ],
             [
-              -66.14792940000001,
-              -17.379407200000003
+              -66.1479294,
+              -17.3794072
             ],
             [
               -66.1479796,
-              -17.379212600000002
+              -17.3792126
             ],
             [
               -66.1480319,
-              -17.379008000000002
+              -17.379008
             ]
           ]
         ]
@@ -6907,16 +6355,16 @@
               -17.3736588
             ],
             [
-              -66.12769370000001,
+              -66.1276937,
               -17.3736734
             ],
             [
-              -66.12772140000001,
-              -17.373907300000003
+              -66.1277214,
+              -17.3739073
             ],
             [
-              -66.12753040000001,
-              -17.373946500000002
+              -66.1275304,
+              -17.3739465
             ],
             [
               -66.1275117,
@@ -6927,7 +6375,7 @@
               -17.3739406
             ],
             [
-              -66.12717830000001,
+              -66.1271783,
               -17.3736734
             ],
             [
@@ -6970,26 +6418,26 @@
             ],
             [
               -66.149769,
-              -17.432284900000003
+              -17.4322849
             ],
             [
-              -66.14968040000001,
-              -17.432404100000003
+              -66.1496804,
+              -17.4324041
             ],
             [
               -66.1496839,
-              -17.432464900000003
+              -17.4324649
             ],
             [
               -66.1495855,
-              -17.432592900000003
+              -17.4325929
             ],
             [
               -66.1495417,
-              -17.432644800000002
+              -17.4326448
             ],
             [
-              -66.14967410000001,
+              -66.1496741,
               -17.4327292
             ],
             [
@@ -6997,16 +6445,16 @@
               -17.43268
             ],
             [
-              -66.14975940000001,
-              -17.432615700000003
+              -66.1497594,
+              -17.4326157
             ],
             [
-              -66.14995440000001,
+              -66.1499544,
               -17.4322267
             ],
             [
-              -66.14988770000001,
-              -17.432179400000003
+              -66.1498877,
+              -17.4321794
             ],
             [
               -66.1498614,
@@ -7043,39 +6491,47 @@
         "coordinates": [
           [
             [
-              -66.17768360000001,
-              -17.395179600000002
+              -66.1776969,
+              -17.3951796
             ],
             [
-              -66.1777229,
-              -17.395401500000002
+              -66.1777362,
+              -17.3954015
             ],
             [
-              -66.17782150000001,
-              -17.395910100000002
+              -66.1778348,
+              -17.3959101
             ],
             [
-              -66.1778257,
+              -66.177839,
               -17.3959414
             ],
             [
-              -66.17759120000001,
+              -66.1776045,
               -17.3959821
             ],
             [
-              -66.1774491,
-              -17.395200000000003
+              -66.1774624,
+              -17.3952
             ],
             [
-              -66.17768360000001,
-              -17.395179600000002
+              -66.1774918,
+              -17.3951974
+            ],
+            [
+              -66.1775944,
+              -17.3951885
+            ],
+            [
+              -66.1776969,
+              -17.3951796
             ]
           ]
         ]
       },
       "properties": {
         "id": 912257719,
-        "name": "Agencia Distribuidora de Subsidio y Lactancia",
+        "name": "Subsidio",
         "type": "Cochabamba",
         "category": "government",
         "subcategory": "administration",
@@ -7084,12 +6540,19 @@
         "addr:housenumber": "1845",
         "addr:neighbourhood": "Villa Rosario",
         "addr:street": "Calle Acre",
+        "admin_level": "2",
         "barrier": "wall",
-        "contact:website": "https://subsidio.gob.bo/",
+        "branch": "Sede Cochabamba",
+        "brand": "Subsidio",
+        "description": "Entidad que determina productos, selecciona proveedores y distribuye los Subsidios Prenatal, de\nLactancia y Universal Prenatal por la Vida.",
         "government": "social_services",
         "office": "government",
         "opening_hours": "Mo-Fr 08:00-14:00",
-        "operator": "SEDEM"
+        "operator": "Servicio de Desarrollo de las Empresas Públicas Productivas",
+        "operator:short": "SEDEM",
+        "operator:type": "public",
+        "phone": "800102434",
+        "website": "https://www.subsidio.gob.bo/"
       }
     },
     {
@@ -7105,15 +6568,15 @@
             ],
             [
               -66.1629719,
-              -17.376835600000003
+              -17.3768356
             ],
             [
-              -66.16294040000001,
-              -17.376992700000002
+              -66.1629404,
+              -17.3769927
             ],
             [
               -66.1626516,
-              -17.376978700000002
+              -17.3769787
             ],
             [
               -66.1626516,
@@ -7121,19 +6584,19 @@
             ],
             [
               -66.1626646,
-              -17.376762300000003
+              -17.3767623
             ],
             [
               -66.1626956,
               -17.3767467
             ],
             [
-              -66.16278030000001,
+              -66.1627803,
               -17.3767645
             ],
             [
               -66.1628362,
-              -17.376776200000002
+              -17.3767762
             ],
             [
               -66.162892,
@@ -7174,16 +6637,16 @@
         "coordinates": [
           [
             [
-              -66.15734900000001,
-              -17.391578000000003
+              -66.157349,
+              -17.391578
             ],
             [
               -66.1571826,
-              -17.391549700000002
+              -17.3915497
             ],
             [
               -66.1571569,
-              -17.391687700000002
+              -17.3916877
             ],
             [
               -66.1568809,
@@ -7191,19 +6654,19 @@
             ],
             [
               -66.1568225,
-              -17.391630900000003
+              -17.3916309
             ],
             [
               -66.1568091,
               -17.3917025
             ],
             [
-              -66.15679560000001,
+              -66.1567956,
               -17.3917742
             ],
             [
-              -66.15685380000001,
-              -17.391784100000002
+              -66.1568538,
+              -17.3917841
             ],
             [
               -66.1571631,
@@ -7211,15 +6674,15 @@
             ],
             [
               -66.1571851,
-              -17.391718700000002
+              -17.3917187
             ],
             [
-              -66.15731840000001,
+              -66.1573184,
               -17.3917414
             ],
             [
-              -66.15734900000001,
-              -17.391578000000003
+              -66.157349,
+              -17.391578
             ]
           ]
         ]
@@ -7241,30 +6704,91 @@
     },
     {
       "type": "Feature",
+      "id": 926482160,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565596,
+              -17.3910835
+            ],
+            [
+              -66.1565199,
+              -17.3912801
+            ],
+            [
+              -66.1565008,
+              -17.3913818
+            ],
+            [
+              -66.1564791,
+              -17.3914821
+            ],
+            [
+              -66.1563377,
+              -17.3914558
+            ],
+            [
+              -66.1561961,
+              -17.3914298
+            ],
+            [
+              -66.1562045,
+              -17.3913913
+            ],
+            [
+              -66.156278,
+              -17.3910317
+            ],
+            [
+              -66.1565596,
+              -17.3910835
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482160,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "340",
+        "addr:street": "Calle Colombia",
+        "admin_level": "2",
+        "barrier": "wall",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
       "id": 935654490,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -66.14359350000001,
-              -17.362989900000002
+              -66.1435935,
+              -17.3629899
             ],
             [
-              -66.14319640000001,
-              -17.363310100000003
+              -66.1431964,
+              -17.3633101
             ],
             [
               -66.1432771,
-              -17.363411900000003
+              -17.3634119
             ],
             [
               -66.1436547,
-              -17.363112800000003
+              -17.3631128
             ],
             [
-              -66.14359350000001,
-              -17.362989900000002
+              -66.1435935,
+              -17.3629899
             ]
           ]
         ]
@@ -7297,11 +6821,11 @@
         "coordinates": [
           [
             [
-              -66.15567730000001,
+              -66.1556773,
               -17.3948022
             ],
             [
-              -66.15565600000001,
+              -66.155656,
               -17.3949137
             ],
             [
@@ -7310,15 +6834,15 @@
             ],
             [
               -66.1556168,
-              -17.395118500000002
+              -17.3951185
             ],
             [
               -66.155578,
-              -17.395111500000002
+              -17.3951115
             ],
             [
               -66.1554912,
-              -17.395096000000002
+              -17.395096
             ],
             [
               -66.1555517,
@@ -7326,14 +6850,14 @@
             ],
             [
               -66.1555975,
-              -17.394788300000002
+              -17.3947883
             ],
             [
               -66.1556374,
               -17.3947952
             ],
             [
-              -66.15567730000001,
+              -66.1556773,
               -17.3948022
             ]
           ]
@@ -7368,26 +6892,26 @@
           [
             [
               -66.1500079,
-              -17.369587600000003
+              -17.3695876
             ],
             [
-              -66.14973450000001,
-              -17.369589400000002
+              -66.1497345,
+              -17.3695894
             ],
             [
-              -66.14970860000001,
+              -66.1497086,
               -17.3695753
             ],
             [
-              -66.14968830000001,
+              -66.1496883,
               -17.3695559
             ],
             [
               -66.1496846,
-              -17.369534700000003
+              -17.3695347
             ],
             [
-              -66.14968180000001,
+              -66.1496818,
               -17.3694519
             ],
             [
@@ -7400,7 +6924,7 @@
             ],
             [
               -66.1500079,
-              -17.369587600000003
+              -17.3695876
             ]
           ]
         ]
@@ -7436,15 +6960,15 @@
               -17.3938893
             ],
             [
-              -66.15404600000001,
+              -66.154046,
               -17.3939065
             ],
             [
-              -66.15396840000001,
+              -66.1539684,
               -17.3943288
             ],
             [
-              -66.15395000000001,
+              -66.15395,
               -17.3943258
             ],
             [
@@ -7453,43 +6977,43 @@
             ],
             [
               -66.1538589,
-              -17.394808100000002
+              -17.3948081
             ],
             [
               -66.1538369,
-              -17.394827600000003
+              -17.3948276
             ],
             [
-              -66.15352180000001,
-              -17.394772000000003
+              -66.1535218,
+              -17.394772
             ],
             [
-              -66.15355810000001,
-              -17.394590100000002
+              -66.1535581,
+              -17.3945901
             ],
             [
-              -66.15346670000001,
+              -66.1534667,
               -17.3945736
             ],
             [
-              -66.15349950000001,
-              -17.394324800000003
+              -66.1534995,
+              -17.3943248
             ],
             [
-              -66.15359020000001,
-              -17.394333300000003
+              -66.1535902,
+              -17.3943333
             ],
             [
-              -66.15362610000001,
-              -17.394091000000003
+              -66.1536261,
+              -17.394091
             ],
             [
-              -66.15363430000001,
-              -17.394031100000003
+              -66.1536343,
+              -17.3940311
             ],
             [
               -66.1536739,
-              -17.393826500000003
+              -17.3938265
             ],
             [
               -66.1538192,
@@ -7537,14 +7061,14 @@
           [
             [
               -66.223307,
-              -17.392982800000002
+              -17.3929828
             ],
             [
-              -66.22294790000001,
-              -17.393014800000003
+              -66.2229479,
+              -17.3930148
             ],
             [
-              -66.22299810000001,
+              -66.2229981,
               -17.3935862
             ],
             [
@@ -7553,7 +7077,7 @@
             ],
             [
               -66.223307,
-              -17.392982800000002
+              -17.3929828
             ]
           ]
         ]
@@ -7581,24 +7105,24 @@
         "coordinates": [
           [
             [
-              -66.16179770000001,
-              -17.371622900000002
+              -66.1617977,
+              -17.3716229
             ],
             [
               -66.1615584,
-              -17.371637900000003
+              -17.3716379
             ],
             [
               -66.1615807,
               -17.3718307
             ],
             [
-              -66.16181590000001,
+              -66.1618159,
               -17.3718177
             ],
             [
-              -66.16179770000001,
-              -17.371622900000002
+              -66.1617977,
+              -17.3716229
             ]
           ]
         ]
@@ -7637,19 +7161,19 @@
             ],
             [
               -66.1725572,
-              -17.410480200000002
+              -17.4104802
             ],
             [
-              -66.17263000000001,
-              -17.410477500000002
+              -66.17263,
+              -17.4104775
             ],
             [
-              -66.17263650000001,
-              -17.410633800000003
+              -66.1726365,
+              -17.4106338
             ],
             [
               -66.1724908,
-              -17.410639200000002
+              -17.4106392
             ],
             [
               -66.1724844,
@@ -7693,11 +7217,11 @@
           [
             [
               -66.1559129,
-              -17.369462300000002
+              -17.3694623
             ],
             [
-              -66.15593790000001,
-              -17.369665100000002
+              -66.1559379,
+              -17.3696651
             ],
             [
               -66.1558576,
@@ -7708,12 +7232,12 @@
               -17.369679
             ],
             [
-              -66.15573640000001,
-              -17.369486000000002
+              -66.1557364,
+              -17.369486
             ],
             [
               -66.1559129,
-              -17.369462300000002
+              -17.3694623
             ]
           ]
         ]
@@ -7755,7 +7279,7 @@
         "coordinates": [
           [
             [
-              -66.22524770000001,
+              -66.2252477,
               -17.3961165
             ],
             [
@@ -7764,11 +7288,11 @@
             ],
             [
               -66.2248697,
-              -17.395968200000002
+              -17.3959682
             ],
             [
               -66.2250518,
-              -17.395905300000003
+              -17.3959053
             ],
             [
               -66.2250405,
@@ -7776,14 +7300,14 @@
             ],
             [
               -66.2250925,
-              -17.395857600000003
+              -17.3958576
             ],
             [
               -66.2251444,
               -17.3958397
             ],
             [
-              -66.22524770000001,
+              -66.2252477,
               -17.3961165
             ]
           ]
@@ -7826,8 +7350,8 @@
         "coordinates": [
           [
             [
-              -66.16281400000001,
-              -17.387452600000003
+              -66.162814,
+              -17.3874526
             ],
             [
               -66.1624632,
@@ -7835,23 +7359,23 @@
             ],
             [
               -66.1624453,
-              -17.387500000000003
+              -17.3875
             ],
             [
-              -66.16267950000001,
+              -66.1626795,
               -17.3875375
             ],
             [
-              -66.16275920000001,
-              -17.387550700000002
+              -66.1627592,
+              -17.3875507
             ],
             [
-              -66.16279610000001,
-              -17.387555600000002
+              -66.1627961,
+              -17.3875556
             ],
             [
-              -66.16281400000001,
-              -17.387452600000003
+              -66.162814,
+              -17.3874526
             ]
           ]
         ]
@@ -7891,35 +7415,35 @@
         "coordinates": [
           [
             [
-              -66.21612130000001,
+              -66.2161213,
               -17.3347848
             ],
             [
               -66.216059,
-              -17.334592200000003
+              -17.3345922
             ],
             [
-              -66.21551930000001,
-              -17.334847500000002
+              -66.2155193,
+              -17.3348475
             ],
             [
-              -66.21557510000001,
+              -66.2155751,
               -17.3351246
             ],
             [
-              -66.21603110000001,
+              -66.2160311,
               -17.3349164
             ],
             [
               -66.2160229,
-              -17.334879700000002
+              -17.3348797
             ],
             [
               -66.2160147,
               -17.3348428
             ],
             [
-              -66.21612130000001,
+              -66.2161213,
               -17.3347848
             ]
           ]
@@ -7953,7 +7477,7 @@
             ],
             [
               -66.1600535,
-              -17.395155000000003
+              -17.395155
             ],
             [
               -66.1600586,
@@ -7964,19 +7488,19 @@
               -17.394943
             ],
             [
-              -66.15983770000001,
-              -17.394897200000003
+              -66.1598377,
+              -17.3948972
             ],
             [
               -66.1598005,
-              -17.395087500000002
+              -17.3950875
             ],
             [
               -66.159796,
               -17.3951108
             ],
             [
-              -66.15976570000001,
+              -66.1597657,
               -17.3952655
             ],
             [
@@ -8017,27 +7541,27 @@
         "coordinates": [
           [
             [
-              -66.14361070000001,
+              -66.1436107,
               -17.3805932
             ],
             [
               -66.1436013,
-              -17.380732700000003
+              -17.3807327
             ],
             [
-              -66.14375820000001,
+              -66.1437582,
               -17.3807353
             ],
             [
-              -66.14379570000001,
+              -66.1437957,
               -17.3807174
             ],
             [
-              -66.14372300000001,
+              -66.143723,
               -17.3806003
             ],
             [
-              -66.14361070000001,
+              -66.1436107,
               -17.3805932
             ]
           ]
@@ -8075,14 +7599,14 @@
           [
             [
               -66.1565552,
-              -17.387850800000002
+              -17.3878508
             ],
             [
               -66.1565315,
-              -17.388006800000003
+              -17.3880068
             ],
             [
-              -66.15638080000001,
+              -66.1563808,
               -17.387986
             ],
             [
@@ -8090,20 +7614,20 @@
               -17.3879819
             ],
             [
-              -66.15636260000001,
-              -17.387907100000003
+              -66.1563626,
+              -17.3879071
             ],
             [
               -66.1563722,
               -17.3878436
             ],
             [
-              -66.15640450000001,
+              -66.1564045,
               -17.38783
             ],
             [
               -66.1565552,
-              -17.387850800000002
+              -17.3878508
             ]
           ]
         ]
@@ -8138,7 +7662,7 @@
           [
             [
               -66.162401,
-              -17.394686200000002
+              -17.3946862
             ],
             [
               -66.1623984,
@@ -8146,10 +7670,10 @@
             ],
             [
               -66.1623776,
-              -17.395042500000002
+              -17.3950425
             ],
             [
-              -66.16236620000001,
+              -66.1623662,
               -17.395115
             ],
             [
@@ -8162,15 +7686,15 @@
             ],
             [
               -66.1623642,
-              -17.395224000000002
+              -17.395224
             ],
             [
-              -66.16235010000001,
-              -17.395277500000002
+              -66.1623501,
+              -17.3952775
             ],
             [
               -66.1623294,
-              -17.395273800000002
+              -17.3952738
             ],
             [
               -66.1621999,
@@ -8190,7 +7714,7 @@
             ],
             [
               -66.162401,
-              -17.394686200000002
+              -17.3946862
             ]
           ]
         ]
@@ -8222,27 +7746,27 @@
               -17.3667599
             ],
             [
-              -66.16629850000001,
+              -66.1662985,
               -17.3673046
             ],
             [
-              -66.16632940000001,
+              -66.1663294,
               -17.3673006
             ],
             [
               -66.1663642,
-              -17.367529400000002
+              -17.3675294
             ],
             [
-              -66.16620800000001,
+              -66.166208,
               -17.3675469
             ],
             [
               -66.1661306,
-              -17.367114400000002
+              -17.3671144
             ],
             [
-              -66.16606730000001,
+              -66.1660673,
               -17.366862
             ],
             [
@@ -8339,7 +7863,7 @@
         "coordinates": [
           [
             [
-              -66.16910060000001,
+              -66.1691006,
               -17.4204389
             ],
             [
@@ -8347,23 +7871,23 @@
               -17.4206091
             ],
             [
-              -66.16891240000001,
+              -66.1689124,
               -17.4206624
             ],
             [
-              -66.16874720000001,
-              -17.420535800000003
+              -66.1687472,
+              -17.4205358
             ],
             [
               -66.1687909,
               -17.4204839
             ],
             [
-              -66.16887670000001,
+              -66.1688767,
               -17.420382
             ],
             [
-              -66.16893540000001,
+              -66.1689354,
               -17.4203122
             ],
             [
@@ -8371,11 +7895,11 @@
               -17.420382
             ],
             [
-              -66.16908380000001,
-              -17.420426000000003
+              -66.1690838,
+              -17.420426
             ],
             [
-              -66.16910060000001,
+              -66.1691006,
               -17.4204389
             ]
           ]
@@ -8417,15 +7941,15 @@
         "coordinates": [
           [
             [
-              -66.15781100000001,
-              -17.382222900000002
+              -66.157811,
+              -17.3822229
             ],
             [
-              -66.15759580000001,
+              -66.1575958,
               -17.382144
             ],
             [
-              -66.15768560000001,
+              -66.1576856,
               -17.3820215
             ],
             [
@@ -8437,16 +7961,16 @@
               -17.382061
             ],
             [
-              -66.15790080000001,
+              -66.1579008,
               -17.3820787
             ],
             [
-              -66.15790080000001,
+              -66.1579008,
               -17.3821045
             ],
             [
-              -66.15781100000001,
-              -17.382222900000002
+              -66.157811,
+              -17.3822229
             ]
           ]
         ]
@@ -8490,19 +8014,19 @@
         "coordinates": [
           [
             [
-              -66.14483700000001,
-              -17.380124000000002
+              -66.144837,
+              -17.380124
             ],
             [
               -66.1447942,
-              -17.380269100000003
+              -17.3802691
             ],
             [
               -66.144576,
               -17.3802103
             ],
             [
-              -66.14459210000001,
+              -66.1445921,
               -17.3801561
             ],
             [
@@ -8510,8 +8034,8 @@
               -17.380061
             ],
             [
-              -66.14483700000001,
-              -17.380124000000002
+              -66.144837,
+              -17.380124
             ]
           ]
         ]
@@ -8549,40 +8073,40 @@
         "coordinates": [
           [
             [
-              -66.17267890000001,
+              -66.1726789,
               -17.366803
             ],
             [
               -66.1726867,
-              -17.366840900000003
+              -17.3668409
             ],
             [
-              -66.17270880000001,
+              -66.1727088,
               -17.3669493
             ],
             [
-              -66.17271910000001,
-              -17.367000100000002
+              -66.1727191,
+              -17.3670001
             ],
             [
-              -66.17256950000001,
+              -66.1725695,
               -17.3669763
             ],
             [
-              -66.17250990000001,
+              -66.1725099,
               -17.3669668
             ],
             [
-              -66.17245630000001,
-              -17.367074300000002
+              -66.1724563,
+              -17.3670743
             ],
             [
               -66.17233,
-              -17.367021700000002
+              -17.3670217
             ],
             [
-              -66.17230880000001,
-              -17.367012900000002
+              -66.1723088,
+              -17.3670129
             ],
             [
               -66.1722927,
@@ -8594,7 +8118,7 @@
             ],
             [
               -66.1723034,
-              -17.366897700000003
+              -17.3668977
             ],
             [
               -66.1723436,
@@ -8602,18 +8126,18 @@
             ],
             [
               -66.1723912,
-              -17.366855700000002
+              -17.3668557
             ],
             [
-              -66.17242990000001,
+              -66.1724299,
               -17.3668486
             ],
             [
-              -66.17248980000001,
+              -66.1724898,
               -17.3668376
             ],
             [
-              -66.17267890000001,
+              -66.1726789,
               -17.366803
             ]
           ]
@@ -8653,14 +8177,14 @@
             ],
             [
               -66.1272301,
-              -17.426941300000003
+              -17.4269413
             ],
             [
               -66.127227,
               -17.4270038
             ],
             [
-              -66.12719270000001,
+              -66.1271927,
               -17.4270257
             ],
             [
@@ -8669,10 +8193,10 @@
             ],
             [
               -66.1267553,
-              -17.426968900000002
+              -17.4269689
             ],
             [
-              -66.12677380000001,
+              -66.1267738,
               -17.4267161
             ],
             [
@@ -8705,31 +8229,31 @@
         "coordinates": [
           [
             [
-              -66.15750390000001,
+              -66.1575039,
               -17.3551372
             ],
             [
-              -66.15722190000001,
+              -66.1572219,
               -17.3552606
             ],
             [
               -66.1573616,
-              -17.355606400000003
+              -17.3556064
             ],
             [
-              -66.15739520000001,
+              -66.1573952,
               -17.3556138
             ],
             [
-              -66.15762550000001,
-              -17.355502700000002
+              -66.1576255,
+              -17.3555027
             ],
             [
               -66.1576333,
               -17.3554706
             ],
             [
-              -66.15750390000001,
+              -66.1575039,
               -17.3551372
             ]
           ]
@@ -8765,7 +8289,7 @@
           [
             [
               -66.1528423,
-              -17.384929300000003
+              -17.3849293
             ],
             [
               -66.1527575,
@@ -8777,19 +8301,19 @@
             ],
             [
               -66.1528811,
-              -17.385165500000003
+              -17.3851655
             ],
             [
-              -66.15293650000001,
+              -66.1529365,
               -17.3850944
             ],
             [
-              -66.15299180000001,
-              -17.385023200000003
+              -66.1529918,
+              -17.3850232
             ],
             [
               -66.1528423,
-              -17.384929300000003
+              -17.3849293
             ]
           ]
         ]
@@ -8831,7 +8355,7 @@
           [
             [
               -66.1631516,
-              -17.378796400000002
+              -17.3787964
             ],
             [
               -66.1631251,
@@ -8843,15 +8367,15 @@
             ],
             [
               -66.1631888,
-              -17.379101600000002
+              -17.3791016
             ],
             [
-              -66.16323360000001,
-              -17.378923800000003
+              -66.1632336,
+              -17.3789238
             ],
             [
-              -66.16325970000001,
-              -17.378820400000002
+              -66.1632597,
+              -17.3788204
             ],
             [
               -66.1632057,
@@ -8859,7 +8383,7 @@
             ],
             [
               -66.1631516,
-              -17.378796400000002
+              -17.3787964
             ]
           ]
         ]
@@ -8901,27 +8425,27 @@
           [
             [
               -66.2251337,
-              -17.395811400000003
+              -17.3958114
             ],
             [
               -66.2251444,
               -17.3958397
             ],
             [
-              -66.22524770000001,
+              -66.2252477,
               -17.3961165
             ],
             [
-              -66.22540520000001,
+              -66.2254052,
               -17.3960621
             ],
             [
               -66.2252898,
-              -17.395757500000002
+              -17.3957575
             ],
             [
               -66.2251337,
-              -17.395811400000003
+              -17.3958114
             ]
           ]
         ]
@@ -8958,31 +8482,31 @@
           [
             [
               -66.1776488,
-              -17.409572100000002
+              -17.4095721
             ],
             [
               -66.1781783,
-              -17.410116400000003
+              -17.4101164
             ],
             [
               -66.1781692,
               -17.4103463
             ],
             [
-              -66.17816210000001,
+              -66.1781621,
               -17.410591
             ],
             [
-              -66.17815970000001,
-              -17.410665400000003
+              -66.1781597,
+              -17.4106654
             ],
             [
               -66.1781631,
               -17.4106843
             ],
             [
-              -66.17815630000001,
-              -17.411003100000002
+              -66.1781563,
+              -17.4110031
             ],
             [
               -66.1781471,
@@ -8990,7 +8514,7 @@
             ],
             [
               -66.1775752,
-              -17.411039300000002
+              -17.4110393
             ],
             [
               -66.1775545,
@@ -8998,11 +8522,11 @@
             ],
             [
               -66.1771521,
-              -17.410885500000003
+              -17.4108855
             ],
             [
               -66.1768342,
-              -17.410744100000002
+              -17.4107441
             ],
             [
               -66.17663,
@@ -9014,7 +8538,7 @@
             ],
             [
               -66.1767361,
-              -17.410327900000002
+              -17.4103279
             ],
             [
               -66.176754,
@@ -9026,7 +8550,7 @@
             ],
             [
               -66.1776488,
-              -17.409572100000002
+              -17.4095721
             ]
           ]
         ]
@@ -9064,298 +8588,149 @@
     },
     {
       "type": "Feature",
-      "id": 8015856,
+      "id": 1455820943,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -66.1995349,
-              -17.376930700000003
+              -66.1538547,
+              -17.3927946
             ],
             [
-              -66.19916110000001,
-              -17.376892700000003
+              -66.153843,
+              -17.3928568
             ],
             [
-              -66.1991478,
-              -17.376953800000003
+              -66.1538122,
+              -17.3930217
             ],
             [
-              -66.19906680000001,
-              -17.377663000000002
+              -66.1537997,
+              -17.3930889
             ],
             [
-              -66.1997516,
-              -17.377664000000003
+              -66.1537769,
+              -17.3932111
             ],
             [
-              -66.19977920000001,
-              -17.377375400000002
+              -66.1537728,
+              -17.3932329
             ],
             [
-              -66.1997958,
-              -17.377229
+              -66.1537398,
+              -17.393403
             ],
             [
-              -66.19974830000001,
-              -17.377224100000003
+              -66.1536021,
+              -17.3933781
             ],
             [
-              -66.19975790000001,
-              -17.377139200000002
+              -66.153599,
+              -17.3933949
             ],
             [
-              -66.199776,
-              -17.376985100000002
+              -66.1535589,
+              -17.3933881
             ],
             [
-              -66.19978090000001,
-              -17.3769524
+              -66.1535655,
+              -17.3933525
             ],
             [
-              -66.19985410000001,
-              -17.3769588
+              -66.153598,
+              -17.3931781
             ],
             [
-              -66.1999775,
-              -17.3769665
+              -66.1536707,
+              -17.392764
             ],
             [
-              -66.19997520000001,
-              -17.3770035
+              -66.1537337,
+              -17.3927746
             ],
             [
-              -66.1998782,
-              -17.377667900000002
+              -66.1537942,
+              -17.3927846
             ],
             [
-              -66.2002607,
-              -17.377672500000003
-            ],
-            [
-              -66.20033430000001,
-              -17.377673400000003
-            ],
-            [
-              -66.20058630000001,
-              -17.377673100000003
-            ],
-            [
-              -66.2006829,
-              -17.3767822
-            ],
-            [
-              -66.1998763,
-              -17.3766852
-            ],
-            [
-              -66.1997377,
-              -17.376670200000003
-            ],
-            [
-              -66.19956710000001,
-              -17.3766517
-            ],
-            [
-              -66.1995349,
-              -17.376930700000003
+              -66.1538547,
+              -17.3927946
             ]
           ]
         ]
       },
       "properties": {
-        "id": 8015856,
-        "name": "Fiscalia Departamental de Cochabamba",
-        "type": "multipolygon",
+        "id": 1455820943,
+        "name": "Consejo de la Magistratura",
+        "type": "Cochabamba",
         "category": "government",
         "subcategory": "administration",
-        "osmType": "relation",
+        "osmType": "way",
         "addr:city": "Cochabamba",
-        "admin_level": "4",
-        "barrier": "fence",
-        "government": "prosecutor",
-        "office": "government"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 8321523,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -66.1722508,
-              -17.39983
-            ],
-            [
-              -66.17221930000001,
-              -17.399834700000003
-            ],
-            [
-              -66.17216610000001,
-              -17.399841700000003
-            ],
-            [
-              -66.1721155,
-              -17.399838000000003
-            ],
-            [
-              -66.17200240000001,
-              -17.400023500000003
-            ],
-            [
-              -66.17199600000001,
-              -17.4000537
-            ],
-            [
-              -66.17211400000001,
-              -17.4006021
-            ],
-            [
-              -66.1722895,
-              -17.4010791
-            ],
-            [
-              -66.1723225,
-              -17.4011508
-            ],
-            [
-              -66.1723403,
-              -17.401163800000003
-            ],
-            [
-              -66.1724437,
-              -17.400991
-            ],
-            [
-              -66.17249170000001,
-              -17.400910900000003
-            ],
-            [
-              -66.17250800000001,
-              -17.4008837
-            ],
-            [
-              -66.17285600000001,
-              -17.4003026
-            ],
-            [
-              -66.17291630000001,
-              -17.400202
-            ],
-            [
-              -66.17230210000001,
-              -17.399858000000002
-            ],
-            [
-              -66.1722508,
-              -17.39983
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "id": 8321523,
-        "name": "Servicio Geológico Minero",
-        "type": "multipolygon",
-        "category": "government",
-        "subcategory": "administration",
-        "osmType": "relation",
-        "addr:city": "Cochabamba",
-        "addr:neighbourhood": "Juan De la Rosa",
-        "addr:street": "Calle Hernan Morales",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
         "admin_level": "2",
-        "branch": "Regional Cochabamba",
-        "description": "Especializada en la prestación de servicios referidos a hidrogeología, perforación de pozos para la explotación de agua subterránea. Perforación y Limpieza de pozos.",
-        "government": "public_service",
+        "barrier": "wall",
+        "branch": "Cochabamba",
+        "contact:facebook": "https://www.facebook.com/Consejo.de.la.Magistratura.Bolivia",
+        "description": "Oficinas distritales del Consejo de la Magistratura, Archivos Judiciales y sus servicios de Derechos Reales, REJAP.",
+        "government": "justice",
         "office": "government",
-        "short_name": "SERGEOMIN",
-        "website": "https://www.sergeomin.gob.bo/"
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "website": "https://magistratura.organojudicial.gob.bo/",
+        "wheelchair": "yes"
       }
     },
     {
       "type": "Feature",
-      "id": 15444713,
+      "id": 1456920100,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -66.15675710000001,
-              -17.393069
+              -66.2351829,
+              -17.3655337
             ],
             [
-              -66.1567522,
-              -17.3930925
+              -66.2351932,
+              -17.3656889
             ],
             [
-              -66.1567234,
-              -17.3932374
+              -66.2350366,
+              -17.3656984
             ],
             [
-              -66.15657540000001,
-              -17.393212700000003
+              -66.2350263,
+              -17.3655432
             ],
             [
-              -66.1565266,
-              -17.393204500000003
+              -66.2351046,
+              -17.3655385
             ],
             [
-              -66.1565169,
-              -17.393188900000002
-            ],
-            [
-              -66.1565125,
-              -17.3931693
-            ],
-            [
-              -66.1566013,
-              -17.3927383
-            ],
-            [
-              -66.15666940000001,
-              -17.392751
-            ],
-            [
-              -66.1566123,
-              -17.393029400000003
-            ],
-            [
-              -66.1566097,
-              -17.3930404
-            ],
-            [
-              -66.1566325,
-              -17.393044600000003
-            ],
-            [
-              -66.15675710000001,
-              -17.393069
+              -66.2351829,
+              -17.3655337
             ]
           ]
         ]
       },
       "properties": {
-        "id": 15444713,
-        "name": "Concejo Municipal de Cochabamba",
-        "type": "multipolygon",
+        "id": 1456920100,
+        "name": "Casa Judicial Colcapirhua",
+        "type": "Colcapirhua",
         "category": "government",
         "subcategory": "administration",
-        "osmType": "relation",
-        "addr:city": "Cochabamba",
-        "addr:neighbourhood": "Centro Histórico",
-        "addr:street": "Plaza 14 de Septiembre",
-        "admin_level": "8",
-        "email": "concejo@concejocbba.gob.bo",
-        "government": "town_council",
-        "historic": "monastery",
+        "osmType": "way",
+        "addr:city": "Colcapirhua",
+        "addr:neighbourhood": "San José Kami",
+        "building": "office",
+        "building:levels": "2",
+        "government": "justice",
         "office": "government",
-        "old_name:1578-1826": "Convento de la Orden de San Agustín",
-        "phone": "+591 4 4255278;+591 4 4255287",
-        "start_date": "1838-02-12",
-        "website": "http://www.concejocbba.gob.bo/",
+        "roof:shape": "hipped",
         "wheelchair": "limited"
       }
     }

@@ -73,11 +73,6 @@ void main() {
             deepLinkScheme: 'trufiapp',
             poiLayersManager: POILayersManager(
               assetsBasePath: 'assets/pois',
-              defaultEnabledSubcategories: {
-                POICategory.tourism: {'attraction', 'culture', 'historic'},
-                POICategory.food: {'restaurant', 'cafe', 'fast_food'},
-                POICategory.transport: {'public_transit', 'taxi'},
-              },
             ),
           ),
           onStartNavigation: (context, itinerary, locationService) {

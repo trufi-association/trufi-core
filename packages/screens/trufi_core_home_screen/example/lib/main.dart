@@ -27,11 +27,6 @@ class MyApp extends StatelessWidget {
         otpEndpoint: _otpEndpoint,
         poiLayersManager: POILayersManager(
           assetsBasePath: 'assets/pois',
-          defaultEnabledSubcategories: {
-            POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
-            POICategory.food: {'restaurant', 'cafe'},
-            POICategory.transport: {'bus_station', 'bus_stop'},
-          },
         ),
       ),
     );

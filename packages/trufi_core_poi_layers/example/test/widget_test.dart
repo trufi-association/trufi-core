@@ -9,14 +9,37 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 
+/// Test category configuration for tests
+final testFoodCategory = POICategoryConfig(
+  name: 'food',
+  displayName: 'Food & Drink',
+  count: 100,
+  color: const Color(0xFFE65100),
+  weight: 2,
+  subcategories: [
+    const POISubcategoryConfig(
+      name: 'restaurant',
+      displayName: 'Restaurants',
+      count: 50,
+      color: Color(0xFFFF5722),
+    ),
+    const POISubcategoryConfig(
+      name: 'cafe',
+      displayName: 'Cafes',
+      count: 30,
+      color: Color(0xFF795548),
+    ),
+  ],
+);
+
 void main() {
   testWidgets('POIDetailPanel renders correctly', (WidgetTester tester) async {
     final testPOI = POI(
       id: 'test-1',
       name: 'Test POI',
       position: const LatLng(-17.3895, -66.1568),
-      category: POICategory.food,
-      type: POIType.restaurant,
+      category: testFoodCategory,
+      subcategory: 'restaurant',
     );
 
     await tester.pumpWidget(
@@ -45,15 +68,15 @@ void main() {
         id: 'test-1',
         name: 'Restaurant A',
         position: const LatLng(-17.3895, -66.1568),
-        category: POICategory.food,
-        type: POIType.restaurant,
+        category: testFoodCategory,
+        subcategory: 'restaurant',
       ),
       POI(
         id: 'test-2',
         name: 'Cafe B',
         position: const LatLng(-17.3896, -66.1569),
-        category: POICategory.food,
-        type: POIType.cafe,
+        category: testFoodCategory,
+        subcategory: 'cafe',
       ),
     ];
 

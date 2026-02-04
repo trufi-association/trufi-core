@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../models/poi.dart';
-import '../models/poi_category.dart';
+import '../models/poi_category_config.dart';
 
 /// Loads POIs from GeoJSON assets with support for lazy loading and parallel preloading.
 ///
@@ -15,12 +15,19 @@ import '../models/poi_category.dart';
 /// - Caching: Loaded data is cached to avoid redundant loads
 /// - Future deduplication: Multiple simultaneous requests for the same category
 ///   share a single loading operation
+/// - Dynamic metadata: Loads category definitions from metadata.json
 class GeoJSONLoader {
-  /// Cached POI data by category
-  final Map<POICategory, List<POI>> _cache = {};
+  /// Cached POI data by category name
+  final Map<String, List<POI>> _cache = {};
 
   /// In-flight loading futures to prevent duplicate loads
-  final Map<POICategory, Future<List<POI>>> _loadingFutures = {};
+  final Map<String, Future<List<POI>>> _loadingFutures = {};
+
+  /// Cached metadata
+  POIMetadata? _metadata;
+
+  /// In-flight metadata loading future
+  Future<POIMetadata>? _metadataFuture;
 
   /// Base path for POI assets
   final String assetsBasePath;
@@ -29,20 +36,70 @@ class GeoJSONLoader {
     required this.assetsBasePath,
   });
 
+  /// Load POI metadata from metadata.json
+  ///
+  /// This loads category definitions, subcategories, icons, and colors.
+  /// The metadata is cached after first load.
+  Future<POIMetadata> loadMetadata() async {
+    // Return cached if available
+    if (_metadata != null) {
+      return _metadata!;
+    }
+
+    // Wait for ongoing load if exists
+    if (_metadataFuture != null) {
+      return await _metadataFuture!;
+    }
+
+    // Start new load
+    _metadataFuture = _loadMetadata();
+    return await _metadataFuture!;
+  }
+
+  /// Internal method to load metadata
+  Future<POIMetadata> _loadMetadata() async {
+    try {
+      final assetPath = '$assetsBasePath/metadata.json';
+      debugPrint('📦 GeoJSONLoader: Loading metadata from $assetPath...');
+
+      final jsonString = await rootBundle.loadString(assetPath);
+      final json = jsonDecode(jsonString) as Map<String, dynamic>;
+
+      _metadata = POIMetadata.fromJson(json);
+      debugPrint(
+          '✅ GeoJSONLoader: Loaded metadata with ${_metadata!.categories.length} categories');
+
+      return _metadata!;
+    } catch (e, stackTrace) {
+      debugPrint('❌ GeoJSONLoader: Error loading metadata: $e');
+      debugPrint('Stack trace: $stackTrace');
+      // Return empty metadata on error
+      _metadata = const POIMetadata(categories: []);
+      return _metadata!;
+    } finally {
+      _metadataFuture = null;
+    }
+  }
+
+  /// Get cached metadata (returns null if not loaded yet)
+  POIMetadata? get metadata => _metadata;
+
   /// Load POIs for a specific category.
   ///
   /// If the category is already cached, returns immediately.
   /// If the category is currently loading, waits for the existing load to complete.
   /// Otherwise, starts a new load operation.
-  Future<List<POI>> loadCategory(POICategory category) async {
+  Future<List<POI>> loadCategory(POICategoryConfig category) async {
+    final categoryName = category.name;
+
     // Return cached if available
-    if (_cache.containsKey(category)) {
-      return _cache[category]!;
+    if (_cache.containsKey(categoryName)) {
+      return _cache[categoryName]!;
     }
 
     // Wait for ongoing load if exists
-    if (_loadingFutures.containsKey(category)) {
-      return await _loadingFutures[category]!;
+    if (_loadingFutures.containsKey(categoryName)) {
+      return await _loadingFutures[categoryName]!;
     }
 
     // Start new load
@@ -50,7 +107,9 @@ class GeoJSONLoader {
   }
 
   /// Start loading a category (internal method)
-  Future<List<POI>> _startLoad(POICategory category) {
+  Future<List<POI>> _startLoad(POICategoryConfig category) {
+    final categoryName = category.name;
+
     final future = Future(() async {
       try {
         final assetPath = '$assetsBasePath/${category.filename}.geojson';
@@ -61,25 +120,28 @@ class GeoJSONLoader {
 
         final features = geojson['features'] as List<dynamic>? ?? [];
         final pois = features
-            .map((f) => POI.fromGeoJsonFeature(f as Map<String, dynamic>))
+            .map((f) => POI.fromGeoJsonFeature(
+                  f as Map<String, dynamic>,
+                  category,
+                ))
             .toList();
 
-        _cache[category] = pois;
+        _cache[categoryName] = pois;
         debugPrint(
-            '✅ GeoJSONLoader: Loaded ${pois.length} POIs for ${category.name}');
+            '✅ GeoJSONLoader: Loaded ${pois.length} POIs for $categoryName');
         return pois;
       } catch (e, stackTrace) {
         debugPrint(
-            '❌ GeoJSONLoader: Error loading ${category.name} from $assetsBasePath: $e');
+            '❌ GeoJSONLoader: Error loading $categoryName from $assetsBasePath: $e');
         debugPrint('Stack trace: $stackTrace');
         return <POI>[];
       } finally {
         // Remove from loading futures once complete
-        _loadingFutures.remove(category);
+        _loadingFutures.remove(categoryName);
       }
     });
 
-    _loadingFutures[category] = future;
+    _loadingFutures[categoryName] = future;
     return future;
   }
 
@@ -87,49 +149,19 @@ class GeoJSONLoader {
   ///
   /// This is useful for preloading commonly used categories during app initialization.
   /// The loading happens in parallel and doesn't block the caller.
-  ///
-  /// Example:
-  /// ```dart
-  /// loader.preloadCategories({
-  ///   POICategory.transport,
-  ///   POICategory.food,
-  /// });
-  /// ```
-  void preloadCategories(Set<POICategory> categories) {
+  void preloadCategories(List<POICategoryConfig> categories) {
     for (final category in categories) {
-      if (!_cache.containsKey(category) &&
-          !_loadingFutures.containsKey(category)) {
+      final categoryName = category.name;
+      if (!_cache.containsKey(categoryName) &&
+          !_loadingFutures.containsKey(categoryName)) {
         _startLoad(category);
       }
     }
   }
 
-  /// Preload all categories in parallel (non-blocking).
-  ///
-  /// Useful when you want all POI data available but don't want to block
-  /// the UI during initialization.
-  void preloadAll() {
-    preloadCategories(POICategory.values.toSet());
-  }
-
-  /// Load POIs for multiple categories.
-  ///
-  /// This method loads categories sequentially. For parallel loading,
-  /// use [preloadCategories] followed by [loadCategory] for each category.
-  Future<List<POI>> loadCategories(Set<POICategory> categories) async {
-    final results = <POI>[];
-    for (final category in categories) {
-      final pois = await loadCategory(category);
-      results.addAll(pois);
-    }
-    return results;
-  }
-
-  /// Load multiple categories in parallel and return all POIs.
-  ///
-  /// This is more efficient than [loadCategories] when loading multiple
-  /// categories simultaneously.
-  Future<List<POI>> loadCategoriesParallel(Set<POICategory> categories) async {
+  /// Load POIs for multiple categories in parallel.
+  Future<List<POI>> loadCategoriesParallel(
+      List<POICategoryConfig> categories) async {
     final futures =
         categories.map((category) => loadCategory(category)).toList();
     final results = await Future.wait(futures);
@@ -142,26 +174,28 @@ class GeoJSONLoader {
   }
 
   /// Check if a category is loaded in cache
-  bool isCategoryLoaded(POICategory category) => _cache.containsKey(category);
+  bool isCategoryLoaded(String categoryName) => _cache.containsKey(categoryName);
 
   /// Check if a category is currently being loaded
-  bool isCategoryLoading(POICategory category) =>
-      _loadingFutures.containsKey(category);
+  bool isCategoryLoading(String categoryName) =>
+      _loadingFutures.containsKey(categoryName);
 
   /// Get the number of POIs for a loaded category (returns 0 if not loaded)
-  int getCategoryCount(POICategory category) =>
-      _cache[category]?.length ?? 0;
+  int getCategoryCount(String categoryName) =>
+      _cache[categoryName]?.length ?? 0;
 
   /// Clear cache for a specific category
-  void clearCategoryCache(POICategory category) {
-    _cache.remove(category);
-    _loadingFutures.remove(category);
+  void clearCategoryCache(String categoryName) {
+    _cache.remove(categoryName);
+    _loadingFutures.remove(categoryName);
   }
 
-  /// Clear all cached data
+  /// Clear all cached data including metadata
   void clearCache() {
     _cache.clear();
     _loadingFutures.clear();
+    _metadata = null;
+    _metadataFuture = null;
   }
 
   /// Get loading statistics
@@ -170,9 +204,9 @@ class GeoJSONLoader {
       'cached_categories': _cache.length,
       'loading_categories': _loadingFutures.length,
       'total_pois': _cache.values.fold(0, (sum, pois) => sum + pois.length),
+      'metadata_loaded': _metadata != null,
       'categories': {
-        for (final entry in _cache.entries)
-          entry.key.name: entry.value.length,
+        for (final entry in _cache.entries) entry.key: entry.value.length,
       },
     };
   }

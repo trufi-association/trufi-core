@@ -1806,7 +1806,7 @@ class _HomeScreenState extends State<HomeScreen>
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      poi.type.icon,
+                      poi.category.fallbackIcon,
                       color: poi.category.color,
                       size: 20,
                     ),
@@ -1825,7 +1825,9 @@ class _HomeScreenState extends State<HomeScreen>
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          poi.type.name,
+                          poi.subcategoryConfig?.displayName ??
+                              poi.subcategory ??
+                              poi.category.displayName,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),

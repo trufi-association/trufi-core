@@ -9,7 +9,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 import 'data/geojson_loader.dart';
 import 'layer/poi_category_layer.dart';
 import 'models/poi.dart';
-import 'models/poi_category.dart';
+import 'models/poi_category_config.dart';
 
 /// Manager class that encapsulates POI layers, loader, and state.
 ///
@@ -17,8 +17,8 @@ import 'models/poi_category.dart';
 /// the home screen map via Provider.
 ///
 /// It provides a unified interface for managing POI layers on the map:
-/// - Handles GeoJSON loading from assets
-/// - Creates and manages layer instances for each category
+/// - Handles metadata and GeoJSON loading from assets
+/// - Creates and manages layer instances for each category dynamically
 /// - Synchronizes layer visibility with internal state
 /// - Notifies listeners when state changes
 /// - Manages POI selection state for detail panel
@@ -56,8 +56,8 @@ class POILayersManager extends ChangeNotifier {
   /// Whether storage has been initialized
   bool _storageInitialized = false;
 
-  /// Internal state for enabled subcategories
-  Map<POICategory, Set<String>> _enabledSubcategories;
+  /// Internal state for enabled subcategories (category name -> set of subcategory names)
+  Map<String, Set<String>> _enabledSubcategories;
 
   /// POI layers, one per category
   final List<POICategoryLayer> _layers = [];
@@ -68,23 +68,32 @@ class POILayersManager extends ChangeNotifier {
   /// Currently selected POI (for detail panel)
   POI? _selectedPOI;
 
+  /// Loaded metadata containing category configurations
+  POIMetadata? _metadata;
+
   /// Creates a POILayersManager.
   ///
   /// Parameters:
   /// - [assetsBasePath]: Base path for POI GeoJSON assets (e.g., 'assets/pois')
-  /// - [defaultEnabledSubcategories]: Optional initial enabled subcategories.
-  ///   These are used if no saved preferences exist.
   /// - [storage]: Optional storage service. Defaults to [SharedPreferencesStorage].
+  ///
+  /// Default enabled subcategories are determined by `defaultActive: true` in
+  /// the metadata.json file for each subcategory.
   POILayersManager({
     required String assetsBasePath,
-    Map<POICategory, Set<String>>? defaultEnabledSubcategories,
     StorageService? storage,
   })  : _loader = GeoJSONLoader(assetsBasePath: assetsBasePath),
         _storage = storage ?? SharedPreferencesStorage(),
-        _enabledSubcategories = defaultEnabledSubcategories ?? {};
+        _enabledSubcategories = {};
 
   /// Whether the manager has been initialized
   bool get isInitialized => _initialized;
+
+  /// Get the loaded metadata (null if not initialized)
+  POIMetadata? get metadata => _metadata;
+
+  /// Get all available categories from metadata
+  List<POICategoryConfig> get categories => _metadata?.categories ?? [];
 
   /// Initialize the layers with a dynamic map controller.
   /// Called automatically when the map is ready.
@@ -107,14 +116,14 @@ class POILayersManager extends ChangeNotifier {
   bool get hasSelectedPOI => _selectedPOI != null;
 
   /// Get current enabled subcategories (for settings UI)
-  Map<POICategory, Set<String>> get enabledSubcategories =>
+  Map<String, Set<String>> get enabledSubcategories =>
       Map.unmodifiable(_enabledSubcategories);
 
   /// Get available subcategories per category (for settings UI)
-  Map<POICategory, Set<String>> get availableSubcategories {
+  Map<String, Set<String>> get availableSubcategories {
     return {
       for (final layer in _layers)
-        layer.category: layer.pois
+        layer.category.name: layer.pois
             .where((poi) => poi.subcategory != null)
             .map((poi) => poi.subcategory!)
             .toSet(),
@@ -125,14 +134,19 @@ class POILayersManager extends ChangeNotifier {
   GeoJSONLoader get loader => _loader;
 
   /// Check if a category is enabled (has any subcategories enabled)
-  bool isCategoryEnabled(POICategory category) {
-    final subcats = _enabledSubcategories[category];
+  bool isCategoryEnabled(String categoryName) {
+    final subcats = _enabledSubcategories[categoryName];
     return subcats != null && subcats.isNotEmpty;
+  }
+
+  /// Check if a category config is enabled
+  bool isCategoryConfigEnabled(POICategoryConfig category) {
+    return isCategoryEnabled(category.name);
   }
 
   /// Check if a POI is enabled based on its subcategory
   bool isPOIEnabled(POI poi) {
-    final subcats = _enabledSubcategories[poi.category];
+    final subcats = _enabledSubcategories[poi.category.name];
     if (subcats == null || subcats.isEmpty) return false;
     if (poi.subcategory == null) return subcats.isNotEmpty;
     return subcats.contains(poi.subcategory);
@@ -144,9 +158,10 @@ class POILayersManager extends ChangeNotifier {
   /// Initialize the manager by loading POI data and creating layers.
   ///
   /// This method:
-  /// 1. Loads all POI categories in parallel from GeoJSON assets
-  /// 2. Creates a POICategoryLayer for each category
-  /// 3. Sets up layer visibility based on current state
+  /// 1. Loads metadata.json to get category configurations
+  /// 2. Loads all POI categories in parallel from GeoJSON assets
+  /// 3. Creates a POICategoryLayer for each category
+  /// 4. Sets up layer visibility based on current state
   ///
   /// If called with a different controller after initial setup, it will
   /// re-create layers on the new controller.
@@ -171,8 +186,25 @@ class POILayersManager extends ChangeNotifier {
       // Load saved preferences first
       await _loadSavedPreferences();
 
+      // Load metadata to get category configurations
+      _metadata = await _loader.loadMetadata();
+
+      if (_metadata == null || _metadata!.categories.isEmpty) {
+        debugPrint('⚠️ POILayersManager: No categories found in metadata');
+        _initialized = true;
+        notifyListeners();
+        return;
+      }
+
+      // If no enabled subcategories (from saved preferences or constructor),
+      // use defaults from metadata
+      if (_enabledSubcategories.isEmpty) {
+        _enabledSubcategories = _metadata!.defaultEnabledSubcategories;
+        debugPrint('ℹ️ Using default enabled subcategories from metadata');
+      }
+
       // Load all categories in parallel
-      final loadingFutures = POICategory.values
+      final loadingFutures = _metadata!.categories
           .map((category) => _loader
               .loadCategory(category)
               .then((pois) => MapEntry(category, pois)))
@@ -239,7 +271,7 @@ class POILayersManager extends ChangeNotifier {
   /// Update layer visibility based on current state
   void _updateLayerVisibility() {
     for (final layer in _layers) {
-      layer.visible = isCategoryEnabled(layer.category);
+      layer.visible = isCategoryEnabled(layer.category.name);
       layer.poiFilter = (poi) => isPOIEnabled(poi);
       layer.updateMarkers();
     }
@@ -296,25 +328,19 @@ class POILayersManager extends ChangeNotifier {
   }
 
   /// Convert enabled subcategories to JSON-serializable format.
-  Map<String, dynamic> _toJson(Map<POICategory, Set<String>> data) {
+  Map<String, dynamic> _toJson(Map<String, Set<String>> data) {
     return {
-      for (final entry in data.entries)
-        entry.key.name: entry.value.toList(),
+      for (final entry in data.entries) entry.key: entry.value.toList(),
     };
   }
 
   /// Parse enabled subcategories from JSON.
-  Map<POICategory, Set<String>> _fromJson(Map<String, dynamic> json) {
-    final result = <POICategory, Set<String>>{};
+  Map<String, Set<String>> _fromJson(Map<String, dynamic> json) {
+    final result = <String, Set<String>>{};
 
     for (final entry in json.entries) {
-      // Find the category by name
-      final category = POICategory.values
-          .where((c) => c.name == entry.key)
-          .firstOrNull;
-
-      if (category != null && entry.value is List) {
-        result[category] = Set<String>.from(
+      if (entry.value is List) {
+        result[entry.key] = Set<String>.from(
           (entry.value as List).whereType<String>(),
         );
       }
@@ -325,8 +351,8 @@ class POILayersManager extends ChangeNotifier {
 
   /// Toggle a subcategory on/off within a category
   void toggleSubcategory(
-      POICategory category, String subcategory, bool enabled) {
-    final currentSubcats = _enabledSubcategories[category] ?? <String>{};
+      String categoryName, String subcategory, bool enabled) {
+    final currentSubcats = _enabledSubcategories[categoryName] ?? <String>{};
     final updatedSubcats = Set<String>.from(currentSubcats);
 
     if (enabled) {
@@ -336,25 +362,31 @@ class POILayersManager extends ChangeNotifier {
     }
 
     _enabledSubcategories = Map.from(_enabledSubcategories)
-      ..[category] = updatedSubcats;
+      ..[categoryName] = updatedSubcats;
 
     _updateLayerVisibility();
     _persistPreferences(); // Fire and forget
     notifyListeners();
   }
 
+  /// Toggle a subcategory using category config
+  void toggleSubcategoryForCategory(
+      POICategoryConfig category, String subcategory, bool enabled) {
+    toggleSubcategory(category.name, subcategory, enabled);
+  }
+
   /// Toggle a category on/off.
   ///
   /// When enabling, all subcategories for the category are enabled.
   /// When disabling, all subcategories are disabled.
-  void toggleCategory(POICategory category, bool enabled) {
+  void toggleCategory(String categoryName, bool enabled) {
     if (enabled) {
-      final subcats = getSubcategoriesForCategory(category);
+      final subcats = getSubcategoriesForCategory(categoryName);
       _enabledSubcategories = Map.from(_enabledSubcategories)
-        ..[category] = subcats;
+        ..[categoryName] = subcats;
     } else {
       _enabledSubcategories = Map.from(_enabledSubcategories)
-        ..[category] = <String>{};
+        ..[categoryName] = <String>{};
     }
 
     _updateLayerVisibility();
@@ -362,12 +394,17 @@ class POILayersManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Toggle a category using category config
+  void toggleCategoryConfig(POICategoryConfig category, bool enabled) {
+    toggleCategory(category.name, enabled);
+  }
+
   /// Enable all subcategories for a category
-  void enableCategory(POICategory category, Set<String> subcategories) {
+  void enableCategory(String categoryName, Set<String> subcategories) {
     if (subcategories.isEmpty) return;
 
     _enabledSubcategories = Map.from(_enabledSubcategories)
-      ..[category] = Set.from(subcategories);
+      ..[categoryName] = Set.from(subcategories);
 
     _updateLayerVisibility();
     _persistPreferences(); // Fire and forget
@@ -375,9 +412,9 @@ class POILayersManager extends ChangeNotifier {
   }
 
   /// Disable all subcategories for a category
-  void disableCategory(POICategory category) {
+  void disableCategory(String categoryName) {
     _enabledSubcategories = Map.from(_enabledSubcategories)
-      ..[category] = <String>{};
+      ..[categoryName] = <String>{};
 
     _updateLayerVisibility();
     _persistPreferences(); // Fire and forget
@@ -439,7 +476,8 @@ class POILayersManager extends ChangeNotifier {
 
   /// Update the highlight state for a POI's polygon
   void _updatePOIHighlight(POI poi, bool highlighted) {
-    final layer = _layers.where((l) => l.category == poi.category).firstOrNull;
+    final layer =
+        _layers.where((l) => l.category.name == poi.category.name).firstOrNull;
     if (layer != null) {
       layer.highlightedPOI = highlighted ? poi : null;
     }
@@ -483,9 +521,9 @@ class POILayersManager extends ChangeNotifier {
     return false;
   }
 
-  /// Get subcategories for a specific category.
-  Set<String> getSubcategoriesForCategory(POICategory category) {
-    final layer = _layers.where((l) => l.category == category).firstOrNull;
+  /// Get subcategories for a specific category by name.
+  Set<String> getSubcategoriesForCategory(String categoryName) {
+    final layer = _layers.where((l) => l.category.name == categoryName).firstOrNull;
     if (layer == null) return {};
 
     return layer.pois
@@ -494,11 +532,23 @@ class POILayersManager extends ChangeNotifier {
         .toSet();
   }
 
+  /// Get subcategories for a specific category config.
+  Set<String> getSubcategoriesForCategoryConfig(POICategoryConfig category) {
+    return getSubcategoriesForCategory(category.name);
+  }
+
+  /// Get category config by name
+  POICategoryConfig? getCategoryByName(String name) {
+    return _metadata?.getCategory(name);
+  }
+
   /// Get layer statistics for debugging.
   Map<String, dynamic> getStats() {
     return {
       'initialized': _initialized,
       'layer_count': _layers.length,
+      'metadata_loaded': _metadata != null,
+      'category_count': _metadata?.categories.length ?? 0,
       'loader_stats': _loader.getStats(),
       'layers': {
         for (final layer in _layers)
@@ -520,6 +570,7 @@ class POILayersManager extends ChangeNotifier {
       _storageInitialized = false;
     }
     _initialized = false;
+    _metadata = null;
     debugPrint('🗑️ POILayersManager disposed');
     super.dispose();
   }

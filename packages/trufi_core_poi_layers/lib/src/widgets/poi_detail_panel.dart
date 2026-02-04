@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../l10n/poi_layers_localizations.dart';
-import '../l10n/poi_layers_localizations_ext.dart';
 import '../models/poi.dart';
 
 /// Panel showing POI details when tapped
@@ -57,19 +57,7 @@ class POIDetailPanel extends StatelessWidget {
           // Header with icon and name
           Row(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: poi.category.color.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  poi.type.icon,
-                  color: poi.category.color,
-                  size: 22,
-                ),
-              ),
+              _buildIcon(theme),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -84,7 +72,7 @@ class POIDetailPanel extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      l10n.poiType(poi.type.name),
+                      _getTypeDisplayName(context),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -163,6 +151,103 @@ class POIDetailPanel extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildIcon(ThemeData theme) {
+    final color = poi.color;
+
+    // Try POI's own icon from properties
+    final poiSvgString = poi.properties['icon'] as String?;
+    if (poiSvgString != null && poiSvgString.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poiSvgString,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try subcategory icon from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig?.iconSvg != null && subConfig!.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          subConfig.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Try category icon from metadata
+    if (poi.category.iconSvg != null && poi.category.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          poi.category.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Fallback to Material icon
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        poi.category.fallbackIcon,
+        color: color,
+        size: 22,
+      ),
+    );
+  }
+
+  String _getTypeDisplayName(BuildContext context) {
+    final langCode = Localizations.localeOf(context).languageCode;
+
+    // Try subcategory displayName from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig != null) {
+      return subConfig.getLocalizedDisplayName(langCode);
+    }
+
+    // Try subcategory string formatted
+    if (poi.subcategory != null) {
+      return poi.subcategory!
+          .split('_')
+          .map((word) =>
+              word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+          .join(' ');
+    }
+
+    // Fallback to category displayName
+    return poi.category.getLocalizedDisplayName(langCode);
   }
 }
 

@@ -1,6 +1,6 @@
 // Models
 export 'src/models/poi.dart';
-export 'src/models/poi_category.dart';
+export 'src/models/poi_category_config.dart';
 
 // Data
 export 'src/data/geojson_loader.dart';

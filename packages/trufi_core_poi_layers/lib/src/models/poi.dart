@@ -1,9 +1,10 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'poi_category.dart';
+import 'poi_category_config.dart';
 
 /// Internal class to hold geometry extraction results
 class _GeometryInfo {
@@ -40,13 +41,10 @@ class POI extends Equatable {
   /// Name of the POI (may be null for unnamed POIs)
   final String? name;
 
-  /// Type of POI (e.g., restaurant, park, bus_stop)
-  final POIType type;
+  /// Category this POI belongs to (dynamic from metadata)
+  final POICategoryConfig category;
 
-  /// Category this POI belongs to
-  final POICategory category;
-
-  /// Subcategory within the category (e.g., pharmacy within healthcare)
+  /// Subcategory within the category (e.g., "pharmacy" within "healthcare")
   final String? subcategory;
 
   /// Original geometry type from GeoJSON
@@ -65,7 +63,6 @@ class POI extends Equatable {
     required this.id,
     required this.position,
     this.name,
-    required this.type,
     required this.category,
     this.subcategory,
     this.geometryType = POIGeometryType.point,
@@ -80,8 +77,23 @@ class POI extends Equatable {
   /// Whether this POI is a large area (> 10000 m²)
   bool get isLargeArea => (areaMeters ?? 0) > 10000;
 
+  /// Get the subcategory configuration if available
+  POISubcategoryConfig? get subcategoryConfig {
+    if (subcategory == null) return null;
+    return category.getSubcategory(subcategory!);
+  }
+
+  /// Get the color for this POI (subcategory color if available, else category color)
+  Color get color {
+    final subConfig = subcategoryConfig;
+    return subConfig?.color ?? category.color;
+  }
+
   /// Create POI from GeoJSON feature
-  factory POI.fromGeoJsonFeature(Map<String, dynamic> feature) {
+  factory POI.fromGeoJsonFeature(
+    Map<String, dynamic> feature,
+    POICategoryConfig category,
+  ) {
     final geometry = feature['geometry'] as Map<String, dynamic>;
     final geoJsonType = geometry['type'] as String;
     final coordinates = geometry['coordinates'];
@@ -90,22 +102,12 @@ class POI extends Equatable {
     // Extract coordinates and geometry info
     final geoInfo = _extractGeometryInfo(geoJsonType, coordinates);
 
-    final typeStr = properties['type'] as String?;
-    final type = POIType.fromString(typeStr);
-
-    final categoryStr = properties['category'] as String?;
-    final category = POICategory.values.firstWhere(
-      (c) => c.name == categoryStr,
-      orElse: () => type.category,
-    );
-
     final subcategoryStr = properties['subcategory'] as String?;
 
     return POI(
       id: (feature['id'] ?? properties['id'] ?? '').toString(),
       position: LatLng(geoInfo.lat, geoInfo.lon),
       name: properties['name'] as String?,
-      type: type,
       category: category,
       subcategory: subcategoryStr,
       geometryType: geoInfo.geometryType,
@@ -275,8 +277,23 @@ class POI extends Equatable {
     return a[0] == b[0] && a[1] == b[1];
   }
 
-  /// Get display name (name or type if no name)
-  String get displayName => name ?? type.name;
+  /// Get display name (name or subcategory displayName if no name)
+  String get displayName {
+    if (name != null && name!.isNotEmpty) return name!;
+    final subConfig = subcategoryConfig;
+    if (subConfig != null) return subConfig.displayName;
+    if (subcategory != null) return _formatSubcategoryName(subcategory!);
+    return category.displayName;
+  }
+
+  /// Format subcategory name to title case
+  static String _formatSubcategoryName(String subcategory) {
+    return subcategory
+        .split('_')
+        .map((word) =>
+            word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+        .join(' ');
+  }
 
   /// Get address if available
   String? get address {
@@ -298,5 +315,5 @@ class POI extends Equatable {
   String? get website => properties['website']?.toString();
 
   @override
-  List<Object?> get props => [id, position, name, type, category];
+  List<Object?> get props => [id, position, name, category.name, subcategory];
 }

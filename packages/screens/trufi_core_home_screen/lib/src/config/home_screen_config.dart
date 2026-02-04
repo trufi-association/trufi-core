@@ -47,13 +47,13 @@ class HomeScreenConfig {
   /// 2. Register the provider in the widget tree for child widgets to access
   /// 3. Show POI settings in the map type button automatically
   ///
+  /// Default enabled subcategories are determined by `defaultActive: true`
+  /// in the metadata.json file for each subcategory.
+  ///
   /// Example:
   /// ```dart
   /// poiLayersManager: POILayersManager(
   ///   assetsBasePath: 'assets/pois',
-  ///   defaultEnabledSubcategories: {
-  ///     POICategory.tourism: {'museum', 'attraction'},
-  ///   },
   /// ),
   /// ```
   final POILayersManager? poiLayersManager;

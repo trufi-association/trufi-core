@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../models/poi_category.dart';
+import '../models/poi_category_config.dart';
 import '../l10n/poi_layers_localizations.dart';
-import '../l10n/poi_layers_localizations_en.dart';
-import '../l10n/poi_layers_localizations_ext.dart';
+import '../poi_layers_manager.dart';
 
-/// Helper to get localizations with English fallback
+/// Helper to get localizations
 POILayersLocalizations _getL10n(BuildContext context) {
-  return POILayersLocalizations.of(context) ?? POILayersLocalizationsEn();
+  return POILayersLocalizations.of(context);
 }
 
 /// A settings section widget for configuring POI layer visibility.
@@ -30,6 +29,8 @@ class POILayersSettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = _getL10n(context);
     final manager = context.watch<POILayersManager>();
+    final categories = manager.categories;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -37,10 +38,10 @@ class POILayersSettingsSection extends StatelessWidget {
         // Section header
         _POILayersHeader(title: title ?? l10n.pointsOfInterest),
         const SizedBox(height: 8),
-        // Category toggles
-        ...POICategory.values.map((category) {
-          final availableSubcats = manager.availableSubcategories[category];
-          final enabledSubcats = manager.enabledSubcategories[category];
+        // Category toggles - dynamically loaded from metadata
+        ...categories.map((category) {
+          final availableSubcats = manager.availableSubcategories[category.name];
+          final enabledSubcats = manager.enabledSubcategories[category.name];
           // Category is enabled if it has any enabled subcategories
           final isEnabled = enabledSubcats != null && enabledSubcats.isNotEmpty;
 
@@ -50,9 +51,9 @@ class POILayersSettingsSection extends StatelessWidget {
             availableSubcategories: availableSubcats,
             enabledSubcategories: enabledSubcats,
             onSubcategoryToggled: (subcategory, enabled) =>
-                manager.toggleSubcategory(category, subcategory, enabled),
+                manager.toggleSubcategory(category.name, subcategory, enabled),
             onToggleAll: (enableAll) =>
-                manager.toggleCategory(category, enableAll),
+                manager.toggleCategory(category.name, enableAll),
           );
         }),
       ],
@@ -99,7 +100,7 @@ class _POILayersHeader extends StatelessWidget {
 
 /// Individual POI category tile with expandable subcategories
 class _POICategoryTile extends StatefulWidget {
-  final POICategory category;
+  final POICategoryConfig category;
   final bool isEnabled;
   final Set<String>? availableSubcategories;
   final Set<String>? enabledSubcategories;
@@ -164,23 +165,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                   child: Row(
                     children: [
                       // Category icon
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: widget.isEnabled
-                              ? widget.category.color.withValues(alpha: 0.12)
-                              : colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(
-                          widget.category.icon,
-                          size: 20,
-                          color: widget.isEnabled
-                              ? widget.category.color
-                              : colorScheme.onSurfaceVariant,
-                        ),
-                      ),
+                      _buildCategoryIcon(),
                       const SizedBox(width: 12),
                       // Category name and subtitle
                       Expanded(
@@ -188,7 +173,9 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l10n.categoryName(widget.category.name),
+                              widget.category.getLocalizedDisplayName(
+                                Localizations.localeOf(context).languageCode,
+                              ),
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: colorScheme.onSurface,
@@ -244,6 +231,49 @@ class _POICategoryTileState extends State<_POICategoryTile> {
     );
   }
 
+  Widget _buildCategoryIcon() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    // Try to use SVG icon from metadata
+    if (widget.category.iconSvg != null && widget.category.iconSvg!.isNotEmpty) {
+      return Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: widget.isEnabled
+              ? widget.category.color.withValues(alpha: 0.12)
+              : colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.all(6),
+        child: SvgPicture.string(
+          widget.category.iconSvg!,
+          width: 28,
+          height: 28,
+        ),
+      );
+    }
+
+    // Fallback to Material icon
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: widget.isEnabled
+            ? widget.category.color.withValues(alpha: 0.12)
+            : colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(
+        widget.category.fallbackIcon,
+        size: 20,
+        color: widget.isEnabled
+            ? widget.category.color
+            : colorScheme.onSurfaceVariant,
+      ),
+    );
+  }
+
   String _getSubcategoryCountText(POILayersLocalizations l10n) {
     final total = widget.availableSubcategories?.length ?? 0;
     final enabled = widget.enabledSubcategories?.length ?? 0;
@@ -256,7 +286,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
 
 /// Widget to display subcategories list
 class _SubcategoriesList extends StatelessWidget {
-  final POICategory category;
+  final POICategoryConfig category;
   final List<String> subcategories;
   final Set<String> enabledSubcategories;
   final void Function(String subcategory, bool enabled) onSubcategoryToggled;
@@ -270,9 +300,16 @@ class _SubcategoriesList extends StatelessWidget {
     required this.onToggleAll,
   });
 
-  String _formatSubcategoryName(String subcategory) {
-    // Convert snake_case to Title Case
-    return subcategory
+  /// Get display name for subcategory from metadata or format from string
+  String _getSubcategoryDisplayName(
+      String subcategoryName, String languageCode) {
+    // Try to get from category metadata
+    final subConfig = category.getSubcategory(subcategoryName);
+    if (subConfig != null) {
+      return subConfig.getLocalizedDisplayName(languageCode);
+    }
+    // Fallback: convert snake_case to Title Case
+    return subcategoryName
         .split('_')
         .map(
           (word) =>
@@ -349,11 +386,15 @@ class _SubcategoriesList extends StatelessWidget {
           // Subcategories switches
           ...subcategories.map((subcategory) {
             final isEnabled = enabledSubcategories.contains(subcategory);
+            final subConfig = category.getSubcategory(subcategory);
+            final subcategoryColor = subConfig?.color ?? category.color;
+            final langCode = Localizations.localeOf(context).languageCode;
 
             return _SubcategorySwitchTile(
-              category: category,
+              color: subcategoryColor,
               subcategory: subcategory,
-              displayName: _formatSubcategoryName(subcategory),
+              displayName: _getSubcategoryDisplayName(subcategory, langCode),
+              iconSvg: subConfig?.iconSvg,
               isEnabled: isEnabled,
               onToggle: (enabled) => onSubcategoryToggled(subcategory, enabled),
             );
@@ -366,16 +407,18 @@ class _SubcategoriesList extends StatelessWidget {
 
 /// Individual subcategory switch tile
 class _SubcategorySwitchTile extends StatelessWidget {
-  final POICategory category;
+  final Color color;
   final String subcategory;
   final String displayName;
+  final String? iconSvg;
   final bool isEnabled;
   final void Function(bool enabled) onToggle;
 
   const _SubcategorySwitchTile({
-    required this.category,
+    required this.color,
     required this.subcategory,
     required this.displayName,
+    this.iconSvg,
     required this.isEnabled,
     required this.onToggle,
   });
@@ -396,17 +439,26 @@ class _SubcategorySwitchTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              // Dot indicator
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: isEnabled
-                      ? category.color
-                      : colorScheme.outlineVariant,
-                  shape: BoxShape.circle,
+              // Icon or dot indicator
+              if (iconSvg != null && iconSvg!.isNotEmpty)
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: SvgPicture.string(
+                    iconSvg!,
+                    width: 20,
+                    height: 20,
+                  ),
+                )
+              else
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: isEnabled ? color : colorScheme.outlineVariant,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
               const SizedBox(width: 12),
               // Subcategory name
               Expanded(
@@ -428,7 +480,7 @@ class _SubcategorySwitchTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: isEnabled
-                      ? category.color.withValues(alpha: 0.8)
+                      ? color.withValues(alpha: 0.8)
                       : colorScheme.outlineVariant,
                 ),
                 child: AnimatedAlign(

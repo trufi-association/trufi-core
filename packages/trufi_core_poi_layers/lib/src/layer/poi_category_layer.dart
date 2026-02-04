@@ -4,7 +4,7 @@ import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 import '../models/poi.dart';
-import '../models/poi_category.dart';
+import '../models/poi_category_config.dart';
 
 /// A TrufiLayer implementation for a single POI category.
 ///
@@ -14,17 +14,20 @@ import '../models/poi_category.dart';
 /// - Independent lifecycle: Each category is a separate layer instance
 /// - Hierarchical support: Can have a parent layer for UI organization
 /// - Polygon rendering: Shows outlines for area POIs
+/// - Dynamic icons: Uses SVG icons from metadata when available
 ///
 /// Example usage:
 /// ```dart
-/// // 1. Load POIs first
+/// // 1. Load metadata and POIs first
 /// final loader = GeoJSONLoader(assetsBasePath: 'assets/pois');
-/// final foodPOIs = await loader.loadCategory(POICategory.food);
+/// final metadata = await loader.loadMetadata();
+/// final foodCategory = metadata.getCategory('food')!;
+/// final foodPOIs = await loader.loadCategory(foodCategory);
 ///
 /// // 2. Create layer with pre-loaded data
 /// final foodLayer = POICategoryLayer(
 ///   controller: mapController,
-///   category: POICategory.food,
+///   category: foodCategory,
 ///   pois: foodPOIs,
 /// );
 ///
@@ -33,8 +36,8 @@ import '../models/poi_category.dart';
 /// foodLayer.updateMarkers(); // Call after changing visibility or filters
 /// ```
 class POICategoryLayer extends TrufiLayer {
-  /// The POI category this layer displays
-  final POICategory category;
+  /// The POI category configuration this layer displays
+  final POICategoryConfig category;
 
   /// POIs for this category (pre-loaded)
   final List<POI> _pois;
@@ -56,7 +59,7 @@ class POICategoryLayer extends TrufiLayer {
         super(
           controller,
           id: 'poi_${category.name}',
-          layerLevel: 100 + int.parse(category.weight),
+          layerLevel: 100 + category.weight,
           parentId: parentId,
         );
 
@@ -83,16 +86,17 @@ class POICategoryLayer extends TrufiLayer {
     final filteredPOIs =
         poiFilter != null ? _pois.where(poiFilter!) : _pois;
 
+    const markerSize = 24.0;
     final markers = filteredPOIs
         .map((poi) => TrufiMarker(
               id: 'poi_${category.name}_${poi.id}',
               position: poi.position,
-              size: const Size(30, 30),
+              size: const Size(markerSize, markerSize),
               layerLevel: layerLevel,
-              // Cache by POI type to reuse same icon for same type
-              imageCacheKey: 'poi_icon_${poi.type.name}',
+              // Cache by subcategory to reuse same icon
+              imageCacheKey: 'poi_icon_${category.name}_${poi.subcategory ?? "default"}',
               allowOverlap: false,
-              widget: _buildMarkerWidget(poi),
+              widget: _buildMarkerWidget(poi, markerSize),
             ))
         .toList();
 
@@ -123,13 +127,14 @@ class POICategoryLayer extends TrufiLayer {
             .map((p) => latlng.LatLng(p.latitude, p.longitude))
             .toList();
 
+        // Use subcategory color if available, else category color
+        final color = poi.color;
+
         // Create polygon outline
         polygonLines.add(TrufiLine(
           id: 'poi_polygon_${category.name}_${poi.id}',
           position: points,
-          color: isHighlighted
-              ? category.color
-              : category.color.withValues(alpha: 0.6),
+          color: isHighlighted ? color : color.withValues(alpha: 0.6),
           lineWidth: isHighlighted ? 4.0 : 2.0,
           layerLevel: isHighlighted ? layerLevel + 1 : layerLevel - 1,
         ));
@@ -140,25 +145,47 @@ class POICategoryLayer extends TrufiLayer {
   }
 
   /// Build marker widget for a POI using its SVG icon if available
-  Widget _buildMarkerWidget(POI poi) {
-    final svgString = poi.properties['icon'] as String?;
+  Widget _buildMarkerWidget(POI poi, double size) {
+    final color = poi.color;
+    final iconSize = size;
 
-    if (svgString != null && svgString.isNotEmpty) {
+    // First try POI's own icon from properties
+    final poiSvgString = poi.properties['icon'] as String?;
+    if (poiSvgString != null && poiSvgString.isNotEmpty) {
       return SvgPicture.string(
-        svgString,
-        width: 30,
-        height: 30,
+        poiSvgString,
+        width: iconSize,
+        height: iconSize,
       );
     }
 
-    // Fallback to category icon if no SVG available
+    // Then try subcategory icon from metadata
+    final subConfig = poi.subcategoryConfig;
+    if (subConfig?.iconSvg != null && subConfig!.iconSvg!.isNotEmpty) {
+      return SvgPicture.string(
+        subConfig.iconSvg!,
+        width: iconSize,
+        height: iconSize,
+      );
+    }
+
+    // Then try category icon from metadata
+    if (category.iconSvg != null && category.iconSvg!.isNotEmpty) {
+      return SvgPicture.string(
+        category.iconSvg!,
+        width: iconSize,
+        height: iconSize,
+      );
+    }
+
+    // Fallback to category fallback icon (Material icon)
     return Container(
-      width: 30,
-      height: 30,
+      width: iconSize,
+      height: iconSize,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(color: category.color, width: 2),
+        border: Border.all(color: color, width: 2),
         boxShadow: const [
           BoxShadow(
             color: Color(0x40000000),
@@ -168,9 +195,9 @@ class POICategoryLayer extends TrufiLayer {
         ],
       ),
       child: Icon(
-        category.icon,
-        color: category.color,
-        size: 17,
+        category.fallbackIcon,
+        color: color,
+        size: iconSize * 0.6,
       ),
     );
   }
