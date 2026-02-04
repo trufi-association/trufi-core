@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
@@ -34,26 +35,46 @@ const _facebookUrl = 'https://facebook.com/trufiapp';
 const _xTwitterUrl = 'https://x.com/trufiapp';
 const _instagramUrl = 'https://instagram.com/trufiapp';
 
-const List<ITrufiMapEngine> _mapEngines = [
-  MapLibreEngine(
+final List<ITrufiMapEngine> _mapEngines = [
+  // Offline map - disabled on web
+  if (!kIsWeb)
+    OfflineMapLibreEngine(
+      engineId: 'offline_osm_bright',
+      displayName: 'Mapa Offline',
+      displayDescription: 'Mapa sin conexión',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/osm-bright/style.json',
+        spritesAssetDir: 'assets/offline/styles/osm-bright/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'OpenSansRegular': 'Open Sans Regular',
+          'OpenSansBold': 'Open Sans Bold',
+          'OpenSansItalic': 'Open Sans Italic',
+        },
+        fontRanges: ['0-255', '256-511', '512-767', '768-1023', '1024-1279', '1280-1535', '8192-8447', '8448-8703'],
+      ),
+    ),
+  // Online map
+  const MapLibreEngine(
     engineId: 'osm_bright',
     styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
     displayDescription: 'Mapa claro',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'osm_liberty',
     styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
     displayDescription: 'Mapa estándar',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'dark_matter',
     styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
     displayDescription: 'Mapa oscuro',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'fiord_color',
     styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
     displayName: 'Fiord Color',

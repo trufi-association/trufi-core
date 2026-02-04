@@ -46,3 +46,9 @@ flutter:
   # POI Layers assets
   assets:
     - assets/pois/
+    # Offline maps assets
+    - assets/offline/
+    - assets/offline/styles/osm-bright/
+    - assets/offline/fonts/OpenSansRegular/
+    - assets/offline/fonts/OpenSansBold/
+    - assets/offline/fonts/OpenSansItalic/

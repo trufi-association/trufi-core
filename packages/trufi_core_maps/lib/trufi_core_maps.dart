@@ -24,6 +24,7 @@ export 'src/configuration/map_engine/trufi_map_engine.dart';
 export 'src/configuration/map_engine/maplibre_engine.dart';
 export 'src/configuration/map_engine/map_engine_manager.dart';
 export 'src/configuration/map_engine/default_map_engines.dart';
+export 'src/configuration/map_engine/offline_maplibre_engine.dart';
 
 // ============================================
 // DOMAIN LAYER - Entities
