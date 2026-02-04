@@ -107,6 +107,10 @@ class AppConfiguration {
   final TrufiThemeConfig themeConfig;
   final List<SocialMediaLink> socialMediaLinks;
 
+  /// Optional default locale override.
+  /// If provided, this will be used instead of [localeConfig.defaultLocale].
+  final Locale? defaultLocale;
+
   /// Deep link scheme for route sharing (e.g., 'trufiapp').
   /// When set, shared routes will include a deep link URL that opens the app.
   final String? deepLinkScheme;
@@ -177,6 +181,7 @@ class AppConfiguration {
     this.themeConfig = const TrufiThemeConfig(),
     this.socialMediaLinks = const [],
     this.deepLinkScheme,
+    this.defaultLocale,
     this.providers = const [],
     this.appOverlayManagers = const [],
     this.loadingScreenBuilder,

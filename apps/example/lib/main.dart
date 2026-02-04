@@ -22,6 +22,7 @@ void main() {
     AppConfiguration(
       appName: 'Trufi App',
       deepLinkScheme: 'trufiapp',
+      defaultLocale: Locale('es'),
       appOverlayManagers: [
         OnboardingManager(
           overlayBuilder: (onComplete) =>
@@ -71,9 +72,7 @@ void main() {
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
             appName: 'Trufi App',
             deepLinkScheme: 'trufiapp',
-            poiLayersManager: POILayersManager(
-              assetsBasePath: 'assets/pois',
-            ),
+            poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(
