@@ -531,5 +531,29 @@
   "findingRoutes": "Finding routes...",
   "@findingRoutes": {
     "description": "Loading message while searching for routes"
+  },
+  "moreDepartures": "+{count} more",
+  "@moreDepartures": {
+    "description": "Badge showing number of additional departure times",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "otherDepartures": "Other departures",
+  "@otherDepartures": {
+    "description": "Header for alternative departure times section"
+  },
+  "departsAt": "Departs {time}",
+  "@departsAt": {
+    "description": "Label showing departure time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
   }
 }

@@ -100,5 +100,8 @@
   "arrivedMessage": "¡Has llegado!",
   "buttonRetry": "Reintentar",
   "buttonSettings": "Configuración",
-  "findingRoutes": "Buscando rutas..."
+  "findingRoutes": "Buscando rutas...",
+  "moreDepartures": "+{count} más",
+  "otherDepartures": "Otras salidas",
+  "departsAt": "Sale a las {time}"
 }
