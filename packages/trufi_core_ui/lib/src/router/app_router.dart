@@ -32,16 +32,36 @@ class AppRouter {
   }
 
   GoRouter _createRouter() {
-    // Convert screens directly to GoRoutes
-    final routes = screens
-        .map(
-          (s) => GoRoute(
-            path: s.path,
-            name: s.id,
-            builder: (context, state) => s.builder(context),
-          ),
-        )
-        .toList();
+    // Enable URL updates for imperative navigation (push/pop) on web
+    // Without this, push() won't update the browser URL (GoRouter 8.0+ behavior)
+    GoRouter.optionURLReflectsImperativeAPIs = true;
+
+    // Convert screens to GoRoutes with sub-routes support
+    final routes = screens.map((s) {
+      // Create sub-routes if any
+      final subRoutes = s.subRoutes
+          .map(
+            (sub) => GoRoute(
+              path: sub.path,
+              builder: (context, state) {
+                // Merge path parameters and query parameters
+                final params = <String, String>{
+                  ...state.pathParameters,
+                  ...state.uri.queryParameters,
+                };
+                return sub.builder(context, params);
+              },
+            ),
+          )
+          .toList();
+
+      return GoRoute(
+        path: s.path,
+        name: s.id,
+        builder: (context, state) => s.builder(context),
+        routes: subRoutes,
+      );
+    }).toList();
 
     // Add the /route deep link handler to the routes list
     final allRoutes = [

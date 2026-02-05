@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -18,79 +17,45 @@ typedef MapMoveCallback = void Function(double latitude, double longitude);
 /// Callback type for selecting a stop on the map
 typedef StopSelectionCallback = void Function(int? stopIndex);
 
-/// Screen showing transport route details with map and stops
+/// Screen showing transport route details with map and stops.
+///
+/// The map is automatically provided by [MapEngineManager] from the context.
 class TransportDetailScreen extends StatefulWidget {
   final String routeCode;
   final Future<TransportRouteDetails?> Function(String code) getRouteDetails;
-  final Widget Function(
-    BuildContext context,
-    TransportRouteDetails? route,
-    void Function(MapMoveCallback) registerMapMoveCallback,
-    void Function(StopSelectionCallback) registerStopSelectionCallback,
-  )?
-  mapBuilder;
   final Uri? shareBaseUri;
 
-  /// Base path for URL updates (web only). Example: '/routes'
-  /// When set, the URL will be updated to include the route ID as a query parameter.
-  final String? basePath;
+  /// Callback when close/back button is pressed.
+  /// If not provided, uses Navigator.pop().
+  final VoidCallback? onClose;
 
   const TransportDetailScreen({
     super.key,
     required this.routeCode,
     required this.getRouteDetails,
-    this.mapBuilder,
     this.shareBaseUri,
-    this.basePath,
+    this.onClose,
   });
+
+  /// Creates a getRouteDetails function using RoutingEngineManager from context.
+  /// Use this when embedding TransportDetailScreen directly (not via show()).
+  static Future<TransportRouteDetails?> Function(String) createGetRouteDetails(
+    BuildContext context,
+  ) {
+    return _createGetRouteDetails(context);
+  }
 
   /// Shows the transport detail screen.
   ///
-  /// Uses [RoutingEngineManager] and [MapEngineManager] from context automatically.
-  static Future<void> show(
+  /// Navigates to `/routes/:id` using path parameter.
+  /// Uses push() so pop() can return to the previous screen.
+  /// URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs.
+  static void show(
     BuildContext context, {
     required String routeCode,
   }) {
-    return Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            TransportDetailScreen(
-              routeCode: routeCode,
-              getRouteDetails: _createGetRouteDetails(context),
-              mapBuilder: _defaultMapBuilder,
-            ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position:
-                Tween<Offset>(
-                  begin: const Offset(0, 0.1),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ),
-                ),
-            child: FadeTransition(opacity: animation, child: child),
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 300),
-      ),
-    );
-  }
-
-  /// Default map builder using _RouteMapView.
-  static Widget _defaultMapBuilder(
-    BuildContext context,
-    TransportRouteDetails? route,
-    void Function(MapMoveCallback) registerMapMoveCallback,
-    void Function(StopSelectionCallback) registerStopSelectionCallback,
-  ) {
-    return _RouteMapView(
-      route: route,
-      registerMapMoveCallback: registerMapMoveCallback,
-      registerStopSelectionCallback: registerStopSelectionCallback,
-    );
+    final encodedId = Uri.encodeComponent(routeCode);
+    context.push('/routes/$encodedId');
   }
 
   /// Creates a getRouteDetails function using RoutingEngineManager from context.
@@ -162,6 +127,28 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     super.dispose();
   }
 
+  /// Handles close/back action - goes back to previous screen.
+  void _handleClose() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else if (context.canPop()) {
+      // Pop to go back to where user came from (home, routes list, etc.)
+      context.pop();
+    } else {
+      // Fallback if there's nothing to pop (e.g., direct URL access)
+      context.go('/routes');
+    }
+  }
+
+  /// Builds the map widget using MapEngineManager from context.
+  Widget _buildMap(BuildContext context) {
+    return _RouteMapView(
+      route: _route,
+      registerMapMoveCallback: (callback) => _mapMoveCallback = callback,
+      registerStopSelectionCallback: (callback) => _stopSelectionCallback = callback,
+    );
+  }
+
   Future<void> _loadRoute() async {
     setState(() => _isLoading = true);
     try {
@@ -172,8 +159,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           _isLoading = false;
         });
         _fadeController.forward();
-        // Update URL with route ID (web only)
-        _updateUrlWithRouteId();
       }
     } catch (e) {
       if (mounted) {
@@ -188,21 +173,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           ),
         );
       }
-    }
-  }
-
-  /// Updates the URL with the route ID (web only).
-  void _updateUrlWithRouteId() {
-    if (!kIsWeb || widget.basePath == null) return;
-
-    try {
-      final uri = Uri(
-        path: widget.basePath,
-        queryParameters: {'id': widget.routeCode},
-      );
-      GoRouter.of(context).replace(uri.toString());
-    } catch (e) {
-      debugPrint('TransportDetailScreen: Error updating URL: $e');
     }
   }
 
@@ -257,7 +227,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                 child: InkWell(
                   onTap: () {
                     HapticFeedback.lightImpact();
-                    Navigator.pop(context);
+                    _handleClose();
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -406,7 +376,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
       return Stack(
         children: [
           Positioned.fill(
-            child: _ErrorState(onRetry: () => Navigator.pop(context)),
+            child: _ErrorState(onRetry: () => _handleClose()),
           ),
           _buildBackButton(context, colorScheme),
         ],
@@ -448,26 +418,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           left: sidePanelWidth,
           bottom: 0,
           right: 0,
-          child: widget.mapBuilder != null
-              ? FadeTransition(
-                  opacity: _fadeController,
-                  child: widget.mapBuilder!(
-                    context,
-                    _route,
-                    (callback) => _mapMoveCallback = callback,
-                    (callback) => _stopSelectionCallback = callback,
-                  ),
-                )
-              : Container(
-                  color: colorScheme.surfaceContainerLow,
-                  child: Center(
-                    child: Icon(
-                      Icons.map_outlined,
-                      size: 64,
-                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                    ),
-                  ),
-                ),
+          child: FadeTransition(
+            opacity: _fadeController,
+            child: _buildMap(context),
+          ),
         ),
 
         // Side panel on the left
@@ -526,7 +480,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                       child: InkWell(
                         onTap: () {
                           HapticFeedback.lightImpact();
-                          Navigator.pop(context);
+                          _handleClose();
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
@@ -648,31 +602,12 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     return Stack(
       children: [
         // Map
-        if (widget.mapBuilder != null)
-          Positioned.fill(
-            child: FadeTransition(
-              opacity: _fadeController,
-              child: widget.mapBuilder!(
-                context,
-                _route,
-                (callback) => _mapMoveCallback = callback,
-                (callback) => _stopSelectionCallback = callback,
-              ),
-            ),
-          )
-        else
-          Positioned.fill(
-            child: Container(
-              color: colorScheme.surfaceContainerLow,
-              child: Center(
-                child: Icon(
-                  Icons.map_outlined,
-                  size: 64,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                ),
-              ),
-            ),
+        Positioned.fill(
+          child: FadeTransition(
+            opacity: _fadeController,
+            child: _buildMap(context),
           ),
+        ),
 
         // Top bar with route info
         _buildTopBar(context, theme, colorScheme),
@@ -740,7 +675,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
             child: InkWell(
               onTap: () {
                 HapticFeedback.lightImpact();
-                Navigator.pop(context);
+                _handleClose();
               },
               borderRadius: BorderRadius.circular(12),
               child: Container(

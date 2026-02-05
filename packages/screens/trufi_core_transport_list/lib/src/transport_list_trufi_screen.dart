@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/single_child_widget.dart';
@@ -17,6 +16,10 @@ import 'transport_list_data_provider.dart';
 /// Uses the current routing provider from [RoutingEngineManager] to fetch
 /// transit routes. If the current provider doesn't support transit routes,
 /// it will try to find an online provider that does.
+///
+/// Routes:
+/// - `/routes` - shows the list of transit routes
+/// - `/routes/:id` - shows route detail for the given pattern ID (path parameter)
 class TransportListTrufiScreen extends TrufiScreen {
   TransportListTrufiScreen();
 
@@ -31,9 +34,27 @@ class TransportListTrufiScreen extends TrufiScreen {
       (_) => const _TransportListScreenWidget();
 
   @override
+  List<TrufiSubRoute> get subRoutes => [
+        TrufiSubRoute(
+          path: ':id', // Path parameter - matches /routes/xxx
+          builder: (context, params) {
+            final routeId = params['id'];
+            if (routeId == null || routeId.isEmpty) {
+              return const _TransportListScreenWidget();
+            }
+            return TransportDetailScreen(
+              routeCode: routeId,
+              getRouteDetails:
+                  TransportDetailScreen.createGetRouteDetails(context),
+            );
+          },
+        ),
+      ];
+
+  @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-    ...TransportListLocalizations.localizationsDelegates,
-  ];
+        ...TransportListLocalizations.localizationsDelegates,
+      ];
 
   @override
   List<Locale> get supportedLocales =>
@@ -67,7 +88,6 @@ class _TransportListScreenWidgetState
     extends State<_TransportListScreenWidget> {
   TransportListDataProvider? _dataProvider;
   TransportListCache? _cache;
-  bool _urlParsed = false;
   bool _initialized = false;
 
   @override
@@ -79,9 +99,6 @@ class _TransportListScreenWidgetState
       _initialized = true;
       _initializeDataProvider();
     }
-
-    // Parse URL parameters on first load (web only)
-    _parseUrlAndOpenRoute();
   }
 
   void _initializeDataProvider() {
@@ -122,37 +139,6 @@ class _TransportListScreenWidgetState
     super.dispose();
   }
 
-  /// Parses URL parameters and opens route detail if id is present (web only).
-  /// Only runs on initial page load, not when URL is updated programmatically.
-  void _parseUrlAndOpenRoute() {
-    if (!kIsWeb || _urlParsed || _dataProvider == null) return;
-    _urlParsed = true;
-
-    try {
-      final routerState = GoRouterState.of(context);
-      final params = routerState.uri.queryParameters;
-      final routeId = params['id'];
-
-      if (routeId != null && routeId.isNotEmpty) {
-        // Only open if this is the current route (not if we're being navigated away from)
-        // Check if TransportDetailScreen is already being shown
-        final navigator = Navigator.of(context);
-        if (navigator.canPop()) {
-          // Already have screens on top, don't open another one
-          return;
-        }
-
-        // Open route detail screen after frame is built
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          TransportDetailScreen.show(context, routeCode: routeId);
-        });
-      }
-    } catch (e) {
-      debugPrint('TransportListScreen: Error parsing URL: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final dataProvider = _dataProvider;
@@ -160,10 +146,14 @@ class _TransportListScreenWidgetState
       return const Center(child: CircularProgressIndicator());
     }
 
+    // This widget only shows the list - detail is handled by sub-route
     return TransportListContent(
       dataProvider: dataProvider,
       onRouteTap: (route) {
-        TransportDetailScreen.show(context, routeCode: route.code);
+        // Push to /routes/{id} so pop() returns here
+        // URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs
+        final encodedId = Uri.encodeComponent(route.code);
+        context.push('/routes/$encodedId');
       },
     );
   }

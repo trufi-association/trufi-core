@@ -7,6 +7,25 @@ import 'screen_theme_data.dart';
 export 'screen_menu_item.dart';
 export 'screen_theme_data.dart';
 
+/// Represents a sub-route within a TrufiScreen
+class TrufiSubRoute {
+  /// The path segment for this sub-route (e.g., 'detail')
+  /// Will be appended to parent screen's path
+  final String path;
+
+  /// Widget builder that receives context and query parameters
+  final Widget Function(BuildContext context, Map<String, String> queryParams) builder;
+
+  /// Whether this sub-route provides its own AppBar
+  final bool hasOwnAppBar;
+
+  const TrufiSubRoute({
+    required this.path,
+    required this.builder,
+    this.hasOwnAppBar = true,
+  });
+}
+
 /// Abstract class for all Trufi screen modules
 ///
 /// Screens can optionally implement asynchronous initialization by overriding
@@ -43,6 +62,11 @@ abstract class TrufiScreen {
   /// Whether this screen provides its own AppBar (default: false)
   /// Set to true if the screen needs a custom AppBar instead of the shared one
   bool get hasOwnAppBar => false;
+
+  /// Sub-routes for this screen (nested routes under this screen's path)
+  /// Each entry is a map with 'path' and 'builder' keys.
+  /// Example: [{'path': 'detail', 'builder': (context, params) => DetailScreen(...)}]
+  List<TrufiSubRoute> get subRoutes => [];
 
   /// Initialize the screen module.
   ///
