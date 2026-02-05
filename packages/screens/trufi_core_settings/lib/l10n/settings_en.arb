@@ -41,6 +41,11 @@
     "description": "Map selection title in onboarding"
   },
 
+  "onboardingRoutingTitle": "Choose your routing engine",
+  "@onboardingRoutingTitle": {
+    "description": "Routing engine selection title in onboarding"
+  },
+
   "onboardingComplete": "Get Started",
   "@onboardingComplete": {
     "description": "Button to complete onboarding"
@@ -136,6 +141,16 @@
     "description": "Map type selection instruction"
   },
 
+  "settingsRouting": "Routing",
+  "@settingsRouting": {
+    "description": "Routing settings section"
+  },
+
+  "settingsSelectRoutingEngine": "Select your preferred routing engine:",
+  "@settingsSelectRoutingEngine": {
+    "description": "Routing engine selection instruction"
+  },
+
   "settingsPrivacy": "Privacy",
   "@settingsPrivacy": {
     "description": "Privacy settings section"
@@ -154,5 +169,34 @@
   "settingsPrivacyShareDataDescription": "Help us fix bugs and improve transit data",
   "@settingsPrivacyShareDataDescription": {
     "description": "Description of what data sharing does"
+  },
+
+  "engineOnlineName": "Online",
+  "@engineOnlineName": {
+    "description": "Name for online routing engine"
+  },
+  "engineOnlineDescription": "OpenTripPlanner 2.8. Real-time routing with detailed walking directions.",
+  "@engineOnlineDescription": {
+    "description": "Description for online routing engine"
+  },
+  "engineOfflineName": "Offline",
+  "@engineOfflineName": {
+    "description": "Name for offline routing engine"
+  },
+  "engineOfflineDescription": "GTFS-based routing inspired by GuíaCochala. Works without internet.",
+  "@engineOfflineDescription": {
+    "description": "Description for offline routing engine"
+  },
+  "limitationRequiresInternet": "Requires internet",
+  "@limitationRequiresInternet": {
+    "description": "Limitation tag for engines that require internet"
+  },
+  "limitationSlower": "Slower response",
+  "@limitationSlower": {
+    "description": "Limitation tag for engines that are slower"
+  },
+  "limitationNoWalkingRoute": "No walking route on map",
+  "@limitationNoWalkingRoute": {
+    "description": "Limitation tag for engines that don't show walking routes on map"
   }
 }

@@ -151,6 +151,12 @@ abstract class SettingsLocalizations {
   /// **'Choose your map style'**
   String get onboardingMapTitle;
 
+  /// Routing engine selection title in onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your routing engine'**
+  String get onboardingRoutingTitle;
+
   /// Button to complete onboarding
   ///
   /// In en, this message translates to:
@@ -265,6 +271,18 @@ abstract class SettingsLocalizations {
   /// **'Select your preferred map type:'**
   String get settingsSelectMapType;
 
+  /// Routing settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Routing'**
+  String get settingsRouting;
+
+  /// Routing engine selection instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred routing engine:'**
+  String get settingsSelectRoutingEngine;
+
   /// Privacy settings section
   ///
   /// In en, this message translates to:
@@ -288,6 +306,48 @@ abstract class SettingsLocalizations {
   /// In en, this message translates to:
   /// **'Help us fix bugs and improve transit data'**
   String get settingsPrivacyShareDataDescription;
+
+  /// Name for online routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get engineOnlineName;
+
+  /// Description for online routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'OpenTripPlanner 2.8. Real-time routing with detailed walking directions.'**
+  String get engineOnlineDescription;
+
+  /// Name for offline routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get engineOfflineName;
+
+  /// Description for offline routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'GTFS-based routing inspired by GuíaCochala. Works without internet.'**
+  String get engineOfflineDescription;
+
+  /// Limitation tag for engines that require internet
+  ///
+  /// In en, this message translates to:
+  /// **'Requires internet'**
+  String get limitationRequiresInternet;
+
+  /// Limitation tag for engines that are slower
+  ///
+  /// In en, this message translates to:
+  /// **'Slower response'**
+  String get limitationSlower;
+
+  /// Limitation tag for engines that don't show walking routes on map
+  ///
+  /// In en, this message translates to:
+  /// **'No walking route on map'**
+  String get limitationNoWalkingRoute;
 }
 
 class _SettingsLocalizationsDelegate

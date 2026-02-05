@@ -19,6 +19,7 @@ dependencies:
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
   trufi_core_maps: ^1.0.0
+  trufi_core_routing: ^1.0.0
   pointer_interceptor: ^0.10.1+2
   shared_preferences: ^2.5.3
 

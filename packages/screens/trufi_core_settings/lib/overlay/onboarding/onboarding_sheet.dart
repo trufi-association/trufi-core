@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/settings_localizations.dart';
@@ -194,6 +195,8 @@ class OnboardingSheet extends StatelessWidget {
                 _OnboardingThemeSection(l10n: l10n),
                 const SizedBox(height: 16),
                 _OnboardingMapSection(l10n: l10n),
+                const SizedBox(height: 16),
+                _OnboardingRoutingSection(l10n: l10n),
               ],
             ),
           ),
@@ -363,13 +366,60 @@ class _OnboardingMapSection extends StatelessWidget {
             padding: EdgeInsets.only(
               bottom: index < mapEngineManager.engines.length - 1 ? 8 : 0,
             ),
-            child: _MapOption(
+            child: _EngineOption(
               name: engine.name,
               description: engine.description,
+              icon: Icons.layers_rounded,
               isSelected: index == mapEngineManager.currentIndex,
               onTap: () {
                 HapticFeedback.selectionClick();
                 mapEngineManager.setEngineByIndex(index);
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Routing engine selection section
+class _OnboardingRoutingSection extends StatelessWidget {
+  final SettingsLocalizations l10n;
+
+  const _OnboardingRoutingSection({required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    final routingEngineManager = routing.RoutingEngineManager.maybeWatch(context);
+
+    // Only show if multiple routing engines available
+    if (routingEngineManager == null || !routingEngineManager.hasMultipleEngines) {
+      return const SizedBox.shrink();
+    }
+
+    return _OnboardingCard(
+      icon: Icons.route_rounded,
+      iconColor: Colors.indigo,
+      title: l10n.onboardingRoutingTitle,
+      child: Column(
+        children: routingEngineManager.engines.asMap().entries.map((entry) {
+          final index = entry.key;
+          final engine = entry.value;
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
+            ),
+            child: _EngineOption(
+              name: engine.name,
+              description: engine.description,
+              icon: engine.requiresInternet
+                  ? Icons.cloud_rounded
+                  : Icons.offline_bolt_rounded,
+              isSelected: index == routingEngineManager.currentIndex,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                routingEngineManager.setEngineByIndex(index);
               },
             ),
           );
@@ -635,16 +685,18 @@ class _ThemeChip extends StatelessWidget {
   }
 }
 
-/// Map option tile
-class _MapOption extends StatelessWidget {
+/// Engine option tile (used for map and routing engines)
+class _EngineOption extends StatelessWidget {
   final String name;
   final String description;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _MapOption({
+  const _EngineOption({
     required this.name,
     required this.description,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -685,7 +737,7 @@ class _MapOption extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  Icons.layers_rounded,
+                  icon,
                   color: isSelected
                       ? colorScheme.primary
                       : colorScheme.onSurfaceVariant,

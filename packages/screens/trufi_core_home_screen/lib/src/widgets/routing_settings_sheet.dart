@@ -17,6 +17,10 @@ Future<bool?> showRoutingSettingsSheet(BuildContext context) {
 }
 
 /// Bottom sheet for configuring routing preferences.
+///
+/// The UI adapts based on the current routing provider's capabilities.
+/// For example, GTFS offline only supports maxWalkDistance, while OTP
+/// supports wheelchair, walk speed, transport modes, etc.
 class RoutingSettingsSheet extends StatelessWidget {
   const RoutingSettingsSheet({super.key});
 
@@ -25,6 +29,11 @@ class RoutingSettingsSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = HomeScreenLocalizations.of(context);
+
+    // Get current provider capabilities
+    final routingManager = RoutingEngineManager.maybeWatch(context);
+    final capabilities = routingManager?.currentEngine.capabilities ??
+        RoutingCapabilities.full;
 
     return Container(
       decoration: BoxDecoration(
@@ -44,7 +53,7 @@ class RoutingSettingsSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          // Header
+          // Header with provider name
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Row(
@@ -55,13 +64,26 @@ class RoutingSettingsSheet extends StatelessWidget {
                   size: 24,
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  l10n.routeSettings,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.routeSettings,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (routingManager != null)
+                        Text(
+                          routingManager.currentEngine.name,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-                const Spacer(),
                 TextButton(
                   onPressed: () {
                     final manager = RoutingPreferencesManager.maybeRead(context);
@@ -74,7 +96,12 @@ class RoutingSettingsSheet extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-          // Content
+          // Engine selector - only show if multiple engines available
+          if (routingManager != null && routingManager.hasMultipleEngines) ...[
+            _RoutingEngineSelector(routingManager: routingManager),
+            const Divider(height: 1),
+          ],
+          // Content - only show sections supported by current provider
           Flexible(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
@@ -82,16 +109,28 @@ class RoutingSettingsSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Accessibility section
-                  const _AccessibilitySection(),
-                  const SizedBox(height: 24),
+                  if (capabilities.supportsWheelchair) ...[
+                    const _AccessibilitySection(),
+                    const SizedBox(height: 24),
+                  ],
                   // Walk speed section
-                  const _WalkSpeedSection(),
-                  const SizedBox(height: 24),
+                  if (capabilities.supportsWalkSpeed) ...[
+                    const _WalkSpeedSection(),
+                    const SizedBox(height: 24),
+                  ],
                   // Max walk distance section
-                  const _MaxWalkDistanceSection(),
-                  const SizedBox(height: 24),
+                  if (capabilities.supportsMaxWalkDistance) ...[
+                    const _MaxWalkDistanceSection(),
+                    const SizedBox(height: 24),
+                  ],
                   // Transport modes section
-                  const _TransportModesSection(),
+                  if (capabilities.supportsTransportModes) ...[
+                    const _TransportModesSection(),
+                    const SizedBox(height: 24),
+                  ],
+                  // Show message if no options available
+                  if (!capabilities.hasAnyOptions)
+                    _NoOptionsMessage(providerName: routingManager?.currentEngine.name ?? 'Offline'),
                 ],
               ),
             ),
@@ -123,6 +162,258 @@ class RoutingSettingsSheet extends StatelessWidget {
   }
 }
 
+/// Message shown when the current provider has no configurable options.
+class _NoOptionsMessage extends StatelessWidget {
+  final String providerName;
+
+  const _NoOptionsMessage({required this.providerName});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            color: colorScheme.onSurfaceVariant,
+            size: 48,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'El proveedor "$providerName" no tiene opciones configurables.',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Routing engine selector section.
+class _RoutingEngineSelector extends StatelessWidget {
+  final RoutingEngineManager routingManager;
+
+  const _RoutingEngineSelector({required this.routingManager});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.router_rounded,
+                color: colorScheme.primary,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                l10n.routingProvider,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...routingManager.engines.map((engine) {
+            final isSelected = engine == routingManager.currentEngine;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _EngineCard(
+                engine: engine,
+                isSelected: isSelected,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  routingManager.setEngine(engine);
+                },
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+/// Engine selection card with detailed info.
+class _EngineCard extends StatelessWidget {
+  final IRoutingProvider engine;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _EngineCard({
+    required this.engine,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final l10n = HomeScreenLocalizations.of(context);
+
+    final isOffline = !engine.requiresInternet;
+
+    // Get localized name and description based on engine type
+    final name = isOffline ? l10n.engineOfflineName : l10n.engineOnlineName;
+    final description = isOffline ? l10n.engineOfflineDescription : l10n.engineOnlineDescription;
+
+    // Build limitations list based on engine type
+    final limitations = <String>[];
+    if (isOffline) {
+      // Offline limitations
+      limitations.add(l10n.limitationNoWalkingRoute);
+    } else {
+      // Online limitations
+      limitations.add(l10n.limitationRequiresInternet);
+      limitations.add(l10n.limitationSlower);
+    }
+
+    return Material(
+      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Radio indicator
+              Container(
+                width: 20,
+                height: 20,
+                margin: const EdgeInsets.only(top: 2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected ? colorScheme.primary : colorScheme.outline,
+                    width: 2,
+                  ),
+                ),
+                child: isSelected
+                    ? Center(
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+              const SizedBox(width: 12),
+              // Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title row with icon
+                    Row(
+                      children: [
+                        Icon(
+                          isOffline ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
+                          color: isSelected
+                              ? colorScheme.onPrimaryContainer
+                              : colorScheme.onSurfaceVariant,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            name,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              color: isSelected
+                                  ? colorScheme.onPrimaryContainer
+                                  : colorScheme.onSurface,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    // Description
+                    Text(
+                      description,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: isSelected
+                            ? colorScheme.onPrimaryContainer.withValues(alpha: 0.8)
+                            : colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    // Limitations (if any)
+                    if (limitations.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: limitations.map((limitation) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? colorScheme.onPrimaryContainer.withValues(alpha: 0.15)
+                                  : colorScheme.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              limitation,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: isSelected
+                                    ? colorScheme.onPrimaryContainer.withValues(alpha: 0.7)
+                                    : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Accessibility toggle section.
 class _AccessibilitySection extends StatelessWidget {
   const _AccessibilitySection();
@@ -148,7 +439,7 @@ class _AccessibilitySection extends StatelessWidget {
               size: 24,
             ),
             const SizedBox(width: 12),
-            Text(l10n.wheelchairAccessible),
+            Expanded(child: Text(l10n.wheelchairAccessible)),
           ],
         ),
         subtitle: Text(
@@ -591,3 +882,4 @@ class _SettingsCard extends StatelessWidget {
     );
   }
 }
+

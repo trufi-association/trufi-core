@@ -16,11 +16,13 @@ import 'transport_detail_screen.dart';
 import 'transport_list_content.dart';
 import 'transport_list_data_provider.dart';
 
-/// Transport List screen module for TrufiApp integration with OTP and Map support
+/// Transport List screen module for TrufiApp integration with OTP and Map support.
+///
+/// Uses the current routing provider from [RoutingEngineManager] to fetch
+/// transit routes. If the current provider doesn't support transit routes,
+/// it will try to find an online provider that does.
 class TransportListTrufiScreen extends TrufiScreen {
-  final OtpConfiguration otpConfiguration;
-
-  TransportListTrufiScreen({required this.otpConfiguration});
+  TransportListTrufiScreen();
 
   @override
   String get id => 'transport_list';
@@ -30,7 +32,7 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   Widget Function(BuildContext context) get builder =>
-      (_) => _TransportListScreenWidget(otpConfiguration: otpConfiguration);
+      (_) => const _TransportListScreenWidget();
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
@@ -58,9 +60,7 @@ class TransportListTrufiScreen extends TrufiScreen {
 }
 
 class _TransportListScreenWidget extends StatefulWidget {
-  final OtpConfiguration otpConfiguration;
-
-  const _TransportListScreenWidget({required this.otpConfiguration});
+  const _TransportListScreenWidget();
 
   @override
   State<_TransportListScreenWidget> createState() =>
@@ -69,38 +69,64 @@ class _TransportListScreenWidget extends StatefulWidget {
 
 class _TransportListScreenWidgetState
     extends State<_TransportListScreenWidget> {
-  late final TransportListDataProvider _dataProvider;
-  late final TransportListCache _cache;
+  TransportListDataProvider? _dataProvider;
+  TransportListCache? _cache;
   bool _urlParsed = false;
+  bool _initialized = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Initialize data provider with routing engine from context
+    if (!_initialized) {
+      _initialized = true;
+      _initializeDataProvider();
+    }
+
+    // Parse URL parameters on first load (web only)
+    _parseUrlAndOpenRoute();
+  }
+
+  void _initializeDataProvider() {
     _cache = TransportListCache();
-    _cache.initialize();
+    _cache!.initialize();
+
+    // Get the transit route repository from the routing engine manager
+    final routingManager = RoutingEngineManager.maybeRead(context);
+    TransitRouteRepository? repository;
+
+    if (routingManager != null) {
+      // Try current engine first
+      if (routingManager.currentEngine.supportsTransitRoutes) {
+        repository = routingManager.currentEngine.createTransitRouteRepository();
+      } else {
+        // Fallback: find any engine that supports transit routes
+        for (final engine in routingManager.engines) {
+          if (engine.supportsTransitRoutes) {
+            repository = engine.createTransitRouteRepository();
+            break;
+          }
+        }
+      }
+    }
+
     _dataProvider = OtpTransportDataProvider(
-      otpConfiguration: widget.otpConfiguration,
+      repository: repository,
       cache: _cache,
     );
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Parse URL parameters on first load (web only)
-    _parseUrlAndOpenRoute();
-  }
-
-  @override
   void dispose() {
-    _dataProvider.dispose();
-    _cache.dispose();
+    _dataProvider?.dispose();
+    _cache?.dispose();
     super.dispose();
   }
 
   /// Parses URL parameters and opens route detail if id is present (web only).
   void _parseUrlAndOpenRoute() {
-    if (!kIsWeb || _urlParsed) return;
+    if (!kIsWeb || _urlParsed || _dataProvider == null) return;
     _urlParsed = true;
 
     try {
@@ -111,11 +137,11 @@ class _TransportListScreenWidgetState
       if (routeId != null && routeId.isNotEmpty) {
         // Open route detail screen after frame is built
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
+          if (!mounted || _dataProvider == null) return;
           TransportDetailScreen.show(
             context,
             routeCode: routeId,
-            getRouteDetails: _dataProvider.getRouteDetails,
+            getRouteDetails: _dataProvider!.getRouteDetails,
             basePath: '/routes',
             mapBuilder: (
               context,
@@ -138,13 +164,18 @@ class _TransportListScreenWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = _dataProvider;
+    if (dataProvider == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return TransportListContent(
-      dataProvider: _dataProvider,
+      dataProvider: dataProvider,
       onRouteTap: (route) {
         TransportDetailScreen.show(
           context,
           routeCode: route.code,
-          getRouteDetails: _dataProvider.getRouteDetails,
+          getRouteDetails: dataProvider.getRouteDetails,
           basePath: '/routes',
           mapBuilder:
               (

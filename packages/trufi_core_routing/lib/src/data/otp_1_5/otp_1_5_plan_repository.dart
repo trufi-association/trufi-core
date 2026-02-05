@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -87,7 +88,7 @@ class Otp15PlanRepository implements PlanRepository {
         headers: {
           'Accept': 'application/json',
         },
-      );
+      ).timeout(const Duration(seconds: 60));
 
       if (response.statusCode != 200) {
         throw Otp15Exception(
@@ -106,6 +107,8 @@ class Otp15PlanRepository implements PlanRepository {
       }
 
       return Otp15ResponseParser.parsePlan(json);
+    } on TimeoutException {
+      throw Otp15Exception('Request timeout');
     } on FormatException catch (e) {
       throw Otp15Exception('Invalid response format: ${e.message}');
     } on http.ClientException catch (e) {

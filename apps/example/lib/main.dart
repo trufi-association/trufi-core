@@ -11,7 +11,12 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show OtpConfiguration, OtpVersion;
+    show
+        RoutingEngineManager,
+        IRoutingProvider,
+        Otp28RoutingProvider,
+        GtfsRoutingProvider,
+        GtfsRoutingConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
@@ -19,10 +24,6 @@ import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 import 'package:trufi_core_ui/trufi_core_ui.dart';
 
 // ============ CONFIGURATION ============
-const _otpConfiguration = OtpConfiguration(
-  endpoint: 'https://otp.trufi.app',
-  version: OtpVersion.v2_8,
-);
 const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
@@ -35,13 +36,47 @@ const _facebookUrl = 'https://facebook.com/trufiapp';
 const _xTwitterUrl = 'https://x.com/trufiapp';
 const _instagramUrl = 'https://instagram.com/trufiapp';
 
+// Routing engines (similar to map engines)
+final List<IRoutingProvider> _routingEngines = [
+  // Online routing via OTP 2.8
+  const Otp28RoutingProvider(
+    endpoint: 'https://otp.trufi.app',
+  ),
+  // Offline routing via GTFS (disabled on web)
+  if (!kIsWeb)
+    GtfsRoutingProvider(
+      config: const GtfsRoutingConfig(
+        gtfsAsset: 'assets/routing/cochabamba.gtfs.zip',
+      ),
+    ),
+];
+
+// Map engines
 final List<ITrufiMapEngine> _mapEngines = [
-  // Offline map - disabled on web
+  // Offline maps - disabled on web
+  if (!kIsWeb)
+    OfflineMapLibreEngine(
+      engineId: 'offline_osm_liberty',
+      displayName: 'Offline Liberty',
+      displayDescription: 'Mapa offline estándar',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/osm-liberty/style.json',
+        spritesAssetDir: 'assets/offline/styles/osm-liberty/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'RobotoRegular': 'Roboto Regular',
+          'RobotoMedium': 'Roboto Medium',
+          'RobotoCondensedItalic': 'Roboto Condensed Italic',
+        },
+        fontRanges: ['0-255', '256-511', '512-767', '768-1023', '1024-1279', '1280-1535', '8192-8447', '8448-8703'],
+      ),
+    ),
   if (!kIsWeb)
     OfflineMapLibreEngine(
       engineId: 'offline_osm_bright',
-      displayName: 'Mapa Offline',
-      displayDescription: 'Mapa sin conexión',
+      displayName: 'Offline Bright',
+      displayDescription: 'Mapa offline claro',
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/osm-bright/style.json',
@@ -55,7 +90,7 @@ final List<ITrufiMapEngine> _mapEngines = [
         fontRanges: ['0-255', '256-511', '512-767', '768-1023', '1024-1279', '1280-1535', '8192-8447', '8448-8703'],
       ),
     ),
-  // Online map
+  // Online maps
   const MapLibreEngine(
     engineId: 'osm_bright',
     styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
@@ -123,6 +158,11 @@ void main() {
             defaultCenter: _defaultCenter,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => RoutingEngineManager(
+            engines: _routingEngines,
+          ),
+        ),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
             searchLocationService: PhotonSearchService(
@@ -136,7 +176,6 @@ void main() {
       screens: [
         HomeScreenTrufiScreen(
           config: HomeScreenConfig(
-            otpConfiguration: _otpConfiguration,
             appName: _appName,
             deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
@@ -151,9 +190,7 @@ void main() {
           },
         ),
         SavedPlacesTrufiScreen(),
-        TransportListTrufiScreen(
-          otpConfiguration: _otpConfiguration,
-        ),
+        TransportListTrufiScreen(),
         FaresTrufiScreen(
           config: FaresConfig(
             currency: 'Bs.',

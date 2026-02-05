@@ -5,14 +5,13 @@ import 'models/transport_route.dart';
 import 'repository/transport_list_cache.dart';
 import 'transport_list_data_provider.dart';
 
-/// Data provider that connects to OpenTripPlanner to fetch transport routes.
+/// Data provider that fetches transport routes from a routing provider.
 ///
 /// Supports optional [cache] parameter for persisting routes between sessions.
 /// When cache is provided:
 /// - Routes are loaded from cache first (instant display)
 /// - Network fetch only happens on explicit refresh
 class OtpTransportDataProvider extends TransportListDataProvider {
-  final OtpConfiguration _otpConfiguration;
   final TransitRouteRepository? _repository;
   final TransportListCache? _cache;
 
@@ -23,11 +22,22 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   final Map<String, TransportRouteDetails> _detailsCache = {};
 
   OtpTransportDataProvider({
+    required TransitRouteRepository? repository,
+    TransportListCache? cache,
+  })  : _repository = repository,
+        _cache = cache;
+
+  /// Creates a data provider from an OtpConfiguration (legacy).
+  @Deprecated('Use the repository constructor instead')
+  factory OtpTransportDataProvider.fromOtpConfiguration({
     required OtpConfiguration otpConfiguration,
     TransportListCache? cache,
-  })  : _otpConfiguration = otpConfiguration,
-        _repository = otpConfiguration.createTransitRouteRepository(),
-        _cache = cache;
+  }) {
+    return OtpTransportDataProvider(
+      repository: otpConfiguration.createTransitRouteRepository(),
+      cache: cache,
+    );
+  }
 
   @override
   TransportListState get state => _state;
@@ -78,7 +88,7 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   Future<void> refresh() async {
     if (_repository == null) {
       throw UnsupportedError(
-        'Transit routes are not supported for OTP ${_otpConfiguration.version}',
+        'Transit routes are not supported by the current routing provider',
       );
     }
 

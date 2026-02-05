@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'l10n/settings_localizations.dart';
@@ -217,9 +218,17 @@ class _SettingsContentState extends State<_SettingsContent>
 
           const SizedBox(height: 16),
 
-          // Map settings card
+          // Routing settings card (before maps)
           _buildAnimatedItem(
             index: 2,
+            child: const _RoutingSettingsCard(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Map settings card
+          _buildAnimatedItem(
+            index: 3,
             child: const _MapSettingsCard(),
           ),
 
@@ -227,7 +236,7 @@ class _SettingsContentState extends State<_SettingsContent>
 
           // Privacy settings card
           _buildAnimatedItem(
-            index: 3,
+            index: 4,
             child: const _PrivacySettingsCard(),
           ),
         ],
@@ -371,13 +380,70 @@ class _MapSettingsCard extends StatelessWidget {
             padding: EdgeInsets.only(
               bottom: index < mapEngineManager.engines.length - 1 ? 8 : 0,
             ),
-            child: _MapOptionTile(
+            child: _EngineOptionTile(
               name: engine.name,
               description: engine.description,
+              icon: Icons.layers_rounded,
               isSelected: index == mapEngineManager.currentIndex,
               onTap: () {
                 HapticFeedback.selectionClick();
                 mapEngineManager.setEngineByIndex(index);
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Routing settings card with modern styling
+class _RoutingSettingsCard extends StatelessWidget {
+  const _RoutingSettingsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final settingsL10n = SettingsLocalizations.of(context);
+    final routingEngineManager = routing.RoutingEngineManager.maybeWatch(context);
+
+    // If no RoutingEngineManager is available or only one engine, don't show this card
+    if (routingEngineManager == null || !routingEngineManager.hasMultipleEngines) {
+      return const SizedBox.shrink();
+    }
+
+    return _SettingsCard(
+      icon: Icons.route_rounded,
+      iconColor: Colors.indigo,
+      title: settingsL10n.settingsRouting,
+      subtitle: settingsL10n.settingsSelectRoutingEngine,
+      child: Column(
+        children: routingEngineManager.engines.asMap().entries.map((entry) {
+          final index = entry.key;
+          final engine = entry.value;
+          final isOffline = !engine.requiresInternet;
+
+          // Get localized name and description
+          final name = isOffline ? settingsL10n.engineOfflineName : settingsL10n.engineOnlineName;
+          final description = isOffline ? settingsL10n.engineOfflineDescription : settingsL10n.engineOnlineDescription;
+
+          // Get limitations based on engine type
+          final limitations = isOffline
+              ? [settingsL10n.limitationNoWalkingRoute]
+              : [settingsL10n.limitationRequiresInternet, settingsL10n.limitationSlower];
+
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
+            ),
+            child: _RoutingEngineOptionTile(
+              name: name,
+              description: description,
+              limitations: limitations,
+              icon: isOffline ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
+              isSelected: index == routingEngineManager.currentIndex,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                routingEngineManager.setEngineByIndex(index);
               },
             ),
           );
@@ -665,16 +731,18 @@ class _ThemeOptionChip extends StatelessWidget {
   }
 }
 
-/// Map option tile with description
-class _MapOptionTile extends StatelessWidget {
+/// Engine option tile with description (used for map and routing engines)
+class _EngineOptionTile extends StatelessWidget {
   final String name;
   final String description;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _MapOptionTile({
+  const _EngineOptionTile({
     required this.name,
     required this.description,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
@@ -705,7 +773,7 @@ class _MapOptionTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Map icon
+              // Engine icon
               Container(
                 width: 44,
                 height: 44,
@@ -716,7 +784,7 @@ class _MapOptionTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  Icons.layers_rounded,
+                  icon,
                   color: isSelected
                       ? colorScheme.primary
                       : colorScheme.onSurfaceVariant,
@@ -747,6 +815,151 @@ class _MapOptionTile extends StatelessWidget {
                   ],
                 ),
               ),
+              // Selection indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant,
+                    width: 2,
+                  ),
+                ),
+                child: isSelected
+                    ? Icon(
+                        Icons.check_rounded,
+                        size: 16,
+                        color: colorScheme.onPrimary,
+                      )
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Routing engine option tile with description and limitations
+class _RoutingEngineOptionTile extends StatelessWidget {
+  final String name;
+  final String description;
+  final List<String> limitations;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _RoutingEngineOptionTile({
+    required this.name,
+    required this.description,
+    required this.limitations,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isSelected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.5)
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Engine icon
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? colorScheme.primary.withValues(alpha: 0.15)
+                      : colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              // Engine info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      description,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    if (limitations.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: limitations.map((limitation) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? colorScheme.primary.withValues(alpha: 0.15)
+                                  : colorScheme.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              limitation,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: isSelected
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               // Selection indicator
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),

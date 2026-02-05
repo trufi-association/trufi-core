@@ -13,6 +13,7 @@ import 'cubit/route_planner_cubit.dart';
 import 'repository/home_screen_repository.dart';
 import 'repository/home_screen_repository_impl.dart';
 import 'services/request_plan_service.dart';
+import 'services/routing_engine_request_plan_service.dart';
 import 'services/routing_request_plan_service.dart';
 import 'widgets/home_screen.dart';
 
@@ -20,7 +21,6 @@ import 'widgets/home_screen.dart';
 class HomeScreenTrufiScreen extends TrufiScreen {
   final HomeScreenConfig config;
   late final HomeScreenRepository _repository;
-  late final RequestPlanService _requestService;
   late final routing.RoutingPreferencesManager _routingPreferencesManager;
 
   /// Callback when itinerary details are requested.
@@ -33,8 +33,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )?
-  onStartNavigation;
+  )? onStartNavigation;
 
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
@@ -45,15 +44,30 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   HomeScreenTrufiScreen({
     required this.config,
     HomeScreenRepository? repository,
-    RequestPlanService? requestService,
     this.onItineraryDetails,
     this.onStartNavigation,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
-    _requestService =
-        requestService ??
-        RoutingRequestPlanService(config.otpConfiguration);
     _routingPreferencesManager = routing.RoutingPreferencesManager();
+  }
+
+  /// Creates the appropriate request service based on available context.
+  RequestPlanService _createRequestService(BuildContext context) {
+    // Prefer RoutingEngineManager if available (new pattern)
+    final routingEngineManager = routing.RoutingEngineManager.maybeRead(context);
+    if (routingEngineManager != null) {
+      return RoutingEngineRequestPlanService(manager: routingEngineManager);
+    }
+
+    // Fall back to legacy OtpConfiguration
+    if (config.otpConfiguration != null) {
+      return RoutingRequestPlanService(config.otpConfiguration!);
+    }
+
+    throw StateError(
+      'No routing configuration available. '
+      'Either provide RoutingEngineManager in providers or set otpConfiguration in HomeScreenConfig.',
+    );
   }
 
   @override
@@ -90,9 +104,9 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       value: _routingPreferencesManager,
     ),
     BlocProvider<RoutePlannerCubit>(
-      create: (_) => RoutePlannerCubit(
+      create: (context) => RoutePlannerCubit(
         repository: _repository,
-        requestService: _requestService,
+        requestService: _createRequestService(context),
         getRoutingPreferences: () => _routingPreferencesManager.preferences,
       )..initialize(),
     ),

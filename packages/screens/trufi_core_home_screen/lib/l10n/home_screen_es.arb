@@ -103,5 +103,15 @@
   "findingRoutes": "Buscando rutas...",
   "moreDepartures": "+{count} más",
   "otherDepartures": "Otras salidas",
-  "departsAt": "Sale a las {time}"
+  "departsAt": "Sale a las {time}",
+  "routingProvider": "Proveedor de rutas",
+  "autoFallback": "Respaldo automático",
+  "autoFallbackDescription": "Intenta online primero, usa offline si falla",
+  "engineOnlineName": "Online",
+  "engineOnlineDescription": "OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.",
+  "engineOfflineName": "Offline",
+  "engineOfflineDescription": "Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.",
+  "limitationRequiresInternet": "Requiere internet",
+  "limitationSlower": "Respuesta más lenta",
+  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"
 }

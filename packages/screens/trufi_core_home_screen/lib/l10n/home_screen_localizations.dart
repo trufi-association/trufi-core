@@ -726,6 +726,66 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Departs {time}'**
   String departsAt(String time);
+
+  /// Title for routing provider selection section
+  ///
+  /// In en, this message translates to:
+  /// **'Routing Provider'**
+  String get routingProvider;
+
+  /// Label for auto fallback mode toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Auto fallback'**
+  String get autoFallback;
+
+  /// Description for auto fallback mode
+  ///
+  /// In en, this message translates to:
+  /// **'Try online first, use offline if it fails'**
+  String get autoFallbackDescription;
+
+  /// Name for online routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get engineOnlineName;
+
+  /// Description for online routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'OpenTripPlanner 2.8. Real-time routing with detailed walking directions.'**
+  String get engineOnlineDescription;
+
+  /// Name for offline routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get engineOfflineName;
+
+  /// Description for offline routing engine
+  ///
+  /// In en, this message translates to:
+  /// **'GTFS-based routing inspired by GuíaCochala. Works without internet.'**
+  String get engineOfflineDescription;
+
+  /// Limitation tag for engines that require internet
+  ///
+  /// In en, this message translates to:
+  /// **'Requires internet'**
+  String get limitationRequiresInternet;
+
+  /// Limitation tag for engines that are slower
+  ///
+  /// In en, this message translates to:
+  /// **'Slower response'**
+  String get limitationSlower;
+
+  /// Limitation tag for engines that don't show walking routes on map
+  ///
+  /// In en, this message translates to:
+  /// **'No walking route on map'**
+  String get limitationNoWalkingRoute;
 }
 
 class _HomeScreenLocalizationsDelegate

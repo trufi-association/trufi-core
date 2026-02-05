@@ -27,6 +27,7 @@ export 'src/domain/entities/transit_route.dart';
 export 'src/domain/entities/transport_mode.dart';
 export 'src/domain/entities/vertex_type.dart';
 export 'src/domain/entities/routing_preferences.dart';
+export 'src/domain/entities/routing_capabilities.dart';
 
 // ============================================
 // DOMAIN LAYER - Repositories
@@ -85,3 +86,27 @@ export 'src/data/otp_2_8/otp_2_8_response_parser.dart';
 // ============================================
 export 'src/data/storage/local_storage.dart';
 export 'src/data/storage/storage_map_route_repository.dart';
+
+// ============================================
+// ROUTING PROVIDERS
+// ============================================
+export 'src/routing_configuration.dart';
+export 'src/routing_engine_manager.dart';
+export 'src/providers/routing_provider.dart';
+export 'src/providers/otp_28_routing_provider.dart';
+export 'src/providers/otp_24_routing_provider.dart';
+export 'src/providers/otp_15_routing_provider.dart';
+
+// ============================================
+// GTFS ROUTING (offline routing)
+// ============================================
+export 'src/providers/gtfs/gtfs_routing_provider.dart';
+export 'src/providers/gtfs/gtfs_routing_config.dart';
+export 'src/providers/gtfs/gtfs_data_source.dart';
+export 'src/providers/gtfs/parser/gtfs_parser.dart';
+export 'src/providers/gtfs/data/gtfs_plan_repository.dart';
+export 'src/providers/gtfs/data/gtfs_transit_route_repository.dart';
+export 'src/providers/gtfs/models/gtfs_models.dart';
+export 'src/providers/gtfs/index/gtfs_spatial_index.dart';
+export 'src/providers/gtfs/index/gtfs_route_index.dart';
+export 'src/providers/gtfs/index/gtfs_schedule_index.dart';
