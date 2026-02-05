@@ -64,6 +64,19 @@ class GtfsParser {
     return result;
   }
 
+  /// Parse GTFS data from raw bytes (synchronous, for use in isolates).
+  static GtfsData parseFromBytes(Uint8List data) {
+    final sw = Stopwatch()..start();
+
+    final result = _parseGtfsInIsolate(data);
+
+    sw.stop();
+    debugPrint('GtfsParser: Parsed GTFS in ${sw.elapsedMilliseconds}ms');
+    debugPrint('GtfsParser: ${result.stops.length} stops, ${result.routes.length} routes, ${result.trips.length} trips');
+
+    return result;
+  }
+
   /// Parse GTFS data in an isolate.
   static GtfsData _parseGtfsInIsolate(Uint8List data) {
     final archive = ZipDecoder().decodeBytes(data);

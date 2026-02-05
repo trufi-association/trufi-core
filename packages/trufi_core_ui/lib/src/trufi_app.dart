@@ -228,6 +228,12 @@ class _AppInitializerState extends State<AppInitializer> {
         setState(() {
           _isInitialized = true;
         });
+        // Notify app is ready AFTER the UI is built so overlays can be shown
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            OverlayManager.read(context).notifyAppReady();
+          }
+        });
       }
     } catch (e, stackTrace) {
       debugPrint('Error during initialization: $e');
@@ -273,9 +279,6 @@ class _AppInitializerState extends State<AppInitializer> {
     for (final screen in widget.screens) {
       await screen.initialize();
     }
-
-    // Notify managers that app is ready so they can push overlays
-    overlayManager.notifyAppReady();
   }
 
   Widget _buildDefaultInitializer() {

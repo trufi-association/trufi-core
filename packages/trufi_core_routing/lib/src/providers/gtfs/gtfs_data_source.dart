@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'index/gtfs_route_index.dart';
@@ -15,6 +16,21 @@ enum GtfsDataStatus {
   loading,
   loaded,
   error,
+}
+
+/// Result of loading GTFS data with indices (for isolate communication).
+class _GtfsLoadResult {
+  final GtfsData data;
+  final GtfsSpatialIndex spatialIndex;
+  final GtfsRouteIndex routeIndex;
+  final GtfsScheduleIndex scheduleIndex;
+
+  const _GtfsLoadResult({
+    required this.data,
+    required this.spatialIndex,
+    required this.routeIndex,
+    required this.scheduleIndex,
+  });
 }
 
 /// Main data source for GTFS data.
@@ -83,11 +99,17 @@ class GtfsDataSource {
       debugPrint('GtfsDataSource: Preloading from $assetPath');
       final sw = Stopwatch()..start();
 
-      // Parse GTFS
-      _data = await GtfsParser.parseFromAsset(assetPath);
+      // Load asset bytes on main thread (required by rootBundle)
+      final bytes = await rootBundle.load(assetPath);
+      final assetData = bytes.buffer.asUint8List();
 
-      // Build indices
-      _buildIndices();
+      // Parse GTFS and build ALL indices in isolate to avoid blocking UI
+      final result = await compute(_loadAndBuildInIsolate, assetData);
+
+      _data = result.data;
+      _spatialIndex = result.spatialIndex;
+      _routeIndex = result.routeIndex;
+      _scheduleIndex = result.scheduleIndex;
 
       sw.stop();
       debugPrint('GtfsDataSource: Preloaded in ${sw.elapsedMilliseconds}ms');
@@ -103,35 +125,37 @@ class GtfsDataSource {
     }
   }
 
-  void _buildIndices() {
-    if (_data == null) return;
+  /// Load and build all indices in an isolate to avoid blocking the UI thread.
+  static _GtfsLoadResult _loadAndBuildInIsolate(Uint8List assetData) {
+    final totalSw = Stopwatch()..start();
 
-    final sw = Stopwatch()..start();
+    // Parse GTFS
+    final data = GtfsParser.parseFromBytes(assetData);
 
-    // Build spatial index
-    _spatialIndex = GtfsSpatialIndex(_data!.stops);
-    debugPrint('GtfsDataSource: Spatial index built');
-
-    // Build route index
-    _routeIndex = GtfsRouteIndex(
-      routes: _data!.routes,
-      trips: _data!.trips,
-      stopTimes: _data!.stopTimes,
+    // Build indices
+    final spatialIndex = GtfsSpatialIndex(data.stops);
+    final routeIndex = GtfsRouteIndex(
+      routes: data.routes,
+      trips: data.trips,
+      stopTimes: data.stopTimes,
     );
-    debugPrint('GtfsDataSource: Route index built');
-
-    // Build schedule index
-    _scheduleIndex = GtfsScheduleIndex(
-      trips: _data!.trips,
-      stopTimes: _data!.stopTimes,
-      calendars: _data!.calendars,
-      calendarDates: _data!.calendarDates,
-      frequencies: _data!.frequencies,
+    final scheduleIndex = GtfsScheduleIndex(
+      trips: data.trips,
+      stopTimes: data.stopTimes,
+      calendars: data.calendars,
+      calendarDates: data.calendarDates,
+      frequencies: data.frequencies,
     );
-    debugPrint('GtfsDataSource: Schedule index built');
 
-    sw.stop();
-    debugPrint('GtfsDataSource: All indices built in ${sw.elapsedMilliseconds}ms');
+    totalSw.stop();
+    debugPrint('GtfsDataSource: Total isolate work in ${totalSw.elapsedMilliseconds}ms');
+
+    return _GtfsLoadResult(
+      data: data,
+      spatialIndex: spatialIndex,
+      routeIndex: routeIndex,
+      scheduleIndex: scheduleIndex,
+    );
   }
 
   // === Convenience methods ===
