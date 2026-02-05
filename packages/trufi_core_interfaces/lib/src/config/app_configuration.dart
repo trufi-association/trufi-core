@@ -6,96 +6,64 @@ import 'trufi_theme_config.dart';
 import 'trufi_locale_config.dart';
 import 'social_media_config.dart';
 
-/// Builder for the loading screen shown during app initialization.
-///
-/// Parameters:
-/// - [context]: The build context
-///
-/// Example:
-/// ```dart
-/// Widget myLoadingScreen(BuildContext context) {
-///   return Scaffold(
-///     body: Center(
-///       child: Column(
-///         mainAxisAlignment: MainAxisAlignment.center,
-///         children: [
-///           CircularProgressIndicator(),
-///           SizedBox(height: 16),
-///           Text('Loading...'),
-///         ],
-///       ),
-///     ),
-///   );
-/// }
-/// ```
-typedef LoadingScreenBuilder = Widget Function(BuildContext context);
+/// Steps during app initialization.
+enum AppInitStep {
+  /// Initial state, starting up
+  starting,
 
-/// Builder for the error screen shown when initialization fails.
+  /// Initializing overlay managers
+  initializingOverlays,
+
+  /// Loading map engines
+  loadingMaps,
+
+  /// Loading routing engines
+  loadingRoutes,
+
+  /// Preparing screen modules
+  preparingScreens,
+}
+
+/// Builder for custom app initialization screen.
 ///
 /// Parameters:
-/// - [context]: The build context
-/// - [error]: The error that occurred
-/// - [onRetry]: Callback to retry initialization
+/// - [currentStep]: Current initialization step (null if error)
+/// - [errorMessage]: Error message if initialization failed (null if loading)
+/// - [onRetry]: Callback to retry initialization after an error
 ///
 /// Example:
 /// ```dart
-/// Widget myErrorScreen(
+/// Widget myInitScreen(
 ///   BuildContext context,
-///   Object error,
+///   AppInitStep? currentStep,
+///   String? errorMessage,
 ///   VoidCallback onRetry,
 /// ) {
-///   return Scaffold(
-///     body: Center(
-///       child: Column(
-///         mainAxisAlignment: MainAxisAlignment.center,
-///         children: [
-///           Icon(Icons.error, size: 64, color: Colors.red),
-///           SizedBox(height: 16),
-///           Text('Error: $error'),
-///           SizedBox(height: 16),
-///           ElevatedButton(
-///             onPressed: onRetry,
-///             child: Text('Retry'),
-///           ),
-///         ],
-///       ),
-///     ),
+///   if (errorMessage != null) {
+///     return Column(
+///       mainAxisAlignment: MainAxisAlignment.center,
+///       children: [
+///         Icon(Icons.error, color: Colors.red),
+///         Text('Error: $errorMessage'),
+///         ElevatedButton(onPressed: onRetry, child: Text('Retry')),
+///       ],
+///     );
+///   }
+///
+///   return Column(
+///     mainAxisAlignment: MainAxisAlignment.center,
+///     children: [
+///       CircularProgressIndicator(),
+///       Text(_stepToString(currentStep)),
+///     ],
 ///   );
 /// }
 /// ```
-typedef ErrorScreenBuilder = Widget Function(
+typedef AppInitScreenBuilder = Widget Function(
   BuildContext context,
-  Object error,
+  AppInitStep? currentStep,
+  String? errorMessage,
   VoidCallback onRetry,
-);
-
-/// Factory function for creating custom app initializer widgets.
-///
-/// This builder allows you to completely customize the initialization flow.
-/// The [TrufiApp] will call the async initialization internally and manage the state.
-///
-/// Parameters:
-/// - [context]: The build context
-/// - [initializeAsync]: Async callback that performs the initialization (call this to start)
-/// - [child]: The main app widget to show after initialization completes
-///
-/// Example:
-/// ```dart
-/// Widget myCustomInitializer(
-///   BuildContext context,
-///   Future<void> Function() initializeAsync,
-///   Widget child,
-/// ) {
-///   return MyCustomInitializerWidget(
-///     onInit: initializeAsync,
-///     child: child,
-///   );
-/// }
-/// ```
-typedef AppInitializerBuilder = Widget Function(
-  BuildContext context,
-  Future<void> Function() initializeAsync,
-  Widget child,
 );
 
 /// Application configuration
@@ -138,30 +106,16 @@ class AppConfiguration {
   /// ```
   final List<SingleChildWidget> providers;
 
-  /// Optional custom loading screen builder.
+  /// Optional custom initialization screen builder.
   ///
-  /// If provided, this will be used instead of the default loading spinner
-  /// during app initialization.
+  /// If provided, this will be used instead of the default initialization UI.
+  /// The builder receives:
+  /// - [currentStep]: Current step (null if error occurred)
+  /// - [errorMessage]: Error message (null if loading normally)
+  /// - [onRetry]: Callback to retry initialization
   ///
-  /// If null, the default loading screen with spinner is used.
-  final LoadingScreenBuilder? loadingScreenBuilder;
-
-  /// Optional custom error screen builder.
-  ///
-  /// If provided, this will be used instead of the default error screen
-  /// when initialization fails.
-  ///
-  /// If null, the default error screen with retry button is used.
-  final ErrorScreenBuilder? errorScreenBuilder;
-
-  /// Optional custom app initializer builder.
-  ///
-  /// If provided, this will be used instead of the default initialization flow.
-  /// This gives you complete control over the initialization UI and flow.
-  ///
-  /// If null, the default initialization flow with [loadingScreenBuilder] and
-  /// [errorScreenBuilder] is used.
-  final AppInitializerBuilder? appInitializerBuilder;
+  /// If null, a beautiful default initialization screen is shown.
+  final AppInitScreenBuilder? initScreenBuilder;
 
   const AppConfiguration({
     required this.appName,
@@ -172,8 +126,6 @@ class AppConfiguration {
     this.deepLinkScheme,
     this.defaultLocale,
     this.providers = const [],
-    this.loadingScreenBuilder,
-    this.errorScreenBuilder,
-    this.appInitializerBuilder,
+    this.initScreenBuilder,
   });
 }

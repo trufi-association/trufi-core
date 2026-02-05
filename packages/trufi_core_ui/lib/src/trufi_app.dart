@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
-import 'package:trufi_core_maps/trufi_core_maps.dart' show MapEngineManager;
-import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show RoutingEngineManager;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
+import 'app_initializer/app_initializer.dart';
 import 'l10n/core_localizations.dart';
 import 'overlay/overlay_container.dart';
 import 'router/app_router.dart';
@@ -25,9 +22,8 @@ export 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
         TrufiLocaleConfig,
         TrufiThemeConfig,
         SocialMediaLink,
-        AppInitializerBuilder,
-        LoadingScreenBuilder,
-        ErrorScreenBuilder;
+        AppInitStep,
+        AppInitScreenBuilder;
 export 'services/deep_link_service.dart' show SharedRoute, SharedRouteNotifier;
 
 /// Run the Trufi app with the given configuration
@@ -153,10 +149,7 @@ class _TrufiAppState extends State<TrufiApp> {
       // Layer 2: Initialize screens and managers with loading screen
       child: AppInitializer(
         screens: widget.config.screens,
-        providers: widget.config.providers,
-        loadingScreenBuilder: widget.config.loadingScreenBuilder,
-        errorScreenBuilder: widget.config.errorScreenBuilder,
-        customBuilder: widget.config.appInitializerBuilder,
+        screenBuilder: widget.config.initScreenBuilder,
         // Layer 3: Show the actual app once initialized
         child: _TrufiMaterialApp(
           config: widget.config,
@@ -167,204 +160,6 @@ class _TrufiAppState extends State<TrufiApp> {
         ),
       ),
     );
-  }
-}
-
-/// Widget that initializes screens and managers before showing the app.
-///
-/// This widget handles the app initialization phase by:
-/// 1. Initializing all app managers (OnboardingManager, etc.)
-/// 2. Initializing all screen modules (each screen is responsible for initializing its own providers)
-/// 3. Showing a loading screen during initialization
-/// 4. Showing an error screen with retry if initialization fails
-/// 5. Showing the child widget once initialization completes
-///
-/// You can customize the UI via [loadingScreenBuilder], [errorScreenBuilder],
-/// or completely override the flow with [customBuilder].
-class AppInitializer extends StatefulWidget {
-  final List<TrufiScreen> screens;
-  final List<SingleChildWidget> providers;
-  final LoadingScreenBuilder? loadingScreenBuilder;
-  final ErrorScreenBuilder? errorScreenBuilder;
-  final AppInitializerBuilder? customBuilder;
-  final Widget child;
-
-  const AppInitializer({
-    super.key,
-    required this.screens,
-    required this.providers,
-    this.loadingScreenBuilder,
-    this.errorScreenBuilder,
-    this.customBuilder,
-    required this.child,
-  });
-
-  @override
-  State<AppInitializer> createState() => _AppInitializerState();
-}
-
-class _AppInitializerState extends State<AppInitializer> {
-  bool _isInitialized = false;
-  bool _hasError = false;
-  String? _errorMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    // Start initialization after first frame when context is available
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initialize());
-  }
-
-  Future<void> _initialize() async {
-    setState(() {
-      _hasError = false;
-      _errorMessage = null;
-    });
-
-    try {
-      await _performInitialization();
-
-      if (mounted) {
-        setState(() {
-          _isInitialized = true;
-        });
-        // Notify app is ready AFTER the UI is built so overlays can be shown
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            OverlayManager.read(context).notifyAppReady();
-          }
-        });
-      }
-    } catch (e, stackTrace) {
-      debugPrint('Error during initialization: $e');
-      debugPrint('Stack trace: $stackTrace');
-
-      if (mounted) {
-        setState(() {
-          _hasError = true;
-          _errorMessage = e.toString();
-        });
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // If custom builder is provided, use it
-    if (widget.customBuilder != null) {
-      return widget.customBuilder!(
-        context,
-        _performInitialization,
-        widget.child,
-      );
-    }
-
-    // Otherwise, use default initialization UI
-    return _buildDefaultInitializer();
-  }
-
-  /// Performs the actual initialization of managers and screens.
-  /// This can be called by custom builders.
-  Future<void> _performInitialization() async {
-    // Capture all managers before async operations to avoid BuildContext issues
-    final overlayManager = OverlayManager.read(context);
-    final mapManager = MapEngineManager.read(context);
-    final routingManager = RoutingEngineManager.read(context);
-
-    await overlayManager.initializeManagers();
-    await mapManager.initializeEngines();
-    await routingManager.initializeEngines();
-
-    // Initialize all screen modules
-    for (final screen in widget.screens) {
-      await screen.initialize();
-    }
-  }
-
-  Widget _buildDefaultInitializer() {
-    // Show error screen with retry
-    if (_hasError) {
-      // Use custom error screen builder if provided
-      if (widget.errorScreenBuilder != null) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: widget.errorScreenBuilder!(
-            context,
-            _errorMessage ?? 'Unknown error',
-            _initialize,
-          ),
-        );
-      }
-
-      // Default error screen
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Failed to initialize app',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    _errorMessage ?? 'Unknown error',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton.icon(
-                    onPressed: _initialize,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    // Show loading screen
-    if (!_isInitialized) {
-      // Use custom loading screen builder if provided
-      if (widget.loadingScreenBuilder != null) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: widget.loadingScreenBuilder!(context),
-        );
-      }
-
-      // Default loading screen
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 24),
-                Text(
-                  'Loading...',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    // Show the actual app
-    return widget.child;
   }
 }
 
