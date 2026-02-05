@@ -56,7 +56,6 @@ class TrufiApp extends StatefulWidget {
 class _TrufiAppState extends State<TrufiApp> {
   late final LocaleManager _localeManager;
   late final ThemeManager _themeManager;
-  late final OverlayManager _overlayManager;
   late final AppRouter _router;
   late final SharedRouteNotifier _sharedRouteNotifier;
   DeepLinkService? _deepLinkService;
@@ -83,9 +82,6 @@ class _TrufiAppState extends State<TrufiApp> {
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,
-    );
-    _overlayManager = OverlayManager(
-      appOverlayManagers: widget.config.appOverlayManagers,
     );
     _router = AppRouter(
       screens: widget.config.screens,
@@ -150,7 +146,6 @@ class _TrufiAppState extends State<TrufiApp> {
       providers: [
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
-        ChangeNotifierProvider.value(value: _overlayManager),
         ChangeNotifierProvider.value(value: _sharedRouteNotifier),
         ...widget.config.providers,
         ...screenProviders,
@@ -270,10 +265,7 @@ class _AppInitializerState extends State<AppInitializer> {
     final mapManager = MapEngineManager.read(context);
     final routingManager = RoutingEngineManager.read(context);
 
-    // Initialize all AppOverlayManagers
     await overlayManager.initializeManagers();
-
-    // Initialize all engines
     await mapManager.initializeEngines();
     await routingManager.initializeEngines();
 

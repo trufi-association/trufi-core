@@ -22,6 +22,7 @@ import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 import 'package:trufi_core_ui/trufi_core_ui.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
 const _photonUrl = 'https://photon.trufi.app';
@@ -124,16 +125,6 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
-      appOverlayManagers: [
-        OnboardingManager(
-          overlayBuilder: (onComplete) =>
-              OnboardingSheet(onComplete: onComplete),
-        ),
-        PrivacyConsentManager(
-          overlayBuilder: (onAccept, onDecline) =>
-              PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
-        ),
-      ],
       socialMediaLinks: const [
         SocialMediaLink(
           url: _facebookUrl,
@@ -161,6 +152,20 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => RoutingEngineManager(
             engines: _routingEngines,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OverlayManager(
+            managers: [
+              OnboardingManager(
+                overlayBuilder: (onComplete) =>
+                    OnboardingSheet(onComplete: onComplete),
+              ),
+              PrivacyConsentManager(
+                overlayBuilder: (onAccept, onDecline) =>
+                    PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
+              ),
+            ],
           ),
         ),
         BlocProvider(
