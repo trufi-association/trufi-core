@@ -17,16 +17,22 @@ import 'default_init_screen.dart';
 /// 5. Showing the child widget once initialization completes
 ///
 /// Customize the initialization UI via [screenBuilder].
+/// Customize the theme via [theme].
 class AppInitializer extends StatefulWidget {
   final List<TrufiScreen> screens;
   final AppInitScreenBuilder? screenBuilder;
   final Widget child;
+
+  /// Optional theme for the initialization screen.
+  /// Defaults to a green Material 3 theme.
+  final ThemeData? theme;
 
   const AppInitializer({
     super.key,
     required this.screens,
     this.screenBuilder,
     required this.child,
+    this.theme,
   });
 
   @override
@@ -117,19 +123,17 @@ class _AppInitializerState extends State<AppInitializer> {
     }
 
     // Use custom builder or default to DefaultInitScreen
-    final builder = widget.screenBuilder ??
+    final builder =
+        widget.screenBuilder ??
         (context, step, error, retry) => DefaultInitScreen(
-              currentStep: step,
-              errorMessage: error,
-              onRetry: retry,
-            );
+          currentStep: step,
+          errorMessage: error,
+          onRetry: retry,
+        );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
+      theme: widget.theme,
       home: builder(
         context,
         _hasError ? null : _currentStep,

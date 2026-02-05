@@ -107,28 +107,7 @@ class _TrufiAppState extends State<TrufiApp> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-      useMaterial3: true,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        elevation: 2,
-      ),
-    );
-
-    final defaultDarkTheme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.green,
-        brightness: Brightness.dark,
-      ),
-      useMaterial3: true,
-      appBarTheme: AppBarTheme(
-        backgroundColor: Colors.green[700],
-        foregroundColor: Colors.white,
-        elevation: 2,
-      ),
-    );
+    final themeConfig = widget.config.themeConfig;
 
     final screenDelegates = widget.config.screens
         .expand((s) => s.localizationsDelegates)
@@ -150,12 +129,11 @@ class _TrufiAppState extends State<TrufiApp> {
       child: AppInitializer(
         screens: widget.config.screens,
         screenBuilder: widget.config.initScreenBuilder,
+        theme: themeConfig.theme,
         // Layer 3: Show the actual app once initialized
         child: _TrufiMaterialApp(
           config: widget.config,
           router: _router,
-          defaultTheme: defaultTheme,
-          defaultDarkTheme: defaultDarkTheme,
           screenDelegates: screenDelegates,
         ),
       ),
@@ -166,15 +144,11 @@ class _TrufiAppState extends State<TrufiApp> {
 class _TrufiMaterialApp extends StatelessWidget {
   final AppConfiguration config;
   final AppRouter router;
-  final ThemeData defaultTheme;
-  final ThemeData defaultDarkTheme;
   final List<LocalizationsDelegate> screenDelegates;
 
   const _TrufiMaterialApp({
     required this.config,
     required this.router,
-    required this.defaultTheme,
-    required this.defaultDarkTheme,
     required this.screenDelegates,
   });
 
@@ -186,8 +160,8 @@ class _TrufiMaterialApp extends StatelessWidget {
     return MaterialApp.router(
       title: config.appName,
       debugShowCheckedModeBanner: false,
-      theme: config.themeConfig.theme ?? defaultTheme,
-      darkTheme: config.themeConfig.darkTheme ?? defaultDarkTheme,
+      theme: config.themeConfig.theme,
+      darkTheme: config.themeConfig.darkTheme,
       themeMode: themeManager.themeMode,
       routerConfig: router.router,
       locale: localeManager.currentLocale,

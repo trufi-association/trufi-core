@@ -125,6 +125,8 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
+      // Usa los defaults (verde Material 3) - ver TrufiThemeConfig
+      themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: const [
         SocialMediaLink(
           url: _facebookUrl,
