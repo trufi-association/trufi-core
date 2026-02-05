@@ -538,6 +538,22 @@ class _LegItem extends StatefulWidget {
 
 class _LegItemState extends State<_LegItem> {
   bool _isExpanded = false;
+  bool _isNavigating = false;
+
+  void _handleRouteTap() {
+    if (_isNavigating) return;
+    final routeCode = widget.leg.tripPatternId ?? widget.leg.route?.id ?? '';
+    if (routeCode.isEmpty) return;
+
+    _isNavigating = true;
+    HapticFeedback.lightImpact();
+    widget.onRouteTap!(routeCode);
+
+    // Reset after a delay to allow navigation to complete
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) _isNavigating = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -645,15 +661,8 @@ class _LegItemState extends State<_LegItem> {
           children: [
             // Route badge with icon (tappable)
             GestureDetector(
-              onTap: widget.onRouteTap != null
-                  ? () {
-                      final routeCode = leg.route?.id ?? leg.shortName ?? '';
-                      if (routeCode.isNotEmpty) {
-                        HapticFeedback.lightImpact();
-                        widget.onRouteTap!(routeCode);
-                      }
-                    }
-                  : null,
+              behavior: HitTestBehavior.opaque,
+              onTap: widget.onRouteTap != null ? _handleRouteTap : null,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(

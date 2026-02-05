@@ -44,87 +44,20 @@ class TransportDetailScreen extends StatefulWidget {
     this.basePath,
   });
 
-  /// Shows the transport detail screen using the routing engine from context.
+  /// Shows the transport detail screen.
   ///
-  /// This is the simplest way to show route details - just pass the route code
-  /// and everything else is configured automatically from the context.
-  static Future<void> showWithRoutingEngine(
-    BuildContext context, {
-    required String routeCode,
-    String basePath = '/routes',
-  }) {
-    final routingManager = RoutingEngineManager.read(context);
-    final repository = routingManager.currentEngine.createTransitRouteRepository();
-
-    if (repository == null) {
-      throw StateError('Current routing engine does not support transit routes');
-    }
-
-    return show(
-      context,
-      routeCode: routeCode,
-      basePath: basePath,
-      getRouteDetails: (code) async {
-        final route = await repository.fetchPatternById(code);
-        return TransportRouteDetails(
-          id: route.id,
-          code: route.code,
-          name: route.name,
-          shortName: route.route?.shortName,
-          longName: route.route?.longName,
-          backgroundColor: route.route?.color != null
-              ? Color(int.parse('FF${route.route!.color}', radix: 16))
-              : null,
-          textColor: route.route?.textColor != null
-              ? Color(int.parse('FF${route.route!.textColor}', radix: 16))
-              : null,
-          geometry: route.geometry
-              ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
-              .toList(),
-          stops: route.stops
-              ?.map((s) => TransportStop(
-                    id: s.name,
-                    name: s.name,
-                    latitude: s.lat,
-                    longitude: s.lon,
-                  ))
-              .toList(),
-        );
-      },
-      mapBuilder: (context, routeDetails, registerMapMoveCallback, registerStopSelectionCallback) {
-        return _RouteMapView(
-          route: routeDetails,
-          registerMapMoveCallback: registerMapMoveCallback,
-          registerStopSelectionCallback: registerStopSelectionCallback,
-        );
-      },
-    );
-  }
-
+  /// Uses [RoutingEngineManager] and [MapEngineManager] from context automatically.
   static Future<void> show(
     BuildContext context, {
     required String routeCode,
-    required Future<TransportRouteDetails?> Function(String code)
-    getRouteDetails,
-    Widget Function(
-      BuildContext context,
-      TransportRouteDetails? route,
-      void Function(MapMoveCallback) registerMapMoveCallback,
-      void Function(StopSelectionCallback) registerStopSelectionCallback,
-    )?
-    mapBuilder,
-    Uri? shareBaseUri,
-    String? basePath,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             TransportDetailScreen(
               routeCode: routeCode,
-              getRouteDetails: getRouteDetails,
-              mapBuilder: mapBuilder,
-              shareBaseUri: shareBaseUri,
-              basePath: basePath,
+              getRouteDetails: _createGetRouteDetails(context),
+              mapBuilder: _defaultMapBuilder,
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
@@ -144,6 +77,58 @@ class TransportDetailScreen extends StatefulWidget {
         transitionDuration: const Duration(milliseconds: 300),
       ),
     );
+  }
+
+  /// Default map builder using _RouteMapView.
+  static Widget _defaultMapBuilder(
+    BuildContext context,
+    TransportRouteDetails? route,
+    void Function(MapMoveCallback) registerMapMoveCallback,
+    void Function(StopSelectionCallback) registerStopSelectionCallback,
+  ) {
+    return _RouteMapView(
+      route: route,
+      registerMapMoveCallback: registerMapMoveCallback,
+      registerStopSelectionCallback: registerStopSelectionCallback,
+    );
+  }
+
+  /// Creates a getRouteDetails function using RoutingEngineManager from context.
+  static Future<TransportRouteDetails?> Function(String) _createGetRouteDetails(
+    BuildContext context,
+  ) {
+    final routingManager = RoutingEngineManager.read(context);
+    final repository = routingManager.currentEngine.createTransitRouteRepository();
+
+    return (String code) async {
+      if (repository == null) return null;
+
+      final route = await repository.fetchPatternById(code);
+      return TransportRouteDetails(
+        id: route.id,
+        code: route.code,
+        name: route.name,
+        shortName: route.route?.shortName,
+        longName: route.route?.longName,
+        backgroundColor: route.route?.color != null
+            ? Color(int.parse('FF${route.route!.color}', radix: 16))
+            : null,
+        textColor: route.route?.textColor != null
+            ? Color(int.parse('FF${route.route!.textColor}', radix: 16))
+            : null,
+        geometry: route.geometry
+            ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
+            .toList(),
+        stops: route.stops
+            ?.map((s) => TransportStop(
+                  id: s.name,
+                  name: s.name,
+                  latitude: s.lat,
+                  longitude: s.lon,
+                ))
+            .toList(),
+      );
+    };
   }
 
   @override

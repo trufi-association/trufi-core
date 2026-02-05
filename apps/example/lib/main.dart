@@ -225,10 +225,7 @@ void main() {
             );
           },
           onRouteTap: (context, routeCode) {
-            TransportDetailScreen.showWithRoutingEngine(
-              context,
-              routeCode: routeCode,
-            );
+            TransportDetailScreen.show(context, routeCode: routeCode);
           },
         ),
         SavedPlacesTrufiScreen(),
