@@ -1,4 +1,5 @@
 import '../data/otp_1_5/otp_1_5_plan_repository.dart';
+import '../data/otp_1_5/otp_1_5_transit_route_repository.dart';
 import '../domain/entities/routing_capabilities.dart';
 import '../domain/repositories/plan_repository.dart';
 import '../domain/repositories/transit_route_repository.dart';
@@ -10,7 +11,9 @@ import 'routing_provider.dart';
 /// Location format: "lat,lon"
 /// Times: milliseconds since epoch
 ///
-/// Note: This version does NOT support listing transit routes (patterns query).
+/// Transit routes are fetched via the index API:
+/// - /otp/routers/default/index/routes
+/// - /otp/routers/default/index/patterns/{id}
 ///
 /// Example:
 /// ```dart
@@ -49,7 +52,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
       displayDescription ?? 'OpenTripPlanner 1.5 (Online)';
 
   @override
-  bool get supportsTransitRoutes => false;
+  bool get supportsTransitRoutes => true;
 
   @override
   bool get requiresInternet => true;
@@ -67,8 +70,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
 
   @override
   TransitRouteRepository? createTransitRouteRepository() {
-    // OTP 1.5 doesn't support patterns query via REST
-    return null;
+    return Otp15TransitRouteRepository(endpoint: endpoint);
   }
 
   /// Returns the REST API endpoint URL for OTP 1.5.

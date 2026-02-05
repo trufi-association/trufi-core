@@ -64,6 +64,7 @@ export 'src/data/otp_version.dart';
 // ============================================
 export 'src/data/otp_1_5/otp_1_5_plan_repository.dart';
 export 'src/data/otp_1_5/otp_1_5_response_parser.dart';
+export 'src/data/otp_1_5/otp_1_5_transit_route_repository.dart';
 
 // ============================================
 // DATA LAYER - OTP 2.4 Implementation
