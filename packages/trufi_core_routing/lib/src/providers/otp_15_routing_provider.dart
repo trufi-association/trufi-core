@@ -58,6 +58,9 @@ class Otp15RoutingProvider implements IRoutingProvider {
   RoutingCapabilities get capabilities => RoutingCapabilities.otp15;
 
   @override
+  Future<void> initialize() async {}
+
+  @override
   PlanRepository createPlanRepository() {
     return Otp15PlanRepository(endpoint: _restEndpoint);
   }

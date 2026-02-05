@@ -14,7 +14,6 @@ import 'repository/home_screen_repository.dart';
 import 'repository/home_screen_repository_impl.dart';
 import 'services/request_plan_service.dart';
 import 'services/routing_engine_request_plan_service.dart';
-import 'services/routing_request_plan_service.dart';
 import 'widgets/home_screen.dart';
 
 /// Home screen module for TrufiApp integration.
@@ -35,6 +34,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     LocationService locationService,
   )? onStartNavigation;
 
+  /// Callback when a transit route badge is tapped in itinerary details.
+  /// Provides the route code to allow navigation to route details screen.
+  final void Function(BuildContext context, String routeCode)? onRouteTap;
+
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
   static Future<void> init() async {
@@ -46,6 +49,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     HomeScreenRepository? repository,
     this.onItineraryDetails,
     this.onStartNavigation,
+    this.onRouteTap,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
     _routingPreferencesManager = routing.RoutingPreferencesManager();
@@ -53,21 +57,8 @@ class HomeScreenTrufiScreen extends TrufiScreen {
 
   /// Creates the appropriate request service based on available context.
   RequestPlanService _createRequestService(BuildContext context) {
-    // Prefer RoutingEngineManager if available (new pattern)
-    final routingEngineManager = routing.RoutingEngineManager.maybeRead(context);
-    if (routingEngineManager != null) {
-      return RoutingEngineRequestPlanService(manager: routingEngineManager);
-    }
-
-    // Fall back to legacy OtpConfiguration
-    if (config.otpConfiguration != null) {
-      return RoutingRequestPlanService(config.otpConfiguration!);
-    }
-
-    throw StateError(
-      'No routing configuration available. '
-      'Either provide RoutingEngineManager in providers or set otpConfiguration in HomeScreenConfig.',
-    );
+    final routingEngineManager = routing.RoutingEngineManager.read(context);
+    return RoutingEngineRequestPlanService(manager: routingEngineManager);
   }
 
   @override
@@ -85,6 +76,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       config: config,
       onItineraryDetails: onItineraryDetails,
       onStartNavigation: onStartNavigation,
+      onRouteTap: onRouteTap,
     );
   };
 

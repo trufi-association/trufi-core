@@ -1,5 +1,7 @@
 import 'dart:ui' show Color;
 
+import 'package:flutter/foundation.dart';
+
 import '../../../domain/entities/stop.dart';
 import '../../../domain/entities/transit_route.dart';
 import '../../../domain/entities/transport_mode.dart';
@@ -32,13 +34,26 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
       final route = _dataSource.getRoute(pattern.routeId);
       if (route == null) continue;
 
+      // Generate origin → destination from stops
+      String? generatedLongName;
+      if (pattern.stopIds.length >= 2) {
+        final firstStop = _dataSource.getStop(pattern.stopIds.first);
+        final lastStop = _dataSource.getStop(pattern.stopIds.last);
+        if (firstStop != null && lastStop != null) {
+          generatedLongName = '${firstStop.name} → ${lastStop.name}';
+        }
+      }
+
+      // Use headsign, generated name, or route longName
+      final effectiveLongName = generatedLongName ?? route.longName;
+
       patterns.add(TransitRoute(
         id: pattern.routeId,
         name: pattern.headsign ?? route.longName,
-        code: route.shortName,
+        code: pattern.routeId,
         route: TransitRouteInfo(
           shortName: route.shortName,
-          longName: route.longName,
+          longName: effectiveLongName,
           mode: _routeTypeToMode(route.type),
           color: _colorToHex(route.color),
           textColor: _colorToHex(route.textColor),
@@ -47,19 +62,26 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
     }
 
     // Sort by route short name
-    patterns.sort((a, b) => _compareRouteNames(a.code, b.code));
+    patterns.sort((a, b) => _compareRouteNames(
+      a.route?.shortName ?? a.code,
+      b.route?.shortName ?? b.code,
+    ));
 
     return patterns;
   }
 
   @override
   Future<TransitRoute> fetchPatternById(String id) async {
+    debugPrint('GtfsTransitRouteRepository.fetchPatternById: Looking for id=$id');
+
     // Ensure data is loaded
     if (!_dataSource.isLoaded) {
+      debugPrint('GtfsTransitRouteRepository.fetchPatternById: Data not loaded, preloading...');
       await _dataSource.preload();
     }
 
     if (!_dataSource.isLoaded || _dataSource.routeIndex == null) {
+      debugPrint('GtfsTransitRouteRepository.fetchPatternById: GTFS data not loaded!');
       throw Exception('GTFS data not loaded');
     }
 
@@ -67,7 +89,11 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
     final pattern = routeIndex.getPattern(id);
     final route = _dataSource.getRoute(id);
 
+    debugPrint('GtfsTransitRouteRepository.fetchPatternById: pattern=${pattern != null}, route=${route != null}');
+
     if (pattern == null || route == null) {
+      // Debug: list available patterns
+      debugPrint('GtfsTransitRouteRepository.fetchPatternById: Available patterns: ${routeIndex.patterns.map((p) => p.routeId).take(10).toList()}');
       throw Exception('Route not found: $id');
     }
 
@@ -83,13 +109,21 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
         .map((s) => Stop(name: s.name, lat: s.lat, lon: s.lon))
         .toList();
 
+    // Generate origin → destination from stops
+    String? generatedLongName;
+    if (stops.length >= 2) {
+      generatedLongName = '${stops.first.name} → ${stops.last.name}';
+    }
+
+    final effectiveLongName = generatedLongName ?? route.longName;
+
     return TransitRoute(
       id: pattern.routeId,
       name: pattern.headsign ?? route.longName,
-      code: route.shortName,
+      code: pattern.routeId,
       route: TransitRouteInfo(
         shortName: route.shortName,
-        longName: route.longName,
+        longName: effectiveLongName,
         mode: _routeTypeToMode(route.type),
         color: _colorToHex(route.color),
         textColor: _colorToHex(route.textColor),

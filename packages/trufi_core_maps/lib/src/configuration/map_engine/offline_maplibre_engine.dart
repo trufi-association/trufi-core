@@ -137,10 +137,22 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     return targetPath;
   }
 
-  /// Initialize all offline resources.
-  Future<String> _initializeOffline(
-    void Function(String status, double progress)? onProgress,
-  ) async {
+  /// Whether the engine is initialized.
+  bool get isInitialized => _initialized;
+
+  /// The cached style path (available after initialization).
+  String? get stylePath => _cachedStylePath;
+
+  @override
+  Future<void> initialize() async {
+    if (_initialized && _cachedStylePath != null) {
+      return;
+    }
+    await _initializeOfflineResources();
+  }
+
+  /// Internal initialization logic.
+  Future<String> _initializeOfflineResources() async {
     if (_initialized && _cachedStylePath != null) {
       return _cachedStylePath!;
     }
@@ -150,14 +162,12 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     await offlineDir.create(recursive: true);
 
     // 1. Copy mbtiles
-    onProgress?.call('Copiando tiles...', 0.1);
     final mbtilesPath = await _copyAsset(
       config.mbtilesAsset,
       '${offlineDir.path}/tiles.mbtiles',
     );
 
     // 2. Copy sprites
-    onProgress?.call('Copiando sprites...', 0.3);
     final spritesDir = '${offlineDir.path}/sprites';
     await Directory(spritesDir).create(recursive: true);
 
@@ -175,7 +185,6 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     // 3. Copy fonts
     // fontMapping: assetDirName -> styleFontName
     // e.g., 'OpenSansRegular' -> 'Open Sans Regular'
-    onProgress?.call('Copiando fuentes...', 0.5);
     final fontsDir = '${offlineDir.path}/fonts';
 
     for (final entry in config.fontMapping.entries) {
@@ -198,7 +207,6 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     }
 
     // 4. Load and modify style.json
-    onProgress?.call('Configurando estilo...', 0.8);
     final styleData = await rootBundle.loadString(config.styleAsset);
     final style = json.decode(styleData) as Map<String, dynamic>;
 
@@ -224,8 +232,6 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     // Save modified style
     final stylePath = '${offlineDir.path}/style.json';
     await File(stylePath).writeAsString(json.encode(style));
-
-    onProgress?.call('Listo', 1.0);
 
     _cachedStylePath = stylePath;
     _initialized = true;
@@ -271,28 +277,17 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
   String? _stylePath;
   String? _error;
   bool _loading = true;
-  double _progress = 0;
-  String _statusMessage = 'Inicializando...';
 
   @override
   void initState() {
     super.initState();
-    _initOffline();
+    _ensureInitialized();
   }
 
-  Future<void> _initOffline() async {
+  Future<void> _ensureInitialized() async {
+    // If already initialized during app startup, this returns immediately
     try {
-      final stylePath = await widget.engine._initializeOffline(
-        (status, progress) {
-          if (mounted) {
-            setState(() {
-              _statusMessage = status;
-              _progress = progress;
-            });
-          }
-        },
-      );
-
+      final stylePath = await widget.engine._initializeOfflineResources();
       if (mounted) {
         setState(() {
           _stylePath = stylePath;
@@ -312,22 +307,15 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    // If engine was pre-initialized, show map immediately
+    if (widget.engine.isInitialized && _stylePath == null) {
+      _stylePath = widget.engine.stylePath;
+      _loading = false;
+    }
+
     if (_loading) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 16),
-            Text(_statusMessage),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: 200,
-              child: LinearProgressIndicator(value: _progress),
-            ),
-          ],
-        ),
-      );
+      // Brief loading state - should be instant if pre-initialized
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_error != null) {
@@ -356,7 +344,7 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
                     _loading = true;
                     _error = null;
                   });
-                  _initOffline();
+                  _ensureInitialized();
                 },
                 child: const Text('Reintentar'),
               ),

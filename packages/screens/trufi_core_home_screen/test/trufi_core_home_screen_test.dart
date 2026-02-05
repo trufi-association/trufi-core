@@ -72,7 +72,7 @@ void main() {
       );
 
       expect(config.chooseLocationZoom, equals(18.0));
-      expect(config.otpConfiguration.version, equals(OtpVersion.v2_8));
+      expect(config.otpConfiguration?.version, equals(OtpVersion.v2_8));
     });
   });
 }

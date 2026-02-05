@@ -75,8 +75,8 @@ class HybridRequestPlanService implements RequestPlanService {
     debugPrint('🔄 Pre-loading provider: $providerId');
     final repository = _getRepository(provider);
 
-    // Check if this repository supports preloading
-    if (repository is routing.OfflinePlanRepository) {
+    // Check if this repository supports preloading (GtfsPlanRepository)
+    if (repository is routing.GtfsPlanRepository) {
       if (!repository.isLoaded && !repository.isLoading) {
         await repository.preload();
         debugPrint('✅ Provider $providerId pre-loaded');

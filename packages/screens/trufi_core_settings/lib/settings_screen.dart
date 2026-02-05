@@ -360,10 +360,10 @@ class _MapSettingsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
-    final mapEngineManager = MapEngineManager.maybeWatch(context);
+    final mapEngineManager = MapEngineManager.watch(context);
 
-    // If no MapEngineManager is available, don't show this card
-    if (mapEngineManager == null || mapEngineManager.engines.isEmpty) {
+    // If no engines configured, don't show this card
+    if (mapEngineManager.engines.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -404,10 +404,10 @@ class _RoutingSettingsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
-    final routingEngineManager = routing.RoutingEngineManager.maybeWatch(context);
+    final routingEngineManager = routing.RoutingEngineManager.watch(context);
 
-    // If no RoutingEngineManager is available or only one engine, don't show this card
-    if (routingEngineManager == null || !routingEngineManager.hasMultipleEngines) {
+    // Only show if multiple routing engines available
+    if (!routingEngineManager.hasMultipleEngines) {
       return const SizedBox.shrink();
     }
 

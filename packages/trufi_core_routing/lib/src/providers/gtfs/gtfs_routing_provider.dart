@@ -78,11 +78,15 @@ class GtfsRoutingProvider implements IRoutingProvider {
   /// Error message if loading failed.
   String? get errorMessage => _dataSource.errorMessage;
 
+  @override
+  Future<void> initialize() => _dataSource.preload();
+
   /// Preload GTFS data.
   ///
   /// Call this at app startup to ensure data is available for routing.
   /// The data is parsed and indexed in memory for fast queries.
-  Future<void> preload() => _dataSource.preload();
+  @Deprecated('Use initialize() instead')
+  Future<void> preload() => initialize();
 
   /// Access to the underlying data source for advanced queries.
   GtfsDataSource get dataSource => _dataSource;

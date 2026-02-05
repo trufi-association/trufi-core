@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -28,6 +30,9 @@ class GtfsDataSource {
   GtfsDataStatus _status = GtfsDataStatus.unloaded;
   String? _errorMessage;
 
+  /// Completer to track ongoing preload operation.
+  Completer<void>? _preloadCompleter;
+
   GtfsDataSource({required this.assetPath});
 
   /// Current loading status.
@@ -55,13 +60,24 @@ class GtfsDataSource {
   GtfsScheduleIndex? get scheduleIndex => _scheduleIndex;
 
   /// Preload GTFS data. Call this at app startup for offline routing.
+  ///
+  /// If already loading, waits for the ongoing operation to complete.
+  /// If already loaded, returns immediately.
   Future<void> preload() async {
-    if (_status == GtfsDataStatus.loaded || _status == GtfsDataStatus.loading) {
+    // Already loaded
+    if (_status == GtfsDataStatus.loaded) {
       return;
     }
 
+    // Already loading - wait for it to complete
+    if (_status == GtfsDataStatus.loading && _preloadCompleter != null) {
+      return _preloadCompleter!.future;
+    }
+
+    // Start loading
     _status = GtfsDataStatus.loading;
     _errorMessage = null;
+    _preloadCompleter = Completer<void>();
 
     try {
       debugPrint('GtfsDataSource: Preloading from $assetPath');
@@ -77,11 +93,13 @@ class GtfsDataSource {
       debugPrint('GtfsDataSource: Preloaded in ${sw.elapsedMilliseconds}ms');
 
       _status = GtfsDataStatus.loaded;
+      _preloadCompleter!.complete();
     } catch (e, st) {
       debugPrint('GtfsDataSource: Error loading: $e');
       debugPrint('$st');
       _errorMessage = e.toString();
       _status = GtfsDataStatus.error;
+      _preloadCompleter!.completeError(e, st);
     }
   }
 

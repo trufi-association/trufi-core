@@ -5,6 +5,9 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart' show MapEngineManager;
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show RoutingEngineManager;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'l10n/core_localizations.dart';
@@ -262,10 +265,17 @@ class _AppInitializerState extends State<AppInitializer> {
   /// Performs the actual initialization of managers and screens.
   /// This can be called by custom builders.
   Future<void> _performInitialization() async {
+    // Capture all managers before async operations to avoid BuildContext issues
     final overlayManager = OverlayManager.read(context);
+    final mapManager = MapEngineManager.read(context);
+    final routingManager = RoutingEngineManager.read(context);
 
     // Initialize all AppOverlayManagers
     await overlayManager.initializeManagers();
+
+    // Initialize all engines
+    await mapManager.initializeEngines();
+    await routingManager.initializeEngines();
 
     // Initialize all screen modules
     for (final screen in widget.screens) {

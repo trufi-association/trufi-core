@@ -348,9 +348,9 @@ class _OnboardingMapSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mapEngineManager = MapEngineManager.maybeWatch(context);
+    final mapEngineManager = MapEngineManager.watch(context);
 
-    if (mapEngineManager == null || mapEngineManager.engines.isEmpty) {
+    if (mapEngineManager.engines.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -391,10 +391,10 @@ class _OnboardingRoutingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final routingEngineManager = routing.RoutingEngineManager.maybeWatch(context);
+    final routingEngineManager = routing.RoutingEngineManager.watch(context);
 
     // Only show if multiple routing engines available
-    if (routingEngineManager == null || !routingEngineManager.hasMultipleEngines) {
+    if (!routingEngineManager.hasMultipleEngines) {
       return const SizedBox.shrink();
     }
 

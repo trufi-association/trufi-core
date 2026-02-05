@@ -13,6 +13,27 @@ class TransportTile extends StatelessWidget {
     required this.onTap,
   });
 
+  /// Get the primary text to display (destination or route name)
+  String _getPrimaryText(TransportRoute route) {
+    // If has origin → destination format, show destination
+    if (route.hasOriginDestination) {
+      return route.longNameLast;
+    }
+    // Otherwise show the long name or name
+    if (route.longName != null && route.longName!.isNotEmpty) {
+      return route.longName!;
+    }
+    return route.name;
+  }
+
+  /// Get the secondary text (origin → destination or null)
+  String? _getSecondaryText(TransportRoute route) {
+    if (route.hasOriginDestination) {
+      return '${route.longNameStart} → ${route.longNameLast}';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -65,20 +86,19 @@ class TransportTile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Destination (primary info)
-                            if (route.longNameLast.isNotEmpty)
-                              Text(
-                                route.longNameLast,
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: colorScheme.onSurface,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            // Primary info: destination or route name
+                            Text(
+                              _getPrimaryText(route),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
                               ),
-                            const SizedBox(height: 4),
-                            // Full route (secondary info)
-                            if (route.longNameFull.isNotEmpty)
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            // Secondary info: origin → destination or long name
+                            if (_getSecondaryText(route) != null) ...[
+                              const SizedBox(height: 4),
                               Row(
                                 children: [
                                   Icon(
@@ -89,7 +109,7 @@ class TransportTile extends StatelessWidget {
                                   const SizedBox(width: 4),
                                   Expanded(
                                     child: Text(
-                                      route.longNameFull,
+                                      _getSecondaryText(route)!,
                                       style: theme.textTheme.bodySmall?.copyWith(
                                         color: colorScheme.onSurfaceVariant,
                                         height: 1.3,
@@ -100,6 +120,7 @@ class TransportTile extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                            ],
                           ],
                         ),
                       ),

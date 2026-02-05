@@ -22,6 +22,10 @@ class ItineraryList extends StatefulWidget {
   )? onStartNavigation;
   final LocationService? locationService;
 
+  /// Callback when a transit route badge is tapped.
+  /// Provides the route code to allow navigation to route details.
+  final void Function(String routeCode)? onRouteTap;
+
   /// When true, the list will shrink to fit content and disable its own scrolling.
   /// Use this when the list is inside a parent scrollable (e.g., bottom sheet).
   /// When false (default), the list will scroll independently.
@@ -39,6 +43,7 @@ class ItineraryList extends StatefulWidget {
     this.onItineraryDetails,
     this.onStartNavigation,
     this.locationService,
+    this.onRouteTap,
     this.shrinkWrap = false,
     this.showDetailOnLoad = false,
     this.onDetailStateChanged,
@@ -153,6 +158,7 @@ class _ItineraryListState extends State<ItineraryList> {
       itinerary: itinerary,
       shrinkWrap: widget.shrinkWrap,
       onBack: _hideDetails,
+      onRouteTap: widget.onRouteTap,
       onStartNavigation:
           widget.onStartNavigation != null && widget.locationService != null
               ? () => widget.onStartNavigation!(

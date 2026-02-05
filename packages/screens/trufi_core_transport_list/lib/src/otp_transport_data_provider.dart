@@ -11,9 +11,11 @@ import 'transport_list_data_provider.dart';
 /// When cache is provided:
 /// - Routes are loaded from cache first (instant display)
 /// - Network fetch only happens on explicit refresh
+/// - Cache is invalidated when [providerId] changes (e.g., switching from OTP to GTFS)
 class OtpTransportDataProvider extends TransportListDataProvider {
   final TransitRouteRepository? _repository;
   final TransportListCache? _cache;
+  final String? _providerId;
 
   // Start with isLoading=true so shimmer shows immediately
   TransportListState _state = const TransportListState(isLoading: true);
@@ -24,8 +26,10 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   OtpTransportDataProvider({
     required TransitRouteRepository? repository,
     TransportListCache? cache,
+    String? providerId,
   })  : _repository = repository,
-        _cache = cache;
+        _cache = cache,
+        _providerId = providerId;
 
   /// Creates a data provider from an OtpConfiguration (legacy).
   @Deprecated('Use the repository constructor instead')
@@ -58,8 +62,19 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     // Try loading from cache first
     if (_cache != null) {
       try {
+        // Check if cache is from the same provider
+        if (_providerId != null) {
+          final isValidCache = await _cache.isValidForProvider(_providerId);
+          if (!isValidCache) {
+            debugPrint('OtpTransportDataProvider.load: Cache is from different provider, clearing...');
+            await _cache.clearRoutesCache();
+          }
+        }
+
         final cachedRoutes = await _cache.getCachedRoutes();
         if (cachedRoutes != null && cachedRoutes.isNotEmpty) {
+          debugPrint('OtpTransportDataProvider.load: Loaded ${cachedRoutes.length} routes from cache');
+          debugPrint('OtpTransportDataProvider.load: First 5 route codes: ${cachedRoutes.take(5).map((r) => r.code).toList()}');
           final routes = cachedRoutes.map(_convertCachedToTransportRoute).toList();
           _state = _state.copyWith(
             routes: routes,
@@ -106,7 +121,10 @@ class OtpTransportDataProvider extends TransportListDataProvider {
 
   /// Fetch routes from network and save to cache.
   Future<void> _fetchAndCacheRoutes() async {
+    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: Fetching from ${_repository.runtimeType}');
     final patterns = await _repository!.fetchPatterns();
+    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: Got ${patterns.length} patterns');
+    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: First 5 codes: ${patterns.take(5).map((p) => p.code).toList()}');
 
     // Sort routes by shortName (numeric first, then alphabetic)
     patterns.sort((a, b) {
@@ -130,6 +148,10 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       try {
         final cachedPatterns = patterns.map(_convertToCachedPattern).toList();
         await _cache.cacheRoutes(cachedPatterns);
+        // Save provider ID so we can invalidate cache when provider changes
+        if (_providerId != null) {
+          await _cache.cacheProviderId(_providerId);
+        }
       } catch (e) {
         debugPrint('OtpTransportDataProvider: Error caching routes: $e');
       }
@@ -162,10 +184,14 @@ class OtpTransportDataProvider extends TransportListDataProvider {
 
   @override
   Future<TransportRouteDetails?> getRouteDetails(String code) async {
+    debugPrint('OtpTransportDataProvider.getRouteDetails: code=$code');
+    debugPrint('OtpTransportDataProvider.getRouteDetails: repository type=${_repository.runtimeType}');
+
     if (_repository == null) return null;
 
     // Check in-memory cache first
     if (_detailsCache.containsKey(code)) {
+      debugPrint('OtpTransportDataProvider.getRouteDetails: Found in memory cache');
       return _detailsCache[code];
     }
 

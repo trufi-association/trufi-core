@@ -45,12 +45,17 @@ class HomeScreen extends StatefulWidget {
   )?
   onStartNavigation;
 
+  /// Callback when a transit route badge is tapped in itinerary details.
+  /// Provides the route code to allow navigation to route details screen.
+  final void Function(BuildContext context, String routeCode)? onRouteTap;
+
   const HomeScreen({
     super.key,
     required this.onMenuPressed,
     required this.config,
     this.onItineraryDetails,
     this.onStartNavigation,
+    this.onRouteTap,
   });
 
   @override
@@ -1251,6 +1256,9 @@ class _HomeScreenState extends State<HomeScreen>
             }
           },
           onItineraryDetails: widget.onItineraryDetails,
+          onRouteTap: widget.onRouteTap != null
+              ? (routeCode) => widget.onRouteTap!(context, routeCode)
+              : null,
           onStartNavigation: widget.onStartNavigation != null
               ? (context, itinerary, locationService) {
                   // Clear the home screen's location marker before starting navigation
@@ -1533,6 +1541,9 @@ class _HomeScreenState extends State<HomeScreen>
                         }
                       },
                       onItineraryDetails: widget.onItineraryDetails,
+                      onRouteTap: widget.onRouteTap != null
+                          ? (routeCode) => widget.onRouteTap!(context, routeCode)
+                          : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
                               _myLocationLayer?.clearMarkers();
@@ -1556,6 +1567,9 @@ class _HomeScreenState extends State<HomeScreen>
                         }
                       },
                       onItineraryDetails: widget.onItineraryDetails,
+                      onRouteTap: widget.onRouteTap != null
+                          ? (routeCode) => widget.onRouteTap!(context, routeCode)
+                          : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
                               _myLocationLayer?.clearMarkers();

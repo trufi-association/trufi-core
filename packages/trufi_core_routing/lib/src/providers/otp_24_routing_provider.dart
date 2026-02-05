@@ -62,6 +62,9 @@ class Otp24RoutingProvider implements IRoutingProvider {
   RoutingCapabilities get capabilities => RoutingCapabilities.otp24;
 
   @override
+  Future<void> initialize() async {}
+
+  @override
   PlanRepository createPlanRepository() {
     return Otp24PlanRepository(
       endpoint: _graphqlEndpoint,

@@ -31,9 +31,8 @@ class RoutingSettingsSheet extends StatelessWidget {
     final l10n = HomeScreenLocalizations.of(context);
 
     // Get current provider capabilities
-    final routingManager = RoutingEngineManager.maybeWatch(context);
-    final capabilities = routingManager?.currentEngine.capabilities ??
-        RoutingCapabilities.full;
+    final routingManager = RoutingEngineManager.watch(context);
+    final capabilities = routingManager.currentEngine.capabilities;
 
     return Container(
       decoration: BoxDecoration(
@@ -74,13 +73,12 @@ class RoutingSettingsSheet extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      if (routingManager != null)
-                        Text(
-                          routingManager.currentEngine.name,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
+                      Text(
+                        routingManager.currentEngine.name,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -97,7 +95,7 @@ class RoutingSettingsSheet extends StatelessWidget {
           ),
           const Divider(height: 1),
           // Engine selector - only show if multiple engines available
-          if (routingManager != null && routingManager.hasMultipleEngines) ...[
+          if (routingManager.hasMultipleEngines) ...[
             _RoutingEngineSelector(routingManager: routingManager),
             const Divider(height: 1),
           ],
@@ -130,7 +128,7 @@ class RoutingSettingsSheet extends StatelessWidget {
                   ],
                   // Show message if no options available
                   if (!capabilities.hasAnyOptions)
-                    _NoOptionsMessage(providerName: routingManager?.currentEngine.name ?? 'Offline'),
+                    _NoOptionsMessage(providerName: routingManager.currentEngine.name),
                 ],
               ),
             ),

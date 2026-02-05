@@ -74,6 +74,17 @@ class RoutingEngineManager extends ChangeNotifier {
   /// List of available engines.
   List<IRoutingProvider> get engines => List.unmodifiable(_engines);
 
+  /// Initialize all engines.
+  ///
+  /// This should be called during app startup to prepare all engines.
+  /// For online engines (OTP), this is a no-op. For offline engines (GTFS),
+  /// this loads and indexes the data.
+  Future<void> initializeEngines() async {
+    for (final engine in _engines) {
+      await engine.initialize();
+    }
+  }
+
   /// Currently selected engine.
   IRoutingProvider get currentEngine => _engines[_currentIndex];
 

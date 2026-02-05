@@ -53,6 +53,15 @@ abstract class IRoutingProvider {
   /// UI should adapt based on these capabilities to show only relevant options.
   RoutingCapabilities get capabilities;
 
+  /// Initialize the provider.
+  ///
+  /// Called during app startup to prepare any resources needed by the provider.
+  /// For online providers (e.g., OTP), this is typically a no-op.
+  /// For offline providers (e.g., GTFS), this loads and indexes the data.
+  ///
+  /// Default implementation does nothing.
+  Future<void> initialize() async {}
+
   /// Creates the PlanRepository for fetching trip plans.
   PlanRepository createPlanRepository();
 

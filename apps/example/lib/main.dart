@@ -188,6 +188,12 @@ void main() {
               mapEngineManager: MapEngineManager.read(context),
             );
           },
+          onRouteTap: (context, routeCode) {
+            TransportDetailScreen.showWithRoutingEngine(
+              context,
+              routeCode: routeCode,
+            );
+          },
         ),
         SavedPlacesTrufiScreen(),
         TransportListTrufiScreen(),

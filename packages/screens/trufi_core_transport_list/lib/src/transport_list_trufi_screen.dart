@@ -93,20 +93,21 @@ class _TransportListScreenWidgetState
     _cache!.initialize();
 
     // Get the transit route repository from the routing engine manager
-    final routingManager = RoutingEngineManager.maybeRead(context);
+    final routingManager = RoutingEngineManager.read(context);
     TransitRouteRepository? repository;
+    String? providerId;
 
-    if (routingManager != null) {
-      // Try current engine first
-      if (routingManager.currentEngine.supportsTransitRoutes) {
-        repository = routingManager.currentEngine.createTransitRouteRepository();
-      } else {
-        // Fallback: find any engine that supports transit routes
-        for (final engine in routingManager.engines) {
-          if (engine.supportsTransitRoutes) {
-            repository = engine.createTransitRouteRepository();
-            break;
-          }
+    // Try current engine first
+    if (routingManager.currentEngine.supportsTransitRoutes) {
+      repository = routingManager.currentEngine.createTransitRouteRepository();
+      providerId = routingManager.currentEngine.id;
+    } else {
+      // Fallback: find any engine that supports transit routes
+      for (final engine in routingManager.engines) {
+        if (engine.supportsTransitRoutes) {
+          repository = engine.createTransitRouteRepository();
+          providerId = engine.id;
+          break;
         }
       }
     }
@@ -114,6 +115,7 @@ class _TransportListScreenWidgetState
     _dataProvider = OtpTransportDataProvider(
       repository: repository,
       cache: _cache,
+      providerId: providerId,
     );
   }
 
@@ -471,36 +473,34 @@ class _RouteLayer extends TrufiLayer {
       );
     }
 
-    // Add origin marker (green circle) - unless it's selected
+    // Add origin marker (green circle) - ALWAYS visible
     final firstStop = stops.first;
-    if (_selectedStopIndex != 0) {
-      addMarker(
-        TrufiMarker(
-          id: 'origin-marker',
-          position: LatLng(firstStop.latitude, firstStop.longitude),
-          widget: const _OriginMarker(),
-          size: const Size(24, 24),
-          layerLevel: 3,
-          imageCacheKey: 'origin_marker',
-        ),
-      );
-    }
+    addMarker(
+      TrufiMarker(
+        id: 'origin-marker',
+        position: LatLng(firstStop.latitude, firstStop.longitude),
+        widget: const _OriginMarker(),
+        size: const Size(28, 28),
+        layerLevel: 5,
+        imageCacheKey: 'origin_marker_v2',
+        allowOverlap: true,
+      ),
+    );
 
-    // Add destination marker (red pin) - unless it's selected
+    // Add destination marker (red pin) - ALWAYS visible
     final lastStop = stops.last;
-    if (_selectedStopIndex != stops.length - 1) {
-      addMarker(
-        TrufiMarker(
-          id: 'destination-marker',
-          position: LatLng(lastStop.latitude, lastStop.longitude),
-          widget: const _DestinationMarker(),
-          size: const Size(32, 32),
-          alignment: Alignment.topCenter,
-          layerLevel: 3,
-          imageCacheKey: 'destination_marker',
-        ),
-      );
-    }
+    addMarker(
+      TrufiMarker(
+        id: 'destination-marker',
+        position: LatLng(lastStop.latitude, lastStop.longitude),
+        widget: const _DestinationMarker(),
+        size: const Size(36, 36),
+        alignment: Alignment.topCenter,
+        layerLevel: 5,
+        imageCacheKey: 'destination_marker_v2',
+        allowOverlap: true,
+      ),
+    );
 
     // Add selected stop marker with higher priority
     if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
@@ -555,19 +555,12 @@ class _OriginMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 24,
-      height: 24,
+      width: 28,
+      height: 28,
       decoration: BoxDecoration(
         color: _color,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: Colors.white, width: 4),
       ),
     );
   }
@@ -584,10 +577,7 @@ class _DestinationMarker extends StatelessWidget {
     return const Icon(
       Icons.place_rounded,
       color: _color,
-      size: 32,
-      shadows: [
-        Shadow(color: Colors.black38, blurRadius: 4, offset: Offset(0, 2)),
-      ],
+      size: 36,
     );
   }
 }
