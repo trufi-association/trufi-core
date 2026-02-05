@@ -94,41 +94,49 @@ class RoutingSettingsSheet extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-          // Engine selector - only show if multiple engines available
-          if (routingManager.hasMultipleEngines) ...[
-            _RoutingEngineSelector(routingManager: routingManager),
-            const Divider(height: 1),
-          ],
-          // Content - only show sections supported by current provider
+          // All content in a single scrollable area
           Flexible(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Accessibility section
-                  if (capabilities.supportsWheelchair) ...[
-                    const _AccessibilitySection(),
-                    const SizedBox(height: 24),
+                  // Engine selector - only show if multiple engines available
+                  if (routingManager.hasMultipleEngines) ...[
+                    _RoutingEngineSelector(routingManager: routingManager),
+                    const Divider(height: 1),
                   ],
-                  // Walk speed section
-                  if (capabilities.supportsWalkSpeed) ...[
-                    const _WalkSpeedSection(),
-                    const SizedBox(height: 24),
-                  ],
-                  // Max walk distance section
-                  if (capabilities.supportsMaxWalkDistance) ...[
-                    const _MaxWalkDistanceSection(),
-                    const SizedBox(height: 24),
-                  ],
-                  // Transport modes section
-                  if (capabilities.supportsTransportModes) ...[
-                    const _TransportModesSection(),
-                    const SizedBox(height: 24),
-                  ],
-                  // Show message if no options available
-                  if (!capabilities.hasAnyOptions)
-                    _NoOptionsMessage(providerName: routingManager.currentEngine.name),
+                  // Content - only show sections supported by current provider
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Accessibility section
+                        if (capabilities.supportsWheelchair) ...[
+                          const _AccessibilitySection(),
+                          const SizedBox(height: 24),
+                        ],
+                        // Walk speed section
+                        if (capabilities.supportsWalkSpeed) ...[
+                          const _WalkSpeedSection(),
+                          const SizedBox(height: 24),
+                        ],
+                        // Max walk distance section
+                        if (capabilities.supportsMaxWalkDistance) ...[
+                          const _MaxWalkDistanceSection(),
+                          const SizedBox(height: 24),
+                        ],
+                        // Transport modes section
+                        if (capabilities.supportsTransportModes) ...[
+                          const _TransportModesSection(),
+                          const SizedBox(height: 24),
+                        ],
+                        // Show message if no options available
+                        if (!capabilities.hasAnyOptions)
+                          _NoOptionsMessage(providerName: routingManager.currentEngine.name),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -198,54 +206,108 @@ class _NoOptionsMessage extends StatelessWidget {
   }
 }
 
-/// Routing engine selector section.
-class _RoutingEngineSelector extends StatelessWidget {
+/// Routing engine selector section (collapsible).
+class _RoutingEngineSelector extends StatefulWidget {
   final RoutingEngineManager routingManager;
 
   const _RoutingEngineSelector({required this.routingManager});
+
+  @override
+  State<_RoutingEngineSelector> createState() => _RoutingEngineSelectorState();
+}
+
+class _RoutingEngineSelectorState extends State<_RoutingEngineSelector> {
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = HomeScreenLocalizations.of(context);
+    final currentEngine = widget.routingManager.currentEngine;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.router_rounded,
-                color: colorScheme.primary,
-                size: 20,
+          // Header row (tappable to expand/collapse)
+          InkWell(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              setState(() => _isExpanded = !_isExpanded);
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.router_rounded,
+                    color: colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.routingProvider,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          currentEngine.name,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _isExpanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Text(
-                l10n.routingProvider,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+            ),
           ),
-          const SizedBox(height: 12),
-          ...routingManager.engines.map((engine) {
-            final isSelected = engine == routingManager.currentEngine;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _EngineCard(
-                engine: engine,
-                isSelected: isSelected,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  routingManager.setEngine(engine);
-                },
+          // Expandable engine list
+          AnimatedCrossFade(
+            firstChild: const SizedBox.shrink(),
+            secondChild: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Column(
+                children: widget.routingManager.engines.map((engine) {
+                  final isSelected = engine == currentEngine;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _EngineCard(
+                      engine: engine,
+                      isSelected: isSelected,
+                      onTap: () {
+                        HapticFeedback.selectionClick();
+                        widget.routingManager.setEngine(engine);
+                        // Collapse after selection
+                        setState(() => _isExpanded = false);
+                      },
+                    ),
+                  );
+                }).toList(),
               ),
-            );
-          }),
+            ),
+            crossFadeState: _isExpanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 200),
+          ),
         ],
       ),
     );
@@ -272,9 +334,9 @@ class _EngineCard extends StatelessWidget {
 
     final isOffline = !engine.requiresInternet;
 
-    // Get localized name and description based on engine type
-    final name = isOffline ? l10n.engineOfflineName : l10n.engineOnlineName;
-    final description = isOffline ? l10n.engineOfflineDescription : l10n.engineOnlineDescription;
+    // Use engine's actual name and description
+    final name = engine.name;
+    final description = engine.description;
 
     // Build limitations list based on engine type
     final limitations = <String>[];
@@ -284,7 +346,6 @@ class _EngineCard extends StatelessWidget {
     } else {
       // Online limitations
       limitations.add(l10n.limitationRequiresInternet);
-      limitations.add(l10n.limitationSlower);
     }
 
     return Material(

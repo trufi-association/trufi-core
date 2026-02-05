@@ -15,6 +15,8 @@ import 'package:trufi_core_routing/trufi_core_routing.dart'
         RoutingEngineManager,
         IRoutingProvider,
         Otp28RoutingProvider,
+        Otp24RoutingProvider,
+        Otp15RoutingProvider,
         GtfsRoutingProvider,
         GtfsRoutingConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
@@ -39,10 +41,6 @@ const _instagramUrl = 'https://instagram.com/trufiapp';
 
 // Routing engines (similar to map engines)
 final List<IRoutingProvider> _routingEngines = [
-  // Online routing via OTP 2.8
-  const Otp28RoutingProvider(
-    endpoint: 'https://otp.trufi.app',
-  ),
   // Offline routing via GTFS (disabled on web)
   if (!kIsWeb)
     GtfsRoutingProvider(
@@ -50,6 +48,19 @@ final List<IRoutingProvider> _routingEngines = [
         gtfsAsset: 'assets/routing/cochabamba.gtfs.zip',
       ),
     ),
+  // Online routing via OTP (dev servers)
+  const Otp28RoutingProvider(
+    endpoint: 'https://otp-281.trufi-core.trufi.dev',
+    displayName: 'OTP 2.8.1',
+  ),
+  const Otp24RoutingProvider(
+    endpoint: 'https://otp-240.trufi-core.trufi.dev',
+    displayName: 'OTP 2.4.0',
+  ),
+  const Otp15RoutingProvider(
+    endpoint: 'https://otp-150.trufi-core.trufi.dev',
+    displayName: 'OTP 1.5.0',
+  ),
 ];
 
 // Map engines
@@ -70,7 +81,16 @@ final List<ITrufiMapEngine> _mapEngines = [
           'RobotoMedium': 'Roboto Medium',
           'RobotoCondensedItalic': 'Roboto Condensed Italic',
         },
-        fontRanges: ['0-255', '256-511', '512-767', '768-1023', '1024-1279', '1280-1535', '8192-8447', '8448-8703'],
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
       ),
     ),
   if (!kIsWeb)
@@ -88,7 +108,16 @@ final List<ITrufiMapEngine> _mapEngines = [
           'OpenSansBold': 'Open Sans Bold',
           'OpenSansItalic': 'Open Sans Italic',
         },
-        fontRanges: ['0-255', '256-511', '512-767', '768-1023', '1024-1279', '1280-1535', '8192-8447', '8448-8703'],
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
       ),
     ),
   // Online maps
@@ -152,9 +181,7 @@ void main() {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => RoutingEngineManager(
-            engines: _routingEngines,
-          ),
+          create: (_) => RoutingEngineManager(engines: _routingEngines),
         ),
         ChangeNotifierProvider(
           create: (_) => OverlayManager(
@@ -164,8 +191,10 @@ void main() {
                     OnboardingSheet(onComplete: onComplete),
               ),
               PrivacyConsentManager(
-                overlayBuilder: (onAccept, onDecline) =>
-                    PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
+                overlayBuilder: (onAccept, onDecline) => PrivacyConsentSheet(
+                  onAccept: onAccept,
+                  onDecline: onDecline,
+                ),
               ),
             ],
           ),
@@ -232,11 +261,7 @@ void main() {
             ],
           ),
         ),
-        FeedbackTrufiScreen(
-          config: FeedbackConfig(
-            feedbackUrl: _feedbackUrl,
-          ),
-        ),
+        FeedbackTrufiScreen(config: FeedbackConfig(feedbackUrl: _feedbackUrl)),
         SettingsTrufiScreen(),
         AboutTrufiScreen(
           config: AboutScreenConfig(
