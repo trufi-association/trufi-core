@@ -182,11 +182,33 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // 3. Copy fonts
+    // 3. Load style.json to parse font stacks
+    final styleData = await rootBundle.loadString(config.styleAsset);
+    final style = json.decode(styleData) as Map<String, dynamic>;
+
+    // Extract all unique font stacks from the style
+    final Set<List<String>> fontStacks = {};
+    if (style.containsKey('layers')) {
+      final layers = style['layers'] as List<dynamic>;
+      for (final layer in layers) {
+        if (layer is Map<String, dynamic> && layer.containsKey('layout')) {
+          final layout = layer['layout'] as Map<String, dynamic>;
+          if (layout.containsKey('text-font')) {
+            final textFont = layout['text-font'];
+            if (textFont is List) {
+              fontStacks.add(textFont.map((e) => e.toString()).toList());
+            }
+          }
+        }
+      }
+    }
+
+    // 4. Copy fonts
     // fontMapping: assetDirName -> styleFontName
     // e.g., 'OpenSansRegular' -> 'Open Sans Regular'
     final fontsDir = '${offlineDir.path}/fonts';
 
+    // First, copy individual fonts
     for (final entry in config.fontMapping.entries) {
       final assetFontName = entry.key; // e.g., 'OpenSansRegular'
       final styleFontName = entry.value; // e.g., 'Open Sans Regular'
@@ -206,10 +228,32 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // 4. Load and modify style.json
-    final styleData = await rootBundle.loadString(config.styleAsset);
-    final style = json.decode(styleData) as Map<String, dynamic>;
+    // Second, create font stack directories (for combined fonts like "Font A,Font B")
+    for (final fontStack in fontStacks) {
+      if (fontStack.length > 1) {
+        // This is a font stack with multiple fonts
+        final stackName = fontStack.join(',');
+        final stackDir = '$fontsDir/$stackName';
+        await Directory(stackDir).create(recursive: true);
 
+        // Copy from the first font in the stack (primary font)
+        final primaryFont = fontStack.first;
+        final primaryFontDir = '$fontsDir/$primaryFont';
+
+        for (final range in config.fontRanges) {
+          try {
+            final sourceFile = File('$primaryFontDir/$range.pbf');
+            if (await sourceFile.exists()) {
+              await sourceFile.copy('$stackDir/$range.pbf');
+            }
+          } catch (e) {
+            debugPrint('Warning: Could not copy font stack $stackName/$range.pbf: $e');
+          }
+        }
+      }
+    }
+
+    // 5. Modify style.json (already loaded above)
     // Update sources to use local mbtiles
     // Format: mbtiles:///absolute/path/to/file.mbtiles
     if (style.containsKey('sources')) {
@@ -247,6 +291,7 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     bool isDarkMode = false,
   }) {
     return _OfflineMapWrapper(
+      key: ValueKey(id),
       engine: this,
       controller: controller,
       onMapClick: onMapClick,
@@ -263,6 +308,7 @@ class _OfflineMapWrapper extends StatefulWidget {
   final void Function(LatLng)? onMapLongClick;
 
   const _OfflineMapWrapper({
+    super.key,
     required this.engine,
     required this.controller,
     this.onMapClick,
@@ -355,6 +401,7 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
     }
 
     return TrufiMapLibreMap(
+      key: ValueKey(_stylePath),
       controller: widget.controller,
       styleString: _stylePath!,
       onMapClick: widget.onMapClick,

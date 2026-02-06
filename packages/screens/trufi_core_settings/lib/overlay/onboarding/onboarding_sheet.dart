@@ -341,10 +341,28 @@ class _OnboardingThemeSection extends StatelessWidget {
 }
 
 /// Map engine selection section
-class _OnboardingMapSection extends StatelessWidget {
+class _OnboardingMapSection extends StatefulWidget {
   final SettingsLocalizations l10n;
 
   const _OnboardingMapSection({required this.l10n});
+
+  @override
+  State<_OnboardingMapSection> createState() => _OnboardingMapSectionState();
+}
+
+class _OnboardingMapSectionState extends State<_OnboardingMapSection> {
+  bool _showOnline = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Set initial filter based on current engine
+    final mapEngineManager = MapEngineManager.maybeRead(context);
+    if (mapEngineManager != null && mapEngineManager.engines.isNotEmpty) {
+      final currentEngine = mapEngineManager.currentEngine;
+      _showOnline = !currentEngine.runtimeType.toString().contains('Offline');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,30 +372,66 @@ class _OnboardingMapSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    // Filter engines based on online/offline selection
+    final offlineEngines = mapEngineManager.engines
+        .asMap()
+        .entries
+        .where((e) => e.value.runtimeType.toString().contains('Offline'))
+        .toList();
+    final onlineEngines = mapEngineManager.engines
+        .asMap()
+        .entries
+        .where((e) => !e.value.runtimeType.toString().contains('Offline'))
+        .toList();
+
+    final hasOffline = offlineEngines.isNotEmpty;
+    final hasOnline = onlineEngines.isNotEmpty;
+    final showToggle = hasOffline && hasOnline;
+
+    final filteredEngines = _showOnline ? onlineEngines : offlineEngines;
+
     return _OnboardingCard(
       icon: Icons.map_rounded,
       iconColor: Colors.teal,
-      title: l10n.onboardingMapTitle,
+      title: widget.l10n.onboardingMapTitle,
       child: Column(
-        children: mapEngineManager.engines.asMap().entries.map((entry) {
-          final index = entry.key;
-          final engine = entry.value;
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: index < mapEngineManager.engines.length - 1 ? 8 : 0,
-            ),
-            child: _EngineOption(
-              name: engine.name,
-              description: engine.description,
-              icon: Icons.layers_rounded,
-              isSelected: index == mapEngineManager.currentIndex,
-              onTap: () {
-                HapticFeedback.selectionClick();
-                mapEngineManager.setEngineByIndex(index);
+        children: [
+          // Online/Offline toggle (only if both types exist)
+          if (showToggle) ...[
+            MapOnlineOfflineToggle(
+              showOnline: _showOnline,
+              onToggle: (value) {
+                setState(() {
+                  _showOnline = value;
+                });
               },
             ),
-          );
-        }).toList(),
+            const SizedBox(height: 12),
+          ],
+          // Filtered map engines
+          ...filteredEngines.asMap().entries.map((outerEntry) {
+            final displayIndex = outerEntry.key;
+            final engineEntry = outerEntry.value;
+            final actualIndex = engineEntry.key;
+            final engine = engineEntry.value;
+
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: displayIndex < filteredEngines.length - 1 ? 8 : 0,
+              ),
+              child: _EngineOption(
+                name: engine.name,
+                description: engine.description,
+                icon: Icons.layers_rounded,
+                isSelected: actualIndex == mapEngineManager.currentIndex,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  mapEngineManager.setEngineByIndex(actualIndex);
+                },
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -761,8 +815,8 @@ class _EngineOption extends StatelessWidget {
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      overflow: TextOverflow.fade,
                     ),
                   ],
                 ),

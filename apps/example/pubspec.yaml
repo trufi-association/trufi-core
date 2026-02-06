@@ -50,11 +50,19 @@ flutter:
     - assets/offline/
     - assets/offline/styles/osm-bright/
     - assets/offline/styles/osm-liberty/
+    - assets/offline/styles/dark-matter/
+    - assets/offline/styles/fiord-color/
     - assets/offline/fonts/OpenSansRegular/
     - assets/offline/fonts/OpenSansBold/
     - assets/offline/fonts/OpenSansItalic/
     - assets/offline/fonts/RobotoRegular/
     - assets/offline/fonts/RobotoMedium/
     - assets/offline/fonts/RobotoCondensedItalic/
+    - assets/offline/fonts/MetropolisLight/
+    - assets/offline/fonts/MetropolisLightItalic/
+    - assets/offline/fonts/MetropolisRegular/
+    - assets/offline/fonts/MetropolisMediumItalic/
+    - assets/offline/fonts/NotoSansRegular/
+    - assets/offline/fonts/NotoSansItalic/
     # Offline routing data (GTFS)
     - assets/routing/

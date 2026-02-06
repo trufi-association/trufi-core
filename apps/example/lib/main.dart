@@ -66,7 +66,7 @@ final List<IRoutingProvider> _routingEngines = [
 // Map engines
 final List<ITrufiMapEngine> _mapEngines = [
   // Offline maps - disabled on web
-  if (!kIsWeb)
+  if (!kIsWeb) ...[
     OfflineMapLibreEngine(
       engineId: 'offline_osm_liberty',
       displayName: 'Offline Liberty',
@@ -93,7 +93,6 @@ final List<ITrufiMapEngine> _mapEngines = [
         ],
       ),
     ),
-  if (!kIsWeb)
     OfflineMapLibreEngine(
       engineId: 'offline_osm_bright',
       displayName: 'Offline Bright',
@@ -120,6 +119,65 @@ final List<ITrufiMapEngine> _mapEngines = [
         ],
       ),
     ),
+    OfflineMapLibreEngine(
+      engineId: 'offline_dark_matter',
+      displayName: 'Offline Dark Matter',
+      displayDescription: 'Mapa offline oscuro',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/dark-matter/style.json',
+        spritesAssetDir: 'assets/offline/styles/dark-matter/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'MetropolisLight': 'Metropolis Light',
+          'MetropolisLightItalic': 'Metropolis Light Italic',
+          'MetropolisRegular': 'Metropolis Regular',
+          'MetropolisMediumItalic': 'Metropolis Medium Italic',
+          'NotoSansRegular': 'Noto Sans Regular',
+          'NotoSansItalic': 'Noto Sans Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+    OfflineMapLibreEngine(
+      engineId: 'offline_fiord_color',
+      displayName: 'Offline Fiord Color',
+      displayDescription: 'Mapa offline colorido',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/fiord-color/style.json',
+        spritesAssetDir: 'assets/offline/styles/fiord-color/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'MetropolisLight': 'Metropolis Light',
+          'MetropolisLightItalic': 'Metropolis Light Italic',
+          'MetropolisRegular': 'Metropolis Regular',
+          'MetropolisMediumItalic': 'Metropolis Medium Italic',
+          'NotoSansRegular': 'Noto Sans Regular',
+          'NotoSansItalic': 'Noto Sans Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+  ],
   // Online maps
   const MapLibreEngine(
     engineId: 'osm_bright',
