@@ -33,6 +33,7 @@ class Leg extends Equatable {
     this.rentedBike,
     this.interlineWithPreviousLeg,
     this.headsign,
+    this.tripPatternId,
   });
 
   final String mode;
@@ -55,6 +56,7 @@ class Leg extends Equatable {
   final bool? rentedBike;
   final bool? interlineWithPreviousLeg;
   final String? headsign;
+  final String? tripPatternId;
 
   /// Returns the transport mode enum.
   TransportMode get transportMode => TransportModeExtension.fromString(
@@ -108,6 +110,7 @@ class Leg extends Equatable {
       rentedBike: json['rentedBike'] as bool?,
       interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
       headsign: json['headsign'] as String?,
+      tripPatternId: json['tripPatternId'] as String?,
     );
   }
 
@@ -152,6 +155,7 @@ class Leg extends Equatable {
       'rentedBike': rentedBike,
       'interlineWithPreviousLeg': interlineWithPreviousLeg,
       'headsign': headsign,
+      'tripPatternId': tripPatternId,
     };
   }
 
@@ -177,6 +181,7 @@ class Leg extends Equatable {
     bool? rentedBike,
     bool? interlineWithPreviousLeg,
     String? headsign,
+    String? tripPatternId,
   }) {
     return Leg(
       mode: mode ?? this.mode,
@@ -200,6 +205,7 @@ class Leg extends Equatable {
       interlineWithPreviousLeg:
           interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       headsign: headsign ?? this.headsign,
+      tripPatternId: tripPatternId ?? this.tripPatternId,
     );
   }
 
@@ -225,6 +231,7 @@ class Leg extends Equatable {
         shortName,
         routeLongName,
         headsign,
+        tripPatternId,
       ];
 }
 

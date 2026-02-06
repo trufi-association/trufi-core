@@ -39,6 +39,16 @@ abstract class ITrufiMapEngine {
   /// If null, a default icon will be shown.
   Widget? get previewWidget => null;
 
+  /// Initialize the engine.
+  ///
+  /// Called during app startup to prepare any resources needed by the engine.
+  /// For online engines, this is typically a no-op.
+  /// For offline engines (e.g., OfflineMapLibreEngine), this copies assets
+  /// and prepares the map style.
+  ///
+  /// Default implementation does nothing.
+  Future<void> initialize() async {}
+
   /// Build the map widget.
   ///
   /// [controller] - The TrufiMapController to control the map.

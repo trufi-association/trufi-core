@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
@@ -15,75 +17,83 @@ typedef MapMoveCallback = void Function(double latitude, double longitude);
 /// Callback type for selecting a stop on the map
 typedef StopSelectionCallback = void Function(int? stopIndex);
 
-/// Screen showing transport route details with map and stops
+/// Screen showing transport route details with map and stops.
+///
+/// The map is automatically provided by [MapEngineManager] from the context.
 class TransportDetailScreen extends StatefulWidget {
   final String routeCode;
   final Future<TransportRouteDetails?> Function(String code) getRouteDetails;
-  final Widget Function(
-    BuildContext context,
-    TransportRouteDetails? route,
-    void Function(MapMoveCallback) registerMapMoveCallback,
-    void Function(StopSelectionCallback) registerStopSelectionCallback,
-  )?
-  mapBuilder;
   final Uri? shareBaseUri;
 
-  /// Base path for URL updates (web only). Example: '/routes'
-  /// When set, the URL will be updated to include the route ID as a query parameter.
-  final String? basePath;
+  /// Callback when close/back button is pressed.
+  /// If not provided, uses Navigator.pop().
+  final VoidCallback? onClose;
 
   const TransportDetailScreen({
     super.key,
     required this.routeCode,
     required this.getRouteDetails,
-    this.mapBuilder,
     this.shareBaseUri,
-    this.basePath,
+    this.onClose,
   });
 
-  static Future<void> show(
+  /// Creates a getRouteDetails function using RoutingEngineManager from context.
+  /// Use this when embedding TransportDetailScreen directly (not via show()).
+  static Future<TransportRouteDetails?> Function(String) createGetRouteDetails(
+    BuildContext context,
+  ) {
+    return _createGetRouteDetails(context);
+  }
+
+  /// Shows the transport detail screen.
+  ///
+  /// Navigates to `/routes/:id` using path parameter.
+  /// Uses push() so pop() can return to the previous screen.
+  /// URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs.
+  static void show(
     BuildContext context, {
     required String routeCode,
-    required Future<TransportRouteDetails?> Function(String code)
-    getRouteDetails,
-    Widget Function(
-      BuildContext context,
-      TransportRouteDetails? route,
-      void Function(MapMoveCallback) registerMapMoveCallback,
-      void Function(StopSelectionCallback) registerStopSelectionCallback,
-    )?
-    mapBuilder,
-    Uri? shareBaseUri,
-    String? basePath,
   }) {
-    return Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            TransportDetailScreen(
-              routeCode: routeCode,
-              getRouteDetails: getRouteDetails,
-              mapBuilder: mapBuilder,
-              shareBaseUri: shareBaseUri,
-              basePath: basePath,
-            ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SlideTransition(
-            position:
-                Tween<Offset>(
-                  begin: const Offset(0, 0.1),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ),
-                ),
-            child: FadeTransition(opacity: animation, child: child),
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 300),
-      ),
-    );
+    final encodedId = Uri.encodeComponent(routeCode);
+    context.push('/routes/$encodedId');
+  }
+
+  /// Creates a getRouteDetails function using RoutingEngineManager from context.
+  static Future<TransportRouteDetails?> Function(String) _createGetRouteDetails(
+    BuildContext context,
+  ) {
+    final routingManager = RoutingEngineManager.read(context);
+    final repository = routingManager.currentEngine.createTransitRouteRepository();
+
+    return (String code) async {
+      if (repository == null) return null;
+
+      final route = await repository.fetchPatternById(code);
+      return TransportRouteDetails(
+        id: route.id,
+        code: route.code,
+        name: route.name,
+        shortName: route.route?.shortName,
+        longName: route.route?.longName,
+        backgroundColor: route.route?.color != null
+            ? Color(int.parse('FF${route.route!.color}', radix: 16))
+            : null,
+        textColor: route.route?.textColor != null
+            ? Color(int.parse('FF${route.route!.textColor}', radix: 16))
+            : null,
+        geometry: route.geometry
+            ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
+            .toList(),
+        stops: route.stops
+            ?.map((s) => TransportStop(
+                  id: s.name,
+                  name: s.name,
+                  latitude: s.lat,
+                  longitude: s.lon,
+                ))
+            .toList(),
+      );
+    };
   }
 
   @override
@@ -93,7 +103,7 @@ class TransportDetailScreen extends StatefulWidget {
 class _TransportDetailScreenState extends State<TransportDetailScreen>
     with SingleTickerProviderStateMixin {
   TransportRouteDetails? _route;
-  bool _isLoading = true;
+  bool _isLoading = false; // Only show loading if data takes > 200ms
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
   late AnimationController _fadeController;
@@ -117,6 +127,28 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     super.dispose();
   }
 
+  /// Handles close/back action - goes back to previous screen.
+  void _handleClose() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else if (context.canPop()) {
+      // Pop to go back to where user came from (home, routes list, etc.)
+      context.pop();
+    } else {
+      // Fallback if there's nothing to pop (e.g., direct URL access)
+      context.go('/routes');
+    }
+  }
+
+  /// Builds the map widget using MapEngineManager from context.
+  Widget _buildMap(BuildContext context) {
+    return _RouteMapView(
+      route: _route,
+      registerMapMoveCallback: (callback) => _mapMoveCallback = callback,
+      registerStopSelectionCallback: (callback) => _stopSelectionCallback = callback,
+    );
+  }
+
   Future<void> _loadRoute() async {
     setState(() => _isLoading = true);
     try {
@@ -127,8 +159,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           _isLoading = false;
         });
         _fadeController.forward();
-        // Update URL with route ID (web only)
-        _updateUrlWithRouteId();
       }
     } catch (e) {
       if (mounted) {
@@ -143,21 +173,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           ),
         );
       }
-    }
-  }
-
-  /// Updates the URL with the route ID (web only).
-  void _updateUrlWithRouteId() {
-    if (!kIsWeb || widget.basePath == null) return;
-
-    try {
-      final uri = Uri(
-        path: widget.basePath,
-        queryParameters: {'id': widget.routeCode},
-      );
-      GoRouter.of(context).replace(uri.toString());
-    } catch (e) {
-      debugPrint('TransportDetailScreen: Error updating URL: $e');
     }
   }
 
@@ -212,7 +227,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                 child: InkWell(
                   onTap: () {
                     HapticFeedback.lightImpact();
-                    Navigator.pop(context);
+                    _handleClose();
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -361,7 +376,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
       return Stack(
         children: [
           Positioned.fill(
-            child: _ErrorState(onRetry: () => Navigator.pop(context)),
+            child: _ErrorState(onRetry: () => _handleClose()),
           ),
           _buildBackButton(context, colorScheme),
         ],
@@ -403,26 +418,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           left: sidePanelWidth,
           bottom: 0,
           right: 0,
-          child: widget.mapBuilder != null
-              ? FadeTransition(
-                  opacity: _fadeController,
-                  child: widget.mapBuilder!(
-                    context,
-                    _route,
-                    (callback) => _mapMoveCallback = callback,
-                    (callback) => _stopSelectionCallback = callback,
-                  ),
-                )
-              : Container(
-                  color: colorScheme.surfaceContainerLow,
-                  child: Center(
-                    child: Icon(
-                      Icons.map_outlined,
-                      size: 64,
-                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                    ),
-                  ),
-                ),
+          child: FadeTransition(
+            opacity: _fadeController,
+            child: _buildMap(context),
+          ),
         ),
 
         // Side panel on the left
@@ -481,7 +480,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                       child: InkWell(
                         onTap: () {
                           HapticFeedback.lightImpact();
-                          Navigator.pop(context);
+                          _handleClose();
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
@@ -603,31 +602,12 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     return Stack(
       children: [
         // Map
-        if (widget.mapBuilder != null)
-          Positioned.fill(
-            child: FadeTransition(
-              opacity: _fadeController,
-              child: widget.mapBuilder!(
-                context,
-                _route,
-                (callback) => _mapMoveCallback = callback,
-                (callback) => _stopSelectionCallback = callback,
-              ),
-            ),
-          )
-        else
-          Positioned.fill(
-            child: Container(
-              color: colorScheme.surfaceContainerLow,
-              child: Center(
-                child: Icon(
-                  Icons.map_outlined,
-                  size: 64,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                ),
-              ),
-            ),
+        Positioned.fill(
+          child: FadeTransition(
+            opacity: _fadeController,
+            child: _buildMap(context),
           ),
+        ),
 
         // Top bar with route info
         _buildTopBar(context, theme, colorScheme),
@@ -695,7 +675,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
             child: InkWell(
               onTap: () {
                 HapticFeedback.lightImpact();
-                Navigator.pop(context);
+                _handleClose();
               },
               borderRadius: BorderRadius.circular(12),
               child: Container(
@@ -1544,6 +1524,391 @@ class _StatItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ============ Route Map View ============
+
+/// Map view for displaying a route (used by showWithRoutingEngine)
+class _RouteMapView extends StatefulWidget {
+  final TransportRouteDetails? route;
+  final void Function(MapMoveCallback) registerMapMoveCallback;
+  final void Function(StopSelectionCallback) registerStopSelectionCallback;
+
+  const _RouteMapView({
+    required this.route,
+    required this.registerMapMoveCallback,
+    required this.registerStopSelectionCallback,
+  });
+
+  @override
+  State<_RouteMapView> createState() => _RouteMapViewState();
+}
+
+class _RouteMapViewState extends State<_RouteMapView> {
+  TrufiMapController? _mapController;
+  FitCameraLayer? _fitCameraLayer;
+  _RouteLayer? _routeLayer;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.registerMapMoveCallback(_moveToLocation);
+    widget.registerStopSelectionCallback(_onStopSelected);
+  }
+
+  void _onStopSelected(int? stopIndex) {
+    _routeLayer?.setSelectedStop(stopIndex);
+  }
+
+  void _moveToLocation(double latitude, double longitude) {
+    _mapController?.setCameraPosition(
+      TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
+    );
+  }
+
+  void _initializeIfNeeded(MapEngineManager mapEngineManager) {
+    if (_mapController == null) {
+      _mapController = TrufiMapController(
+        initialCameraPosition: TrufiCameraPosition(
+          target: mapEngineManager.defaultCenter,
+          zoom: mapEngineManager.defaultZoom,
+        ),
+      );
+      _fitCameraLayer = FitCameraLayer(_mapController!);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateRoute();
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _RouteMapView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.route != oldWidget.route) {
+      _updateRoute();
+    }
+  }
+
+  void _updateRoute() {
+    final route = widget.route;
+    if (route == null || route.geometry == null || _mapController == null) {
+      return;
+    }
+
+    if (_routeLayer != null) {
+      _mapController!.removeLayer(_routeLayer!.id);
+    }
+
+    _routeLayer = _RouteLayer(_mapController!);
+    _routeLayer!.setRoute(route);
+
+    final points = route.geometry!
+        .map((p) => LatLng(p.latitude, p.longitude))
+        .toList();
+
+    if (points.length > 1) {
+      _fitCameraLayer?.setFitPoints(points);
+    }
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
+
+  Widget _buildMap(ITrufiMapEngine engine) {
+    return engine.buildMap(controller: _mapController!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mapEngineManager = MapEngineManager.watch(context);
+    _initializeIfNeeded(mapEngineManager);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final viewPadding = MediaQuery.of(context).viewPadding;
+        final sheetHeight = constraints.maxHeight * 0.30;
+        final adjustedPadding = EdgeInsets.only(
+          top: viewPadding.top + 70,
+          bottom: viewPadding.bottom + sheetHeight,
+          left: viewPadding.left,
+          right: viewPadding.right,
+        );
+        _fitCameraLayer?.updateViewport(
+          Size(constraints.maxWidth, constraints.maxHeight),
+          adjustedPadding,
+        );
+        final topOffset = viewPadding.top + 70;
+
+        return Stack(
+          children: [
+            _buildMap(mapEngineManager.currentEngine),
+            Positioned(
+              top: topOffset,
+              right: 16,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (mapEngineManager.engines.length > 1) ...[
+                    MapTypeButton.fromEngines(
+                      engines: mapEngineManager.engines,
+                      currentEngineIndex: mapEngineManager.currentIndex,
+                      onEngineChanged: (engine) {
+                        mapEngineManager.setEngine(engine);
+                      },
+                      settingsAppBarTitle: 'Map Settings',
+                      settingsSectionTitle: 'Map Type',
+                      settingsApplyButtonText: 'Apply Changes',
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  ValueListenableBuilder<bool>(
+                    valueListenable: _fitCameraLayer!.outOfFocusNotifier,
+                    builder: (context, outOfFocus, _) {
+                      return AnimatedOpacity(
+                        opacity: outOfFocus ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: AnimatedScale(
+                          scale: outOfFocus ? 1.0 : 0.8,
+                          duration: const Duration(milliseconds: 200),
+                          child: Material(
+                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.95),
+                            borderRadius: BorderRadius.circular(12),
+                            elevation: 2,
+                            shadowColor: Colors.black26,
+                            child: InkWell(
+                              onTap: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                width: 44,
+                                height: 44,
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.crop_free_rounded,
+                                  size: 22,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Custom layer for displaying route on map
+class _RouteLayer extends TrufiLayer {
+  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
+
+  TransportRouteDetails? _currentRoute;
+  int? _selectedStopIndex;
+
+  void setSelectedStop(int? stopIndex) {
+    _selectedStopIndex = stopIndex;
+    if (_currentRoute != null) {
+      _updateStopMarkers(_currentRoute!);
+    }
+  }
+
+  void setRoute(TransportRouteDetails route) {
+    _currentRoute = route;
+    clearMarkers();
+    clearLines();
+
+    if (route.geometry == null || route.geometry!.isEmpty) return;
+
+    final routeColor = route.backgroundColor ?? Colors.blue;
+    final points = route.geometry!
+        .map((p) => LatLng(p.latitude, p.longitude))
+        .toList();
+
+    addLine(
+      TrufiLine(
+        id: 'route-line',
+        position: points,
+        color: routeColor,
+        lineWidth: 5,
+      ),
+    );
+
+    _updateStopMarkers(route);
+  }
+
+  void _updateStopMarkers(TransportRouteDetails route) {
+    final stops = route.stops ?? [];
+    for (int i = 0; i < stops.length; i++) {
+      removeMarkerById('stop-$i');
+    }
+    removeMarkerById('selected-stop');
+    removeMarkerById('origin-marker');
+    removeMarkerById('destination-marker');
+
+    if (stops.isEmpty) return;
+
+    final routeColor = route.backgroundColor ?? Colors.blue;
+    final colorHex = routeColor.toARGB32().toRadixString(16);
+    final intermediateImageKey = 'stop_intermediate_$colorHex';
+    final selectedImageKey = 'stop_selected_$colorHex';
+
+    for (int i = 0; i < stops.length; i++) {
+      final stop = stops[i];
+      final isFirst = i == 0;
+      final isLast = i == stops.length - 1;
+      final isSelected = i == _selectedStopIndex;
+
+      if (isFirst || isLast || isSelected) continue;
+
+      addMarker(
+        TrufiMarker(
+          id: 'stop-$i',
+          position: LatLng(stop.latitude, stop.longitude),
+          widget: _StopMarker(color: routeColor),
+          size: const Size(12, 12),
+          layerLevel: 1,
+          imageCacheKey: intermediateImageKey,
+        ),
+      );
+    }
+
+    final firstStop = stops.first;
+    addMarker(
+      TrufiMarker(
+        id: 'origin-marker',
+        position: LatLng(firstStop.latitude, firstStop.longitude),
+        widget: const _OriginMarker(),
+        size: const Size(28, 28),
+        layerLevel: 5,
+        imageCacheKey: 'origin_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    final lastStop = stops.last;
+    addMarker(
+      TrufiMarker(
+        id: 'destination-marker',
+        position: LatLng(lastStop.latitude, lastStop.longitude),
+        widget: const _DestinationMarker(),
+        size: const Size(36, 36),
+        alignment: Alignment.topCenter,
+        layerLevel: 5,
+        imageCacheKey: 'destination_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
+      final selectedStop = stops[_selectedStopIndex!];
+      addMarker(
+        TrufiMarker(
+          id: 'selected-stop',
+          position: LatLng(selectedStop.latitude, selectedStop.longitude),
+          widget: _SelectedStopMarker(color: routeColor),
+          size: const Size(24, 24),
+          layerLevel: 10,
+          imageCacheKey: selectedImageKey,
+        ),
+      );
+    }
+  }
+}
+
+class _StopMarker extends StatelessWidget {
+  final Color color;
+
+  const _StopMarker({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(color: color, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.25),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OriginMarker extends StatelessWidget {
+  const _OriginMarker();
+
+  static const _color = Color(0xFF4CAF50);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: _color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 4),
+      ),
+    );
+  }
+}
+
+class _DestinationMarker extends StatelessWidget {
+  const _DestinationMarker();
+
+  static const _color = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.place_rounded,
+      color: _color,
+      size: 36,
+    );
+  }
+}
+
+class _SelectedStopMarker extends StatelessWidget {
+  final Color color;
+
+  const _SelectedStopMarker({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
     );
   }
 }

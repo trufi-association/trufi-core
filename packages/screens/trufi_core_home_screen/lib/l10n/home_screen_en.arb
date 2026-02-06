@@ -555,5 +555,45 @@
         "example": "14:30"
       }
     }
+  },
+  "routingProvider": "Routing Provider",
+  "@routingProvider": {
+    "description": "Title for routing provider selection section"
+  },
+  "autoFallback": "Auto fallback",
+  "@autoFallback": {
+    "description": "Label for auto fallback mode toggle"
+  },
+  "autoFallbackDescription": "Try online first, use offline if it fails",
+  "@autoFallbackDescription": {
+    "description": "Description for auto fallback mode"
+  },
+  "engineOnlineName": "Online",
+  "@engineOnlineName": {
+    "description": "Name for online routing engine"
+  },
+  "engineOnlineDescription": "OpenTripPlanner 2.8. Real-time routing with detailed walking directions.",
+  "@engineOnlineDescription": {
+    "description": "Description for online routing engine"
+  },
+  "engineOfflineName": "Offline",
+  "@engineOfflineName": {
+    "description": "Name for offline routing engine"
+  },
+  "engineOfflineDescription": "GTFS-based routing inspired by GuíaCochala. Works without internet.",
+  "@engineOfflineDescription": {
+    "description": "Description for offline routing engine"
+  },
+  "limitationRequiresInternet": "Requires internet",
+  "@limitationRequiresInternet": {
+    "description": "Limitation tag for engines that require internet"
+  },
+  "limitationSlower": "Slower response",
+  "@limitationSlower": {
+    "description": "Limitation tag for engines that are slower"
+  },
+  "limitationNoWalkingRoute": "No walking route on map",
+  "@limitationNoWalkingRoute": {
+    "description": "Limitation tag for engines that don't show walking routes on map"
   }
 }

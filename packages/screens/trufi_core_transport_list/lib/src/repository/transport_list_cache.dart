@@ -10,6 +10,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 /// The cached data is JSON serializable (no widgets).
 class TransportListCache {
   static const String _routesCacheKey = 'trufi_transport_list_routes_cache';
+  static const String _providerIdCacheKey = 'trufi_transport_list_provider_id';
   static const String _detailsCacheKeyPrefix = 'trufi_transport_list_details_';
 
   final StorageService _storage;
@@ -17,6 +18,9 @@ class TransportListCache {
 
   /// Cached route patterns (raw data from API).
   List<CachedRoutePattern>? _cachedRoutes;
+
+  /// Cached provider ID.
+  String? _cachedProviderId;
 
   /// Cached route details by code.
   final Map<String, CachedRouteDetails> _cachedDetails = {};
@@ -81,7 +85,43 @@ class TransportListCache {
     if (!_isInitialized) await initialize();
 
     _cachedRoutes = null;
+    _cachedProviderId = null;
     await _storage.delete(_routesCacheKey);
+    await _storage.delete(_providerIdCacheKey);
+  }
+
+  /// Get the cached provider ID.
+  Future<String?> getCachedProviderId() async {
+    if (!_isInitialized) await initialize();
+
+    if (_cachedProviderId != null) return _cachedProviderId;
+
+    try {
+      _cachedProviderId = await _storage.read(_providerIdCacheKey);
+      return _cachedProviderId;
+    } catch (e) {
+      debugPrint('TransportListCache: Error loading provider ID: $e');
+      return null;
+    }
+  }
+
+  /// Save provider ID to cache.
+  Future<void> cacheProviderId(String providerId) async {
+    if (!_isInitialized) await initialize();
+
+    _cachedProviderId = providerId;
+    try {
+      await _storage.write(_providerIdCacheKey, providerId);
+    } catch (e) {
+      debugPrint('TransportListCache: Error saving provider ID: $e');
+    }
+  }
+
+  /// Check if the cached data is from the given provider.
+  /// Returns true if cache is valid for this provider, false if cache should be invalidated.
+  Future<bool> isValidForProvider(String providerId) async {
+    final cachedId = await getCachedProviderId();
+    return cachedId == providerId;
   }
 
   // ============ Route Details Cache ============

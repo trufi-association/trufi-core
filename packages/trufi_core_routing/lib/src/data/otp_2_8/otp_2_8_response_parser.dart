@@ -79,6 +79,8 @@ class Otp28ResponseParser {
         : <LatLng>[];
 
     final routeData = json['route'] as Map<String, dynamic>?;
+    final tripData = json['trip'] as Map<String, dynamic>?;
+    final tripPatternId = tripData?['pattern']?['code'] as String?;
 
     return Leg(
       mode: mode,
@@ -103,6 +105,7 @@ class Otp28ResponseParser {
       realtimeState: RealtimeStateExtension.fromString(
         json['realtimeState'] as String?,
       ),
+      tripPatternId: tripPatternId,
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,18 +11,22 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show OtpConfiguration, OtpVersion;
+    show
+        RoutingEngineManager,
+        IRoutingProvider,
+        Otp28RoutingProvider,
+        Otp24RoutingProvider,
+        Otp15RoutingProvider,
+        GtfsRoutingProvider,
+        GtfsRoutingConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 import 'package:trufi_core_ui/trufi_core_ui.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
-const _otpConfiguration = OtpConfiguration(
-  endpoint: 'https://otp.trufi.app',
-  version: OtpVersion.v2_8,
-);
 const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
@@ -34,26 +39,107 @@ const _facebookUrl = 'https://facebook.com/trufiapp';
 const _xTwitterUrl = 'https://x.com/trufiapp';
 const _instagramUrl = 'https://instagram.com/trufiapp';
 
-const List<ITrufiMapEngine> _mapEngines = [
-  MapLibreEngine(
+// Routing engines (similar to map engines)
+final List<IRoutingProvider> _routingEngines = [
+  // Offline routing via GTFS (disabled on web)
+  if (!kIsWeb)
+    GtfsRoutingProvider(
+      config: const GtfsRoutingConfig(
+        gtfsAsset: 'assets/routing/cochabamba.gtfs.zip',
+      ),
+    ),
+  // Online routing via OTP (dev servers)
+  const Otp28RoutingProvider(
+    endpoint: 'https://otp-281.trufi-core.trufi.dev',
+    displayName: 'OTP 2.8.1',
+  ),
+  const Otp24RoutingProvider(
+    endpoint: 'https://otp-240.trufi-core.trufi.dev',
+    displayName: 'OTP 2.4.0',
+  ),
+  const Otp15RoutingProvider(
+    endpoint: 'https://otp-150.trufi-core.trufi.dev',
+    displayName: 'OTP 1.5.0',
+  ),
+];
+
+// Map engines
+final List<ITrufiMapEngine> _mapEngines = [
+  // Offline maps - disabled on web
+  if (!kIsWeb)
+    OfflineMapLibreEngine(
+      engineId: 'offline_osm_liberty',
+      displayName: 'Offline Liberty',
+      displayDescription: 'Mapa offline estándar',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/osm-liberty/style.json',
+        spritesAssetDir: 'assets/offline/styles/osm-liberty/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'RobotoRegular': 'Roboto Regular',
+          'RobotoMedium': 'Roboto Medium',
+          'RobotoCondensedItalic': 'Roboto Condensed Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+  if (!kIsWeb)
+    OfflineMapLibreEngine(
+      engineId: 'offline_osm_bright',
+      displayName: 'Offline Bright',
+      displayDescription: 'Mapa offline claro',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/osm-bright/style.json',
+        spritesAssetDir: 'assets/offline/styles/osm-bright/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'OpenSansRegular': 'Open Sans Regular',
+          'OpenSansBold': 'Open Sans Bold',
+          'OpenSansItalic': 'Open Sans Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+  // Online maps
+  const MapLibreEngine(
     engineId: 'osm_bright',
     styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
     displayDescription: 'Mapa claro',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'osm_liberty',
     styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
     displayDescription: 'Mapa estándar',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'dark_matter',
     styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
     displayDescription: 'Mapa oscuro',
   ),
-  MapLibreEngine(
+  const MapLibreEngine(
     engineId: 'fiord_color',
     styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
     displayName: 'Fiord Color',
@@ -68,16 +154,8 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
-      appOverlayManagers: [
-        OnboardingManager(
-          overlayBuilder: (onComplete) =>
-              OnboardingSheet(onComplete: onComplete),
-        ),
-        PrivacyConsentManager(
-          overlayBuilder: (onAccept, onDecline) =>
-              PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
-        ),
-      ],
+      // Usa los defaults (verde Material 3) - ver TrufiThemeConfig
+      themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: const [
         SocialMediaLink(
           url: _facebookUrl,
@@ -102,6 +180,25 @@ void main() {
             defaultCenter: _defaultCenter,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => RoutingEngineManager(engines: _routingEngines),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OverlayManager(
+            managers: [
+              OnboardingManager(
+                overlayBuilder: (onComplete) =>
+                    OnboardingSheet(onComplete: onComplete),
+              ),
+              PrivacyConsentManager(
+                overlayBuilder: (onAccept, onDecline) => PrivacyConsentSheet(
+                  onAccept: onAccept,
+                  onDecline: onDecline,
+                ),
+              ),
+            ],
+          ),
+        ),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
             searchLocationService: PhotonSearchService(
@@ -115,7 +212,6 @@ void main() {
       screens: [
         HomeScreenTrufiScreen(
           config: HomeScreenConfig(
-            otpConfiguration: _otpConfiguration,
             appName: _appName,
             deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
@@ -128,11 +224,12 @@ void main() {
               mapEngineManager: MapEngineManager.read(context),
             );
           },
+          onRouteTap: (context, routeCode) {
+            TransportDetailScreen.show(context, routeCode: routeCode);
+          },
         ),
         SavedPlacesTrufiScreen(),
-        TransportListTrufiScreen(
-          otpConfiguration: _otpConfiguration,
-        ),
+        TransportListTrufiScreen(),
         FaresTrufiScreen(
           config: FaresConfig(
             currency: 'Bs.',
@@ -161,11 +258,7 @@ void main() {
             ],
           ),
         ),
-        FeedbackTrufiScreen(
-          config: FeedbackConfig(
-            feedbackUrl: _feedbackUrl,
-          ),
-        ),
+        FeedbackTrufiScreen(config: FeedbackConfig(feedbackUrl: _feedbackUrl)),
         SettingsTrufiScreen(),
         AboutTrufiScreen(
           config: AboutScreenConfig(

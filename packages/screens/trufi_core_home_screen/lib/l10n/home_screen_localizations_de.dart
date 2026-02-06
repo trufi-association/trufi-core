@@ -381,4 +381,37 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   String departsAt(String time) {
     return 'Abfahrt $time';
   }
+
+  @override
+  String get routingProvider => 'Routing-Anbieter';
+
+  @override
+  String get autoFallback => 'Automatischer Fallback';
+
+  @override
+  String get autoFallbackDescription =>
+      'Versucht zuerst online, nutzt offline bei Fehler';
+
+  @override
+  String get engineOnlineName => 'Online';
+
+  @override
+  String get engineOnlineDescription =>
+      'OpenTripPlanner 2.8. Echtzeit-Routing mit detaillierten Fußweganweisungen.';
+
+  @override
+  String get engineOfflineName => 'Offline';
+
+  @override
+  String get engineOfflineDescription =>
+      'GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.';
+
+  @override
+  String get limitationRequiresInternet => 'Erfordert Internet';
+
+  @override
+  String get limitationSlower => 'Langsamere Antwort';
+
+  @override
+  String get limitationNoWalkingRoute => 'Keine Fußweg-Route auf Karte';
 }

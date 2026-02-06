@@ -9,6 +9,7 @@
   "onboardingThemeDark": "Oscuro",
   "onboardingThemeSystem": "Sistema",
   "onboardingMapTitle": "Elige tu estilo de mapa",
+  "onboardingRoutingTitle": "Elige tu motor de enrutamiento",
   "onboardingComplete": "Comenzar",
 
   "privacyConsentTitle": "Ayuda a mejorar Trufi",
@@ -31,8 +32,19 @@
   "settingsMap": "Mapa",
   "settingsSelectMapType": "Selecciona tu tipo de mapa preferido:",
 
+  "settingsRouting": "Enrutamiento",
+  "settingsSelectRoutingEngine": "Selecciona tu motor de enrutamiento preferido:",
+
   "settingsPrivacy": "Privacidad",
   "settingsPrivacySubtitle": "Ayuda a mejorar la app",
   "settingsPrivacyShareData": "Compartir datos de uso anonimos",
-  "settingsPrivacyShareDataDescription": "Ayudanos a corregir errores y mejorar los datos de transporte"
+  "settingsPrivacyShareDataDescription": "Ayudanos a corregir errores y mejorar los datos de transporte",
+
+  "engineOnlineName": "Online",
+  "engineOnlineDescription": "OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.",
+  "engineOfflineName": "Offline",
+  "engineOfflineDescription": "Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.",
+  "limitationRequiresInternet": "Requiere internet",
+  "limitationSlower": "Respuesta más lenta",
+  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"
 }

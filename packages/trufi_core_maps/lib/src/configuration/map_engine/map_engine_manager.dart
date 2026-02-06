@@ -82,6 +82,17 @@ class MapEngineManager extends ChangeNotifier {
   /// List of available engines.
   List<ITrufiMapEngine> get engines => List.unmodifiable(_engines);
 
+  /// Initialize all engines.
+  ///
+  /// This should be called during app startup to prepare all engines.
+  /// For online engines, this is a no-op. For offline engines, this
+  /// copies assets and prepares resources.
+  Future<void> initializeEngines() async {
+    for (final engine in _engines) {
+      await engine.initialize();
+    }
+  }
+
   /// Currently selected engine.
   ITrufiMapEngine get currentEngine => _engines[_currentIndex];
 

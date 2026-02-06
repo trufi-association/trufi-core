@@ -33,6 +33,9 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get onboardingMapTitle => 'Elige tu estilo de mapa';
 
   @override
+  String get onboardingRoutingTitle => 'Elige tu motor de enrutamiento';
+
+  @override
   String get onboardingComplete => 'Comenzar';
 
   @override
@@ -94,6 +97,13 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get settingsSelectMapType => 'Selecciona tu tipo de mapa preferido:';
 
   @override
+  String get settingsRouting => 'Enrutamiento';
+
+  @override
+  String get settingsSelectRoutingEngine =>
+      'Selecciona tu motor de enrutamiento preferido:';
+
+  @override
   String get settingsPrivacy => 'Privacidad';
 
   @override
@@ -105,4 +115,27 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   @override
   String get settingsPrivacyShareDataDescription =>
       'Ayudanos a corregir errores y mejorar los datos de transporte';
+
+  @override
+  String get engineOnlineName => 'Online';
+
+  @override
+  String get engineOnlineDescription =>
+      'OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.';
+
+  @override
+  String get engineOfflineName => 'Offline';
+
+  @override
+  String get engineOfflineDescription =>
+      'Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.';
+
+  @override
+  String get limitationRequiresInternet => 'Requiere internet';
+
+  @override
+  String get limitationSlower => 'Respuesta más lenta';
+
+  @override
+  String get limitationNoWalkingRoute => 'Sin ruta de caminata en mapa';
 }

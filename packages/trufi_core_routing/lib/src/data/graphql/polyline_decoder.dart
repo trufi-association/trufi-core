@@ -1,5 +1,46 @@
 import 'package:latlong2/latlong.dart';
 
+/// Encodes and decodes Google-encoded polyline strings.
+class PolylineCodec {
+  PolylineCodec._();
+
+  /// Encodes a list of coordinates to a polyline string.
+  ///
+  /// This implements the Google Polyline Algorithm:
+  /// https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+  static String encode(List<LatLng> points) {
+    if (points.isEmpty) return '';
+
+    final buffer = StringBuffer();
+    int prevLat = 0;
+    int prevLng = 0;
+
+    for (final point in points) {
+      final lat = (point.latitude * 1e5).round();
+      final lng = (point.longitude * 1e5).round();
+
+      _encodeValue(lat - prevLat, buffer);
+      _encodeValue(lng - prevLng, buffer);
+
+      prevLat = lat;
+      prevLng = lng;
+    }
+
+    return buffer.toString();
+  }
+
+  static void _encodeValue(int value, StringBuffer buffer) {
+    // Zigzag encode
+    int encoded = value < 0 ? ((-value) << 1) - 1 : value << 1;
+
+    while (encoded >= 0x20) {
+      buffer.writeCharCode(((encoded & 0x1f) | 0x20) + 63);
+      encoded >>= 5;
+    }
+    buffer.writeCharCode(encoded + 63);
+  }
+}
+
 /// Decodes Google-encoded polyline strings.
 class PolylineDecoder {
   PolylineDecoder._();

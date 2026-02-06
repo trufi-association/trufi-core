@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math' show Point;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:maplibre_gl/maplibre_gl.dart' hide LatLngBounds;
@@ -449,9 +451,19 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     await future;
   }
 
+  Future<void> _handleWebLongPress(Offset localPosition) async {
+    final ctl = _mapCtl;
+    if (ctl == null) return;
+    final point = Point(localPosition.dx, localPosition.dy);
+    final coordinates = await ctl.toLatLng(point);
+    widget.onMapLongClick?.call(
+      latlng.LatLng(coordinates.latitude, coordinates.longitude),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MapLibreMap(
+    final mapWidget = MapLibreMap(
       initialCameraPosition: _toCameraPosition(
         widget.controller.cameraPositionNotifier.value,
       ),
@@ -476,17 +488,30 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         await _syncLayers(visibleLayers);
       },
       onCameraIdle: _handleCameraIdle,
-      onMapLongClick: (point, coordinates) {
-        widget.onMapLongClick?.call(
-          latlng.LatLng(coordinates.latitude, coordinates.longitude),
-        );
-      },
+      onMapLongClick: kIsWeb
+          ? null
+          : (point, coordinates) {
+              widget.onMapLongClick?.call(
+                latlng.LatLng(coordinates.latitude, coordinates.longitude),
+              );
+            },
       onMapClick: (points, coordinates) {
         widget.onMapClick?.call(
           latlng.LatLng(coordinates.latitude, coordinates.longitude),
         );
       },
     );
+
+    // On web, onMapLongClick doesn't work reliably, so we wrap with
+    // GestureDetector to handle long press manually
+    if (kIsWeb && widget.onMapLongClick != null) {
+      return GestureDetector(
+        onLongPressStart: (details) => _handleWebLongPress(details.localPosition),
+        child: mapWidget,
+      );
+    }
+
+    return mapWidget;
   }
 
   CameraPosition _toCameraPosition(TrufiCameraPosition cam) => CameraPosition(

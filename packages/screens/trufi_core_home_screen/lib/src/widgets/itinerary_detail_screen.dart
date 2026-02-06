@@ -12,6 +12,10 @@ class ItineraryDetailContent extends StatelessWidget {
   final VoidCallback? onBack;
   final VoidCallback? onStartNavigation;
 
+  /// Callback when a transit route badge is tapped.
+  /// Provides the route code to allow navigation to route details.
+  final void Function(String routeCode)? onRouteTap;
+
   /// When true, the content will shrink to fit and disable its own scrolling.
   /// Use this when the content is inside a parent scrollable.
   final bool shrinkWrap;
@@ -21,6 +25,7 @@ class ItineraryDetailContent extends StatelessWidget {
     required this.itinerary,
     this.onBack,
     this.onStartNavigation,
+    this.onRouteTap,
     this.shrinkWrap = false,
   });
 
@@ -55,7 +60,7 @@ class ItineraryDetailContent extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Timeline
-        _VerticalTimeline(itinerary: itinerary, l10n: l10n),
+        _VerticalTimeline(itinerary: itinerary, l10n: l10n, onRouteTap: onRouteTap),
       ],
     );
 
@@ -261,8 +266,13 @@ class ItineraryDetailContent extends StatelessWidget {
 class _VerticalTimeline extends StatelessWidget {
   final routing.Itinerary itinerary;
   final HomeScreenLocalizations l10n;
+  final void Function(String routeCode)? onRouteTap;
 
-  const _VerticalTimeline({required this.itinerary, required this.l10n});
+  const _VerticalTimeline({
+    required this.itinerary,
+    required this.l10n,
+    this.onRouteTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -290,6 +300,7 @@ class _VerticalTimeline extends StatelessWidget {
               leg: legs[i],
               l10n: l10n,
               lineColor: _getLegColor(legs[i], colorScheme),
+              onRouteTap: onRouteTap,
             ),
 
             // Destination / Transfer
@@ -512,11 +523,13 @@ class _LegItem extends StatefulWidget {
   final routing.Leg leg;
   final HomeScreenLocalizations l10n;
   final Color lineColor;
+  final void Function(String routeCode)? onRouteTap;
 
   const _LegItem({
     required this.leg,
     required this.l10n,
     required this.lineColor,
+    this.onRouteTap,
   });
 
   @override
@@ -525,6 +538,22 @@ class _LegItem extends StatefulWidget {
 
 class _LegItemState extends State<_LegItem> {
   bool _isExpanded = false;
+  bool _isNavigating = false;
+
+  void _handleRouteTap() {
+    if (_isNavigating) return;
+    final routeCode = widget.leg.tripPatternId ?? widget.leg.route?.id ?? '';
+    if (routeCode.isEmpty) return;
+
+    _isNavigating = true;
+    HapticFeedback.lightImpact();
+    widget.onRouteTap!(routeCode);
+
+    // Reset after a delay to allow navigation to complete
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) _isNavigating = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -630,31 +659,35 @@ class _LegItemState extends State<_LegItem> {
         // First row: badge + stops count
         Row(
           children: [
-            // Route badge with icon
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: BoxDecoration(
-                color: widget.lineColor,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _getModeIcon(leg.transportMode),
-                    size: 14,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    leg.displayName,
-                    style: const TextStyle(
+            // Route badge with icon (tappable)
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: widget.onRouteTap != null ? _handleRouteTap : null,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                decoration: BoxDecoration(
+                  color: widget.lineColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _getModeIcon(leg.transportMode),
+                      size: 14,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    Text(
+                      leg.displayName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -860,11 +893,13 @@ class _LegItemState extends State<_LegItem> {
 class ItineraryDetailScreen extends StatelessWidget {
   final routing.Itinerary itinerary;
   final VoidCallback? onStartNavigation;
+  final void Function(String routeCode)? onRouteTap;
 
   const ItineraryDetailScreen({
     super.key,
     required this.itinerary,
     this.onStartNavigation,
+    this.onRouteTap,
   });
 
   /// Shows the itinerary detail screen with a slide transition.
@@ -872,6 +907,7 @@ class ItineraryDetailScreen extends StatelessWidget {
     BuildContext context, {
     required routing.Itinerary itinerary,
     VoidCallback? onStartNavigation,
+    void Function(String routeCode)? onRouteTap,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
@@ -879,6 +915,7 @@ class ItineraryDetailScreen extends StatelessWidget {
             ItineraryDetailScreen(
           itinerary: itinerary,
           onStartNavigation: onStartNavigation,
+          onRouteTap: onRouteTap,
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
@@ -979,7 +1016,7 @@ class ItineraryDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 8, bottom: 24),
-        child: _VerticalTimeline(itinerary: itinerary, l10n: l10n),
+        child: _VerticalTimeline(itinerary: itinerary, l10n: l10n, onRouteTap: onRouteTap),
       ),
     );
   }

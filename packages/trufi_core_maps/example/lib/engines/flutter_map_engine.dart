@@ -74,6 +74,9 @@ class FlutterMapEngine implements ITrufiMapEngine {
       );
 
   @override
+  Future<void> initialize() async {}
+
+  @override
   Widget buildMap({
     required TrufiMapController controller,
     void Function(LatLng)? onMapClick,

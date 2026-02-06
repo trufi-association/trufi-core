@@ -148,6 +148,9 @@ query plan(
           blockId
           wheelchairAccessible
           bikesAllowed
+          pattern {
+            code
+          }
         }
         intermediatePlaces {
           name

@@ -33,6 +33,9 @@ class SettingsLocalizationsEn extends SettingsLocalizations {
   String get onboardingMapTitle => 'Choose your map style';
 
   @override
+  String get onboardingRoutingTitle => 'Choose your routing engine';
+
+  @override
   String get onboardingComplete => 'Get Started';
 
   @override
@@ -93,6 +96,13 @@ class SettingsLocalizationsEn extends SettingsLocalizations {
   String get settingsSelectMapType => 'Select your preferred map type:';
 
   @override
+  String get settingsRouting => 'Routing';
+
+  @override
+  String get settingsSelectRoutingEngine =>
+      'Select your preferred routing engine:';
+
+  @override
   String get settingsPrivacy => 'Privacy';
 
   @override
@@ -104,4 +114,27 @@ class SettingsLocalizationsEn extends SettingsLocalizations {
   @override
   String get settingsPrivacyShareDataDescription =>
       'Help us fix bugs and improve transit data';
+
+  @override
+  String get engineOnlineName => 'Online';
+
+  @override
+  String get engineOnlineDescription =>
+      'OpenTripPlanner 2.8. Real-time routing with detailed walking directions.';
+
+  @override
+  String get engineOfflineName => 'Offline';
+
+  @override
+  String get engineOfflineDescription =>
+      'GTFS-based routing inspired by GuíaCochala. Works without internet.';
+
+  @override
+  String get limitationRequiresInternet => 'Requires internet';
+
+  @override
+  String get limitationSlower => 'Slower response';
+
+  @override
+  String get limitationNoWalkingRoute => 'No walking route on map';
 }

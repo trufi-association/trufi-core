@@ -87,18 +87,30 @@ class AppOverlayEntry {
 ///
 /// Lifecycle:
 /// 1. Create OverlayManager with list of AppOverlayManagers
-/// 2. Call [initialize] to init all managers (async)
+/// 2. Call [initializeManagers] to init all managers (async)
 /// 3. Call [notifyAppReady] when UI is ready so managers can push overlays
+///
+/// Example:
+/// ```dart
+/// ChangeNotifierProvider(
+///   create: (_) => OverlayManager(
+///     managers: [
+///       OnboardingManager(...),
+///       PrivacyConsentManager(...),
+///     ],
+///   ),
+/// )
+/// ```
 class OverlayManager extends ChangeNotifier implements OverlayService {
   final List<AppOverlayEntry> _overlays = [];
-  final List<AppOverlayManager> _appOverlayManagers;
+  final List<AppOverlayManager> _managers;
 
-  OverlayManager({List<AppOverlayManager> appOverlayManagers = const []})
-      : _appOverlayManagers = appOverlayManagers;
+  OverlayManager({List<AppOverlayManager> managers = const []})
+      : _managers = managers;
 
   /// The registered AppOverlayManagers
-  List<AppOverlayManager> get appOverlayManagers =>
-      List.unmodifiable(_appOverlayManagers);
+  List<AppOverlayManager> get managers =>
+      List.unmodifiable(_managers);
 
   /// Get a manager by type.
   ///
@@ -109,7 +121,7 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
   /// final privacyManager = overlayManager.getManager<PrivacyConsentManager>();
   /// ```
   T? getManager<T extends AppOverlayManager>() {
-    for (final manager in _appOverlayManagers) {
+    for (final manager in _managers) {
       if (manager is T) {
         return manager;
       }
@@ -119,7 +131,7 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
 
   /// Initialize all AppOverlayManagers asynchronously.
   Future<void> initializeManagers() async {
-    for (final manager in _appOverlayManagers) {
+    for (final manager in _managers) {
       await manager.initialize();
     }
   }
@@ -127,7 +139,7 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
   /// Notify all AppOverlayManagers that the app is ready.
   /// Managers can then push their overlays.
   void notifyAppReady() {
-    for (final manager in _appOverlayManagers) {
+    for (final manager in _managers) {
       manager.onAppReady(this);
     }
   }

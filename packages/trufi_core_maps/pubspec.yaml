@@ -21,6 +21,7 @@ dependencies:
   maplibre: ^0.3.3+2
   maplibre_gl: ^0.25.0
   shared_preferences: ^2.5.4
+  path_provider: ^2.1.5
   url_launcher: ^6.3.2
   vector_tile: ^3.0.0
   trufi_core_interfaces: ^1.0.0

@@ -191,11 +191,35 @@ class RoutingPreferencesManager extends ChangeNotifier {
       'walkReluctance': prefs.walkReluctance,
       'bikeSpeed': prefs.bikeSpeed,
       'transportModes': prefs.transportModes.map((m) => m.name).toList(),
-      // Note: timeMode and dateTime are NOT persisted - they reset to "Leave now" each session
+      'timeMode': prefs.timeMode.name,
+      'dateTime': prefs.dateTime?.toIso8601String(),
     };
   }
 
   RoutingPreferences _fromJson(Map<String, dynamic> json) {
+    // Parse saved timeMode
+    TimeMode savedTimeMode = TimeMode.leaveNow;
+    final timeModeStr = json['timeMode'] as String?;
+    if (timeModeStr != null) {
+      savedTimeMode = TimeMode.values.firstWhere(
+        (m) => m.name == timeModeStr,
+        orElse: () => TimeMode.leaveNow,
+      );
+    }
+
+    // Parse saved dateTime
+    DateTime? savedDateTime;
+    final dateTimeStr = json['dateTime'] as String?;
+    if (dateTimeStr != null) {
+      savedDateTime = DateTime.tryParse(dateTimeStr);
+      // If the saved date is in the past, reset to leaveNow
+      // (the old search result is no longer relevant)
+      if (savedDateTime != null && savedDateTime.isBefore(DateTime.now())) {
+        savedDateTime = null;
+        savedTimeMode = TimeMode.leaveNow;
+      }
+    }
+
     return RoutingPreferences(
       wheelchair: json['wheelchair'] as bool? ?? false,
       walkSpeed: (json['walkSpeed'] as num?)?.toDouble() ?? 1.33,
@@ -209,7 +233,8 @@ class RoutingPreferencesManager extends ChangeNotifier {
                   ))
               .toSet() ??
           const {RoutingMode.transit, RoutingMode.walk},
-      // timeMode defaults to leaveNow, dateTime defaults to null
+      timeMode: savedTimeMode,
+      dateTime: savedDateTime,
     );
   }
 

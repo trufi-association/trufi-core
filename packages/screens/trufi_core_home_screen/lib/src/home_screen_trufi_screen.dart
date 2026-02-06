@@ -13,14 +13,13 @@ import 'cubit/route_planner_cubit.dart';
 import 'repository/home_screen_repository.dart';
 import 'repository/home_screen_repository_impl.dart';
 import 'services/request_plan_service.dart';
-import 'services/routing_request_plan_service.dart';
+import 'services/routing_engine_request_plan_service.dart';
 import 'widgets/home_screen.dart';
 
 /// Home screen module for TrufiApp integration.
 class HomeScreenTrufiScreen extends TrufiScreen {
   final HomeScreenConfig config;
   late final HomeScreenRepository _repository;
-  late final RequestPlanService _requestService;
   late final routing.RoutingPreferencesManager _routingPreferencesManager;
 
   /// Callback when itinerary details are requested.
@@ -33,8 +32,11 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )?
-  onStartNavigation;
+  )? onStartNavigation;
+
+  /// Callback when a transit route badge is tapped in itinerary details.
+  /// Provides the route code to allow navigation to route details screen.
+  final void Function(BuildContext context, String routeCode)? onRouteTap;
 
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
@@ -45,15 +47,18 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   HomeScreenTrufiScreen({
     required this.config,
     HomeScreenRepository? repository,
-    RequestPlanService? requestService,
     this.onItineraryDetails,
     this.onStartNavigation,
+    this.onRouteTap,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
-    _requestService =
-        requestService ??
-        RoutingRequestPlanService(config.otpConfiguration);
     _routingPreferencesManager = routing.RoutingPreferencesManager();
+  }
+
+  /// Creates the appropriate request service based on available context.
+  RequestPlanService _createRequestService(BuildContext context) {
+    final routingEngineManager = routing.RoutingEngineManager.read(context);
+    return RoutingEngineRequestPlanService(manager: routingEngineManager);
   }
 
   @override
@@ -71,6 +76,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       config: config,
       onItineraryDetails: onItineraryDetails,
       onStartNavigation: onStartNavigation,
+      onRouteTap: onRouteTap,
     );
   };
 
@@ -90,9 +96,9 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       value: _routingPreferencesManager,
     ),
     BlocProvider<RoutePlannerCubit>(
-      create: (_) => RoutePlannerCubit(
+      create: (context) => RoutePlannerCubit(
         repository: _repository,
-        requestService: _requestService,
+        requestService: _createRequestService(context),
         getRoutingPreferences: () => _routingPreferencesManager.preferences,
       )..initialize(),
     ),

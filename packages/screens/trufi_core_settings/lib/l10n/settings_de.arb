@@ -9,6 +9,7 @@
   "onboardingThemeDark": "Dunkel",
   "onboardingThemeSystem": "System",
   "onboardingMapTitle": "Wahle deinen Kartenstil",
+  "onboardingRoutingTitle": "Wahle deine Routenplanung",
   "onboardingComplete": "Los geht's",
 
   "privacyConsentTitle": "Hilf uns, Trufi zu verbessern",
@@ -31,8 +32,19 @@
   "settingsMap": "Karte",
   "settingsSelectMapType": "Wahlen Sie Ihren bevorzugten Kartentyp:",
 
+  "settingsRouting": "Routenplanung",
+  "settingsSelectRoutingEngine": "Wahlen Sie Ihre bevorzugte Routenplanung:",
+
   "settingsPrivacy": "Datenschutz",
   "settingsPrivacySubtitle": "Hilf uns, die App zu verbessern",
   "settingsPrivacyShareData": "Anonyme Nutzungsdaten teilen",
-  "settingsPrivacyShareDataDescription": "Hilf uns, Fehler zu beheben und Nahverkehrsdaten zu verbessern"
+  "settingsPrivacyShareDataDescription": "Hilf uns, Fehler zu beheben und Nahverkehrsdaten zu verbessern",
+
+  "engineOnlineName": "Online",
+  "engineOnlineDescription": "OpenTripPlanner 2.8. Echtzeit-Routing mit detaillierten Fußweganweisungen.",
+  "engineOfflineName": "Offline",
+  "engineOfflineDescription": "GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.",
+  "limitationRequiresInternet": "Erfordert Internet",
+  "limitationSlower": "Langsamere Antwort",
+  "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte"
 }
