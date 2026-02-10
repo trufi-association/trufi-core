@@ -1,9 +1,8 @@
-/// Export all GTFS models.
-export 'gtfs_agency.dart';
-export 'gtfs_stop.dart';
-export 'gtfs_route.dart';
-export 'gtfs_trip.dart';
-export 'gtfs_stop_time.dart';
-export 'gtfs_calendar.dart';
-export 'gtfs_frequency.dart';
-export 'gtfs_shape.dart';
+/// GTFS models for trufi_core_routing.
+/// Re-exports models from trufi_core_planner + Flutter extensions.
+
+// Export all models from trufi_core_planner
+export 'package:trufi_core_planner/trufi_core_planner.dart';
+
+// Export Flutter-specific extensions
+export 'gtfs_flutter_extensions.dart';

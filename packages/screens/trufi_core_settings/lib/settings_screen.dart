@@ -354,8 +354,26 @@ class _ThemeSettingsCard extends StatelessWidget {
 }
 
 /// Map settings card with modern styling
-class _MapSettingsCard extends StatelessWidget {
+class _MapSettingsCard extends StatefulWidget {
   const _MapSettingsCard();
+
+  @override
+  State<_MapSettingsCard> createState() => _MapSettingsCardState();
+}
+
+class _MapSettingsCardState extends State<_MapSettingsCard> {
+  bool _showOnline = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Set initial filter based on current engine
+    final mapEngineManager = MapEngineManager.maybeRead(context);
+    if (mapEngineManager != null && mapEngineManager.engines.isNotEmpty) {
+      final currentEngine = mapEngineManager.currentEngine;
+      _showOnline = !currentEngine.runtimeType.toString().contains('Offline');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -367,31 +385,67 @@ class _MapSettingsCard extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    // Filter engines based on online/offline selection
+    final offlineEngines = mapEngineManager.engines
+        .asMap()
+        .entries
+        .where((e) => e.value.runtimeType.toString().contains('Offline'))
+        .toList();
+    final onlineEngines = mapEngineManager.engines
+        .asMap()
+        .entries
+        .where((e) => !e.value.runtimeType.toString().contains('Offline'))
+        .toList();
+
+    final hasOffline = offlineEngines.isNotEmpty;
+    final hasOnline = onlineEngines.isNotEmpty;
+    final showToggle = hasOffline && hasOnline;
+
+    final filteredEngines = _showOnline ? onlineEngines : offlineEngines;
+
     return _SettingsCard(
       icon: Icons.map_rounded,
       iconColor: Colors.teal,
       title: settingsL10n.settingsMap,
       subtitle: settingsL10n.settingsSelectMapType,
       child: Column(
-        children: mapEngineManager.engines.asMap().entries.map((entry) {
-          final index = entry.key;
-          final engine = entry.value;
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: index < mapEngineManager.engines.length - 1 ? 8 : 0,
-            ),
-            child: _EngineOptionTile(
-              name: engine.name,
-              description: engine.description,
-              icon: Icons.layers_rounded,
-              isSelected: index == mapEngineManager.currentIndex,
-              onTap: () {
-                HapticFeedback.selectionClick();
-                mapEngineManager.setEngineByIndex(index);
+        children: [
+          // Online/Offline toggle (only if both types exist)
+          if (showToggle) ...[
+            MapOnlineOfflineToggle(
+              showOnline: _showOnline,
+              onToggle: (value) {
+                setState(() {
+                  _showOnline = value;
+                });
               },
             ),
-          );
-        }).toList(),
+            const SizedBox(height: 12),
+          ],
+          // Filtered map engines
+          ...filteredEngines.asMap().entries.map((outerEntry) {
+            final displayIndex = outerEntry.key;
+            final engineEntry = outerEntry.value;
+            final actualIndex = engineEntry.key;
+            final engine = engineEntry.value;
+
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: displayIndex < filteredEngines.length - 1 ? 8 : 0,
+              ),
+              child: _EngineOptionTile(
+                name: engine.name,
+                description: engine.description,
+                icon: Icons.layers_rounded,
+                isSelected: actualIndex == mapEngineManager.currentIndex,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  mapEngineManager.setEngineByIndex(actualIndex);
+                },
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -422,23 +476,13 @@ class _RoutingSettingsCard extends StatelessWidget {
           final engine = entry.value;
           final isOffline = !engine.requiresInternet;
 
-          // Get localized name and description
-          final name = isOffline ? settingsL10n.engineOfflineName : settingsL10n.engineOnlineName;
-          final description = isOffline ? settingsL10n.engineOfflineDescription : settingsL10n.engineOnlineDescription;
-
-          // Get limitations based on engine type
-          final limitations = isOffline
-              ? [settingsL10n.limitationNoWalkingRoute]
-              : [settingsL10n.limitationRequiresInternet, settingsL10n.limitationSlower];
-
           return Padding(
             padding: EdgeInsets.only(
               bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
             ),
-            child: _RoutingEngineOptionTile(
-              name: name,
-              description: description,
-              limitations: limitations,
+            child: _EngineOptionTile(
+              name: engine.name,
+              description: engine.description,
               icon: isOffline ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
               isSelected: index == routingEngineManager.currentIndex,
               onTap: () {
@@ -809,157 +853,12 @@ class _EngineOptionTile extends StatelessWidget {
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      overflow: TextOverflow.fade,
                     ),
                   ],
                 ),
               ),
-              // Selection indicator
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: isSelected ? colorScheme.primary : Colors.transparent,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: isSelected
-                        ? colorScheme.primary
-                        : colorScheme.outlineVariant,
-                    width: 2,
-                  ),
-                ),
-                child: isSelected
-                    ? Icon(
-                        Icons.check_rounded,
-                        size: 16,
-                        color: colorScheme.onPrimary,
-                      )
-                    : null,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Routing engine option tile with description and limitations
-class _RoutingEngineOptionTile extends StatelessWidget {
-  final String name;
-  final String description;
-  final List<String> limitations;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _RoutingEngineOptionTile({
-    required this.name,
-    required this.description,
-    required this.limitations,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Material(
-      color: isSelected
-          ? colorScheme.primaryContainer.withValues(alpha: 0.5)
-          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Engine icon
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? colorScheme.primary.withValues(alpha: 0.15)
-                      : colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  icon,
-                  color: isSelected
-                      ? colorScheme.primary
-                      : colorScheme.onSurfaceVariant,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 14),
-              // Engine info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      description,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    if (limitations.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 4,
-                        runSpacing: 4,
-                        children: limitations.map((limitation) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? colorScheme.primary.withValues(alpha: 0.15)
-                                  : colorScheme.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              limitation,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: isSelected
-                                    ? colorScheme.primary
-                                    : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
               // Selection indicator
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),

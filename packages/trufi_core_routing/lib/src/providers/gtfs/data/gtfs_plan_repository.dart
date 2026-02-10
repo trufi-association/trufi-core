@@ -16,16 +16,27 @@ import '../../../domain/entities/transport_mode.dart';
 import '../../../domain/repositories/plan_repository.dart';
 import '../gtfs_data_source.dart';
 import '../models/gtfs_models.dart';
-import '../services/gtfs_routing_service.dart';
 
 /// PlanRepository implementation using GTFS data.
 class GtfsPlanRepository implements PlanRepository {
   final GtfsDataSource _dataSource;
-  late final GtfsRoutingService _routingService;
+  GtfsRoutingService? _routingService;
 
   GtfsPlanRepository({required GtfsDataSource dataSource})
       : _dataSource = dataSource {
-    _routingService = GtfsRoutingService(_dataSource);
+    _initRoutingService();
+  }
+
+  void _initRoutingService() {
+    if (_dataSource.isLoaded &&
+        _dataSource.spatialIndex != null &&
+        _dataSource.routeIndex != null) {
+      _routingService = GtfsRoutingService(
+        data: _dataSource.data!,
+        spatialIndex: _dataSource.spatialIndex!,
+        routeIndex: _dataSource.routeIndex!,
+      );
+    }
   }
 
   /// Whether data is loaded.
@@ -61,15 +72,29 @@ class GtfsPlanRepository implements PlanRepository {
       );
     }
 
+    // Ensure routing service is initialized after preload
+    if (_routingService == null) {
+      _initRoutingService();
+    }
+
+    if (_routingService == null) {
+      debugPrint('GtfsPlanRepository: ERROR - routing service not initialized');
+      return Plan(
+        from: _createPlanLocation(from),
+        to: _createPlanLocation(to),
+        itineraries: [],
+        type: 'GTFS_ERROR',
+      );
+    }
+
     final sw = Stopwatch()..start();
 
     final maxWalkDistance = preferences?.maxWalkDistance ?? 500.0;
 
-    final paths = _routingService.findRoutes(
+    final paths = _routingService!.findRoutes(
       origin: from.position,
       destination: to.position,
       maxWalkDistance: maxWalkDistance,
-      maxTransfers: 1,
       maxResults: numItineraries,
     );
 
@@ -137,50 +162,31 @@ class GtfsPlanRepository implements PlanRepository {
 
     // Transit segments
     for (final segment in path.segments) {
-      final shape = segment.pattern.shapeId != null
-          ? _dataSource.getShape(segment.pattern.shapeId!)
-          : null;
-
-      // Get stop positions for this segment
-      final stopPositions = segment.stopIds
-          .map((id) => _dataSource.getStop(id))
-          .whereType<GtfsStop>()
-          .map((s) => s.position)
-          .toList();
-
-      // Extract only the relevant portion of the shape
-      final points = shape != null
-          ? _extractShapeSegment(
-              shape.polyline,
-              segment.fromStop.position,
-              segment.toStop.position,
-            )
-          : stopPositions;
+      // Use shape from segment (resolved by routing service),
+      // fallback to stop positions
+      final points = segment.shapePoints.isNotEmpty
+          ? segment.shapePoints
+          : segment.stops.map((s) => s.position).toList();
 
       // Use scheduled duration from GTFS, fallback to estimation
       final duration = segment.scheduledDuration ??
           Duration(minutes: segment.stopCount * 2);
 
       // Get intermediate places (stops between from and to)
-      final intermediatePlaces = segment.stopIds
+      final intermediatePlaces = segment.stops
           .skip(1) // Skip first stop
-          .take(segment.stopIds.length - 2) // Skip last stop
-          .map((id) {
-            final stop = _dataSource.getStop(id);
-            if (stop == null) return null;
-            return Place(
-              name: stop.name,
-              lat: stop.lat,
-              lon: stop.lon,
-              stopId: stop.id,
-            );
-          })
-          .whereType<Place>()
+          .take(segment.stops.length - 2) // Skip last stop
+          .map((stop) => Place(
+                name: stop.name,
+                lat: stop.lat,
+                lon: stop.lon,
+                stopId: stop.id,
+              ))
           .toList();
 
       legs.add(Leg(
         mode: _routeTypeToMode(segment.route.type).otpName,
-        distance: _estimateDistance(stopPositions),
+        distance: _estimateDistance(points),
         duration: duration,
         transitLeg: true,
         fromPlace: Place(
@@ -204,14 +210,14 @@ class GtfsPlanRepository implements PlanRepository {
           gtfsId: segment.route.id,
           shortName: segment.route.shortName,
           longName: segment.route.longName,
-          color: _colorToHex(segment.route.color),
-          textColor: _colorToHex(segment.route.textColor),
+          color: _colorToHex(segment.route.flutterColor),
+          textColor: _colorToHex(segment.route.flutterTextColor),
           type: segment.route.type.value,
           mode: _routeTypeToMode(segment.route.type),
         ),
         shortName: segment.route.shortName,
         routeLongName: segment.route.longName,
-        headsign: segment.pattern.headsign,
+        headsign: segment.headsign,
         intermediatePlaces: intermediatePlaces,
       ));
 
@@ -286,47 +292,6 @@ class GtfsPlanRepository implements PlanRepository {
     return '$r$g$b'.toUpperCase();
   }
 
-  /// Extract the portion of a shape polyline between two stops.
-  List<LatLng> _extractShapeSegment(
-    List<LatLng> polyline,
-    LatLng fromStop,
-    LatLng toStop,
-  ) {
-    if (polyline.length < 2) return polyline;
-
-    // Find closest point index to fromStop
-    int fromIndex = 0;
-    double minFromDist = double.infinity;
-    for (int i = 0; i < polyline.length; i++) {
-      final dist = _haversineDistance(polyline[i], fromStop);
-      if (dist < minFromDist) {
-        minFromDist = dist;
-        fromIndex = i;
-      }
-    }
-
-    // Find closest point index to toStop
-    int toIndex = polyline.length - 1;
-    double minToDist = double.infinity;
-    for (int i = 0; i < polyline.length; i++) {
-      final dist = _haversineDistance(polyline[i], toStop);
-      if (dist < minToDist) {
-        minToDist = dist;
-        toIndex = i;
-      }
-    }
-
-    // Ensure correct order
-    if (fromIndex > toIndex) {
-      final temp = fromIndex;
-      fromIndex = toIndex;
-      toIndex = temp;
-    }
-
-    // Extract segment (include both endpoints)
-    return polyline.sublist(fromIndex, toIndex + 1);
-  }
-
   TransportMode _routeTypeToMode(GtfsRouteType type) {
     switch (type) {
       case GtfsRouteType.tram:
@@ -364,9 +329,4 @@ class GtfsPlanRepository implements PlanRepository {
     return total;
   }
 
-  /// Calculate haversine distance between two points (in meters).
-  double _haversineDistance(LatLng a, LatLng b) {
-    const distance = Distance();
-    return distance.as(LengthUnit.Meter, a, b);
-  }
 }

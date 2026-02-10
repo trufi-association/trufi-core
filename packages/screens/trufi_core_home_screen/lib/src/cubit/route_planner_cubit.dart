@@ -110,8 +110,8 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
 
     await _cancelCurrentFetch();
 
-    emit(state.copyWith(isLoading: true));
     emit(state.copyWithNullable(
+      isLoading: true,
       plan: const Optional(null),
       selectedItinerary: const Optional(null),
       error: const Optional(null),

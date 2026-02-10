@@ -14,10 +14,14 @@ class MapTypeOption {
   /// Optional preview image widget for this map type.
   final Widget? previewImage;
 
+  /// Whether this is an offline map.
+  final bool isOffline;
+
   const MapTypeOption({
     required this.id,
     required this.name,
     required this.description,
     this.previewImage,
+    this.isOffline = false,
   });
 }

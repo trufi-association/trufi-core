@@ -67,11 +67,15 @@ abstract class ITrufiMapEngine {
 extension TrufiMapEngineExtension on ITrufiMapEngine {
   /// Converts this engine to a MapTypeOption for use with MapTypeButton.
   MapTypeOption toMapTypeOption() {
+    // Check if this is an offline engine by checking the type
+    final isOffline = runtimeType.toString().contains('Offline');
+
     return MapTypeOption(
       id: id,
       name: name,
       description: description,
       previewImage: previewWidget,
+      isOffline: isOffline,
     );
   }
 }

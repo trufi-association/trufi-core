@@ -15,10 +15,9 @@ import 'package:trufi_core_routing/trufi_core_routing.dart'
         RoutingEngineManager,
         IRoutingProvider,
         Otp28RoutingProvider,
-        Otp24RoutingProvider,
         Otp15RoutingProvider,
-        GtfsRoutingProvider,
-        GtfsRoutingConfig;
+        TrufiPlannerProvider,
+        TrufiPlannerConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
@@ -27,7 +26,7 @@ import 'package:trufi_core_ui/trufi_core_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
-const _photonUrl = 'https://photon.trufi.app';
+const _photonUrl = 'https://photon.trufi.dev';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
 const _deepLinkScheme = 'trufiapp';
@@ -41,24 +40,26 @@ const _instagramUrl = 'https://instagram.com/trufiapp';
 
 // Routing engines (similar to map engines)
 final List<IRoutingProvider> _routingEngines = [
-  // Offline routing via GTFS (disabled on web)
+  // Offline routing via GTFS (mobile) / online via server (web)
   if (!kIsWeb)
-    GtfsRoutingProvider(
-      config: const GtfsRoutingConfig(
+    TrufiPlannerProvider(
+      config: const TrufiPlannerConfig.local(
         gtfsAsset: 'assets/routing/cochabamba.gtfs.zip',
+      ),
+    ),
+  if (kIsWeb)
+    TrufiPlannerProvider(
+      config: const TrufiPlannerConfig.remote(
+        serverUrl: 'http://localhost:9090/',
       ),
     ),
   // Online routing via OTP (dev servers)
   const Otp28RoutingProvider(
-    endpoint: 'https://otp-281.trufi-core.trufi.dev',
+    endpoint: 'https://otp281.trufi.dev',
     displayName: 'OTP 2.8.1',
   ),
-  const Otp24RoutingProvider(
-    endpoint: 'https://otp-240.trufi-core.trufi.dev',
-    displayName: 'OTP 2.4.0',
-  ),
   const Otp15RoutingProvider(
-    endpoint: 'https://otp-150.trufi-core.trufi.dev',
+    endpoint: 'https://otp150.trufi.dev',
     displayName: 'OTP 1.5.0',
   ),
 ];
@@ -66,7 +67,7 @@ final List<IRoutingProvider> _routingEngines = [
 // Map engines
 final List<ITrufiMapEngine> _mapEngines = [
   // Offline maps - disabled on web
-  if (!kIsWeb)
+  if (!kIsWeb) ...[
     OfflineMapLibreEngine(
       engineId: 'offline_osm_liberty',
       displayName: 'Offline Liberty',
@@ -93,7 +94,6 @@ final List<ITrufiMapEngine> _mapEngines = [
         ],
       ),
     ),
-  if (!kIsWeb)
     OfflineMapLibreEngine(
       engineId: 'offline_osm_bright',
       displayName: 'Offline Bright',
@@ -120,28 +120,87 @@ final List<ITrufiMapEngine> _mapEngines = [
         ],
       ),
     ),
+    OfflineMapLibreEngine(
+      engineId: 'offline_dark_matter',
+      displayName: 'Offline Dark Matter',
+      displayDescription: 'Mapa offline oscuro',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/dark-matter/style.json',
+        spritesAssetDir: 'assets/offline/styles/dark-matter/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'MetropolisLight': 'Metropolis Light',
+          'MetropolisLightItalic': 'Metropolis Light Italic',
+          'MetropolisRegular': 'Metropolis Regular',
+          'MetropolisMediumItalic': 'Metropolis Medium Italic',
+          'NotoSansRegular': 'Noto Sans Regular',
+          'NotoSansItalic': 'Noto Sans Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+    OfflineMapLibreEngine(
+      engineId: 'offline_fiord_color',
+      displayName: 'Offline Fiord Color',
+      displayDescription: 'Mapa offline colorido',
+      config: OfflineMapConfig(
+        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+        styleAsset: 'assets/offline/styles/fiord-color/style.json',
+        spritesAssetDir: 'assets/offline/styles/fiord-color/',
+        fontsAssetDir: 'assets/offline/fonts/',
+        fontMapping: {
+          'MetropolisLight': 'Metropolis Light',
+          'MetropolisLightItalic': 'Metropolis Light Italic',
+          'MetropolisRegular': 'Metropolis Regular',
+          'MetropolisMediumItalic': 'Metropolis Medium Italic',
+          'NotoSansRegular': 'Noto Sans Regular',
+          'NotoSansItalic': 'Noto Sans Italic',
+        },
+        fontRanges: [
+          '0-255',
+          '256-511',
+          '512-767',
+          '768-1023',
+          '1024-1279',
+          '1280-1535',
+          '8192-8447',
+          '8448-8703',
+        ],
+      ),
+    ),
+  ],
   // Online maps
   const MapLibreEngine(
     engineId: 'osm_bright',
-    styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
+    styleString: 'https://maps.trufi.dev/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
     displayDescription: 'Mapa claro',
   ),
   const MapLibreEngine(
     engineId: 'osm_liberty',
-    styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
+    styleString: 'https://maps.trufi.dev/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
     displayDescription: 'Mapa estándar',
   ),
   const MapLibreEngine(
     engineId: 'dark_matter',
-    styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
+    styleString: 'https://maps.trufi.dev/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
     displayDescription: 'Mapa oscuro',
   ),
   const MapLibreEngine(
     engineId: 'fiord_color',
-    styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
+    styleString: 'https://maps.trufi.dev/styles/fiord-color/style.json',
     displayName: 'Fiord Color',
     displayDescription: 'Mapa colorido',
   ),
@@ -154,7 +213,6 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
-      // Usa los defaults (verde Material 3) - ver TrufiThemeConfig
       themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: const [
         SocialMediaLink(

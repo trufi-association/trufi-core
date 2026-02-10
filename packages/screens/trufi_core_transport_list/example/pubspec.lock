@@ -1006,6 +1006,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  trufi_core_planner:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_planner"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_routing:
     dependency: "direct main"
     description:

@@ -63,6 +63,7 @@ export 'src/presentation/utils/trufi_camera_fit.dart';
 export 'src/presentation/widgets/map_type_button.dart';
 export 'src/presentation/widgets/map_type_option.dart';
 export 'src/presentation/widgets/map_type_settings_screen.dart';
+export 'src/presentation/widgets/map_selection_widgets.dart';
 export 'src/presentation/widgets/choose_on_map_screen.dart';
 
 // ============================================

@@ -55,8 +55,8 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
           shortName: route.shortName,
           longName: effectiveLongName,
           mode: _routeTypeToMode(route.type),
-          color: _colorToHex(route.color),
-          textColor: _colorToHex(route.textColor),
+          color: _colorToHex(route.flutterColor),
+          textColor: _colorToHex(route.flutterTextColor),
         ),
       ));
     }
@@ -125,8 +125,8 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
         shortName: route.shortName,
         longName: effectiveLongName,
         mode: _routeTypeToMode(route.type),
-        color: _colorToHex(route.color),
-        textColor: _colorToHex(route.textColor),
+        color: _colorToHex(route.flutterColor),
+        textColor: _colorToHex(route.flutterTextColor),
       ),
       geometry: shape?.polyline,
       stops: stops,

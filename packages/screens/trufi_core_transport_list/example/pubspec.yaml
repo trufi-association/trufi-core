@@ -20,6 +20,8 @@ dependencies:
     path: ../../../trufi_core_routing
 
 dependency_overrides:
+  trufi_core_planner:
+    path: ../../../trufi_core_planner
   trufi_core_base_widgets:
     path: ../../../trufi_core_base_widgets
   trufi_core_custom_material:

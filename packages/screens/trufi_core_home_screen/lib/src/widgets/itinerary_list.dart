@@ -88,7 +88,19 @@ class _ItineraryListState extends State<ItineraryList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RoutePlannerCubit, RoutePlannerState>(
+    return BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
+      listener: (context, state) {
+        // Clear stale local state when a new search starts or plan changes
+        if (state.isLoading || state.plan == null) {
+          if (_detailItinerary != null || _expandedGroups.isNotEmpty) {
+            setState(() {
+              _detailItinerary = null;
+              _expandedGroups.clear();
+            });
+            widget.onDetailStateChanged?.call(false);
+          }
+        }
+      },
       builder: (context, state) {
         final l10n = HomeScreenLocalizations.of(context);
         final cubit = context.read<RoutePlannerCubit>();
@@ -136,9 +148,21 @@ class _ItineraryListState extends State<ItineraryList> {
           });
         }
 
-        // Show detail view if an itinerary is selected for details
+        // Show detail view only if the itinerary is still in the current plan
         if (_detailItinerary != null) {
-          return _buildDetailView(context, _detailItinerary!);
+          if (itineraries.contains(_detailItinerary)) {
+            return _buildDetailView(context, _detailItinerary!);
+          }
+          // Stale detail from a previous search — clear it
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _detailItinerary != null) {
+              setState(() {
+                _detailItinerary = null;
+                _expandedGroups.clear();
+              });
+              widget.onDetailStateChanged?.call(false);
+            }
+          });
         }
 
         // Use grouped itineraries if available, otherwise fall back to regular list

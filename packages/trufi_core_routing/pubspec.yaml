@@ -12,6 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  trufi_core_planner: ^1.0.0
   equatable: ^2.0.8
   flutter_bloc: ^9.1.1
   graphql: ^5.2.3

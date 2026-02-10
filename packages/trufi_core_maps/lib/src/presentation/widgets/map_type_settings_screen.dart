@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'map_type_option.dart';
+import 'map_selection_widgets.dart';
 
 /// Full-screen settings screen for selecting map type and optional POI layers.
 class MapTypeSettingsScreen extends StatefulWidget {
@@ -46,11 +47,18 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
     with SingleTickerProviderStateMixin {
   late int selectedMapIndex;
   late AnimationController _staggerController;
+  bool _showOnline = true;
 
   @override
   void initState() {
     super.initState();
     selectedMapIndex = widget.currentMapIndex;
+
+    // Determine initial filter based on current map
+    if (widget.currentMapIndex < widget.mapOptions.length) {
+      _showOnline = !widget.mapOptions[widget.currentMapIndex].isOffline;
+    }
+
     _staggerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -101,6 +109,18 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    // Filter maps based on online/offline selection
+    final filteredMaps = widget.mapOptions
+        .asMap()
+        .entries
+        .where((entry) => entry.value.isOffline != _showOnline)
+        .toList();
+
+    // Check if we have both online and offline maps
+    final hasOfflineMaps = widget.mapOptions.any((m) => m.isOffline);
+    final hasOnlineMaps = widget.mapOptions.any((m) => !m.isOffline);
+    final showToggle = hasOfflineMaps && hasOnlineMaps;
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       body: SafeArea(
@@ -128,19 +148,40 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
                       title: widget.sectionTitle ?? 'Map Type',
                     ),
                   ),
-                  // Map type options
-                  ...List.generate(widget.mapOptions.length, (index) {
-                    final option = widget.mapOptions[index];
-                    final isSelected = selectedMapIndex == index;
+
+                  // Online/Offline toggle (only if both types exist)
+                  if (showToggle)
+                    _buildAnimatedItem(
+                      index: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                        child: MapOnlineOfflineToggle(
+                          showOnline: _showOnline,
+                          onToggle: (value) {
+                            setState(() {
+                              _showOnline = value;
+                            });
+                          },
+                          compact: false,
+                        ),
+                      ),
+                    ),
+
+                  // Map type options (filtered)
+                  ...List.generate(filteredMaps.length, (filteredIndex) {
+                    final entry = filteredMaps[filteredIndex];
+                    final originalIndex = entry.key;
+                    final option = entry.value;
+                    final isSelected = selectedMapIndex == originalIndex;
 
                     return _buildAnimatedItem(
-                      index: index + 2,
+                      index: filteredIndex + (showToggle ? 3 : 2),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                         child: _ModernMapTypeCard(
                           option: option,
                           isSelected: isSelected,
-                          onTap: () => _onMapTypeSelected(index),
+                          onTap: () => _onMapTypeSelected(originalIndex),
                         ),
                       ),
                     );

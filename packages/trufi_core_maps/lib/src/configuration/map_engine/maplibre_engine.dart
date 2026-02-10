@@ -80,6 +80,7 @@ class MapLibreEngine implements ITrufiMapEngine {
     bool isDarkMode = false,
   }) {
     return TrufiMapLibreMap(
+      key: ValueKey(id),
       controller: controller,
       styleString: styleString,
       onMapClick: onMapClick,
