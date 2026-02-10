@@ -185,20 +185,21 @@ class GtfsRoutingService {
           originStops, destinationStops, paths, segmentCache);
     }
 
-    // Deduplicate paths that use the same route(s) in the same direction
+    // Sort all paths by score (lower is better)
+    paths.sort((a, b) => a.score.compareTo(b.score));
+
+    // Deduplicate: keep only the best path per route combination.
+    // E.g., all "Bus 15 → Z14" variants collapse into the best one,
+    // leaving room for genuinely different route options.
     final seen = <String>{};
     final uniquePaths = <RoutingPath>[];
     for (final path in paths) {
-      final key = path.segments
-          .map((s) => '${s.route.id}:${s.fromStop.id}->${s.toStop.id}')
-          .join('|');
+      final key = path.segments.map((s) => s.route.shortName).join('|');
       if (seen.add(key)) {
         uniquePaths.add(path);
       }
     }
 
-    // Sort by score, take top results, then resolve full stops
-    uniquePaths.sort((a, b) => a.score.compareTo(b.score));
     return uniquePaths
         .take(maxResults)
         .map(_resolvePathStops)
