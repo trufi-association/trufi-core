@@ -11,6 +11,7 @@ workspace:
   - packages/trufi_core_base_widgets
   - packages/trufi_core_custom_material
   - packages/trufi_core_maps
+  - packages/trufi_core_planner
   - packages/trufi_core_routing
   - packages/trufi_core_routing_ui
   - packages/trufi_core_search_locations

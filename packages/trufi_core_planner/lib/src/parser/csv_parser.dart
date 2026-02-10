@@ -17,11 +17,17 @@ class CsvParser {
       if (line.isEmpty) continue;
 
       final values = _parseLine(line);
-      if (values.length != headers.length) continue;
+      if (values.isEmpty) continue;
+
+      // Pad values if needed (some files have optional trailing columns)
+      final paddedValues = List<String>.from(values);
+      while (paddedValues.length < headers.length) {
+        paddedValues.add('');
+      }
 
       final row = <String, String>{};
-      for (var j = 0; j < headers.length; j++) {
-        row[headers[j]] = values[j];
+      for (var j = 0; j < headers.length && j < paddedValues.length; j++) {
+        row[headers[j]] = paddedValues[j];
       }
       rows.add(row);
     }

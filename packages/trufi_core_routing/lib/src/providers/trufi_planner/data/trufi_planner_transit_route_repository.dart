@@ -1,40 +1,45 @@
-import 'dart:ui' show Color;
-
 import 'package:flutter/foundation.dart';
 
 import '../../../domain/entities/stop.dart';
 import '../../../domain/entities/transit_route.dart';
 import '../../../domain/entities/transport_mode.dart';
 import '../../../domain/repositories/transit_route_repository.dart';
-import '../gtfs_data_source.dart';
-import '../models/gtfs_models.dart';
+import '../models/trufi_planner_models.dart';
+import '../trufi_planner_data_source.dart';
 
-/// TransitRouteRepository implementation using GTFS data.
-class GtfsTransitRouteRepository implements TransitRouteRepository {
-  final GtfsDataSource _dataSource;
+/// TransitRouteRepository implementation using TrufiPlanner (local or remote).
+class TrufiPlannerTransitRouteRepository implements TransitRouteRepository {
+  final TrufiPlannerDataSource _dataSource;
 
-  GtfsTransitRouteRepository({required GtfsDataSource dataSource})
+  TrufiPlannerTransitRouteRepository(
+      {required TrufiPlannerDataSource dataSource})
       : _dataSource = dataSource;
 
   @override
   Future<List<TransitRoute>> fetchPatterns() async {
-    // Ensure data is loaded
     if (!_dataSource.isLoaded) {
       await _dataSource.preload();
     }
 
-    if (!_dataSource.isLoaded || _dataSource.routeIndex == null) {
-      return [];
-    }
+    if (!_dataSource.isLoaded) return [];
 
-    final routeIndex = _dataSource.routeIndex!;
+    if (_dataSource.config.isLocal) {
+      return _fetchPatternsLocal();
+    } else {
+      return _fetchPatternsRemote();
+    }
+  }
+
+  Future<List<TransitRoute>> _fetchPatternsLocal() async {
+    final routeIndex = _dataSource.routeIndex;
+    if (routeIndex == null) return [];
+
     final patterns = <TransitRoute>[];
 
     for (final pattern in routeIndex.patterns) {
       final route = _dataSource.getRoute(pattern.routeId);
       if (route == null) continue;
 
-      // Generate origin → destination from stops
       String? generatedLongName;
       if (pattern.stopIds.length >= 2) {
         final firstStop = _dataSource.getStop(pattern.stopIds.first);
@@ -44,7 +49,6 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
         }
       }
 
-      // Use headsign, generated name, or route longName
       final effectiveLongName = generatedLongName ?? route.longName;
 
       patterns.add(TransitRoute(
@@ -55,61 +59,87 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
           shortName: route.shortName,
           longName: effectiveLongName,
           mode: _routeTypeToMode(route.type),
-          color: _colorToHex(route.flutterColor),
-          textColor: _colorToHex(route.flutterTextColor),
+          color: route.colorHex,
+          textColor: route.textColorHex,
         ),
       ));
     }
 
-    // Sort by route short name
     patterns.sort((a, b) => _compareRouteNames(
-      a.route?.shortName ?? a.code,
-      b.route?.shortName ?? b.code,
-    ));
+          a.route?.shortName ?? a.code,
+          b.route?.shortName ?? b.code,
+        ));
+
+    return patterns;
+  }
+
+  Future<List<TransitRoute>> _fetchPatternsRemote() async {
+    final routes = await _dataSource.client.getRoutes();
+
+    final patterns = routes
+        .map((route) => TransitRoute(
+              id: route.id,
+              name: route.longName,
+              code: route.id,
+              route: TransitRouteInfo(
+                shortName: route.shortName,
+                longName: route.longName,
+                mode: _routeTypeToMode(route.type),
+                color: route.colorHex,
+                textColor: route.textColorHex,
+              ),
+            ))
+        .toList();
+
+    patterns.sort((a, b) => _compareRouteNames(
+          a.route?.shortName ?? a.code,
+          b.route?.shortName ?? b.code,
+        ));
 
     return patterns;
   }
 
   @override
   Future<TransitRoute> fetchPatternById(String id) async {
-    debugPrint('GtfsTransitRouteRepository.fetchPatternById: Looking for id=$id');
+    debugPrint(
+        'TrufiPlannerTransitRouteRepository.fetchPatternById: Looking for id=$id');
 
-    // Ensure data is loaded
     if (!_dataSource.isLoaded) {
-      debugPrint('GtfsTransitRouteRepository.fetchPatternById: Data not loaded, preloading...');
       await _dataSource.preload();
     }
 
-    if (!_dataSource.isLoaded || _dataSource.routeIndex == null) {
-      debugPrint('GtfsTransitRouteRepository.fetchPatternById: GTFS data not loaded!');
-      throw Exception('GTFS data not loaded');
+    if (!_dataSource.isLoaded) {
+      throw Exception('Planner data not loaded');
     }
 
-    final routeIndex = _dataSource.routeIndex!;
+    if (_dataSource.config.isLocal) {
+      return _fetchPatternByIdLocal(id);
+    } else {
+      return _fetchPatternByIdRemote(id);
+    }
+  }
+
+  Future<TransitRoute> _fetchPatternByIdLocal(String id) async {
+    final routeIndex = _dataSource.routeIndex;
+    if (routeIndex == null) throw Exception('Route index not available');
+
     final pattern = routeIndex.getPattern(id);
     final route = _dataSource.getRoute(id);
 
-    debugPrint('GtfsTransitRouteRepository.fetchPatternById: pattern=${pattern != null}, route=${route != null}');
-
     if (pattern == null || route == null) {
-      // Debug: list available patterns
-      debugPrint('GtfsTransitRouteRepository.fetchPatternById: Available patterns: ${routeIndex.patterns.map((p) => p.routeId).take(10).toList()}');
       throw Exception('Route not found: $id');
     }
 
-    // Get shape geometry if available
     final shape = pattern.shapeId != null
         ? _dataSource.getShape(pattern.shapeId!)
         : null;
 
-    // Get stops for this pattern
     final stops = pattern.stopIds
         .map((stopId) => _dataSource.getStop(stopId))
         .whereType<GtfsStop>()
         .map((s) => Stop(name: s.name, lat: s.lat, lon: s.lon))
         .toList();
 
-    // Generate origin → destination from stops
     String? generatedLongName;
     if (stops.length >= 2) {
       generatedLongName = '${stops.first.name} → ${stops.last.name}';
@@ -125,10 +155,42 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
         shortName: route.shortName,
         longName: effectiveLongName,
         mode: _routeTypeToMode(route.type),
-        color: _colorToHex(route.flutterColor),
-        textColor: _colorToHex(route.flutterTextColor),
+        color: route.colorHex,
+        textColor: route.textColorHex,
       ),
       geometry: shape?.polyline,
+      stops: stops,
+    );
+  }
+
+  Future<TransitRoute> _fetchPatternByIdRemote(String id) async {
+    final detail = await _dataSource.client.getRouteDetail(id);
+    if (detail == null) throw Exception('Route not found: $id');
+
+    final route = detail.route;
+    final stops = detail.stops
+        .map((s) => Stop(name: s.name, lat: s.lat, lon: s.lon))
+        .toList();
+
+    String? generatedLongName;
+    if (stops.length >= 2) {
+      generatedLongName = '${stops.first.name} → ${stops.last.name}';
+    }
+
+    final effectiveLongName = generatedLongName ?? route.longName;
+
+    return TransitRoute(
+      id: route.id,
+      name: route.longName,
+      code: route.id,
+      route: TransitRouteInfo(
+        shortName: route.shortName,
+        longName: effectiveLongName,
+        mode: _routeTypeToMode(route.type),
+        color: route.colorHex,
+        textColor: route.textColorHex,
+      ),
+      geometry: detail.geometry,
       stops: stops,
     );
   }
@@ -158,17 +220,7 @@ class GtfsTransitRouteRepository implements TransitRouteRepository {
     }
   }
 
-  String? _colorToHex(Color? color) {
-    if (color == null) return null;
-    final r = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
-    return '$r$g$b'.toUpperCase();
-  }
-
-  /// Compare route names, handling numeric prefixes.
   int _compareRouteNames(String a, String b) {
-    // Try to parse as numbers for natural sorting
     final numA = int.tryParse(a.replaceAll(RegExp(r'[^0-9]'), ''));
     final numB = int.tryParse(b.replaceAll(RegExp(r'[^0-9]'), ''));
 

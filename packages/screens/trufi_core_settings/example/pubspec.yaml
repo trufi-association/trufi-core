@@ -18,6 +18,8 @@ dependencies:
     path: ../../../trufi_core_utils
 
 dependency_overrides:
+  trufi_core_planner:
+    path: ../../../trufi_core_planner
   trufi_core_interfaces:
     path: ../../../trufi_core_interfaces
   trufi_core_utils:

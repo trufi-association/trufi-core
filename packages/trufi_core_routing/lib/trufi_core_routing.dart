@@ -99,15 +99,21 @@ export 'src/providers/otp_24_routing_provider.dart';
 export 'src/providers/otp_15_routing_provider.dart';
 
 // ============================================
-// GTFS ROUTING (offline routing)
+// GTFS ROUTING (offline routing) - legacy, prefer TrufiPlanner
 // ============================================
 export 'src/providers/gtfs/gtfs_routing_provider.dart';
 export 'src/providers/gtfs/gtfs_routing_config.dart';
 export 'src/providers/gtfs/gtfs_data_source.dart';
-export 'src/providers/gtfs/parser/gtfs_parser.dart';
 export 'src/providers/gtfs/data/gtfs_plan_repository.dart';
 export 'src/providers/gtfs/data/gtfs_transit_route_repository.dart';
 export 'src/providers/gtfs/models/gtfs_models.dart';
-export 'src/providers/gtfs/index/gtfs_spatial_index.dart';
-export 'src/providers/gtfs/index/gtfs_route_index.dart';
-export 'src/providers/gtfs/index/gtfs_schedule_index.dart';
+
+// ============================================
+// TRUFI PLANNER (local + remote routing)
+// ============================================
+export 'src/providers/trufi_planner/trufi_planner_provider.dart';
+export 'src/providers/trufi_planner/trufi_planner_config.dart';
+export 'src/providers/trufi_planner/trufi_planner_data_source.dart';
+export 'src/providers/trufi_planner/data/trufi_planner_plan_repository.dart';
+export 'src/providers/trufi_planner/data/trufi_planner_transit_route_repository.dart';
+export 'src/providers/trufi_planner/models/trufi_planner_models.dart';

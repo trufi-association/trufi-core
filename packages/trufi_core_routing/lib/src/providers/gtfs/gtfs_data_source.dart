@@ -3,12 +3,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_planner/trufi_core_planner.dart';
 
-import 'index/gtfs_route_index.dart';
-import 'index/gtfs_schedule_index.dart';
-import 'index/gtfs_spatial_index.dart';
 import 'models/gtfs_models.dart';
-import 'parser/gtfs_parser.dart';
+import 'parser/gtfs_parser.dart' as local;
 
 /// Status of the GTFS data source.
 enum GtfsDataStatus {
@@ -130,15 +128,11 @@ class GtfsDataSource {
     final totalSw = Stopwatch()..start();
 
     // Parse GTFS
-    final data = GtfsParser.parseFromBytes(assetData);
+    final data = local.GtfsParser.parseFromBytes(assetData);
 
     // Build indices
     final spatialIndex = GtfsSpatialIndex(data.stops);
-    final routeIndex = GtfsRouteIndex(
-      routes: data.routes,
-      trips: data.trips,
-      stopTimes: data.stopTimes,
-    );
+    final routeIndex = GtfsRouteIndex(data);
     final scheduleIndex = GtfsScheduleIndex(
       trips: data.trips,
       stopTimes: data.stopTimes,
@@ -194,7 +188,7 @@ class GtfsDataSource {
 
   /// Get routes at a stop.
   List<GtfsRoute> getRoutesAtStop(String stopId) {
-    final routeIds = _routeIndex?.getRoutesAtStop(stopId) ?? [];
+    final routeIds = _routeIndex?.getRoutesAtStop(stopId) ?? <String>{};
     return routeIds
         .map((id) => _data?.routes[id])
         .whereType<GtfsRoute>()

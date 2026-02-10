@@ -968,6 +968,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  trufi_core_planner:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_planner"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_poi_layers:
     dependency: "direct main"
     description:

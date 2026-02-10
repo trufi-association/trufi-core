@@ -1,5 +1,3 @@
-import 'dart:ui' show Color;
-
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -14,39 +12,15 @@ import '../../../domain/entities/routing_location.dart';
 import '../../../domain/entities/routing_preferences.dart';
 import '../../../domain/entities/transport_mode.dart';
 import '../../../domain/repositories/plan_repository.dart';
-import '../gtfs_data_source.dart';
-import '../models/gtfs_models.dart';
+import '../models/trufi_planner_models.dart';
+import '../trufi_planner_data_source.dart';
 
-/// PlanRepository implementation using GTFS data.
-class GtfsPlanRepository implements PlanRepository {
-  final GtfsDataSource _dataSource;
-  GtfsRoutingService? _routingService;
+/// PlanRepository implementation using TrufiPlanner (local or remote).
+class TrufiPlannerPlanRepository implements PlanRepository {
+  final TrufiPlannerDataSource _dataSource;
 
-  GtfsPlanRepository({required GtfsDataSource dataSource})
-      : _dataSource = dataSource {
-    _initRoutingService();
-  }
-
-  void _initRoutingService() {
-    if (_dataSource.isLoaded &&
-        _dataSource.spatialIndex != null &&
-        _dataSource.routeIndex != null) {
-      _routingService = GtfsRoutingService(
-        data: _dataSource.data!,
-        spatialIndex: _dataSource.spatialIndex!,
-        routeIndex: _dataSource.routeIndex!,
-      );
-    }
-  }
-
-  /// Whether data is loaded.
-  bool get isLoaded => _dataSource.isLoaded;
-
-  /// Whether data is loading.
-  bool get isLoading => _dataSource.isLoading;
-
-  /// Preload data.
-  Future<void> preload() => _dataSource.preload();
+  TrufiPlannerPlanRepository({required TrufiPlannerDataSource dataSource})
+      : _dataSource = dataSource;
 
   @override
   Future<Plan> fetchPlan({
@@ -58,7 +32,6 @@ class GtfsPlanRepository implements PlanRepository {
     bool arriveBy = false,
     RoutingPreferences? preferences,
   }) async {
-    // Ensure data is loaded
     if (!_dataSource.isLoaded) {
       await _dataSource.preload();
     }
@@ -68,30 +41,14 @@ class GtfsPlanRepository implements PlanRepository {
         from: _createPlanLocation(from),
         to: _createPlanLocation(to),
         itineraries: [],
-        type: 'GTFS_ERROR',
-      );
-    }
-
-    // Ensure routing service is initialized after preload
-    if (_routingService == null) {
-      _initRoutingService();
-    }
-
-    if (_routingService == null) {
-      debugPrint('GtfsPlanRepository: ERROR - routing service not initialized');
-      return Plan(
-        from: _createPlanLocation(from),
-        to: _createPlanLocation(to),
-        itineraries: [],
-        type: 'GTFS_ERROR',
+        type: 'PLANNER_ERROR',
       );
     }
 
     final sw = Stopwatch()..start();
-
     final maxWalkDistance = preferences?.maxWalkDistance ?? 500.0;
 
-    final paths = _routingService!.findRoutes(
+    final paths = await _dataSource.client.findRoutes(
       origin: from.position,
       destination: to.position,
       maxWalkDistance: maxWalkDistance,
@@ -100,7 +57,7 @@ class GtfsPlanRepository implements PlanRepository {
 
     sw.stop();
     debugPrint(
-        'GtfsPlanRepository: Found ${paths.length} paths in ${sw.elapsedMilliseconds}ms');
+        'TrufiPlannerPlanRepository: Found ${paths.length} paths in ${sw.elapsedMilliseconds}ms');
 
     if (paths.isEmpty) {
       return Plan(
@@ -110,7 +67,6 @@ class GtfsPlanRepository implements PlanRepository {
       );
     }
 
-    // Convert paths to itineraries
     final itineraries = paths
         .map((path) => _convertToItinerary(path, from, to, dateTime))
         .toList();
@@ -162,20 +118,19 @@ class GtfsPlanRepository implements PlanRepository {
 
     // Transit segments
     for (final segment in path.segments) {
-      // Use shape from segment (resolved by routing service),
-      // fallback to stop positions
+      // Use shape from segment (resolved by routing service for both
+      // local and remote modes), fallback to stop positions
       final points = segment.shapePoints.isNotEmpty
           ? segment.shapePoints
           : segment.stops.map((s) => s.position).toList();
 
-      // Use scheduled duration from GTFS, fallback to estimation
       final duration = segment.scheduledDuration ??
           Duration(minutes: segment.stopCount * 2);
 
       // Get intermediate places (stops between from and to)
       final intermediatePlaces = segment.stops
-          .skip(1) // Skip first stop
-          .take(segment.stops.length - 2) // Skip last stop
+          .skip(1)
+          .take(segment.stops.length - 2)
           .map((stop) => Place(
                 name: stop.name,
                 lat: stop.lat,
@@ -210,8 +165,8 @@ class GtfsPlanRepository implements PlanRepository {
           gtfsId: segment.route.id,
           shortName: segment.route.shortName,
           longName: segment.route.longName,
-          color: _colorToHex(segment.route.flutterColor),
-          textColor: _colorToHex(segment.route.flutterTextColor),
+          color: segment.route.colorHex,
+          textColor: segment.route.textColorHex,
           type: segment.route.type.value,
           mode: _routeTypeToMode(segment.route.type),
         ),
@@ -252,7 +207,6 @@ class GtfsPlanRepository implements PlanRepository {
       ));
     }
 
-    // Calculate totals
     final totalDuration = legs.fold<Duration>(
       Duration.zero,
       (sum, leg) => sum + leg.duration,
@@ -283,15 +237,6 @@ class GtfsPlanRepository implements PlanRepository {
     );
   }
 
-  String? _colorToHex(Color? color) {
-    if (color == null) return null;
-    // Convert ARGB to RGB hex string (without alpha)
-    final r = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
-    final g = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
-    final b = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
-    return '$r$g$b'.toUpperCase();
-  }
-
   TransportMode _routeTypeToMode(GtfsRouteType type) {
     switch (type) {
       case GtfsRouteType.tram:
@@ -317,10 +262,8 @@ class GtfsPlanRepository implements PlanRepository {
     }
   }
 
-  /// Calculate total distance along a path of points (in meters).
   double _estimateDistance(List<LatLng> points) {
     if (points.length < 2) return 0;
-
     const distance = Distance();
     double total = 0;
     for (var i = 0; i < points.length - 1; i++) {

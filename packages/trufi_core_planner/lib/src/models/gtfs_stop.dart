@@ -56,6 +56,44 @@ class GtfsStop {
       platformCode: row['platform_code'],
     );
   }
+
+  factory GtfsStop.fromJson(Map<String, dynamic> json) {
+    return GtfsStop(
+      id: json['id'] as String,
+      code: json['code'] as String?,
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      lat: (json['lat'] as num).toDouble(),
+      lon: (json['lon'] as num).toDouble(),
+      zoneId: json['zoneId'] as String?,
+      url: json['url'] as String?,
+      locationType: GtfsLocationType.fromValue(
+        json['locationType'] as int? ?? 0,
+      ),
+      parentStation: json['parentStation'] as String?,
+      timezone: json['timezone'] as String?,
+      wheelchairBoarding: GtfsWheelchairBoarding.fromValue(
+        json['wheelchairBoarding'] as int? ?? 0,
+      ),
+      platformCode: json['platformCode'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'code': code,
+        'name': name,
+        'description': description,
+        'lat': lat,
+        'lon': lon,
+        'zoneId': zoneId,
+        'url': url,
+        'locationType': locationType.value,
+        'parentStation': parentStation,
+        'timezone': timezone,
+        'wheelchairBoarding': wheelchairBoarding.value,
+        'platformCode': platformCode,
+      };
 }
 
 /// Location type for stops.

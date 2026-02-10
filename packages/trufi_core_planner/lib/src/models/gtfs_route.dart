@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// GTFS Route entity.
 /// Represents a transit route from routes.txt
 class GtfsRoute {
@@ -10,8 +8,8 @@ class GtfsRoute {
   final String? description;
   final GtfsRouteType type;
   final String? url;
-  final Color? color;
-  final Color? textColor;
+  final String? colorHex;  // Hex color without '#'
+  final String? textColorHex;
   final int? sortOrder;
 
   const GtfsRoute({
@@ -22,8 +20,8 @@ class GtfsRoute {
     this.description,
     required this.type,
     this.url,
-    this.color,
-    this.textColor,
+    this.colorHex,
+    this.textColorHex,
     this.sortOrder,
   });
 
@@ -41,20 +39,46 @@ class GtfsRoute {
         int.tryParse(row['route_type'] ?? '') ?? 3,
       ),
       url: row['route_url'],
-      color: _parseColor(row['route_color']),
-      textColor: _parseColor(row['route_text_color']),
+      colorHex: _parseColorHex(row['route_color']),
+      textColorHex: _parseColorHex(row['route_text_color']),
       sortOrder: int.tryParse(row['route_sort_order'] ?? ''),
     );
   }
 
-  static Color? _parseColor(String? hex) {
+  static String? _parseColorHex(String? hex) {
     if (hex == null || hex.isEmpty) return null;
-    hex = hex.replaceFirst('#', '');
-    if (hex.length == 6) {
-      return Color(int.parse('FF$hex', radix: 16));
-    }
-    return null;
+    return hex.replaceFirst('#', '');
   }
+
+  factory GtfsRoute.fromJson(Map<String, dynamic> json) {
+    return GtfsRoute(
+      id: json['id'] as String,
+      agencyId: json['agencyId'] as String?,
+      shortName: json['shortName'] as String? ?? '',
+      longName: json['longName'] as String? ?? '',
+      description: json['description'] as String?,
+      type: GtfsRouteType.fromValue(
+        int.tryParse(json['type']?.toString() ?? '') ?? 3,
+      ),
+      url: json['url'] as String?,
+      colorHex: json['color'] as String?,
+      textColorHex: json['textColor'] as String?,
+      sortOrder: json['sortOrder'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'agencyId': agencyId,
+        'shortName': shortName,
+        'longName': longName,
+        'description': description,
+        'type': type.value.toString(),
+        'url': url,
+        'color': colorHex,
+        'textColor': textColorHex,
+        'sortOrder': sortOrder,
+      };
 }
 
 /// GTFS route types.
@@ -78,32 +102,6 @@ enum GtfsRouteType {
       (e) => e.value == value,
       orElse: () => GtfsRouteType.bus,
     );
-  }
-
-  /// Icon for this route type.
-  IconData get icon {
-    switch (this) {
-      case GtfsRouteType.tram:
-        return Icons.tram;
-      case GtfsRouteType.subway:
-        return Icons.subway;
-      case GtfsRouteType.rail:
-        return Icons.train;
-      case GtfsRouteType.bus:
-        return Icons.directions_bus;
-      case GtfsRouteType.ferry:
-        return Icons.directions_boat;
-      case GtfsRouteType.cableTram:
-        return Icons.tram;
-      case GtfsRouteType.aerialLift:
-        return Icons.airline_seat_recline_extra;
-      case GtfsRouteType.funicular:
-        return Icons.train;
-      case GtfsRouteType.trolleybus:
-        return Icons.directions_bus;
-      case GtfsRouteType.monorail:
-        return Icons.train;
-    }
   }
 
   /// Human-readable name for this route type.
