@@ -1,8 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../models/plan.dart';
 import '../models/routing_location.dart';
 import '../models/transit_route.dart';
+
+/// Callback to provide extra HTTP headers for plan requests.
+///
+/// Headers are computed dynamically based on origin/destination.
+/// Defined at the app level and injected into providers.
+typedef PlanHeaderProvider = FutureOr<Map<String, String>> Function(
+  RoutingLocation from,
+  RoutingLocation to,
+);
 
 /// Interface for routing providers.
 ///

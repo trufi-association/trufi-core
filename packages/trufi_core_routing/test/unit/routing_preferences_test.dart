@@ -327,5 +327,38 @@ void main() {
       expect(captured.queryParameters['walkReluctance'], equals('3.0'));
       expect(captured.queryParameters['maxWalkDistance'], equals('400.0'));
     });
+
+    test('includes custom headers from planHeaderProvider', () async {
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      SharedPreferences.setMockInitialValues({});
+
+      provider = Otp15RoutingProvider(
+        endpoint: 'https://test-otp.example.com/otp/routers/default/plan',
+        httpClient: mockHttpClient,
+        planHeaderProvider: (from, to) => {
+          'X-Origin':
+              '${from.position.latitude},${from.position.longitude}',
+          'X-Dest':
+              '${to.position.latitude},${to.position.longitude}',
+        },
+      );
+      await provider.initialize();
+
+      await provider.fetchPlan(
+        from: TestConfig.originLocation,
+        to: TestConfig.destinationLocation,
+        dateTime: fixedDate,
+      );
+
+      final captured = verify(
+        () => mockHttpClient.get(any(), headers: captureAny(named: 'headers')),
+      ).captured.first as Map<String, String>;
+
+      expect(captured['Accept'], equals('application/json'));
+      expect(captured['X-Origin'], isNotNull);
+      expect(captured['X-Dest'], isNotNull);
+    });
   });
 }

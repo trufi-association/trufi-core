@@ -44,6 +44,9 @@ class Otp15RoutingProvider implements IRoutingProvider {
   /// Custom description for this provider.
   final String? displayDescription;
 
+  /// Optional callback to provide extra HTTP headers per plan request.
+  final PlanHeaderProvider? planHeaderProvider;
+
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
 
@@ -51,6 +54,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
     required this.endpoint,
     this.displayName,
     this.displayDescription,
+    this.planHeaderProvider,
     http.Client? httpClient,
   }) : _injectedHttpClient = httpClient;
 
@@ -135,8 +139,13 @@ class Otp15RoutingProvider implements IRoutingProvider {
     final uri = Uri.parse(_restEndpoint).replace(queryParameters: queryParams);
 
     try {
+      final headers = <String, String>{'Accept': 'application/json'};
+      if (planHeaderProvider != null) {
+        headers.addAll(await planHeaderProvider!(from, to));
+      }
+
       final response = await _httpClient
-          .get(uri, headers: {'Accept': 'application/json'})
+          .get(uri, headers: headers)
           .timeout(const Duration(seconds: 60));
 
       if (response.statusCode != 200) {

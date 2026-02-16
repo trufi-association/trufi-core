@@ -43,11 +43,15 @@ class Otp28RoutingProvider implements IRoutingProvider {
   /// Custom description for this provider.
   final String? displayDescription;
 
+  /// Optional callback to provide extra HTTP headers per plan request.
+  final PlanHeaderProvider? planHeaderProvider;
+
   Otp28RoutingProvider({
     required this.endpoint,
     this.useSimpleQuery = false,
     this.displayName,
     this.displayDescription,
+    this.planHeaderProvider,
   });
 
   late final _prefs = Otp28PreferencesState();
@@ -129,9 +133,17 @@ class Otp28RoutingProvider implements IRoutingProvider {
           .toList();
     }
 
+    Context? requestContext;
+    if (planHeaderProvider != null) {
+      final extraHeaders = await planHeaderProvider!(from, to);
+      requestContext =
+          Context().withEntry(HttpLinkHeaders(headers: extraHeaders));
+    }
+
     final query = QueryOptions(
       document: parseString(queryString),
       variables: variables,
+      context: requestContext,
     );
 
     final result = await _client.query(query);
