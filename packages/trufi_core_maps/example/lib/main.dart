@@ -117,7 +117,9 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
   void _applySettings() {
     final center = _controller.cameraPositionNotifier.value.target;
 
-    debugPrint('Applying settings: markers=$_markerCount, lines=$_lineCount, fps=$_fps');
+    debugPrint(
+      'Applying settings: markers=$_markerCount, lines=$_lineCount, fps=$_fps',
+    );
     debugPrint('Center: ${center.latitude}, ${center.longitude}');
 
     // Generate markers
@@ -193,10 +195,7 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
           return Stack(
             children: [
               // Map
-              _buildMap(
-                mapEngineManager.currentEngine,
-                isDarkMode: isDarkMode,
-              ),
+              _buildMap(mapEngineManager.currentEngine, isDarkMode: isDarkMode),
 
               // Performance Stats (top-left)
               Positioned(

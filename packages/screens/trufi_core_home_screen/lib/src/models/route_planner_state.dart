@@ -2,6 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
+/// How the departure/arrival time is configured.
+enum TimeMode { leaveNow, departAt, arriveBy }
+
 /// State for the route planner.
 class RoutePlannerState extends Equatable {
   final TrufiLocation? fromPlace;
@@ -10,6 +13,8 @@ class RoutePlannerState extends Equatable {
   final routing.Itinerary? selectedItinerary;
   final bool isLoading;
   final String? error;
+  final TimeMode timeMode;
+  final DateTime? dateTime;
 
   const RoutePlannerState({
     this.fromPlace,
@@ -18,6 +23,8 @@ class RoutePlannerState extends Equatable {
     this.selectedItinerary,
     this.isLoading = false,
     this.error,
+    this.timeMode = TimeMode.leaveNow,
+    this.dateTime,
   });
 
   RoutePlannerState copyWith({
@@ -27,6 +34,8 @@ class RoutePlannerState extends Equatable {
     routing.Itinerary? selectedItinerary,
     bool? isLoading,
     String? error,
+    TimeMode? timeMode,
+    DateTime? dateTime,
   }) {
     return RoutePlannerState(
       fromPlace: fromPlace ?? this.fromPlace,
@@ -35,6 +44,8 @@ class RoutePlannerState extends Equatable {
       selectedItinerary: selectedItinerary ?? this.selectedItinerary,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
+      timeMode: timeMode ?? this.timeMode,
+      dateTime: dateTime ?? this.dateTime,
     );
   }
 
@@ -46,6 +57,8 @@ class RoutePlannerState extends Equatable {
     Optional<routing.Itinerary?>? selectedItinerary,
     bool? isLoading,
     Optional<String?>? error,
+    TimeMode? timeMode,
+    Optional<DateTime?>? dateTime,
   }) {
     return RoutePlannerState(
       fromPlace: fromPlace != null ? fromPlace.value : this.fromPlace,
@@ -56,6 +69,8 @@ class RoutePlannerState extends Equatable {
           : this.selectedItinerary,
       isLoading: isLoading ?? this.isLoading,
       error: error != null ? error.value : this.error,
+      timeMode: timeMode ?? this.timeMode,
+      dateTime: dateTime != null ? dateTime.value : this.dateTime,
     );
   }
 
@@ -83,7 +98,8 @@ class RoutePlannerState extends Equatable {
           : null,
       selectedItinerary: json['selectedItinerary'] != null
           ? routing.Itinerary.fromJson(
-              json['selectedItinerary'] as Map<String, dynamic>)
+              json['selectedItinerary'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -99,13 +115,15 @@ class RoutePlannerState extends Equatable {
 
   @override
   List<Object?> get props => [
-        fromPlace,
-        toPlace,
-        plan,
-        selectedItinerary,
-        isLoading,
-        error,
-      ];
+    fromPlace,
+    toPlace,
+    plan,
+    selectedItinerary,
+    isLoading,
+    error,
+    timeMode,
+    dateTime,
+  ];
 }
 
 /// Helper class for nullable optional values

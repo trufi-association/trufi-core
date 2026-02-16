@@ -13,10 +13,7 @@ void main() {
     });
 
     test('creates instance with message and status code', () {
-      final exception = SearchLocationException(
-        'HTTP error',
-        statusCode: 404,
-      );
+      final exception = SearchLocationException('HTTP error', statusCode: 404);
 
       expect(exception.message, 'HTTP error');
       expect(exception.statusCode, 404);

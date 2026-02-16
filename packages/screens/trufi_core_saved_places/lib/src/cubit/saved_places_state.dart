@@ -1,12 +1,7 @@
 part of 'saved_places_cubit.dart';
 
 /// Status of saved places operations.
-enum SavedPlacesStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-}
+enum SavedPlacesStatus { initial, loading, loaded, error }
 
 /// State for the SavedPlacesCubit.
 class SavedPlacesState extends Equatable {
@@ -63,11 +58,11 @@ class SavedPlacesState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        home,
-        work,
-        otherPlaces,
-        history,
-        errorMessage,
-      ];
+    status,
+    home,
+    work,
+    otherPlaces,
+    history,
+    errorMessage,
+  ];
 }

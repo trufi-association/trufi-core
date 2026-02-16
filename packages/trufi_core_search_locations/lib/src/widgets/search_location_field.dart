@@ -84,7 +84,9 @@ class SearchLocationField extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               )
                             : theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withValues(alpha: 0.6),
+                                color: colorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
                               ),
                       ),
                     ),
@@ -95,10 +97,7 @@ class SearchLocationField extends StatelessWidget {
           ),
         ),
         if (trailingWidget != null)
-          SizedBox(
-            width: 40.0,
-            child: trailingWidget,
-          ),
+          SizedBox(width: 40.0, child: trailingWidget),
       ],
     );
   }

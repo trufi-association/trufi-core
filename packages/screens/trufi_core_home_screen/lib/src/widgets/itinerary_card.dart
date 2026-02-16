@@ -143,7 +143,10 @@ class ItineraryCard extends StatelessWidget {
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               visualDensity: VisualDensity.compact,
-              textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              textStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           )
         else if (isSelected)
@@ -197,9 +200,7 @@ class ItineraryCard extends StatelessWidget {
       0,
       (sum, leg) => sum + leg.distance.toInt(),
     );
-    final transferCount = itinerary.legs
-        .where((leg) => leg.transitLeg)
-        .length;
+    final transferCount = itinerary.legs.where((leg) => leg.transitLeg).length;
 
     return Row(
       children: [
@@ -291,7 +292,9 @@ class _LegChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              isWalk ? Icons.directions_walk_rounded : Icons.directions_bike_rounded,
+              isWalk
+                  ? Icons.directions_walk_rounded
+                  : Icons.directions_bike_rounded,
               size: 18,
               color: Colors.grey[600],
             ),
@@ -322,11 +325,7 @@ class _LegChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            _getModeIcon(leg.transportMode),
-            size: 16,
-            color: Colors.white,
-          ),
+          Icon(_getModeIcon(leg.transportMode), size: 16, color: Colors.white),
           if (routeName.isNotEmpty) ...[
             const SizedBox(width: 4),
             Text(
@@ -405,11 +404,7 @@ class _InfoChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 14,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 4),
         Text(
           label,

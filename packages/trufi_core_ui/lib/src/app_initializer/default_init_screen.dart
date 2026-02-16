@@ -150,10 +150,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
                           height: 140,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(
-                              color: primaryColor,
-                              width: 2,
-                            ),
+                            border: Border.all(color: primaryColor, width: 2),
                           ),
                         ),
                       ),
@@ -185,7 +182,8 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
                 builder: (context, child) {
                   return Transform.scale(
                     scale: _pulseAnimation.value,
-                    child: widget.logo ??
+                    child:
+                        widget.logo ??
                         Container(
                           width: 90,
                           height: 90,
@@ -246,9 +244,9 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
                 : 'Loading...',
             key: ValueKey(widget.currentStep),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.8),
-                  fontWeight: FontWeight.w500,
-                ),
+              color: colorScheme.onSurface.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
@@ -276,8 +274,8 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
                 color: isCompleted
                     ? primaryColor
                     : isCurrent
-                        ? primaryColor.withValues(alpha: 0.15)
-                        : colorScheme.outline.withValues(alpha: 0.2),
+                    ? primaryColor.withValues(alpha: 0.15)
+                    : colorScheme.outline.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
                 border: isCurrent
                     ? Border.all(color: primaryColor, width: 2)
@@ -335,10 +333,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
           duration: const Duration(milliseconds: 600),
           curve: Curves.elasticOut,
           builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: child,
-            );
+            return Transform.scale(scale: value, child: child);
           },
           child: Container(
             width: 100,
@@ -366,9 +361,9 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
         // Error title
         Text(
           'Unable to start',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
 
@@ -383,8 +378,8 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
             widget.errorMessage ?? 'An unexpected error occurred',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.8),
-                ),
+              color: colorScheme.onSurface.withValues(alpha: 0.8),
+            ),
           ),
         ),
         const SizedBox(height: 32),
@@ -411,10 +406,7 @@ class _DottedCirclePainter extends CustomPainter {
   final Color color;
   final int dotCount;
 
-  _DottedCirclePainter({
-    required this.color,
-    this.dotCount = 12,
-  });
+  _DottedCirclePainter({required this.color, this.dotCount = 12});
 
   @override
   void paint(Canvas canvas, Size size) {

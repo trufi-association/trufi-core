@@ -14,9 +14,9 @@ class NavigationCubit extends Cubit<NavigationState> {
   NavigationCubit({
     required LocationService locationService,
     NavigationConfig config = const NavigationConfig(),
-  })  : _locationService = locationService,
-        _config = config,
-        super(const NavigationState());
+  }) : _locationService = locationService,
+       _config = config,
+       super(const NavigationState());
 
   /// Start navigation for a route.
   Future<void> startNavigation(NavigationRoute route) async {
@@ -25,10 +25,12 @@ class NavigationCubit extends Cubit<NavigationState> {
     // Request location permission
     final permissionStatus = await _locationService.requestPermission();
     if (permissionStatus != LocationPermissionStatus.granted) {
-      emit(state.copyWith(
-        status: NavigationStatus.error,
-        errorMessage: _getPermissionErrorMessage(permissionStatus),
-      ));
+      emit(
+        state.copyWith(
+          status: NavigationStatus.error,
+          errorMessage: _getPermissionErrorMessage(permissionStatus),
+        ),
+      );
       return;
     }
 
@@ -38,10 +40,12 @@ class NavigationCubit extends Cubit<NavigationState> {
     );
 
     if (!trackingStarted) {
-      emit(state.copyWith(
-        status: NavigationStatus.error,
-        errorMessage: 'Could not start location tracking',
-      ));
+      emit(
+        state.copyWith(
+          status: NavigationStatus.error,
+          errorMessage: 'Could not start location tracking',
+        ),
+      );
       return;
     }
 
@@ -59,21 +63,24 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     // Build initial instruction
     final instruction = _buildTransitInstruction(route, startStopIndex);
-    final nextInstruction =
-        remainingStops > 0 ? _buildNextStopPreview(route, startStopIndex + 1) : null;
+    final nextInstruction = remainingStops > 0
+        ? _buildNextStopPreview(route, startStopIndex + 1)
+        : null;
 
-    emit(state.copyWith(
-      status: NavigationStatus.navigating,
-      segmentType: NavigationSegmentType.transit,
-      route: route,
-      currentStopIndex: startStopIndex,
-      totalStops: totalStops,
-      remainingStops: remainingStops,
-      currentInstruction: instruction,
-      nextInstruction: nextInstruction,
-      currentLocation: currentLocation,
-      isMapFollowingUser: true,
-    ));
+    emit(
+      state.copyWith(
+        status: NavigationStatus.navigating,
+        segmentType: NavigationSegmentType.transit,
+        route: route,
+        currentStopIndex: startStopIndex,
+        totalStops: totalStops,
+        remainingStops: remainingStops,
+        currentInstruction: instruction,
+        nextInstruction: nextInstruction,
+        currentLocation: currentLocation,
+        isMapFollowingUser: true,
+      ),
+    );
 
     // Start listening to location updates
     _locationService.addListener(_onLocationUpdate);
@@ -157,17 +164,20 @@ class NavigationCubit extends Cubit<NavigationState> {
     if (location == null) return;
 
     // Check GPS accuracy
-    final isGpsWeak = location.accuracy != null &&
+    final isGpsWeak =
+        location.accuracy != null &&
         location.accuracy! > _config.gpsAccuracyWarningThreshold;
 
     // Calculate current leg index based on user position
     final currentLegIndex = _getCurrentLegIndex(location);
 
-    emit(state.copyWith(
-      currentLocation: location,
-      currentLegIndex: currentLegIndex,
-      isGpsWeak: isGpsWeak,
-    ));
+    emit(
+      state.copyWith(
+        currentLocation: location,
+        currentLegIndex: currentLegIndex,
+        isGpsWeak: isGpsWeak,
+      ),
+    );
 
     if (state.status != NavigationStatus.navigating) return;
 
@@ -245,15 +255,18 @@ class NavigationCubit extends Cubit<NavigationState> {
     final remainingStops = route.stops.length - stopIndex - 1;
 
     final instruction = _buildTransitInstruction(route, stopIndex);
-    final nextInstruction =
-        remainingStops > 0 ? _buildNextStopPreview(route, stopIndex + 1) : null;
+    final nextInstruction = remainingStops > 0
+        ? _buildNextStopPreview(route, stopIndex + 1)
+        : null;
 
-    emit(state.copyWith(
-      currentStopIndex: stopIndex,
-      remainingStops: remainingStops,
-      currentInstruction: instruction,
-      nextInstruction: nextInstruction,
-    ));
+    emit(
+      state.copyWith(
+        currentStopIndex: stopIndex,
+        remainingStops: remainingStops,
+        currentInstruction: instruction,
+        nextInstruction: nextInstruction,
+      ),
+    );
 
     // Haptic feedback on stop arrival
     HapticFeedback.mediumImpact();
@@ -262,17 +275,19 @@ class NavigationCubit extends Cubit<NavigationState> {
   void _completeNavigation() {
     final route = state.route;
 
-    emit(state.copyWith(
-      status: NavigationStatus.completed,
-      currentStopIndex: route?.stops.length ?? 0,
-      remainingStops: 0,
-      currentInstruction: NavigationInstruction(
-        type: InstructionType.arriveDestination,
-        primaryText: 'You have arrived',
-        stopName: route?.stops.lastOrNull?.name,
+    emit(
+      state.copyWith(
+        status: NavigationStatus.completed,
+        currentStopIndex: route?.stops.length ?? 0,
+        remainingStops: 0,
+        currentInstruction: NavigationInstruction(
+          type: InstructionType.arriveDestination,
+          primaryText: 'You have arrived',
+          stopName: route?.stops.lastOrNull?.name,
+        ),
+        nextInstruction: null,
       ),
-      nextInstruction: null,
-    ));
+    );
 
     HapticFeedback.heavyImpact();
   }
@@ -290,8 +305,9 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     // Estimate time based on average transit speed (30 km/h = 8.33 m/s)
     // For walking: ~1.4 m/s (5 km/h)
-    final speedMs =
-        state.segmentType == NavigationSegmentType.transit ? 8.33 : 1.4;
+    final speedMs = state.segmentType == NavigationSegmentType.transit
+        ? 8.33
+        : 1.4;
     final etaSeconds = distanceToNext / speedMs;
 
     // Estimate total ETA based on remaining stops
@@ -300,12 +316,14 @@ class NavigationCubit extends Cubit<NavigationState> {
         ? Duration(minutes: state.remainingStops * 2)
         : Duration.zero;
 
-    emit(state.copyWith(
-      distanceToNextStop: distanceToNext,
-      etaToNextStop: Duration(seconds: etaSeconds.round()),
-      etaToDestination:
-          Duration(seconds: etaSeconds.round()) + remainingStopsEta,
-    ));
+    emit(
+      state.copyWith(
+        distanceToNextStop: distanceToNext,
+        etaToNextStop: Duration(seconds: etaSeconds.round()),
+        etaToDestination:
+            Duration(seconds: etaSeconds.round()) + remainingStopsEta,
+      ),
+    );
   }
 
   void _checkOffRoute(LocationResult location) {
@@ -328,17 +346,11 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     if (isOffRoute && !state.isOffRoute) {
       // Just went off route
-      emit(state.copyWith(
-        isOffRoute: true,
-        distanceFromRoute: minDistance,
-      ));
+      emit(state.copyWith(isOffRoute: true, distanceFromRoute: minDistance));
       HapticFeedback.heavyImpact();
     } else if (!isOffRoute && state.isOffRoute) {
       // Back on route
-      emit(state.copyWith(
-        isOffRoute: false,
-        distanceFromRoute: null,
-      ));
+      emit(state.copyWith(isOffRoute: false, distanceFromRoute: null));
     }
   }
 
@@ -369,7 +381,10 @@ class NavigationCubit extends Cubit<NavigationState> {
     return closestLegIndex;
   }
 
-  int _findNearestStopIndex(List<NavigationStop> stops, LocationResult location) {
+  int _findNearestStopIndex(
+    List<NavigationStop> stops,
+    LocationResult location,
+  ) {
     if (stops.isEmpty) return 0;
 
     int nearestIndex = 0;
@@ -394,7 +409,9 @@ class NavigationCubit extends Cubit<NavigationState> {
   }
 
   NavigationInstruction _buildTransitInstruction(
-      NavigationRoute route, int stopIndex) {
+    NavigationRoute route,
+    int stopIndex,
+  ) {
     final stops = route.stops;
     final remainingStops = stops.length - stopIndex - 1;
 
@@ -403,8 +420,9 @@ class NavigationCubit extends Cubit<NavigationState> {
         type: InstructionType.exitTransport,
         primaryText: 'Exit at ${stops.last.name}',
         stopName: stops.last.name,
-        routeColor:
-            route.backgroundColor != null ? Color(route.backgroundColor!) : null,
+        routeColor: route.backgroundColor != null
+            ? Color(route.backgroundColor!)
+            : null,
         routeShortName: route.shortName,
       );
     }
@@ -417,14 +435,17 @@ class NavigationCubit extends Cubit<NavigationState> {
       primaryText: nextStop.name,
       secondaryText: '$stopsText remaining',
       stopName: nextStop.name,
-      routeColor:
-          route.backgroundColor != null ? Color(route.backgroundColor!) : null,
+      routeColor: route.backgroundColor != null
+          ? Color(route.backgroundColor!)
+          : null,
       routeShortName: route.shortName,
     );
   }
 
   NavigationInstruction _buildNextStopPreview(
-      NavigationRoute route, int stopIndex) {
+    NavigationRoute route,
+    int stopIndex,
+  ) {
     if (stopIndex >= route.stops.length) {
       return NavigationInstruction(
         type: InstructionType.arriveDestination,

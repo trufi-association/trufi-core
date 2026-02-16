@@ -5,17 +5,16 @@ import 'models/transport_route.dart';
 import 'repository/transport_list_cache.dart';
 import 'transport_list_data_provider.dart';
 
-/// Data provider that fetches transport routes from a routing provider.
+/// Data provider that fetches transport routes via [RoutingEngineManager].
 ///
 /// Supports optional [cache] parameter for persisting routes between sessions.
 /// When cache is provided:
 /// - Routes are loaded from cache first (instant display)
 /// - Network fetch only happens on explicit refresh
-/// - Cache is invalidated when [providerId] changes (e.g., switching from OTP to GTFS)
+/// - Cache is invalidated when the engine changes
 class OtpTransportDataProvider extends TransportListDataProvider {
-  final TransitRouteRepository? _repository;
+  final RoutingEngineManager _manager;
   final TransportListCache? _cache;
-  final String? _providerId;
 
   // Start with isLoading=true so shimmer shows immediately
   TransportListState _state = const TransportListState(isLoading: true);
@@ -24,31 +23,19 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   final Map<String, TransportRouteDetails> _detailsCache = {};
 
   OtpTransportDataProvider({
-    required TransitRouteRepository? repository,
+    required RoutingEngineManager manager,
     TransportListCache? cache,
-    String? providerId,
-  })  : _repository = repository,
-        _cache = cache,
-        _providerId = providerId;
-
-  /// Creates a data provider from an OtpConfiguration (legacy).
-  @Deprecated('Use the repository constructor instead')
-  factory OtpTransportDataProvider.fromOtpConfiguration({
-    required OtpConfiguration otpConfiguration,
-    TransportListCache? cache,
-  }) {
-    return OtpTransportDataProvider(
-      repository: otpConfiguration.createTransitRouteRepository(),
-      cache: cache,
-    );
-  }
+  }) : _manager = manager,
+       _cache = cache;
 
   @override
   TransportListState get state => _state;
 
+  String get _providerId => _manager.currentEngine.id;
+
   @override
   Future<void> load() async {
-    if (_repository == null) {
+    if (!_manager.currentEngine.supportsTransitRoutes) {
       _state = _state.copyWith(isLoading: false);
       notifyListeners();
       return;
@@ -62,20 +49,25 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     // Try loading from cache first
     if (_cache != null) {
       try {
-        // Check if cache is from the same provider
-        if (_providerId != null) {
-          final isValidCache = await _cache.isValidForProvider(_providerId);
-          if (!isValidCache) {
-            debugPrint('OtpTransportDataProvider.load: Cache is from different provider, clearing...');
-            await _cache.clearRoutesCache();
-          }
+        final isValidCache = await _cache.isValidForProvider(_providerId);
+        if (!isValidCache) {
+          debugPrint(
+            'OtpTransportDataProvider.load: Cache is from different provider, clearing...',
+          );
+          await _cache.clearRoutesCache();
         }
 
         final cachedRoutes = await _cache.getCachedRoutes();
         if (cachedRoutes != null && cachedRoutes.isNotEmpty) {
-          debugPrint('OtpTransportDataProvider.load: Loaded ${cachedRoutes.length} routes from cache');
-          debugPrint('OtpTransportDataProvider.load: First 5 route codes: ${cachedRoutes.take(5).map((r) => r.code).toList()}');
-          final routes = cachedRoutes.map(_convertCachedToTransportRoute).toList();
+          debugPrint(
+            'OtpTransportDataProvider.load: Loaded ${cachedRoutes.length} routes from cache',
+          );
+          debugPrint(
+            'OtpTransportDataProvider.load: First 5 route codes: ${cachedRoutes.take(5).map((r) => r.code).toList()}',
+          );
+          final routes = cachedRoutes
+              .map(_convertCachedToTransportRoute)
+              .toList();
           _state = _state.copyWith(
             routes: routes,
             filteredRoutes: routes,
@@ -101,7 +93,7 @@ class OtpTransportDataProvider extends TransportListDataProvider {
 
   @override
   Future<void> refresh() async {
-    if (_repository == null) {
+    if (!_manager.currentEngine.supportsTransitRoutes) {
       throw UnsupportedError(
         'Transit routes are not supported by the current routing provider',
       );
@@ -121,10 +113,16 @@ class OtpTransportDataProvider extends TransportListDataProvider {
 
   /// Fetch routes from network and save to cache.
   Future<void> _fetchAndCacheRoutes() async {
-    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: Fetching from ${_repository.runtimeType}');
-    final patterns = await _repository!.fetchPatterns();
-    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: Got ${patterns.length} patterns');
-    debugPrint('OtpTransportDataProvider._fetchAndCacheRoutes: First 5 codes: ${patterns.take(5).map((p) => p.code).toList()}');
+    debugPrint(
+      'OtpTransportDataProvider._fetchAndCacheRoutes: Fetching via RoutingEngineManager (${_manager.currentEngine.id})',
+    );
+    final patterns = await _manager.fetchRoutes();
+    debugPrint(
+      'OtpTransportDataProvider._fetchAndCacheRoutes: Got ${patterns.length} patterns',
+    );
+    debugPrint(
+      'OtpTransportDataProvider._fetchAndCacheRoutes: First 5 codes: ${patterns.take(5).map((p) => p.code).toList()}',
+    );
 
     // Sort routes by shortName (numeric first, then alphabetic)
     patterns.sort((a, b) {
@@ -148,10 +146,7 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       try {
         final cachedPatterns = patterns.map(_convertToCachedPattern).toList();
         await _cache.cacheRoutes(cachedPatterns);
-        // Save provider ID so we can invalidate cache when provider changes
-        if (_providerId != null) {
-          await _cache.cacheProviderId(_providerId);
-        }
+        await _cache.cacheProviderId(_providerId);
       } catch (e) {
         debugPrint('OtpTransportDataProvider: Error caching routes: $e');
       }
@@ -185,13 +180,17 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   @override
   Future<TransportRouteDetails?> getRouteDetails(String code) async {
     debugPrint('OtpTransportDataProvider.getRouteDetails: code=$code');
-    debugPrint('OtpTransportDataProvider.getRouteDetails: repository type=${_repository.runtimeType}');
+    debugPrint(
+      'OtpTransportDataProvider.getRouteDetails: engine=${_manager.currentEngine.id}',
+    );
 
-    if (_repository == null) return null;
+    if (!_manager.currentEngine.supportsTransitRoutes) return null;
 
     // Check in-memory cache first
     if (_detailsCache.containsKey(code)) {
-      debugPrint('OtpTransportDataProvider.getRouteDetails: Found in memory cache');
+      debugPrint(
+        'OtpTransportDataProvider.getRouteDetails: Found in memory cache',
+      );
       return _detailsCache[code];
     }
 
@@ -205,7 +204,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
           return details;
         }
       } catch (e) {
-        debugPrint('OtpTransportDataProvider: Error loading cached details: $e');
+        debugPrint(
+          'OtpTransportDataProvider: Error loading cached details: $e',
+        );
       }
     }
 
@@ -213,7 +214,12 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     _notifySafe();
 
     try {
-      final pattern = await _repository.fetchPatternById(code);
+      final pattern = await _manager.fetchRouteById(code);
+      if (pattern == null) {
+        _state = _state.copyWith(isLoadingDetails: false);
+        _notifySafe();
+        return null;
+      }
       final details = _convertToTransportRouteDetails(pattern);
 
       // Cache the result in memory
@@ -275,18 +281,20 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       modeIcon: _getModeIcon(route.route?.mode),
       modeName: route.route?.mode?.name,
       geometry: route.geometry
-          ?.map((latLng) => (
-                latitude: latLng.latitude,
-                longitude: latLng.longitude,
-              ))
+          ?.map(
+            (latLng) =>
+                (latitude: latLng.latitude, longitude: latLng.longitude),
+          )
           .toList(),
       stops: route.stops
-          ?.map((stop) => TransportStop(
-                id: stop.name,
-                name: stop.name,
-                latitude: stop.lat,
-                longitude: stop.lon,
-              ))
+          ?.map(
+            (stop) => TransportStop(
+              id: stop.name,
+              name: stop.name,
+              latitude: stop.lat,
+              longitude: stop.lon,
+            ),
+          )
           .toList(),
     );
   }
@@ -317,18 +325,22 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       textColor: route.route?.textColor,
       mode: route.route?.mode?.name,
       geometry: route.geometry
-          ?.map((latLng) => CachedLatLng(
-                latitude: latLng.latitude,
-                longitude: latLng.longitude,
-              ))
+          ?.map(
+            (latLng) => CachedLatLng(
+              latitude: latLng.latitude,
+              longitude: latLng.longitude,
+            ),
+          )
           .toList(),
       stops: route.stops
-          ?.map((stop) => CachedStop(
-                id: stop.name,
-                name: stop.name,
-                latitude: stop.lat,
-                longitude: stop.lon,
-              ))
+          ?.map(
+            (stop) => CachedStop(
+              id: stop.name,
+              name: stop.name,
+              latitude: stop.lat,
+              longitude: stop.lon,
+            ),
+          )
           .toList(),
     );
   }
@@ -349,7 +361,8 @@ class OtpTransportDataProvider extends TransportListDataProvider {
 
   /// Convert CachedRouteDetails to TransportRouteDetails
   TransportRouteDetails _convertCachedToTransportRouteDetails(
-      CachedRouteDetails cached) {
+    CachedRouteDetails cached,
+  ) {
     return TransportRouteDetails(
       id: cached.id,
       code: cached.code,
@@ -361,18 +374,20 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       modeIcon: _getModeIconFromString(cached.mode),
       modeName: cached.mode,
       geometry: cached.geometry
-          ?.map((latLng) => (
-                latitude: latLng.latitude,
-                longitude: latLng.longitude,
-              ))
+          ?.map(
+            (latLng) =>
+                (latitude: latLng.latitude, longitude: latLng.longitude),
+          )
           .toList(),
       stops: cached.stops
-          ?.map((stop) => TransportStop(
-                id: stop.id,
-                name: stop.name,
-                latitude: stop.latitude,
-                longitude: stop.longitude,
-              ))
+          ?.map(
+            (stop) => TransportStop(
+              id: stop.id,
+              name: stop.name,
+              latitude: stop.latitude,
+              longitude: stop.longitude,
+            ),
+          )
           .toList(),
     );
   }

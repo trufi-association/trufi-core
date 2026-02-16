@@ -8,7 +8,8 @@ class LocaleManager extends ChangeNotifier {
 
   Locale _currentLocale;
 
-  LocaleManager({required Locale defaultLocale}) : _currentLocale = defaultLocale {
+  LocaleManager({required Locale defaultLocale})
+    : _currentLocale = defaultLocale {
     _loadSavedLocale();
   }
 
@@ -40,6 +41,8 @@ class LocaleManager extends ChangeNotifier {
     setLocale(Locale(languageCode));
   }
 
-  static LocaleManager read(BuildContext context) => context.read<LocaleManager>();
-  static LocaleManager watch(BuildContext context) => context.watch<LocaleManager>();
+  static LocaleManager read(BuildContext context) =>
+      context.read<LocaleManager>();
+  static LocaleManager watch(BuildContext context) =>
+      context.watch<LocaleManager>();
 }

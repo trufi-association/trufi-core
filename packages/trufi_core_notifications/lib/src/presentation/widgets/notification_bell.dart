@@ -36,8 +36,9 @@ class NotificationBell extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     final showBadge = alwaysShowBadge || unreadCount > 0;
-    final displayCount =
-        unreadCount > maxCount ? '$maxCount+' : unreadCount.toString();
+    final displayCount = unreadCount > maxCount
+        ? '$maxCount+'
+        : unreadCount.toString();
 
     return IconButton(
       onPressed: onTap != null
@@ -88,14 +89,8 @@ class _NotificationBadge extends StatelessWidget {
     final isSmall = count.length == 1;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 0 : 4,
-        vertical: 0,
-      ),
-      constraints: BoxConstraints(
-        minWidth: isSmall ? 16 : 18,
-        minHeight: 16,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isSmall ? 0 : 4, vertical: 0),
+      constraints: BoxConstraints(minWidth: isSmall ? 16 : 18, minHeight: 16),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8),

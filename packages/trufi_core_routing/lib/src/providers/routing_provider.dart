@@ -1,11 +1,25 @@
-import '../domain/entities/routing_capabilities.dart';
-import '../domain/repositories/plan_repository.dart';
-import '../domain/repositories/transit_route_repository.dart';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+
+import '../models/plan.dart';
+import '../models/routing_location.dart';
+import '../models/transit_route.dart';
+
+/// Callback to provide extra HTTP headers for plan requests.
+///
+/// Headers are computed dynamically based on origin/destination.
+/// Defined at the app level and injected into providers.
+typedef PlanHeaderProvider =
+    FutureOr<Map<String, String>> Function(
+      RoutingLocation from,
+      RoutingLocation to,
+    );
 
 /// Interface for routing providers.
 ///
-/// Similar to ITrufiMapEngine but for routing. Implement this interface
-/// to create custom routing backends that can be used with RoutingConfiguration.
+/// Implement this interface to create custom routing backends
+/// that can be used with RoutingEngineManager.
 ///
 /// Example implementation:
 /// ```dart
@@ -26,10 +40,13 @@ import '../domain/repositories/transit_route_repository.dart';
 ///   bool get requiresInternet => true;
 ///
 ///   @override
-///   PlanRepository createPlanRepository() => MyCustomPlanRepository();
+///   Future<Plan> fetchPlan({...}) async { ... }
 ///
 ///   @override
-///   TransitRouteRepository? createTransitRouteRepository() => null;
+///   Future<List<TransitRoute>> fetchTransitRoutes() async => [];
+///
+///   @override
+///   Future<TransitRoute?> fetchTransitRouteById(String id) async => null;
 /// }
 /// ```
 abstract class IRoutingProvider {
@@ -48,11 +65,6 @@ abstract class IRoutingProvider {
   /// Whether this provider requires internet connection.
   bool get requiresInternet;
 
-  /// The routing capabilities supported by this provider.
-  ///
-  /// UI should adapt based on these capabilities to show only relevant options.
-  RoutingCapabilities get capabilities;
-
   /// Initialize the provider.
   ///
   /// Called during app startup to prepare any resources needed by the provider.
@@ -62,12 +74,38 @@ abstract class IRoutingProvider {
   /// Default implementation does nothing.
   Future<void> initialize() async {}
 
-  /// Creates the PlanRepository for fetching trip plans.
-  PlanRepository createPlanRepository();
+  /// Fetches a trip plan from origin to destination.
+  ///
+  /// Each provider reads its own internal preferences (wheelchair, walkSpeed,
+  /// etc.) when building the request. The caller only provides trip-level
+  /// parameters: origin, destination, time, and direction.
+  Future<Plan> fetchPlan({
+    required RoutingLocation from,
+    required RoutingLocation to,
+    int numItineraries = 5,
+    String? locale,
+    required DateTime dateTime,
+    bool arriveBy = false,
+  });
 
-  /// Creates the TransitRouteRepository for listing transit routes.
-  /// Returns null if this provider doesn't support transit routes.
-  TransitRouteRepository? createTransitRouteRepository();
+  /// Fetches all transit routes.
+  ///
+  /// Returns an empty list if this provider doesn't support transit routes.
+  Future<List<TransitRoute>> fetchTransitRoutes();
+
+  /// Fetches a transit route by ID.
+  ///
+  /// Returns null if the route is not found or transit routes are not supported.
+  Future<TransitRoute?> fetchTransitRouteById(String id);
+
+  /// Builds the preferences UI for this provider.
+  ///
+  /// The provider injects its own internal state into the widget.
+  /// Returns null if this provider has no configurable preferences.
+  Widget? buildPreferencesUI(BuildContext context) => null;
+
+  /// Resets provider-specific preferences to defaults.
+  void resetPreferences() {}
 }
 
 /// Option for routing provider selection UI.

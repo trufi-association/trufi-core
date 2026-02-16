@@ -190,11 +190,7 @@ class NavigationInstructionCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              _getModeIcon(leg.modeName),
-              color: Colors.white,
-              size: 22,
-            ),
+            Icon(_getModeIcon(leg.modeName), color: Colors.white, size: 22),
             if (routeName.isNotEmpty) ...[
               const SizedBox(width: 4),
               Text(
@@ -226,12 +222,15 @@ class NavigationInstructionCard extends StatelessWidget {
       }
 
       // Use wider container for transit with route name
-      final isWideTransit = leg.isTransit && (leg.routeName?.isNotEmpty ?? false);
+      final isWideTransit =
+          leg.isTransit && (leg.routeName?.isNotEmpty ?? false);
 
       return Container(
         width: isWideTransit ? 80 : 56,
         height: 56,
-        padding: isWideTransit ? const EdgeInsets.symmetric(horizontal: 8) : null,
+        padding: isWideTransit
+            ? const EdgeInsets.symmetric(horizontal: 8)
+            : null,
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(16),
@@ -359,7 +358,9 @@ class NavigationInstructionCard extends StatelessWidget {
     final routeColor = instruction.routeColor ?? colorScheme.primary;
 
     // Calculate progress percentage
-    final progressPercent = totalStops > 1 ? currentStopIndex / (totalStops - 1) : 0.0;
+    final progressPercent = totalStops > 1
+        ? currentStopIndex / (totalStops - 1)
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -376,8 +377,10 @@ class NavigationInstructionCard extends StatelessWidget {
               // Duration chip
               if (totalDuration != null)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.primary,
                     borderRadius: BorderRadius.circular(16),
@@ -436,9 +439,7 @@ class NavigationInstructionCard extends StatelessWidget {
                   if (progressPercent < 1)
                     Expanded(
                       flex: ((1 - progressPercent) * 100).round(),
-                      child: Container(
-                        color: routeColor,
-                      ),
+                      child: Container(color: routeColor),
                     ),
                 ],
               ),
@@ -498,11 +499,7 @@ class _LegChipWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            _getModeIcon(leg.modeName),
-            size: 14,
-            color: Colors.white,
-          ),
+          Icon(_getModeIcon(leg.modeName), size: 14, color: Colors.white),
           if (routeName.isNotEmpty) ...[
             const SizedBox(width: 3),
             Text(

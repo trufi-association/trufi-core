@@ -81,8 +81,7 @@ class NotificationsScreen extends StatelessWidget {
       body: Column(
         children: [
           // Permission warning if not granted
-          if (manager.permissionStatus ==
-                  NotificationPermissionStatus.denied ||
+          if (manager.permissionStatus == NotificationPermissionStatus.denied ||
               manager.permissionStatus ==
                   NotificationPermissionStatus.permanentlyDenied)
             _buildPermissionWarning(context, manager),
@@ -105,7 +104,8 @@ class NotificationsScreen extends StatelessWidget {
   ) {
     final colorScheme = Theme.of(context).colorScheme;
     final isPermanent =
-        manager.permissionStatus == NotificationPermissionStatus.permanentlyDenied;
+        manager.permissionStatus ==
+        NotificationPermissionStatus.permanentlyDenied;
 
     return Container(
       margin: const EdgeInsets.all(16),

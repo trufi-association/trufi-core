@@ -56,19 +56,9 @@ class GtfsData {
 class GtfsParser {
   /// Parse a GTFS ZIP file from a file path.
   static Future<GtfsData> parseFromFile(String filePath) async {
-    final sw = Stopwatch()..start();
-    print('GtfsParser: Loading GTFS from $filePath');
-
     final file = File(filePath);
     final bytes = await file.readAsBytes();
-
-    final result = parseFromBytes(bytes);
-
-    sw.stop();
-    print('GtfsParser: Parsed GTFS in ${sw.elapsedMilliseconds}ms');
-    print('GtfsParser: ${result.stops.length} stops, ${result.routes.length} routes, ${result.trips.length} trips');
-
-    return result;
+    return parseFromBytes(bytes);
   }
 
   /// Parse GTFS data from raw bytes (synchronous).
@@ -155,7 +145,9 @@ class GtfsParser {
   static Map<String, GtfsShape> _parseShapes(String? content) {
     if (content == null) return {};
 
-    final points = CsvParser.parse(content).map(GtfsShapePoint.fromCsv).toList();
+    final points = CsvParser.parse(
+      content,
+    ).map(GtfsShapePoint.fromCsv).toList();
 
     // Group by shape ID
     final grouped = <String, List<GtfsShapePoint>>{};
@@ -166,7 +158,8 @@ class GtfsParser {
     // Sort by sequence and create shapes
     final shapes = <String, GtfsShape>{};
     for (final entry in grouped.entries) {
-      final sortedPoints = entry.value..sort((a, b) => a.sequence.compareTo(b.sequence));
+      final sortedPoints = entry.value
+        ..sort((a, b) => a.sequence.compareTo(b.sequence));
       shapes[entry.key] = GtfsShape(id: entry.key, points: sortedPoints);
     }
 

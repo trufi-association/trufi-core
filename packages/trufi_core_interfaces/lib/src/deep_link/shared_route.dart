@@ -60,9 +60,7 @@ class SharedRoute {
       toLat: toLat,
       toLng: toLng,
       toName: toName,
-      time: timeMs != null
-          ? DateTime.fromMillisecondsSinceEpoch(timeMs)
-          : null,
+      time: timeMs != null ? DateTime.fromMillisecondsSinceEpoch(timeMs) : null,
       selectedItineraryIndex: itineraryIndex,
     );
   }

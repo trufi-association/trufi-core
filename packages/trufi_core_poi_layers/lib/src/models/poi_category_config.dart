@@ -142,8 +142,7 @@ class POICategoryConfig extends Equatable {
   }
 
   /// Get all subcategory names
-  Set<String> get subcategoryNames =>
-      subcategories.map((s) => s.name).toSet();
+  Set<String> get subcategoryNames => subcategories.map((s) => s.name).toSet();
 
   /// Get subcategories that are active by default
   Set<String> get defaultActiveSubcategories =>
@@ -189,10 +188,12 @@ class POIMetadata {
     final categories = <POICategoryConfig>[];
 
     for (var i = 0; i < categoriesJson.length; i++) {
-      categories.add(POICategoryConfig.fromJson(
-        categoriesJson[i] as Map<String, dynamic>,
-        i,
-      ));
+      categories.add(
+        POICategoryConfig.fromJson(
+          categoriesJson[i] as Map<String, dynamic>,
+          i,
+        ),
+      );
     }
 
     POIBoundingBox? bbox;
@@ -282,7 +283,9 @@ Color _parseColor(String? colorStr) {
 /// Extract translations from JSON for a given field name
 /// Looks for keys like "displayName:en", "displayName:es", "displayName:de"
 Map<String, String> _extractTranslations(
-    Map<String, dynamic> json, String fieldName) {
+  Map<String, dynamic> json,
+  String fieldName,
+) {
   final translations = <String, String>{};
   final prefix = '$fieldName:';
 

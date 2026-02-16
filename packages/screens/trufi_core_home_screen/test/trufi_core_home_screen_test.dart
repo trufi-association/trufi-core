@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
-import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show OtpConfiguration, OtpVersion;
 
 void main() {
   group('RoutePlannerState', () {
@@ -27,10 +25,7 @@ void main() {
     });
 
     test('copyWith preserves values not being changed', () {
-      const state = RoutePlannerState(
-        isLoading: true,
-        error: 'Test error',
-      );
+      const state = RoutePlannerState(isLoading: true, error: 'Test error');
 
       final newState = state.copyWith(isLoading: false);
 
@@ -41,9 +36,7 @@ void main() {
     test('copyWithNullable can set values to null', () {
       const state = RoutePlannerState(error: 'Test error');
 
-      final newState = state.copyWithNullable(
-        error: const Optional(null),
-      );
+      final newState = state.copyWithNullable(error: const Optional(null));
 
       expect(newState.error, isNull);
     });
@@ -51,28 +44,16 @@ void main() {
 
   group('HomeScreenConfig', () {
     test('has correct defaults', () {
-      const config = HomeScreenConfig(
-        otpConfiguration: OtpConfiguration(
-          endpoint: 'https://example.com',
-          version: OtpVersion.v2_4,
-        ),
-      );
+      const config = HomeScreenConfig();
 
       expect(config.chooseLocationZoom, equals(16.0));
       expect(config.myPlaces, isEmpty);
     });
 
     test('can set custom values', () {
-      const config = HomeScreenConfig(
-        otpConfiguration: OtpConfiguration(
-          endpoint: 'https://example.com',
-          version: OtpVersion.v2_8,
-        ),
-        chooseLocationZoom: 18.0,
-      );
+      const config = HomeScreenConfig(chooseLocationZoom: 18.0);
 
       expect(config.chooseLocationZoom, equals(18.0));
-      expect(config.otpConfiguration?.version, equals(OtpVersion.v2_8));
     });
   });
 }

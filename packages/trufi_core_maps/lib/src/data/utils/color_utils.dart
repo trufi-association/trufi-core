@@ -20,8 +20,7 @@ String decodeFillColor(Color? color) {
     } else {
       // Convert to ARGB32 and extract RGB components
       final argb = color.toARGB32();
-      stringColor =
-          '#${argb.toRadixString(16).padLeft(8, '0').substring(2)}';
+      stringColor = '#${argb.toRadixString(16).padLeft(8, '0').substring(2)}';
     }
   }
   return stringColor;

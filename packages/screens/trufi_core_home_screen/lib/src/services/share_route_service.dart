@@ -75,10 +75,15 @@ class ShareRouteService {
     buffer.writeln();
 
     // Date and time
-    buffer.writeln('📅 ${strings.date(dateFormat.format(itinerary.startTime))}');
     buffer.writeln(
-        '🕐 ${strings.times(timeFormat.format(itinerary.startTime), timeFormat.format(itinerary.endTime))}');
-    buffer.writeln('⏱️ ${strings.duration(_formatDuration(itinerary.duration))}');
+      '📅 ${strings.date(dateFormat.format(itinerary.startTime))}',
+    );
+    buffer.writeln(
+      '🕐 ${strings.times(timeFormat.format(itinerary.startTime), timeFormat.format(itinerary.endTime))}',
+    );
+    buffer.writeln(
+      '⏱️ ${strings.duration(_formatDuration(itinerary.duration))}',
+    );
     buffer.writeln();
 
     // Route summary
@@ -88,13 +93,15 @@ class ShareRouteService {
     if (deepLinkScheme != null) {
       buffer.writeln();
       buffer.writeln('📲 ${strings.openInApp}');
-      buffer.writeln(generateDeepLink(
-        from: from,
-        to: to,
-        itinerary: itinerary,
-        selectedItineraryIndex: selectedItineraryIndex,
-        scheme: deepLinkScheme,
-      ));
+      buffer.writeln(
+        generateDeepLink(
+          from: from,
+          to: to,
+          itinerary: itinerary,
+          selectedItineraryIndex: selectedItineraryIndex,
+          scheme: deepLinkScheme,
+        ),
+      );
     }
 
     return buffer.toString();
@@ -115,11 +122,7 @@ class ShareRouteService {
       selectedItineraryIndex: selectedItineraryIndex,
     );
 
-    final uri = Uri(
-      scheme: scheme,
-      host: 'route',
-      queryParameters: params,
-    );
+    final uri = Uri(scheme: scheme, host: 'route', queryParameters: params);
 
     return uri.toString();
   }

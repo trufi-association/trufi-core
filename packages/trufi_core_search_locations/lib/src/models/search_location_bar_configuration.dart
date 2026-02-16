@@ -40,9 +40,8 @@ class SearchLocationBarConfiguration {
 ///
 /// [isOrigin] indicates whether this is for the origin (true) or destination (false).
 /// Returns the selected [SearchLocation] or null if cancelled.
-typedef OnSearchLocation = Future<SearchLocation?> Function({
-  required bool isOrigin,
-});
+typedef OnSearchLocation =
+    Future<SearchLocation?> Function({required bool isOrigin});
 
 /// Callback type for when a location is selected/saved.
 typedef OnLocationSelected = void Function(SearchLocation location);

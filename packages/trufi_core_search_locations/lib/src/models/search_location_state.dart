@@ -11,10 +11,7 @@ class SearchLocationState {
   /// The destination/to location.
   final SearchLocation? destination;
 
-  const SearchLocationState({
-    this.origin,
-    this.destination,
-  });
+  const SearchLocationState({this.origin, this.destination});
 
   /// Returns true if both origin and destination are defined.
   bool get isComplete => origin != null && destination != null;
@@ -37,16 +34,11 @@ class SearchLocationState {
 
   /// Creates a new state with swapped origin and destination.
   SearchLocationState swapped() {
-    return SearchLocationState(
-      origin: destination,
-      destination: origin,
-    );
+    return SearchLocationState(origin: destination, destination: origin);
   }
 
   /// Creates an empty state.
-  const SearchLocationState.empty()
-      : origin = null,
-        destination = null;
+  const SearchLocationState.empty() : origin = null, destination = null;
 
   @override
   bool operator ==(Object other) =>

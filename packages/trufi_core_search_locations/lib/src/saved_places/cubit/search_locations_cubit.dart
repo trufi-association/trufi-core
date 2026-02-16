@@ -25,27 +25,29 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   SearchLocationsCubit({
     required this.searchLocationService,
     SearchLocationsRepository? localRepository,
-  })  : _localRepository = localRepository ?? SearchLocationsRepositoryImpl(),
-        super(const SearchLocationsState()) {
+  }) : _localRepository = localRepository ?? SearchLocationsRepositoryImpl(),
+       super(const SearchLocationsState()) {
     _initLoad();
   }
 
   Future<void> _initLoad() async {
     await _localRepository.loadRepository();
-    List<TrufiLocation> myDefaultPlaces =
-        await _localRepository.getMyDefaultPlaces();
+    List<TrufiLocation> myDefaultPlaces = await _localRepository
+        .getMyDefaultPlaces();
     if (myDefaultPlaces.isEmpty) {
       myDefaultPlaces = [
         DefaultLocation.defaultHome.initLocation,
         DefaultLocation.defaultWork.initLocation,
       ];
     }
-    emit(state.copyWith(
-      myPlaces: await _localRepository.getMyPlaces(),
-      myDefaultPlaces: myDefaultPlaces,
-      favoritePlaces: await _localRepository.getFavoritePlaces(),
-      historyPlaces: await _localRepository.getHistoryPlaces(),
-    ));
+    emit(
+      state.copyWith(
+        myPlaces: await _localRepository.getMyPlaces(),
+        myDefaultPlaces: myDefaultPlaces,
+        favoritePlaces: await _localRepository.getFavoritePlaces(),
+        historyPlaces: await _localRepository.getHistoryPlaces(),
+      ),
+    );
     await _localRepository.saveMyDefaultPlaces(state.myDefaultPlaces);
   }
 
@@ -62,10 +64,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
       if (query.isNotEmpty) {
         try {
           final results = await searchLocationService.search(query);
-          emit(state.copyWith(
-            searchResult: results,
-            isLoading: false,
-          ));
+          emit(state.copyWith(searchResult: results, isLoading: false));
         } on SearchLocationException {
           emit(state.copyWith(searchResult: [], isLoading: false));
         }
@@ -103,9 +102,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   void deleteMyPlace(TrufiLocation location) {
-    emit(state.copyWith(
-      myPlaces: _deleteItem(state.myPlaces, location),
-    ));
+    emit(state.copyWith(myPlaces: _deleteItem(state.myPlaces, location)));
     _localRepository.saveMyPlaces(state.myPlaces);
   }
 
@@ -113,9 +110,9 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   void updateMyDefaultPlace(TrufiLocation old, TrufiLocation location) {
     emit(
-      state.copyWith(myDefaultPlaces: [
-        ..._updateItem(state.myDefaultPlaces, old, location)
-      ]),
+      state.copyWith(
+        myDefaultPlaces: [..._updateItem(state.myDefaultPlaces, old, location)],
+      ),
     );
     _localRepository.saveMyDefaultPlaces(state.myDefaultPlaces);
   }
@@ -123,25 +120,30 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   // ============ History Operations ============
 
   void insertHistoryPlace(TrufiLocation location) {
-    emit(state.copyWith(historyPlaces: [
-      ..._deleteAllItem(state.historyPlaces, location),
-      location,
-    ]));
+    emit(
+      state.copyWith(
+        historyPlaces: [
+          ..._deleteAllItem(state.historyPlaces, location),
+          location,
+        ],
+      ),
+    );
     _localRepository.saveHistoryPlaces(state.historyPlaces);
   }
 
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(
-          historyPlaces: [..._updateItem(state.historyPlaces, old, location)]),
+        historyPlaces: [..._updateItem(state.historyPlaces, old, location)],
+      ),
     );
     _localRepository.saveHistoryPlaces(state.historyPlaces);
   }
 
   void deleteHistoryPlace(TrufiLocation location) {
-    emit(state.copyWith(
-      historyPlaces: _deleteItem(state.historyPlaces, location),
-    ));
+    emit(
+      state.copyWith(historyPlaces: _deleteItem(state.historyPlaces, location)),
+    );
     _localRepository.saveHistoryPlaces(state.historyPlaces);
   }
 
@@ -158,21 +160,19 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   void updateFavoritePlace(TrufiLocation old, TrufiLocation location) {
     emit(
-      state.copyWith(favoritePlaces: [
-        ..._updateItem(
-          state.favoritePlaces,
-          old,
-          location,
-        )
-      ]),
+      state.copyWith(
+        favoritePlaces: [..._updateItem(state.favoritePlaces, old, location)],
+      ),
     );
     _localRepository.saveFavoritePlaces(state.favoritePlaces);
   }
 
   void deleteFavoritePlace(TrufiLocation location) {
-    emit(state.copyWith(
-      favoritePlaces: _deleteItem(state.favoritePlaces, location),
-    ));
+    emit(
+      state.copyWith(
+        favoritePlaces: _deleteItem(state.favoritePlaces, location),
+      ),
+    );
     _localRepository.saveFavoritePlaces(state.favoritePlaces);
   }
 
@@ -189,15 +189,17 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         .toSet();
 
     locations.sort((a, b) {
-      final aIsFavorite =
-          favoriteCoords.contains('${a.latitude},${a.longitude}');
-      final bIsFavorite =
-          favoriteCoords.contains('${b.latitude},${b.longitude}');
+      final aIsFavorite = favoriteCoords.contains(
+        '${a.latitude},${a.longitude}',
+      );
+      final bIsFavorite = favoriteCoords.contains(
+        '${b.latitude},${b.longitude}',
+      );
       return aIsFavorite == bIsFavorite
           ? 0
           : aIsFavorite
-              ? -1
-              : 1;
+          ? -1
+          : 1;
     });
     return locations;
   }

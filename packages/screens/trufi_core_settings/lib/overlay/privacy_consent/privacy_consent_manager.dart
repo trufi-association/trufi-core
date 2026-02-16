@@ -6,10 +6,8 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 ///
 /// The [onAccept] callback should be called when user accepts.
 /// The [onDecline] callback should be called when user declines.
-typedef PrivacyConsentOverlayBuilder = Widget Function(
-  VoidCallback onAccept,
-  VoidCallback onDecline,
-);
+typedef PrivacyConsentOverlayBuilder =
+    Widget Function(VoidCallback onAccept, VoidCallback onDecline);
 
 /// Manages the privacy consent state for log reporting.
 ///

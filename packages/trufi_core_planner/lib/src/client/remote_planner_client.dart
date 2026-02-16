@@ -17,10 +17,8 @@ class RemotePlannerClient implements PlannerRoutingClient {
   final http.Client _httpClient;
   bool _isReady = false;
 
-  RemotePlannerClient({
-    required this.serverUrl,
-    http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+  RemotePlannerClient({required this.serverUrl, http.Client? httpClient})
+    : _httpClient = httpClient ?? http.Client();
 
   String get _baseUrl => serverUrl.endsWith('/')
       ? serverUrl.substring(0, serverUrl.length - 1)
@@ -35,8 +33,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
     if (response.statusCode == 200) {
       _isReady = true;
     } else {
-      throw Exception(
-          'Server health check failed: ${response.statusCode}');
+      throw Exception('Server health check failed: ${response.statusCode}');
     }
   }
 
@@ -104,13 +101,15 @@ class RemotePlannerClient implements PlannerRoutingClient {
     double maxDistance = 500,
     int maxResults = 10,
   }) async {
-    final response = await _httpClient.get(Uri.parse(
-      '$_baseUrl/stops/nearby'
-      '?lat=${location.latitude}'
-      '&lon=${location.longitude}'
-      '&maxDistance=$maxDistance'
-      '&maxResults=$maxResults',
-    ));
+    final response = await _httpClient.get(
+      Uri.parse(
+        '$_baseUrl/stops/nearby'
+        '?lat=${location.latitude}'
+        '&lon=${location.longitude}'
+        '&maxDistance=$maxDistance'
+        '&maxResults=$maxResults',
+      ),
+    );
     if (response.statusCode != 200) return [];
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -138,20 +137,24 @@ class RemotePlannerClient implements PlannerRoutingClient {
 
     final geometryList = data['geometry'] as List? ?? [];
     final geometry = geometryList
-        .map((p) => LatLng(
-              (p['lat'] as num).toDouble(),
-              (p['lon'] as num).toDouble(),
-            ))
+        .map(
+          (p) => LatLng(
+            (p['lat'] as num).toDouble(),
+            (p['lon'] as num).toDouble(),
+          ),
+        )
         .toList();
 
     final stopsList = data['stops'] as List? ?? [];
     final stops = stopsList
-        .map((s) => GtfsStop.fromJson({
-              'id': s['name'] as String? ?? '',
-              'name': s['name'] as String? ?? '',
-              'lat': s['lat'] as num,
-              'lon': s['lon'] as num,
-            }))
+        .map(
+          (s) => GtfsStop.fromJson({
+            'id': s['name'] as String? ?? '',
+            'name': s['name'] as String? ?? '',
+            'lat': s['lat'] as num,
+            'lon': s['lon'] as num,
+          }),
+        )
         .toList();
 
     return RouteDetail(route: route, geometry: geometry, stops: stops);

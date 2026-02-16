@@ -7,7 +7,7 @@ import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show OtpConfiguration, OtpVersion;
+    show Otp24RoutingProvider, RoutingEngineManager;
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 void main() async {
@@ -19,7 +19,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   static const _defaultCenter = LatLng(-17.3988354, -66.1626903);
   static const _otpEndpoint = 'https://otp-240.trufi-core.trufi.dev';
-  static const _otpVersion = OtpVersion.v2_4;
   static const _photonUrl = 'https://photon.komoot.io';
 
   const MyApp({super.key});
@@ -28,13 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final screen = HomeScreenTrufiScreen(
       config: HomeScreenConfig(
-        otpConfiguration: OtpConfiguration(
-          endpoint: _otpEndpoint,
-          version: _otpVersion,
-        ),
-        poiLayersManager: POILayersManager(
-          assetsBasePath: 'assets/pois',
-        ),
+        poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
       ),
     );
 
@@ -44,6 +37,11 @@ class MyApp extends StatelessWidget {
           create: (_) => MapEngineManager(
             engines: defaultMapEngines,
             defaultCenter: _defaultCenter,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RoutingEngineManager(
+            engines: [Otp24RoutingProvider(endpoint: _otpEndpoint)],
           ),
         ),
         BlocProvider(

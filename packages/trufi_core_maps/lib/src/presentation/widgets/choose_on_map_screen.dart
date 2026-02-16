@@ -21,10 +21,7 @@ class MapLocationResult {
   final double latitude;
   final double longitude;
 
-  const MapLocationResult({
-    required this.latitude,
-    required this.longitude,
-  });
+  const MapLocationResult({required this.latitude, required this.longitude});
 }
 
 /// Configuration for the ChooseOnMapScreen appearance.
@@ -186,14 +183,13 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       body: Stack(
         children: [
           // Map using the current engine
-          mapEngineManager.currentEngine.buildMap(
-            controller: _mapController!,
-          ),
+          mapEngineManager.currentEngine.buildMap(controller: _mapController!),
 
           // Center marker with modern design
           Center(
             child: IgnorePointer(
-              child: widget.configuration.centerMarker ??
+              child:
+                  widget.configuration.centerMarker ??
                   _DefaultCenterMarker(colorScheme: colorScheme),
             ),
           ),
@@ -360,7 +356,9 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
   }
 
   void _openMapTypeSettings(
-      BuildContext context, MapEngineManager mapEngineManager) {
+    BuildContext context,
+    MapEngineManager mapEngineManager,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -432,10 +430,7 @@ class _CoordinatesCard extends StatelessWidget {
   final double latitude;
   final double longitude;
 
-  const _CoordinatesCard({
-    required this.latitude,
-    required this.longitude,
-  });
+  const _CoordinatesCard({required this.latitude, required this.longitude});
 
   @override
   Widget build(BuildContext context) {

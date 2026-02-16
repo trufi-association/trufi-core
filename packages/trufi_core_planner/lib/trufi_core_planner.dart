@@ -1,6 +1,6 @@
 /// Core GTFS parsing and routing library for Trufi.
 /// Pure Dart implementation without Flutter dependencies.
-library trufi_core_planner;
+library;
 
 // Models
 export 'src/models/gtfs_agency.dart';

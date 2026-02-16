@@ -91,8 +91,9 @@ class NominatimSearchService implements SearchLocationService {
       queryParams['bounded'] = '0'; // Prefer but don't restrict
     }
 
-    final uri =
-        Uri.parse('$baseUrl/search').replace(queryParameters: queryParams);
+    final uri = Uri.parse(
+      '$baseUrl/search',
+    ).replace(queryParameters: queryParams);
 
     try {
       final response = await _client.get(
@@ -112,7 +113,10 @@ class NominatimSearchService implements SearchLocationService {
       return json.map((item) => _parseResult(item)).toList();
     } catch (e) {
       if (e is SearchLocationException) rethrow;
-      throw SearchLocationException('Nominatim search failed: $e', originalError: e);
+      throw SearchLocationException(
+        'Nominatim search failed: $e',
+        originalError: e,
+      );
     }
   }
 
@@ -129,8 +133,9 @@ class NominatimSearchService implements SearchLocationService {
       queryParams['accept-language'] = language!;
     }
 
-    final uri =
-        Uri.parse('$baseUrl/reverse').replace(queryParameters: queryParams);
+    final uri = Uri.parse(
+      '$baseUrl/reverse',
+    ).replace(queryParameters: queryParams);
 
     try {
       final response = await _client.get(
@@ -168,7 +173,8 @@ class NominatimSearchService implements SearchLocationService {
 
     if (address != null) {
       // Try to get a good name
-      name = address['name'] as String? ??
+      name =
+          address['name'] as String? ??
           address['amenity'] as String? ??
           address['shop'] as String? ??
           address['tourism'] as String? ??
@@ -184,10 +190,12 @@ class NominatimSearchService implements SearchLocationService {
         parts.add(houseNumber != null ? '$road $houseNumber' : road);
       }
 
-      final suburb = address['suburb'] as String? ?? address['neighbourhood'] as String?;
+      final suburb =
+          address['suburb'] as String? ?? address['neighbourhood'] as String?;
       if (suburb != null) parts.add(suburb);
 
-      final city = address['city'] as String? ??
+      final city =
+          address['city'] as String? ??
           address['town'] as String? ??
           address['village'] as String?;
       if (city != null) parts.add(city);

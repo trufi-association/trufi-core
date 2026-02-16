@@ -10,8 +10,11 @@ class NotificationList extends StatelessWidget {
   final void Function(TrufiNotification notification)? onNotificationTap;
 
   /// Callback when action button is tapped (e.g., deep link)
-  final void Function(TrufiNotification notification, NotificationAction action)?
-      onActionTap;
+  final void Function(
+    TrufiNotification notification,
+    NotificationAction action,
+  )?
+  onActionTap;
 
   /// Widget to show when there are no notifications
   final Widget? emptyWidget;
@@ -105,65 +108,60 @@ class NotificationList extends StatelessWidget {
           SliverPadding(
             padding: padding,
             sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (index == notifications.length) {
-                    // Load more indicator
-                    if (manager.hasMore) {
-                      // Trigger load more
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        manager.loadMore();
-                      });
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index == notifications.length) {
+                  // Load more indicator
+                  if (manager.hasMore) {
+                    // Trigger load more
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      manager.loadMore();
+                    });
+                    return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         ),
-                      );
-                    }
-                    return null;
-                  }
-
-                  final notification = notifications[index];
-                  return Column(
-                    children: [
-                      NotificationTile(
-                        notification: notification,
-                        onTap: () {
-                          // Mark as read on tap
-                          if (!notification.isRead) {
-                            manager.markAsRead(notification.id);
-                          }
-                          onNotificationTap?.call(notification);
-                        },
-                        onDismiss: () {
-                          manager.deleteNotification(notification.id);
-                        },
                       ),
-                      if (index < notifications.length - 1)
-                        Divider(
-                          height: 1,
-                          indent: 76,
-                          color: colorScheme.outlineVariant.withAlpha(100),
-                        ),
-                    ],
-                  );
-                },
-                childCount: notifications.length + (manager.hasMore ? 1 : 0),
-              ),
+                    );
+                  }
+                  return null;
+                }
+
+                final notification = notifications[index];
+                return Column(
+                  children: [
+                    NotificationTile(
+                      notification: notification,
+                      onTap: () {
+                        // Mark as read on tap
+                        if (!notification.isRead) {
+                          manager.markAsRead(notification.id);
+                        }
+                        onNotificationTap?.call(notification);
+                      },
+                      onDismiss: () {
+                        manager.deleteNotification(notification.id);
+                      },
+                    ),
+                    if (index < notifications.length - 1)
+                      Divider(
+                        height: 1,
+                        indent: 76,
+                        color: colorScheme.outlineVariant.withAlpha(100),
+                      ),
+                  ],
+                );
+              }, childCount: notifications.length + (manager.hasMore ? 1 : 0)),
             ),
           ),
 
           // Loading indicator for initial load
           if (manager.isLoading && notifications.isEmpty)
             const SliverFillRemaining(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             ),
         ],
       ),

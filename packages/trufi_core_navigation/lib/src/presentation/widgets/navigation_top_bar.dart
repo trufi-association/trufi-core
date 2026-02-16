@@ -56,14 +56,18 @@ class NavigationTopBar extends StatelessWidget {
                 elevation: 2,
                 shadowColor: Colors.black26,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   child: Row(
                     children: [
                       // Route badge
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: effectiveRouteColor,
                           borderRadius: BorderRadius.circular(10),
@@ -74,7 +78,9 @@ class NavigationTopBar extends StatelessWidget {
                             if (modeIcon != null) ...[
                               IconTheme(
                                 data: IconThemeData(
-                                    color: effectiveTextColor, size: 16),
+                                  color: effectiveTextColor,
+                                  size: 16,
+                                ),
                                 child: modeIcon!,
                               ),
                               const SizedBox(width: 4),

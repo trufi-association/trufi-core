@@ -15,17 +15,11 @@ class TrufiLatLng extends Equatable {
   }
 
   factory TrufiLatLng.fromJson(Map<String, dynamic> json) {
-    return TrufiLatLng(
-      json["latitude"] as double,
-      json["longitude"] as double,
-    );
+    return TrufiLatLng(json["latitude"] as double, json["longitude"] as double);
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      "latitude": latitude,
-      "longitude": longitude,
-    };
+    return <String, dynamic>{"latitude": latitude, "longitude": longitude};
   }
 
   LatLng toLatLng() => LatLng(latitude, longitude);

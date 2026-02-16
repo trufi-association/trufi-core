@@ -75,10 +75,8 @@ class AppOverlayEntry {
   /// Unique key for this entry
   final UniqueKey key;
 
-  AppOverlayEntry({
-    required this.child,
-    this.config = const OverlayConfig(),
-  }) : key = UniqueKey();
+  AppOverlayEntry({required this.child, this.config = const OverlayConfig()})
+    : key = UniqueKey();
 }
 
 /// Manages a stack of overlay widgets and AppOverlayManagers.
@@ -106,11 +104,10 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
   final List<AppOverlayManager> _managers;
 
   OverlayManager({List<AppOverlayManager> managers = const []})
-      : _managers = managers;
+    : _managers = managers;
 
   /// The registered AppOverlayManagers
-  List<AppOverlayManager> get managers =>
-      List.unmodifiable(_managers);
+  List<AppOverlayManager> get managers => List.unmodifiable(_managers);
 
   /// Get a manager by type.
   ///
@@ -163,7 +160,10 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
   }
 
   /// Push a widget with default config
-  void pushWidget(Widget child, {OverlayConfig config = const OverlayConfig()}) {
+  void pushWidget(
+    Widget child, {
+    OverlayConfig config = const OverlayConfig(),
+  }) {
     push(AppOverlayEntry(child: child, config: config));
   }
 
@@ -215,14 +215,16 @@ class OverlayManager extends ChangeNotifier implements OverlayService {
     required String id,
     bool dismissible = false,
   }) {
-    push(AppOverlayEntry(
-      child: child,
-      config: OverlayConfig(
-        type: OverlayType.fullScreen,
-        dismissible: dismissible,
-        id: id,
+    push(
+      AppOverlayEntry(
+        child: child,
+        config: OverlayConfig(
+          type: OverlayType.fullScreen,
+          dismissible: dismissible,
+          id: id,
+        ),
       ),
-    ));
+    );
   }
 
   @override

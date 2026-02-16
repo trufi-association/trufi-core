@@ -109,7 +109,7 @@ class TrufiLocation implements TrufiPlace, ITrufiLocation {
       "latitude": latitude,
       "longitude": longitude,
       "type": type,
-      "address": address ?? ''
+      "address": address ?? '',
     };
   }
 
@@ -138,7 +138,9 @@ class TrufiLocation implements TrufiPlace, ITrufiLocation {
   }
 
   static TrufiLatLng centerLocation(
-      TrufiLatLng location1, TrufiLatLng location2) {
+    TrufiLatLng location1,
+    TrufiLatLng location2,
+  ) {
     return TrufiLatLng(
       (location1.latitude + location2.latitude) / 2,
       (location1.longitude + location2.longitude) / 2,
@@ -204,12 +206,7 @@ class LevenshteinObject<T> {
 
 /// Location model from geocoding responses.
 class LocationModel {
-  LocationModel({
-    this.geometry,
-    this.type,
-    this.name,
-    this.street,
-  });
+  LocationModel({this.geometry, this.type, this.name, this.street});
 
   Geometry? geometry;
   String? type;
@@ -249,31 +246,26 @@ class LocationModel {
 
 /// Geometry from GeoJSON.
 class Geometry {
-  Geometry({
-    this.coordinates,
-    this.type,
-  });
+  Geometry({this.coordinates, this.type});
 
   List<double>? coordinates;
   String? type;
 
   factory Geometry.fromJson(Map<String, dynamic> json) => Geometry(
-        coordinates: List<double>.from(
-            (json["coordinates"] as List).map((x) => x.toDouble())),
-        type: json["type"].toString(),
-      );
+    coordinates: List<double>.from(
+      (json["coordinates"] as List).map((x) => x.toDouble()),
+    ),
+    type: json["type"].toString(),
+  );
 
   Map<String, dynamic> toJson() => {
-        "coordinates": List<dynamic>.from((coordinates ?? []).map((x) => x)),
-        "type": type,
-      };
+    "coordinates": List<dynamic>.from((coordinates ?? []).map((x) => x)),
+    "type": type,
+  };
 }
 
 /// Default location types.
-enum DefaultLocation {
-  defaultHome,
-  defaultWork,
-}
+enum DefaultLocation { defaultHome, defaultWork }
 
 /// Extension for default location initialization.
 extension DefaultLocationExtension on DefaultLocation {
@@ -294,7 +286,7 @@ extension DefaultLocationExtension on DefaultLocation {
 
   static final keys = <DefaultLocation, String>{
     DefaultLocation.defaultHome: 'Key-Default-Home',
-    DefaultLocation.defaultWork: 'Key-Default-Work'
+    DefaultLocation.defaultWork: 'Key-Default-Work',
   };
 
   TrufiLocation get initLocation =>

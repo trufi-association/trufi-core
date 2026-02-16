@@ -47,10 +47,7 @@ void main() {
         localizationsDelegates: POILayersLocalizations.localizationsDelegates,
         supportedLocales: POILayersLocalizations.supportedLocales,
         home: Scaffold(
-          body: POIDetailPanel(
-            poi: testPOI,
-            onClose: () {},
-          ),
+          body: POIDetailPanel(poi: testPOI, onClose: () {}),
         ),
       ),
     );
@@ -61,8 +58,9 @@ void main() {
     expect(find.byIcon(Icons.close), findsOneWidget);
   });
 
-  testWidgets('POISelectionSheet renders correctly',
-      (WidgetTester tester) async {
+  testWidgets('POISelectionSheet renders correctly', (
+    WidgetTester tester,
+  ) async {
     final testPOIs = [
       POI(
         id: 'test-1',
@@ -85,10 +83,7 @@ void main() {
         localizationsDelegates: POILayersLocalizations.localizationsDelegates,
         supportedLocales: POILayersLocalizations.supportedLocales,
         home: Scaffold(
-          body: POISelectionSheet(
-            pois: testPOIs,
-            onPOISelected: (_) {},
-          ),
+          body: POISelectionSheet(pois: testPOIs, onPOISelected: (_) {}),
         ),
       ),
     );

@@ -2,12 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 /// Types of saved places
-enum SavedPlaceType {
-  home,
-  work,
-  other,
-  history,
-}
+enum SavedPlaceType { home, work, other, history }
 
 /// A saved place with additional metadata for display and storage.
 class SavedPlace extends Equatable {
@@ -133,7 +128,10 @@ class SavedPlace extends Equatable {
       latitude: json['latitude'] as double,
       longitude: json['longitude'] as double,
       type: SavedPlaceType.values.firstWhere(
-        (e) => e.name == json['type'] || (json['type'] == 'favorite' && e == SavedPlaceType.other) || (json['type'] == 'others' && e == SavedPlaceType.other),
+        (e) =>
+            e.name == json['type'] ||
+            (json['type'] == 'favorite' && e == SavedPlaceType.other) ||
+            (json['type'] == 'others' && e == SavedPlaceType.other),
         orElse: () => SavedPlaceType.other,
       ),
       iconName: json['iconName'] as String?,
@@ -160,14 +158,14 @@ class SavedPlace extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        address,
-        latitude,
-        longitude,
-        type,
-        iconName,
-        createdAt,
-        lastUsedAt,
-      ];
+    id,
+    name,
+    address,
+    latitude,
+    longitude,
+    type,
+    iconName,
+    createdAt,
+    lastUsedAt,
+  ];
 }

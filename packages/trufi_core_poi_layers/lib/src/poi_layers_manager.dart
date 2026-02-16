@@ -79,12 +79,10 @@ class POILayersManager extends ChangeNotifier {
   ///
   /// Default enabled subcategories are determined by `defaultActive: true` in
   /// the metadata.json file for each subcategory.
-  POILayersManager({
-    required String assetsBasePath,
-    StorageService? storage,
-  })  : _loader = GeoJSONLoader(assetsBasePath: assetsBasePath),
-        _storage = storage ?? SharedPreferencesStorage(),
-        _enabledSubcategories = {};
+  POILayersManager({required String assetsBasePath, StorageService? storage})
+    : _loader = GeoJSONLoader(assetsBasePath: assetsBasePath),
+      _storage = storage ?? SharedPreferencesStorage(),
+      _enabledSubcategories = {};
 
   /// Whether the manager has been initialized
   bool get isInitialized => _initialized;
@@ -205,9 +203,11 @@ class POILayersManager extends ChangeNotifier {
 
       // Load all categories in parallel
       final loadingFutures = _metadata!.categories
-          .map((category) => _loader
-              .loadCategory(category)
-              .then((pois) => MapEntry(category, pois)))
+          .map(
+            (category) => _loader
+                .loadCategory(category)
+                .then((pois) => MapEntry(category, pois)),
+          )
           .toList();
 
       final loadedData = await Future.wait(loadingFutures);
@@ -230,10 +230,12 @@ class POILayersManager extends ChangeNotifier {
       _currentController = mapController;
 
       debugPrint(
-          '✅ POILayersManager initialized with ${_layers.length} layers');
+        '✅ POILayersManager initialized with ${_layers.length} layers',
+      );
       for (final layer in _layers) {
         debugPrint(
-            '  - ${layer.category.name}: ${layer.poiCount} POIs, visible: ${layer.visible}');
+          '  - ${layer.category.name}: ${layer.poiCount} POIs, visible: ${layer.visible}',
+        );
       }
 
       notifyListeners();
@@ -329,9 +331,7 @@ class POILayersManager extends ChangeNotifier {
 
   /// Convert enabled subcategories to JSON-serializable format.
   Map<String, dynamic> _toJson(Map<String, Set<String>> data) {
-    return {
-      for (final entry in data.entries) entry.key: entry.value.toList(),
-    };
+    return {for (final entry in data.entries) entry.key: entry.value.toList()};
   }
 
   /// Parse enabled subcategories from JSON.
@@ -351,7 +351,10 @@ class POILayersManager extends ChangeNotifier {
 
   /// Toggle a subcategory on/off within a category
   void toggleSubcategory(
-      String categoryName, String subcategory, bool enabled) {
+    String categoryName,
+    String subcategory,
+    bool enabled,
+  ) {
     final currentSubcats = _enabledSubcategories[categoryName] ?? <String>{};
     final updatedSubcats = Set<String>.from(currentSubcats);
 
@@ -371,7 +374,10 @@ class POILayersManager extends ChangeNotifier {
 
   /// Toggle a subcategory using category config
   void toggleSubcategoryForCategory(
-      POICategoryConfig category, String subcategory, bool enabled) {
+    POICategoryConfig category,
+    String subcategory,
+    bool enabled,
+  ) {
     toggleSubcategory(category.name, subcategory, enabled);
   }
 
@@ -431,8 +437,9 @@ class POILayersManager extends ChangeNotifier {
     final categoryName = parts[1];
     final poiId = parts.sublist(2).join('_');
 
-    final layer =
-        _layers.where((l) => l.category.name == categoryName).firstOrNull;
+    final layer = _layers
+        .where((l) => l.category.name == categoryName)
+        .firstOrNull;
     if (layer == null) return null;
 
     return layer.pois.where((p) => p.id == poiId).firstOrNull;
@@ -476,8 +483,9 @@ class POILayersManager extends ChangeNotifier {
 
   /// Update the highlight state for a POI's polygon
   void _updatePOIHighlight(POI poi, bool highlighted) {
-    final layer =
-        _layers.where((l) => l.category.name == poi.category.name).firstOrNull;
+    final layer = _layers
+        .where((l) => l.category.name == poi.category.name)
+        .firstOrNull;
     if (layer != null) {
       layer.highlightedPOI = highlighted ? poi : null;
     }
@@ -523,7 +531,9 @@ class POILayersManager extends ChangeNotifier {
 
   /// Get subcategories for a specific category by name.
   Set<String> getSubcategoriesForCategory(String categoryName) {
-    final layer = _layers.where((l) => l.category.name == categoryName).firstOrNull;
+    final layer = _layers
+        .where((l) => l.category.name == categoryName)
+        .firstOrNull;
     if (layer == null) return {};
 
     return layer.pois

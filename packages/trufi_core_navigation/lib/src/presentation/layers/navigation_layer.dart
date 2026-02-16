@@ -6,11 +6,7 @@ import '../../models/navigation_state.dart';
 
 /// Layer for rendering navigation elements on the map.
 class NavigationLayer extends TrufiLayer {
-  NavigationLayer(super.controller)
-      : super(
-          id: 'navigation',
-          layerLevel: 100,
-        );
+  NavigationLayer(super.controller) : super(id: 'navigation', layerLevel: 100);
 
   /// Update the layer with current navigation state.
   void updateNavigation(NavigationState state) {
@@ -36,7 +32,12 @@ class NavigationLayer extends TrufiLayer {
         : 0;
 
     // Draw route lines
-    _drawRouteLinesWithProgress(route, currentLegIndex, currentStopIndex, userPosition);
+    _drawRouteLinesWithProgress(
+      route,
+      currentLegIndex,
+      currentStopIndex,
+      userPosition,
+    );
 
     // Draw user location marker
     _drawUserLocation(state);
@@ -60,14 +61,16 @@ class NavigationLayer extends TrufiLayer {
     final userPosition = LatLng(location.latitude, location.longitude);
 
     // Add user location marker
-    addMarker(TrufiMarker(
-      id: 'user_location',
-      position: userPosition,
-      widget: _UserLocationMarker(isGpsWeak: state.isGpsWeak),
-      size: const Size(48, 48),
-      layerLevel: 100,
-      imageCacheKey: 'nav_user_location_${state.isGpsWeak}',
-    ));
+    addMarker(
+      TrufiMarker(
+        id: 'user_location',
+        position: userPosition,
+        widget: _UserLocationMarker(isGpsWeak: state.isGpsWeak),
+        size: const Size(48, 48),
+        layerLevel: 100,
+        imageCacheKey: 'nav_user_location_${state.isGpsWeak}',
+      ),
+    );
   }
 
   void _drawRouteLinesWithProgress(
@@ -183,14 +186,16 @@ class NavigationLayer extends TrufiLayer {
 
       if (isCompletelyPassed) {
         // Entire leg is passed - draw in gray
-        addLine(TrufiLine(
-          id: 'leg-$i',
-          position: leg.points,
-          color: Colors.grey.withValues(alpha: 0.5),
-          lineWidth: 4,
-          activeDots: false,
-          layerLevel: 0,
-        ));
+        addLine(
+          TrufiLine(
+            id: 'leg-$i',
+            position: leg.points,
+            color: Colors.grey.withValues(alpha: 0.5),
+            lineWidth: 4,
+            activeDots: false,
+            layerLevel: 0,
+          ),
+        );
       } else if (isCurrentLeg && userPosition != null) {
         // Current leg - split at user position
         final splitIndex = _findClosestPointIndex(leg.points, userPosition);
@@ -198,38 +203,44 @@ class NavigationLayer extends TrufiLayer {
         // Draw passed portion (gray)
         if (splitIndex > 0) {
           final passedPoints = leg.points.sublist(0, splitIndex + 1);
-          addLine(TrufiLine(
-            id: 'leg-$i-passed',
-            position: passedPoints,
-            color: Colors.grey.withValues(alpha: 0.5),
-            lineWidth: 4,
-            activeDots: false,
-            layerLevel: 0,
-          ));
+          addLine(
+            TrufiLine(
+              id: 'leg-$i-passed',
+              position: passedPoints,
+              color: Colors.grey.withValues(alpha: 0.5),
+              lineWidth: 4,
+              activeDots: false,
+              layerLevel: 0,
+            ),
+          );
         }
 
         // Draw remaining portion (active color)
         if (splitIndex < leg.points.length - 1) {
           final remainingPoints = leg.points.sublist(splitIndex);
-          addLine(TrufiLine(
-            id: 'leg-$i-remaining',
-            position: remainingPoints,
+          addLine(
+            TrufiLine(
+              id: 'leg-$i-remaining',
+              position: remainingPoints,
+              color: activeColor,
+              lineWidth: lineWidth,
+              activeDots: useDots,
+              layerLevel: 1,
+            ),
+          );
+        }
+      } else {
+        // Future leg - draw in active color
+        addLine(
+          TrufiLine(
+            id: 'leg-$i',
+            position: leg.points,
             color: activeColor,
             lineWidth: lineWidth,
             activeDots: useDots,
             layerLevel: 1,
-          ));
-        }
-      } else {
-        // Future leg - draw in active color
-        addLine(TrufiLine(
-          id: 'leg-$i',
-          position: leg.points,
-          color: activeColor,
-          lineWidth: lineWidth,
-          activeDots: useDots,
-          layerLevel: 1,
-        ));
+          ),
+        );
       }
     }
 
@@ -237,14 +248,16 @@ class NavigationLayer extends TrufiLayer {
     if (route.legs.isNotEmpty) {
       final firstLegPoints = route.legs.first.points;
       if (firstLegPoints.isNotEmpty) {
-        addMarker(TrufiMarker(
-          id: 'origin-marker',
-          position: firstLegPoints.first,
-          widget: const _OriginMarkerWidget(),
-          size: const Size(24, 24),
-          layerLevel: 3,
-          imageCacheKey: 'nav_origin_marker',
-        ));
+        addMarker(
+          TrufiMarker(
+            id: 'origin-marker',
+            position: firstLegPoints.first,
+            widget: const _OriginMarkerWidget(),
+            size: const Size(24, 24),
+            layerLevel: 3,
+            imageCacheKey: 'nav_origin_marker',
+          ),
+        );
       }
     }
 
@@ -252,15 +265,17 @@ class NavigationLayer extends TrufiLayer {
     if (route.legs.isNotEmpty) {
       final lastLegPoints = route.legs.last.points;
       if (lastLegPoints.isNotEmpty) {
-        addMarker(TrufiMarker(
-          id: 'destination-marker',
-          position: lastLegPoints.last,
-          widget: const _DestinationMarkerWidget(),
-          size: const Size(32, 32),
-          alignment: Alignment.topCenter,
-          layerLevel: 3,
-          imageCacheKey: 'nav_destination_marker',
-        ));
+        addMarker(
+          TrufiMarker(
+            id: 'destination-marker',
+            position: lastLegPoints.last,
+            widget: const _DestinationMarkerWidget(),
+            size: const Size(32, 32),
+            alignment: Alignment.topCenter,
+            layerLevel: 3,
+            imageCacheKey: 'nav_destination_marker',
+          ),
+        );
       }
     }
   }
@@ -309,25 +324,29 @@ class NavigationLayer extends TrufiLayer {
     // Draw passed route section (gray/dimmed)
     if (splitIndex > 0) {
       final passedPoints = geometry.sublist(0, splitIndex + 1);
-      addLine(TrufiLine(
-        id: 'passed_route',
-        position: passedPoints,
-        color: Colors.grey.withValues(alpha: 0.5),
-        lineWidth: 4,
-        layerLevel: 1,
-      ));
+      addLine(
+        TrufiLine(
+          id: 'passed_route',
+          position: passedPoints,
+          color: Colors.grey.withValues(alpha: 0.5),
+          lineWidth: 4,
+          layerLevel: 1,
+        ),
+      );
     }
 
     // Draw remaining route section (highlighted)
     if (splitIndex < geometry.length - 1) {
       final remainingPoints = geometry.sublist(splitIndex);
-      addLine(TrufiLine(
-        id: 'remaining_route',
-        position: remainingPoints,
-        color: routeColor,
-        lineWidth: 6,
-        layerLevel: 2,
-      ));
+      addLine(
+        TrufiLine(
+          id: 'remaining_route',
+          position: remainingPoints,
+          color: routeColor,
+          lineWidth: 6,
+          layerLevel: 2,
+        ),
+      );
     }
   }
 
@@ -341,9 +360,7 @@ class NavigationLayer extends TrufiLayer {
 class _UserLocationMarker extends StatelessWidget {
   final bool isGpsWeak;
 
-  const _UserLocationMarker({
-    this.isGpsWeak = false,
-  });
+  const _UserLocationMarker({this.isGpsWeak = false});
 
   @override
   Widget build(BuildContext context) {
@@ -375,14 +392,12 @@ class _UserLocationMarker extends StatelessWidget {
           decoration: BoxDecoration(
             color: isGpsWeak ? Colors.orange : Colors.blue,
             shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white,
-              width: 3,
-            ),
+            border: Border.all(color: Colors.white, width: 3),
             boxShadow: [
               BoxShadow(
-                color: (isGpsWeak ? Colors.orange : Colors.blue)
-                    .withValues(alpha: 0.4),
+                color: (isGpsWeak ? Colors.orange : Colors.blue).withValues(
+                  alpha: 0.4,
+                ),
                 blurRadius: 8,
                 spreadRadius: 2,
               ),
@@ -434,11 +449,7 @@ class _DestinationMarkerWidget extends StatelessWidget {
       color: _color,
       size: 32,
       shadows: [
-        Shadow(
-          color: Colors.black38,
-          blurRadius: 4,
-          offset: Offset(0, 2),
-        ),
+        Shadow(color: Colors.black38, blurRadius: 4, offset: Offset(0, 2)),
       ],
     );
   }

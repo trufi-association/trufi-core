@@ -113,14 +113,13 @@ class NotificationSettings {
   }
 
   Map<String, dynamic> toJson() => {
-        'enabled': enabled,
-        'showInApp': showInApp,
-        'soundEnabled': soundEnabled,
-        'vibrationEnabled': vibrationEnabled,
-        if (enabledCategories != null)
-          'enabledCategories': enabledCategories!.toList(),
-        if (quietHoursStart != null)
-          'quietHoursStart': quietHoursStart!.inMinutes,
-        if (quietHoursEnd != null) 'quietHoursEnd': quietHoursEnd!.inMinutes,
-      };
+    'enabled': enabled,
+    'showInApp': showInApp,
+    'soundEnabled': soundEnabled,
+    'vibrationEnabled': vibrationEnabled,
+    if (enabledCategories != null)
+      'enabledCategories': enabledCategories!.toList(),
+    if (quietHoursStart != null) 'quietHoursStart': quietHoursStart!.inMinutes,
+    if (quietHoursEnd != null) 'quietHoursEnd': quietHoursEnd!.inMinutes,
+  };
 }

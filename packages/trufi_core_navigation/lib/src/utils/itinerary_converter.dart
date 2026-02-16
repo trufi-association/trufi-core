@@ -34,17 +34,19 @@ class ItineraryConverter {
       final isWalking = leg.transportMode == routing.TransportMode.walk;
       final isBicycle = leg.transportMode == routing.TransportMode.bicycle;
 
-      navigationLegs.add(NavigationLeg(
-        id: 'leg-$i',
-        points: leg.decodedPoints,
-        isTransit: leg.transitLeg,
-        isWalking: isWalking,
-        isBicycle: isBicycle,
-        color: legColor,
-        routeName: leg.shortName ?? leg.route?.shortName,
-        modeName: leg.mode,
-        duration: leg.duration,
-      ));
+      navigationLegs.add(
+        NavigationLeg(
+          id: 'leg-$i',
+          points: leg.decodedPoints,
+          isTransit: leg.transitLeg,
+          isWalking: isWalking,
+          isBicycle: isBicycle,
+          color: legColor,
+          routeName: leg.shortName ?? leg.route?.shortName,
+          modeName: leg.mode,
+          duration: leg.duration,
+        ),
+      );
     }
 
     // Get first transit leg for route info
@@ -66,18 +68,22 @@ class ItineraryConverter {
       final firstLeg = itinerary.legs.first;
       final fromPlace = firstLeg.fromPlace;
       if (fromPlace != null) {
-        stops.add(NavigationStop(
-          id: 'stop-$stopIndex',
-          name: fromPlace.name.isNotEmpty ? fromPlace.name : 'Origin',
-          position: LatLng(fromPlace.lat, fromPlace.lon),
-        ));
+        stops.add(
+          NavigationStop(
+            id: 'stop-$stopIndex',
+            name: fromPlace.name.isNotEmpty ? fromPlace.name : 'Origin',
+            position: LatLng(fromPlace.lat, fromPlace.lon),
+          ),
+        );
         stopIndex++;
       } else if (firstLeg.decodedPoints.isNotEmpty) {
-        stops.add(NavigationStop(
-          id: 'stop-$stopIndex',
-          name: 'Origin',
-          position: firstLeg.decodedPoints.first,
-        ));
+        stops.add(
+          NavigationStop(
+            id: 'stop-$stopIndex',
+            name: 'Origin',
+            position: firstLeg.decodedPoints.first,
+          ),
+        );
         stopIndex++;
       }
     }
@@ -89,11 +95,13 @@ class ItineraryConverter {
       // Add intermediate stops from transit legs
       if (leg.transitLeg && leg.intermediatePlaces != null) {
         for (final place in leg.intermediatePlaces!) {
-          stops.add(NavigationStop(
-            id: 'stop-$stopIndex',
-            name: place.name,
-            position: LatLng(place.lat, place.lon),
-          ));
+          stops.add(
+            NavigationStop(
+              id: 'stop-$stopIndex',
+              name: place.name,
+              position: LatLng(place.lat, place.lon),
+            ),
+          );
           stopIndex++;
         }
       }
@@ -103,18 +111,22 @@ class ItineraryConverter {
       if (i < itinerary.legs.length - 1) {
         final toPlace = leg.toPlace;
         if (toPlace != null) {
-          stops.add(NavigationStop(
-            id: 'stop-$stopIndex',
-            name: toPlace.name.isNotEmpty ? toPlace.name : 'Transfer',
-            position: LatLng(toPlace.lat, toPlace.lon),
-          ));
+          stops.add(
+            NavigationStop(
+              id: 'stop-$stopIndex',
+              name: toPlace.name.isNotEmpty ? toPlace.name : 'Transfer',
+              position: LatLng(toPlace.lat, toPlace.lon),
+            ),
+          );
           stopIndex++;
         } else if (leg.decodedPoints.isNotEmpty) {
-          stops.add(NavigationStop(
-            id: 'stop-$stopIndex',
-            name: 'Transfer',
-            position: leg.decodedPoints.last,
-          ));
+          stops.add(
+            NavigationStop(
+              id: 'stop-$stopIndex',
+              name: 'Transfer',
+              position: leg.decodedPoints.last,
+            ),
+          );
           stopIndex++;
         }
       }
@@ -125,17 +137,21 @@ class ItineraryConverter {
       final lastLeg = itinerary.legs.last;
       final toPlace = lastLeg.toPlace;
       if (toPlace != null) {
-        stops.add(NavigationStop(
-          id: 'stop-$stopIndex',
-          name: toPlace.name.isNotEmpty ? toPlace.name : 'Destination',
-          position: LatLng(toPlace.lat, toPlace.lon),
-        ));
+        stops.add(
+          NavigationStop(
+            id: 'stop-$stopIndex',
+            name: toPlace.name.isNotEmpty ? toPlace.name : 'Destination',
+            position: LatLng(toPlace.lat, toPlace.lon),
+          ),
+        );
       } else if (lastLeg.decodedPoints.isNotEmpty) {
-        stops.add(NavigationStop(
-          id: 'stop-$stopIndex',
-          name: 'Destination',
-          position: lastLeg.decodedPoints.last,
-        ));
+        stops.add(
+          NavigationStop(
+            id: 'stop-$stopIndex',
+            name: 'Destination',
+            position: lastLeg.decodedPoints.last,
+          ),
+        );
       }
     }
 

@@ -13,10 +13,8 @@ class HttpNotificationService implements NotificationService {
 
   bool _isDisposed = false;
 
-  HttpNotificationService({
-    required this.config,
-    http.Client? client,
-  }) : _client = client ?? http.Client();
+  HttpNotificationService({required this.config, http.Client? client})
+    : _client = client ?? http.Client();
 
   Future<Map<String, String>> _getHeaders() async {
     final headers = <String, String>{
@@ -66,8 +64,11 @@ class HttpNotificationService implements NotificationService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final notifications = (data['notifications'] as List<dynamic>?)
-                ?.map((e) => TrufiNotification.fromJson(e as Map<String, dynamic>))
+        final notifications =
+            (data['notifications'] as List<dynamic>?)
+                ?.map(
+                  (e) => TrufiNotification.fromJson(e as Map<String, dynamic>),
+                )
                 .toList() ??
             [];
 
@@ -176,9 +177,7 @@ class HttpNotificationService implements NotificationService {
       final response = await _client.post(
         _buildUri('/devices/unregister'),
         headers: await _getHeaders(),
-        body: jsonEncode({
-          if (deviceId != null) 'deviceId': deviceId,
-        }),
+        body: jsonEncode({if (deviceId != null) 'deviceId': deviceId}),
       );
 
       return response.statusCode == 200 || response.statusCode == 204;

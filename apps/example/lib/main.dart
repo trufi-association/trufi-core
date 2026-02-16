@@ -54,11 +54,11 @@ final List<IRoutingProvider> _routingEngines = [
       ),
     ),
   // Online routing via OTP (dev servers)
-  const Otp28RoutingProvider(
+  Otp28RoutingProvider(
     endpoint: 'https://otp281.trufi.dev',
     displayName: 'OTP 2.8.1',
   ),
-  const Otp15RoutingProvider(
+  Otp15RoutingProvider(
     endpoint: 'https://otp150.trufi.dev',
     displayName: 'OTP 1.5.0',
   ),

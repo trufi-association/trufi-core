@@ -74,9 +74,7 @@ class PrivacyConsentSheet extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: PointerInterceptor(
         child: Container(
-          constraints: BoxConstraints(
-            maxHeight: screenSize.height * 0.9,
-          ),
+          constraints: BoxConstraints(maxHeight: screenSize.height * 0.9),
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -90,7 +88,11 @@ class PrivacyConsentSheet extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: _buildContent(context, showCloseButton: false, showDragHandle: true),
+            child: _buildContent(
+              context,
+              showCloseButton: false,
+              showDragHandle: true,
+            ),
           ),
         ),
       ),
@@ -246,9 +248,7 @@ class _PrivacyInfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withAlpha(77),
-        ),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +265,11 @@ class _PrivacyInfoCard extends StatelessWidget {
                     color: Colors.blue.withAlpha(38),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.info_outline_rounded, color: Colors.blue, size: 22),
+                  child: const Icon(
+                    Icons.info_outline_rounded,
+                    color: Colors.blue,
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -313,10 +317,7 @@ class _InfoItem extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const _InfoItem({
-    required this.icon,
-    required this.text,
-  });
+  const _InfoItem({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -333,11 +334,7 @@ class _InfoItem extends StatelessWidget {
             color: colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            size: 18,
-            color: colorScheme.onSurfaceVariant,
-          ),
+          child: Icon(icon, size: 18, color: colorScheme.onSurfaceVariant),
         ),
         const SizedBox(width: 12),
         Expanded(

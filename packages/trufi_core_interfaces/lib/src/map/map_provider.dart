@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'map_engine.dart';
 
 /// Builder function for map route widget.
-typedef MapRouteBuilder = Widget Function(
-  BuildContext context,
-  dynamic asyncExecutor,
-);
+typedef MapRouteBuilder =
+    Widget Function(BuildContext context, dynamic asyncExecutor);
 
 /// Builder function for choose location widget.
-typedef MapChooseLocationBuilder = Widget Function(
-  BuildContext context,
-  void Function(dynamic) onCenterChanged,
-);
+typedef MapChooseLocationBuilder =
+    Widget Function(
+      BuildContext context,
+      void Function(dynamic) onCenterChanged,
+    );
 
 /// Interface for map route provider.
 abstract class IMapRouteProvider {

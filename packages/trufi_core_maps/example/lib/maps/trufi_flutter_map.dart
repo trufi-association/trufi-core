@@ -14,7 +14,8 @@ double _metersToPixels(double meters, double latitude, double zoom) {
   const tileSize = 256.0;
 
   // Ground resolution (meters per pixel) at given latitude and zoom
-  final groundResolution = (earthCircumference * math.cos(latitude * math.pi / 180)) /
+  final groundResolution =
+      (earthCircumference * math.cos(latitude * math.pi / 180)) /
       (tileSize * math.pow(2, zoom));
 
   return meters / groundResolution;

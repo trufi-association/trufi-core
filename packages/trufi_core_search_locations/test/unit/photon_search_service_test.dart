@@ -63,9 +63,9 @@ void main() {
 
         await service.search('Berlin');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.host, equals('photon.komoot.io'));
         expect(captured.path, equals('/api/'));
@@ -109,9 +109,9 @@ void main() {
 
         await service.search('Munich');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.queryParameters['lang'], equals('de'));
       });
@@ -130,9 +130,9 @@ void main() {
 
         await service.search('Cafe');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(
           captured.queryParameters['lat'],
@@ -157,9 +157,9 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.queryParameters['bbox'], equals('13.0,52.3,13.8,52.7'));
       });
@@ -177,9 +177,9 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.queryParameters['limit'], equals('5'));
       });
@@ -218,9 +218,9 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.host, equals('custom.photon.server'));
       });
@@ -253,9 +253,7 @@ void main() {
                 'coordinates': [13.4, 52.52],
                 'type': 'Point',
               },
-              'properties': {
-                'name': 'Test Location',
-              },
+              'properties': {'name': 'Test Location'},
             },
           ],
         });
@@ -346,9 +344,9 @@ void main() {
 
         await service.reverse(52.52, 13.4);
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.path, equals('/reverse'));
         expect(captured.queryParameters['lat'], equals('52.52'));
@@ -398,9 +396,9 @@ void main() {
 
         await service.reverse(52.52, 13.4);
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny()),
-        ).captured.first as Uri;
+        final captured =
+            verify(() => mockHttpClient.get(captureAny())).captured.first
+                as Uri;
 
         expect(captured.queryParameters['lang'], equals('es'));
       });

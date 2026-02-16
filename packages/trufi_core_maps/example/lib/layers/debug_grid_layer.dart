@@ -5,7 +5,7 @@ class DebugGridLayer extends TrufiLayer {
   static const String layerId = 'debug-grid-layer';
 
   DebugGridLayer(super.controller)
-      : super(id: layerId, layerLevel: 10, visible: false) {
+    : super(id: layerId, layerLevel: 10, visible: false) {
     controller.cameraPositionNotifier.addListener(_onCameraChanged);
   }
 

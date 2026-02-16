@@ -28,8 +28,6 @@ class MarkersContainer {
     if (layer != null) layer.rebuild(layer.all());
   }
 
-
-
   List<TrufiMarker> getMarkers(
     String layerId,
     latlng.LatLng target,

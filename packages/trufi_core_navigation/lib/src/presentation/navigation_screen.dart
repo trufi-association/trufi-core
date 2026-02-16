@@ -14,8 +14,8 @@ import 'layers/navigation_layer.dart';
 import 'widgets/navigation_bottom_panel.dart';
 
 /// Factory function to create a NavigationLayer with a controller.
-typedef NavigationLayerFactory = NavigationLayer Function(
-    TrufiMapController controller);
+typedef NavigationLayerFactory =
+    NavigationLayer Function(TrufiMapController controller);
 
 /// Screen for turn-by-turn navigation.
 class NavigationScreen extends StatefulWidget {
@@ -43,7 +43,8 @@ class NavigationScreen extends StatefulWidget {
     BuildContext context,
     NavigationLayerFactory layerFactory,
     NavigationState state,
-  ) mapBuilder;
+  )
+  mapBuilder;
 
   /// Location service to use for tracking.
   final LocationService locationService;
@@ -71,7 +72,8 @@ class NavigationScreen extends StatefulWidget {
       BuildContext context,
       NavigationLayerFactory layerFactory,
       NavigationState state,
-    ) mapBuilder,
+    )
+    mapBuilder,
     required LocationService locationService,
     NavigationConfig config = const NavigationConfig(),
     Widget? modeIcon,
@@ -80,21 +82,21 @@ class NavigationScreen extends StatefulWidget {
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             NavigationScreen(
-          route: route,
-          mapBuilder: mapBuilder,
-          locationService: locationService,
-          config: config,
-          modeIcon: modeIcon,
-        ),
+              route: route,
+              mapBuilder: mapBuilder,
+              locationService: locationService,
+              config: config,
+              modeIcon: modeIcon,
+            ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            )),
+            position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+                .animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
             child: child,
           );
         },
@@ -136,10 +138,7 @@ class NavigationScreen extends StatefulWidget {
         final controller = TrufiMapController(
           initialCameraPosition: TrufiCameraPosition(
             target: currentLocation != null
-                ? LatLng(
-                    currentLocation.latitude,
-                    currentLocation.longitude,
-                  )
+                ? LatLng(currentLocation.latitude, currentLocation.longitude)
                 : fallbackCenter,
             zoom: 16,
           ),
@@ -148,9 +147,7 @@ class NavigationScreen extends StatefulWidget {
         // Create navigation layer
         layerFactory(controller);
 
-        return mapEngineManager.currentEngine.buildMap(
-          controller: controller,
-        );
+        return mapEngineManager.currentEngine.buildMap(controller: controller);
       },
     );
   }
@@ -245,10 +242,7 @@ class _NavigationScreenState extends State<NavigationScreen>
             body: Stack(
               children: [
                 // Map (built once and cached)
-                if (_mapWidget != null)
-                  Positioned.fill(
-                    child: _mapWidget!,
-                  ),
+                if (_mapWidget != null) Positioned.fill(child: _mapWidget!),
 
                 // Bottom panel
                 Positioned(

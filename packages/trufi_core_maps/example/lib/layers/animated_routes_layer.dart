@@ -64,8 +64,10 @@ class AnimatedRoutesLayer extends TrufiLayer {
       final points = <latlng.LatLng>[];
 
       // Start point
-      var lat = center.latitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
-      var lng = center.longitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
+      var lat =
+          center.latitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
+      var lng =
+          center.longitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
 
       // Generate wandering path
       final direction = random.nextDouble() * 2 * pi;
@@ -84,12 +86,14 @@ class AnimatedRoutesLayer extends TrufiLayer {
 
       final color = colors[i % colors.length];
 
-      _routes.add(AnimatedRoute(
-        id: 'route-$i',
-        points: points,
-        color: color,
-        width: 3 + random.nextDouble() * 3,
-      ));
+      _routes.add(
+        AnimatedRoute(
+          id: 'route-$i',
+          points: points,
+          color: color,
+          width: 3 + random.nextDouble() * 3,
+        ),
+      );
 
       // Add start marker
       addMarker(
@@ -189,10 +193,7 @@ class _RouteEndpointMarker extends StatelessWidget {
   final Color color;
   final bool isStart;
 
-  const _RouteEndpointMarker({
-    required this.color,
-    required this.isStart,
-  });
+  const _RouteEndpointMarker({required this.color, required this.isStart});
 
   @override
   Widget build(BuildContext context) {

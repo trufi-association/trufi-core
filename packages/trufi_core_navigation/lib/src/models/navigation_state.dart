@@ -76,16 +76,16 @@ class NavigationLeg extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        points,
-        isTransit,
-        isWalking,
-        isBicycle,
-        color,
-        routeName,
-        modeName,
-        duration,
-      ];
+    id,
+    points,
+    isTransit,
+    isWalking,
+    isBicycle,
+    color,
+    routeName,
+    modeName,
+    duration,
+  ];
 }
 
 /// Route information for navigation.
@@ -120,18 +120,18 @@ class NavigationRoute extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        code,
-        name,
-        shortName,
-        longName,
-        backgroundColor,
-        textColor,
-        geometry,
-        stops,
-        legs,
-        modeName,
-      ];
+    id,
+    code,
+    name,
+    shortName,
+    longName,
+    backgroundColor,
+    textColor,
+    geometry,
+    stops,
+    legs,
+    modeName,
+  ];
 }
 
 /// The state of navigation.
@@ -308,24 +308,24 @@ class NavigationState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        segmentType,
-        route,
-        currentStopIndex,
-        currentLegIndex,
-        totalStops,
-        remainingStops,
-        currentInstruction,
-        nextInstruction,
-        currentLocation,
-        distanceToNextStop,
-        etaToNextStop,
-        etaToDestination,
-        errorMessage,
-        isOffRoute,
-        distanceFromRoute,
-        isGpsWeak,
-        isMapFollowingUser,
-        isInBackground,
-      ];
+    status,
+    segmentType,
+    route,
+    currentStopIndex,
+    currentLegIndex,
+    totalStops,
+    remainingStops,
+    currentInstruction,
+    nextInstruction,
+    currentLocation,
+    distanceToNextStop,
+    etaToNextStop,
+    etaToDestination,
+    errorMessage,
+    isOffRoute,
+    distanceFromRoute,
+    isGpsWeak,
+    isMapFollowingUser,
+    isInBackground,
+  ];
 }

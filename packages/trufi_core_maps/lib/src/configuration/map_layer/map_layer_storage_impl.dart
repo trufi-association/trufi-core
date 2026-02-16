@@ -18,7 +18,7 @@ class MapLayerStorageImpl implements MapLayerLocalStorage {
   bool _isInitialized = false;
 
   MapLayerStorageImpl({StorageService? storage})
-      : _storage = storage ?? SharedPreferencesStorage();
+    : _storage = storage ?? SharedPreferencesStorage();
 
   @override
   Future<void> initialize() async {
@@ -37,9 +37,7 @@ class MapLayerStorageImpl implements MapLayerLocalStorage {
   Future<bool> save(Map<String, bool> currentState) async {
     try {
       if (!_isInitialized) {
-        debugPrint(
-          'MapLayerStorageImpl: Cannot save, not initialized',
-        );
+        debugPrint('MapLayerStorageImpl: Cannot save, not initialized');
         return false;
       }
       await _storage.write(_key, jsonEncode(currentState));
@@ -54,9 +52,7 @@ class MapLayerStorageImpl implements MapLayerLocalStorage {
   Future<Map<String, bool>> load() async {
     try {
       if (!_isInitialized) {
-        debugPrint(
-          'MapLayerStorageImpl: Cannot load, not initialized',
-        );
+        debugPrint('MapLayerStorageImpl: Cannot load, not initialized');
         return {};
       }
       final jsonString = await _storage.read(_key);

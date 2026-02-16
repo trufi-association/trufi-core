@@ -93,24 +93,15 @@ class POIDetailPanel extends StatelessWidget {
 
           // Details
           if (poi.address != null) ...[
-            _InfoRow(
-              icon: Icons.location_on_outlined,
-              text: poi.address!,
-            ),
+            _InfoRow(icon: Icons.location_on_outlined, text: poi.address!),
             const SizedBox(height: 8),
           ],
           if (poi.openingHours != null) ...[
-            _InfoRow(
-              icon: Icons.access_time_outlined,
-              text: poi.openingHours!,
-            ),
+            _InfoRow(icon: Icons.access_time_outlined, text: poi.openingHours!),
             const SizedBox(height: 8),
           ],
           if (poi.phone != null) ...[
-            _InfoRow(
-              icon: Icons.phone_outlined,
-              text: poi.phone!,
-            ),
+            _InfoRow(icon: Icons.phone_outlined, text: poi.phone!),
             const SizedBox(height: 8),
           ],
 
@@ -167,11 +158,7 @@ class POIDetailPanel extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          poiSvgString,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(poiSvgString, width: 28, height: 28),
       );
     }
 
@@ -186,11 +173,7 @@ class POIDetailPanel extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          subConfig.iconSvg!,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(subConfig.iconSvg!, width: 28, height: 28),
       );
     }
 
@@ -204,11 +187,7 @@ class POIDetailPanel extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          poi.category.iconSvg!,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(poi.category.iconSvg!, width: 28, height: 28),
       );
     }
 
@@ -220,11 +199,7 @@ class POIDetailPanel extends StatelessWidget {
         color: color.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        poi.category.fallbackIcon,
-        color: color,
-        size: 22,
-      ),
+      child: Icon(poi.category.fallbackIcon, color: color, size: 22),
     );
   }
 
@@ -241,8 +216,10 @@ class POIDetailPanel extends StatelessWidget {
     if (poi.subcategory != null) {
       return poi.subcategory!
           .split('_')
-          .map((word) =>
-              word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+          .map(
+            (word) =>
+                word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1),
+          )
           .join(' ');
     }
 
@@ -255,10 +232,7 @@ class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const _InfoRow({
-    required this.icon,
-    required this.text,
-  });
+  const _InfoRow({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -267,18 +241,9 @@ class _InfoRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 18,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: theme.textTheme.bodyMedium,
-          ),
-        ),
+        Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
       ],
     );
   }

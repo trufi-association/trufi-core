@@ -21,7 +21,7 @@ class SearchLocationsRepositoryImpl implements SearchLocationsRepository {
   bool _isInitialized = false;
 
   SearchLocationsRepositoryImpl({StorageService? storage})
-      : _storage = storage ?? SharedPreferencesStorage();
+    : _storage = storage ?? SharedPreferencesStorage();
 
   void _ensureInitialized() {
     if (!_isInitialized) {

@@ -12,20 +12,18 @@ import '../test_config.dart';
 /// Run with: flutter test --tags integration
 void main() {
   group('OTP 2.8 Integration Tests', () {
-    late Otp28PlanRepository repository;
+    late Otp28RoutingProvider provider;
     late DateTime testDateTime;
 
     setUp(() {
-      repository = Otp28PlanRepository(
-        endpoint: TestConfig.otp28Endpoint,
-      );
-      
+      provider = Otp28RoutingProvider(endpoint: TestConfig.otp28Endpoint);
+
       // Set test time to December 1, 2025 at 12:00 PM (noon)
       testDateTime = DateTime(2025, 12, 1, 12, 0);
     });
 
     test('fetchPlan returns valid plan with itineraries', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
@@ -40,7 +38,7 @@ void main() {
     });
 
     test('fetchPlan returns itineraries with legs', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -57,7 +55,7 @@ void main() {
     });
 
     test('fetchPlan legs contain valid geometry', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -79,7 +77,7 @@ void main() {
     });
 
     test('fetchPlan transit legs contain route and agency info', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 5,
@@ -117,12 +115,12 @@ void main() {
     });
 
     test('fetchPlan with simple query works', () async {
-      final simpleRepository = Otp28PlanRepository(
+      final simpleProvider = Otp28RoutingProvider(
         endpoint: TestConfig.otp28Endpoint,
         useSimpleQuery: true,
       );
 
-      final plan = await simpleRepository.fetchPlan(
+      final plan = await simpleProvider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -134,7 +132,7 @@ void main() {
     });
 
     test('fetchPlan with locale parameter works', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -147,7 +145,7 @@ void main() {
     });
 
     test('fetchPlan with alternative origin works', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.alternativeOrigin,
         to: TestConfig.destinationLocation,
         numItineraries: 2,
@@ -159,7 +157,7 @@ void main() {
     });
 
     test('fetchPlan legs may contain walking steps', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -169,7 +167,9 @@ void main() {
       final itinerary = plan.itineraries!.first;
 
       // Find a walking leg
-      final walkingLeg = itinerary.legs.where((leg) => leg.mode == 'WALK').firstOrNull;
+      final walkingLeg = itinerary.legs
+          .where((leg) => leg.mode == 'WALK')
+          .firstOrNull;
 
       // If there's a walking leg, it may have steps
       if (walkingLeg != null && walkingLeg.steps != null) {

@@ -24,11 +24,7 @@ class _GeometryInfo {
 }
 
 /// Geometry type of the POI
-enum POIGeometryType {
-  point,
-  polygon,
-  line,
-}
+enum POIGeometryType { point, polygon, line }
 
 /// A Point of Interest
 class POI extends Equatable {
@@ -140,10 +136,7 @@ class POI extends Equatable {
         final area = _calculatePolygonArea(firstRing);
         final points = firstRing.map((coord) {
           final c = coord as List<dynamic>;
-          return LatLng(
-            (c[1] as num).toDouble(),
-            (c[0] as num).toDouble(),
-          );
+          return LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble());
         }).toList();
         return _GeometryInfo(
           lat: lat,
@@ -162,10 +155,7 @@ class POI extends Equatable {
         final area = _calculatePolygonArea(firstRing);
         final points = firstRing.map((coord) {
           final c = coord as List<dynamic>;
-          return LatLng(
-            (c[1] as num).toDouble(),
-            (c[0] as num).toDouble(),
-          );
+          return LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble());
         }).toList();
         return _GeometryInfo(
           lat: lat,
@@ -290,8 +280,10 @@ class POI extends Equatable {
   static String _formatSubcategoryName(String subcategory) {
     return subcategory
         .split('_')
-        .map((word) =>
-            word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+        .map(
+          (word) =>
+              word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1),
+        )
         .join(' ');
   }
 

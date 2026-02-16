@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
 
   // Routing engines
   static final List<IRoutingProvider> _routingEngines = [
-    const Otp28RoutingProvider(
-      endpoint: 'https://otp.trufi.app',
-    ),
+    Otp28RoutingProvider(endpoint: 'https://otp.trufi.app'),
   ];
 
   const MyApp({super.key});
@@ -36,9 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => RoutingEngineManager(
-            engines: _routingEngines,
-          ),
+          create: (_) => RoutingEngineManager(engines: _routingEngines),
         ),
         ...screen.providers,
       ],

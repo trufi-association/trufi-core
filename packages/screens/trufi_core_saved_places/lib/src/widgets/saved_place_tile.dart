@@ -124,11 +124,7 @@ class SavedPlaceTile extends StatelessWidget {
         color: iconColor.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Icon(
-        iconData,
-        color: iconColor,
-        size: 24,
-      ),
+      child: Icon(iconData, color: iconColor, size: 24),
     );
   }
 
@@ -175,10 +171,7 @@ class _FavoriteButton extends StatelessWidget {
   final bool isFavorite;
   final VoidCallback? onPressed;
 
-  const _FavoriteButton({
-    required this.isFavorite,
-    this.onPressed,
-  });
+  const _FavoriteButton({required this.isFavorite, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -199,12 +192,12 @@ class _FavoriteButton extends StatelessWidget {
           alignment: Alignment.center,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
-            transitionBuilder: (child, animation) => ScaleTransition(
-              scale: animation,
-              child: child,
-            ),
+            transitionBuilder: (child, animation) =>
+                ScaleTransition(scale: animation, child: child),
             child: Icon(
-              isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+              isFavorite
+                  ? Icons.favorite_rounded
+                  : Icons.favorite_border_rounded,
               key: ValueKey(isFavorite),
               color: isFavorite ? Colors.red : colorScheme.onSurfaceVariant,
               size: 22,
@@ -222,11 +215,7 @@ class _MoreOptionsButton extends StatelessWidget {
   final VoidCallback? onDelete;
   final SavedPlacesLocalizations? localization;
 
-  const _MoreOptionsButton({
-    this.onEdit,
-    this.onDelete,
-    this.localization,
-  });
+  const _MoreOptionsButton({this.onEdit, this.onDelete, this.localization});
 
   @override
   Widget build(BuildContext context) {
@@ -243,9 +232,7 @@ class _MoreOptionsButton extends StatelessWidget {
           size: 22,
         ),
         padding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 3,
         surfaceTintColor: colorScheme.surfaceTint,
         onSelected: (value) {
@@ -265,7 +252,9 @@ class _MoreOptionsButton extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+                      color: colorScheme.primaryContainer.withValues(
+                        alpha: 0.5,
+                      ),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(

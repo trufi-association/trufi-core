@@ -54,11 +54,12 @@ class RoutingSegment {
         stopIds: stops.map((s) => s.id).toList(),
         headsign: json['headsign'] as String?,
       ),
-      scheduledDuration:
-          durationSeconds != null ? Duration(seconds: durationSeconds) : null,
-      shapePoints: shapeRaw
-              ?.map((p) =>
-                  LatLng((p as List)[0] as double, p[1] as double))
+      scheduledDuration: durationSeconds != null
+          ? Duration(seconds: durationSeconds)
+          : null,
+      shapePoints:
+          shapeRaw
+              ?.map((p) => LatLng((p as List)[0] as double, p[1] as double))
               .toList() ??
           const [],
     );
@@ -68,16 +69,16 @@ class RoutingSegment {
   String? get headsign => pattern.headsign;
 
   Map<String, dynamic> toJson() => {
-        'route': route.toJson(),
-        'from': fromStop.toJson(),
-        'to': toStop.toJson(),
-        'stopCount': stopCount,
-        'stops': stops.map((s) => s.toJson()).toList(),
-        if (pattern.headsign != null) 'headsign': pattern.headsign,
-        'scheduledDuration': scheduledDuration?.inSeconds,
-        if (shapePoints.isNotEmpty)
-          'shape': shapePoints.map((p) => [p.latitude, p.longitude]).toList(),
-      };
+    'route': route.toJson(),
+    'from': fromStop.toJson(),
+    'to': toStop.toJson(),
+    'stopCount': stopCount,
+    'stops': stops.map((s) => s.toJson()).toList(),
+    if (pattern.headsign != null) 'headsign': pattern.headsign,
+    'scheduledDuration': scheduledDuration?.inSeconds,
+    if (shapePoints.isNotEmpty)
+      'shape': shapePoints.map((p) => [p.latitude, p.longitude]).toList(),
+  };
 }
 
 /// A complete routing path result.
@@ -99,15 +100,13 @@ class RoutingPath {
   });
 
   /// Total walk distance in meters.
-  double get totalWalkDistance =>
-      originWalkDistance + destinationWalkDistance;
+  double get totalWalkDistance => originWalkDistance + destinationWalkDistance;
 
   /// Number of transfers.
   int get transfers => segments.length - 1;
 
   /// Total number of stops.
-  int get totalStops =>
-      segments.fold(0, (sum, seg) => sum + seg.stopCount);
+  int get totalStops => segments.fold(0, (sum, seg) => sum + seg.stopCount);
 
   factory RoutingPath.fromJson(Map<String, dynamic> json) {
     return RoutingPath(
@@ -116,24 +115,25 @@ class RoutingPath {
       segments: (json['segments'] as List)
           .map((s) => RoutingSegment.fromJson(s as Map<String, dynamic>))
           .toList(),
-      destinationStop:
-          GtfsStop.fromJson(json['destinationStop'] as Map<String, dynamic>),
+      destinationStop: GtfsStop.fromJson(
+        json['destinationStop'] as Map<String, dynamic>,
+      ),
       destinationWalkDistance: (json['destinationWalk'] as num).toDouble(),
       score: (json['score'] as num).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'originWalk': originWalkDistance,
-        'originStop': originStop.toJson(),
-        'segments': segments.map((s) => s.toJson()).toList(),
-        'destinationStop': destinationStop.toJson(),
-        'destinationWalk': destinationWalkDistance,
-        'totalWalk': totalWalkDistance,
-        'transfers': transfers,
-        'totalStops': totalStops,
-        'score': score,
-      };
+    'originWalk': originWalkDistance,
+    'originStop': originStop.toJson(),
+    'segments': segments.map((s) => s.toJson()).toList(),
+    'destinationStop': destinationStop.toJson(),
+    'destinationWalk': destinationWalkDistance,
+    'totalWalk': totalWalkDistance,
+    'transfers': transfers,
+    'totalStops': totalStops,
+    'score': score,
+  };
 }
 
 /// Service for GTFS-based routing.
@@ -182,7 +182,11 @@ class GtfsRoutingService {
     // Phase 2: Find routes with 1 transfer
     if (maxTransfers >= 1) {
       _findOneTransferRoutes(
-          originStops, destinationStops, paths, segmentCache);
+        originStops,
+        destinationStops,
+        paths,
+        segmentCache,
+      );
     }
 
     // Sort all paths by score (lower is better)
@@ -200,10 +204,7 @@ class GtfsRoutingService {
       }
     }
 
-    return uniquePaths
-        .take(maxResults)
-        .map(_resolvePathStops)
-        .toList();
+    return uniquePaths.take(maxResults).map(_resolvePathStops).toList();
   }
 
   /// Find direct routes (0 transfers) between origin and destination stops.
@@ -218,29 +219,37 @@ class GtfsRoutingService {
         final originStop = originNearby.stop;
         final destStop = destNearby.stop;
 
-        final connectingRoutes =
-            routeIndex.findConnectingRoutes(originStop.id, destStop.id);
+        final connectingRoutes = routeIndex.findConnectingRoutes(
+          originStop.id,
+          destStop.id,
+        );
 
         for (final routeId in connectingRoutes) {
           final route = data.routes[routeId];
           if (route == null) continue;
 
           final segment = _buildSegmentCached(
-            segmentCache, route, originStop, destStop);
+            segmentCache,
+            route,
+            originStop,
+            destStop,
+          );
           if (segment == null) continue;
 
-          paths.add(RoutingPath(
-            originWalkDistance: originNearby.distance,
-            originStop: originStop,
-            segments: [segment],
-            destinationStop: destStop,
-            destinationWalkDistance: destNearby.distance,
-            score: _calculateScore(
-              walkDistance: originNearby.distance + destNearby.distance,
-              transfers: 0,
-              totalStops: segment.stopCount,
+          paths.add(
+            RoutingPath(
+              originWalkDistance: originNearby.distance,
+              originStop: originStop,
+              segments: [segment],
+              destinationStop: destStop,
+              destinationWalkDistance: destNearby.distance,
+              score: _calculateScore(
+                walkDistance: originNearby.distance + destNearby.distance,
+                transfers: 0,
+                totalStops: segment.stopCount,
+              ),
             ),
-          ));
+          );
         }
       }
     }
@@ -262,8 +271,7 @@ class GtfsRoutingService {
     // For each such route's pattern, all stops BEFORE the dest stop
     // are potential transfer points.
     // transferCandidates: transferStopId -> {destRouteId -> [destNearby]}
-    final transferCandidates =
-        <String, Map<String, List<NearbyStop>>>{};
+    final transferCandidates = <String, Map<String, List<NearbyStop>>>{};
 
     for (final destNearby in destinationStops) {
       final routesAtDest = routeIndex.getRoutesAtStop(destNearby.stop.id);
@@ -290,8 +298,7 @@ class GtfsRoutingService {
     // Step 2: Scan origin patterns, check intermediate stops
     // against the precomputed transfer map.
     for (final originNearby in originStops) {
-      final originStopRoutes =
-          routeIndex.getRoutesAtStop(originNearby.stop.id);
+      final originStopRoutes = routeIndex.getRoutesAtStop(originNearby.stop.id);
 
       for (final originRouteId in originStopRoutes) {
         final originRoute = data.routes[originRouteId];
@@ -321,29 +328,38 @@ class GtfsRoutingService {
 
               // Build first segment: origin -> transfer
               final seg1 = _buildSegmentCached(
-                  segmentCache, originRoute, originNearby.stop, transferStop);
+                segmentCache,
+                originRoute,
+                originNearby.stop,
+                transferStop,
+              );
               if (seg1 == null) continue;
 
               for (final destNearby in entry.value) {
                 // Build second segment: transfer -> destination
                 final seg2 = _buildSegmentCached(
-                    segmentCache, destRoute, transferStop, destNearby.stop);
+                  segmentCache,
+                  destRoute,
+                  transferStop,
+                  destNearby.stop,
+                );
                 if (seg2 == null) continue;
 
                 final totalStops = seg1.stopCount + seg2.stopCount;
-                paths.add(RoutingPath(
-                  originWalkDistance: originNearby.distance,
-                  originStop: originNearby.stop,
-                  segments: [seg1, seg2],
-                  destinationStop: destNearby.stop,
-                  destinationWalkDistance: destNearby.distance,
-                  score: _calculateScore(
-                    walkDistance:
-                        originNearby.distance + destNearby.distance,
-                    transfers: 1,
-                    totalStops: totalStops,
+                paths.add(
+                  RoutingPath(
+                    originWalkDistance: originNearby.distance,
+                    originStop: originNearby.stop,
+                    segments: [seg1, seg2],
+                    destinationStop: destNearby.stop,
+                    destinationWalkDistance: destNearby.distance,
+                    score: _calculateScore(
+                      walkDistance: originNearby.distance + destNearby.distance,
+                      transfers: 1,
+                      totalStops: totalStops,
+                    ),
                   ),
-                ));
+                );
               }
             }
           }
@@ -396,8 +412,10 @@ class GtfsRoutingService {
         final toIdx = seg.pattern.indexOfStop(seg.toStop.id);
         if (fromIdx >= 0 && toIdx > fromIdx) {
           final ids = seg.pattern.stopIds.sublist(fromIdx, toIdx + 1);
-          final stops =
-              ids.map((id) => data.stops[id]).whereType<GtfsStop>().toList();
+          final stops = ids
+              .map((id) => data.stops[id])
+              .whereType<GtfsStop>()
+              .toList();
 
           final shapePoints = _extractShapeForSegment(
             seg.pattern.shapeId,

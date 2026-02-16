@@ -10,11 +10,11 @@ import '../test_config.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
-/// Unit tests for OTP 1.5 repository with mocked HTTP client.
+/// Unit tests for OTP 1.5 routing provider with mocked HTTP client.
 void main() {
-  group('Otp15PlanRepository', () {
+  group('Otp15RoutingProvider', () {
     late MockHttpClient mockHttpClient;
-    late Otp15PlanRepository repository;
+    late Otp15RoutingProvider provider;
     late String fixtureResponse;
 
     setUpAll(() {
@@ -26,14 +26,14 @@ void main() {
 
     setUp(() {
       mockHttpClient = MockHttpClient();
-      repository = Otp15PlanRepository(
+      provider = Otp15RoutingProvider(
         endpoint: 'https://test-otp.example.com/otp/routers/default/plan',
         httpClient: mockHttpClient,
       );
     });
 
     tearDown(() {
-      repository.dispose();
+      provider.dispose();
     });
 
     test('fetchPlan makes correct HTTP request', () async {
@@ -43,7 +43,7 @@ void main() {
 
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
-      await repository.fetchPlan(
+      await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
@@ -74,7 +74,7 @@ void main() {
 
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
-      await repository.fetchPlan(
+      await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         dateTime: fixedDate,
@@ -107,7 +107,7 @@ void main() {
 
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
-      await repository.fetchPlan(
+      await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         locale: 'es',
@@ -133,7 +133,7 @@ void main() {
 
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         dateTime: fixedDate,
@@ -152,7 +152,7 @@ void main() {
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
-        () => repository.fetchPlan(
+        () => provider.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
           dateTime: fixedDate,
@@ -173,7 +173,7 @@ void main() {
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
-        () => repository.fetchPlan(
+        () => provider.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
           dateTime: fixedDate,
@@ -190,7 +190,7 @@ void main() {
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
-        () => repository.fetchPlan(
+        () => provider.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
           dateTime: fixedDate,
@@ -207,7 +207,7 @@ void main() {
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
-        () => repository.fetchPlan(
+        () => provider.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
           dateTime: fixedDate,
@@ -217,7 +217,7 @@ void main() {
     });
 
     test('fetchPlan removes trailing slash from endpoint', () async {
-      final repoWithSlash = Otp15PlanRepository(
+      final providerWithSlash = Otp15RoutingProvider(
         endpoint: 'https://test-otp.example.com/otp/routers/default/plan/',
         httpClient: mockHttpClient,
       );
@@ -228,7 +228,7 @@ void main() {
 
       final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
-      await repoWithSlash.fetchPlan(
+      await providerWithSlash.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         dateTime: fixedDate,
@@ -247,7 +247,7 @@ void main() {
       expect(captured.path, isNot(contains('//')));
       expect(captured.path, equals('/otp/routers/default/plan'));
 
-      repoWithSlash.dispose();
+      providerWithSlash.dispose();
     });
   });
 }

@@ -33,9 +33,11 @@ class LegUtils {
 
   /// Returns true if two legs can be combined (both are walk/bike).
   static bool canCombineLegs(Leg leg1, Leg leg2) {
-    final bool isOnFoot1 = leg1.transportMode == TransportMode.bicycle ||
+    final bool isOnFoot1 =
+        leg1.transportMode == TransportMode.bicycle ||
         leg1.transportMode == TransportMode.walk;
-    final bool isOnFoot2 = leg2.transportMode == TransportMode.bicycle ||
+    final bool isOnFoot2 =
+        leg2.transportMode == TransportMode.bicycle ||
         leg2.transportMode == TransportMode.walk;
     return isOnFoot1 && isOnFoot2;
   }

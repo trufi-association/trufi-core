@@ -242,11 +242,7 @@ class SearchLocationBar extends StatelessWidget {
         ),
       );
     } else {
-      return const Icon(
-        Icons.place_rounded,
-        color: destinationColor,
-        size: 16,
-      );
+      return const Icon(Icons.place_rounded, color: destinationColor, size: 16);
     }
   }
 
@@ -334,7 +330,10 @@ class SearchLocationBar extends StatelessWidget {
     );
   }
 
-  Future<void> _handleSearch(BuildContext context, {required bool isOrigin}) async {
+  Future<void> _handleSearch(
+    BuildContext context, {
+    required bool isOrigin,
+  }) async {
     HapticFeedback.selectionClick();
     final location = await onSearch(isOrigin: isOrigin);
     if (location != null) {
@@ -379,7 +378,9 @@ class _LocationFieldWithClear extends StatelessWidget {
           height: 40,
           padding: const EdgeInsets.only(left: 12, right: 4),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.5,
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -469,11 +470,7 @@ class _ActionButton extends StatelessWidget {
             color: color,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: 20,
-          ),
+          child: Icon(icon, color: iconColor, size: 20),
         ),
       ),
     );
@@ -518,7 +515,9 @@ class _LocationFieldModernWithClear extends StatelessWidget {
             right: hasValue && onClear != null ? 4 : 12,
           ),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.5,
+            ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: hasValue
@@ -607,11 +606,7 @@ class _LocationFieldModernWithClear extends StatelessWidget {
         ),
       );
     } else {
-      return const Icon(
-        Icons.place_rounded,
-        color: destinationColor,
-        size: 24,
-      );
+      return const Icon(Icons.place_rounded, color: destinationColor, size: 24);
     }
   }
 }
@@ -638,7 +633,9 @@ class _MenuButtonModern extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.5,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -651,4 +648,3 @@ class _MenuButtonModern extends StatelessWidget {
     );
   }
 }
-

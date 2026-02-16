@@ -38,11 +38,11 @@ class SearchLocationsState extends Equatable {
 
   @override
   List<Object> get props => [
-        myPlaces,
-        myDefaultPlaces,
-        historyPlaces,
-        favoritePlaces,
-        searchResult,
-        isLoading
-      ];
+    myPlaces,
+    myDefaultPlaces,
+    historyPlaces,
+    favoritePlaces,
+    searchResult,
+    isLoading,
+  ];
 }

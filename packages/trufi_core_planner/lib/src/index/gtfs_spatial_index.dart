@@ -9,10 +9,7 @@ class NearbyStop {
   final GtfsStop stop;
   final double distance;
 
-  const NearbyStop({
-    required this.stop,
-    required this.distance,
-  });
+  const NearbyStop({required this.stop, required this.distance});
 }
 
 /// Spatial index for fast nearest-stop queries using a KD-Tree.
@@ -123,7 +120,15 @@ class _KdTree {
     final first = targetVal < nodeVal ? node.left : node.right;
     final second = targetVal < nodeVal ? node.right : node.left;
 
-    _searchNearest(first, lat, lon, depth + 1, results, maxResults, maxDistance);
+    _searchNearest(
+      first,
+      lat,
+      lon,
+      depth + 1,
+      results,
+      maxResults,
+      maxDistance,
+    );
 
     // Check if we need to search the other branch
     final axisDist = (targetVal - nodeVal).abs();
@@ -133,11 +138,20 @@ class _KdTree {
 
     // Convert axis distance to meters (rough approximation)
     final axisDistMeters = axis == 0
-        ? axisDist * 111000 // lat degrees to meters
+        ? axisDist *
+              111000 // lat degrees to meters
         : axisDist * 111000 * math.cos(lat * math.pi / 180); // lon degrees
 
     if (axisDistMeters < worstDist) {
-      _searchNearest(second, lat, lon, depth + 1, results, maxResults, maxDistance);
+      _searchNearest(
+        second,
+        lat,
+        lon,
+        depth + 1,
+        results,
+        maxResults,
+        maxDistance,
+      );
     }
   }
 
@@ -153,7 +167,8 @@ class _KdTree {
     final dLat = (lat2 - lat1) * math.pi / 180;
     final dLon = (lon2 - lon1) * math.pi / 180;
 
-    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    final a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(lat1 * math.pi / 180) *
             math.cos(lat2 * math.pi / 180) *
             math.sin(dLon / 2) *
@@ -170,11 +185,7 @@ class _KdNode {
   final _KdNode? left;
   final _KdNode? right;
 
-  _KdNode({
-    required this.stop,
-    this.left,
-    this.right,
-  });
+  _KdNode({required this.stop, this.left, this.right});
 }
 
 class _NearestResult {

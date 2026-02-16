@@ -47,14 +47,18 @@ void main() {
         final results = await service.search('');
 
         expect(results, isEmpty);
-        verifyNever(() => mockHttpClient.get(any(), headers: any(named: 'headers')));
+        verifyNever(
+          () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+        );
       });
 
       test('returns empty list for whitespace-only query', () async {
         final results = await service.search('   ');
 
         expect(results, isEmpty);
-        verifyNever(() => mockHttpClient.get(any(), headers: any(named: 'headers')));
+        verifyNever(
+          () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+        );
       });
 
       test('makes correct HTTP request', () async {
@@ -120,9 +124,14 @@ void main() {
 
         await service.search('Madrid');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['accept-language'], equals('es'));
       });
@@ -141,9 +150,14 @@ void main() {
 
         await service.search('Vienna');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['countrycodes'], equals('de,at'));
       });
@@ -162,9 +176,14 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['viewbox'], isNotNull);
         expect(captured.queryParameters['bounded'], equals('1'));
@@ -185,9 +204,14 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['viewbox'], isNotNull);
         expect(captured.queryParameters['bounded'], equals('0'));
@@ -207,9 +231,14 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['limit'], equals('5'));
       });
@@ -249,20 +278,21 @@ void main() {
 
         await service.search('Test');
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.host, equals('custom.nominatim.server'));
       });
 
       test('handles result without osm_id', () async {
         final responseWithoutOsmId = jsonEncode([
-          {
-            'lat': '52.52',
-            'lon': '13.40',
-            'display_name': 'Test Location',
-          },
+          {'lat': '52.52', 'lon': '13.40', 'display_name': 'Test Location'},
         ]);
 
         when(
@@ -300,9 +330,14 @@ void main() {
 
         await service.reverse(52.52, 13.4);
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.path, equals('/reverse'));
         expect(captured.queryParameters['lat'], equals('52.52'));
@@ -356,9 +391,14 @@ void main() {
 
         await service.reverse(52.52, 13.4);
 
-        final captured = verify(
-          () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-        ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
         expect(captured.queryParameters['accept-language'], equals('de'));
       });

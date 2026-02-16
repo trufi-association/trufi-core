@@ -298,10 +298,7 @@ class _MapTypeButtonBase extends StatelessWidget {
         message: tooltip ?? 'Change map type',
         child: IconButton(
           iconSize: iconSize,
-          icon: Icon(
-            icon,
-            color: effectiveIconColor,
-          ),
+          icon: Icon(icon, color: effectiveIconColor),
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(effectiveBackgroundColor),
             padding: WidgetStatePropertyAll(padding),

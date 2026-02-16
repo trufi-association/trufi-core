@@ -32,9 +32,7 @@ class GeoJSONLoader {
   /// Base path for POI assets
   final String assetsBasePath;
 
-  GeoJSONLoader({
-    required this.assetsBasePath,
-  });
+  GeoJSONLoader({required this.assetsBasePath});
 
   /// Load POI metadata from metadata.json
   ///
@@ -67,7 +65,8 @@ class GeoJSONLoader {
 
       _metadata = POIMetadata.fromJson(json);
       debugPrint(
-          '✅ GeoJSONLoader: Loaded metadata with ${_metadata!.categories.length} categories');
+        '✅ GeoJSONLoader: Loaded metadata with ${_metadata!.categories.length} categories',
+      );
 
       return _metadata!;
     } catch (e, stackTrace) {
@@ -120,19 +119,21 @@ class GeoJSONLoader {
 
         final features = geojson['features'] as List<dynamic>? ?? [];
         final pois = features
-            .map((f) => POI.fromGeoJsonFeature(
-                  f as Map<String, dynamic>,
-                  category,
-                ))
+            .map(
+              (f) =>
+                  POI.fromGeoJsonFeature(f as Map<String, dynamic>, category),
+            )
             .toList();
 
         _cache[categoryName] = pois;
         debugPrint(
-            '✅ GeoJSONLoader: Loaded ${pois.length} POIs for $categoryName');
+          '✅ GeoJSONLoader: Loaded ${pois.length} POIs for $categoryName',
+        );
         return pois;
       } catch (e, stackTrace) {
         debugPrint(
-            '❌ GeoJSONLoader: Error loading $categoryName from $assetsBasePath: $e');
+          '❌ GeoJSONLoader: Error loading $categoryName from $assetsBasePath: $e',
+        );
         debugPrint('Stack trace: $stackTrace');
         return <POI>[];
       } finally {
@@ -161,9 +162,11 @@ class GeoJSONLoader {
 
   /// Load POIs for multiple categories in parallel.
   Future<List<POI>> loadCategoriesParallel(
-      List<POICategoryConfig> categories) async {
-    final futures =
-        categories.map((category) => loadCategory(category)).toList();
+    List<POICategoryConfig> categories,
+  ) async {
+    final futures = categories
+        .map((category) => loadCategory(category))
+        .toList();
     final results = await Future.wait(futures);
     return results.expand((pois) => pois).toList();
   }
@@ -174,7 +177,8 @@ class GeoJSONLoader {
   }
 
   /// Check if a category is loaded in cache
-  bool isCategoryLoaded(String categoryName) => _cache.containsKey(categoryName);
+  bool isCategoryLoaded(String categoryName) =>
+      _cache.containsKey(categoryName);
 
   /// Check if a category is currently being loaded
   bool isCategoryLoading(String categoryName) =>
@@ -217,10 +221,7 @@ class LatLngBounds {
   final LatLng southWest;
   final LatLng northEast;
 
-  const LatLngBounds({
-    required this.southWest,
-    required this.northEast,
-  });
+  const LatLngBounds({required this.southWest, required this.northEast});
 
   bool contains(LatLng point) {
     return point.latitude >= southWest.latitude &&

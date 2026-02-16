@@ -22,7 +22,7 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
   bool _isInitialized = false;
 
   HomeScreenRepositoryImpl({StorageService? storage})
-      : _storage = storage ?? SharedPreferencesStorage();
+    : _storage = storage ?? SharedPreferencesStorage();
 
   @override
   Future<void> initialize() async {
@@ -51,9 +51,7 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
     try {
       final data = await _storage.read(_fromPlaceKey);
       if (data == null) return null;
-      return TrufiLocation.fromJson(
-        jsonDecode(data) as Map<String, dynamic>,
-      );
+      return TrufiLocation.fromJson(jsonDecode(data) as Map<String, dynamic>);
     } catch (e) {
       debugPrint('HomeScreenRepositoryImpl: Error getting fromPlace: $e');
       return null;
@@ -80,9 +78,7 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
     try {
       final data = await _storage.read(_toPlaceKey);
       if (data == null) return null;
-      return TrufiLocation.fromJson(
-        jsonDecode(data) as Map<String, dynamic>,
-      );
+      return TrufiLocation.fromJson(jsonDecode(data) as Map<String, dynamic>);
     } catch (e) {
       debugPrint('HomeScreenRepositoryImpl: Error getting toPlace: $e');
       return null;
@@ -109,9 +105,7 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
     try {
       final data = await _storage.read(_planKey);
       if (data == null) return null;
-      return routing.Plan.fromJson(
-        jsonDecode(data) as Map<String, dynamic>,
-      );
+      return routing.Plan.fromJson(jsonDecode(data) as Map<String, dynamic>);
     } catch (e) {
       debugPrint('HomeScreenRepositoryImpl: Error getting plan: $e');
       return null;
@@ -142,7 +136,9 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
         jsonDecode(data) as Map<String, dynamic>,
       );
     } catch (e) {
-      debugPrint('HomeScreenRepositoryImpl: Error getting selectedItinerary: $e');
+      debugPrint(
+        'HomeScreenRepositoryImpl: Error getting selectedItinerary: $e',
+      );
       return null;
     }
   }
@@ -157,7 +153,9 @@ class HomeScreenRepositoryImpl implements HomeScreenRepository {
         await _storage.write(_selectedItineraryKey, jsonEncode(data.toJson()));
       }
     } catch (e) {
-      debugPrint('HomeScreenRepositoryImpl: Error saving selectedItinerary: $e');
+      debugPrint(
+        'HomeScreenRepositoryImpl: Error saving selectedItinerary: $e',
+      );
     }
   }
 
