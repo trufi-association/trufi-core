@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/plan.dart';
+import 'models/routing_location.dart';
+import 'models/transit_route.dart';
 import 'providers/routing_provider.dart';
-import 'providers/gtfs/data/gtfs_plan_repository.dart';
 
 /// Manages the current routing engine for the app with persistence.
 ///
@@ -16,7 +18,7 @@ import 'providers/gtfs/data/gtfs_plan_repository.dart';
 /// final routingEngineManager = RoutingEngineManager(
 ///   engines: [
 ///     Otp28RoutingProvider(endpoint: 'https://otp.trufi.app'),
-///     GtfsRoutingProvider(config: ...),
+///     TrufiPlannerProvider(config: TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip')),
 ///   ],
 /// );
 ///
@@ -27,8 +29,9 @@ import 'providers/gtfs/data/gtfs_plan_repository.dart';
 /// )
 ///
 /// // Use it in widgets
-/// final manager = RoutingEngineManager.watch(context);
-/// manager.currentEngine.createPlanRepository();
+/// final manager = RoutingEngineManager.read(context);
+/// final plan = await manager.fetchPlan(from: origin, to: destination, dateTime: DateTime.now());
+/// final route = await manager.fetchRouteById('route-123');
 ///
 /// // Change the engine
 /// RoutingEngineManager.read(context).setEngine(newEngine);
@@ -139,22 +142,50 @@ class RoutingEngineManager extends ChangeNotifier {
   void _preloadCurrentEngine() {
     if (_isPreloading) return;
 
-    final repo = currentEngine.createPlanRepository();
-    if (repo is GtfsPlanRepository) {
-      if (!repo.isLoaded && !repo.isLoading) {
-        _isPreloading = true;
-        notifyListeners();
+    _isPreloading = true;
+    notifyListeners();
 
-        repo.preload().then((_) {
-          _isPreloading = false;
-          notifyListeners();
-        }).catchError((e) {
-          debugPrint('RoutingEngineManager: Preload failed: $e');
-          _isPreloading = false;
-          notifyListeners();
-        });
-      }
-    }
+    currentEngine.initialize().then((_) {
+      _isPreloading = false;
+      notifyListeners();
+    }).catchError((e) {
+      debugPrint('RoutingEngineManager: Preload failed: $e');
+      _isPreloading = false;
+      notifyListeners();
+    });
+  }
+
+  /// Fetches a trip plan using the current engine.
+  Future<Plan> fetchPlan({
+    required RoutingLocation from,
+    required RoutingLocation to,
+    int numItineraries = 5,
+    String? locale,
+    required DateTime dateTime,
+    bool arriveBy = false,
+  }) {
+    return currentEngine.fetchPlan(
+          from: from,
+          to: to,
+          numItineraries: numItineraries,
+          locale: locale,
+          dateTime: dateTime,
+          arriveBy: arriveBy,
+        );
+  }
+
+  /// Fetches all transit routes using the current engine.
+  ///
+  /// Returns an empty list if the current engine doesn't support transit routes.
+  Future<List<TransitRoute>> fetchRoutes() {
+    return currentEngine.fetchTransitRoutes();
+  }
+
+  /// Fetches a transit route by ID using the current engine.
+  ///
+  /// Returns null if the current engine doesn't support transit routes.
+  Future<TransitRoute?> fetchRouteById(String id) {
+    return currentEngine.fetchTransitRouteById(id);
   }
 
   /// Reads the RoutingEngineManager from context (does not listen to changes).

@@ -20,7 +20,6 @@ import 'widgets/home_screen.dart';
 class HomeScreenTrufiScreen extends TrufiScreen {
   final HomeScreenConfig config;
   late final HomeScreenRepository _repository;
-  late final routing.RoutingPreferencesManager _routingPreferencesManager;
 
   /// Callback when itinerary details are requested.
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
@@ -52,7 +51,6 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     this.onRouteTap,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
-    _routingPreferencesManager = routing.RoutingPreferencesManager();
   }
 
   /// Creates the appropriate request service based on available context.
@@ -92,14 +90,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
 
   @override
   List<SingleChildWidget> get providers => [
-    ChangeNotifierProvider<routing.RoutingPreferencesManager>.value(
-      value: _routingPreferencesManager,
-    ),
     BlocProvider<RoutePlannerCubit>(
       create: (context) => RoutePlannerCubit(
         repository: _repository,
         requestService: _createRequestService(context),
-        getRoutingPreferences: () => _routingPreferencesManager.preferences,
       )..initialize(),
     ),
     if (config.poiLayersManager != null)
@@ -123,7 +117,6 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   @override
   Future<void> initialize() async {
     await _repository.initialize();
-    await _routingPreferencesManager.initialize();
 
     // Initialize POI layers if available (optional dependency)
     // This requires POILayersCubit to be provided in AppConfiguration.providers

@@ -63,12 +63,10 @@ class TransportDetailScreen extends StatefulWidget {
     BuildContext context,
   ) {
     final routingManager = RoutingEngineManager.read(context);
-    final repository = routingManager.currentEngine.createTransitRouteRepository();
 
     return (String code) async {
-      if (repository == null) return null;
-
-      final route = await repository.fetchPatternById(code);
+      final route = await routingManager.fetchRouteById(code);
+      if (route == null) return null;
       return TransportRouteDetails(
         id: route.id,
         code: route.code,

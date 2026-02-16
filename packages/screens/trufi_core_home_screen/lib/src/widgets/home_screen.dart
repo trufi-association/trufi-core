@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   TrufiLocation? _lastUrlFrom;
   TrufiLocation? _lastUrlTo;
-  routing.TimeMode? _lastUrlTimeMode;
+  TimeMode? _lastUrlTimeMode;
   DateTime? _lastUrlDateTime;
   int? _lastUrlRouteIndex;
   bool _urlParsed = false;
@@ -182,16 +182,9 @@ class _HomeScreenState extends State<HomeScreen>
     final from = state.fromPlace;
     final to = state.toPlace;
 
-    // Get current time settings
-    routing.TimeMode? currentTimeMode;
-    DateTime? currentDateTime;
-    try {
-      final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
-      if (prefsManager != null) {
-        currentTimeMode = prefsManager.timeMode;
-        currentDateTime = prefsManager.dateTime;
-      }
-    } catch (_) {}
+    // Get current time settings from state
+    final currentTimeMode = state.timeMode;
+    final currentDateTime = state.dateTime;
 
     // Calculate selected itinerary index
     int? routeIndex;
@@ -232,12 +225,9 @@ class _HomeScreenState extends State<HomeScreen>
     }
 
     // Add time settings
-    if (currentTimeMode != null) {
-      params['time_mode'] = currentTimeMode.name;
-      if (currentTimeMode != routing.TimeMode.leaveNow &&
-          currentDateTime != null) {
-        params['time'] = currentDateTime.millisecondsSinceEpoch.toString();
-      }
+    params['time_mode'] = currentTimeMode.name;
+    if (currentTimeMode != TimeMode.leaveNow && currentDateTime != null) {
+      params['time'] = currentDateTime.millisecondsSinceEpoch.toString();
     }
 
     // Add selected route index
@@ -268,30 +258,23 @@ class _HomeScreenState extends State<HomeScreen>
       final cubit = context.read<RoutePlannerCubit>();
 
       // Parse and apply time settings first
-      try {
-        final prefsManager = routing.RoutingPreferencesManager.maybeRead(context);
-        if (prefsManager != null) {
-          final timeModeStr = params['time_mode'];
-          if (timeModeStr != null) {
-            final timeMode = routing.TimeMode.values.firstWhere(
-              (m) => m.name == timeModeStr,
-              orElse: () => routing.TimeMode.leaveNow,
-            );
-            prefsManager.setTimeMode(timeMode);
+      final timeModeStr = params['time_mode'];
+      if (timeModeStr != null) {
+        final timeMode = TimeMode.values.firstWhere(
+          (m) => m.name == timeModeStr,
+          orElse: () => TimeMode.leaveNow,
+        );
+        cubit.setTimeMode(timeMode);
 
-            // Parse datetime if not leaveNow
-            if (timeMode != routing.TimeMode.leaveNow) {
-              final timeMs = int.tryParse(params['time'] ?? '');
-              if (timeMs != null) {
-                prefsManager.setDateTime(
-                  DateTime.fromMillisecondsSinceEpoch(timeMs),
-                );
-              }
-            }
+        // Parse datetime if not leaveNow
+        if (timeMode != TimeMode.leaveNow) {
+          final timeMs = int.tryParse(params['time'] ?? '');
+          if (timeMs != null) {
+            cubit.setDateTime(
+              DateTime.fromMillisecondsSinceEpoch(timeMs),
+            );
           }
         }
-      } catch (_) {
-        // RoutingPreferencesManager not available
       }
 
       // Parse origin
@@ -2345,76 +2328,77 @@ class _DepartureTimeChip extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = HomeScreenLocalizations.of(context);
-    final manager = routing.RoutingPreferencesManager.maybeWatch(context);
 
-    if (manager == null) return const SizedBox.shrink();
+    return BlocBuilder<RoutePlannerCubit, RoutePlannerState>(
+      builder: (context, state) {
+        final timeMode = state.timeMode;
+        final dateTime = state.dateTime;
 
-    final timeMode = manager.timeMode;
-    final dateTime = manager.dateTime;
-
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Material(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        elevation: 2,
-        shadowColor: Colors.black.withValues(alpha: 0.15),
-        child: InkWell(
-          onTap: () => _showTimePicker(context, manager),
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  _getTimeModeIcon(timeMode),
-                  size: 18,
-                  color: colorScheme.primary,
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Material(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(20),
+            elevation: 2,
+            shadowColor: Colors.black.withValues(alpha: 0.15),
+            child: InkWell(
+              onTap: () => _showTimePicker(context, timeMode, dateTime),
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _getTimeModeIcon(timeMode),
+                      size: 18,
+                      color: colorScheme.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      _getTimeModeLabel(timeMode, dateTime, l10n),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: colorScheme.onSurface,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_drop_down_rounded,
+                      size: 20,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  _getTimeModeLabel(timeMode, dateTime, l10n),
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.arrow_drop_down_rounded,
-                  size: 20,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  IconData _getTimeModeIcon(routing.TimeMode mode) {
+  IconData _getTimeModeIcon(TimeMode mode) {
     switch (mode) {
-      case routing.TimeMode.leaveNow:
+      case TimeMode.leaveNow:
         return Icons.access_time_rounded;
-      case routing.TimeMode.departAt:
+      case TimeMode.departAt:
         return Icons.departure_board_rounded;
-      case routing.TimeMode.arriveBy:
+      case TimeMode.arriveBy:
         return Icons.schedule_rounded;
     }
   }
 
-  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime, HomeScreenLocalizations l10n) {
+  String _getTimeModeLabel(TimeMode mode, DateTime? dateTime, HomeScreenLocalizations l10n) {
     switch (mode) {
-      case routing.TimeMode.leaveNow:
+      case TimeMode.leaveNow:
         return l10n.leaveNow;
-      case routing.TimeMode.departAt:
+      case TimeMode.departAt:
         if (dateTime != null) {
           return l10n.departAtTime(_formatDateTime(dateTime, l10n));
         }
         return l10n.departAt;
-      case routing.TimeMode.arriveBy:
+      case TimeMode.arriveBy:
         if (dateTime != null) {
           return l10n.arriveByTime(_formatDateTime(dateTime, l10n));
         }
@@ -2443,27 +2427,36 @@ class _DepartureTimeChip extends StatelessWidget {
 
   void _showTimePicker(
     BuildContext context,
-    routing.RoutingPreferencesManager manager,
+    TimeMode currentMode,
+    DateTime? currentDateTime,
   ) {
     HapticFeedback.selectionClick();
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) =>
-          _DepartureTimeSheet(manager: manager, onTimeChanged: onTimeChanged),
+      builder: (sheetContext) => _DepartureTimeSheet(
+        initialMode: currentMode,
+        initialDateTime: currentDateTime,
+        onTimeChanged: onTimeChanged,
+        cubit: context.read<RoutePlannerCubit>(),
+      ),
     );
   }
 }
 
 /// Bottom sheet for selecting departure time mode and date/time
 class _DepartureTimeSheet extends StatefulWidget {
-  final routing.RoutingPreferencesManager manager;
+  final TimeMode initialMode;
+  final DateTime? initialDateTime;
   final VoidCallback onTimeChanged;
+  final RoutePlannerCubit cubit;
 
   const _DepartureTimeSheet({
-    required this.manager,
+    required this.initialMode,
+    required this.initialDateTime,
     required this.onTimeChanged,
+    required this.cubit,
   });
 
   @override
@@ -2471,14 +2464,14 @@ class _DepartureTimeSheet extends StatefulWidget {
 }
 
 class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
-  late routing.TimeMode _selectedMode;
+  late TimeMode _selectedMode;
   late DateTime _selectedDateTime;
 
   @override
   void initState() {
     super.initState();
-    _selectedMode = widget.manager.timeMode;
-    _selectedDateTime = widget.manager.dateTime ?? DateTime.now();
+    _selectedMode = widget.initialMode;
+    _selectedDateTime = widget.initialDateTime ?? DateTime.now();
   }
 
   @override
@@ -2537,34 +2530,34 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
                   _TimeModeOption(
                     icon: Icons.access_time_rounded,
                     label: l10n.leaveNow,
-                    isSelected: _selectedMode == routing.TimeMode.leaveNow,
+                    isSelected: _selectedMode == TimeMode.leaveNow,
                     onTap: () {
-                      setState(() => _selectedMode = routing.TimeMode.leaveNow);
+                      setState(() => _selectedMode = TimeMode.leaveNow);
                     },
                   ),
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.departure_board_rounded,
                     label: l10n.departAt.replaceAll('...', ''),
-                    isSelected: _selectedMode == routing.TimeMode.departAt,
+                    isSelected: _selectedMode == TimeMode.departAt,
                     onTap: () {
-                      setState(() => _selectedMode = routing.TimeMode.departAt);
+                      setState(() => _selectedMode = TimeMode.departAt);
                     },
                   ),
                   const SizedBox(height: 8),
                   _TimeModeOption(
                     icon: Icons.schedule_rounded,
                     label: l10n.arriveBy.replaceAll('...', ''),
-                    isSelected: _selectedMode == routing.TimeMode.arriveBy,
+                    isSelected: _selectedMode == TimeMode.arriveBy,
                     onTap: () {
-                      setState(() => _selectedMode = routing.TimeMode.arriveBy);
+                      setState(() => _selectedMode = TimeMode.arriveBy);
                     },
                   ),
                 ],
               ),
             ),
             // Date/time picker (only shown when not "Leave now")
-            if (_selectedMode != routing.TimeMode.leaveNow) ...[
+            if (_selectedMode != TimeMode.leaveNow) ...[
               const Divider(height: 1),
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -2685,9 +2678,9 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
 
   void _applyChanges() {
     HapticFeedback.mediumImpact();
-    widget.manager.setTimeMode(_selectedMode);
-    if (_selectedMode != routing.TimeMode.leaveNow) {
-      widget.manager.setDateTime(_selectedDateTime);
+    widget.cubit.setTimeMode(_selectedMode);
+    if (_selectedMode != TimeMode.leaveNow) {
+      widget.cubit.setDateTime(_selectedDateTime);
     }
     Navigator.of(context).pop();
     widget.onTimeChanged();

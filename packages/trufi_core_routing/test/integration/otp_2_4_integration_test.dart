@@ -12,20 +12,20 @@ import '../test_config.dart';
 /// Run with: flutter test --tags integration
 void main() {
   group('OTP 2.4 Integration Tests', () {
-    late Otp24PlanRepository repository;
+    late Otp24RoutingProvider provider;
     late DateTime testDateTime;
 
     setUp(() {
-      repository = Otp24PlanRepository(
+      provider = Otp24RoutingProvider(
         endpoint: TestConfig.otp24Endpoint,
       );
-      
+
       // Set test time to December 1, 2025 at 12:00 PM (noon)
       testDateTime = DateTime(2025, 12, 1, 12, 0);
     });
 
     test('fetchPlan returns valid plan with itineraries', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('fetchPlan returns itineraries with legs', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('fetchPlan legs contain valid geometry', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -79,7 +79,7 @@ void main() {
     });
 
     test('fetchPlan transit legs contain route and agency info', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 5,
@@ -112,12 +112,12 @@ void main() {
     });
 
     test('fetchPlan with simple query works', () async {
-      final simpleRepository = Otp24PlanRepository(
+      final simpleProvider = Otp24RoutingProvider(
         endpoint: TestConfig.otp24Endpoint,
         useSimpleQuery: true,
       );
 
-      final plan = await simpleRepository.fetchPlan(
+      final plan = await simpleProvider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -129,7 +129,7 @@ void main() {
     });
 
     test('fetchPlan with locale parameter works', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
@@ -142,7 +142,7 @@ void main() {
     });
 
     test('fetchPlan with alternative origin works', () async {
-      final plan = await repository.fetchPlan(
+      final plan = await provider.fetchPlan(
         from: TestConfig.alternativeOrigin,
         to: TestConfig.destinationLocation,
         numItineraries: 2,

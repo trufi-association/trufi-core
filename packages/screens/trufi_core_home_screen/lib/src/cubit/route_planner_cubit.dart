@@ -8,26 +8,20 @@ import '../repository/home_screen_repository.dart';
 import '../repository/home_screen_repository_impl.dart';
 import '../services/request_plan_service.dart';
 
-/// Callback to get current routing preferences.
-typedef GetRoutingPreferences = routing.RoutingPreferences? Function();
-
 /// Cubit for managing route planning state.
 ///
 /// If [repository] is not provided, uses [HomeScreenRepositoryImpl] by default.
 class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   final HomeScreenRepository _repository;
   final RequestPlanService _requestService;
-  final GetRoutingPreferences? _getRoutingPreferences;
 
   CancelableOperation<routing.Plan>? _currentFetchOperation;
 
   RoutePlannerCubit({
     HomeScreenRepository? repository,
     required RequestPlanService requestService,
-    GetRoutingPreferences? getRoutingPreferences,
   })  : _repository = repository ?? HomeScreenRepositoryImpl(),
         _requestService = requestService,
-        _getRoutingPreferences = getRoutingPreferences,
         super(const RoutePlannerState());
 
   /// Initialize and load saved state.
@@ -104,6 +98,16 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     emit(const RoutePlannerState());
   }
 
+  /// Set the time mode (leave now, depart at, arrive by).
+  void setTimeMode(TimeMode mode) {
+    emit(state.copyWith(timeMode: mode));
+  }
+
+  /// Set the departure/arrival date and time.
+  void setDateTime(DateTime? dateTime) {
+    emit(state.copyWithNullable(dateTime: Optional(dateTime)));
+  }
+
   /// Fetch route plan.
   Future<void> fetchPlan({int? selectedItineraryIndex}) async {
     if (state.fromPlace == null || state.toPlace == null) return;
@@ -117,12 +121,29 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       error: const Optional(null),
     ));
 
+    // Compute dateTime and arriveBy from time settings
+    final DateTime effectiveDateTime;
+    final bool arriveBy;
+
+    switch (state.timeMode) {
+      case TimeMode.leaveNow:
+        effectiveDateTime = DateTime.now();
+        arriveBy = false;
+      case TimeMode.departAt:
+        effectiveDateTime = state.dateTime ?? DateTime.now();
+        arriveBy = false;
+      case TimeMode.arriveBy:
+        effectiveDateTime = state.dateTime ?? DateTime.now();
+        arriveBy = true;
+    }
+
     try {
       _currentFetchOperation = CancelableOperation.fromFuture(
         _requestService.fetchPlan(
           from: state.fromPlace!,
           to: state.toPlace!,
-          preferences: _getRoutingPreferences?.call(),
+          dateTime: effectiveDateTime,
+          arriveBy: arriveBy,
         ),
       );
 

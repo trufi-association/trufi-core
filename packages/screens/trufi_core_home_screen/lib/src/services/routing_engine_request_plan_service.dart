@@ -7,49 +7,33 @@ import 'request_plan_service.dart';
 
 /// A RequestPlanService that uses RoutingEngineManager to route.
 ///
-/// This service gets the current engine from the manager and uses it
-/// to create the plan repository for routing requests.
+/// This service delegates all routing requests to [RoutingEngineManager.fetchPlan],
+/// which automatically uses the currently selected engine.
 class RoutingEngineRequestPlanService implements RequestPlanService {
   final routing.RoutingEngineManager _manager;
-
-  /// Cached repositories by provider ID.
-  final Map<String, routing.PlanRepository> _repositories = {};
 
   RoutingEngineRequestPlanService({
     required routing.RoutingEngineManager manager,
   }) : _manager = manager;
 
-  /// Gets or creates a repository for the current engine.
-  routing.PlanRepository _getRepository() {
-    final engine = _manager.currentEngine;
-    return _repositories.putIfAbsent(
-      engine.id,
-      () => engine.createPlanRepository(),
-    );
-  }
-
   @override
   Future<routing.Plan> fetchPlan({
     required TrufiLocation from,
     required TrufiLocation to,
-    List<routing.TransportMode>? transportModes,
     String? locale,
-    DateTime? dateTime,
-    routing.RoutingPreferences? preferences,
+    required DateTime dateTime,
+    bool arriveBy = false,
   }) async {
     final totalStopwatch = Stopwatch()..start();
     final engine = _manager.currentEngine;
 
     debugPrint('');
     debugPrint('╔══════════════════════════════════════════════════════════════');
-    debugPrint('║ 🚀 ROUTING REQUEST STARTED');
+    debugPrint('║ ROUTING REQUEST STARTED');
     debugPrint('║ Engine: ${engine.id} (${engine.requiresInternet ? "online" : "offline"})');
     debugPrint('║ From: ${from.description} (${from.latitude}, ${from.longitude})');
     debugPrint('║ To: ${to.description} (${to.latitude}, ${to.longitude})');
     debugPrint('╠══════════════════════════════════════════════════════════════');
-
-    final effectiveDateTime = _getEffectiveDateTime(preferences, dateTime);
-    final arriveBy = preferences?.timeMode == routing.TimeMode.arriveBy;
 
     final routingFrom = routing.RoutingLocation(
       position: LatLng(from.latitude, from.longitude),
@@ -61,15 +45,12 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
     );
 
     try {
-      final repository = _getRepository();
-
-      final plan = await repository.fetchPlan(
+      final plan = await _manager.fetchPlan(
         from: routingFrom,
         to: routingTo,
         locale: locale,
-        dateTime: effectiveDateTime,
+        dateTime: dateTime,
         arriveBy: arriveBy,
-        preferences: preferences,
       );
 
       totalStopwatch.stop();
@@ -89,7 +70,7 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
       return plan;
     } catch (e) {
       totalStopwatch.stop();
-      debugPrint('║ ❌ REQUEST FAILED: $e');
+      debugPrint('║ REQUEST FAILED: $e');
       debugPrint('║ Total time: ${totalStopwatch.elapsedMilliseconds}ms');
       debugPrint('╚══════════════════════════════════════════════════════════════');
       rethrow;
@@ -99,7 +80,7 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
   void _logSuccess(routing.Plan plan, int totalMs) {
     final count = plan.itineraries?.length ?? 0;
     debugPrint('╠══════════════════════════════════════════════════════════════');
-    debugPrint('║ ✅ REQUEST SUCCESSFUL');
+    debugPrint('║ REQUEST SUCCESSFUL');
     debugPrint('║ Itineraries found: $count');
     debugPrint('║ Total time: ${totalMs}ms');
     if (plan.itineraries != null && plan.itineraries!.isNotEmpty) {
@@ -117,18 +98,5 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
     return (itinerary.numberOfTransfers * 0.65) +
         (itinerary.walkDistance * 0.3) +
         ((itinerary.distance / 100) * 0.05);
-  }
-
-  DateTime _getEffectiveDateTime(
-    routing.RoutingPreferences? preferences,
-    DateTime? fallback,
-  ) {
-    if (preferences == null) return fallback ?? DateTime.now();
-
-    if (preferences.timeMode == routing.TimeMode.leaveNow) {
-      return DateTime.now();
-    }
-
-    return preferences.dateTime ?? fallback ?? DateTime.now();
   }
 }

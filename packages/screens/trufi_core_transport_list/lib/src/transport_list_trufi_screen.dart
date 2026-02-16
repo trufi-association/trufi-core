@@ -105,30 +105,11 @@ class _TransportListScreenWidgetState
     _cache = TransportListCache();
     _cache!.initialize();
 
-    // Get the transit route repository from the routing engine manager
     final routingManager = RoutingEngineManager.read(context);
-    TransitRouteRepository? repository;
-    String? providerId;
-
-    // Try current engine first
-    if (routingManager.currentEngine.supportsTransitRoutes) {
-      repository = routingManager.currentEngine.createTransitRouteRepository();
-      providerId = routingManager.currentEngine.id;
-    } else {
-      // Fallback: find any engine that supports transit routes
-      for (final engine in routingManager.engines) {
-        if (engine.supportsTransitRoutes) {
-          repository = engine.createTransitRouteRepository();
-          providerId = engine.id;
-          break;
-        }
-      }
-    }
 
     _dataProvider = OtpTransportDataProvider(
-      repository: repository,
+      manager: routingManager,
       cache: _cache,
-      providerId: providerId,
     );
   }
 

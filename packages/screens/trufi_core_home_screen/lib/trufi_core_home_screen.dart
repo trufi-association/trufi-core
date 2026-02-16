@@ -33,7 +33,6 @@ export 'src/repository/home_screen_repository_impl.dart';
 
 // Services
 export 'src/services/request_plan_service.dart';
-export 'src/services/routing_request_plan_service.dart';
 
 // Cubit (State Management)
 export 'src/cubit/route_planner_cubit.dart';

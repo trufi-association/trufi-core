@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   // Routing engines
   static final List<IRoutingProvider> _routingEngines = [
-    const Otp28RoutingProvider(
+    Otp28RoutingProvider(
       endpoint: 'https://otp.trufi.app',
     ),
   ];

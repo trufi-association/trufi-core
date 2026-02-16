@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
-import 'package:trufi_core_routing/trufi_core_routing.dart'
-    show OtpConfiguration, OtpVersion;
 
 void main() {
   group('RoutePlannerState', () {
@@ -51,12 +49,7 @@ void main() {
 
   group('HomeScreenConfig', () {
     test('has correct defaults', () {
-      const config = HomeScreenConfig(
-        otpConfiguration: OtpConfiguration(
-          endpoint: 'https://example.com',
-          version: OtpVersion.v2_4,
-        ),
-      );
+      const config = HomeScreenConfig();
 
       expect(config.chooseLocationZoom, equals(16.0));
       expect(config.myPlaces, isEmpty);
@@ -64,15 +57,10 @@ void main() {
 
     test('can set custom values', () {
       const config = HomeScreenConfig(
-        otpConfiguration: OtpConfiguration(
-          endpoint: 'https://example.com',
-          version: OtpVersion.v2_8,
-        ),
         chooseLocationZoom: 18.0,
       );
 
       expect(config.chooseLocationZoom, equals(18.0));
-      expect(config.otpConfiguration?.version, equals(OtpVersion.v2_8));
     });
   });
 }

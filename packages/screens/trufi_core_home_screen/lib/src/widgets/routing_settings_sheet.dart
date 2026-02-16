@@ -18,9 +18,8 @@ Future<bool?> showRoutingSettingsSheet(BuildContext context) {
 
 /// Bottom sheet for configuring routing preferences.
 ///
-/// The UI adapts based on the current routing provider's capabilities.
-/// For example, GTFS offline only supports maxWalkDistance, while OTP
-/// supports wheelchair, walk speed, transport modes, etc.
+/// Delegates preference content to the current provider's
+/// [IRoutingProvider.buildPreferencesUI] method.
 class RoutingSettingsSheet extends StatelessWidget {
   const RoutingSettingsSheet({super.key});
 
@@ -29,10 +28,7 @@ class RoutingSettingsSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = HomeScreenLocalizations.of(context);
-
-    // Get current provider capabilities
     final routingManager = RoutingEngineManager.watch(context);
-    final capabilities = routingManager.currentEngine.capabilities;
 
     return Container(
       decoration: BoxDecoration(
@@ -84,8 +80,7 @@ class RoutingSettingsSheet extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    final manager = RoutingPreferencesManager.maybeRead(context);
-                    manager?.reset();
+                    routingManager.currentEngine.resetPreferences();
                     HapticFeedback.lightImpact();
                   },
                   child: Text(l10n.buttonReset),
@@ -94,7 +89,7 @@ class RoutingSettingsSheet extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-          // All content in a single scrollable area
+          // Scrollable content
           Flexible(
             child: SingleChildScrollView(
               child: Column(
@@ -105,37 +100,14 @@ class RoutingSettingsSheet extends StatelessWidget {
                     _RoutingEngineSelector(routingManager: routingManager),
                     const Divider(height: 1),
                   ],
-                  // Content - only show sections supported by current provider
+                  // Provider-specific preferences UI
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Accessibility section
-                        if (capabilities.supportsWheelchair) ...[
-                          const _AccessibilitySection(),
-                          const SizedBox(height: 24),
-                        ],
-                        // Walk speed section
-                        if (capabilities.supportsWalkSpeed) ...[
-                          const _WalkSpeedSection(),
-                          const SizedBox(height: 24),
-                        ],
-                        // Max walk distance section
-                        if (capabilities.supportsMaxWalkDistance) ...[
-                          const _MaxWalkDistanceSection(),
-                          const SizedBox(height: 24),
-                        ],
-                        // Transport modes section
-                        if (capabilities.supportsTransportModes) ...[
-                          const _TransportModesSection(),
-                          const SizedBox(height: 24),
-                        ],
-                        // Show message if no options available
-                        if (!capabilities.hasAnyOptions)
-                          _NoOptionsMessage(providerName: routingManager.currentEngine.name),
-                      ],
-                    ),
+                    child: routingManager.currentEngine
+                            .buildPreferencesUI(context) ??
+                        _NoOptionsMessage(
+                            providerName:
+                                routingManager.currentEngine.name),
                   ),
                 ],
               ),
@@ -295,7 +267,6 @@ class _RoutingEngineSelectorState extends State<_RoutingEngineSelector> {
                       onTap: () {
                         HapticFeedback.selectionClick();
                         widget.routingManager.setEngine(engine);
-                        // Collapse after selection
                         setState(() => _isExpanded = false);
                       },
                     ),
@@ -333,23 +304,20 @@ class _EngineCard extends StatelessWidget {
     final l10n = HomeScreenLocalizations.of(context);
 
     final isOffline = !engine.requiresInternet;
-
-    // Use engine's actual name and description
     final name = engine.name;
     final description = engine.description;
 
-    // Build limitations list based on engine type
     final limitations = <String>[];
     if (isOffline) {
-      // Offline limitations
       limitations.add(l10n.limitationNoWalkingRoute);
     } else {
-      // Online limitations
       limitations.add(l10n.limitationRequiresInternet);
     }
 
     return Material(
-      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
+      color: isSelected
+          ? colorScheme.primaryContainer
+          : colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
@@ -377,7 +345,8 @@ class _EngineCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? colorScheme.primary : colorScheme.outline,
+                    color:
+                        isSelected ? colorScheme.primary : colorScheme.outline,
                     width: 2,
                   ),
                 ),
@@ -400,11 +369,12 @@ class _EngineCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title row with icon
                     Row(
                       children: [
                         Icon(
-                          isOffline ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
+                          isOffline
+                              ? Icons.offline_bolt_rounded
+                              : Icons.cloud_rounded,
                           color: isSelected
                               ? colorScheme.onPrimaryContainer
                               : colorScheme.onSurfaceVariant,
@@ -425,16 +395,15 @@ class _EngineCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    // Description
                     Text(
                       description,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: isSelected
-                            ? colorScheme.onPrimaryContainer.withValues(alpha: 0.8)
+                            ? colorScheme.onPrimaryContainer
+                                .withValues(alpha: 0.8)
                             : colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    // Limitations (if any)
                     if (limitations.isNotEmpty) ...[
                       const SizedBox(height: 6),
                       Wrap(
@@ -442,10 +411,12 @@ class _EngineCard extends StatelessWidget {
                         runSpacing: 4,
                         children: limitations.map((limitation) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? colorScheme.onPrimaryContainer.withValues(alpha: 0.15)
+                                  ? colorScheme.onPrimaryContainer
+                                      .withValues(alpha: 0.15)
                                   : colorScheme.surfaceContainerLow,
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -453,8 +424,10 @@ class _EngineCard extends StatelessWidget {
                               limitation,
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: isSelected
-                                    ? colorScheme.onPrimaryContainer.withValues(alpha: 0.7)
-                                    : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                                    ? colorScheme.onPrimaryContainer
+                                        .withValues(alpha: 0.7)
+                                    : colorScheme.onSurfaceVariant
+                                        .withValues(alpha: 0.8),
                                 fontSize: 10,
                               ),
                             ),
@@ -472,473 +445,3 @@ class _EngineCard extends StatelessWidget {
     );
   }
 }
-
-/// Accessibility toggle section.
-class _AccessibilitySection extends StatelessWidget {
-  const _AccessibilitySection();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final manager = RoutingPreferencesManager.maybeWatch(context);
-
-    if (manager == null) return const SizedBox.shrink();
-
-    final l10n = HomeScreenLocalizations.of(context);
-
-    return _SettingsCard(
-      child: SwitchListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Row(
-          children: [
-            Icon(
-              Icons.accessible_rounded,
-              color: manager.wheelchair ? colorScheme.primary : colorScheme.onSurfaceVariant,
-              size: 24,
-            ),
-            const SizedBox(width: 12),
-            Expanded(child: Text(l10n.wheelchairAccessible)),
-          ],
-        ),
-        subtitle: Text(
-          manager.wheelchair
-              ? l10n.wheelchairAccessibleOn
-              : l10n.wheelchairAccessibleOff,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-        value: manager.wheelchair,
-        onChanged: (value) {
-          HapticFeedback.selectionClick();
-          manager.setWheelchair(value);
-        },
-      ),
-    );
-  }
-}
-
-/// Walk speed selection section.
-class _WalkSpeedSection extends StatelessWidget {
-  const _WalkSpeedSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final manager = RoutingPreferencesManager.maybeWatch(context);
-
-    if (manager == null) return const SizedBox.shrink();
-
-    final l10n = HomeScreenLocalizations.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.directions_walk_rounded,
-              color: colorScheme.primary,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              l10n.walkingSpeed,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: WalkSpeedLevel.values.map((level) {
-            final isSelected = manager.walkSpeedLevel == level;
-            return Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  right: level != WalkSpeedLevel.fast ? 8 : 0,
-                ),
-                child: _SpeedChip(
-                  label: _getSpeedLabel(level, l10n),
-                  icon: _getSpeedIcon(level),
-                  isSelected: isSelected,
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    manager.setWalkSpeedLevel(level);
-                  },
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  String _getSpeedLabel(WalkSpeedLevel level, HomeScreenLocalizations l10n) {
-    switch (level) {
-      case WalkSpeedLevel.slow:
-        return l10n.speedSlow;
-      case WalkSpeedLevel.normal:
-        return l10n.speedNormal;
-      case WalkSpeedLevel.fast:
-        return l10n.speedFast;
-    }
-  }
-
-  IconData _getSpeedIcon(WalkSpeedLevel level) {
-    switch (level) {
-      case WalkSpeedLevel.slow:
-        return Icons.elderly_rounded;
-      case WalkSpeedLevel.normal:
-        return Icons.directions_walk_rounded;
-      case WalkSpeedLevel.fast:
-        return Icons.directions_run_rounded;
-    }
-  }
-}
-
-/// Speed selection chip.
-class _SpeedChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _SpeedChip({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Material(
-      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                color: isSelected
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
-                size: 24,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: isSelected
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSurfaceVariant,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Max walk distance section.
-class _MaxWalkDistanceSection extends StatelessWidget {
-  const _MaxWalkDistanceSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final l10n = HomeScreenLocalizations.of(context);
-    final manager = RoutingPreferencesManager.maybeWatch(context);
-
-    if (manager == null) return const SizedBox.shrink();
-
-    final distances = <double?>[null, 300, 500, 800, 1000, 1500];
-    final currentDistance = manager.maxWalkDistance;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.straighten_rounded,
-              color: colorScheme.primary,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              l10n.maxWalkDistance,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: distances.map((distance) {
-            final isSelected = currentDistance == distance;
-            return _DistanceChip(
-              distance: distance,
-              noLimitLabel: l10n.noLimit,
-              isSelected: isSelected,
-              onTap: () {
-                HapticFeedback.selectionClick();
-                manager.setMaxWalkDistance(distance);
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-/// Distance selection chip.
-class _DistanceChip extends StatelessWidget {
-  final double? distance;
-  final String noLimitLabel;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _DistanceChip({
-    required this.distance,
-    required this.noLimitLabel,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    final label = distance == null
-        ? noLimitLabel
-        : distance! >= 1000
-            ? '${(distance! / 1000).toStringAsFixed(1)} km'
-            : '${distance!.toInt()} m';
-
-    return Material(
-      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Text(
-            label,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: isSelected
-                  ? colorScheme.onPrimaryContainer
-                  : colorScheme.onSurfaceVariant,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Transport modes selection section.
-class _TransportModesSection extends StatelessWidget {
-  const _TransportModesSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final l10n = HomeScreenLocalizations.of(context);
-    final manager = RoutingPreferencesManager.maybeWatch(context);
-
-    if (manager == null) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.commute_rounded,
-              color: colorScheme.primary,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              l10n.transportModes,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _TransportModeChip(
-              mode: RoutingMode.transit,
-              icon: Icons.directions_bus_rounded,
-              label: l10n.modeTransit,
-              isSelected: manager.transportModes.contains(RoutingMode.transit),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                manager.toggleTransportMode(RoutingMode.transit);
-              },
-            ),
-            _TransportModeChip(
-              mode: RoutingMode.walk,
-              icon: Icons.directions_walk_rounded,
-              label: l10n.walk,
-              isSelected: manager.transportModes.contains(RoutingMode.walk),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                manager.toggleTransportMode(RoutingMode.walk);
-              },
-            ),
-            _TransportModeChip(
-              mode: RoutingMode.bicycle,
-              icon: Icons.directions_bike_rounded,
-              label: l10n.modeBicycle,
-              isSelected: manager.transportModes.contains(RoutingMode.bicycle),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                manager.toggleTransportMode(RoutingMode.bicycle);
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Transport mode selection chip.
-class _TransportModeChip extends StatelessWidget {
-  final RoutingMode mode;
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _TransportModeChip({
-    required this.mode,
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Material(
-      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                color: isSelected
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
-                size: 18,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: isSelected
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSurfaceVariant,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Settings card container.
-class _SettingsCard extends StatelessWidget {
-  final Widget child;
-
-  const _SettingsCard({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
-        ),
-      ),
-      child: child,
-    );
-  }
-}
-

@@ -7,9 +7,8 @@ abstract class RequestPlanService {
   Future<routing.Plan> fetchPlan({
     required TrufiLocation from,
     required TrufiLocation to,
-    List<routing.TransportMode>? transportModes,
     String? locale,
-    DateTime? dateTime,
-    routing.RoutingPreferences? preferences,
+    required DateTime dateTime,
+    bool arriveBy = false,
   });
 }

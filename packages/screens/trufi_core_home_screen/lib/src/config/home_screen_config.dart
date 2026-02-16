@@ -1,18 +1,13 @@
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
-import 'package:trufi_core_routing/trufi_core_routing.dart' show OtpConfiguration;
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 /// Configuration for the Home Screen module.
 ///
-/// Routing configuration is now provided via RoutingEngineManager in the app's
+/// Routing configuration is provided via RoutingEngineManager in the app's
 /// providers, similar to how MapEngineManager works. This allows for consistent
 /// engine selection in Settings.
 class HomeScreenConfig {
-  /// Legacy OTP configuration for route planning.
-  /// Only used if RoutingEngineManager is not available in context.
-  final OtpConfiguration? otpConfiguration;
-
   /// Zoom level when choosing a location
   final double chooseLocationZoom;
 
@@ -62,7 +57,6 @@ class HomeScreenConfig {
   final POILayersManager? poiLayersManager;
 
   const HomeScreenConfig({
-    this.otpConfiguration,
     this.chooseLocationZoom = 16.0,
     this.searchService,
     this.myPlaces = const [],
