@@ -1,5 +1,4 @@
 import '../models/gtfs_stop_time.dart';
-import '../models/gtfs_trip.dart';
 import '../parser/gtfs_parser.dart';
 
 /// A pattern representing a sequence of stops for a route.

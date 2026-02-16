@@ -56,19 +56,9 @@ class GtfsData {
 class GtfsParser {
   /// Parse a GTFS ZIP file from a file path.
   static Future<GtfsData> parseFromFile(String filePath) async {
-    final sw = Stopwatch()..start();
-    print('GtfsParser: Loading GTFS from $filePath');
-
     final file = File(filePath);
     final bytes = await file.readAsBytes();
-
-    final result = parseFromBytes(bytes);
-
-    sw.stop();
-    print('GtfsParser: Parsed GTFS in ${sw.elapsedMilliseconds}ms');
-    print('GtfsParser: ${result.stops.length} stops, ${result.routes.length} routes, ${result.trips.length} trips');
-
-    return result;
+    return parseFromBytes(bytes);
   }
 
   /// Parse GTFS data from raw bytes (synchronous).

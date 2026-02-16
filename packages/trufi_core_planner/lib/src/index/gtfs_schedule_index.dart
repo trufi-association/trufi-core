@@ -37,7 +37,9 @@ class RouteFrequencyInfo {
 class GtfsScheduleIndex {
   final Map<String, GtfsTrip> _trips;
   final List<GtfsStopTime> _stopTimes;
+  // ignore: unused_field
   final Map<String, GtfsCalendar> _calendars;
+  // ignore: unused_field
   final List<GtfsCalendarDate> _calendarDates;
   final List<GtfsFrequency> _frequencies;
 
