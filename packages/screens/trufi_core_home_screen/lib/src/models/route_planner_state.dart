@@ -3,11 +3,7 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
 /// How the departure/arrival time is configured.
-enum TimeMode {
-  leaveNow,
-  departAt,
-  arriveBy,
-}
+enum TimeMode { leaveNow, departAt, arriveBy }
 
 /// State for the route planner.
 class RoutePlannerState extends Equatable {
@@ -102,7 +98,8 @@ class RoutePlannerState extends Equatable {
           : null,
       selectedItinerary: json['selectedItinerary'] != null
           ? routing.Itinerary.fromJson(
-              json['selectedItinerary'] as Map<String, dynamic>)
+              json['selectedItinerary'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -118,15 +115,15 @@ class RoutePlannerState extends Equatable {
 
   @override
   List<Object?> get props => [
-        fromPlace,
-        toPlace,
-        plan,
-        selectedItinerary,
-        isLoading,
-        error,
-        timeMode,
-        dateTime,
-      ];
+    fromPlace,
+    toPlace,
+    plan,
+    selectedItinerary,
+    isLoading,
+    error,
+    timeMode,
+    dateTime,
+  ];
 }
 
 /// Helper class for nullable optional values

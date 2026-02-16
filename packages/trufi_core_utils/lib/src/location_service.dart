@@ -230,24 +230,25 @@ class LocationService extends ChangeNotifier {
         distanceFilter: distanceFilter,
       );
 
-      _positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: locationSettings,
-      ).listen(
-        (Position position) {
-          _lastKnownPosition = position;
-          _currentLocation = LocationResult(
-            latitude: position.latitude,
-            longitude: position.longitude,
-            accuracy: position.accuracy,
+      _positionStreamSubscription =
+          Geolocator.getPositionStream(
+            locationSettings: locationSettings,
+          ).listen(
+            (Position position) {
+              _lastKnownPosition = position;
+              _currentLocation = LocationResult(
+                latitude: position.latitude,
+                longitude: position.longitude,
+                accuracy: position.accuracy,
+              );
+              _safeNotifyListeners();
+            },
+            onError: (error) {
+              // Handle stream errors silently, tracking continues
+              debugPrint('Location stream error: $error');
+            },
+            cancelOnError: false, // Keep listening even after errors
           );
-          _safeNotifyListeners();
-        },
-        onError: (error) {
-          // Handle stream errors silently, tracking continues
-          debugPrint('Location stream error: $error');
-        },
-        cancelOnError: false, // Keep listening even after errors
-      );
 
       _isTracking = true;
 

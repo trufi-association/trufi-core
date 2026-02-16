@@ -23,7 +23,7 @@ class SavedPlacesRepositoryImpl implements SavedPlacesRepository {
   bool _isInitialized = false;
 
   SavedPlacesRepositoryImpl({StorageService? storage})
-      : _storage = storage ?? SharedPreferencesStorage();
+    : _storage = storage ?? SharedPreferencesStorage();
 
   @override
   Future<void> initialize() async {
@@ -51,9 +51,7 @@ class SavedPlacesRepositoryImpl implements SavedPlacesRepository {
     _ensureInitialized();
     final data = await _storage.read(_homePlaceKey);
     if (data == null) return null;
-    return SavedPlace.fromJson(
-      jsonDecode(data) as Map<String, dynamic>,
-    );
+    return SavedPlace.fromJson(jsonDecode(data) as Map<String, dynamic>);
   }
 
   @override
@@ -61,9 +59,7 @@ class SavedPlacesRepositoryImpl implements SavedPlacesRepository {
     _ensureInitialized();
     final data = await _storage.read(_workPlaceKey);
     if (data == null) return null;
-    return SavedPlace.fromJson(
-      jsonDecode(data) as Map<String, dynamic>,
-    );
+    return SavedPlace.fromJson(jsonDecode(data) as Map<String, dynamic>);
   }
 
   @override

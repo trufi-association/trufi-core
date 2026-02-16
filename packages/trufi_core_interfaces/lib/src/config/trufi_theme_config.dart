@@ -10,8 +10,8 @@ class TrufiThemeConfig {
     ThemeData? theme,
     ThemeData? darkTheme,
     this.themeMode = ThemeMode.system,
-  })  : _theme = theme,
-        _darkTheme = darkTheme;
+  }) : _theme = theme,
+       _darkTheme = darkTheme;
 
   ThemeData get theme =>
       _theme ??

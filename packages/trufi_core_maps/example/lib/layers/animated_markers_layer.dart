@@ -57,12 +57,17 @@ class VehicleMarker {
     }
 
     // Interpolate position
-    final segFrom = _forward ? route[_currentSegment] : route[_currentSegment + 1];
-    final segTo = _forward ? route[_currentSegment + 1] : route[_currentSegment];
+    final segFrom = _forward
+        ? route[_currentSegment]
+        : route[_currentSegment + 1];
+    final segTo = _forward
+        ? route[_currentSegment + 1]
+        : route[_currentSegment];
 
     currentPosition = latlng.LatLng(
       segFrom.latitude + (segTo.latitude - segFrom.latitude) * _segmentProgress,
-      segFrom.longitude + (segTo.longitude - segFrom.longitude) * _segmentProgress,
+      segFrom.longitude +
+          (segTo.longitude - segFrom.longitude) * _segmentProgress,
     );
   }
 }
@@ -121,8 +126,10 @@ class AnimatedMarkersLayer extends TrufiLayer {
       final routeLength = 5 + random.nextInt(10);
       final route = <latlng.LatLng>[];
 
-      var lat = center.latitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
-      var lng = center.longitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
+      var lat =
+          center.latitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
+      var lng =
+          center.longitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
 
       for (var j = 0; j < routeLength; j++) {
         route.add(latlng.LatLng(lat, lng));
@@ -130,13 +137,15 @@ class AnimatedMarkersLayer extends TrufiLayer {
         lng += (random.nextDouble() - 0.5) * 0.01;
       }
 
-      _vehicles.add(VehicleMarker(
-        id: 'vehicle-$i',
-        route: route,
-        color: colors[random.nextInt(colors.length)],
-        icon: icons[random.nextInt(icons.length)],
-        speed: 0.00002 + random.nextDouble() * 0.00006,
-      ));
+      _vehicles.add(
+        VehicleMarker(
+          id: 'vehicle-$i',
+          route: route,
+          color: colors[random.nextInt(colors.length)],
+          icon: icons[random.nextInt(icons.length)],
+          speed: 0.00002 + random.nextDouble() * 0.00006,
+        ),
+      );
     }
 
     _updateMarkers();
@@ -177,7 +186,8 @@ class AnimatedMarkersLayer extends TrufiLayer {
           alignment: Alignment.center,
           layerLevel: layerLevel,
           // IMPORTANT: Stable key for image caching - see method docs above
-          imageCacheKey: 'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
+          imageCacheKey:
+              'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
         ),
       );
     }
@@ -256,10 +266,7 @@ class _VehicleMarkerWidget extends StatelessWidget {
   final Color color;
   final IconData icon;
 
-  const _VehicleMarkerWidget({
-    required this.color,
-    required this.icon,
-  });
+  const _VehicleMarkerWidget({required this.color, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -269,9 +276,7 @@ class _VehicleMarkerWidget extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 2),
       ),
-      child: Center(
-        child: Icon(icon, color: Colors.white, size: 18),
-      ),
+      child: Center(child: Icon(icon, color: Colors.white, size: 18)),
     );
   }
 }

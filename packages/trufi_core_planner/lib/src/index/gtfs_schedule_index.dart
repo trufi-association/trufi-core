@@ -52,11 +52,11 @@ class GtfsScheduleIndex {
     required Map<String, GtfsCalendar> calendars,
     required List<GtfsCalendarDate> calendarDates,
     required List<GtfsFrequency> frequencies,
-  })  : _trips = trips,
-        _stopTimes = stopTimes,
-        _calendars = calendars,
-        _calendarDates = calendarDates,
-        _frequencies = frequencies {
+  }) : _trips = trips,
+       _stopTimes = stopTimes,
+       _calendars = calendars,
+       _calendarDates = calendarDates,
+       _frequencies = frequencies {
     _buildIndices();
   }
 
@@ -117,13 +117,15 @@ class GtfsScheduleIndex {
           departureTime.inSeconds % 60,
         );
 
-        departures.add(StopDeparture(
-          tripId: st.tripId,
-          routeId: trip.routeId,
-          headsign: trip.headsign ?? '',
-          departureTime: departureDateTime,
-          stopSequence: st.stopSequence,
-        ));
+        departures.add(
+          StopDeparture(
+            tripId: st.tripId,
+            routeId: trip.routeId,
+            headsign: trip.headsign ?? '',
+            departureTime: departureDateTime,
+            stopSequence: st.stopSequence,
+          ),
+        );
 
         if (departures.length >= limit) break;
       }

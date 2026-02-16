@@ -47,10 +47,7 @@ class PhotonSearchService implements SearchLocationService {
       return [];
     }
 
-    final queryParams = <String, String>{
-      'q': query,
-      'limit': limit.toString(),
-    };
+    final queryParams = <String, String>{'q': query, 'limit': limit.toString()};
 
     if (language != null) {
       queryParams['lang'] = language!;
@@ -66,7 +63,9 @@ class PhotonSearchService implements SearchLocationService {
           '${boundingBox![0]},${boundingBox![1]},${boundingBox![2]},${boundingBox![3]}';
     }
 
-    final uri = Uri.parse('$baseUrl/api/').replace(queryParameters: queryParams);
+    final uri = Uri.parse(
+      '$baseUrl/api/',
+    ).replace(queryParameters: queryParams);
 
     try {
       final response = await _client.get(uri);
@@ -84,7 +83,10 @@ class PhotonSearchService implements SearchLocationService {
       return features.map((feature) => _parseFeature(feature)).toList();
     } catch (e) {
       if (e is SearchLocationException) rethrow;
-      throw SearchLocationException('Photon search failed: $e', originalError: e);
+      throw SearchLocationException(
+        'Photon search failed: $e',
+        originalError: e,
+      );
     }
   }
 
@@ -99,8 +101,9 @@ class PhotonSearchService implements SearchLocationService {
       queryParams['lang'] = language!;
     }
 
-    final uri =
-        Uri.parse('$baseUrl/reverse').replace(queryParameters: queryParams);
+    final uri = Uri.parse(
+      '$baseUrl/reverse',
+    ).replace(queryParameters: queryParams);
 
     try {
       final response = await _client.get(uri);
@@ -144,9 +147,11 @@ class PhotonSearchService implements SearchLocationService {
     } else if (street != null) {
       displayName = houseNumber != null ? '$street $houseNumber' : street;
     } else {
-      displayName = [city, state, country]
-          .where((s) => s != null && s.isNotEmpty)
-          .join(', ');
+      displayName = [
+        city,
+        state,
+        country,
+      ].where((s) => s != null && s.isNotEmpty).join(', ');
     }
 
     if (displayName.isEmpty) {
@@ -162,8 +167,7 @@ class PhotonSearchService implements SearchLocationService {
     if (state != null) addressParts.add(state);
     if (country != null) addressParts.add(country);
 
-    final address =
-        addressParts.isNotEmpty ? addressParts.join(', ') : null;
+    final address = addressParts.isNotEmpty ? addressParts.join(', ') : null;
 
     return SearchLocation(
       id: osmId != null ? 'osm_$osmId' : 'photon_${lat}_$lon',

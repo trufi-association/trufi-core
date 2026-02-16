@@ -20,9 +20,9 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   RoutePlannerCubit({
     HomeScreenRepository? repository,
     required RequestPlanService requestService,
-  })  : _repository = repository ?? HomeScreenRepositoryImpl(),
-        _requestService = requestService,
-        super(const RoutePlannerState());
+  }) : _repository = repository ?? HomeScreenRepositoryImpl(),
+       _requestService = requestService,
+       super(const RoutePlannerState());
 
   /// Initialize and load saved state.
   Future<void> initialize() async {
@@ -33,12 +33,14 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     final plan = await _repository.getPlan();
     final selectedItinerary = await _repository.getSelectedItinerary();
 
-    emit(state.copyWith(
-      fromPlace: fromPlace,
-      toPlace: toPlace,
-      plan: plan,
-      selectedItinerary: selectedItinerary,
-    ));
+    emit(
+      state.copyWith(
+        fromPlace: fromPlace,
+        toPlace: toPlace,
+        plan: plan,
+        selectedItinerary: selectedItinerary,
+      ),
+    );
   }
 
   /// Set the origin location.
@@ -70,11 +72,13 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     await _cancelCurrentFetch();
     await _repository.savePlan(null);
     await _repository.saveSelectedItinerary(null);
-    emit(state.copyWithNullable(
-      plan: const Optional(null),
-      selectedItinerary: const Optional(null),
-      error: const Optional(null),
-    ));
+    emit(
+      state.copyWithNullable(
+        plan: const Optional(null),
+        selectedItinerary: const Optional(null),
+        error: const Optional(null),
+      ),
+    );
   }
 
   /// Swap origin and destination.
@@ -85,10 +89,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     await _repository.saveFromPlace(newFromPlace);
     await _repository.saveToPlace(newToPlace);
 
-    emit(state.copyWith(
-      fromPlace: newFromPlace,
-      toPlace: newToPlace,
-    ));
+    emit(state.copyWith(fromPlace: newFromPlace, toPlace: newToPlace));
   }
 
   /// Reset all state.
@@ -114,12 +115,14 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
 
     await _cancelCurrentFetch();
 
-    emit(state.copyWithNullable(
-      isLoading: true,
-      plan: const Optional(null),
-      selectedItinerary: const Optional(null),
-      error: const Optional(null),
-    ));
+    emit(
+      state.copyWithNullable(
+        isLoading: true,
+        plan: const Optional(null),
+        selectedItinerary: const Optional(null),
+        error: const Optional(null),
+      ),
+    );
 
     // Compute dateTime and arriveBy from time settings
     final DateTime effectiveDateTime;
@@ -155,30 +158,26 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       }
 
       if (!plan.hasItineraries) {
-        emit(state.copyWith(
-          isLoading: false,
-          error: 'No routes found',
-        ));
+        emit(state.copyWith(isLoading: false, error: 'No routes found'));
         return;
       }
 
       final index = selectedItineraryIndex ?? 0;
-      final selectedItinerary = plan.itineraries![
-          index < plan.itineraries!.length ? index : 0];
+      final selectedItinerary =
+          plan.itineraries![index < plan.itineraries!.length ? index : 0];
 
       await _repository.savePlan(plan);
       await _repository.saveSelectedItinerary(selectedItinerary);
 
-      emit(state.copyWith(
-        plan: plan,
-        selectedItinerary: selectedItinerary,
-        isLoading: false,
-      ));
+      emit(
+        state.copyWith(
+          plan: plan,
+          selectedItinerary: selectedItinerary,
+          isLoading: false,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 

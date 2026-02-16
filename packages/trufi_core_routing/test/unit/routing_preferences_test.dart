@@ -99,8 +99,9 @@ void main() {
     }
 
     test('includes wheelchair parameter when enabled', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(wheelchair: true);
 
@@ -110,16 +111,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['wheelchair'], equals('true'));
     });
 
     test('includes walkSpeed parameter', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(walkSpeed: 0.8);
 
@@ -129,16 +136,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['walkSpeed'], equals('0.8'));
     });
 
     test('includes walkReluctance parameter', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(walkReluctance: 3.5);
 
@@ -148,16 +161,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['walkReluctance'], equals('3.5'));
     });
 
     test('includes maxWalkDistance when set', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(maxWalkDistance: 500.0);
 
@@ -167,16 +186,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['maxWalkDistance'], equals('500.0'));
     });
 
     test('does not include maxWalkDistance when null', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       // Default preferences have maxWalkDistance as null
       provider = await createProviderWithPrefs();
@@ -187,16 +212,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters.containsKey('maxWalkDistance'), isFalse);
     });
 
     test('includes bikeSpeed when bicycle mode is selected', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(
         bikeSpeed: 6.0,
@@ -209,38 +240,53 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['bikeSpeed'], equals('6.0'));
     });
 
-    test('does not include bikeSpeed when bicycle mode is not selected', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+    test(
+      'does not include bikeSpeed when bicycle mode is not selected',
+      () async {
+        when(
+          () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+        ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
-      provider = await createProviderWithPrefs(
-        bikeSpeed: 6.0,
-        transportModes: {RoutingMode.transit, RoutingMode.walk},
-      );
+        provider = await createProviderWithPrefs(
+          bikeSpeed: 6.0,
+          transportModes: {RoutingMode.transit, RoutingMode.walk},
+        );
 
-      await provider.fetchPlan(
-        from: TestConfig.originLocation,
-        to: TestConfig.destinationLocation,
-        dateTime: fixedDate,
-      );
+        await provider.fetchPlan(
+          from: TestConfig.originLocation,
+          to: TestConfig.destinationLocation,
+          dateTime: fixedDate,
+        );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+        final captured =
+            verify(
+                  () => mockHttpClient.get(
+                    captureAny(),
+                    headers: any(named: 'headers'),
+                  ),
+                ).captured.first
+                as Uri;
 
-      expect(captured.queryParameters.containsKey('bikeSpeed'), isFalse);
-    });
+        expect(captured.queryParameters.containsKey('bikeSpeed'), isFalse);
+      },
+    );
 
     test('builds correct mode string from transportModes', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(
         transportModes: {RoutingMode.bicycle, RoutingMode.transit},
@@ -252,9 +298,14 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       final mode = captured.queryParameters['mode']!;
       expect(mode.contains('BICYCLE'), isTrue);
@@ -262,8 +313,9 @@ void main() {
     });
 
     test('uses default modes with default preferences', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs();
 
@@ -273,16 +325,22 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['mode'], equals('TRANSIT,WALK'));
     });
 
     test('formats date correctly in query params', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs();
 
@@ -292,9 +350,14 @@ void main() {
         dateTime: fixedDate, // 2025-06-15 10:30
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       // OTP 1.5 uses MM-DD-YYYY format
       expect(captured.queryParameters['date'], equals('06-15-2025'));
@@ -302,8 +365,9 @@ void main() {
     });
 
     test('includes all wheelchair-related preferences together', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       provider = await createProviderWithPrefs(
         wheelchair: true,
@@ -318,9 +382,14 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['wheelchair'], equals('true'));
       expect(captured.queryParameters['walkSpeed'], equals('0.8'));
@@ -329,8 +398,9 @@ void main() {
     });
 
     test('includes custom headers from planHeaderProvider', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
 
       SharedPreferences.setMockInitialValues({});
 
@@ -338,10 +408,8 @@ void main() {
         endpoint: 'https://test-otp.example.com/otp/routers/default/plan',
         httpClient: mockHttpClient,
         planHeaderProvider: (from, to) => {
-          'X-Origin':
-              '${from.position.latitude},${from.position.longitude}',
-          'X-Dest':
-              '${to.position.latitude},${to.position.longitude}',
+          'X-Origin': '${from.position.latitude},${from.position.longitude}',
+          'X-Dest': '${to.position.latitude},${to.position.longitude}',
         },
       );
       await provider.initialize();
@@ -352,9 +420,14 @@ void main() {
         dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(any(), headers: captureAny(named: 'headers')),
-      ).captured.first as Map<String, String>;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  any(),
+                  headers: captureAny(named: 'headers'),
+                ),
+              ).captured.first
+              as Map<String, String>;
 
       expect(captured['Accept'], equals('application/json'));
       expect(captured['X-Origin'], isNotNull);

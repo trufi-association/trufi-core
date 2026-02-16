@@ -15,15 +15,10 @@ POILayersLocalizations _getL10n(BuildContext context) {
 /// A settings section widget for configuring POI layer visibility.
 /// Can be integrated into a settings screen or shown as a standalone modal.
 class POILayersSettingsSection extends StatelessWidget {
-
-
   /// Optional section title
   final String? title;
 
-  const POILayersSettingsSection({
-    super.key,
-    this.title,
-  });
+  const POILayersSettingsSection({super.key, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +35,8 @@ class POILayersSettingsSection extends StatelessWidget {
         const SizedBox(height: 8),
         // Category toggles - dynamically loaded from metadata
         ...categories.map((category) {
-          final availableSubcats = manager.availableSubcategories[category.name];
+          final availableSubcats =
+              manager.availableSubcategories[category.name];
           final enabledSubcats = manager.enabledSubcategories[category.name];
           // Category is enabled if it has any enabled subcategories
           final isEnabled = enabledSubcats != null && enabledSubcats.isNotEmpty;
@@ -235,7 +231,8 @@ class _POICategoryTileState extends State<_POICategoryTile> {
     final colorScheme = Theme.of(context).colorScheme;
 
     // Try to use SVG icon from metadata
-    if (widget.category.iconSvg != null && widget.category.iconSvg!.isNotEmpty) {
+    if (widget.category.iconSvg != null &&
+        widget.category.iconSvg!.isNotEmpty) {
       return Container(
         width: 40,
         height: 40,
@@ -302,7 +299,9 @@ class _SubcategoriesList extends StatelessWidget {
 
   /// Get display name for subcategory from metadata or format from string
   String _getSubcategoryDisplayName(
-      String subcategoryName, String languageCode) {
+    String subcategoryName,
+    String languageCode,
+  ) {
     // Try to get from category metadata
     final subConfig = category.getSubcategory(subcategoryName);
     if (subConfig != null) {
@@ -444,11 +443,7 @@ class _SubcategorySwitchTile extends StatelessWidget {
                 SizedBox(
                   width: 20,
                   height: 20,
-                  child: SvgPicture.string(
-                    iconSvg!,
-                    width: 20,
-                    height: 20,
-                  ),
+                  child: SvgPicture.string(iconSvg!, width: 20, height: 20),
                 )
               else
                 Container(

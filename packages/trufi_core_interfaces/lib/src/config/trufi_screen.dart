@@ -14,7 +14,8 @@ class TrufiSubRoute {
   final String path;
 
   /// Widget builder that receives context and query parameters
-  final Widget Function(BuildContext context, Map<String, String> queryParams) builder;
+  final Widget Function(BuildContext context, Map<String, String> queryParams)
+  builder;
 
   /// Whether this sub-route provides its own AppBar
   final bool hasOwnAppBar;

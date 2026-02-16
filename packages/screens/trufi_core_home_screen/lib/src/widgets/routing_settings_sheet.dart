@@ -53,11 +53,7 @@ class RoutingSettingsSheet extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Row(
               children: [
-                Icon(
-                  Icons.tune_rounded,
-                  color: colorScheme.primary,
-                  size: 24,
-                ),
+                Icon(Icons.tune_rounded, color: colorScheme.primary, size: 24),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -103,11 +99,13 @@ class RoutingSettingsSheet extends StatelessWidget {
                   // Provider-specific preferences UI
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                    child: routingManager.currentEngine
-                            .buildPreferencesUI(context) ??
+                    child:
+                        routingManager.currentEngine.buildPreferencesUI(
+                          context,
+                        ) ??
                         _NoOptionsMessage(
-                            providerName:
-                                routingManager.currentEngine.name),
+                          providerName: routingManager.currentEngine.name,
+                        ),
                   ),
                 ],
               ),
@@ -345,8 +343,9 @@ class _EngineCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color:
-                        isSelected ? colorScheme.primary : colorScheme.outline,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outline,
                     width: 2,
                   ),
                 ),
@@ -399,8 +398,9 @@ class _EngineCard extends StatelessWidget {
                       description,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: isSelected
-                            ? colorScheme.onPrimaryContainer
-                                .withValues(alpha: 0.8)
+                            ? colorScheme.onPrimaryContainer.withValues(
+                                alpha: 0.8,
+                              )
                             : colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -412,11 +412,14 @@ class _EngineCard extends StatelessWidget {
                         children: limitations.map((limitation) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? colorScheme.onPrimaryContainer
-                                      .withValues(alpha: 0.15)
+                                  ? colorScheme.onPrimaryContainer.withValues(
+                                      alpha: 0.15,
+                                    )
                                   : colorScheme.surfaceContainerLow,
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -424,10 +427,12 @@ class _EngineCard extends StatelessWidget {
                               limitation,
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: isSelected
-                                    ? colorScheme.onPrimaryContainer
-                                        .withValues(alpha: 0.7)
-                                    : colorScheme.onSurfaceVariant
-                                        .withValues(alpha: 0.8),
+                                    ? colorScheme.onPrimaryContainer.withValues(
+                                        alpha: 0.7,
+                                      )
+                                    : colorScheme.onSurfaceVariant.withValues(
+                                        alpha: 0.8,
+                                      ),
                                 fontSize: 10,
                               ),
                             ),

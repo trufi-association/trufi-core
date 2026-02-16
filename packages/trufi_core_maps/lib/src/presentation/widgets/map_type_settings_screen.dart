@@ -74,10 +74,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
     super.dispose();
   }
 
-  Widget _buildAnimatedItem({
-    required int index,
-    required Widget child,
-  }) {
+  Widget _buildAnimatedItem({required int index, required Widget child}) {
     final totalItems = widget.mapOptions.length + 2; // +2 for header and button
     final startTime = (index / totalItems).clamp(0.0, 0.6);
     final endTime = ((index / totalItems) + 0.4).clamp(0.0, 1.0);
@@ -94,10 +91,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -215,10 +209,7 @@ class _MapSettingsHeader extends StatelessWidget {
   final String title;
   final VoidCallback onClose;
 
-  const _MapSettingsHeader({
-    required this.title,
-    required this.onClose,
-  });
+  const _MapSettingsHeader({required this.title, required this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -385,11 +376,7 @@ class _ModernMapTypeCard extends StatelessWidget {
     if (option.previewImage != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: SizedBox(
-          width: 72,
-          height: 72,
-          child: option.previewImage,
-        ),
+        child: SizedBox(width: 72, height: 72, child: option.previewImage),
       );
     }
 

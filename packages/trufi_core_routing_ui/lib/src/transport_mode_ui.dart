@@ -45,21 +45,27 @@ extension TransportModeUI on TransportMode {
   /// Custom SVG image widget for this transport mode.
   Widget? getCustomImage({Color? color}) {
     return switch (this) {
-      TransportMode.bicycle =>
-        bikeIcon(color: color ?? const Color(0xff666666)),
+      TransportMode.bicycle => bikeIcon(
+        color: color ?? const Color(0xff666666),
+      ),
       TransportMode.bus => busIcon(color: color ?? const Color(0xffff260c)),
-      TransportMode.cableCar =>
-        gondolaIcon(color: color ?? const Color(0xff000000)),
+      TransportMode.cableCar => gondolaIcon(
+        color: color ?? const Color(0xff000000),
+      ),
       TransportMode.car => carIcon(color: color ?? const Color(0xff000000)),
-      TransportMode.carPool =>
-        carpoolIcon(color: color ?? const Color(0xff9fc727)),
-      TransportMode.funicular =>
-        gondolaIcon(color: color ?? const Color(0xff000000)),
-      TransportMode.gondola =>
-        gondolaIcon(color: color ?? const Color(0xff000000)),
+      TransportMode.carPool => carpoolIcon(
+        color: color ?? const Color(0xff9fc727),
+      ),
+      TransportMode.funicular => gondolaIcon(
+        color: color ?? const Color(0xff000000),
+      ),
+      TransportMode.gondola => gondolaIcon(
+        color: color ?? const Color(0xff000000),
+      ),
       TransportMode.rail => railIcon(color: color ?? const Color(0xff018000)),
-      TransportMode.subway =>
-        subwayIcon(color: color ?? Colors.blueAccent[700]),
+      TransportMode.subway => subwayIcon(
+        color: color ?? Colors.blueAccent[700],
+      ),
       TransportMode.walk => walkIcon(color: color ?? const Color(0xff000000)),
       _ => null,
     };
@@ -108,7 +114,8 @@ extension TransportModeUI on TransportMode {
       height: size,
       padding: const EdgeInsets.all(2),
       child: FittedBox(
-        child: getCustomImage(color: color) ??
+        child:
+            getCustomImage(color: color) ??
             (icon != null
                 ? Icon(icon, color: color)
                 : const Icon(Icons.error, color: Colors.red)),

@@ -50,10 +50,7 @@ class TransportDetailScreen extends StatefulWidget {
   /// Navigates to `/routes/:id` using path parameter.
   /// Uses push() so pop() can return to the previous screen.
   /// URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs.
-  static void show(
-    BuildContext context, {
-    required String routeCode,
-  }) {
+  static void show(BuildContext context, {required String routeCode}) {
     final encodedId = Uri.encodeComponent(routeCode);
     context.push('/routes/$encodedId');
   }
@@ -83,12 +80,14 @@ class TransportDetailScreen extends StatefulWidget {
             ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
             .toList(),
         stops: route.stops
-            ?.map((s) => TransportStop(
-                  id: s.name,
-                  name: s.name,
-                  latitude: s.lat,
-                  longitude: s.lon,
-                ))
+            ?.map(
+              (s) => TransportStop(
+                id: s.name,
+                name: s.name,
+                latitude: s.lat,
+                longitude: s.lon,
+              ),
+            )
             .toList(),
       );
     };
@@ -143,7 +142,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     return _RouteMapView(
       route: _route,
       registerMapMoveCallback: (callback) => _mapMoveCallback = callback,
-      registerStopSelectionCallback: (callback) => _stopSelectionCallback = callback,
+      registerStopSelectionCallback: (callback) =>
+          _stopSelectionCallback = callback,
     );
   }
 
@@ -373,9 +373,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     if (_route == null) {
       return Stack(
         children: [
-          Positioned.fill(
-            child: _ErrorState(onRetry: () => _handleClose()),
-          ),
+          Positioned.fill(child: _ErrorState(onRetry: () => _handleClose())),
           _buildBackButton(context, colorScheme),
         ],
       );
@@ -388,12 +386,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
 
         if (isWideScreen) {
-          return _buildWideLayout(
-            context,
-            theme,
-            colorScheme,
-            sidePanelWidth,
-          );
+          return _buildWideLayout(context, theme, colorScheme, sidePanelWidth);
         } else {
           return _buildNarrowLayout(context, theme, colorScheme);
         }
@@ -510,10 +503,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                           children: [
                             if (_route!.modeIcon != null) ...[
                               IconTheme(
-                                data: IconThemeData(
-                                  color: textColor,
-                                  size: 16,
-                                ),
+                                data: IconThemeData(color: textColor, size: 16),
                                 child: _route!.modeIcon!,
                               ),
                               const SizedBox(width: 4),
@@ -739,7 +729,8 @@ class _RouteDistanceCalculator {
     const earthRadius = 6371.0; // km
     final dLat = _toRadians(lat2 - lat1);
     final dLon = _toRadians(lon2 - lon1);
-    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    final a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(_toRadians(lat1)) *
             math.cos(_toRadians(lat2)) *
             math.sin(dLon / 2) *
@@ -919,9 +910,7 @@ class _StopsSheetContent extends StatelessWidget {
             decoration: BoxDecoration(
               color: routeColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: routeColor.withValues(alpha: 0.2),
-              ),
+              border: Border.all(color: routeColor.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -1367,9 +1356,7 @@ class _SidePanelStopsContent extends StatelessWidget {
             decoration: BoxDecoration(
               color: routeColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: routeColor.withValues(alpha: 0.2),
-              ),
+              border: Border.all(color: routeColor.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -1675,12 +1662,16 @@ class _RouteMapViewState extends State<_RouteMapView> {
                           scale: outOfFocus ? 1.0 : 0.8,
                           duration: const Duration(milliseconds: 200),
                           child: Material(
-                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.95),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surface.withValues(alpha: 0.95),
                             borderRadius: BorderRadius.circular(12),
                             elevation: 2,
                             shadowColor: Colors.black26,
                             child: InkWell(
-                              onTap: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                              onTap: outOfFocus
+                                  ? _fitCameraLayer!.reFitCamera
+                                  : null,
                               borderRadius: BorderRadius.circular(12),
                               child: Container(
                                 width: 44,
@@ -1689,7 +1680,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
                                 child: Icon(
                                   Icons.crop_free_rounded,
                                   size: 22,
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -1877,11 +1870,7 @@ class _DestinationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(
-      Icons.place_rounded,
-      color: _color,
-      size: 36,
-    );
+    return const Icon(Icons.place_rounded, color: _color, size: 36);
   }
 }
 

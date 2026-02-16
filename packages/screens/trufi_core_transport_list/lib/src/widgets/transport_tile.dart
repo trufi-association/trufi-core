@@ -7,11 +7,7 @@ class TransportTile extends StatelessWidget {
   final TransportRoute route;
   final VoidCallback onTap;
 
-  const TransportTile({
-    super.key,
-    required this.route,
-    required this.onTap,
-  });
+  const TransportTile({super.key, required this.route, required this.onTap});
 
   /// Get the primary text to display (destination or route name)
   String _getPrimaryText(TransportRoute route) {
@@ -104,16 +100,18 @@ class TransportTile extends StatelessWidget {
                                   Icon(
                                     Icons.route_rounded,
                                     size: 14,
-                                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                                    color: colorScheme.onSurfaceVariant
+                                        .withValues(alpha: 0.7),
                                   ),
                                   const SizedBox(width: 4),
                                   Expanded(
                                     child: Text(
                                       _getSecondaryText(route)!,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
-                                        height: 1.3,
-                                      ),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color: colorScheme.onSurfaceVariant,
+                                            height: 1.3,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -130,7 +128,9 @@ class TransportTile extends StatelessWidget {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                          color: colorScheme.surfaceContainerHighest.withValues(
+                            alpha: 0.5,
+                          ),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
@@ -193,11 +193,7 @@ class _RouteBadge extends StatelessWidget {
               ),
             )
           else
-            Icon(
-              Icons.directions_bus_rounded,
-              size: 18,
-              color: textColor,
-            ),
+            Icon(Icons.directions_bus_rounded, size: 18, color: textColor),
           const SizedBox(height: 2),
           // Route number
           Text(

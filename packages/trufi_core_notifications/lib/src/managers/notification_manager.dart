@@ -37,8 +37,8 @@ class NotificationManager extends ChangeNotifier {
     NotificationService? service,
     Duration? pollInterval,
     this.onNotificationReceived,
-  })  : _service = service,
-        _pollInterval = pollInterval {
+  }) : _service = service,
+       _pollInterval = pollInterval {
     _initialize();
   }
 
@@ -343,10 +343,7 @@ class NotificationManager extends ChangeNotifier {
   }) async {
     final service = _service;
     if (service == null) return false;
-    return service.registerDevice(
-      pushToken: pushToken,
-      platform: platform,
-    );
+    return service.registerDevice(pushToken: pushToken, platform: platform);
   }
 
   /// Unregister device from push notifications

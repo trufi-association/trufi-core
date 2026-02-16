@@ -2,11 +2,7 @@ import 'package:latlong2/latlong.dart';
 
 /// A location in a trip plan (origin or destination).
 class PlanLocation {
-  const PlanLocation({
-    this.name,
-    this.latitude,
-    this.longitude,
-  });
+  const PlanLocation({this.name, this.latitude, this.longitude});
 
   final String? name;
   final double? latitude;
@@ -23,11 +19,7 @@ class PlanLocation {
 
   /// Converts this location to JSON.
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'lat': latitude,
-      'lon': longitude,
-    };
+    return {'name': name, 'lat': latitude, 'lon': longitude};
   }
 
   /// Returns a [LatLng] if both latitude and longitude are available.

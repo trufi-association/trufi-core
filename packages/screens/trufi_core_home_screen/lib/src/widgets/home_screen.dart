@@ -118,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.deactivate();
   }
 
-
   void _setupSharedRouteListener() {
     // Try to get SharedRouteNotifier from context (it may not be available)
     try {
@@ -195,7 +194,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     // Skip if nothing has changed
     final placesChanged = _lastUrlFrom != from || _lastUrlTo != to;
-    final timeChanged = _lastUrlTimeMode != currentTimeMode ||
+    final timeChanged =
+        _lastUrlTimeMode != currentTimeMode ||
         _lastUrlDateTime != currentDateTime;
     final routeChanged = _lastUrlRouteIndex != routeIndex;
     if (!placesChanged && !timeChanged && !routeChanged) return;
@@ -237,7 +237,10 @@ class _HomeScreenState extends State<HomeScreen>
 
     // Update URL without navigation
     try {
-      final uri = Uri(path: '/', queryParameters: params.isEmpty ? null : params);
+      final uri = Uri(
+        path: '/',
+        queryParameters: params.isEmpty ? null : params,
+      );
       GoRouter.of(context).replace(uri.toString());
     } catch (e) {
       debugPrint('HomeScreen: Error updating URL: $e');
@@ -270,9 +273,7 @@ class _HomeScreenState extends State<HomeScreen>
         if (timeMode != TimeMode.leaveNow) {
           final timeMs = int.tryParse(params['time'] ?? '');
           if (timeMs != null) {
-            cubit.setDateTime(
-              DateTime.fromMillisecondsSinceEpoch(timeMs),
-            );
+            cubit.setDateTime(DateTime.fromMillisecondsSinceEpoch(timeMs));
           }
         }
       }
@@ -307,7 +308,10 @@ class _HomeScreenState extends State<HomeScreen>
       final routeIndex = int.tryParse(params['route'] ?? '');
 
       // Fetch plan if both are set
-      if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
+      if (fromLat != null &&
+          fromLng != null &&
+          toLat != null &&
+          toLng != null) {
         // If a route index is specified, show details on load
         if (routeIndex != null && routeIndex >= 0) {
           _showDetailOnLoad = true;
@@ -1016,7 +1020,8 @@ class _HomeScreenState extends State<HomeScreen>
               // The BlocConsumer listener only fires on state changes, so if we
               // navigate away and come back with the same state, we need to
               // re-render the route manually.
-              final needsRouteRender = _needsRouteRefresh ||
+              final needsRouteRender =
+                  _needsRouteRefresh ||
                   (state.selectedItinerary != null && _routeLayer == null);
 
               if (_needsRouteRefresh) {
@@ -1048,9 +1053,7 @@ class _HomeScreenState extends State<HomeScreen>
               // Note: The map is already positioned to the right of the side panel,
               // so we don't need to include sidePanelWidth in the padding.
               if (isWideScreen) {
-                _fitCameraLayer?.updatePadding(
-                  const EdgeInsets.all(30),
-                );
+                _fitCameraLayer?.updatePadding(const EdgeInsets.all(30));
               }
 
               return Stack(
@@ -1525,7 +1528,8 @@ class _HomeScreenState extends State<HomeScreen>
                       },
                       onItineraryDetails: widget.onItineraryDetails,
                       onRouteTap: widget.onRouteTap != null
-                          ? (routeCode) => widget.onRouteTap!(context, routeCode)
+                          ? (routeCode) =>
+                                widget.onRouteTap!(context, routeCode)
                           : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
@@ -1551,7 +1555,8 @@ class _HomeScreenState extends State<HomeScreen>
                       },
                       onItineraryDetails: widget.onItineraryDetails,
                       onRouteTap: widget.onRouteTap != null
-                          ? (routeCode) => widget.onRouteTap!(context, routeCode)
+                          ? (routeCode) =>
+                                widget.onRouteTap!(context, routeCode)
                           : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
@@ -2345,7 +2350,10 @@ class _DepartureTimeChip extends StatelessWidget {
               onTap: () => _showTimePicker(context, timeMode, dateTime),
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -2389,7 +2397,11 @@ class _DepartureTimeChip extends StatelessWidget {
     }
   }
 
-  String _getTimeModeLabel(TimeMode mode, DateTime? dateTime, HomeScreenLocalizations l10n) {
+  String _getTimeModeLabel(
+    TimeMode mode,
+    DateTime? dateTime,
+    HomeScreenLocalizations l10n,
+  ) {
     switch (mode) {
       case TimeMode.leaveNow:
         return l10n.leaveNow;

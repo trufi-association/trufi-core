@@ -107,10 +107,7 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     const SizedBox(height: 12),
                     _buildStatRow('Total', manager.notifications.length),
                     _buildStatRow('Unread', manager.unreadCount),
-                    _buildStatRow(
-                      'Permission',
-                      manager.permissionStatus.name,
-                    ),
+                    _buildStatRow('Permission', manager.permissionStatus.name),
                     _buildStatRow(
                       'In-App Enabled',
                       manager.settings.showInApp ? 'Yes' : 'No',
@@ -238,8 +235,9 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                 clipBehavior: Clip.antiAlias,
                 child: Column(
                   children: [
-                    for (final notification
-                        in manager.notifications.take(3)) ...[
+                    for (final notification in manager.notifications.take(
+                      3,
+                    )) ...[
                       NotificationTile(
                         notification: notification,
                         showDismiss: false,

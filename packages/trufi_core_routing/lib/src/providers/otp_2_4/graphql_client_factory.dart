@@ -20,9 +20,7 @@ class GraphQLClientFactory {
 
     final httpLink = HttpLink(
       endpoint,
-      defaultHeaders: {
-        'Accept': 'application/json',
-      },
+      defaultHeaders: {'Accept': 'application/json'},
       httpClient: httpClient,
     );
 

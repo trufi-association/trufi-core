@@ -15,22 +15,25 @@ class MapLayersCubit extends Cubit<MapLayersState> {
   MapLayersCubit({
     required this.layersContainer,
     required MapLayerLocalStorage localStorage,
-  })  : _localStorage = localStorage,
-        super(
-          MapLayersState(
-            layersSatus: layersContainer
-                .fold<List<MapLayer>>(
-                    [],
-                    (previousValue, element) =>
-                        [...previousValue, ...element.layers])
-                .asMap()
-                .map((key, value) => MapEntry(value.id, false)),
-            layers: layersContainer.fold<List<MapLayer>>(
-                [],
-                (previousValue, element) =>
-                    [...previousValue, ...element.layers]),
-          ),
-        ) {
+  }) : _localStorage = localStorage,
+       super(
+         MapLayersState(
+           layersSatus: layersContainer
+               .fold<List<MapLayer>>(
+                 [],
+                 (previousValue, element) => [
+                   ...previousValue,
+                   ...element.layers,
+                 ],
+               )
+               .asMap()
+               .map((key, value) => MapEntry(value.id, false)),
+           layers: layersContainer.fold<List<MapLayer>>(
+             [],
+             (previousValue, element) => [...previousValue, ...element.layers],
+           ),
+         ),
+       ) {
     _setupLayerCallbacks();
     _initialize();
   }
@@ -81,16 +84,15 @@ class MapLayersCubit extends Cubit<MapLayersState> {
     _localStorage.save(state.layersSatus);
   }
 
-  List<TrufiMarker> markers(
-    int zoom,
-  ) {
+  List<TrufiMarker> markers(int zoom) {
     List<MapLayer> listSort = state.layers
         .where((element) => state.layersSatus[element.id] ?? false)
         .toList();
 
     listSort.sort((a, b) => a.weight.compareTo(b.weight));
-    final allList =
-        listSort.map((element) => element.buildLayerMarkers(zoom)).toList();
+    final allList = listSort
+        .map((element) => element.buildLayerMarkers(zoom))
+        .toList();
     return allList.expand((list) => list ?? <TrufiMarker>[]).toList();
   }
 
@@ -113,22 +115,14 @@ class MapLayersCubit extends Cubit<MapLayersState> {
         listPOIBackground.add(layerPOIBackground);
       }
     }
-    final listPOI =
-        listSort.map((element) => element.buildLayerOptions(zoom)).toList();
+    final listPOI = listSort
+        .map((element) => element.buildLayerOptions(zoom))
+        .toList();
 
     return zoom > 13
         ? layers.isNotEmpty
-            ? [
-                ...listPOIBackground,
-                ...listPOI,
-                ...layers,
-              ]
-            : [
-                ...listPOIBackground,
-                ...listPOI,
-                layersClusterPOIs,
-                ...layers,
-              ]
+              ? [...listPOIBackground, ...listPOI, ...layers]
+              : [...listPOIBackground, ...listPOI, layersClusterPOIs, ...layers]
         : layers;
   }
 

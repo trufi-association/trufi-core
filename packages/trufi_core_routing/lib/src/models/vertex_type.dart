@@ -1,12 +1,5 @@
 /// Type of vertex in a trip plan.
-enum VertexType {
-  normal,
-  bikePark,
-  bikeShare,
-  carPark,
-  transit,
-  unknown,
-}
+enum VertexType { normal, bikePark, bikeShare, carPark, transit, unknown }
 
 /// Extension methods for [VertexType].
 extension VertexTypeExtension on VertexType {

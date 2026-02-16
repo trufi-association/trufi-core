@@ -16,10 +16,8 @@ void main() {
     late DateTime testDateTime;
 
     setUp(() {
-      provider = Otp15RoutingProvider(
-        endpoint: TestConfig.otp15Endpoint,
-      );
-      
+      provider = Otp15RoutingProvider(endpoint: TestConfig.otp15Endpoint);
+
       // Set test time to December 1, 2025 at 12:00 PM (noon)
       testDateTime = DateTime(2025, 12, 1, 12, 0);
     });

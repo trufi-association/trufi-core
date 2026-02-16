@@ -65,7 +65,10 @@ class Otp15PreferencesState extends ChangeNotifier {
   double? _maxWalkDistance;
   double _walkReluctance = 2.0;
   double _bikeSpeed = 5.0;
-  Set<RoutingMode> _transportModes = const {RoutingMode.transit, RoutingMode.walk};
+  Set<RoutingMode> _transportModes = const {
+    RoutingMode.transit,
+    RoutingMode.walk,
+  };
   bool _initialized = false;
 
   bool get wheelchair => _wheelchair;
@@ -93,11 +96,14 @@ class Otp15PreferencesState extends ChangeNotifier {
         _maxWalkDistance = (map['maxWalkDistance'] as num?)?.toDouble();
         _walkReluctance = (map['walkReluctance'] as num?)?.toDouble() ?? 2.0;
         _bikeSpeed = (map['bikeSpeed'] as num?)?.toDouble() ?? 5.0;
-        _transportModes = (map['transportModes'] as List<dynamic>?)
-                ?.map((e) => RoutingMode.values.firstWhere(
-                      (m) => m.name == e,
-                      orElse: () => RoutingMode.transit,
-                    ))
+        _transportModes =
+            (map['transportModes'] as List<dynamic>?)
+                ?.map(
+                  (e) => RoutingMode.values.firstWhere(
+                    (m) => m.name == e,
+                    orElse: () => RoutingMode.transit,
+                  ),
+                )
                 .toSet() ??
             const {RoutingMode.transit, RoutingMode.walk};
       } catch (_) {}
@@ -107,14 +113,17 @@ class Otp15PreferencesState extends ChangeNotifier {
 
   Future<void> _save() async {
     final sp = await SharedPreferences.getInstance();
-    await sp.setString(_key, jsonEncode({
-      'wheelchair': _wheelchair,
-      'walkSpeed': _walkSpeed,
-      'maxWalkDistance': _maxWalkDistance,
-      'walkReluctance': _walkReluctance,
-      'bikeSpeed': _bikeSpeed,
-      'transportModes': _transportModes.map((m) => m.name).toList(),
-    }));
+    await sp.setString(
+      _key,
+      jsonEncode({
+        'wheelchair': _wheelchair,
+        'walkSpeed': _walkSpeed,
+        'maxWalkDistance': _maxWalkDistance,
+        'walkReluctance': _walkReluctance,
+        'bikeSpeed': _bikeSpeed,
+        'transportModes': _transportModes.map((m) => m.name).toList(),
+      }),
+    );
   }
 
   void setWheelchair(bool value) {
@@ -263,12 +272,18 @@ class _WalkSpeedSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(Icons.directions_walk_rounded,
-                color: colorScheme.primary, size: 20),
+            Icon(
+              Icons.directions_walk_rounded,
+              color: colorScheme.primary,
+              size: 20,
+            ),
             const SizedBox(width: 8),
-            Text('Walking speed',
-                style: theme.textTheme.titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              'Walking speed',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -277,8 +292,9 @@ class _WalkSpeedSection extends StatelessWidget {
             final isSelected = state.walkSpeedLevel == level;
             return Expanded(
               child: Padding(
-                padding:
-                    EdgeInsets.only(right: level != WalkSpeedLevel.fast ? 8 : 0),
+                padding: EdgeInsets.only(
+                  right: level != WalkSpeedLevel.fast ? 8 : 0,
+                ),
                 child: _SpeedChip(
                   label: _speedLabel(level),
                   icon: _speedIcon(level),
@@ -358,20 +374,23 @@ class _SpeedChip extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Icon(icon,
+              Icon(
+                icon,
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
+                size: 24,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
                   color: isSelected
                       ? colorScheme.onPrimaryContainer
                       : colorScheme.onSurfaceVariant,
-                  size: 24),
-              const SizedBox(height: 4),
-              Text(label,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: isSelected
-                        ? colorScheme.onPrimaryContainer
-                        : colorScheme.onSurfaceVariant,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.w500,
-                  )),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),
@@ -398,12 +417,18 @@ class _MaxWalkDistanceSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(Icons.straighten_rounded,
-                color: colorScheme.primary, size: 20),
+            Icon(
+              Icons.straighten_rounded,
+              color: colorScheme.primary,
+              size: 20,
+            ),
             const SizedBox(width: 8),
-            Text('Maximum walking distance',
-                style: theme.textTheme.titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              'Maximum walking distance',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -446,8 +471,8 @@ class _DistanceChip extends StatelessWidget {
     final label = distance == null
         ? 'No limit'
         : distance! >= 1000
-            ? '${(distance! / 1000).toStringAsFixed(1)} km'
-            : '${distance!.toInt()} m';
+        ? '${(distance! / 1000).toStringAsFixed(1)} km'
+        : '${distance!.toInt()} m';
 
     return Material(
       color: isSelected
@@ -468,13 +493,15 @@ class _DistanceChip extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          child: Text(label,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: isSelected
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              )),
+          child: Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: isSelected
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSurfaceVariant,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            ),
+          ),
         ),
       ),
     );
@@ -499,9 +526,12 @@ class _TransportModesSection extends StatelessWidget {
           children: [
             Icon(Icons.commute_rounded, color: colorScheme.primary, size: 20),
             const SizedBox(width: 8),
-            Text('Transport modes',
-                style: theme.textTheme.titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w600)),
+            Text(
+              'Transport modes',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -583,20 +613,23 @@ class _TransportModeChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon,
+              Icon(
+                icon,
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
+                size: 18,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: theme.textTheme.labelLarge?.copyWith(
                   color: isSelected
                       ? colorScheme.onPrimaryContainer
                       : colorScheme.onSurfaceVariant,
-                  size: 18),
-              const SizedBox(width: 6),
-              Text(label,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: isSelected
-                        ? colorScheme.onPrimaryContainer
-                        : colorScheme.onSurfaceVariant,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.w500,
-                  )),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),

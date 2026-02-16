@@ -14,11 +14,7 @@ void main() {
     });
 
     test('displayName returns name when shortName is null', () {
-      const route = TransportRoute(
-        id: '1',
-        code: 'R1',
-        name: 'Route 1',
-      );
+      const route = TransportRoute(id: '1', code: 'R1', name: 'Route 1');
       expect(route.displayName, 'Route 1');
     });
 

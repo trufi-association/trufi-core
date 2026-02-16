@@ -15,10 +15,7 @@ class DeepLinkService {
 
   StreamSubscription<Uri>? _subscription;
 
-  DeepLinkService({
-    this.scheme,
-    this.onRouteReceived,
-  });
+  DeepLinkService({this.scheme, this.onRouteReceived});
 
   /// Initialize the deep link service
   Future<void> initialize() async {

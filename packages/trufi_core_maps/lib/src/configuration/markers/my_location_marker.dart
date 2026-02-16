@@ -24,10 +24,7 @@ class MyLocationMarker extends StatelessWidget {
               ),
             ],
           ),
-          child: Icon(
-            Icons.circle_outlined,
-            color: theme.colorScheme.primary,
-          ),
+          child: Icon(Icons.circle_outlined, color: theme.colorScheme.primary),
         ),
       ),
     );

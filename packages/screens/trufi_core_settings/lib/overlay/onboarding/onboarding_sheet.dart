@@ -76,9 +76,7 @@ class OnboardingSheet extends StatelessWidget {
       // capturing touch events meant for this sheet on web
       child: PointerInterceptor(
         child: Container(
-          constraints: BoxConstraints(
-            maxHeight: screenSize.height * 0.9,
-          ),
+          constraints: BoxConstraints(maxHeight: screenSize.height * 0.9),
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -92,7 +90,11 @@ class OnboardingSheet extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: _buildContent(context, showCloseButton: false, showDragHandle: true),
+            child: _buildContent(
+              context,
+              showCloseButton: false,
+              showDragHandle: true,
+            ),
           ),
         ),
       ),
@@ -148,7 +150,12 @@ class OnboardingSheet extends StatelessWidget {
           ),
         // Header content
         Padding(
-          padding: EdgeInsets.fromLTRB(24, showDragHandle ? 0 : (showCloseButton ? 0 : 24), 24, 16),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            showDragHandle ? 0 : (showCloseButton ? 0 : 24),
+            24,
+            16,
+          ),
           child: Column(
             children: [
               Container(
@@ -506,9 +513,7 @@ class _OnboardingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withAlpha(77),
-        ),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(77)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

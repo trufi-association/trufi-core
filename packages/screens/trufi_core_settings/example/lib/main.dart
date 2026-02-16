@@ -40,11 +40,7 @@ class MyApp extends StatelessWidget {
               ),
               useMaterial3: true,
             ),
-            supportedLocales: const [
-              Locale('en'),
-              Locale('es'),
-              Locale('de'),
-            ],
+            supportedLocales: const [Locale('en'), Locale('es'), Locale('de')],
             localizationsDelegates: [
               ...screen.localizationsDelegates,
               GlobalMaterialLocalizations.delegate,

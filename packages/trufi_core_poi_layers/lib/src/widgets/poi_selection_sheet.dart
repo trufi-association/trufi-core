@@ -119,10 +119,7 @@ class _POISelectionTile extends StatelessWidget {
   final POI poi;
   final VoidCallback onTap;
 
-  const _POISelectionTile({
-    required this.poi,
-    required this.onTap,
-  });
+  const _POISelectionTile({required this.poi, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -184,11 +181,7 @@ class _POISelectionTile extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          poiSvgString,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(poiSvgString, width: 28, height: 28),
       );
     }
 
@@ -203,11 +196,7 @@ class _POISelectionTile extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          subConfig.iconSvg!,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(subConfig.iconSvg!, width: 28, height: 28),
       );
     }
 
@@ -221,11 +210,7 @@ class _POISelectionTile extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(6),
-        child: SvgPicture.string(
-          poi.category.iconSvg!,
-          width: 28,
-          height: 28,
-        ),
+        child: SvgPicture.string(poi.category.iconSvg!, width: 28, height: 28),
       );
     }
 
@@ -237,11 +222,7 @@ class _POISelectionTile extends StatelessWidget {
         color: color.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        poi.category.fallbackIcon,
-        color: color,
-        size: 20,
-      ),
+      child: Icon(poi.category.fallbackIcon, color: color, size: 20),
     );
   }
 }

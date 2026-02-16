@@ -8,7 +8,7 @@ class GtfsRoute {
   final String? description;
   final GtfsRouteType type;
   final String? url;
-  final String? colorHex;  // Hex color without '#'
+  final String? colorHex; // Hex color without '#'
   final String? textColorHex;
   final int? sortOrder;
 
@@ -35,9 +35,7 @@ class GtfsRoute {
       shortName: row['route_short_name'] ?? '',
       longName: row['route_long_name'] ?? '',
       description: row['route_desc'],
-      type: GtfsRouteType.fromValue(
-        int.tryParse(row['route_type'] ?? '') ?? 3,
-      ),
+      type: GtfsRouteType.fromValue(int.tryParse(row['route_type'] ?? '') ?? 3),
       url: row['route_url'],
       colorHex: _parseColorHex(row['route_color']),
       textColorHex: _parseColorHex(row['route_text_color']),
@@ -68,17 +66,17 @@ class GtfsRoute {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'agencyId': agencyId,
-        'shortName': shortName,
-        'longName': longName,
-        'description': description,
-        'type': type.value.toString(),
-        'url': url,
-        'color': colorHex,
-        'textColor': textColorHex,
-        'sortOrder': sortOrder,
-      };
+    'id': id,
+    'agencyId': agencyId,
+    'shortName': shortName,
+    'longName': longName,
+    'description': description,
+    'type': type.value.toString(),
+    'url': url,
+    'color': colorHex,
+    'textColor': textColorHex,
+    'sortOrder': sortOrder,
+  };
 }
 
 /// GTFS route types.

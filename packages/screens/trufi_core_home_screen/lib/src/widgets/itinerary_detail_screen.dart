@@ -60,7 +60,11 @@ class ItineraryDetailContent extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Timeline
-        _VerticalTimeline(itinerary: itinerary, l10n: l10n, onRouteTap: onRouteTap),
+        _VerticalTimeline(
+          itinerary: itinerary,
+          l10n: l10n,
+          onRouteTap: onRouteTap,
+        ),
       ],
     );
 
@@ -83,7 +87,9 @@ class ItineraryDetailContent extends StatelessWidget {
     final duration = itinerary.duration;
     final durationText = duration.inHours > 0
         ? l10n.durationHoursMinutes(
-            duration.inHours, duration.inMinutes.remainder(60))
+            duration.inHours,
+            duration.inMinutes.remainder(60),
+          )
         : l10n.durationMinutes(duration.inMinutes);
 
     // Calculate total walking
@@ -94,8 +100,7 @@ class ItineraryDetailContent extends StatelessWidget {
       0,
       (sum, leg) => sum + leg.distance.toInt(),
     );
-    final transferCount =
-        itinerary.legs.where((leg) => leg.transitLeg).length;
+    final transferCount = itinerary.legs.where((leg) => leg.transitLeg).length;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 8, 12, 0),
@@ -119,8 +124,10 @@ class ItineraryDetailContent extends StatelessWidget {
               const SizedBox(width: 4),
               // Duration chip
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: colorScheme.primary,
                   borderRadius: BorderRadius.circular(20),
@@ -167,11 +174,15 @@ class ItineraryDetailContent extends StatelessWidget {
                   icon: const Icon(Icons.navigation_rounded, size: 16),
                   label: const Text('Go'),
                   style: FilledButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     visualDensity: VisualDensity.compact,
-                    textStyle:
-                        const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    textStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
             ],
@@ -231,15 +242,12 @@ class ItineraryDetailContent extends StatelessWidget {
                 // CO2 emissions
                 if (itinerary.emissionsPerPerson != null &&
                     itinerary.emissionsPerPerson! > 0) ...[
-                  Icon(
-                    Icons.eco_rounded,
-                    size: 14,
-                    color: Colors.green[600],
-                  ),
+                  Icon(Icons.eco_rounded, size: 14, color: Colors.green[600]),
                   const SizedBox(width: 4),
                   Text(
                     l10n.co2Emissions(
-                        itinerary.emissionsPerPerson!.toStringAsFixed(0)),
+                      itinerary.emissionsPerPerson!.toStringAsFixed(0),
+                    ),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.green[600],
                     ),
@@ -399,11 +407,7 @@ class _PlaceItem extends StatelessWidget {
                         ),
                       ),
                     // Pin icon
-                    Icon(
-                      Icons.location_on,
-                      size: 20,
-                      color: dotColor,
-                    ),
+                    Icon(Icons.location_on, size: 20, color: dotColor),
                   ],
                 )
               : CustomPaint(
@@ -913,21 +917,19 @@ class ItineraryDetailScreen extends StatelessWidget {
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             ItineraryDetailScreen(
-          itinerary: itinerary,
-          onStartNavigation: onStartNavigation,
-          onRouteTap: onRouteTap,
-        ),
+              itinerary: itinerary,
+              onStartNavigation: onStartNavigation,
+              onRouteTap: onRouteTap,
+            ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-              ),
-            ),
+            position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                .animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
             child: child,
           );
         },
@@ -945,7 +947,9 @@ class ItineraryDetailScreen extends StatelessWidget {
     final duration = itinerary.duration;
     final durationText = duration.inHours > 0
         ? l10n.durationHoursMinutes(
-            duration.inHours, duration.inMinutes.remainder(60))
+            duration.inHours,
+            duration.inMinutes.remainder(60),
+          )
         : l10n.durationMinutes(duration.inMinutes);
 
     // Calculate total walking
@@ -975,7 +979,11 @@ class ItineraryDetailScreen extends StatelessWidget {
         ),
         title: Row(
           children: [
-            Icon(Icons.schedule_rounded, size: 20, color: colorScheme.onSurface),
+            Icon(
+              Icons.schedule_rounded,
+              size: 20,
+              color: colorScheme.onSurface,
+            ),
             const SizedBox(width: 4),
             Text(
               durationText,
@@ -1016,7 +1024,11 @@ class ItineraryDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 8, bottom: 24),
-        child: _VerticalTimeline(itinerary: itinerary, l10n: l10n, onRouteTap: onRouteTap),
+        child: _VerticalTimeline(
+          itinerary: itinerary,
+          l10n: l10n,
+          onRouteTap: onRouteTap,
+        ),
       ),
     );
   }

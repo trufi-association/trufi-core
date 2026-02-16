@@ -28,12 +28,20 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
     final engine = _manager.currentEngine;
 
     debugPrint('');
-    debugPrint('╔══════════════════════════════════════════════════════════════');
+    debugPrint(
+      '╔══════════════════════════════════════════════════════════════',
+    );
     debugPrint('║ ROUTING REQUEST STARTED');
-    debugPrint('║ Engine: ${engine.id} (${engine.requiresInternet ? "online" : "offline"})');
-    debugPrint('║ From: ${from.description} (${from.latitude}, ${from.longitude})');
+    debugPrint(
+      '║ Engine: ${engine.id} (${engine.requiresInternet ? "online" : "offline"})',
+    );
+    debugPrint(
+      '║ From: ${from.description} (${from.latitude}, ${from.longitude})',
+    );
     debugPrint('║ To: ${to.description} (${to.latitude}, ${to.longitude})');
-    debugPrint('╠══════════════════════════════════════════════════════════════');
+    debugPrint(
+      '╠══════════════════════════════════════════════════════════════',
+    );
 
     final routingFrom = routing.RoutingLocation(
       position: LatLng(from.latitude, from.longitude),
@@ -58,7 +66,9 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
 
       // Sort itineraries
       if (plan.itineraries != null && plan.itineraries!.isNotEmpty) {
-        final sortedItineraries = List<routing.Itinerary>.from(plan.itineraries!);
+        final sortedItineraries = List<routing.Itinerary>.from(
+          plan.itineraries!,
+        );
         sortedItineraries.sort((a, b) {
           final weightA = _calculateWeight(a);
           final weightB = _calculateWeight(b);
@@ -72,14 +82,18 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
       totalStopwatch.stop();
       debugPrint('║ REQUEST FAILED: $e');
       debugPrint('║ Total time: ${totalStopwatch.elapsedMilliseconds}ms');
-      debugPrint('╚══════════════════════════════════════════════════════════════');
+      debugPrint(
+        '╚══════════════════════════════════════════════════════════════',
+      );
       rethrow;
     }
   }
 
   void _logSuccess(routing.Plan plan, int totalMs) {
     final count = plan.itineraries?.length ?? 0;
-    debugPrint('╠══════════════════════════════════════════════════════════════');
+    debugPrint(
+      '╠══════════════════════════════════════════════════════════════',
+    );
     debugPrint('║ REQUEST SUCCESSFUL');
     debugPrint('║ Itineraries found: $count');
     debugPrint('║ Total time: ${totalMs}ms');
@@ -88,10 +102,14 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
         final it = plan.itineraries![i];
         final durationMin = it.duration.inMinutes;
         final walkMin = it.walkTime.inMinutes;
-        debugPrint('║   [$i] ${durationMin}min total, ${walkMin}min walk, ${it.numberOfTransfers} transfers');
+        debugPrint(
+          '║   [$i] ${durationMin}min total, ${walkMin}min walk, ${it.numberOfTransfers} transfers',
+        );
       }
     }
-    debugPrint('╚══════════════════════════════════════════════════════════════');
+    debugPrint(
+      '╚══════════════════════════════════════════════════════════════',
+    );
   }
 
   double _calculateWeight(routing.Itinerary itinerary) {

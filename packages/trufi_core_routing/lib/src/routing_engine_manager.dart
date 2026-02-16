@@ -46,13 +46,13 @@ class RoutingEngineManager extends ChangeNotifier {
   RoutingEngineManager({
     required List<IRoutingProvider> engines,
     int defaultIndex = 0,
-  })  : assert(engines.isNotEmpty, 'At least one engine is required'),
-        assert(
-          defaultIndex >= 0 && defaultIndex < engines.length,
-          'defaultIndex must be valid',
-        ),
-        _engines = engines,
-        _currentIndex = defaultIndex {
+  }) : assert(engines.isNotEmpty, 'At least one engine is required'),
+       assert(
+         defaultIndex >= 0 && defaultIndex < engines.length,
+         'defaultIndex must be valid',
+       ),
+       _engines = engines,
+       _currentIndex = defaultIndex {
     _loadSavedEngine();
   }
 
@@ -145,14 +145,17 @@ class RoutingEngineManager extends ChangeNotifier {
     _isPreloading = true;
     notifyListeners();
 
-    currentEngine.initialize().then((_) {
-      _isPreloading = false;
-      notifyListeners();
-    }).catchError((e) {
-      debugPrint('RoutingEngineManager: Preload failed: $e');
-      _isPreloading = false;
-      notifyListeners();
-    });
+    currentEngine
+        .initialize()
+        .then((_) {
+          _isPreloading = false;
+          notifyListeners();
+        })
+        .catchError((e) {
+          debugPrint('RoutingEngineManager: Preload failed: $e');
+          _isPreloading = false;
+          notifyListeners();
+        });
   }
 
   /// Fetches a trip plan using the current engine.
@@ -165,13 +168,13 @@ class RoutingEngineManager extends ChangeNotifier {
     bool arriveBy = false,
   }) {
     return currentEngine.fetchPlan(
-          from: from,
-          to: to,
-          numItineraries: numItineraries,
-          locale: locale,
-          dateTime: dateTime,
-          arriveBy: arriveBy,
-        );
+      from: from,
+      to: to,
+      numItineraries: numItineraries,
+      locale: locale,
+      dateTime: dateTime,
+      arriveBy: arriveBy,
+    );
   }
 
   /// Fetches all transit routes using the current engine.

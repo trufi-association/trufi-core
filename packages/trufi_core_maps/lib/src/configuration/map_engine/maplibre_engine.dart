@@ -57,7 +57,8 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   @override
   String get description =>
-      displayDescription ?? 'Vector map with modern styling and better performance';
+      displayDescription ??
+      'Vector map with modern styling and better performance';
 
   @override
   Widget? get previewWidget =>

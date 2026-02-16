@@ -60,7 +60,8 @@ export 'src/services/notification_service.dart'
         NotificationServiceConfig,
         NotificationFetchResult,
         NotificationCallback;
-export 'src/services/http_notification_service.dart' show HttpNotificationService;
+export 'src/services/http_notification_service.dart'
+    show HttpNotificationService;
 
 // ============================================
 // MANAGERS

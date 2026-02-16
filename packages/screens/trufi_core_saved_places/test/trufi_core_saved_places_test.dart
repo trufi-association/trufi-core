@@ -157,10 +157,7 @@ void main() {
         createdAt: DateTime(2024, 1, 1),
       );
 
-      final state = SavedPlacesState(
-        home: home,
-        otherPlaces: [otherPlace],
-      );
+      final state = SavedPlacesState(home: home, otherPlaces: [otherPlace]);
 
       expect(state.allPlaces.length, 2);
       expect(state.allPlaces, contains(home));
@@ -177,9 +174,7 @@ void main() {
         createdAt: DateTime(2024, 1, 1),
       );
 
-      const original = SavedPlacesState(
-        status: SavedPlacesStatus.loaded,
-      );
+      const original = SavedPlacesState(status: SavedPlacesStatus.loaded);
 
       final updated = original.copyWith(home: home);
 

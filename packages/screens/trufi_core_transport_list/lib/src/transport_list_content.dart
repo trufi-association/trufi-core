@@ -122,9 +122,7 @@ class _TransportListContentState extends State<TransportListContent>
               ),
 
             // Main content
-            Expanded(
-              child: _buildBody(context, state, localization),
-            ),
+            Expanded(child: _buildBody(context, state, localization)),
           ],
         ),
       ),
@@ -181,10 +179,7 @@ class _TransportListContentState extends State<TransportListContent>
                 builder: (context, child) {
                   return Transform.translate(
                     offset: Offset(0, 20 * (1 - animation.value)),
-                    child: Opacity(
-                      opacity: animation.value,
-                      child: child,
-                    ),
+                    child: Opacity(opacity: animation.value, child: child),
                   );
                 },
                 child: Padding(
@@ -365,10 +360,7 @@ class _RefreshButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
 
-  const _RefreshButton({
-    required this.isLoading,
-    required this.onPressed,
-  });
+  const _RefreshButton({required this.isLoading, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -410,10 +402,7 @@ class _RouteCountIndicator extends StatelessWidget {
   final int count;
   final bool isFiltered;
 
-  const _RouteCountIndicator({
-    required this.count,
-    required this.isFiltered,
-  });
+  const _RouteCountIndicator({required this.count, required this.isFiltered});
 
   @override
   Widget build(BuildContext context) {
@@ -534,7 +523,9 @@ class _ShimmerCard extends StatelessWidget {
                     end: Alignment(1.0 + 2.0 * animation.value, 0),
                     colors: [
                       colorScheme.surfaceContainerHighest,
-                      colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                      colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.5,
+                      ),
                       colorScheme.surfaceContainerHighest,
                     ],
                   ),
@@ -556,7 +547,9 @@ class _ShimmerCard extends StatelessWidget {
                           end: Alignment(1.0 + 2.0 * animation.value, 0),
                           colors: [
                             colorScheme.surfaceContainerHighest,
-                            colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                            colorScheme.surfaceContainerHighest.withValues(
+                              alpha: 0.5,
+                            ),
                             colorScheme.surfaceContainerHighest,
                           ],
                         ),
@@ -574,7 +567,9 @@ class _ShimmerCard extends StatelessWidget {
                           end: Alignment(1.0 + 2.0 * animation.value, 0),
                           colors: [
                             colorScheme.surfaceContainerHighest,
-                            colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                            colorScheme.surfaceContainerHighest.withValues(
+                              alpha: 0.5,
+                            ),
                             colorScheme.surfaceContainerHighest,
                           ],
                         ),
@@ -596,10 +591,7 @@ class _EmptyState extends StatelessWidget {
   final String message;
   final bool isSearch;
 
-  const _EmptyState({
-    required this.message,
-    required this.isSearch,
-  });
+  const _EmptyState({required this.message, required this.isSearch});
 
   @override
   Widget build(BuildContext context) {
@@ -620,7 +612,9 @@ class _EmptyState extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                isSearch ? Icons.search_off_rounded : Icons.directions_bus_outlined,
+                isSearch
+                    ? Icons.search_off_rounded
+                    : Icons.directions_bus_outlined,
                 size: 40,
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
               ),
@@ -636,9 +630,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              isSearch
-                  ? 'Try a different search term'
-                  : 'Pull down to refresh',
+              isSearch ? 'Try a different search term' : 'Pull down to refresh',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),

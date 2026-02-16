@@ -8,12 +8,7 @@ import 'package:trufi_core_planner/trufi_core_planner.dart';
 import 'trufi_planner_config.dart';
 
 /// Status of the data source.
-enum TrufiPlannerDataStatus {
-  unloaded,
-  loading,
-  loaded,
-  error,
-}
+enum TrufiPlannerDataStatus { unloaded, loading, loaded, error }
 
 /// Result of loading GTFS data with indices (for isolate communication).
 class _GtfsLoadResult {
@@ -91,7 +86,8 @@ class TrufiPlannerDataSource {
   Future<void> preload() async {
     if (_status == TrufiPlannerDataStatus.loaded) return;
 
-    if (_status == TrufiPlannerDataStatus.loading && _preloadCompleter != null) {
+    if (_status == TrufiPlannerDataStatus.loading &&
+        _preloadCompleter != null) {
       return _preloadCompleter!.future;
     }
 
@@ -118,7 +114,9 @@ class TrufiPlannerDataSource {
   }
 
   Future<void> _preloadLocal() async {
-    debugPrint('TrufiPlannerDataSource: Preloading local from ${config.gtfsAsset}');
+    debugPrint(
+      'TrufiPlannerDataSource: Preloading local from ${config.gtfsAsset}',
+    );
     final sw = Stopwatch()..start();
 
     final bytes = await rootBundle.load(config.gtfsAsset!);
@@ -137,7 +135,9 @@ class TrufiPlannerDataSource {
     );
 
     sw.stop();
-    debugPrint('TrufiPlannerDataSource: Preloaded in ${sw.elapsedMilliseconds}ms');
+    debugPrint(
+      'TrufiPlannerDataSource: Preloaded in ${sw.elapsedMilliseconds}ms',
+    );
   }
 
   Future<void> _preloadRemote() async {

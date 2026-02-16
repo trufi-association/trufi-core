@@ -26,7 +26,7 @@ class TransportListCache {
   final Map<String, CachedRouteDetails> _cachedDetails = {};
 
   TransportListCache({StorageService? storage})
-      : _storage = storage ?? SharedPreferencesStorage();
+    : _storage = storage ?? SharedPreferencesStorage();
 
   /// Initialize the cache.
   Future<void> initialize() async {
@@ -145,7 +145,9 @@ class TransportListCache {
       _cachedDetails[code] = details;
       return details;
     } catch (e) {
-      debugPrint('TransportListCache: Error loading details cache for $code: $e');
+      debugPrint(
+        'TransportListCache: Error loading details cache for $code: $e',
+      );
       return null;
     }
   }
@@ -160,7 +162,9 @@ class TransportListCache {
       final json = jsonEncode(details.toJson());
       await _storage.write('$_detailsCacheKeyPrefix$code', json);
     } catch (e) {
-      debugPrint('TransportListCache: Error saving details cache for $code: $e');
+      debugPrint(
+        'TransportListCache: Error saving details cache for $code: $e',
+      );
     }
   }
 
@@ -269,10 +273,7 @@ class CachedLatLng {
   final double latitude;
   final double longitude;
 
-  const CachedLatLng({
-    required this.latitude,
-    required this.longitude,
-  });
+  const CachedLatLng({required this.latitude, required this.longitude});
 
   factory CachedLatLng.fromJson(Map<String, dynamic> json) {
     return CachedLatLng(
@@ -282,10 +283,7 @@ class CachedLatLng {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'lat': latitude,
-      'lng': longitude,
-    };
+    return {'lat': latitude, 'lng': longitude};
   }
 }
 
@@ -313,11 +311,6 @@ class CachedStop {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'lat': latitude,
-      'lng': longitude,
-    };
+    return {'id': id, 'name': name, 'lat': latitude, 'lng': longitude};
   }
 }

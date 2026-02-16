@@ -39,11 +39,11 @@ class RoutePattern {
   }
 
   Map<String, dynamic> toJson() => {
-        'routeId': routeId,
-        'stopIds': stopIds,
-        'headsign': headsign,
-        'shapeId': shapeId,
-      };
+    'routeId': routeId,
+    'stopIds': stopIds,
+    'headsign': headsign,
+    'shapeId': shapeId,
+  };
 }
 
 /// Index for fast route lookups.
@@ -91,15 +91,16 @@ class GtfsRouteIndex {
       final patterns = _routePatterns.putIfAbsent(trip.routeId, () => []);
       if (patterns.isEmpty ||
           !patterns.any((p) => _sameStopSequence(p.stopIds, stopIds))) {
-        patterns.add(RoutePattern(
-          routeId: trip.routeId,
-          stopIds: stopIds,
-          headsign: trip.headsign,
-          shapeId: trip.shapeId,
-        ));
+        patterns.add(
+          RoutePattern(
+            routeId: trip.routeId,
+            stopIds: stopIds,
+            headsign: trip.headsign,
+            shapeId: trip.shapeId,
+          ),
+        );
       }
     }
-
   }
 
   bool _sameStopSequence(List<String> a, List<String> b) {

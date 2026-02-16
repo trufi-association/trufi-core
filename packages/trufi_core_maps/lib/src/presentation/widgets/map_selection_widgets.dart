@@ -33,18 +33,12 @@ class MapOnlineOfflineToggle extends StatelessWidget {
         ButtonSegment<bool>(
           value: true,
           label: const Text('Online'),
-          icon: Icon(
-            Icons.cloud_outlined,
-            size: compact ? 18 : 20,
-          ),
+          icon: Icon(Icons.cloud_outlined, size: compact ? 18 : 20),
         ),
         ButtonSegment<bool>(
           value: false,
           label: const Text('Offline'),
-          icon: Icon(
-            Icons.offline_bolt_outlined,
-            size: compact ? 18 : 20,
-          ),
+          icon: Icon(Icons.offline_bolt_outlined, size: compact ? 18 : 20),
         ),
       ],
       selected: {showOnline},
@@ -53,24 +47,24 @@ class MapOnlineOfflineToggle extends StatelessWidget {
       },
       style: ButtonStyle(
         visualDensity: compact ? VisualDensity.compact : null,
-        backgroundColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return colorScheme.primaryContainer;
-            }
-            return compact
-                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-                : colorScheme.surfaceContainerLow;
-          },
-        ),
-        foregroundColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.selected)) {
-              return colorScheme.onPrimaryContainer;
-            }
-            return colorScheme.onSurface;
-          },
-        ),
+        backgroundColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primaryContainer;
+          }
+          return compact
+              ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+              : colorScheme.surfaceContainerLow;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.onPrimaryContainer;
+          }
+          return colorScheme.onSurface;
+        }),
       ),
     );
   }

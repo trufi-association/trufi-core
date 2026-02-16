@@ -226,10 +226,7 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // Modern footer
-          _DrawerFooter(
-            theme: theme,
-            socialMediaLinks: socialMediaLinks,
-          ),
+          _DrawerFooter(theme: theme, socialMediaLinks: socialMediaLinks),
         ],
       ),
     );
@@ -252,10 +249,7 @@ class AppDrawer extends StatelessWidget {
         widgets.add(
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Divider(
-              height: 1,
-              color: theme.colorScheme.outlineVariant,
-            ),
+            child: Divider(height: 1, color: theme.colorScheme.outlineVariant),
           ),
         );
       }
@@ -399,7 +393,9 @@ class _DrawerMenuItem extends StatelessWidget {
                       color: isSelected
                           ? colorScheme.onSecondaryContainer
                           : colorScheme.onSurfaceVariant,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                     ),
                   ),
                 ),
@@ -427,10 +423,7 @@ class _DrawerFooter extends StatelessWidget {
   final ThemeData theme;
   final List<SocialMediaLink> socialMediaLinks;
 
-  const _DrawerFooter({
-    required this.theme,
-    this.socialMediaLinks = const [],
-  });
+  const _DrawerFooter({required this.theme, this.socialMediaLinks = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -520,10 +513,7 @@ class _SocialIconButton extends StatelessWidget {
       color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
       onPressed: () => launchUrl(Uri.parse(url)),
       tooltip: label ?? url,
-      constraints: const BoxConstraints(
-        minWidth: 36,
-        minHeight: 36,
-      ),
+      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
       padding: EdgeInsets.zero,
     );
   }

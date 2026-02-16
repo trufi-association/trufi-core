@@ -37,10 +37,7 @@ class ResetButton extends StatelessWidget {
   /// Called when the button is pressed.
   final VoidCallback onPressed;
 
-  const ResetButton({
-    super.key,
-    required this.onPressed,
-  });
+  const ResetButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +45,7 @@ class ResetButton extends StatelessWidget {
 
     return FittedBox(
       child: IconButton(
-        icon: Icon(
-          Icons.clear,
-          color: colorScheme.onPrimary,
-        ),
+        icon: Icon(Icons.clear, color: colorScheme.onPrimary),
         onPressed: onPressed,
       ),
     );
@@ -66,25 +60,19 @@ class MenuButton extends StatelessWidget {
   /// Optional tooltip text.
   final String? tooltip;
 
-  const MenuButton({
-    super.key,
-    required this.onPressed,
-    this.tooltip,
-  });
+  const MenuButton({super.key, required this.onPressed, this.tooltip});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return IconButton(
-      icon: Icon(
-        Icons.menu,
-        color: colorScheme.onPrimary,
-      ),
+      icon: Icon(Icons.menu, color: colorScheme.onPrimary),
       splashRadius: 24,
       iconSize: 24,
       onPressed: onPressed,
-      tooltip: tooltip ?? MaterialLocalizations.of(context).openAppDrawerTooltip,
+      tooltip:
+          tooltip ?? MaterialLocalizations.of(context).openAppDrawerTooltip,
     );
   }
 }

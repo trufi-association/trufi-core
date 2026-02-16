@@ -1,12 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 /// Priority level for notifications
-enum NotificationPriority {
-  low,
-  normal,
-  high,
-  urgent,
-}
+enum NotificationPriority { low, normal, high, urgent }
 
 /// Action that can be performed when tapping a notification
 @immutable
@@ -40,11 +35,11 @@ class NotificationAction {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'label': label,
-        if (deepLink != null) 'deepLink': deepLink,
-        if (payload != null) 'payload': payload,
-      };
+    'id': id,
+    'label': label,
+    if (deepLink != null) 'deepLink': deepLink,
+    if (payload != null) 'payload': payload,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -112,8 +107,7 @@ class TrufiNotification {
   });
 
   /// Whether this notification has expired
-  bool get isExpired =>
-      expiresAt != null && DateTime.now().isAfter(expiresAt!);
+  bool get isExpired => expiresAt != null && DateTime.now().isAfter(expiresAt!);
 
   /// Create a copy with updated fields
   TrufiNotification copyWith({
@@ -165,8 +159,11 @@ class TrufiNotification {
       action: json['action'] != null
           ? NotificationAction.fromJson(json['action'] as Map<String, dynamic>)
           : null,
-      additionalActions: (json['additionalActions'] as List<dynamic>?)
-              ?.map((e) => NotificationAction.fromJson(e as Map<String, dynamic>))
+      additionalActions:
+          (json['additionalActions'] as List<dynamic>?)
+              ?.map(
+                (e) => NotificationAction.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           const [],
       data: json['data'] as Map<String, dynamic>?,
@@ -174,20 +171,20 @@ class TrufiNotification {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'body': body,
-        if (imageUrl != null) 'imageUrl': imageUrl,
-        'createdAt': createdAt.toIso8601String(),
-        if (expiresAt != null) 'expiresAt': expiresAt!.toIso8601String(),
-        'isRead': isRead,
-        'priority': priority.name,
-        if (category != null) 'category': category,
-        if (action != null) 'action': action!.toJson(),
-        if (additionalActions.isNotEmpty)
-          'additionalActions': additionalActions.map((e) => e.toJson()).toList(),
-        if (data != null) 'data': data,
-      };
+    'id': id,
+    'title': title,
+    'body': body,
+    if (imageUrl != null) 'imageUrl': imageUrl,
+    'createdAt': createdAt.toIso8601String(),
+    if (expiresAt != null) 'expiresAt': expiresAt!.toIso8601String(),
+    'isRead': isRead,
+    'priority': priority.name,
+    if (category != null) 'category': category,
+    if (action != null) 'action': action!.toJson(),
+    if (additionalActions.isNotEmpty)
+      'additionalActions': additionalActions.map((e) => e.toJson()).toList(),
+    if (data != null) 'data': data,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -200,5 +197,6 @@ class TrufiNotification {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() => 'TrufiNotification(id: $id, title: $title, isRead: $isRead)';
+  String toString() =>
+      'TrufiNotification(id: $id, title: $title, isRead: $isRead)';
 }

@@ -84,8 +84,9 @@ class Otp24RoutingProvider implements IRoutingProvider {
     await _prefs.initialize();
   }
 
-  late final GraphQLClient _client =
-      GraphQLClientFactory.create(_graphqlEndpoint);
+  late final GraphQLClient _client = GraphQLClientFactory.create(
+    _graphqlEndpoint,
+  );
 
   // --- Plan ---
 
@@ -98,8 +99,7 @@ class Otp24RoutingProvider implements IRoutingProvider {
     required DateTime dateTime,
     bool arriveBy = false,
   }) async {
-    final queryString =
-        useSimpleQuery ? otp24SimplePlanQuery : otp24PlanQuery;
+    final queryString = useSimpleQuery ? otp24SimplePlanQuery : otp24PlanQuery;
 
     final date =
         '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
@@ -136,8 +136,9 @@ class Otp24RoutingProvider implements IRoutingProvider {
     Context? requestContext;
     if (planHeaderProvider != null) {
       final extraHeaders = await planHeaderProvider!(from, to);
-      requestContext =
-          Context().withEntry(HttpLinkHeaders(headers: extraHeaders));
+      requestContext = Context().withEntry(
+        HttpLinkHeaders(headers: extraHeaders),
+      );
     }
 
     final query = QueryOptions(
@@ -182,10 +183,14 @@ class Otp24RoutingProvider implements IRoutingProvider {
           : Exception('Connection error');
     }
 
-    final patterns = result.data!['patterns']
-        ?.map<TransitRoute>((dynamic json) =>
-            TransitRoute.fromJson(json as Map<String, dynamic>))
-        ?.toList() as List<TransitRoute>;
+    final patterns =
+        result.data!['patterns']
+                ?.map<TransitRoute>(
+                  (dynamic json) =>
+                      TransitRoute.fromJson(json as Map<String, dynamic>),
+                )
+                ?.toList()
+            as List<TransitRoute>;
 
     return patterns;
   }
@@ -208,7 +213,8 @@ class Otp24RoutingProvider implements IRoutingProvider {
     }
 
     final patternData = TransitRoute.fromJson(
-        result.data!['pattern'] as Map<String, dynamic>);
+      result.data!['pattern'] as Map<String, dynamic>,
+    );
 
     // For cities that don't use stops like Cochabamba (uses street intersection).
     // Workaround: remove the name of the adjacent stops that are repeated.

@@ -148,10 +148,7 @@ class NotificationBanner extends StatelessWidget {
         color = colorScheme.primary;
     }
 
-    return Container(
-      height: 3,
-      color: color,
-    );
+    return Container(height: 3, color: color);
   }
 
   Widget _buildIcon(ColorScheme colorScheme) {
@@ -180,11 +177,7 @@ class NotificationBanner extends StatelessWidget {
         color: color.withAlpha(30),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        icon,
-        color: color,
-        size: 20,
-      ),
+      child: Icon(icon, color: color, size: 20),
     );
   }
 }

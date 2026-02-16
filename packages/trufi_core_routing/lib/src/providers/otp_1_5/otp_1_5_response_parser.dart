@@ -47,7 +47,8 @@ class Otp15ResponseParser {
   }
 
   static Itinerary _parseItinerary(Map<String, dynamic> json) {
-    final legs = (json['legs'] as List<dynamic>?)
+    final legs =
+        (json['legs'] as List<dynamic>?)
             ?.map((l) => _parseLeg(l as Map<String, dynamic>))
             .toList() ??
         [];

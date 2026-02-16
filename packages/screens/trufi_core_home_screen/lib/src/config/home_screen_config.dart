@@ -36,7 +36,8 @@ class HomeScreenConfig {
   ///   POITrufiLayerAdapter(poiLayersCubit),
   /// ]
   /// ```
-  final List<TrufiLayer> Function(TrufiMapController controller)? customMapLayers;
+  final List<TrufiLayer> Function(TrufiMapController controller)?
+  customMapLayers;
 
   /// Optional POI layers manager for displaying points of interest on the map.
   ///

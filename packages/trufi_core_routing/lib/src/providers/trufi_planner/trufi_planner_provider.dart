@@ -46,7 +46,7 @@ class TrufiPlannerProvider implements IRoutingProvider {
   late final TrufiPlannerDataSource _dataSource;
 
   TrufiPlannerProvider({required this.config})
-      : _dataSource = TrufiPlannerDataSource(config: config);
+    : _dataSource = TrufiPlannerDataSource(config: config);
 
   late final _prefs = TrufiPlannerPreferencesState();
 
@@ -135,7 +135,8 @@ class TrufiPlannerProvider implements IRoutingProvider {
 
     sw.stop();
     debugPrint(
-        'TrufiPlannerProvider: Found ${paths.length} paths in ${sw.elapsedMilliseconds}ms');
+      'TrufiPlannerProvider: Found ${paths.length} paths in ${sw.elapsedMilliseconds}ms',
+    );
 
     if (paths.isEmpty) {
       return Plan(
@@ -167,30 +168,33 @@ class TrufiPlannerProvider implements IRoutingProvider {
 
     // Walk to first stop
     if (path.originWalkDistance > 0) {
-      final walkDuration =
-          Duration(seconds: (path.originWalkDistance / 1.2).round());
+      final walkDuration = Duration(
+        seconds: (path.originWalkDistance / 1.2).round(),
+      );
       final walkPoints = [from.position, path.originStop.position];
-      legs.add(Leg(
-        mode: 'WALK',
-        distance: path.originWalkDistance,
-        duration: walkDuration,
-        transitLeg: false,
-        fromPlace: Place(
-          name: from.description,
-          lat: from.position.latitude,
-          lon: from.position.longitude,
+      legs.add(
+        Leg(
+          mode: 'WALK',
+          distance: path.originWalkDistance,
+          duration: walkDuration,
+          transitLeg: false,
+          fromPlace: Place(
+            name: from.description,
+            lat: from.position.latitude,
+            lon: from.position.longitude,
+          ),
+          toPlace: Place(
+            name: path.originStop.name,
+            lat: path.originStop.lat,
+            lon: path.originStop.lon,
+            stopId: path.originStop.id,
+          ),
+          encodedPoints: PolylineCodec.encode(walkPoints),
+          decodedPoints: walkPoints,
+          startTime: currentTime,
+          endTime: currentTime.add(walkDuration),
         ),
-        toPlace: Place(
-          name: path.originStop.name,
-          lat: path.originStop.lat,
-          lon: path.originStop.lon,
-          stopId: path.originStop.id,
-        ),
-        encodedPoints: PolylineCodec.encode(walkPoints),
-        decodedPoints: walkPoints,
-        startTime: currentTime,
-        endTime: currentTime.add(walkDuration),
-      ));
+      );
       currentTime = currentTime.add(walkDuration);
     }
 
@@ -200,86 +204,93 @@ class TrufiPlannerProvider implements IRoutingProvider {
           ? segment.shapePoints
           : segment.stops.map((s) => s.position).toList();
 
-      final duration = segment.scheduledDuration ??
-          Duration(minutes: segment.stopCount * 2);
+      final duration =
+          segment.scheduledDuration ?? Duration(minutes: segment.stopCount * 2);
 
       final intermediatePlaces = segment.stops
           .skip(1)
           .take(segment.stops.length - 2)
-          .map((stop) => Place(
-                name: stop.name,
-                lat: stop.lat,
-                lon: stop.lon,
-                stopId: stop.id,
-              ))
+          .map(
+            (stop) => Place(
+              name: stop.name,
+              lat: stop.lat,
+              lon: stop.lon,
+              stopId: stop.id,
+            ),
+          )
           .toList();
 
-      legs.add(Leg(
-        mode: _routeTypeToMode(segment.route.type).otpName,
-        distance: _estimateDistance(points),
-        duration: duration,
-        transitLeg: true,
-        fromPlace: Place(
-          name: segment.fromStop.name,
-          lat: segment.fromStop.lat,
-          lon: segment.fromStop.lon,
-          stopId: segment.fromStop.id,
-        ),
-        toPlace: Place(
-          name: segment.toStop.name,
-          lat: segment.toStop.lat,
-          lon: segment.toStop.lon,
-          stopId: segment.toStop.id,
-        ),
-        encodedPoints: PolylineCodec.encode(points),
-        decodedPoints: points,
-        startTime: currentTime,
-        endTime: currentTime.add(duration),
-        route: domain.Route(
-          id: segment.route.id,
-          gtfsId: segment.route.id,
+      legs.add(
+        Leg(
+          mode: _routeTypeToMode(segment.route.type).otpName,
+          distance: _estimateDistance(points),
+          duration: duration,
+          transitLeg: true,
+          fromPlace: Place(
+            name: segment.fromStop.name,
+            lat: segment.fromStop.lat,
+            lon: segment.fromStop.lon,
+            stopId: segment.fromStop.id,
+          ),
+          toPlace: Place(
+            name: segment.toStop.name,
+            lat: segment.toStop.lat,
+            lon: segment.toStop.lon,
+            stopId: segment.toStop.id,
+          ),
+          encodedPoints: PolylineCodec.encode(points),
+          decodedPoints: points,
+          startTime: currentTime,
+          endTime: currentTime.add(duration),
+          route: domain.Route(
+            id: segment.route.id,
+            gtfsId: segment.route.id,
+            shortName: segment.route.shortName,
+            longName: segment.route.longName,
+            color: segment.route.colorHex,
+            textColor: segment.route.textColorHex,
+            type: segment.route.type.value,
+            mode: _routeTypeToMode(segment.route.type),
+          ),
           shortName: segment.route.shortName,
-          longName: segment.route.longName,
-          color: segment.route.colorHex,
-          textColor: segment.route.textColorHex,
-          type: segment.route.type.value,
-          mode: _routeTypeToMode(segment.route.type),
+          routeLongName: segment.route.longName,
+          headsign: segment.headsign,
+          intermediatePlaces: intermediatePlaces,
         ),
-        shortName: segment.route.shortName,
-        routeLongName: segment.route.longName,
-        headsign: segment.headsign,
-        intermediatePlaces: intermediatePlaces,
-      ));
+      );
 
       currentTime = currentTime.add(duration);
     }
 
     // Walk from last stop to destination
     if (path.destinationWalkDistance > 0) {
-      final walkDuration =
-          Duration(seconds: (path.destinationWalkDistance / 1.2).round());
+      final walkDuration = Duration(
+        seconds: (path.destinationWalkDistance / 1.2).round(),
+      );
       final walkPoints = [path.destinationStop.position, to.position];
-      legs.add(Leg(
-        mode: 'WALK',
-        distance: path.destinationWalkDistance,
-        duration: walkDuration,
-        transitLeg: false,
-        fromPlace: Place(
-          name: path.destinationStop.name,
-          lat: path.destinationStop.lat,
-          lon: path.destinationStop.lon,
-          stopId: path.destinationStop.id,
+      legs.add(
+        Leg(
+          mode: 'WALK',
+          distance: path.destinationWalkDistance,
+          duration: walkDuration,
+          transitLeg: false,
+          fromPlace: Place(
+            name: path.destinationStop.name,
+            lat: path.destinationStop.lat,
+            lon: path.destinationStop.lon,
+            stopId: path.destinationStop.id,
+          ),
+          toPlace: Place(
+            name: to.description,
+            lat: to.position.latitude,
+            lon: to.position.longitude,
+          ),
+          encodedPoints: PolylineCodec.encode(walkPoints),
+          decodedPoints: walkPoints,
+          startTime: currentTime,
+          endTime: currentTime.add(walkDuration),
         ),
-        toPlace: Place(
-          name: to.description,
-          lat: to.position.latitude,
-          lon: to.position.longitude,
-        ),
-        encodedPoints: PolylineCodec.encode(walkPoints),
-        decodedPoints: walkPoints,
-        startTime: currentTime,
-        endTime: currentTime.add(walkDuration),
-      ));
+      );
     }
 
     final totalDuration = legs.fold<Duration>(
@@ -342,24 +353,28 @@ class TrufiPlannerProvider implements IRoutingProvider {
 
       final effectiveLongName = generatedLongName ?? route.longName;
 
-      patterns.add(TransitRoute(
-        id: pattern.routeId,
-        name: pattern.headsign ?? route.longName,
-        code: pattern.routeId,
-        route: TransitRouteInfo(
-          shortName: route.shortName,
-          longName: effectiveLongName,
-          mode: _routeTypeToMode(route.type),
-          color: route.colorHex,
-          textColor: route.textColorHex,
+      patterns.add(
+        TransitRoute(
+          id: pattern.routeId,
+          name: pattern.headsign ?? route.longName,
+          code: pattern.routeId,
+          route: TransitRouteInfo(
+            shortName: route.shortName,
+            longName: effectiveLongName,
+            mode: _routeTypeToMode(route.type),
+            color: route.colorHex,
+            textColor: route.textColorHex,
+          ),
         ),
-      ));
+      );
     }
 
-    patterns.sort((a, b) => _compareRouteNames(
-          a.route?.shortName ?? a.code,
-          b.route?.shortName ?? b.code,
-        ));
+    patterns.sort(
+      (a, b) => _compareRouteNames(
+        a.route?.shortName ?? a.code,
+        b.route?.shortName ?? b.code,
+      ),
+    );
 
     return patterns;
   }
@@ -368,24 +383,28 @@ class TrufiPlannerProvider implements IRoutingProvider {
     final routes = await _dataSource.client.getRoutes();
 
     final patterns = routes
-        .map((route) => TransitRoute(
-              id: route.id,
-              name: route.longName,
-              code: route.id,
-              route: TransitRouteInfo(
-                shortName: route.shortName,
-                longName: route.longName,
-                mode: _routeTypeToMode(route.type),
-                color: route.colorHex,
-                textColor: route.textColorHex,
-              ),
-            ))
+        .map(
+          (route) => TransitRoute(
+            id: route.id,
+            name: route.longName,
+            code: route.id,
+            route: TransitRouteInfo(
+              shortName: route.shortName,
+              longName: route.longName,
+              mode: _routeTypeToMode(route.type),
+              color: route.colorHex,
+              textColor: route.textColorHex,
+            ),
+          ),
+        )
         .toList();
 
-    patterns.sort((a, b) => _compareRouteNames(
-          a.route?.shortName ?? a.code,
-          b.route?.shortName ?? b.code,
-        ));
+    patterns.sort(
+      (a, b) => _compareRouteNames(
+        a.route?.shortName ?? a.code,
+        b.route?.shortName ?? b.code,
+      ),
+    );
 
     return patterns;
   }
@@ -393,7 +412,8 @@ class TrufiPlannerProvider implements IRoutingProvider {
   @override
   Future<TransitRoute?> fetchTransitRouteById(String id) async {
     debugPrint(
-        'TrufiPlannerProvider.fetchTransitRouteById: Looking for id=$id');
+      'TrufiPlannerProvider.fetchTransitRouteById: Looking for id=$id',
+    );
 
     if (!_dataSource.isLoaded) {
       await _dataSource.preload();

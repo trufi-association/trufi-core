@@ -27,11 +27,7 @@ class SearchLocationException implements Exception {
   final int? statusCode;
   final Object? originalError;
 
-  SearchLocationException(
-    this.message, {
-    this.statusCode,
-    this.originalError,
-  });
+  SearchLocationException(this.message, {this.statusCode, this.originalError});
 
   @override
   String toString() => 'SearchLocationException: $message';

@@ -59,12 +59,13 @@ enum AppInitStep {
 ///   );
 /// }
 /// ```
-typedef AppInitScreenBuilder = Widget Function(
-  BuildContext context,
-  AppInitStep? currentStep,
-  String? errorMessage,
-  VoidCallback onRetry,
-);
+typedef AppInitScreenBuilder =
+    Widget Function(
+      BuildContext context,
+      AppInitStep? currentStep,
+      String? errorMessage,
+      VoidCallback onRetry,
+    );
 
 /// Application configuration
 class AppConfiguration {

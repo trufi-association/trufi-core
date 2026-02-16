@@ -35,26 +35,25 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   List<TrufiSubRoute> get subRoutes => [
-        TrufiSubRoute(
-          path: ':id', // Path parameter - matches /routes/xxx
-          builder: (context, params) {
-            final routeId = params['id'];
-            if (routeId == null || routeId.isEmpty) {
-              return const _TransportListScreenWidget();
-            }
-            return TransportDetailScreen(
-              routeCode: routeId,
-              getRouteDetails:
-                  TransportDetailScreen.createGetRouteDetails(context),
-            );
-          },
-        ),
-      ];
+    TrufiSubRoute(
+      path: ':id', // Path parameter - matches /routes/xxx
+      builder: (context, params) {
+        final routeId = params['id'];
+        if (routeId == null || routeId.isEmpty) {
+          return const _TransportListScreenWidget();
+        }
+        return TransportDetailScreen(
+          routeCode: routeId,
+          getRouteDetails: TransportDetailScreen.createGetRouteDetails(context),
+        );
+      },
+    ),
+  ];
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        ...TransportListLocalizations.localizationsDelegates,
-      ];
+    ...TransportListLocalizations.localizationsDelegates,
+  ];
 
   @override
   List<Locale> get supportedLocales =>

@@ -39,11 +39,7 @@ class _OverlayWidget extends StatefulWidget {
   final AppOverlayEntry entry;
   final VoidCallback? onDismiss;
 
-  const _OverlayWidget({
-    super.key,
-    required this.entry,
-    this.onDismiss,
-  });
+  const _OverlayWidget({super.key, required this.entry, this.onDismiss});
 
   @override
   State<_OverlayWidget> createState() => _OverlayWidgetState();
@@ -63,9 +59,10 @@ class _OverlayWidgetState extends State<_OverlayWidget>
       duration: widget.entry.config.animationDuration,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _slideTween = _getSlideTween();
 
@@ -76,21 +73,12 @@ class _OverlayWidgetState extends State<_OverlayWidget>
     switch (widget.entry.config.type) {
       case OverlayType.bottomSheet:
       case OverlayType.bottomBanner:
-        return Tween<Offset>(
-          begin: const Offset(0, 1),
-          end: Offset.zero,
-        );
+        return Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero);
       case OverlayType.topBanner:
-        return Tween<Offset>(
-          begin: const Offset(0, -1),
-          end: Offset.zero,
-        );
+        return Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero);
       case OverlayType.fullScreen:
       case OverlayType.custom:
-        return Tween<Offset>(
-          begin: Offset.zero,
-          end: Offset.zero,
-        );
+        return Tween<Offset>(begin: Offset.zero, end: Offset.zero);
     }
   }
 
@@ -141,27 +129,19 @@ class _OverlayWidgetState extends State<_OverlayWidget>
       position: _slideTween.animate(
         CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
       ),
-      child: FadeTransition(
-        opacity: _fadeAnimation,
-        child: widget.entry.child,
-      ),
+      child: FadeTransition(opacity: _fadeAnimation, child: widget.entry.child),
     );
 
     switch (config.type) {
       case OverlayType.fullScreen:
-        return Positioned.fill(
-          child: SafeArea(child: content),
-        );
+        return Positioned.fill(child: SafeArea(child: content));
 
       case OverlayType.bottomSheet:
         return Positioned(
           left: 0,
           right: 0,
           bottom: 0,
-          child: SafeArea(
-            top: false,
-            child: content,
-          ),
+          child: SafeArea(top: false, child: content),
         );
 
       case OverlayType.topBanner:
@@ -169,10 +149,7 @@ class _OverlayWidgetState extends State<_OverlayWidget>
           left: 0,
           right: 0,
           top: 0,
-          child: SafeArea(
-            bottom: false,
-            child: content,
-          ),
+          child: SafeArea(bottom: false, child: content),
         );
 
       case OverlayType.bottomBanner:
@@ -180,10 +157,7 @@ class _OverlayWidgetState extends State<_OverlayWidget>
           left: 0,
           right: 0,
           bottom: 0,
-          child: SafeArea(
-            top: false,
-            child: content,
-          ),
+          child: SafeArea(top: false, child: content),
         );
 
       case OverlayType.custom:

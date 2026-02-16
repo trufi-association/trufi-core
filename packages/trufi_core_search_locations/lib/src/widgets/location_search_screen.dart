@@ -141,8 +141,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
       id: place.placeType == MyPlaceType.home
           ? 'home'
           : place.placeType == MyPlaceType.work
-              ? 'work'
-              : place.id,
+          ? 'work'
+          : place.id,
       displayName: place.name,
       address: place.address,
       latitude: place.latitude,
@@ -201,10 +201,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 16 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -325,9 +322,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     if (_isSearching)
                       const Padding(
                         padding: EdgeInsets.all(32.0),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        child: Center(child: CircularProgressIndicator()),
                       )
                     else if (_searchResults.isEmpty)
                       _EmptySearchResults(text: config.noResultsText)
@@ -604,11 +599,7 @@ class _QuickActionItem extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 22,
-                ),
+                child: Icon(icon, color: iconColor, size: 22),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -732,11 +723,7 @@ class _YourPlaceItem extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 22,
-                ),
+                child: Icon(icon, color: iconColor, size: 22),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -841,11 +828,7 @@ class _ModernLocationTile extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 22,
-                ),
+                child: Icon(icon, color: iconColor, size: 22),
               ),
               const SizedBox(width: 12),
               Expanded(

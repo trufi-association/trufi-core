@@ -31,7 +31,8 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
 
   /// Callback when a transit route badge is tapped in itinerary details.
   /// Provides the route code to allow navigation to route details screen.

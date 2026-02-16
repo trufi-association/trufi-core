@@ -59,10 +59,8 @@ class Leg extends Equatable {
   final String? tripPatternId;
 
   /// Returns the transport mode enum.
-  TransportMode get transportMode => TransportModeExtension.fromString(
-        mode,
-        specificTransport: routeLongName,
-      );
+  TransportMode get transportMode =>
+      TransportModeExtension.fromString(mode, specificTransport: routeLongName);
 
   /// Creates a [Leg] from JSON.
   factory Leg.fromJson(
@@ -71,8 +69,9 @@ class Leg extends Equatable {
   }) {
     final encodedPoints = json['legGeometry']?['points'] as String?;
     final decoder = polylineDecoder ?? PolylineDecoder.decode;
-    final decodedPoints =
-        encodedPoints != null ? decoder(encodedPoints) : <LatLng>[];
+    final decodedPoints = encodedPoints != null
+        ? decoder(encodedPoints)
+        : <LatLng>[];
 
     return Leg(
       mode: json['mode'] as String,
@@ -89,8 +88,9 @@ class Leg extends Equatable {
       agency: json['agency'] != null
           ? Agency.fromJson(json['agency'] as Map<String, dynamic>)
           : null,
-      realtimeState:
-          RealtimeStateExtension.fromString(json['realtimeState'] as String?),
+      realtimeState: RealtimeStateExtension.fromString(
+        json['realtimeState'] as String?,
+      ),
       fromPlace: json['fromPlace'] != null
           ? Place.fromJson(json['fromPlace'] as Map<String, dynamic>)
           : null,
@@ -99,13 +99,13 @@ class Leg extends Equatable {
           : null,
       steps: json['steps'] != null
           ? (json['steps'] as List<dynamic>)
-              .map((e) => Step.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => Step.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
       intermediatePlaces: json['intermediatePlaces'] != null
           ? (json['intermediatePlaces'] as List<dynamic>)
-              .map((e) => Place.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => Place.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
       rentedBike: json['rentedBike'] as bool?,
       interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
@@ -150,8 +150,7 @@ class Leg extends Equatable {
       'fromPlace': fromPlace?.toJson(),
       'toPlace': toPlace?.toJson(),
       'steps': steps?.map((e) => e.toJson()).toList(),
-      'intermediatePlaces':
-          intermediatePlaces?.map((e) => e.toJson()).toList(),
+      'intermediatePlaces': intermediatePlaces?.map((e) => e.toJson()).toList(),
       'rentedBike': rentedBike,
       'interlineWithPreviousLeg': interlineWithPreviousLeg,
       'headsign': headsign,
@@ -220,19 +219,19 @@ class Leg extends Equatable {
 
   @override
   List<Object?> get props => [
-        mode,
-        startTime,
-        endTime,
-        duration,
-        distance,
-        transitLeg,
-        encodedPoints,
-        route,
-        shortName,
-        routeLongName,
-        headsign,
-        tripPatternId,
-      ];
+    mode,
+    startTime,
+    endTime,
+    duration,
+    distance,
+    transitLeg,
+    encodedPoints,
+    route,
+    shortName,
+    routeLongName,
+    headsign,
+    tripPatternId,
+  ];
 }
 
 /// Backwards compatibility alias.

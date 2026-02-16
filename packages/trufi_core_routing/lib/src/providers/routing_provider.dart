@@ -10,10 +10,11 @@ import '../models/transit_route.dart';
 ///
 /// Headers are computed dynamically based on origin/destination.
 /// Defined at the app level and injected into providers.
-typedef PlanHeaderProvider = FutureOr<Map<String, String>> Function(
-  RoutingLocation from,
-  RoutingLocation to,
-);
+typedef PlanHeaderProvider =
+    FutureOr<Map<String, String>> Function(
+      RoutingLocation from,
+      RoutingLocation to,
+    );
 
 /// Interface for routing providers.
 ///

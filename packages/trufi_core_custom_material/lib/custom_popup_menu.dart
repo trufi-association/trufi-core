@@ -13,10 +13,7 @@ const double _kMenuScreenPadding = 0.0;
 const double _kDefaultIconSize = 24.0;
 
 class _MenuItem extends SingleChildRenderObjectWidget {
-  const _MenuItem({
-    required this.onLayout,
-    required super.child,
-  });
+  const _MenuItem({required this.onLayout, required super.child});
 
   final ValueChanged<Size> onLayout;
 
@@ -27,7 +24,9 @@ class _MenuItem extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, covariant _RenderMenuItem renderObject) {
+    BuildContext context,
+    covariant _RenderMenuItem renderObject,
+  ) {
     renderObject.onLayout = onLayout;
   }
 }
@@ -73,7 +72,8 @@ class _PopupMenu<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double unit = 1.0 /
+    final double unit =
+        1.0 /
         (route.items.length +
             1.5); // 1.0 for the width and 0.5 for the last item's fade.
     final List<Widget> children = <Widget>[];
@@ -89,32 +89,29 @@ class _PopupMenu<T> extends StatelessWidget {
       Widget item = route.items[i];
       if (route.initialValue != null &&
           route.items[i].represents(route.initialValue)) {
-        item = Container(
-          color: Theme.of(context).highlightColor,
-          child: item,
-        );
+        item = Container(color: Theme.of(context).highlightColor, child: item);
       }
       children.add(
         _MenuItem(
           onLayout: (Size size) {
             route.itemSizes[i] = size;
           },
-          child: FadeTransition(
-            opacity: opacity,
-            child: item,
-          ),
+          child: FadeTransition(opacity: opacity, child: item),
         ),
       );
     }
 
-    final CurveTween opacity =
-        CurveTween(curve: const Interval(0.0, 1.0 / 3.0));
+    final CurveTween opacity = CurveTween(
+      curve: const Interval(0.0, 1.0 / 3.0),
+    );
     final CurveTween width = CurveTween(curve: Interval(0.0, unit));
-    final CurveTween height =
-        CurveTween(curve: Interval(0.0, unit * route.items.length));
+    final CurveTween height = CurveTween(
+      curve: Interval(0.0, unit * route.items.length),
+    );
 
     final Widget child = ConstrainedBox(
-      constraints: constraints ??
+      constraints:
+          constraints ??
           const BoxConstraints(
             minWidth: _kMenuMinWidth,
             maxWidth: _kMenuMaxWidth,
@@ -199,9 +196,9 @@ class _PopupMenuRouteLayout extends SingleChildLayoutDelegate {
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     // The menu can be at most the size of the overlay minus 8.0 pixels in each
     // direction.
-    return BoxConstraints.loose(constraints.biggest).deflate(
-      const EdgeInsets.all(_kMenuScreenPadding) + padding,
-    );
+    return BoxConstraints.loose(
+      constraints.biggest,
+    ).deflate(const EdgeInsets.all(_kMenuScreenPadding) + padding);
   }
 
   @override
@@ -245,7 +242,9 @@ class _PopupMenuRouteLayout extends SingleChildLayoutDelegate {
     final Offset originCenter = position.toRect(Offset.zero & size).center;
     final Iterable<Rect> subScreens =
         DisplayFeatureSubScreen.subScreensInBounds(
-            Offset.zero & size, avoidBounds);
+          Offset.zero & size,
+          avoidBounds,
+        );
     final Rect subScreen = _closestScreen(subScreens, originCenter);
     return _fitInsideScreen(subScreen, childSize, wantedPosition);
   }
@@ -276,7 +275,8 @@ class _PopupMenuRouteLayout extends SingleChildLayoutDelegate {
       y = _kMenuScreenPadding + padding.top;
     } else if (y + childSize.height >
         screen.bottom - _kMenuScreenPadding - padding.bottom) {
-      y = screen.bottom -
+      y =
+          screen.bottom -
           childSize.height -
           _kMenuScreenPadding -
           padding.bottom;
@@ -348,13 +348,18 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
   final String barrierLabel;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     int? selectedItemIndex;
     if (initialValue != null) {
-      for (int index = 0;
-          selectedItemIndex == null && index < items.length;
-          index += 1) {
+      for (
+        int index = 0;
+        selectedItemIndex == null && index < items.length;
+        index += 1
+      ) {
         if (items[index].represents(initialValue)) {
           selectedItemIndex = index;
         }
@@ -422,21 +427,27 @@ Future<T?> trufiShowMenu<T>({
       semanticLabel ??= MaterialLocalizations.of(context).popupMenuLabel;
   }
 
-  final NavigatorState navigator =
-      Navigator.of(context, rootNavigator: useRootNavigator);
-  return navigator.push(_PopupMenuRoute<T>(
-    position: position,
-    items: items,
-    initialValue: initialValue,
-    elevation: elevation,
-    semanticLabel: semanticLabel,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    shape: shape,
-    color: color,
-    capturedThemes:
-        InheritedTheme.capture(from: context, to: navigator.context),
-    constraints: constraints,
-  ));
+  final NavigatorState navigator = Navigator.of(
+    context,
+    rootNavigator: useRootNavigator,
+  );
+  return navigator.push(
+    _PopupMenuRoute<T>(
+      position: position,
+      items: items,
+      initialValue: initialValue,
+      elevation: elevation,
+      semanticLabel: semanticLabel,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      shape: shape,
+      color: color,
+      capturedThemes: InheritedTheme.capture(
+        from: context,
+        to: navigator.context,
+      ),
+      constraints: constraints,
+    ),
+  );
 }
 
 class TrufiPopupMenuButton<T> extends StatefulWidget {
@@ -464,9 +475,9 @@ class TrufiPopupMenuButton<T> extends StatefulWidget {
     this.constraints,
     this.position = PopupMenuPosition.over,
   }) : assert(
-          !(child != null && icon != null),
-          'You can only pass [child] or [icon], not both.',
-        );
+         !(child != null && icon != null),
+         'You can only pass [child] or [icon], not both.',
+       );
 
   /// Called when the button is pressed to create the items to show in the menu.
   final PopupMenuItemBuilder<T> itemBuilder;
@@ -622,14 +633,16 @@ class TrufiPopupMenuButtonState<T> extends State<TrufiPopupMenuButton<T>> {
       case PopupMenuPosition.under:
         offset =
             Offset(0.0, button.size.height - (widget.padding.vertical / 2)) +
-                widget.offset;
+            widget.offset;
         break;
     }
     final RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(offset, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero) + offset,
-            ancestor: overlay),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
       ),
       Offset.zero & overlay.size,
     );
@@ -659,7 +672,8 @@ class TrufiPopupMenuButtonState<T> extends State<TrufiPopupMenuButton<T>> {
   }
 
   bool get _canRequestFocus {
-    final NavigationMode mode = MediaQuery.maybeOf(context)?.navigationMode ??
+    final NavigationMode mode =
+        MediaQuery.maybeOf(context)?.navigationMode ??
         NavigationMode.traditional;
     switch (mode) {
       case NavigationMode.traditional:
@@ -672,7 +686,8 @@ class TrufiPopupMenuButtonState<T> extends State<TrufiPopupMenuButton<T>> {
   @override
   Widget build(BuildContext context) {
     final IconThemeData iconTheme = IconTheme.of(context);
-    final bool enableFeedback = widget.enableFeedback ??
+    final bool enableFeedback =
+        widget.enableFeedback ??
         PopupMenuTheme.of(context).enableFeedback ??
         true;
 

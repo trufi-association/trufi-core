@@ -16,10 +16,9 @@ part 'saved_places_state.dart';
 class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   final SavedPlacesRepository _repository;
 
-  SavedPlacesCubit({
-    SavedPlacesRepository? repository,
-  })  : _repository = repository ?? SavedPlacesRepositoryImpl(),
-        super(const SavedPlacesState());
+  SavedPlacesCubit({SavedPlacesRepository? repository})
+    : _repository = repository ?? SavedPlacesRepositoryImpl(),
+      super(const SavedPlacesState());
 
   /// Initializes the cubit and loads all saved places.
   Future<void> initialize() async {
@@ -28,10 +27,12 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
       await _repository.initialize();
       await _loadAllPlaces();
     } catch (e) {
-      emit(state.copyWith(
-        status: SavedPlacesStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: SavedPlacesStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -41,15 +42,17 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
     final otherPlaces = await _repository.getOtherPlaces();
     final history = await _repository.getHistory();
 
-    emit(state.copyWith(
-      status: SavedPlacesStatus.loaded,
-      home: home,
-      work: work,
-      otherPlaces: otherPlaces,
-      history: history,
-      clearHome: home == null,
-      clearWork: work == null,
-    ));
+    emit(
+      state.copyWith(
+        status: SavedPlacesStatus.loaded,
+        home: home,
+        work: work,
+        otherPlaces: otherPlaces,
+        history: history,
+        clearHome: home == null,
+        clearWork: work == null,
+      ),
+    );
   }
 
   /// Sets the home location. Replaces any existing home.
@@ -108,9 +111,11 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   /// Removes a place from other places.
   Future<void> removeOtherPlace(String id) async {
     await _repository.deletePlace(id);
-    emit(state.copyWith(
-      otherPlaces: state.otherPlaces.where((p) => p.id != id).toList(),
-    ));
+    emit(
+      state.copyWith(
+        otherPlaces: state.otherPlaces.where((p) => p.id != id).toList(),
+      ),
+    );
   }
 
   /// Adds a place to history.
@@ -123,9 +128,9 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   /// Removes a place from history.
   Future<void> removeFromHistory(String id) async {
     await _repository.deletePlace(id);
-    emit(state.copyWith(
-      history: state.history.where((p) => p.id != id).toList(),
-    ));
+    emit(
+      state.copyWith(history: state.history.where((p) => p.id != id).toList()),
+    );
   }
 
   /// Clears all history.
@@ -136,7 +141,10 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
 
   /// Saves a place based on its type.
   /// Handles type changes correctly (e.g., other -> home).
-  Future<void> savePlace(SavedPlace place, {SavedPlaceType? originalType}) async {
+  Future<void> savePlace(
+    SavedPlace place, {
+    SavedPlaceType? originalType,
+  }) async {
     final newType = place.type;
 
     // If type changed, handle the transition
@@ -150,14 +158,20 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
           emit(state.copyWith(clearWork: true));
           break;
         case SavedPlaceType.other:
-          emit(state.copyWith(
-            otherPlaces: state.otherPlaces.where((p) => p.id != place.id).toList(),
-          ));
+          emit(
+            state.copyWith(
+              otherPlaces: state.otherPlaces
+                  .where((p) => p.id != place.id)
+                  .toList(),
+            ),
+          );
           break;
         case SavedPlaceType.history:
-          emit(state.copyWith(
-            history: state.history.where((p) => p.id != place.id).toList(),
-          ));
+          emit(
+            state.copyWith(
+              history: state.history.where((p) => p.id != place.id).toList(),
+            ),
+          );
           break;
       }
       // Delete old record
@@ -176,9 +190,13 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
         if (originalType == newType) {
           // Just updating, not changing type
           await _repository.updatePlace(place);
-          emit(state.copyWith(
-            otherPlaces: state.otherPlaces.map((p) => p.id == place.id ? place : p).toList(),
-          ));
+          emit(
+            state.copyWith(
+              otherPlaces: state.otherPlaces
+                  .map((p) => p.id == place.id ? place : p)
+                  .toList(),
+            ),
+          );
         } else {
           await addOtherPlace(place);
         }

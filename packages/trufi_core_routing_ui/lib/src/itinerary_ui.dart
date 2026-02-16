@@ -51,9 +51,9 @@ extension ItineraryUI on Itinerary {
   /// Returns the first departure (transit) leg.
   Leg? get getFirstDeparture {
     return compressLegs.cast<Leg?>().firstWhere(
-          (leg) => leg?.transitLeg ?? false,
-          orElse: () => null,
-        );
+      (leg) => leg?.transitLeg ?? false,
+      orElse: () => null,
+    );
   }
 
   /// Total biking distance.
@@ -94,25 +94,25 @@ class PlanUtils {
   /// Remove duplicate itineraries based on first bus route.
   static List<Itinerary> removeDuplicates(List<Itinerary> itineraries) {
     final usedRoutes = <String>{};
-    return itineraries.fold<List<Itinerary>>(
-      <Itinerary>[],
-      (result, itinerary) {
-        final firstBusLeg = itinerary.legs.cast<Leg?>().firstWhere(
-              (leg) => leg?.transitLeg ?? false,
-              orElse: () => null,
-            );
-        if (firstBusLeg == null) {
+    return itineraries.fold<List<Itinerary>>(<Itinerary>[], (
+      result,
+      itinerary,
+    ) {
+      final firstBusLeg = itinerary.legs.cast<Leg?>().firstWhere(
+        (leg) => leg?.transitLeg ?? false,
+        orElse: () => null,
+      );
+      if (firstBusLeg == null) {
+        result.add(itinerary);
+      } else {
+        if (!usedRoutes.contains(firstBusLeg.shortName)) {
           result.add(itinerary);
-        } else {
-          if (!usedRoutes.contains(firstBusLeg.shortName)) {
-            result.add(itinerary);
-            if (firstBusLeg.shortName != null) {
-              usedRoutes.add(firstBusLeg.shortName!);
-            }
+          if (firstBusLeg.shortName != null) {
+            usedRoutes.add(firstBusLeg.shortName!);
           }
         }
-        return result;
-      },
-    );
+      }
+      return result;
+    });
   }
 }

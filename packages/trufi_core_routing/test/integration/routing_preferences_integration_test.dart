@@ -20,9 +20,7 @@ void main() {
     late Otp24RoutingProvider provider;
 
     setUp(() {
-      provider = Otp24RoutingProvider(
-        endpoint: TestConfig.otp24Endpoint,
-      );
+      provider = Otp24RoutingProvider(endpoint: TestConfig.otp24Endpoint);
     });
 
     test('fetchPlan returns itineraries', () async {
@@ -51,8 +49,11 @@ void main() {
 
       for (final leg in itinerary.legs) {
         if (leg.distance > 0) {
-          expect(leg.decodedPoints, isNotEmpty,
-              reason: 'Leg should have decoded geometry points');
+          expect(
+            leg.decodedPoints,
+            isNotEmpty,
+            reason: 'Leg should have decoded geometry points',
+          );
           expect(leg.fromPlace, isNotNull);
           expect(leg.toPlace, isNotNull);
           expect(leg.duration.inSeconds, greaterThan(0));
@@ -68,8 +69,11 @@ void main() {
         dateTime: testDateTime,
       );
 
-      expect(plan, isNotNull,
-          reason: 'Should return a plan (accessible or not)');
+      expect(
+        plan,
+        isNotNull,
+        reason: 'Should return a plan (accessible or not)',
+      );
     });
   });
 
@@ -77,9 +81,7 @@ void main() {
     late Otp15RoutingProvider provider;
 
     setUp(() {
-      provider = Otp15RoutingProvider(
-        endpoint: TestConfig.otp15Endpoint,
-      );
+      provider = Otp15RoutingProvider(endpoint: TestConfig.otp15Endpoint);
     });
 
     tearDown(() {
@@ -108,8 +110,11 @@ void main() {
       expect(plan.itineraries, isNotEmpty);
 
       final itinerary = plan.itineraries!.first;
-      expect(itinerary.duration.inSeconds, greaterThan(0),
-          reason: 'Itinerary should have positive duration');
+      expect(
+        itinerary.duration.inSeconds,
+        greaterThan(0),
+        reason: 'Itinerary should have positive duration',
+      );
     });
   });
 
@@ -117,9 +122,7 @@ void main() {
     late Otp28RoutingProvider provider;
 
     setUp(() {
-      provider = Otp28RoutingProvider(
-        endpoint: TestConfig.otp28Endpoint,
-      );
+      provider = Otp28RoutingProvider(endpoint: TestConfig.otp28Endpoint);
     });
 
     test('fetchPlan returns itineraries', () async {
@@ -148,8 +151,11 @@ void main() {
 
       // Verify each leg has a mode
       for (final leg in itinerary.legs) {
-        expect(leg.mode, isNotEmpty,
-            reason: 'Each leg should have a transport mode');
+        expect(
+          leg.mode,
+          isNotEmpty,
+          reason: 'Each leg should have a transport mode',
+        );
       }
     });
   });
@@ -158,9 +164,7 @@ void main() {
     late Otp24RoutingProvider provider;
 
     setUp(() {
-      provider = Otp24RoutingProvider(
-        endpoint: TestConfig.otp24Endpoint,
-      );
+      provider = Otp24RoutingProvider(endpoint: TestConfig.otp24Endpoint);
     });
 
     test('requesting multiple itineraries returns results', () async {
@@ -196,9 +200,12 @@ void main() {
         if (hasTransitLeg) break;
       }
 
-      expect(hasTransitLeg, isTrue,
-          reason:
-              'Default mode (transit+walk) should return itineraries with transit legs');
+      expect(
+        hasTransitLeg,
+        isTrue,
+        reason:
+            'Default mode (transit+walk) should return itineraries with transit legs',
+      );
     });
   });
 }

@@ -55,13 +55,13 @@ class POICategoryLayer extends TrufiLayer {
     required List<POI> pois,
     String? parentId,
     this.poiFilter,
-  })  : _pois = pois,
-        super(
-          controller,
-          id: 'poi_${category.name}',
-          layerLevel: 100 + category.weight,
-          parentId: parentId,
-        );
+  }) : _pois = pois,
+       super(
+         controller,
+         id: 'poi_${category.name}',
+         layerLevel: 100 + category.weight,
+         parentId: parentId,
+       );
 
   /// Set the highlighted POI (for selection styling)
   set highlightedPOI(POI? poi) {
@@ -83,21 +83,23 @@ class POICategoryLayer extends TrufiLayer {
       return;
     }
 
-    final filteredPOIs =
-        poiFilter != null ? _pois.where(poiFilter!) : _pois;
+    final filteredPOIs = poiFilter != null ? _pois.where(poiFilter!) : _pois;
 
     const markerSize = 24.0;
     final markers = filteredPOIs
-        .map((poi) => TrufiMarker(
-              id: 'poi_${category.name}_${poi.id}',
-              position: poi.position,
-              size: const Size(markerSize, markerSize),
-              layerLevel: layerLevel,
-              // Cache by subcategory to reuse same icon
-              imageCacheKey: 'poi_icon_${category.name}_${poi.subcategory ?? "default"}',
-              allowOverlap: false,
-              widget: _buildMarkerWidget(poi, markerSize),
-            ))
+        .map(
+          (poi) => TrufiMarker(
+            id: 'poi_${category.name}_${poi.id}',
+            position: poi.position,
+            size: const Size(markerSize, markerSize),
+            layerLevel: layerLevel,
+            // Cache by subcategory to reuse same icon
+            imageCacheKey:
+                'poi_icon_${category.name}_${poi.subcategory ?? "default"}',
+            allowOverlap: false,
+            widget: _buildMarkerWidget(poi, markerSize),
+          ),
+        )
         .toList();
 
     setMarkers(markers);
@@ -113,13 +115,14 @@ class POICategoryLayer extends TrufiLayer {
       return;
     }
 
-    final filteredPOIs =
-        poiFilter != null ? _pois.where(poiFilter!) : _pois;
+    final filteredPOIs = poiFilter != null ? _pois.where(poiFilter!) : _pois;
 
     final polygonLines = <TrufiLine>[];
 
     for (final poi in filteredPOIs) {
-      if (poi.isArea && poi.polygonPoints != null && poi.polygonPoints!.isNotEmpty) {
+      if (poi.isArea &&
+          poi.polygonPoints != null &&
+          poi.polygonPoints!.isNotEmpty) {
         final isHighlighted = _highlightedPOI?.id == poi.id;
 
         // Convert LatLng to latlng.LatLng for TrufiLine
@@ -131,13 +134,15 @@ class POICategoryLayer extends TrufiLayer {
         final color = poi.color;
 
         // Create polygon outline
-        polygonLines.add(TrufiLine(
-          id: 'poi_polygon_${category.name}_${poi.id}',
-          position: points,
-          color: isHighlighted ? color : color.withValues(alpha: 0.6),
-          lineWidth: isHighlighted ? 4.0 : 2.0,
-          layerLevel: isHighlighted ? layerLevel + 1 : layerLevel - 1,
-        ));
+        polygonLines.add(
+          TrufiLine(
+            id: 'poi_polygon_${category.name}_${poi.id}',
+            position: points,
+            color: isHighlighted ? color : color.withValues(alpha: 0.6),
+            lineWidth: isHighlighted ? 4.0 : 2.0,
+            layerLevel: isHighlighted ? layerLevel + 1 : layerLevel - 1,
+          ),
+        );
       }
     }
 
@@ -152,11 +157,7 @@ class POICategoryLayer extends TrufiLayer {
     // First try POI's own icon from properties
     final poiSvgString = poi.properties['icon'] as String?;
     if (poiSvgString != null && poiSvgString.isNotEmpty) {
-      return SvgPicture.string(
-        poiSvgString,
-        width: iconSize,
-        height: iconSize,
-      );
+      return SvgPicture.string(poiSvgString, width: iconSize, height: iconSize);
     }
 
     // Then try subcategory icon from metadata
@@ -194,11 +195,7 @@ class POICategoryLayer extends TrufiLayer {
           ),
         ],
       ),
-      child: Icon(
-        category.fallbackIcon,
-        color: color,
-        size: iconSize * 0.6,
-      ),
+      child: Icon(category.fallbackIcon, color: color, size: iconSize * 0.6),
     );
   }
 

@@ -35,10 +35,7 @@ class GtfsShape {
   final String id;
   final List<GtfsShapePoint> points;
 
-  const GtfsShape({
-    required this.id,
-    required this.points,
-  });
+  const GtfsShape({required this.id, required this.points});
 
   /// Get the shape as a list of LatLng points.
   List<LatLng> get polyline => points.map((p) => p.position).toList();

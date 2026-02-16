@@ -33,8 +33,8 @@ class Plan {
           : null,
       itineraries: json['itineraries'] != null
           ? (json['itineraries'] as List<dynamic>)
-              .map((e) => Itinerary.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => Itinerary.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
       type: json['type'] as String?,
     );
@@ -68,8 +68,7 @@ class Plan {
   }
 
   /// Returns true if this plan has itineraries.
-  bool get hasItineraries =>
-      itineraries != null && itineraries!.isNotEmpty;
+  bool get hasItineraries => itineraries != null && itineraries!.isNotEmpty;
 
   /// Returns itineraries that are not walk-only.
   List<Itinerary> get transitItineraries {

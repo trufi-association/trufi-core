@@ -19,7 +19,8 @@ class ItineraryList extends StatefulWidget {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
   final LocationService? locationService;
 
   /// Callback when a transit route badge is tapped.
@@ -168,7 +169,12 @@ class _ItineraryListState extends State<ItineraryList> {
         // Use grouped itineraries if available, otherwise fall back to regular list
         final groupedItineraries = state.plan?.groupedItineraries;
         if (groupedItineraries != null && groupedItineraries.isNotEmpty) {
-          return _buildGroupedListView(context, groupedItineraries, state, cubit);
+          return _buildGroupedListView(
+            context,
+            groupedItineraries,
+            state,
+            cubit,
+          );
         }
 
         // Fallback to non-grouped list view
@@ -185,12 +191,12 @@ class _ItineraryListState extends State<ItineraryList> {
       onRouteTap: widget.onRouteTap,
       onStartNavigation:
           widget.onStartNavigation != null && widget.locationService != null
-              ? () => widget.onStartNavigation!(
-                    context,
-                    itinerary,
-                    widget.locationService!,
-                  )
-              : null,
+          ? () => widget.onStartNavigation!(
+              context,
+              itinerary,
+              widget.locationService!,
+            )
+          : null,
     );
   }
 
@@ -229,8 +235,12 @@ class _ItineraryListState extends State<ItineraryList> {
               // Main card for representative itinerary
               ItineraryCard(
                 itinerary: group.representative,
-                isSelected: isSelected && state.selectedItinerary == group.representative,
-                alternativeCount: group.hasAlternatives ? group.additionalCount : null,
+                isSelected:
+                    isSelected &&
+                    state.selectedItinerary == group.representative,
+                alternativeCount: group.hasAlternatives
+                    ? group.additionalCount
+                    : null,
                 isExpanded: isExpanded,
                 onTap: () {
                   cubit.selectItinerary(group.representative);
@@ -245,13 +255,14 @@ class _ItineraryListState extends State<ItineraryList> {
                     : null,
                 onDetailsTap: null,
                 onStartNavigation:
-                    widget.onStartNavigation != null && widget.locationService != null
-                        ? () => widget.onStartNavigation!(
-                              context,
-                              group.representative,
-                              widget.locationService!,
-                            )
-                        : null,
+                    widget.onStartNavigation != null &&
+                        widget.locationService != null
+                    ? () => widget.onStartNavigation!(
+                        context,
+                        group.representative,
+                        widget.locationService!,
+                      )
+                    : null,
               ),
               // Expanded alternatives
               if (isExpanded && group.hasAlternatives)
@@ -349,13 +360,14 @@ class _ItineraryListState extends State<ItineraryList> {
             },
             onDetailsTap: null,
             onStartNavigation:
-                widget.onStartNavigation != null && widget.locationService != null
-                    ? () => widget.onStartNavigation!(
-                          context,
-                          itinerary,
-                          widget.locationService!,
-                        )
-                    : null,
+                widget.onStartNavigation != null &&
+                    widget.locationService != null
+                ? () => widget.onStartNavigation!(
+                    context,
+                    itinerary,
+                    widget.locationService!,
+                  )
+                : null,
           ),
         );
       },

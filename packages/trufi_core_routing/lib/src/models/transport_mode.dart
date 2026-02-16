@@ -23,6 +23,7 @@ enum TransportMode {
   micro,
   miniBus,
   lightRail,
+
   /// @deprecated Use [error] instead.
   @Deprecated('Use TransportMode.error instead')
   unknown,

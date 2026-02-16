@@ -6,9 +6,5 @@ class SocialMediaLink {
   final IconData icon;
   final String? label;
 
-  const SocialMediaLink({
-    required this.url,
-    required this.icon,
-    this.label,
-  });
+  const SocialMediaLink({required this.url, required this.icon, this.label});
 }

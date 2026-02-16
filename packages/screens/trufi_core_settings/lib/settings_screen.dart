@@ -22,14 +22,12 @@ class SettingsTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        SettingsLocalizations.delegate,
-      ];
+    SettingsLocalizations.delegate,
+  ];
 
   @override
-  ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.settings,
-        order: 300,
-      );
+  ScreenMenuItem? get menuItem =>
+      const ScreenMenuItem(icon: Icons.settings, order: 300);
 
   @override
   bool get hasOwnAppBar => true;
@@ -70,9 +68,7 @@ class _SettingsScreenWidget extends StatelessWidget {
               onMenuPressed: () => _tryOpenDrawer(context),
             ),
             // Content
-            const Expanded(
-              child: _SettingsContent(),
-            ),
+            const Expanded(child: _SettingsContent()),
           ],
         ),
       ),
@@ -85,10 +81,7 @@ class _SettingsHeader extends StatelessWidget {
   final String title;
   final VoidCallback onMenuPressed;
 
-  const _SettingsHeader({
-    required this.title,
-    required this.onMenuPressed,
-  });
+  const _SettingsHeader({required this.title, required this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -185,10 +178,7 @@ class _SettingsContentState extends State<_SettingsContent>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -203,42 +193,27 @@ class _SettingsContentState extends State<_SettingsContent>
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Language settings card
-          _buildAnimatedItem(
-            index: 0,
-            child: const _LanguageSettingsCard(),
-          ),
+          _buildAnimatedItem(index: 0, child: const _LanguageSettingsCard()),
 
           const SizedBox(height: 16),
 
           // Theme settings card
-          _buildAnimatedItem(
-            index: 1,
-            child: const _ThemeSettingsCard(),
-          ),
+          _buildAnimatedItem(index: 1, child: const _ThemeSettingsCard()),
 
           const SizedBox(height: 16),
 
           // Routing settings card (before maps)
-          _buildAnimatedItem(
-            index: 2,
-            child: const _RoutingSettingsCard(),
-          ),
+          _buildAnimatedItem(index: 2, child: const _RoutingSettingsCard()),
 
           const SizedBox(height: 16),
 
           // Map settings card
-          _buildAnimatedItem(
-            index: 3,
-            child: const _MapSettingsCard(),
-          ),
+          _buildAnimatedItem(index: 3, child: const _MapSettingsCard()),
 
           const SizedBox(height: 16),
 
           // Privacy settings card
-          _buildAnimatedItem(
-            index: 4,
-            child: const _PrivacySettingsCard(),
-          ),
+          _buildAnimatedItem(index: 4, child: const _PrivacySettingsCard()),
         ],
       ),
     );
@@ -483,7 +458,9 @@ class _RoutingSettingsCard extends StatelessWidget {
             child: _EngineOptionTile(
               name: engine.name,
               description: engine.description,
-              icon: isOffline ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
+              icon: isOffline
+                  ? Icons.offline_bolt_rounded
+                  : Icons.cloud_rounded,
               isSelected: index == routingEngineManager.currentIndex,
               onTap: () {
                 HapticFeedback.selectionClick();
@@ -534,7 +511,9 @@ class _SettingsCard extends StatelessWidget {
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(19)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(19),
+              ),
             ),
             child: Row(
               children: [
@@ -573,10 +552,7 @@ class _SettingsCard extends StatelessWidget {
             ),
           ),
           // Content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: child,
-          ),
+          Padding(padding: const EdgeInsets.all(16), child: child),
         ],
       ),
     );
@@ -898,8 +874,8 @@ class _PrivacySettingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
     final overlayManager = OverlayManager.watch(context);
-    final privacyConsentManager =
-        overlayManager.getManager<PrivacyConsentManager>();
+    final privacyConsentManager = overlayManager
+        .getManager<PrivacyConsentManager>();
 
     // If no PrivacyConsentManager is available, don't show this card
     if (privacyConsentManager == null) {
@@ -1011,10 +987,7 @@ class _PrivacyToggleTile extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               // Switch
-              Switch.adaptive(
-                value: isEnabled,
-                onChanged: onToggle,
-              ),
+              Switch.adaptive(value: isEnabled, onChanged: onToggle),
             ],
           ),
         ),

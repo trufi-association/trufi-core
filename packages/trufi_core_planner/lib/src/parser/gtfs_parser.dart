@@ -145,7 +145,9 @@ class GtfsParser {
   static Map<String, GtfsShape> _parseShapes(String? content) {
     if (content == null) return {};
 
-    final points = CsvParser.parse(content).map(GtfsShapePoint.fromCsv).toList();
+    final points = CsvParser.parse(
+      content,
+    ).map(GtfsShapePoint.fromCsv).toList();
 
     // Group by shape ID
     final grouped = <String, List<GtfsShapePoint>>{};
@@ -156,7 +158,8 @@ class GtfsParser {
     // Sort by sequence and create shapes
     final shapes = <String, GtfsShape>{};
     for (final entry in grouped.entries) {
-      final sortedPoints = entry.value..sort((a, b) => a.sequence.compareTo(b.sequence));
+      final sortedPoints = entry.value
+        ..sort((a, b) => a.sequence.compareTo(b.sequence));
       shapes[entry.key] = GtfsShape(id: entry.key, points: sortedPoints);
     }
 

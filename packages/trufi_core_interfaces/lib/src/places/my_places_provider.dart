@@ -52,12 +52,7 @@ class MyPlace implements ITrufiLocation {
 }
 
 /// Types of saved places.
-enum MyPlaceType {
-  home,
-  work,
-  other,
-  history,
-}
+enum MyPlaceType { home, work, other, history }
 
 /// Interface for providing saved/favorite places.
 ///

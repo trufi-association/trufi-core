@@ -17,8 +17,8 @@ class Itinerary extends Equatable {
     this.transfers,
     this.arrivedAtDestinationWithRentedBicycle = false,
     this.emissionsPerPerson,
-  })  : legs = _assignDefaultColors(legs),
-        distance = _calculateDistance(legs);
+  }) : legs = _assignDefaultColors(legs),
+       distance = _calculateDistance(legs);
 
   final List<Leg> legs;
   final DateTime startTime;
@@ -66,12 +66,15 @@ class Itinerary extends Equatable {
   static List<Leg> _assignDefaultColors(List<Leg> legs) {
     int transitIndex = 0;
     return legs.map((leg) {
-      if (leg.transitLeg && (leg.route?.color == null || leg.route!.color!.isEmpty)) {
-        final defaultColor = _defaultTransitColors[transitIndex % _defaultTransitColors.length];
+      if (leg.transitLeg &&
+          (leg.route?.color == null || leg.route!.color!.isEmpty)) {
+        final defaultColor =
+            _defaultTransitColors[transitIndex % _defaultTransitColors.length];
         transitIndex++;
         return leg.copyWith(
-          route: leg.route?.copyWith(color: defaultColor) ??
-                 Route(color: defaultColor, shortName: leg.shortName),
+          route:
+              leg.route?.copyWith(color: defaultColor) ??
+              Route(color: defaultColor, shortName: leg.shortName),
         );
       }
       if (leg.transitLeg) transitIndex++;
@@ -117,7 +120,7 @@ class Itinerary extends Equatable {
       transfers: transfers ?? this.transfers,
       arrivedAtDestinationWithRentedBicycle:
           arrivedAtDestinationWithRentedBicycle ??
-              this.arrivedAtDestinationWithRentedBicycle,
+          this.arrivedAtDestinationWithRentedBicycle,
       emissionsPerPerson: emissionsPerPerson ?? this.emissionsPerPerson,
     );
   }
@@ -125,16 +128,14 @@ class Itinerary extends Equatable {
   /// Returns the first transit leg (bus, train, etc.) or null.
   Leg? get firstTransitLeg {
     return legs.cast<Leg?>().firstWhere(
-          (leg) => leg?.transitLeg ?? false,
-          orElse: () => null,
-        );
+      (leg) => leg?.transitLeg ?? false,
+      orElse: () => null,
+    );
   }
 
   /// Returns true if this itinerary is walk-only.
   bool get isWalkOnly {
-    return legs.every(
-      (leg) => leg.transportMode == TransportMode.walk,
-    );
+    return legs.every((leg) => leg.transportMode == TransportMode.walk);
   }
 
   /// Returns all transit legs.
@@ -151,15 +152,15 @@ class Itinerary extends Equatable {
 
   @override
   List<Object?> get props => [
-        startTime,
-        endTime,
-        duration,
-        walkTime,
-        walkDistance,
-        transfers,
-        arrivedAtDestinationWithRentedBicycle,
-        emissionsPerPerson,
-        distance,
-        legs,
-      ];
+    startTime,
+    endTime,
+    duration,
+    walkTime,
+    walkDistance,
+    transfers,
+    arrivedAtDestinationWithRentedBicycle,
+    emissionsPerPerson,
+    distance,
+    legs,
+  ];
 }

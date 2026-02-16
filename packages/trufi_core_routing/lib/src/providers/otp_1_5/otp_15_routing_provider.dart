@@ -106,9 +106,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
     final time =
         '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
 
-    final modes = _prefs.transportModes
-        .map((m) => m.otpName)
-        .join(',');
+    final modes = _prefs.transportModes.map((m) => m.otpName).join(',');
 
     final queryParams = <String, String>{
       'fromPlace': _formatPlanLocation(from),
@@ -213,14 +211,17 @@ class Otp15RoutingProvider implements IRoutingProvider {
       }
       final routeData = routeId != null ? routeMap[routeId] : null;
 
-      allPatterns.add(TransitRoute(
-        id: patternId,
-        name: patternData['desc'] as String? ??
-            routeData?['longName'] as String? ??
-            '',
-        code: patternId,
-        route: routeData != null ? _parseRouteInfo(routeData) : null,
-      ));
+      allPatterns.add(
+        TransitRoute(
+          id: patternId,
+          name:
+              patternData['desc'] as String? ??
+              routeData?['longName'] as String? ??
+              '',
+          code: patternId,
+          route: routeData != null ? _parseRouteInfo(routeData) : null,
+        ),
+      );
     }
 
     return allPatterns;
@@ -292,8 +293,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
     return TransitRouteInfo(
       shortName: json['shortName'] as String?,
       longName: json['longName'] as String?,
-      mode:
-          modeStr != null ? TransportModeExtension.fromString(modeStr) : null,
+      mode: modeStr != null ? TransportModeExtension.fromString(modeStr) : null,
       color: json['color'] as String?,
       textColor: json['textColor'] as String?,
     );
@@ -351,8 +351,9 @@ class Otp15RoutingProvider implements IRoutingProvider {
       } else if (base.contains('/otp/')) {
         final routerIdx = base.indexOf('/otp/routers/');
         if (routerIdx >= 0) {
-          final afterRouter =
-              base.substring(routerIdx + '/otp/routers/'.length);
+          final afterRouter = base.substring(
+            routerIdx + '/otp/routers/'.length,
+          );
           final routerName = afterRouter.split('/').first;
           base =
               '${base.substring(0, routerIdx)}/otp/routers/$routerName/index';

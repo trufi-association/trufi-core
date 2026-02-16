@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 class FromMarker extends StatelessWidget {
   final double height;
-  const FromMarker({
-    super.key,
-    this.height = 15,
-  });
+  const FromMarker({super.key, this.height = 15});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

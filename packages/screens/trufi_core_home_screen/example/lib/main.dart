@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final screen = HomeScreenTrufiScreen(
       config: HomeScreenConfig(
-        poiLayersManager: POILayersManager(
-          assetsBasePath: 'assets/pois',
-        ),
+        poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
       ),
     );
 
@@ -43,9 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => RoutingEngineManager(
-            engines: [
-              Otp24RoutingProvider(endpoint: _otpEndpoint),
-            ],
+            engines: [Otp24RoutingProvider(endpoint: _otpEndpoint)],
           ),
         ),
         BlocProvider(

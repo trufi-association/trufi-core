@@ -31,9 +31,7 @@ class TrufiPlannerPreferencesState extends ChangeNotifier {
 
   Future<void> _save() async {
     final sp = await SharedPreferences.getInstance();
-    await sp.setString(_key, jsonEncode({
-      'maxWalkDistance': _maxWalkDistance,
-    }));
+    await sp.setString(_key, jsonEncode({'maxWalkDistance': _maxWalkDistance}));
   }
 
   void setMaxWalkDistance(double? distance) {
@@ -72,12 +70,18 @@ class TrufiPlannerPreferences extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.straighten_rounded,
-                    color: colorScheme.primary, size: 20),
+                Icon(
+                  Icons.straighten_rounded,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
-                Text('Maximum walking distance',
-                    style: theme.textTheme.titleSmall
-                        ?.copyWith(fontWeight: FontWeight.w600)),
+                Text(
+                  'Maximum walking distance',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -122,8 +126,8 @@ class _DistanceChip extends StatelessWidget {
     final label = distance == null
         ? 'No limit'
         : distance! >= 1000
-            ? '${(distance! / 1000).toStringAsFixed(1)} km'
-            : '${distance!.toInt()} m';
+        ? '${(distance! / 1000).toStringAsFixed(1)} km'
+        : '${distance!.toInt()} m';
 
     return Material(
       color: isSelected
@@ -144,13 +148,15 @@ class _DistanceChip extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          child: Text(label,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: isSelected
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              )),
+          child: Text(
+            label,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: isSelected
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSurfaceVariant,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            ),
+          ),
         ),
       ),
     );

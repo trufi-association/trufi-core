@@ -46,7 +46,7 @@ class MapLayerContainer {
     return active
         ? active
         : !inactive
-            ? inactive
-            : null;
+        ? inactive
+        : null;
   }
 }

@@ -74,7 +74,8 @@ class _TrufiAppState extends State<TrufiApp> {
 
     _localeManager = LocaleManager(
       defaultLocale:
-          widget.config.defaultLocale ?? widget.config.localeConfig.defaultLocale,
+          widget.config.defaultLocale ??
+          widget.config.localeConfig.defaultLocale,
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,
@@ -174,9 +175,7 @@ class _TrufiMaterialApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, child) {
-        return OverlayContainer(
-          child: child ?? const SizedBox.shrink(),
-        );
+        return OverlayContainer(child: child ?? const SizedBox.shrink());
       },
     );
   }

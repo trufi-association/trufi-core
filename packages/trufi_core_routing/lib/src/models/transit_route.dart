@@ -43,39 +43,42 @@ class TransitRoute {
   }
 
   factory TransitRoute.fromJson(Map<String, dynamic> json) => TransitRoute(
-        id: json['id'].toString(),
-        name: json['name'].toString(),
-        code: json['code'].toString(),
-        route: json['route'] != null
-            ? TransitRouteInfo.fromJson(json['route'] as Map<String, dynamic>)
-            : null,
-        geometry: json['geometry'] != null
-            ? List<LatLng>.from((json['geometry'] as List<dynamic>).map(
-                (x) => LatLng(x['lat'] as double, x['lon'] as double),
-              ))
-            : null,
-        stops: json['stops'] != null
-            ? List<Stop>.from((json['stops'] as List<dynamic>).map(
-                (x) => Stop.fromJson(x as Map<String, dynamic>),
-              ))
-            : null,
-      );
+    id: json['id'].toString(),
+    name: json['name'].toString(),
+    code: json['code'].toString(),
+    route: json['route'] != null
+        ? TransitRouteInfo.fromJson(json['route'] as Map<String, dynamic>)
+        : null,
+    geometry: json['geometry'] != null
+        ? List<LatLng>.from(
+            (json['geometry'] as List<dynamic>).map(
+              (x) => LatLng(x['lat'] as double, x['lon'] as double),
+            ),
+          )
+        : null,
+    stops: json['stops'] != null
+        ? List<Stop>.from(
+            (json['stops'] as List<dynamic>).map(
+              (x) => Stop.fromJson(x as Map<String, dynamic>),
+            ),
+          )
+        : null,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'code': code,
-        'route': route?.toJson(),
-        'geometry': geometry != null
-            ? List<dynamic>.from(geometry!.map((x) => {
-                  'lat': x.latitude,
-                  'lon': x.longitude,
-                }))
-            : null,
-        'stops': stops != null
-            ? List<dynamic>.from(stops!.map((x) => x.toJson()))
-            : null,
-      };
+    'id': id,
+    'name': name,
+    'code': code,
+    'route': route?.toJson(),
+    'geometry': geometry != null
+        ? List<dynamic>.from(
+            geometry!.map((x) => {'lat': x.latitude, 'lon': x.longitude}),
+          )
+        : null,
+    'stops': stops != null
+        ? List<dynamic>.from(stops!.map((x) => x.toJson()))
+        : null,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -116,12 +119,12 @@ class TransitRouteInfo {
       );
 
   Map<String, dynamic> toJson() => {
-        'shortName': shortName,
-        'longName': longName,
-        'mode': mode?.name,
-        'color': color,
-        'textColor': textColor,
-      };
+    'shortName': shortName,
+    'longName': longName,
+    'mode': mode?.name,
+    'color': color,
+    'textColor': textColor,
+  };
 
   /// Returns the last part of longName after "→ "
   String get longNameLast {

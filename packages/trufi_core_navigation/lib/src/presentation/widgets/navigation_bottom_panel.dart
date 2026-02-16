@@ -19,7 +19,8 @@ class NavigationPanelStrings {
   const NavigationPanelStrings({
     this.exitNavigation = 'Exit Navigation',
     this.exitNavigationTitle = 'Exit Navigation?',
-    this.exitNavigationMessage = 'Are you sure you want to stop navigating this route?',
+    this.exitNavigationMessage =
+        'Are you sure you want to stop navigating this route?',
     this.buttonCancel = 'Cancel',
     this.buttonExit = 'Exit',
     this.buttonClose = 'Close',

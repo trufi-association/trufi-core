@@ -118,7 +118,8 @@ class NotificationTile extends StatelessWidget {
                     width: 56,
                     height: 56,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox.shrink(),
                   ),
                 ),
               ],
@@ -138,10 +139,7 @@ class NotificationTile extends StatelessWidget {
           color: colorScheme.error,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 24),
-          child: Icon(
-            Icons.delete_outline,
-            color: colorScheme.onError,
-          ),
+          child: Icon(Icons.delete_outline, color: colorScheme.onError),
         ),
         child: tile,
       );
@@ -176,11 +174,7 @@ class NotificationTile extends StatelessWidget {
         color: color.withAlpha(30),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        icon,
-        color: color,
-        size: 20,
-      ),
+      child: Icon(icon, color: color, size: 20),
     );
   }
 

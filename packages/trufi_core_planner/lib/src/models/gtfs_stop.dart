@@ -80,20 +80,20 @@ class GtfsStop {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'code': code,
-        'name': name,
-        'description': description,
-        'lat': lat,
-        'lon': lon,
-        'zoneId': zoneId,
-        'url': url,
-        'locationType': locationType.value,
-        'parentStation': parentStation,
-        'timezone': timezone,
-        'wheelchairBoarding': wheelchairBoarding.value,
-        'platformCode': platformCode,
-      };
+    'id': id,
+    'code': code,
+    'name': name,
+    'description': description,
+    'lat': lat,
+    'lon': lon,
+    'zoneId': zoneId,
+    'url': url,
+    'locationType': locationType.value,
+    'parentStation': parentStation,
+    'timezone': timezone,
+    'wheelchairBoarding': wheelchairBoarding.value,
+    'platformCode': platformCode,
+  };
 }
 
 /// Location type for stops.

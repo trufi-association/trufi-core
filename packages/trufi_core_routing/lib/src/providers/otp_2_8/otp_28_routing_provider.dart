@@ -84,8 +84,9 @@ class Otp28RoutingProvider implements IRoutingProvider {
     await _prefs.initialize();
   }
 
-  late final GraphQLClient _client =
-      GraphQLClientFactory.create(_graphqlEndpoint);
+  late final GraphQLClient _client = GraphQLClientFactory.create(
+    _graphqlEndpoint,
+  );
 
   // --- Plan ---
 
@@ -98,8 +99,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
     required DateTime dateTime,
     bool arriveBy = false,
   }) async {
-    final queryString =
-        useSimpleQuery ? otp28SimplePlanQuery : otp28PlanQuery;
+    final queryString = useSimpleQuery ? otp28SimplePlanQuery : otp28PlanQuery;
 
     final date =
         '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
@@ -136,8 +136,9 @@ class Otp28RoutingProvider implements IRoutingProvider {
     Context? requestContext;
     if (planHeaderProvider != null) {
       final extraHeaders = await planHeaderProvider!(from, to);
-      requestContext =
-          Context().withEntry(HttpLinkHeaders(headers: extraHeaders));
+      requestContext = Context().withEntry(
+        HttpLinkHeaders(headers: extraHeaders),
+      );
     }
 
     final query = QueryOptions(
@@ -193,10 +194,14 @@ class Otp28RoutingProvider implements IRoutingProvider {
           : Exception('Connection error');
     }
 
-    final patterns = result.data!['patterns']
-        ?.map<TransitRoute>((dynamic json) =>
-            TransitRoute.fromJson(json as Map<String, dynamic>))
-        ?.toList() as List<TransitRoute>;
+    final patterns =
+        result.data!['patterns']
+                ?.map<TransitRoute>(
+                  (dynamic json) =>
+                      TransitRoute.fromJson(json as Map<String, dynamic>),
+                )
+                ?.toList()
+            as List<TransitRoute>;
 
     return patterns;
   }
@@ -219,7 +224,8 @@ class Otp28RoutingProvider implements IRoutingProvider {
     }
 
     final patternData = TransitRoute.fromJson(
-        result.data!['pattern'] as Map<String, dynamic>);
+      result.data!['pattern'] as Map<String, dynamic>,
+    );
 
     final newListStops = <Stop>[];
     if (patternData.stops != null && patternData.stops!.isNotEmpty) {

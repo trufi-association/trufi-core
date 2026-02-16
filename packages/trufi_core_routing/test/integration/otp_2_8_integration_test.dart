@@ -16,9 +16,7 @@ void main() {
     late DateTime testDateTime;
 
     setUp(() {
-      provider = Otp28RoutingProvider(
-        endpoint: TestConfig.otp28Endpoint,
-      );
+      provider = Otp28RoutingProvider(endpoint: TestConfig.otp28Endpoint);
 
       // Set test time to December 1, 2025 at 12:00 PM (noon)
       testDateTime = DateTime(2025, 12, 1, 12, 0);
@@ -169,7 +167,9 @@ void main() {
       final itinerary = plan.itineraries!.first;
 
       // Find a walking leg
-      final walkingLeg = itinerary.legs.where((leg) => leg.mode == 'WALK').firstOrNull;
+      final walkingLeg = itinerary.legs
+          .where((leg) => leg.mode == 'WALK')
+          .firstOrNull;
 
       // If there's a walking leg, it may have steps
       if (walkingLeg != null && walkingLeg.steps != null) {

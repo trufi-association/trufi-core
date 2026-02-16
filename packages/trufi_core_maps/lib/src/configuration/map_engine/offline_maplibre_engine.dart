@@ -104,8 +104,7 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   String get name => displayName ?? 'Offline Map';
 
   @override
-  String get description =>
-      displayDescription ?? 'Mapa completamente offline';
+  String get description => displayDescription ?? 'Mapa completamente offline';
 
   @override
   Widget? get previewWidget =>
@@ -171,7 +170,12 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     final spritesDir = '${offlineDir.path}/sprites';
     await Directory(spritesDir).create(recursive: true);
 
-    for (final spriteFile in ['sprite.json', 'sprite.png', 'sprite@2x.json', 'sprite@2x.png']) {
+    for (final spriteFile in [
+      'sprite.json',
+      'sprite.png',
+      'sprite@2x.json',
+      'sprite@2x.png',
+    ]) {
       try {
         await _copyAsset(
           '${config.spritesAssetDir}$spriteFile',
@@ -223,7 +227,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
           );
         } catch (e) {
           // Font range might not exist, skip it
-          debugPrint('Warning: Could not copy font $assetFontName/$range.pbf: $e');
+          debugPrint(
+            'Warning: Could not copy font $assetFontName/$range.pbf: $e',
+          );
         }
       }
     }
@@ -247,7 +253,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
               await sourceFile.copy('$stackDir/$range.pbf');
             }
           } catch (e) {
-            debugPrint('Warning: Could not copy font stack $stackName/$range.pbf: $e');
+            debugPrint(
+              'Warning: Could not copy font stack $stackName/$range.pbf: $e',
+            );
           }
         }
       }

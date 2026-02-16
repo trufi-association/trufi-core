@@ -31,11 +31,7 @@ class PerformanceStatsOverlay extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.speed,
-                    color: _getFpsColor(stats.fps),
-                    size: 18,
-                  ),
+                  Icon(Icons.speed, color: _getFpsColor(stats.fps), size: 18),
                   const SizedBox(width: 6),
                   Text(
                     '${stats.fps.toStringAsFixed(0)} FPS',
@@ -99,18 +95,12 @@ class _StatRow extends StatelessWidget {
         Container(
           width: 6,
           height: 6,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
         Text(
           '$label: ',
-          style: const TextStyle(
-            color: Colors.white60,
-            fontSize: 11,
-          ),
+          style: const TextStyle(color: Colors.white60, fontSize: 11),
         ),
         Text(
           value,
@@ -144,10 +134,34 @@ class Preset {
 
   static const List<Preset> all = [
     Preset(name: 'Light', markers: 50, lines: 10, fps: 30, color: Colors.green),
-    Preset(name: 'Medium', markers: 200, lines: 50, fps: 30, color: Colors.blue),
-    Preset(name: 'Heavy', markers: 500, lines: 100, fps: 30, color: Colors.orange),
-    Preset(name: 'Stress', markers: 1000, lines: 200, fps: 60, color: Colors.red),
-    Preset(name: 'Extreme', markers: 2000, lines: 500, fps: 60, color: Colors.purple),
+    Preset(
+      name: 'Medium',
+      markers: 200,
+      lines: 50,
+      fps: 30,
+      color: Colors.blue,
+    ),
+    Preset(
+      name: 'Heavy',
+      markers: 500,
+      lines: 100,
+      fps: 30,
+      color: Colors.orange,
+    ),
+    Preset(
+      name: 'Stress',
+      markers: 1000,
+      lines: 200,
+      fps: 60,
+      color: Colors.red,
+    ),
+    Preset(
+      name: 'Extreme',
+      markers: 2000,
+      lines: 500,
+      fps: 60,
+      color: Colors.purple,
+    ),
   ];
 
   bool matches(int m, int l, int f) => markers == m && lines == l && fps == f;
@@ -223,8 +237,9 @@ class _PerformanceControlPanelState extends State<PerformanceControlPanel> {
                 // Custom chip (opens dialog)
                 _CustomChip(
                   isActive: isCustom && widget.hasData,
-                  currentValues:
-                      isCustom ? '${widget.markerCount}/${widget.lineCount}' : null,
+                  currentValues: isCustom
+                      ? '${widget.markerCount}/${widget.lineCount}'
+                      : null,
                   onTap: () => _showCustomDialog(context),
                 ),
                 const SizedBox(width: 8),
@@ -367,7 +382,9 @@ class _CustomChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: isActive ? Colors.blueGrey : Colors.blueGrey.withValues(alpha: 0.1),
+            color: isActive
+                ? Colors.blueGrey
+                : Colors.blueGrey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: Colors.blueGrey.withValues(alpha: isActive ? 1 : 0.3),
@@ -401,7 +418,9 @@ class _CustomChip extends StatelessWidget {
                   currentValues!,
                   style: TextStyle(
                     fontSize: 9,
-                    color: isActive ? Colors.white70 : Colors.blueGrey.withValues(alpha: 0.8),
+                    color: isActive
+                        ? Colors.white70
+                        : Colors.blueGrey.withValues(alpha: 0.8),
                   ),
                 ),
             ],
@@ -493,10 +512,7 @@ class _SliderRow extends StatelessWidget {
           width: 60,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           ),
         ),
         Expanded(

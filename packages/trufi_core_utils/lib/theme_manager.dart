@@ -9,7 +9,7 @@ class ThemeManager extends ChangeNotifier {
   ThemeMode _themeMode;
 
   ThemeManager({ThemeMode defaultThemeMode = ThemeMode.system})
-      : _themeMode = defaultThemeMode {
+    : _themeMode = defaultThemeMode {
     _loadSavedTheme();
   }
 
@@ -46,6 +46,8 @@ class ThemeManager extends ChangeNotifier {
   bool get isDark => _themeMode == ThemeMode.dark;
   bool get isSystem => _themeMode == ThemeMode.system;
 
-  static ThemeManager read(BuildContext context) => context.read<ThemeManager>();
-  static ThemeManager watch(BuildContext context) => context.watch<ThemeManager>();
+  static ThemeManager read(BuildContext context) =>
+      context.read<ThemeManager>();
+  static ThemeManager watch(BuildContext context) =>
+      context.watch<ThemeManager>();
 }

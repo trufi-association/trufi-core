@@ -8,11 +8,7 @@ class TransportDetailSheet extends StatelessWidget {
   final TransportRouteDetails route;
   final void Function(double lat, double lng)? onStopTap;
 
-  const TransportDetailSheet({
-    super.key,
-    required this.route,
-    this.onStopTap,
-  });
+  const TransportDetailSheet({super.key, required this.route, this.onStopTap});
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +157,9 @@ class _StopTimelineItem extends StatelessWidget {
                           Icon(
                             Icons.my_location_rounded,
                             size: 18,
-                            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                            color: colorScheme.onSurfaceVariant.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                       ],
                     ),
@@ -197,7 +195,9 @@ class _TimelineTrack extends StatelessWidget {
           child: Container(
             width: 3,
             decoration: BoxDecoration(
-              color: isFirst ? Colors.transparent : routeColor.withValues(alpha: 0.4),
+              color: isFirst
+                  ? Colors.transparent
+                  : routeColor.withValues(alpha: 0.4),
               borderRadius: isLast
                   ? const BorderRadius.vertical(bottom: Radius.circular(2))
                   : null,
@@ -217,7 +217,9 @@ class _TimelineTrack extends StatelessWidget {
           child: Container(
             width: 3,
             decoration: BoxDecoration(
-              color: isLast ? Colors.transparent : routeColor.withValues(alpha: 0.4),
+              color: isLast
+                  ? Colors.transparent
+                  : routeColor.withValues(alpha: 0.4),
               borderRadius: isFirst
                   ? const BorderRadius.vertical(top: Radius.circular(2))
                   : null,
@@ -276,15 +278,9 @@ class _TimelineNode extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: routeColor,
-          width: 3,
-        ),
+        border: Border.all(color: routeColor, width: 3),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 2,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2),
         ],
       ),
     );

@@ -25,10 +25,7 @@ void main() {
     });
 
     test('copyWith preserves values not being changed', () {
-      const state = RoutePlannerState(
-        isLoading: true,
-        error: 'Test error',
-      );
+      const state = RoutePlannerState(isLoading: true, error: 'Test error');
 
       final newState = state.copyWith(isLoading: false);
 
@@ -39,9 +36,7 @@ void main() {
     test('copyWithNullable can set values to null', () {
       const state = RoutePlannerState(error: 'Test error');
 
-      final newState = state.copyWithNullable(
-        error: const Optional(null),
-      );
+      final newState = state.copyWithNullable(error: const Optional(null));
 
       expect(newState.error, isNull);
     });
@@ -56,9 +51,7 @@ void main() {
     });
 
     test('can set custom values', () {
-      const config = HomeScreenConfig(
-        chooseLocationZoom: 18.0,
-      );
+      const config = HomeScreenConfig(chooseLocationZoom: 18.0);
 
       expect(config.chooseLocationZoom, equals(18.0));
     });

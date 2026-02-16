@@ -341,9 +341,11 @@ class FitCameraLayer extends IFitCameraLayer {
     final slackLng = focusSlackCss * 0.0001;
 
     // Check if fitBounds is fully contained within viewport (with slack)
-    final containsLat = fitSW.latitude >= (viewportSW.latitude - slackLat) &&
+    final containsLat =
+        fitSW.latitude >= (viewportSW.latitude - slackLat) &&
         fitNE.latitude <= (viewportNE.latitude + slackLat);
-    final containsLng = fitSW.longitude >= (viewportSW.longitude - slackLng) &&
+    final containsLng =
+        fitSW.longitude >= (viewportSW.longitude - slackLng) &&
         fitNE.longitude <= (viewportNE.longitude + slackLng);
 
     // Return true if bbox is outside (not fully contained)

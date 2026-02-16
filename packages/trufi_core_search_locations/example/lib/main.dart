@@ -159,9 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Container(
               color: Colors.grey[200],
-              child: const Center(
-                child: Text('Map Area'),
-              ),
+              child: const Center(child: Text('Map Area')),
             ),
           ),
         ],
