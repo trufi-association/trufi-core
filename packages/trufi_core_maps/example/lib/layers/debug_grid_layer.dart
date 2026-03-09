@@ -1,35 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-class DebugGridLayer extends TrufiLayer {
+/// State holder that produces line data for a debug tile grid overlay.
+///
+/// Unlike the old imperative approach, this class computes grid lines
+/// from the current camera and returns them as data. The host widget
+/// calls [updateFromCamera] whenever the camera changes and reads [lines].
+class DebugGridLayer {
   static const String layerId = 'debug-grid-layer';
 
-  DebugGridLayer(super.controller)
-    : super(id: layerId, layerLevel: 10, visible: false) {
-    controller.cameraPositionNotifier.addListener(_onCameraChanged);
-  }
-
   int _granularityLevels = 0;
+  bool _visible = false;
   final Set<String> _drawnBoxes = <String>{};
+  List<TrufiLine> _lines = [];
+
+  /// Callback invoked when lines change so the host can call setState.
+  VoidCallback? onUpdate;
+
+  bool get visible => _visible;
 
   int get granularityLevels => _granularityLevels;
 
   set granularityLevels(int value) {
     if (_granularityLevels == value) return;
     _granularityLevels = value;
-    _clearAndRedraw();
-  }
-
-  void _clearAndRedraw() {
     _drawnBoxes.clear();
-    clearLines();
-    _onCameraChanged();
+    _lines = [];
   }
 
-  void _onCameraChanged() {
-    if (!visible) return;
+  /// Current line data to pass into a TrufiLayer.
+  List<TrufiLine> get lines => _lines;
 
-    final cam = controller.cameraPositionNotifier.value;
+  void setVisible(bool value) {
+    if (_visible == value) return;
+    _visible = value;
+    if (!_visible) {
+      _drawnBoxes.clear();
+      _lines = [];
+    }
+    onUpdate?.call();
+  }
+
+  /// Recompute grid lines for the given camera position.
+  void updateFromCamera(TrufiCameraPosition cam) {
+    if (!_visible) return;
+
     final z = cam.zoom.floor();
 
     final bounds =
@@ -55,7 +70,7 @@ class DebugGridLayer extends TrufiLayer {
           position: outline,
           activeDots: false,
           color: Colors.red.withValues(alpha: 0.6),
-          layerLevel: layerLevel,
+          layerLevel: 10,
           lineWidth: 2,
         ),
       );
@@ -63,25 +78,8 @@ class DebugGridLayer extends TrufiLayer {
     }
 
     if (newLines.isNotEmpty) {
-      addLines(newLines);
+      _lines = [..._lines, ...newLines];
+      onUpdate?.call();
     }
-  }
-
-  @override
-  void dispose() {
-    controller.cameraPositionNotifier.removeListener(_onCameraChanged);
-    super.dispose();
-  }
-
-  void setVisible(bool value) {
-    if (visible == value) return;
-    visible = value;
-    if (visible) {
-      _clearAndRedraw();
-    } else {
-      _drawnBoxes.clear();
-      clearLines();
-    }
-    mutateLayers();
   }
 }

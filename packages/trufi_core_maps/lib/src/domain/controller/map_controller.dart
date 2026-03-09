@@ -6,150 +6,74 @@ import 'package:latlong2/latlong.dart' as latlng;
 import '../entities/bounds.dart';
 import '../entities/camera.dart';
 import '../entities/marker.dart';
-import '../layers/trufi_layer.dart';
 
+/// Lightweight controller for imperative map operations.
+///
+/// Provides programmatic access to camera control and marker picking.
+/// Data (layers, markers) is passed declaratively to [TrufiMap], not
+/// through this controller.
+///
+/// ```dart
+/// final controller = TrufiMapController();
+///
+/// TrufiMap(
+///   controller: controller,
+///   layers: [...],
+/// )
+///
+/// // Later: programmatic camera control
+/// controller.moveCamera(TrufiCameraPosition(target: latLng, zoom: 14));
+/// controller.fitBounds(bounds);
+/// ```
 class TrufiMapController {
-  TrufiMapController({required TrufiCameraPosition initialCameraPosition})
-    : cameraPositionNotifier = ValueNotifier(initialCameraPosition),
-      layersNotifier = ValueNotifier(<String, TrufiLayer>{});
+  TrufiMapDelegate? _delegate;
 
-  final ValueNotifier<TrufiCameraPosition> cameraPositionNotifier;
-  final ValueNotifier<Map<String, TrufiLayer>> layersNotifier;
-  bool _mutateScheduled = false;
-  bool _isDisposed = false;
+  /// Called by [TrufiMap] to bind its state. Do not call directly.
+  void attach(TrufiMapDelegate delegate) => _delegate = delegate;
 
-  List<TrufiLayer> get visibleLayers => layersNotifier.value.values
-      .where((l) => l.visible)
-      .toList(growable: false);
+  /// Called by [TrufiMap] to unbind its state. Do not call directly.
+  void detach() => _delegate = null;
 
-  bool setCameraPosition(TrufiCameraPosition position) {
-    final prev = cameraPositionNotifier.value;
-    if (position == prev) return false;
-    final sameTarget = prev.target == position.target;
-    final sameBearing = prev.bearing == position.bearing;
-    final sameIntZoom = prev.zoom.floor() == position.zoom.floor();
-    final tinyZoomDiff = (prev.zoom - position.zoom).abs() < 0.001;
-    final sameVisibleRegion = prev.visibleRegion == position.visibleRegion;
-    if (sameTarget &&
-        sameBearing &&
-        sameIntZoom &&
-        tinyZoomDiff &&
-        sameVisibleRegion) {
-      return false;
-    }
+  /// Current camera position, or null if the map is not yet ready.
+  TrufiCameraPosition? get cameraPosition => _delegate?.cameraPosition;
 
-    // Debug zoom changes
-    if (prev.zoom != position.zoom) {
-      debugPrint(
-        '🔍 Zoom changed: ${prev.zoom.toStringAsFixed(2)} → ${position.zoom.toStringAsFixed(2)}',
-      );
-    }
-
-    cameraPositionNotifier.value = position;
-
-    return true;
+  /// Move the camera to the given position.
+  void moveCamera(TrufiCameraPosition position) {
+    _delegate?.moveCamera(position);
   }
 
-  bool setViewportSize(Size size) {
-    final cur = cameraPositionNotifier.value;
-    if (cur.viewportSize == size) return false;
-    return setCameraPosition(cur.copyWith(viewportSize: size));
-  }
-
-  bool updateCamera({
-    latlng.LatLng? target,
-    double? zoom,
-    double? bearing,
-    LatLngBounds? visibleRegion,
+  /// Fit the camera to show the given bounds.
+  void fitBounds(
+    LatLngBounds bounds, {
+    EdgeInsets padding = EdgeInsets.zero,
+    double minZoom = 2.0,
+    double maxZoom = 20.0,
   }) {
-    final next = cameraPositionNotifier.value.copyWith(
-      target: target,
-      zoom: zoom,
-      bearing: bearing != null ? bearing % 360 : null,
-      visibleRegion: visibleRegion,
+    _delegate?.fitBounds(
+      bounds,
+      padding: padding,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
     );
-    return setCameraPosition(next);
   }
 
-  void mutateLayers() {
-    // Debounce: only schedule one callback per frame
-    if (_mutateScheduled || _isDisposed) return;
-    _mutateScheduled = true;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _mutateScheduled = false;
-      // Skip if disposed while waiting for the callback
-      if (_isDisposed) return;
-      // Create a new map reference from the current state to trigger listeners
-      layersNotifier.value = Map<String, TrufiLayer>.from(layersNotifier.value);
-    });
-  }
-
-  bool addLayer(TrufiLayer layer) {
-    final layers = Map<String, TrufiLayer>.from(layersNotifier.value);
-    if (layers.containsKey(layer.id)) return false;
-    layers[layer.id] = layer;
-    layersNotifier.value = layers;
-    return true;
-  }
-
-  TrufiLayer? getLayerById(String layerId) => layersNotifier.value[layerId];
-
-  bool removeLayer(String layerId) {
-    final layers = Map<String, TrufiLayer>.from(layersNotifier.value);
-    final layer = layers[layerId];
-    if (layer == null) return false;
-    layer.dispose();
-    layers.remove(layerId);
-    layersNotifier.value = layers;
-    return true;
-  }
-
-  bool toggleLayer(String layerId, bool visible) {
-    final layers = Map<String, TrufiLayer>.from(layersNotifier.value);
-    final layer = layers[layerId];
-    if (layer == null || layer.visible == visible) return false;
-    layer.visible = visible;
-    layersNotifier.value = layers;
-    return true;
-  }
-
+  /// Pick markers near a tap point.
   List<TrufiMarker> pickMarkersAt(
     latlng.LatLng tap, {
     double hitboxPx = 24.0,
     int? perLayerLimit,
     int? globalLimit,
   }) {
-    final leafletZoom = cameraPositionNotifier.value.zoom;
-    // Flutter Map zoom = MapLibre zoom + 1 (for same visual scale)
-    final mapLibreZoom = leafletZoom - 1.0;
-    final radiusMeters = _hitboxPxToMeters(
-      centerLatDeg: tap.latitude,
-      zoomMapLibre: mapLibreZoom,
-      hitboxPx: hitboxPx,
-    );
-    final dist = const latlng.Distance();
-    final all = <TrufiMarker>[];
-    for (final layer in visibleLayers) {
-      final local = layer.markerIndex.getMarkers(
-        tap,
-        radiusMeters,
-        limit: perLayerLimit,
-      );
-      all.addAll(local);
-    }
-    if (all.isEmpty) return const [];
-    all.sort(
-      (a, b) => dist
-          .distance(tap, a.position)
-          .compareTo(dist.distance(tap, b.position)),
-    );
-    if (globalLimit != null && globalLimit > 0 && all.length > globalLimit) {
-      return all.take(globalLimit).toList(growable: false);
-    }
-    return all;
+    return _delegate?.pickMarkersAt(
+          tap,
+          hitboxPx: hitboxPx,
+          perLayerLimit: perLayerLimit,
+          globalLimit: globalLimit,
+        ) ??
+        const [];
   }
 
+  /// Pick the nearest marker to a tap point.
   TrufiMarker? pickNearestMarkerAt(
     latlng.LatLng tap, {
     double hitboxPx = 24.0,
@@ -157,25 +81,35 @@ class TrufiMapController {
     final picks = pickMarkersAt(tap, hitboxPx: hitboxPx, globalLimit: 1);
     return picks.isEmpty ? null : picks.first;
   }
+}
 
-  double _hitboxPxToMeters({
-    required double centerLatDeg,
-    required double zoomMapLibre,
-    required double hitboxPx,
-  }) {
-    const earthCircumference = 40075016.68557849;
-    final metersPerPixel =
-        (earthCircumference * math.cos(centerLatDeg * math.pi / 180.0)) /
-        (256.0 * math.pow(2.0, zoomMapLibre));
-    return metersPerPixel * (hitboxPx * 0.5);
-  }
+/// Internal delegate interface implemented by the map widget state.
+abstract class TrufiMapDelegate {
+  TrufiCameraPosition get cameraPosition;
+  void moveCamera(TrufiCameraPosition position);
+  void fitBounds(
+    LatLngBounds bounds, {
+    EdgeInsets padding,
+    double minZoom,
+    double maxZoom,
+  });
+  List<TrufiMarker> pickMarkersAt(
+    latlng.LatLng tap, {
+    double hitboxPx,
+    int? perLayerLimit,
+    int? globalLimit,
+  });
+}
 
-  void dispose() {
-    _isDisposed = true;
-    for (final layer in layersNotifier.value.values.toList()) {
-      layer.dispose();
-    }
-    cameraPositionNotifier.dispose();
-    layersNotifier.dispose();
-  }
+/// Utility: convert pixel hitbox to meters at a given zoom/latitude.
+double hitboxPxToMeters({
+  required double centerLatDeg,
+  required double zoomMapLibre,
+  required double hitboxPx,
+}) {
+  const earthCircumference = 40075016.68557849;
+  final metersPerPixel =
+      (earthCircumference * math.cos(centerLatDeg * math.pi / 180.0)) /
+      (256.0 * math.pow(2.0, zoomMapLibre));
+  return metersPerPixel * (hitboxPx * 0.5);
 }

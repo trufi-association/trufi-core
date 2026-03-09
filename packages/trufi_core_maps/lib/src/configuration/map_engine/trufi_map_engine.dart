@@ -2,29 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../domain/controller/map_controller.dart';
+import '../../domain/entities/camera.dart';
+import '../../domain/entities/widget_marker.dart';
+import '../../domain/layers/trufi_layer.dart';
 import '../../presentation/widgets/map_type_option.dart';
 
 /// Interface for map engines.
 ///
 /// Implement this interface to create custom map engines that can be
 /// used with MapTypeButton and other map selection widgets.
-///
-/// Example implementation:
-/// ```dart
-/// class CustomEngine implements ITrufiMapEngine {
-///   @override
-///   String get id => 'custom';
-///
-///   @override
-///   String get name => 'Custom Map';
-///
-///   @override
-///   String get description => 'My custom map engine';
-///
-///   @override
-///   Widget buildMap({...}) => MyCustomMapWidget(...);
-/// }
-/// ```
 abstract class ITrufiMapEngine {
   /// Unique identifier for this engine.
   String get id;
@@ -36,30 +22,21 @@ abstract class ITrufiMapEngine {
   String get description;
 
   /// Optional preview widget for the map type selector.
-  /// If null, a default icon will be shown.
   Widget? get previewWidget => null;
 
   /// Initialize the engine.
-  ///
-  /// Called during app startup to prepare any resources needed by the engine.
-  /// For online engines, this is typically a no-op.
-  /// For offline engines (e.g., OfflineMapLibreEngine), this copies assets
-  /// and prepares the map style.
-  ///
-  /// Default implementation does nothing.
   Future<void> initialize() async {}
 
-  /// Build the map widget.
-  ///
-  /// [controller] - The TrufiMapController to control the map.
-  /// [onMapClick] - Callback when the map is tapped.
-  /// [onMapLongClick] - Callback when the map is long-pressed.
-  /// [isDarkMode] - Whether dark mode is enabled for the map style.
+  /// Build the map widget with the declarative API.
   Widget buildMap({
-    required TrufiMapController controller,
+    TrufiMapController? controller,
+    required TrufiCameraPosition initialCamera,
+    TrufiCameraPosition? camera,
+    ValueChanged<TrufiCameraPosition>? onCameraChanged,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
-    bool isDarkMode = false,
+    List<TrufiLayer> layers,
+    List<WidgetMarker> widgetMarkers,
   });
 }
 
@@ -67,9 +44,7 @@ abstract class ITrufiMapEngine {
 extension TrufiMapEngineExtension on ITrufiMapEngine {
   /// Converts this engine to a MapTypeOption for use with MapTypeButton.
   MapTypeOption toMapTypeOption() {
-    // Check if this is an offline engine by checking the type
     final isOffline = runtimeType.toString().contains('Offline');
-
     return MapTypeOption(
       id: id,
       name: name,
@@ -82,7 +57,6 @@ extension TrufiMapEngineExtension on ITrufiMapEngine {
 
 /// Extension to convert a list of engines to MapTypeOptions.
 extension MapEngineListExtension on List<ITrufiMapEngine> {
-  /// Converts all engines to MapTypeOptions.
   List<MapTypeOption> toMapTypeOptions() {
     return map((e) => e.toMapTypeOption()).toList();
   }

@@ -1533,8 +1533,17 @@ class _RouteMapView extends StatefulWidget {
 
 class _RouteMapViewState extends State<_RouteMapView> {
   TrufiMapController? _mapController;
-  FitCameraLayer? _fitCameraLayer;
-  _RouteLayer? _routeLayer;
+  final FitCameraUtil _fitCamera = FitCameraUtil();
+
+  // Declarative layer state
+  List<TrufiMarker> _routeMarkers = const [];
+  List<TrufiLine> _routeLines = const [];
+  TrufiCameraPosition? _camera;
+  TrufiCameraPosition? _initialCamera;
+
+  TransportRouteDetails? _currentRoute;
+  int? _selectedStopIndex;
+  bool _outOfFocus = false;
 
   @override
   void initState() {
@@ -1544,24 +1553,31 @@ class _RouteMapViewState extends State<_RouteMapView> {
   }
 
   void _onStopSelected(int? stopIndex) {
-    _routeLayer?.setSelectedStop(stopIndex);
+    _selectedStopIndex = stopIndex;
+    if (_currentRoute != null) {
+      setState(() {
+        _rebuildRouteLayer(_currentRoute!);
+      });
+    }
   }
 
   void _moveToLocation(double latitude, double longitude) {
-    _mapController?.setCameraPosition(
-      TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
-    );
+    setState(() {
+      _camera = TrufiCameraPosition(
+        target: LatLng(latitude, longitude),
+        zoom: 16,
+      );
+    });
   }
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
     if (_mapController == null) {
-      _mapController = TrufiMapController(
-        initialCameraPosition: TrufiCameraPosition(
-          target: mapEngineManager.defaultCenter,
-          zoom: mapEngineManager.defaultZoom,
-        ),
+      _mapController = TrufiMapController();
+      _initialCamera = TrufiCameraPosition(
+        target: mapEngineManager.defaultCenter,
+        zoom: mapEngineManager.defaultZoom,
       );
-      _fitCameraLayer = FitCameraLayer(_mapController!);
+      _camera = _initialCamera;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _updateRoute();
@@ -1583,30 +1599,164 @@ class _RouteMapViewState extends State<_RouteMapView> {
       return;
     }
 
-    if (_routeLayer != null) {
-      _mapController!.removeLayer(_routeLayer!.id);
-    }
-
-    _routeLayer = _RouteLayer(_mapController!);
-    _routeLayer!.setRoute(route);
+    _currentRoute = route;
+    _selectedStopIndex = null;
 
     final points = route.geometry!
         .map((p) => LatLng(p.latitude, p.longitude))
         .toList();
 
     if (points.length > 1) {
-      _fitCameraLayer?.setFitPoints(points);
+      final fitCam = _fitCamera.cameraForPoints(
+        points,
+        _camera ?? _initialCamera!,
+      );
+      if (fitCam != null) {
+        _camera = fitCam;
+      }
+    }
+
+    setState(() {
+      _rebuildRouteLayer(route);
+    });
+  }
+
+  void _rebuildRouteLayer(TransportRouteDetails route) {
+    final markers = <TrufiMarker>[];
+    final lines = <TrufiLine>[];
+
+    if (route.geometry != null && route.geometry!.isNotEmpty) {
+      final routeColor = route.backgroundColor ?? Colors.blue;
+      final points = route.geometry!
+          .map((p) => LatLng(p.latitude, p.longitude))
+          .toList();
+
+      lines.add(
+        TrufiLine(
+          id: 'route-line',
+          position: points,
+          color: routeColor,
+          lineWidth: 5,
+        ),
+      );
+
+      _buildStopMarkers(route, markers);
+    }
+
+    _routeMarkers = markers;
+    _routeLines = lines;
+  }
+
+  void _buildStopMarkers(
+    TransportRouteDetails route,
+    List<TrufiMarker> markers,
+  ) {
+    final stops = route.stops ?? [];
+    if (stops.isEmpty) return;
+
+    final routeColor = route.backgroundColor ?? Colors.blue;
+    final colorHex = routeColor.toARGB32().toRadixString(16);
+    final intermediateImageKey = 'stop_intermediate_$colorHex';
+    final selectedImageKey = 'stop_selected_$colorHex';
+
+    for (int i = 0; i < stops.length; i++) {
+      final stop = stops[i];
+      final isFirst = i == 0;
+      final isLast = i == stops.length - 1;
+      final isSelected = i == _selectedStopIndex;
+
+      if (isFirst || isLast || isSelected) continue;
+
+      markers.add(
+        TrufiMarker(
+          id: 'stop-$i',
+          position: LatLng(stop.latitude, stop.longitude),
+          widget: _StopMarker(color: routeColor),
+          size: const Size(12, 12),
+          layerLevel: 1,
+          imageCacheKey: intermediateImageKey,
+        ),
+      );
+    }
+
+    final firstStop = stops.first;
+    markers.add(
+      TrufiMarker(
+        id: 'origin-marker',
+        position: LatLng(firstStop.latitude, firstStop.longitude),
+        widget: const _OriginMarker(),
+        size: const Size(28, 28),
+        layerLevel: 5,
+        imageCacheKey: 'origin_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    final lastStop = stops.last;
+    markers.add(
+      TrufiMarker(
+        id: 'destination-marker',
+        position: LatLng(lastStop.latitude, lastStop.longitude),
+        widget: const _DestinationMarker(),
+        size: const Size(36, 36),
+        alignment: Alignment.topCenter,
+        layerLevel: 5,
+        imageCacheKey: 'destination_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
+      final selectedStop = stops[_selectedStopIndex!];
+      markers.add(
+        TrufiMarker(
+          id: 'selected-stop',
+          position: LatLng(selectedStop.latitude, selectedStop.longitude),
+          widget: _SelectedStopMarker(color: routeColor),
+          size: const Size(24, 24),
+          layerLevel: 10,
+          imageCacheKey: selectedImageKey,
+        ),
+      );
     }
   }
 
-  @override
-  void dispose() {
-    _mapController?.dispose();
-    super.dispose();
+  void _onCameraChanged(TrufiCameraPosition cam) {
+    final nowOutOfFocus = _fitCamera.isOutOfFocus(cam);
+    if (nowOutOfFocus != _outOfFocus) {
+      setState(() {
+        _outOfFocus = nowOutOfFocus;
+      });
+    }
+  }
+
+  void _reFitCamera() {
+    final refitted = _fitCamera.reFitCamera(
+      _camera ?? _initialCamera!,
+    );
+    if (refitted != null) {
+      setState(() {
+        _camera = refitted;
+        _outOfFocus = false;
+      });
+    }
   }
 
   Widget _buildMap(ITrufiMapEngine engine) {
-    return engine.buildMap(controller: _mapController!);
+    return engine.buildMap(
+      controller: _mapController!,
+      initialCamera: _initialCamera!,
+      camera: _camera,
+      onCameraChanged: _onCameraChanged,
+      layers: [
+        TrufiLayer(
+          id: 'route-layer',
+          markers: _routeMarkers,
+          lines: _routeLines,
+          layerLevel: 1,
+        ),
+      ],
+    );
   }
 
   @override
@@ -1624,7 +1774,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
           left: viewPadding.left,
           right: viewPadding.right,
         );
-        _fitCameraLayer?.updateViewport(
+        _fitCamera.updateViewport(
           Size(constraints.maxWidth, constraints.maxHeight),
           adjustedPadding,
         );
@@ -1652,44 +1802,37 @@ class _RouteMapViewState extends State<_RouteMapView> {
                     ),
                     const SizedBox(height: 8),
                   ],
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-                    builder: (context, outOfFocus, _) {
-                      return AnimatedOpacity(
-                        opacity: outOfFocus ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 200),
-                        child: AnimatedScale(
-                          scale: outOfFocus ? 1.0 : 0.8,
-                          duration: const Duration(milliseconds: 200),
-                          child: Material(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.surface.withValues(alpha: 0.95),
-                            borderRadius: BorderRadius.circular(12),
-                            elevation: 2,
-                            shadowColor: Colors.black26,
-                            child: InkWell(
-                              onTap: outOfFocus
-                                  ? _fitCameraLayer!.reFitCamera
-                                  : null,
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                width: 44,
-                                height: 44,
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.crop_free_rounded,
-                                  size: 22,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
-                              ),
+                  AnimatedOpacity(
+                    opacity: _outOfFocus ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedScale(
+                      scale: _outOfFocus ? 1.0 : 0.8,
+                      duration: const Duration(milliseconds: 200),
+                      child: Material(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surface.withValues(alpha: 0.95),
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 2,
+                        shadowColor: Colors.black26,
+                        child: InkWell(
+                          onTap: _outOfFocus ? _reFitCamera : null,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            width: 44,
+                            height: 44,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.crop_free_rounded,
+                              size: 22,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface,
                             ),
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1698,123 +1841,6 @@ class _RouteMapViewState extends State<_RouteMapView> {
         );
       },
     );
-  }
-}
-
-/// Custom layer for displaying route on map
-class _RouteLayer extends TrufiLayer {
-  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
-
-  TransportRouteDetails? _currentRoute;
-  int? _selectedStopIndex;
-
-  void setSelectedStop(int? stopIndex) {
-    _selectedStopIndex = stopIndex;
-    if (_currentRoute != null) {
-      _updateStopMarkers(_currentRoute!);
-    }
-  }
-
-  void setRoute(TransportRouteDetails route) {
-    _currentRoute = route;
-    clearMarkers();
-    clearLines();
-
-    if (route.geometry == null || route.geometry!.isEmpty) return;
-
-    final routeColor = route.backgroundColor ?? Colors.blue;
-    final points = route.geometry!
-        .map((p) => LatLng(p.latitude, p.longitude))
-        .toList();
-
-    addLine(
-      TrufiLine(
-        id: 'route-line',
-        position: points,
-        color: routeColor,
-        lineWidth: 5,
-      ),
-    );
-
-    _updateStopMarkers(route);
-  }
-
-  void _updateStopMarkers(TransportRouteDetails route) {
-    final stops = route.stops ?? [];
-    for (int i = 0; i < stops.length; i++) {
-      removeMarkerById('stop-$i');
-    }
-    removeMarkerById('selected-stop');
-    removeMarkerById('origin-marker');
-    removeMarkerById('destination-marker');
-
-    if (stops.isEmpty) return;
-
-    final routeColor = route.backgroundColor ?? Colors.blue;
-    final colorHex = routeColor.toARGB32().toRadixString(16);
-    final intermediateImageKey = 'stop_intermediate_$colorHex';
-    final selectedImageKey = 'stop_selected_$colorHex';
-
-    for (int i = 0; i < stops.length; i++) {
-      final stop = stops[i];
-      final isFirst = i == 0;
-      final isLast = i == stops.length - 1;
-      final isSelected = i == _selectedStopIndex;
-
-      if (isFirst || isLast || isSelected) continue;
-
-      addMarker(
-        TrufiMarker(
-          id: 'stop-$i',
-          position: LatLng(stop.latitude, stop.longitude),
-          widget: _StopMarker(color: routeColor),
-          size: const Size(12, 12),
-          layerLevel: 1,
-          imageCacheKey: intermediateImageKey,
-        ),
-      );
-    }
-
-    final firstStop = stops.first;
-    addMarker(
-      TrufiMarker(
-        id: 'origin-marker',
-        position: LatLng(firstStop.latitude, firstStop.longitude),
-        widget: const _OriginMarker(),
-        size: const Size(28, 28),
-        layerLevel: 5,
-        imageCacheKey: 'origin_marker_v2',
-        allowOverlap: true,
-      ),
-    );
-
-    final lastStop = stops.last;
-    addMarker(
-      TrufiMarker(
-        id: 'destination-marker',
-        position: LatLng(lastStop.latitude, lastStop.longitude),
-        widget: const _DestinationMarker(),
-        size: const Size(36, 36),
-        alignment: Alignment.topCenter,
-        layerLevel: 5,
-        imageCacheKey: 'destination_marker_v2',
-        allowOverlap: true,
-      ),
-    );
-
-    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
-      final selectedStop = stops[_selectedStopIndex!];
-      addMarker(
-        TrufiMarker(
-          id: 'selected-stop',
-          position: LatLng(selectedStop.latitude, selectedStop.longitude),
-          widget: _SelectedStopMarker(color: routeColor),
-          size: const Size(24, 24),
-          layerLevel: 10,
-          imageCacheKey: selectedImageKey,
-        ),
-      );
-    }
   }
 }
 

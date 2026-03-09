@@ -72,11 +72,12 @@ class VehicleMarker {
   }
 }
 
-/// Layer that displays many animated markers (simulating real-time vehicle tracking)
-class AnimatedMarkersLayer extends TrufiLayer {
+/// State holder that produces marker data for animated vehicles.
+///
+/// Call methods to generate/animate vehicles, then read [markers] to get
+/// the current list of TrufiMarker data to pass to TrufiMap.
+class AnimatedMarkersLayer {
   static const String layerId = 'animated-markers-layer';
-
-  AnimatedMarkersLayer(super.controller) : super(id: layerId, layerLevel: 7);
 
   final List<VehicleMarker> _vehicles = [];
   Timer? _animationTimer;
@@ -89,18 +90,23 @@ class AnimatedMarkersLayer extends TrufiLayer {
     const PerformanceStats(),
   );
 
+  /// Callback invoked after each animation tick so the host can call setState.
+  VoidCallback? onUpdate;
+
   int get vehicleCount => _vehicles.length;
   double get currentFps => _currentFps;
+
+  /// Current marker data to pass into a TrufiLayer.
+  List<TrufiMarker> get markers => _buildMarkers();
 
   /// Generate random vehicles around a center point
   void generateVehicles({
     required latlng.LatLng center,
     required int count,
-    double spreadRadius = 0.05, // ~5km radius
+    double spreadRadius = 0.05,
   }) {
     final random = Random();
     _vehicles.clear();
-    clearMarkers();
 
     final colors = [
       Colors.blue,
@@ -122,7 +128,6 @@ class AnimatedMarkersLayer extends TrufiLayer {
     ];
 
     for (var i = 0; i < count; i++) {
-      // Generate a random route for each vehicle
       final routeLength = 5 + random.nextInt(10);
       final route = <latlng.LatLng>[];
 
@@ -147,34 +152,11 @@ class AnimatedMarkersLayer extends TrufiLayer {
         ),
       );
     }
-
-    _updateMarkers();
   }
 
-  /// Updates all marker positions on the map.
-  ///
-  /// ## Performance Note: imageCacheKey
-  ///
-  /// The [imageCacheKey] is critical for MapLibre rendering performance.
-  /// MapLibre converts each marker's widget to a PNG image and caches it
-  /// using the widget's hashCode as the key. However, since widgets are
-  /// recreated every frame, their hashCode changes each time, causing:
-  ///
-  /// 1. Repeated widget-to-PNG conversions (expensive CPU operation)
-  /// 2. Multiple JNI calls to upload images to the native layer
-  /// 3. Memory pressure from duplicate cached images
-  ///
-  /// By providing a stable [imageCacheKey] based on the visual properties
-  /// (color + icon), markers with identical appearance share the same
-  /// cached image, regardless of how many times the widget is recreated.
-  ///
-  /// Example: 50 markers with 8 colors × 5 icons = max 40 unique images
-  /// instead of 50 new images every frame.
-  void _updateMarkers() {
-    final markers = <TrufiMarker>[];
-
-    for (final vehicle in _vehicles) {
-      markers.add(
+  List<TrufiMarker> _buildMarkers() {
+    return [
+      for (final vehicle in _vehicles)
         TrufiMarker(
           id: vehicle.id,
           position: vehicle.currentPosition,
@@ -184,15 +166,11 @@ class AnimatedMarkersLayer extends TrufiLayer {
           ),
           size: const Size(36, 36),
           alignment: Alignment.center,
-          layerLevel: layerLevel,
-          // IMPORTANT: Stable key for image caching - see method docs above
+          layerLevel: 7,
           imageCacheKey:
               'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
         ),
-      );
-    }
-
-    setMarkers(markers);
+    ];
   }
 
   void startAnimation({int fps = 30}) {
@@ -214,8 +192,6 @@ class AnimatedMarkersLayer extends TrufiLayer {
       vehicle.tick();
     }
 
-    _updateMarkers();
-
     stopwatch.stop();
     _frameCount++;
 
@@ -233,6 +209,8 @@ class AnimatedMarkersLayer extends TrufiLayer {
         frameTimeMs: stopwatch.elapsedMilliseconds.toDouble(),
       );
     }
+
+    onUpdate?.call();
   }
 
   void stopAnimation() {
@@ -240,25 +218,15 @@ class AnimatedMarkersLayer extends TrufiLayer {
     _animationTimer = null;
   }
 
-  void setAnimationFps(int fps) {
-    if (_animationTimer != null) {
-      stopAnimation();
-      startAnimation(fps: fps);
-    }
-  }
-
   void clearVehicles() {
     stopAnimation();
     _vehicles.clear();
-    clearMarkers();
     statsNotifier.value = const PerformanceStats();
   }
 
-  @override
   void dispose() {
     stopAnimation();
     statsNotifier.dispose();
-    super.dispose();
   }
 }
 

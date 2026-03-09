@@ -1,187 +1,50 @@
-import 'dart:collection';
-
-import 'package:latlong2/latlong.dart' as latlng;
-
-import '../controller/map_controller.dart';
 import '../entities/marker.dart';
 import '../entities/line.dart';
-import '../../data/spatial/marker_index.dart';
 
-abstract class TrufiLayer {
-  TrufiLayer(
-    this.controller, {
+/// Immutable data class representing a map layer with markers and lines.
+///
+/// Pass layers declaratively to [TrufiMap]:
+/// ```dart
+/// TrufiMap(
+///   layers: [
+///     TrufiLayer(id: 'route', markers: routeMarkers, lines: routeLines),
+///     TrufiLayer(id: 'pois', markers: poiMarkers),
+///   ],
+/// )
+/// ```
+class TrufiLayer {
+  const TrufiLayer({
     required this.id,
-    required this.layerLevel,
+    this.markers = const [],
+    this.lines = const [],
     this.visible = true,
+    this.layerLevel = 1,
     this.parentId,
-  }) {
-    controller.addLayer(this);
-  }
+  });
 
-  final TrufiMapController controller;
   final String id;
+  final List<TrufiMarker> markers;
+  final List<TrufiLine> lines;
+  final bool visible;
   final int layerLevel;
-  bool visible;
 
   /// Optional parent layer ID for hierarchical organization.
-  ///
-  /// When set, this layer is considered a child of the parent layer,
-  /// which can be used for:
-  /// - Grouping layers in UI (e.g., collapsible sections)
-  /// - Batch operations (toggle all children when parent is toggled)
-  /// - Logical organization (e.g., all POI categories under a "POI" parent)
-  ///
-  /// Example:
-  /// ```dart
-  /// // Parent layer
-  /// final parent = MyLayer(controller, id: 'poi_layers', parentId: null);
-  ///
-  /// // Child layers
-  /// final food = MyLayer(controller, id: 'poi_food', parentId: 'poi_layers');
-  /// final transport = MyLayer(controller, id: 'poi_transport', parentId: 'poi_layers');
-  /// ```
   final String? parentId;
-  final MarkerIndex markerIndex = MarkerIndex();
-  final List<TrufiMarker> _markers = <TrufiMarker>[];
-  final List<TrufiLine> _lines = <TrufiLine>[];
 
-  List<TrufiMarker> get markers => UnmodifiableListView(_markers);
-  List<TrufiLine> get lines => UnmodifiableListView(_lines);
-
-  void mutateLayers() => controller.mutateLayers();
-
-  void setMarkers(Iterable<TrufiMarker> items) {
-    _markers
-      ..clear()
-      ..addAll(items);
-    markerIndex.rebuild(_markers);
-    mutateLayers();
-  }
-
-  void addMarker(TrufiMarker m) {
-    _markers.add(m);
-    markerIndex.upsert(m);
-    mutateLayers();
-  }
-
-  void addMarkers(Iterable<TrufiMarker> list) {
-    if (list.isEmpty) return;
-    _markers.addAll(list);
-    markerIndex.upsertMany(list);
-    mutateLayers();
-  }
-
-  bool upsertMarker(TrufiMarker m) {
-    final i = _markers.indexWhere((x) => x.id == m.id);
-    final updated = i >= 0;
-    if (updated) {
-      _markers[i] = m;
-    } else {
-      _markers.add(m);
-    }
-    markerIndex.upsert(m);
-    mutateLayers();
-    return updated;
-  }
-
-  bool removeMarker(TrufiMarker m) {
-    final removed = _markers.remove(m);
-    if (removed) {
-      markerIndex.remove(m.id);
-      mutateLayers();
-    }
-    return removed;
-  }
-
-  bool removeMarkerById(String markerId) {
-    final i = _markers.indexWhere((x) => x.id == markerId);
-    if (i >= 0) {
-      _markers.removeAt(i);
-      markerIndex.remove(markerId);
-      mutateLayers();
-      return true;
-    }
-    return false;
-  }
-
-  void clearMarkers() {
-    final hadMarkers = _markers.isNotEmpty;
-    _markers.clear();
-    markerIndex.rebuild(const []);
-    // Always notify even if already empty to ensure map implementations
-    // properly clear any cached/stale marker data
-    if (hadMarkers) {
-      mutateLayers();
-    }
-  }
-
-  void setLines(Iterable<TrufiLine> items) {
-    _lines
-      ..clear()
-      ..addAll(items);
-    mutateLayers();
-  }
-
-  void addLine(TrufiLine l) {
-    _lines.add(l);
-    mutateLayers();
-  }
-
-  void addLines(Iterable<TrufiLine> list) {
-    if (list.isEmpty) return;
-    _lines.addAll(list);
-    mutateLayers();
-  }
-
-  bool upsertLine(TrufiLine l) {
-    final i = _lines.indexWhere((x) => x.id == l.id);
-    final updated = i >= 0;
-    if (updated) {
-      _lines[i] = l;
-    } else {
-      _lines.add(l);
-    }
-    mutateLayers();
-    return updated;
-  }
-
-  bool removeLine(TrufiLine l) {
-    final removed = _lines.remove(l);
-    if (removed) mutateLayers();
-    return removed;
-  }
-
-  bool removeLineById(String lineId) {
-    final i = _lines.indexWhere((x) => x.id == lineId);
-    if (i >= 0) {
-      _lines.removeAt(i);
-      mutateLayers();
-      return true;
-    }
-    return false;
-  }
-
-  void clearLines() {
-    if (_lines.isEmpty) return;
-    _lines.clear();
-    mutateLayers();
-  }
-
-  List<TrufiMarker> pickMarkers(
-    latlng.LatLng target,
-    double radiusMeters, {
-    int? limit,
-  }) {
-    return markerIndex.getMarkers(target, radiusMeters, limit: limit);
-  }
-
-  TrufiMarker? pickNearest(latlng.LatLng target, double radiusMeters) {
-    return markerIndex.getNearest(target, radiusMeters);
-  }
-
-  void dispose() {
-    _markers.clear();
-    _lines.clear();
-    markerIndex.rebuild(const []);
-  }
+  TrufiLayer copyWith({
+    String? id,
+    List<TrufiMarker>? markers,
+    List<TrufiLine>? lines,
+    bool? visible,
+    int? layerLevel,
+    String? parentId,
+  }) =>
+      TrufiLayer(
+        id: id ?? this.id,
+        markers: markers ?? this.markers,
+        lines: lines ?? this.lines,
+        visible: visible ?? this.visible,
+        layerLevel: layerLevel ?? this.layerLevel,
+        parentId: parentId ?? this.parentId,
+      );
 }

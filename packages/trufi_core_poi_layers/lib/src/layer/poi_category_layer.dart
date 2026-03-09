@@ -6,36 +6,26 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import '../models/poi.dart';
 import '../models/poi_category_config.dart';
 
-/// A TrufiLayer implementation for a single POI category.
+/// A POI category that holds marker/line data and can produce a [TrufiLayer].
 ///
-/// This layer displays POIs for one specific category with:
-/// - Pre-loaded data: Receives POIs directly at construction
-/// - External visibility control: Use `visible` property to show/hide
-/// - Independent lifecycle: Each category is a separate layer instance
-/// - Hierarchical support: Can have a parent layer for UI organization
-/// - Polygon rendering: Shows outlines for area POIs
-/// - Dynamic icons: Uses SVG icons from metadata when available
+/// This is a regular class (not extending TrufiLayer). It manages POI data for
+/// one category and exposes a [toTrufiLayer] method that builds a declarative
+/// [TrufiLayer] from the current state.
 ///
 /// Example usage:
 /// ```dart
-/// // 1. Load metadata and POIs first
-/// final loader = GeoJSONLoader(assetsBasePath: 'assets/pois');
-/// final metadata = await loader.loadMetadata();
-/// final foodCategory = metadata.getCategory('food')!;
-/// final foodPOIs = await loader.loadCategory(foodCategory);
-///
-/// // 2. Create layer with pre-loaded data
 /// final foodLayer = POICategoryLayer(
-///   controller: mapController,
 ///   category: foodCategory,
 ///   pois: foodPOIs,
 /// );
 ///
-/// // 3. Control visibility externally
+/// // Control visibility
 /// foodLayer.visible = true;
-/// foodLayer.updateMarkers(); // Call after changing visibility or filters
+///
+/// // Get declarative layer for the map
+/// final trufiLayer = foodLayer.toTrufiLayer();
 /// ```
-class POICategoryLayer extends TrufiLayer {
+class POICategoryLayer {
   /// The POI category configuration this layer displays
   final POICategoryConfig category;
 
@@ -46,41 +36,46 @@ class POICategoryLayer extends TrufiLayer {
   /// If null, all POIs are shown when the layer is visible.
   bool Function(POI poi)? poiFilter;
 
+  /// Whether this layer is visible
+  bool visible;
+
+  /// The layer ID
+  String get id => 'poi_${category.name}';
+
+  /// The layer level for z-ordering
+  int get layerLevel => 100 + category.weight;
+
+  /// Optional parent layer ID
+  final String? parentId;
+
   /// Currently highlighted POI (for selection styling)
   POI? _highlightedPOI;
 
   POICategoryLayer({
-    required TrufiMapController controller,
     required this.category,
     required List<POI> pois,
-    String? parentId,
+    this.parentId,
     this.poiFilter,
-  }) : _pois = pois,
-       super(
-         controller,
-         id: 'poi_${category.name}',
-         layerLevel: 100 + category.weight,
-         parentId: parentId,
-       );
+    this.visible = false,
+  }) : _pois = pois;
 
   /// Set the highlighted POI (for selection styling)
   set highlightedPOI(POI? poi) {
-    if (_highlightedPOI == poi) return;
     _highlightedPOI = poi;
-    _updatePolygons();
   }
 
   /// Get currently highlighted POI
   POI? get highlightedPOI => _highlightedPOI;
 
-  /// Update markers and polygons based on current POI data and filter.
-  /// Call this after changing visibility or poiFilter.
-  void updateMarkers() {
-    // Don't show markers if layer is not visible
+  /// Build a [TrufiLayer] from current state.
+  TrufiLayer toTrufiLayer() {
     if (!visible) {
-      setMarkers([]);
-      setLines([]);
-      return;
+      return TrufiLayer(
+        id: id,
+        visible: false,
+        layerLevel: layerLevel,
+        parentId: parentId,
+      );
     }
 
     final filteredPOIs = poiFilter != null ? _pois.where(poiFilter!) : _pois;
@@ -93,7 +88,6 @@ class POICategoryLayer extends TrufiLayer {
             position: poi.position,
             size: const Size(markerSize, markerSize),
             layerLevel: layerLevel,
-            // Cache by subcategory to reuse same icon
             imageCacheKey:
                 'poi_icon_${category.name}_${poi.subcategory ?? "default"}',
             allowOverlap: false,
@@ -102,21 +96,20 @@ class POICategoryLayer extends TrufiLayer {
         )
         .toList();
 
-    setMarkers(markers);
+    final lines = _buildPolygons(filteredPOIs);
 
-    // Update polygon outlines for area POIs
-    _updatePolygons();
+    return TrufiLayer(
+      id: id,
+      markers: markers,
+      lines: lines,
+      visible: true,
+      layerLevel: layerLevel,
+      parentId: parentId,
+    );
   }
 
-  /// Update polygon outlines for area POIs
-  void _updatePolygons() {
-    if (!visible) {
-      setLines([]);
-      return;
-    }
-
-    final filteredPOIs = poiFilter != null ? _pois.where(poiFilter!) : _pois;
-
+  /// Build polygon outlines for area POIs
+  List<TrufiLine> _buildPolygons(Iterable<POI> filteredPOIs) {
     final polygonLines = <TrufiLine>[];
 
     for (final poi in filteredPOIs) {
@@ -125,15 +118,12 @@ class POICategoryLayer extends TrufiLayer {
           poi.polygonPoints!.isNotEmpty) {
         final isHighlighted = _highlightedPOI?.id == poi.id;
 
-        // Convert LatLng to latlng.LatLng for TrufiLine
         final points = poi.polygonPoints!
             .map((p) => latlng.LatLng(p.latitude, p.longitude))
             .toList();
 
-        // Use subcategory color if available, else category color
         final color = poi.color;
 
-        // Create polygon outline
         polygonLines.add(
           TrufiLine(
             id: 'poi_polygon_${category.name}_${poi.id}',
@@ -146,7 +136,7 @@ class POICategoryLayer extends TrufiLayer {
       }
     }
 
-    setLines(polygonLines);
+    return polygonLines;
   }
 
   /// Build marker widget for a POI using its SVG icon if available
@@ -202,8 +192,12 @@ class POICategoryLayer extends TrufiLayer {
   /// Get the number of POIs in this layer
   int get poiCount => _pois.length;
 
-  /// Get the number of visible markers
-  int get visibleMarkerCount => markers.length;
+  /// Get the number of visible markers (from the last built layer)
+  int get visibleMarkerCount {
+    if (!visible) return 0;
+    final filteredPOIs = poiFilter != null ? _pois.where(poiFilter!) : _pois;
+    return filteredPOIs.length;
+  }
 
   /// Get all POIs in this layer
   List<POI> get pois => _pois;

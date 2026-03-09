@@ -4,17 +4,33 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 import '../../models/navigation_state.dart';
 
-/// Layer for rendering navigation elements on the map.
-class NavigationLayer extends TrufiLayer {
-  NavigationLayer(super.controller) : super(id: 'navigation', layerLevel: 100);
+/// Produces navigation markers and lines for the map.
+///
+/// Unlike the old API this is a plain helper class — it does not extend
+/// [TrufiLayer].  Call [buildLayerData] and pass the result into a
+/// [TrufiLayer] data object that you hand to `buildMap(layers: ...)`.
+class NavigationLayer {
+  /// The layer id consumers should use when wrapping the output in a
+  /// [TrufiLayer].
+  static const layerId = 'navigation';
 
-  /// Update the layer with current navigation state.
-  void updateNavigation(NavigationState state) {
-    clearMarkers();
-    clearLines();
+  /// Build markers, lines, and an optional camera position for the given
+  /// navigation [state].
+  ///
+  /// Returns a record with `markers`, `lines` and an optional
+  /// `cameraPosition` that the caller can feed to `buildMap`.
+  ({
+    List<TrufiMarker> markers,
+    List<TrufiLine> lines,
+    TrufiCameraPosition? cameraPosition,
+  }) buildLayerData(NavigationState state) {
+    final markers = <TrufiMarker>[];
+    final lines = <TrufiLine>[];
 
     final route = state.route;
-    if (route == null || route.geometry.isEmpty) return;
+    if (route == null || route.geometry.isEmpty) {
+      return (markers: markers, lines: lines, cameraPosition: null);
+    }
 
     final currentStopIndex = state.currentStopIndex;
 
@@ -31,37 +47,46 @@ class NavigationLayer extends TrufiLayer {
         ? _getCurrentLegIndex(route, currentStopIndex, userPosition)
         : 0;
 
-    // Draw route lines
-    _drawRouteLinesWithProgress(
+    // Build route lines
+    _buildRouteLinesWithProgress(
       route,
       currentLegIndex,
       currentStopIndex,
       userPosition,
+      markers,
+      lines,
     );
 
-    // Draw user location marker
-    _drawUserLocation(state);
+    // Build user location marker
+    _buildUserLocation(state, markers);
 
-    // Move camera to follow user if enabled
+    // Compute camera position to follow user if enabled
+    TrufiCameraPosition? cameraPosition;
     if (state.isMapFollowingUser && state.currentLocation != null) {
       final userPos = LatLng(
         state.currentLocation!.latitude,
         state.currentLocation!.longitude,
       );
-      controller.setCameraPosition(
-        TrufiCameraPosition(target: userPos, zoom: 16),
-      );
+      cameraPosition = TrufiCameraPosition(target: userPos, zoom: 16);
     }
+
+    return (
+      markers: markers,
+      lines: lines,
+      cameraPosition: cameraPosition,
+    );
   }
 
-  void _drawUserLocation(NavigationState state) {
+  void _buildUserLocation(
+    NavigationState state,
+    List<TrufiMarker> markers,
+  ) {
     final location = state.currentLocation;
     if (location == null) return;
 
     final userPosition = LatLng(location.latitude, location.longitude);
 
-    // Add user location marker
-    addMarker(
+    markers.add(
       TrufiMarker(
         id: 'user_location',
         position: userPosition,
@@ -73,28 +98,28 @@ class NavigationLayer extends TrufiLayer {
     );
   }
 
-  void _drawRouteLinesWithProgress(
+  void _buildRouteLinesWithProgress(
     NavigationRoute route,
     int currentLegIndex,
     int currentStopIndex,
     LatLng? userPosition,
+    List<TrufiMarker> markers,
+    List<TrufiLine> lines,
   ) {
-    // Use legs for proper rendering with colors and styles
     if (route.legs.isNotEmpty) {
-      _drawLegsWithStyles(
+      _buildLegsWithStyles(
         route,
         currentLegIndex,
         currentStopIndex,
+        markers,
+        lines,
         userPosition: userPosition,
       );
     } else {
-      // Fallback to simple geometry rendering
-      _drawSimpleGeometry(route, currentStopIndex);
+      _buildSimpleGeometry(route, currentStopIndex, lines);
     }
   }
 
-  /// Determines which leg index the user is currently on based on their position.
-  /// Also calculates progress within the current leg to determine what's "passed".
   int _getCurrentLegIndex(
     NavigationRoute route,
     int currentStopIndex,
@@ -102,7 +127,6 @@ class NavigationLayer extends TrufiLayer {
   ) {
     if (route.legs.isEmpty) return 0;
 
-    // If we have user position, find which leg they're on
     if (userPosition != null) {
       double minDist = double.infinity;
       int closestLegIndex = 0;
@@ -121,7 +145,6 @@ class NavigationLayer extends TrufiLayer {
       return closestLegIndex;
     }
 
-    // Fallback: use stop index to estimate leg
     if (route.stops.isEmpty) return 0;
     if (currentStopIndex >= route.stops.length) {
       return route.legs.length - 1;
@@ -129,7 +152,6 @@ class NavigationLayer extends TrufiLayer {
 
     final currentStop = route.stops[currentStopIndex];
 
-    // Find which leg contains this stop
     double minDist = double.infinity;
     int closestLegIndex = 0;
 
@@ -147,24 +169,21 @@ class NavigationLayer extends TrufiLayer {
     return closestLegIndex;
   }
 
-  /// Draws each leg with its own color and style.
-  /// Legs that have been passed are shown in gray.
-  /// The current leg is split at user position: passed portion in gray, remaining in color.
-  void _drawLegsWithStyles(
+  void _buildLegsWithStyles(
     NavigationRoute route,
     int currentLegIndex,
-    int currentStopIndex, {
+    int currentStopIndex,
+    List<TrufiMarker> markers,
+    List<TrufiLine> lines, {
     LatLng? userPosition,
   }) {
     for (int i = 0; i < route.legs.length; i++) {
       final leg = route.legs[i];
       if (leg.points.isEmpty) continue;
 
-      // Check if this leg has been completely passed
       final isCompletelyPassed = i < currentLegIndex;
       final isCurrentLeg = i == currentLegIndex;
 
-      // Determine the active color for this leg type
       final Color activeColor;
       final double lineWidth;
       final bool useDots;
@@ -178,15 +197,13 @@ class NavigationLayer extends TrufiLayer {
         lineWidth = 5;
         useDots = false;
       } else {
-        // Walking legs
         activeColor = Colors.grey;
         lineWidth = 4;
         useDots = true;
       }
 
       if (isCompletelyPassed) {
-        // Entire leg is passed - draw in gray
-        addLine(
+        lines.add(
           TrufiLine(
             id: 'leg-$i',
             position: leg.points,
@@ -197,13 +214,11 @@ class NavigationLayer extends TrufiLayer {
           ),
         );
       } else if (isCurrentLeg && userPosition != null) {
-        // Current leg - split at user position
         final splitIndex = _findClosestPointIndex(leg.points, userPosition);
 
-        // Draw passed portion (gray)
         if (splitIndex > 0) {
           final passedPoints = leg.points.sublist(0, splitIndex + 1);
-          addLine(
+          lines.add(
             TrufiLine(
               id: 'leg-$i-passed',
               position: passedPoints,
@@ -215,10 +230,9 @@ class NavigationLayer extends TrufiLayer {
           );
         }
 
-        // Draw remaining portion (active color)
         if (splitIndex < leg.points.length - 1) {
           final remainingPoints = leg.points.sublist(splitIndex);
-          addLine(
+          lines.add(
             TrufiLine(
               id: 'leg-$i-remaining',
               position: remainingPoints,
@@ -230,8 +244,7 @@ class NavigationLayer extends TrufiLayer {
           );
         }
       } else {
-        // Future leg - draw in active color
-        addLine(
+        lines.add(
           TrufiLine(
             id: 'leg-$i',
             position: leg.points,
@@ -244,11 +257,11 @@ class NavigationLayer extends TrufiLayer {
       }
     }
 
-    // Add origin marker always (at start of route)
+    // Origin marker
     if (route.legs.isNotEmpty) {
       final firstLegPoints = route.legs.first.points;
       if (firstLegPoints.isNotEmpty) {
-        addMarker(
+        markers.add(
           TrufiMarker(
             id: 'origin-marker',
             position: firstLegPoints.first,
@@ -261,11 +274,11 @@ class NavigationLayer extends TrufiLayer {
       }
     }
 
-    // Add destination marker at the last point of the last leg
+    // Destination marker
     if (route.legs.isNotEmpty) {
       final lastLegPoints = route.legs.last.points;
       if (lastLegPoints.isNotEmpty) {
-        addMarker(
+        markers.add(
           TrufiMarker(
             id: 'destination-marker',
             position: lastLegPoints.last,
@@ -280,7 +293,6 @@ class NavigationLayer extends TrufiLayer {
     }
   }
 
-  /// Finds the index of the closest point in a list to the given position.
   int _findClosestPointIndex(List<LatLng> points, LatLng position) {
     double minDist = double.infinity;
     int closestIndex = 0;
@@ -296,8 +308,11 @@ class NavigationLayer extends TrufiLayer {
     return closestIndex;
   }
 
-  /// Fallback simple geometry rendering.
-  void _drawSimpleGeometry(NavigationRoute route, int currentStopIndex) {
+  void _buildSimpleGeometry(
+    NavigationRoute route,
+    int currentStopIndex,
+    List<TrufiLine> lines,
+  ) {
     final geometry = route.geometry;
     if (geometry.isEmpty) return;
 
@@ -305,7 +320,6 @@ class NavigationLayer extends TrufiLayer {
         ? Color(route.backgroundColor!)
         : Colors.blue;
 
-    // Find the geometry index closest to current stop
     int splitIndex = 0;
     if (route.stops.isNotEmpty && currentStopIndex < route.stops.length) {
       final currentStop = route.stops[currentStopIndex];
@@ -321,10 +335,9 @@ class NavigationLayer extends TrufiLayer {
       }
     }
 
-    // Draw passed route section (gray/dimmed)
     if (splitIndex > 0) {
       final passedPoints = geometry.sublist(0, splitIndex + 1);
-      addLine(
+      lines.add(
         TrufiLine(
           id: 'passed_route',
           position: passedPoints,
@@ -335,10 +348,9 @@ class NavigationLayer extends TrufiLayer {
       );
     }
 
-    // Draw remaining route section (highlighted)
     if (splitIndex < geometry.length - 1) {
       final remainingPoints = geometry.sublist(splitIndex);
-      addLine(
+      lines.add(
         TrufiLine(
           id: 'remaining_route',
           position: remainingPoints,

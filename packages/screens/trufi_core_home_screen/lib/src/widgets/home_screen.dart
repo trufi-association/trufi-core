@@ -65,14 +65,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TrufiMapController? _mapController;
-  FitCameraLayer? _fitCameraLayer;
-  _RouteLayer? _routeLayer;
-  _LocationMarkersLayer? _locationMarkersLayer;
-  _MyLocationLayer? _myLocationLayer;
+  FitCameraUtil? _fitCameraUtil;
   bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
   bool _needsRouteRefresh = false;
+
+  // Declarative layer state
+  TrufiCameraPosition? _initialCamera;
+  TrufiCameraPosition? _cameraTarget; // Driven camera position (for fit/move)
+  TrufiCameraPosition? _currentCamera; // Last reported camera position
+  List<TrufiMarker> _routeMarkers = const [];
+  List<TrufiLine> _routeLines = const [];
+  List<TrufiMarker> _locationMarkers = const [];
+  List<TrufiMarker> _myLocationMarkers = const [];
+  bool _outOfFocus = false;
 
   // GPS location service
   final LocationService _locationService = LocationService();
@@ -332,10 +339,9 @@ class _HomeScreenState extends State<HomeScreen>
       if (started && mounted) {
         // Get initial location to show marker immediately
         final location = _locationService.currentLocation;
-        if (location != null && _mapController != null) {
+        if (location != null) {
           final position = LatLng(location.latitude, location.longitude);
-          _myLocationLayer ??= _MyLocationLayer(_mapController!);
-          _myLocationLayer!.setLocation(position, location.accuracy);
+          _updateMyLocationMarkers(position, location.accuracy);
         }
       }
     }
@@ -346,13 +352,12 @@ class _HomeScreenState extends State<HomeScreen>
     MapEngineManager mapEngineManager,
   ) {
     if (_mapController == null) {
-      _mapController = TrufiMapController(
-        initialCameraPosition: TrufiCameraPosition(
-          target: mapEngineManager.defaultCenter,
-          zoom: mapEngineManager.defaultZoom,
-        ),
+      _initialCamera = TrufiCameraPosition(
+        target: mapEngineManager.defaultCenter,
+        zoom: mapEngineManager.defaultZoom,
       );
-      _fitCameraLayer = FitCameraLayer(_mapController!);
+      _mapController = TrufiMapController();
+      _fitCameraUtil = FitCameraUtil(padding: const EdgeInsets.all(40));
 
       // Create custom layers if provided in config
       if (widget.config.customMapLayers != null) {
@@ -389,7 +394,6 @@ class _HomeScreenState extends State<HomeScreen>
     widget.config.poiLayersManager?.removeListener(_onPOISelectionChanged);
     _locationService.dispose();
     _sheetController.dispose();
-    _mapController?.dispose();
     super.dispose();
   }
 
@@ -398,16 +402,48 @@ class _HomeScreenState extends State<HomeScreen>
     if (!mounted) return;
 
     final location = _locationService.currentLocation;
-    if (location != null && _mapController != null) {
+    if (location != null) {
       final position = LatLng(location.latitude, location.longitude);
 
       // Update my location marker on map
-      _myLocationLayer ??= _MyLocationLayer(_mapController!);
-      _myLocationLayer!.setLocation(position, location.accuracy);
+      _updateMyLocationMarkers(position, location.accuracy);
 
       // Force rebuild to update UI (e.g., location button icon)
       setState(() {});
     }
+  }
+
+  /// Updates my-location markers declaratively.
+  void _updateMyLocationMarkers(LatLng position, double? accuracy) {
+    final markers = <TrufiMarker>[];
+
+    // Add accuracy circle if available (scales with zoom using metersRadius)
+    if (accuracy != null && accuracy > 0) {
+      markers.add(
+        TrufiMarker(
+          id: 'my-location-accuracy',
+          position: position,
+          widget: const _MyLocationAccuracyCircle(),
+          metersRadius: accuracy,
+        ),
+      );
+    }
+
+    // Add the blue dot marker (fixed size in pixels)
+    markers.add(
+      TrufiMarker(
+        id: 'my-location-dot',
+        position: position,
+        widget: const _MyLocationMarker(),
+        size: const Size(24, 24),
+        layerLevel: 1,
+        allowOverlap: true,
+      ),
+    );
+
+    setState(() {
+      _myLocationMarkers = markers;
+    });
   }
 
   /// Expand sheet when results are available
@@ -569,54 +605,201 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _clearRouteFromMap() {
-    if (_routeLayer != null) {
-      _routeLayer!.clearMarkers();
-      _routeLayer!.clearLines();
-      _mapController?.removeLayer(_routeLayer!.id);
-      _routeLayer = null;
-    }
+    setState(() {
+      _routeMarkers = const [];
+      _routeLines = const [];
+    });
   }
 
   void _updateLocationMarkers(RoutePlannerState state) {
-    if (_mapController == null) return;
-
     // Don't show location markers when we have a route (route has its own markers)
     if (state.selectedItinerary != null) {
-      if (_locationMarkersLayer != null) {
-        _locationMarkersLayer!.clearMarkers();
-        _mapController?.removeLayer(_locationMarkersLayer!.id);
-        _locationMarkersLayer = null;
+      if (_locationMarkers.isNotEmpty) {
+        setState(() {
+          _locationMarkers = const [];
+        });
       }
       return;
     }
 
-    // Create layer if needed
-    _locationMarkersLayer ??= _LocationMarkersLayer(_mapController!);
+    final markers = <TrufiMarker>[];
 
-    // Update markers
-    _locationMarkersLayer!.updateMarkers(
-      origin: state.fromPlace,
-      destination: state.toPlace,
-    );
+    if (state.fromPlace != null) {
+      markers.add(
+        TrufiMarker(
+          id: 'origin-preview',
+          position: LatLng(
+            state.fromPlace!.latitude,
+            state.fromPlace!.longitude,
+          ),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
+        ),
+      );
+    }
+
+    if (state.toPlace != null) {
+      markers.add(
+        TrufiMarker(
+          id: 'destination-preview',
+          position: LatLng(
+            state.toPlace!.latitude,
+            state.toPlace!.longitude,
+          ),
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
+          alignment: Alignment.topCenter,
+        ),
+      );
+    }
+
+    setState(() {
+      _locationMarkers = markers;
+    });
   }
 
   void _updateRouteOnMap(routing.Itinerary? itinerary) {
-    _clearRouteFromMap();
+    if (itinerary == null) {
+      _clearRouteFromMap();
+      return;
+    }
 
-    if (itinerary == null || _mapController == null) return;
+    final markers = <TrufiMarker>[];
+    final lines = <TrufiLine>[];
+    final allPoints = <LatLng>[];
 
-    _routeLayer = _RouteLayer(_mapController!);
-    _routeLayer!.setItinerary(itinerary);
+    // Add legs with improved styling
+    for (int i = 0; i < itinerary.legs.length; i++) {
+      final leg = itinerary.legs[i];
+      if (leg.decodedPoints.isEmpty) continue;
+
+      allPoints.addAll(leg.decodedPoints);
+
+      // Determine color based on leg type
+      final Color color;
+      final double lineWidth;
+      final bool useDots;
+
+      if (leg.transitLeg) {
+        // Transit legs use route color
+        color = _parseColor(leg.routeColor);
+        lineWidth = 6;
+        useDots = false;
+      } else if (leg.transportMode == routing.TransportMode.bicycle) {
+        // Bicycle legs are green
+        color = const Color(0xFF4CAF50);
+        lineWidth = 5;
+        useDots = false;
+      } else {
+        // Walking legs are grey with dots
+        color = Colors.grey;
+        lineWidth = 4;
+        useDots = true;
+      }
+
+      // Add route line
+      lines.add(
+        TrufiLine(
+          id: 'leg-$i-${leg.startTime.millisecondsSinceEpoch}',
+          position: leg.decodedPoints,
+          color: color,
+          lineWidth: lineWidth,
+          activeDots: useDots,
+        ),
+      );
+
+      // Add route label at midpoint for transit legs
+      if (leg.transitLeg && leg.decodedPoints.length > 1) {
+        final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+        final midIndex = leg.decodedPoints.length ~/ 2;
+        final midPoint = leg.decodedPoints[midIndex];
+        final modeIcon = _getModeIcon(leg.transportMode);
+
+        markers.add(
+          TrufiMarker(
+            id: 'transit-label-$i',
+            position: midPoint,
+            widget: _TransitRouteLabel(
+              color: color,
+              routeName: routeName,
+              icon: modeIcon,
+            ),
+            size: const Size(72, 28),
+            layerLevel: 2,
+            allowOverlap: true,
+          ),
+        );
+      }
+
+      // Add bicycle label at midpoint for bicycle legs
+      if (leg.transportMode == routing.TransportMode.bicycle &&
+          leg.decodedPoints.length > 1) {
+        final midIndex = leg.decodedPoints.length ~/ 2;
+        final midPoint = leg.decodedPoints[midIndex];
+        final durationMin = leg.duration.inMinutes;
+
+        markers.add(
+          TrufiMarker(
+            id: 'bike-label-$i',
+            position: midPoint,
+            widget: _TransitRouteLabel(
+              color: color,
+              routeName: '$durationMin\'',
+              icon: Icons.directions_bike_rounded,
+            ),
+            size: const Size(72, 28),
+            layerLevel: 2,
+            allowOverlap: true,
+          ),
+        );
+      }
+    }
+
+    if (allPoints.isNotEmpty) {
+      // Add start marker (origin)
+      markers.add(
+        TrufiMarker(
+          id: 'start-marker',
+          position: allPoints.first,
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
+          layerLevel: 3,
+          allowOverlap: true,
+        ),
+      );
+
+      // Add end marker (destination)
+      markers.add(
+        TrufiMarker(
+          id: 'end-marker',
+          position: allPoints.last,
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
+          alignment: Alignment.topCenter,
+          layerLevel: 3,
+          allowOverlap: true,
+        ),
+      );
+    }
+
+    setState(() {
+      _routeMarkers = markers;
+      _routeLines = lines;
+    });
   }
 
-  /// Updates the fit camera layer with route points.
+  /// Updates the fit camera with route points.
   /// Only fits camera when there's a route (itinerary), not for individual markers.
   void _updateFitCameraPoints(RoutePlannerState state) {
     // Only fit camera when there's a selected itinerary (route)
     // Don't auto-fit when just selecting origin/destination markers
     if (state.selectedItinerary == null) {
       _pendingFitPoints = null;
-      _fitCameraLayer?.clearFitPoints();
+      _fitCameraUtil?.clearFitPoints();
+      setState(() {
+        _outOfFocus = false;
+        _cameraTarget = null;
+      });
       return;
     }
 
@@ -629,11 +812,60 @@ class _HomeScreenState extends State<HomeScreen>
       // Save points for when viewport is ready
       _pendingFitPoints = allPoints;
       if (_viewportReady) {
-        _fitCameraLayer?.setFitPoints(allPoints);
+        _fitCameraToPoints(allPoints);
       }
     } else {
       _pendingFitPoints = null;
-      _fitCameraLayer?.clearFitPoints();
+      _fitCameraUtil?.clearFitPoints();
+      setState(() {
+        _outOfFocus = false;
+        _cameraTarget = null;
+      });
+    }
+  }
+
+  /// Compute and apply camera position to fit the given points.
+  void _fitCameraToPoints(List<LatLng> points) {
+    if (_fitCameraUtil == null || _currentCamera == null) return;
+    final newCam = _fitCameraUtil!.cameraForPoints(
+      points,
+      _currentCamera!,
+    );
+    if (newCam != null) {
+      setState(() {
+        _cameraTarget = newCam;
+        _outOfFocus = false;
+      });
+    }
+  }
+
+  /// Re-fit camera to the last set of points.
+  void _reFitCamera() {
+    if (_fitCameraUtil == null || _currentCamera == null) return;
+    final newCam = _fitCameraUtil!.reFitCamera(_currentCamera!);
+    if (newCam != null) {
+      setState(() {
+        _cameraTarget = newCam;
+        _outOfFocus = false;
+      });
+    }
+  }
+
+  /// Called when the map reports a camera change.
+  void _onCameraChanged(TrufiCameraPosition position) {
+    _currentCamera = position;
+    // Update out-of-focus state
+    if (_fitCameraUtil != null && _pendingFitPoints != null) {
+      final outOfFocus = _fitCameraUtil!.isOutOfFocus(position);
+      if (outOfFocus != _outOfFocus) {
+        setState(() {
+          _outOfFocus = outOfFocus;
+        });
+      }
+    }
+    // Clear camera target after it's been applied so we don't keep re-driving
+    if (_cameraTarget != null) {
+      _cameraTarget = null;
     }
   }
 
@@ -642,7 +874,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (_locationService.isTracking) {
       final location = _locationService.currentLocation;
       if (location != null) {
-        _mapController?.setCameraPosition(
+        _mapController?.moveCamera(
           TrufiCameraPosition(
             target: LatLng(location.latitude, location.longitude),
             zoom: 16,
@@ -676,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen>
             final position = LatLng(location.latitude, location.longitude);
 
             // Move camera to location
-            _mapController?.setCameraPosition(
+            _mapController?.moveCamera(
               TrufiCameraPosition(target: position, zoom: 16),
             );
           }
@@ -935,11 +1167,56 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  /// Build the list of TrufiLayer data objects from current state.
+  List<TrufiLayer> _buildLayers() {
+    final layers = <TrufiLayer>[];
+
+    // My location layer (lowest level)
+    if (_myLocationMarkers.isNotEmpty) {
+      layers.add(TrufiLayer(
+        id: 'my-location-layer',
+        markers: _myLocationMarkers,
+        layerLevel: 0,
+      ));
+    }
+
+    // Location markers layer (origin/destination preview before route)
+    if (_locationMarkers.isNotEmpty) {
+      layers.add(TrufiLayer(
+        id: 'location-markers-layer',
+        markers: _locationMarkers,
+        layerLevel: 2,
+      ));
+    }
+
+    // Route layer
+    if (_routeMarkers.isNotEmpty || _routeLines.isNotEmpty) {
+      layers.add(TrufiLayer(
+        id: 'route-layer',
+        markers: _routeMarkers,
+        lines: _routeLines,
+        layerLevel: 1000,
+      ));
+    }
+
+    // POI layers
+    final poiManager = widget.config.poiLayersManager;
+    if (poiManager != null) {
+      layers.addAll(poiManager.buildLayers());
+    }
+
+    return layers;
+  }
+
   Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
-      controller: _mapController!,
+      controller: _mapController,
+      initialCamera: _initialCamera!,
+      camera: _cameraTarget,
+      onCameraChanged: _onCameraChanged,
       onMapClick: _onMapClick,
       onMapLongClick: _onMapLongPress,
+      layers: _buildLayers(),
     );
   }
 
@@ -975,7 +1252,7 @@ class _HomeScreenState extends State<HomeScreen>
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              // Responsive layout: use side panel for wide screens (≥600px)
+              // Responsive layout: use side panel for wide screens (>=600px)
               final isWideScreen = constraints.maxWidth >= 600;
               final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
 
@@ -983,7 +1260,7 @@ class _HomeScreenState extends State<HomeScreen>
               final mapWidth = isWideScreen
                   ? constraints.maxWidth - sidePanelWidth
                   : constraints.maxWidth;
-              _fitCameraLayer?.updateViewport(
+              _fitCameraUtil?.updateViewport(
                 Size(mapWidth, constraints.maxHeight),
                 MediaQuery.of(context).viewPadding,
               );
@@ -995,24 +1272,27 @@ class _HomeScreenState extends State<HomeScreen>
                     _pendingFitPoints!.isNotEmpty) {
                   // Set initial padding based on screen type
                   if (isWideScreen) {
-                    _fitCameraLayer?.updatePadding(
+                    _fitCameraUtil?.updatePadding(
                       const EdgeInsets.all(30),
-                      recenter: false,
                     );
                   } else {
                     // Narrow screen: account for search bar and bottom sheet
                     final sheetHeight = constraints.maxHeight * _sheetMidSize;
-                    _fitCameraLayer?.updatePadding(
+                    _fitCameraUtil?.updatePadding(
                       EdgeInsets.only(
                         top: 120, // SearchLocationBar height
                         bottom: sheetHeight,
                         left: 30,
                         right: 30,
                       ),
-                      recenter: false,
                     );
                   }
-                  _fitCameraLayer?.setFitPoints(_pendingFitPoints!);
+                  // Use post-frame callback to fit after currentCamera is set
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted && _pendingFitPoints != null) {
+                      _fitCameraToPoints(_pendingFitPoints!);
+                    }
+                  });
                 }
               }
 
@@ -1022,7 +1302,9 @@ class _HomeScreenState extends State<HomeScreen>
               // re-render the route manually.
               final needsRouteRender =
                   _needsRouteRefresh ||
-                  (state.selectedItinerary != null && _routeLayer == null);
+                  (state.selectedItinerary != null &&
+                      _routeMarkers.isEmpty &&
+                      _routeLines.isEmpty);
 
               if (_needsRouteRefresh) {
                 _needsRouteRefresh = false;
@@ -1053,7 +1335,7 @@ class _HomeScreenState extends State<HomeScreen>
               // Note: The map is already positioned to the right of the side panel,
               // so we don't need to include sidePanelWidth in the padding.
               if (isWideScreen) {
-                _fitCameraLayer?.updatePadding(const EdgeInsets.all(30));
+                _fitCameraUtil?.updatePadding(const EdgeInsets.all(30));
               }
 
               return Stack(
@@ -1196,24 +1478,17 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               const SizedBox(height: 8),
               // Recenter button (only visible when route is out of focus)
-              ValueListenableBuilder<bool>(
-                valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-                builder: (context, outOfFocus, _) {
-                  return AnimatedOpacity(
-                    opacity: outOfFocus ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: AnimatedScale(
-                      scale: outOfFocus ? 1.0 : 0.8,
-                      duration: const Duration(milliseconds: 200),
-                      child: _MapControlButton(
-                        icon: Icons.crop_free_rounded,
-                        onPressed: outOfFocus
-                            ? _fitCameraLayer!.reFitCamera
-                            : null,
-                      ),
-                    ),
-                  );
-                },
+              AnimatedOpacity(
+                opacity: _outOfFocus ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: AnimatedScale(
+                  scale: _outOfFocus ? 1.0 : 0.8,
+                  duration: const Duration(milliseconds: 200),
+                  child: _MapControlButton(
+                    icon: Icons.crop_free_rounded,
+                    onPressed: _outOfFocus ? _reFitCamera : null,
+                  ),
+                ),
               ),
             ],
           ),
@@ -1249,7 +1524,9 @@ class _HomeScreenState extends State<HomeScreen>
               ? (context, itinerary, locationService) {
                   // Clear the home screen's location marker before starting navigation
                   // to avoid duplicate markers on the navigation screen
-                  _myLocationLayer?.clearMarkers();
+                  setState(() {
+                    _myLocationMarkers = const [];
+                  });
                   widget.onStartNavigation!(
                     context,
                     itinerary,
@@ -1447,7 +1724,7 @@ class _HomeScreenState extends State<HomeScreen>
     return 340;
   }
 
-  /// Builds the side panel for wide screens (≥600px).
+  /// Builds the side panel for wide screens (>=600px).
   /// Panel is positioned on the LEFT side and includes the SearchBar.
   Widget _buildSidePanel(
     RoutePlannerState state,
@@ -1533,7 +1810,9 @@ class _HomeScreenState extends State<HomeScreen>
                           : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
-                              _myLocationLayer?.clearMarkers();
+                              setState(() {
+                                _myLocationMarkers = const [];
+                              });
                               widget.onStartNavigation!(
                                 context,
                                 itinerary,
@@ -1560,7 +1839,9 @@ class _HomeScreenState extends State<HomeScreen>
                           : null,
                       onStartNavigation: widget.onStartNavigation != null
                           ? (context, itinerary, locationService) {
-                              _myLocationLayer?.clearMarkers();
+                              setState(() {
+                                _myLocationMarkers = const [];
+                              });
                               widget.onStartNavigation!(
                                 context,
                                 itinerary,
@@ -1755,7 +2036,7 @@ class _HomeScreenState extends State<HomeScreen>
       snapSizes: const [_sheetMinSize, _sheetMidSize],
       onHeightChanged: (height) {
         final maxHeight = constraints.maxHeight;
-        _fitCameraLayer?.updatePadding(
+        _fitCameraUtil?.updatePadding(
           EdgeInsets.only(
             bottom: math.min(maxHeight * 0.5, height),
             left: 30,
@@ -1959,6 +2240,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
+// ============================================================
+// Helper functions
+// ============================================================
+
 // Helper functions to convert between location types
 SearchLocation _trufiLocationToSearchLocation(TrufiLocation location) {
   return SearchLocation(
@@ -1979,165 +2264,43 @@ TrufiLocation _searchLocationToTrufiLocation(SearchLocation location) {
   );
 }
 
-/// Custom layer for displaying route on map with improved markers
-class _RouteLayer extends TrufiLayer {
-  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1000);
-
-  void setItinerary(routing.Itinerary itinerary) {
-    clearMarkers();
-    clearLines();
-
-    final allPoints = <LatLng>[];
-
-    // Add legs with improved styling
-    for (int i = 0; i < itinerary.legs.length; i++) {
-      final leg = itinerary.legs[i];
-      if (leg.decodedPoints.isEmpty) continue;
-
-      allPoints.addAll(leg.decodedPoints);
-
-      // Determine color based on leg type
-      final Color color;
-      final double lineWidth;
-      final bool useDots;
-
-      if (leg.transitLeg) {
-        // Transit legs use route color
-        color = _parseColor(leg.routeColor);
-        lineWidth = 6;
-        useDots = false;
-      } else if (leg.transportMode == routing.TransportMode.bicycle) {
-        // Bicycle legs are green
-        color = const Color(0xFF4CAF50);
-        lineWidth = 5;
-        useDots = false;
-      } else {
-        // Walking legs are grey with dots
-        color = Colors.grey;
-        lineWidth = 4;
-        useDots = true;
-      }
-
-      // Add route line
-      addLine(
-        TrufiLine(
-          id: 'leg-$i-${leg.startTime.millisecondsSinceEpoch}',
-          position: leg.decodedPoints,
-          color: color,
-          lineWidth: lineWidth,
-          activeDots: useDots,
-        ),
-      );
-
-      // Add route label at midpoint for transit legs
-      if (leg.transitLeg && leg.decodedPoints.length > 1) {
-        final routeName = leg.shortName ?? leg.route?.shortName ?? '';
-        final midIndex = leg.decodedPoints.length ~/ 2;
-        final midPoint = leg.decodedPoints[midIndex];
-        final modeIcon = _getModeIcon(leg.transportMode);
-
-        addMarker(
-          TrufiMarker(
-            id: 'transit-label-$i',
-            position: midPoint,
-            widget: _TransitRouteLabel(
-              color: color,
-              routeName: routeName,
-              icon: modeIcon,
-            ),
-            size: const Size(72, 28),
-            layerLevel: 2,
-            allowOverlap: true,
-          ),
-        );
-      }
-
-      // Add bicycle label at midpoint for bicycle legs
-      if (leg.transportMode == routing.TransportMode.bicycle &&
-          leg.decodedPoints.length > 1) {
-        final midIndex = leg.decodedPoints.length ~/ 2;
-        final midPoint = leg.decodedPoints[midIndex];
-        final durationMin = leg.duration.inMinutes;
-
-        addMarker(
-          TrufiMarker(
-            id: 'bike-label-$i',
-            position: midPoint,
-            widget: _TransitRouteLabel(
-              color: color,
-              routeName: '$durationMin\'',
-              icon: Icons.directions_bike_rounded,
-            ),
-            size: const Size(72, 28),
-            layerLevel: 2,
-            allowOverlap: true,
-          ),
-        );
-      }
-    }
-
-    if (allPoints.isNotEmpty) {
-      // Add start marker (origin)
-      addMarker(
-        TrufiMarker(
-          id: 'start-marker',
-          position: allPoints.first,
-          widget: const _OriginMarker(),
-          size: const Size(24, 24),
-          layerLevel: 3,
-          allowOverlap: true,
-        ),
-      );
-
-      // Add end marker (destination)
-      addMarker(
-        TrufiMarker(
-          id: 'end-marker',
-          position: allPoints.last,
-          widget: const _DestinationMarker(),
-          size: const Size(32, 32),
-          alignment: Alignment.topCenter,
-          layerLevel: 3,
-          allowOverlap: true,
-        ),
-      );
-    }
-  }
-
-  Color _parseColor(String hexColor) {
-    try {
-      final hex = hexColor.replaceFirst('#', '');
-      return Color(int.parse('FF$hex', radix: 16));
-    } catch (_) {
-      return const Color(0xFF1976D2);
-    }
-  }
-
-  IconData _getModeIcon(routing.TransportMode mode) {
-    switch (mode) {
-      case routing.TransportMode.bus:
-      case routing.TransportMode.trufi:
-      case routing.TransportMode.micro:
-      case routing.TransportMode.miniBus:
-        return Icons.directions_bus_rounded;
-      case routing.TransportMode.rail:
-      case routing.TransportMode.lightRail:
-        return Icons.train_rounded;
-      case routing.TransportMode.subway:
-        return Icons.subway_rounded;
-      case routing.TransportMode.tram:
-        return Icons.tram_rounded;
-      case routing.TransportMode.ferry:
-        return Icons.directions_ferry_rounded;
-      case routing.TransportMode.cableCar:
-      case routing.TransportMode.gondola:
-      case routing.TransportMode.funicular:
-        return Icons.airline_seat_legroom_reduced_rounded;
-      default:
-        return Icons.directions_transit_rounded;
-    }
+Color _parseColor(String hexColor) {
+  try {
+    final hex = hexColor.replaceFirst('#', '');
+    return Color(int.parse('FF$hex', radix: 16));
+  } catch (_) {
+    return const Color(0xFF1976D2);
   }
 }
+
+IconData _getModeIcon(routing.TransportMode mode) {
+  switch (mode) {
+    case routing.TransportMode.bus:
+    case routing.TransportMode.trufi:
+    case routing.TransportMode.micro:
+    case routing.TransportMode.miniBus:
+      return Icons.directions_bus_rounded;
+    case routing.TransportMode.rail:
+    case routing.TransportMode.lightRail:
+      return Icons.train_rounded;
+    case routing.TransportMode.subway:
+      return Icons.subway_rounded;
+    case routing.TransportMode.tram:
+      return Icons.tram_rounded;
+    case routing.TransportMode.ferry:
+      return Icons.directions_ferry_rounded;
+    case routing.TransportMode.cableCar:
+    case routing.TransportMode.gondola:
+    case routing.TransportMode.funicular:
+      return Icons.airline_seat_legroom_reduced_rounded;
+    default:
+      return Icons.directions_transit_rounded;
+  }
+}
+
+// ============================================================
+// Marker Widgets
+// ============================================================
 
 /// Origin marker - green circle (same color as search bar)
 class _OriginMarker extends StatelessWidget {
@@ -2289,36 +2452,42 @@ class _MapControlButton extends StatelessWidget {
   }
 }
 
-/// Layer for displaying origin/destination markers before route is found
-class _LocationMarkersLayer extends TrufiLayer {
-  _LocationMarkersLayer(super.controller)
-    : super(id: 'location-markers-layer', layerLevel: 2);
+/// Blue dot marker for current location (Google Maps style)
+class _MyLocationMarker extends StatelessWidget {
+  const _MyLocationMarker();
 
-  void updateMarkers({TrufiLocation? origin, TrufiLocation? destination}) {
-    clearMarkers();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: const Color(0xFF4285F4), // Google blue
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+      ),
+    );
+  }
+}
 
-    if (origin != null) {
-      addMarker(
-        TrufiMarker(
-          id: 'origin-preview',
-          position: LatLng(origin.latitude, origin.longitude),
-          widget: const _OriginMarker(),
-          size: const Size(24, 24),
+/// Accuracy circle around the location marker.
+/// Size is controlled by the parent marker's metersRadius property.
+class _MyLocationAccuracyCircle extends StatelessWidget {
+  const _MyLocationAccuracyCircle();
+
+  @override
+  Widget build(BuildContext context) {
+    // Fill the entire marker size (which scales with zoom via metersRadius)
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF4285F4).withValues(alpha: 0.15),
+        border: Border.all(
+          color: const Color(0xFF4285F4).withValues(alpha: 0.3),
+          width: 1,
         ),
-      );
-    }
-
-    if (destination != null) {
-      addMarker(
-        TrufiMarker(
-          id: 'destination-preview',
-          position: LatLng(destination.latitude, destination.longitude),
-          widget: const _DestinationMarker(),
-          size: const Size(32, 32),
-          alignment: Alignment.topCenter,
-        ),
-      );
-    }
+      ),
+    );
   }
 }
 
@@ -2816,82 +2985,6 @@ class _DateTimeButton extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Layer for displaying user's current location on the map
-class _MyLocationLayer extends TrufiLayer {
-  _MyLocationLayer(super.controller)
-    : super(
-        id: 'my-location-layer',
-        layerLevel: 0,
-      ); // Below origin/destination markers
-
-  void setLocation(LatLng position, double? accuracy) {
-    clearMarkers();
-
-    // Add accuracy circle if available (scales with zoom using metersRadius)
-    if (accuracy != null && accuracy > 0) {
-      addMarker(
-        TrufiMarker(
-          id: 'my-location-accuracy',
-          position: position,
-          widget: const _MyLocationAccuracyCircle(),
-          metersRadius: accuracy, // This makes the marker scale with zoom
-        ),
-      );
-    }
-
-    // Add the blue dot marker (fixed size in pixels)
-    addMarker(
-      TrufiMarker(
-        id: 'my-location-dot',
-        position: position,
-        widget: const _MyLocationMarker(),
-        size: const Size(24, 24),
-        layerLevel: 1,
-        allowOverlap: true,
-      ),
-    );
-  }
-}
-
-/// Blue dot marker for current location (Google Maps style)
-class _MyLocationMarker extends StatelessWidget {
-  const _MyLocationMarker();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: const Color(0xFF4285F4), // Google blue
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 3),
-      ),
-    );
-  }
-}
-
-/// Accuracy circle around the location marker.
-/// Size is controlled by the parent marker's metersRadius property.
-class _MyLocationAccuracyCircle extends StatelessWidget {
-  const _MyLocationAccuracyCircle();
-
-  @override
-  Widget build(BuildContext context) {
-    // Fill the entire marker size (which scales with zoom via metersRadius)
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color(0xFF4285F4).withValues(alpha: 0.15),
-        border: Border.all(
-          color: const Color(0xFF4285F4).withValues(alpha: 0.3),
-          width: 1,
         ),
       ),
     );

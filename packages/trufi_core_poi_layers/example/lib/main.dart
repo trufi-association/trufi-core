@@ -70,7 +70,7 @@ class POILayersDemoPage extends StatefulWidget {
 }
 
 class _POILayersDemoPageState extends State<POILayersDemoPage> {
-  late final TrufiMapController _mapController;
+  final _mapController = TrufiMapController();
 
   POI? _selectedPOI;
 
@@ -82,13 +82,6 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
   void initState() {
     super.initState();
 
-    _mapController = TrufiMapController(
-      initialCameraPosition: const TrufiCameraPosition(
-        target: _initialPosition,
-        zoom: _initialZoom,
-      ),
-    );
-
     // Initialize POI manager after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializePOIs();
@@ -98,9 +91,9 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
   Future<void> _initializePOIs() async {
     try {
       final poiManager = context.read<POILayersManager>();
-      await poiManager.initialize(_mapController);
+      await poiManager.initialize();
     } catch (e, stackTrace) {
-      debugPrint('❌ Error initializing POIs: $e');
+      debugPrint('Error initializing POIs: $e');
       debugPrint('Stack trace: $stackTrace');
     }
   }
@@ -111,11 +104,7 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
     });
   }
 
-  @override
-  void dispose() {
-    _mapController.dispose();
-    super.dispose();
-  }
+
 
   void _showMarkerSelectionDialog(List<POI> pois) {
     if (pois.isEmpty) return;
@@ -143,7 +132,12 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
         children: [
           // Map
           mapEngineManager.currentEngine.buildMap(
+            initialCamera: const TrufiCameraPosition(
+              target: _initialPosition,
+              zoom: _initialZoom,
+            ),
             controller: _mapController,
+            layers: poiManager.buildLayers(),
             onMapClick: (pos) {
               final markers = _mapController.pickMarkersAt(pos, hitboxPx: 40.0);
 
@@ -191,9 +185,11 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
                     icon: Icons.my_location,
                     tooltip: 'Center Map',
                     onPressed: () {
-                      _mapController.updateCamera(
-                        target: _initialPosition,
-                        zoom: _initialZoom,
+                      _mapController.moveCamera(
+                        const TrufiCameraPosition(
+                          target: _initialPosition,
+                          zoom: _initialZoom,
+                        ),
                       );
                     },
                   ),

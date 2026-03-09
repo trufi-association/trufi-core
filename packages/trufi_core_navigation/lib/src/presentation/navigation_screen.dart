@@ -10,12 +10,8 @@ import '../cubit/navigation_cubit.dart';
 import '../models/navigation_config.dart';
 import '../models/navigation_state.dart';
 import '../utils/itinerary_converter.dart';
-import 'layers/navigation_layer.dart';
+import 'layers/navigation_layer.dart' as nav;
 import 'widgets/navigation_bottom_panel.dart';
-
-/// Factory function to create a NavigationLayer with a controller.
-typedef NavigationLayerFactory =
-    NavigationLayer Function(TrufiMapController controller);
 
 /// Screen for turn-by-turn navigation.
 class NavigationScreen extends StatefulWidget {
@@ -24,27 +20,13 @@ class NavigationScreen extends StatefulWidget {
 
   /// Builder for the map widget.
   ///
-  /// The [layerFactory] should be called with the map controller to create
-  /// the navigation layer. The returned layer will be managed by this screen.
-  ///
-  /// Example:
-  /// ```dart
-  /// mapBuilder: (context, layerFactory, userPosition, followUser) {
-  ///   return TrufiMap(
-  ///     controller: mapController,
-  ///     onMapReady: () {
-  ///       final navLayer = layerFactory(mapController);
-  ///       // navLayer is now registered and will be updated automatically
-  ///     },
-  ///   );
-  /// }
-  /// ```
+  /// Receives the current navigation state and a list of layers
+  /// (from NavigationLayer) to pass to TrufiMap.
   final Widget Function(
     BuildContext context,
-    NavigationLayerFactory layerFactory,
     NavigationState state,
-  )
-  mapBuilder;
+    List<TrufiLayer> navigationLayers,
+  ) mapBuilder;
 
   /// Location service to use for tracking.
   final LocationService locationService;
@@ -70,10 +52,9 @@ class NavigationScreen extends StatefulWidget {
     required NavigationRoute route,
     required Widget Function(
       BuildContext context,
-      NavigationLayerFactory layerFactory,
       NavigationState state,
-    )
-    mapBuilder,
+      List<TrufiLayer> navigationLayers,
+    ) mapBuilder,
     required LocationService locationService,
     NavigationConfig config = const NavigationConfig(),
     Widget? modeIcon,
@@ -90,13 +71,15 @@ class NavigationScreen extends StatefulWidget {
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
-                .animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ),
-                ),
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+              ),
+            ),
             child: child,
           );
         },
@@ -106,12 +89,6 @@ class NavigationScreen extends StatefulWidget {
   }
 
   /// Show the navigation screen from an OTP itinerary.
-  ///
-  /// This is a convenience method that converts the itinerary to a
-  /// NavigationRoute and shows the navigation screen.
-  ///
-  /// [mapEngineManager] is used to build the map widget.
-  /// The initial map center uses current location or falls back to route origin.
   static Future<void> showFromItinerary(
     BuildContext context, {
     required routing.Itinerary itinerary,
@@ -121,12 +98,17 @@ class NavigationScreen extends StatefulWidget {
     Widget? modeIcon,
   }) {
     final route = ItineraryConverter.toNavigationRoute(itinerary);
-
-    // Get current location or use route origin as fallback
     final currentLocation = locationService.currentLocation;
     final fallbackCenter = route.geometry.isNotEmpty
         ? route.geometry.first
         : const LatLng(0, 0);
+
+    final initialCamera = TrufiCameraPosition(
+      target: currentLocation != null
+          ? LatLng(currentLocation.latitude, currentLocation.longitude)
+          : fallbackCenter,
+      zoom: 16,
+    );
 
     return show(
       context,
@@ -134,20 +116,11 @@ class NavigationScreen extends StatefulWidget {
       locationService: locationService,
       config: config,
       modeIcon: modeIcon,
-      mapBuilder: (ctx, layerFactory, state) {
-        final controller = TrufiMapController(
-          initialCameraPosition: TrufiCameraPosition(
-            target: currentLocation != null
-                ? LatLng(currentLocation.latitude, currentLocation.longitude)
-                : fallbackCenter,
-            zoom: 16,
-          ),
+      mapBuilder: (ctx, state, navigationLayers) {
+        return mapEngineManager.currentEngine.buildMap(
+          initialCamera: initialCamera,
+          layers: navigationLayers,
         );
-
-        // Create navigation layer
-        layerFactory(controller);
-
-        return mapEngineManager.currentEngine.buildMap(controller: controller);
       },
     );
   }
@@ -159,52 +132,32 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen>
     with WidgetsBindingObserver {
   late final NavigationCubit _cubit;
-  NavigationLayer? _navigationLayer;
-  Widget? _mapWidget;
+  late final nav.NavigationLayer _navLayerBuilder;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Keep screen awake during navigation
     if (widget.config.keepScreenOn) {
       WakelockPlus.enable();
     }
 
-    // Initialize cubit
     _cubit = NavigationCubit(
       locationService: widget.locationService,
       config: widget.config,
     );
 
-    // Start navigation
+    _navLayerBuilder = nav.NavigationLayer();
     _cubit.startNavigation(widget.route);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Build map widget once after dependencies are available
-    _mapWidget ??= widget.mapBuilder(
-      context,
-      _createNavigationLayer,
-      _cubit.state,
-    );
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
-    // Disable wakelock
     WakelockPlus.disable();
-
-    // Clean up
     _cubit.stopNavigation();
     _cubit.close();
-    _navigationLayer?.dispose();
-
     super.dispose();
   }
 
@@ -217,32 +170,30 @@ class _NavigationScreenState extends State<NavigationScreen>
     }
   }
 
-  NavigationLayer _createNavigationLayer(TrufiMapController controller) {
-    _navigationLayer?.dispose();
-    _navigationLayer = NavigationLayer(controller);
-
-    // Apply current state immediately
-    _navigationLayer!.updateNavigation(_cubit.state);
-
-    return _navigationLayer!;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _cubit,
-      child: BlocConsumer<NavigationCubit, NavigationState>(
-        listener: (context, state) {
-          // Update navigation layer when state changes
-          _navigationLayer?.updateNavigation(state);
-        },
+      child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
+          // Build navigation layers from current state
+          final layerData = _navLayerBuilder.buildLayerData(state);
+          final navLayers = [
+            TrufiLayer(
+              id: nav.NavigationLayer.layerId,
+              markers: layerData.markers,
+              lines: layerData.lines,
+            ),
+          ];
+
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.surface,
             body: Stack(
               children: [
-                // Map (built once and cached)
-                if (_mapWidget != null) Positioned.fill(child: _mapWidget!),
+                // Map with declarative layers
+                Positioned.fill(
+                  child: widget.mapBuilder(context, state, navLayers),
+                ),
 
                 // Bottom panel
                 Positioned(
