@@ -76,6 +76,7 @@ class _TrufiAppState extends State<TrufiApp> {
       defaultLocale:
           widget.config.defaultLocale ??
           widget.config.localeConfig.defaultLocale,
+      supportedLocales: widget.config.localeConfig.supportedLocales,
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,

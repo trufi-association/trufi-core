@@ -249,41 +249,27 @@ class _OnboardingLanguageSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final localeManager = LocaleManager.watch(context);
 
+    final locales = localeManager.supportedLocales;
+
     return _OnboardingCard(
       icon: Icons.translate_rounded,
       iconColor: Colors.blue,
       title: l10n.onboardingLanguageTitle,
       child: Column(
         children: [
-          _LanguageOption(
-            languageCode: 'en',
-            languageName: 'English',
-            isSelected: localeManager.currentLocale.languageCode == 'en',
-            onSelect: () {
-              HapticFeedback.selectionClick();
-              localeManager.setLocaleByCode('en');
-            },
-          ),
-          const SizedBox(height: 8),
-          _LanguageOption(
-            languageCode: 'es',
-            languageName: 'Espanol',
-            isSelected: localeManager.currentLocale.languageCode == 'es',
-            onSelect: () {
-              HapticFeedback.selectionClick();
-              localeManager.setLocaleByCode('es');
-            },
-          ),
-          const SizedBox(height: 8),
-          _LanguageOption(
-            languageCode: 'de',
-            languageName: 'Deutsch',
-            isSelected: localeManager.currentLocale.languageCode == 'de',
-            onSelect: () {
-              HapticFeedback.selectionClick();
-              localeManager.setLocaleByCode('de');
-            },
-          ),
+          for (int i = 0; i < locales.length; i++) ...[
+            if (i > 0) const SizedBox(height: 8),
+            _LanguageOption(
+              languageCode: locales[i].languageCode,
+              languageName: LocaleManager.displayNameForCode(locales[i].languageCode),
+              isSelected: localeManager.currentLocale.languageCode ==
+                  locales[i].languageCode,
+              onSelect: () {
+                HapticFeedback.selectionClick();
+                localeManager.setLocaleByCode(locales[i].languageCode);
+              },
+            ),
+          ],
         ],
       ),
     );
