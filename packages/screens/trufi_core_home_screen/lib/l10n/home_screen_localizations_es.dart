@@ -393,18 +393,18 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
       'Intenta online primero, usa offline si falla';
 
   @override
-  String get engineOnlineName => 'Online';
+  String get engineOnlineName => 'En línea';
 
   @override
   String get engineOnlineDescription =>
       'OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.';
 
   @override
-  String get engineOfflineName => 'Offline';
+  String get engineOfflineName => 'Sin conexión';
 
   @override
   String get engineOfflineDescription =>
-      'Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.';
+      'Enrutamiento basado en GTFS. Funciona sin internet.';
 
   @override
   String get limitationRequiresInternet => 'Requiere internet';

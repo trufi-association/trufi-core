@@ -127,7 +127,7 @@ class SettingsLocalizationsEn extends SettingsLocalizations {
 
   @override
   String get engineOfflineDescription =>
-      'GTFS-based routing inspired by GuíaCochala. Works without internet.';
+      'GTFS-based routing. Works without internet.';
 
   @override
   String get limitationRequiresInternet => 'Requires internet';

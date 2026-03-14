@@ -404,7 +404,7 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get engineOfflineDescription =>
-      'GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.';
+      'GTFS-basiertes Routing. Funktioniert ohne Internet.';
 
   @override
   String get limitationRequiresInternet => 'Erfordert Internet';

@@ -1,7 +1,7 @@
 {
   "@@locale": "es",
 
-  "onboardingTitle": "Bienvenido!",
+  "onboardingTitle": "¡Bienvenido!",
   "onboardingSubtitle": "Vamos a configurar tus preferencias",
   "onboardingLanguageTitle": "Elige tu idioma",
   "onboardingThemeTitle": "Elige tu tema",
@@ -13,15 +13,15 @@
   "onboardingComplete": "Comenzar",
 
   "privacyConsentTitle": "Ayuda a mejorar Trufi",
-  "privacyConsentSubtitle": "Ayudanos a mejorar la app compartiendo datos de uso anonimos",
-  "privacyConsentInfoTitle": "Que recopilamos",
+  "privacyConsentSubtitle": "Ayúdanos a mejorar la app compartiendo datos de uso anónimos",
+  "privacyConsentInfoTitle": "Qué recopilamos",
   "privacyConsentInfoLogs": "Registros de errores para ayudarnos a corregir fallos",
-  "privacyConsentInfoRoutes": "Busquedas de rutas para mejorar los datos de transporte",
-  "privacyConsentInfoAnonymous": "Todos los datos son completamente anonimos",
+  "privacyConsentInfoRoutes": "Búsquedas de rutas para mejorar los datos de transporte",
+  "privacyConsentInfoAnonymous": "Todos los datos son completamente anónimos",
   "privacyConsentAccept": "Aceptar y continuar",
   "privacyConsentDecline": "No, gracias",
 
-  "settingsTitle": "Configuracion",
+  "settingsTitle": "Configuración",
   "settingsLanguage": "Idioma",
   "settingsSelectLanguage": "Selecciona tu idioma preferido:",
   "settingsTheme": "Tema",
@@ -37,13 +37,13 @@
 
   "settingsPrivacy": "Privacidad",
   "settingsPrivacySubtitle": "Ayuda a mejorar la app",
-  "settingsPrivacyShareData": "Compartir datos de uso anonimos",
-  "settingsPrivacyShareDataDescription": "Ayudanos a corregir errores y mejorar los datos de transporte",
+  "settingsPrivacyShareData": "Compartir datos de uso anónimos",
+  "settingsPrivacyShareDataDescription": "Ayúdanos a corregir errores y mejorar los datos de transporte",
 
-  "engineOnlineName": "Online",
+  "engineOnlineName": "En línea",
   "engineOnlineDescription": "OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.",
-  "engineOfflineName": "Offline",
-  "engineOfflineDescription": "Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.",
+  "engineOfflineName": "Sin conexión",
+  "engineOfflineDescription": "Enrutamiento basado en GTFS. Funciona sin internet.",
   "limitationRequiresInternet": "Requiere internet",
   "limitationSlower": "Respuesta más lenta",
   "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"

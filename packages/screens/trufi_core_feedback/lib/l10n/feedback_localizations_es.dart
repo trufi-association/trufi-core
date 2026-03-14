@@ -12,7 +12,7 @@ class FeedbackLocalizationsEs extends FeedbackLocalizations {
   String get menuFeedback => 'Comentarios';
 
   @override
-  String get feedbackTitle => 'Nos encantaría saber de ti!';
+  String get feedbackTitle => '¡Nos encantaría saber de ti!';
 
   @override
   String get feedbackContent =>

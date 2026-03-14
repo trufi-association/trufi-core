@@ -110,7 +110,7 @@
   "engineOnlineName": "Online",
   "engineOnlineDescription": "OpenTripPlanner 2.8. Echtzeit-Routing mit detaillierten Fußweganweisungen.",
   "engineOfflineName": "Offline",
-  "engineOfflineDescription": "GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.",
+  "engineOfflineDescription": "GTFS-basiertes Routing. Funktioniert ohne Internet.",
   "limitationRequiresInternet": "Erfordert Internet",
   "limitationSlower": "Langsamere Antwort",
   "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte"

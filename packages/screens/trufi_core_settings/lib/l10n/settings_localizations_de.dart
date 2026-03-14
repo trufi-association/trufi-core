@@ -15,10 +15,10 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get onboardingSubtitle => 'Lass uns deine Einstellungen festlegen';
 
   @override
-  String get onboardingLanguageTitle => 'Wahle deine Sprache';
+  String get onboardingLanguageTitle => 'Wähle deine Sprache';
 
   @override
-  String get onboardingThemeTitle => 'Wahle dein Design';
+  String get onboardingThemeTitle => 'Wähle dein Design';
 
   @override
   String get onboardingThemeLight => 'Hell';
@@ -30,10 +30,10 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get onboardingThemeSystem => 'System';
 
   @override
-  String get onboardingMapTitle => 'Wahle deinen Kartenstil';
+  String get onboardingMapTitle => 'Wähle deinen Kartenstil';
 
   @override
-  String get onboardingRoutingTitle => 'Wahle deine Routenplanung';
+  String get onboardingRoutingTitle => 'Wähle deine Routenplanung';
 
   @override
   String get onboardingComplete => 'Los geht\'s';
@@ -50,7 +50,7 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
 
   @override
   String get privacyConsentInfoLogs =>
-      'Fehlerprotokolle, um Absturze und Bugs zu beheben';
+      'Fehlerprotokolle, um Abstürze und Bugs zu beheben';
 
   @override
   String get privacyConsentInfoRoutes =>
@@ -58,7 +58,7 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
 
   @override
   String get privacyConsentInfoAnonymous =>
-      'Alle Daten sind vollstandig anonym';
+      'Alle Daten sind vollständig anonym';
 
   @override
   String get privacyConsentAccept => 'Akzeptieren und fortfahren';
@@ -73,13 +73,13 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get settingsLanguage => 'Sprache';
 
   @override
-  String get settingsSelectLanguage => 'Wahlen Sie Ihre bevorzugte Sprache:';
+  String get settingsSelectLanguage => 'Wählen Sie Ihre bevorzugte Sprache:';
 
   @override
   String get settingsTheme => 'Design';
 
   @override
-  String get settingsSelectTheme => 'Wahlen Sie Ihr bevorzugtes Design:';
+  String get settingsSelectTheme => 'Wählen Sie Ihr bevorzugtes Design:';
 
   @override
   String get settingsThemeLight => 'Heller Modus';
@@ -94,14 +94,14 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get settingsMap => 'Karte';
 
   @override
-  String get settingsSelectMapType => 'Wahlen Sie Ihren bevorzugten Kartentyp:';
+  String get settingsSelectMapType => 'Wählen Sie Ihren bevorzugten Kartentyp:';
 
   @override
   String get settingsRouting => 'Routenplanung';
 
   @override
   String get settingsSelectRoutingEngine =>
-      'Wahlen Sie Ihre bevorzugte Routenplanung:';
+      'Wählen Sie Ihre bevorzugte Routenplanung:';
 
   @override
   String get settingsPrivacy => 'Datenschutz';
@@ -128,7 +128,7 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
 
   @override
   String get engineOfflineDescription =>
-      'GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.';
+      'GTFS-basiertes Routing. Funktioniert ohne Internet.';
 
   @override
   String get limitationRequiresInternet => 'Erfordert Internet';
