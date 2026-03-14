@@ -203,7 +203,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${localization.removePlaceConfirmation} "${place.name}"?',
+                localization.removePlaceConfirmation(place.name),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
