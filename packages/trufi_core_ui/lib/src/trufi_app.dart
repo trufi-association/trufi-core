@@ -84,6 +84,7 @@ class _TrufiAppState extends State<TrufiApp> {
       screens: widget.config.screens,
       socialMediaLinks: widget.config.socialMediaLinks,
       initialRoute: _initialRoute,
+      appName: widget.config.appName,
     );
     _sharedRouteNotifier = SharedRouteNotifier();
 

@@ -10,6 +10,7 @@ class AppRouter {
   final List<SocialMediaLink> socialMediaLinks;
   final GlobalKey<NavigatorState> rootNavigatorKey;
   final GlobalKey<NavigatorState> shellNavigatorKey;
+  final String appName;
 
   /// Initial route to navigate to (for web deep linking)
   final String? initialRoute;
@@ -20,6 +21,7 @@ class AppRouter {
     required this.screens,
     this.socialMediaLinks = const [],
     this.initialRoute,
+    this.appName = 'Trufi App',
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
   }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
@@ -99,6 +101,7 @@ class AppRouter {
               currentPath: state.uri.path,
               screens: screens,
               socialMediaLinks: socialMediaLinks,
+              appName: appName,
               child: child,
             );
           },
@@ -131,6 +134,7 @@ class AppShell extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
+  final String appName;
 
   const AppShell({
     super.key,
@@ -138,6 +142,7 @@ class AppShell extends StatelessWidget {
     required this.currentPath,
     required this.screens,
     this.socialMediaLinks = const [],
+    this.appName = 'Trufi App',
   });
 
   @override
@@ -175,6 +180,7 @@ class AppShell extends StatelessWidget {
         currentPath: currentPath,
         screens: screens,
         socialMediaLinks: socialMediaLinks,
+        appName: appName,
       ),
       body: child,
     );
@@ -186,7 +192,7 @@ class AppShell extends StatelessWidget {
         return screen.getLocalizedTitle(context);
       }
     }
-    return 'Trufi App';
+    return appName;
   }
 }
 
@@ -195,12 +201,14 @@ class AppDrawer extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
+  final String appName;
 
   const AppDrawer({
     super.key,
     required this.currentPath,
     required this.screens,
     this.socialMediaLinks = const [],
+    this.appName = 'Trufi App',
   });
 
   @override
@@ -213,7 +221,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           // Modern header with layered design
-          _DrawerHeader(theme: theme),
+          _DrawerHeader(theme: theme, appName: appName),
 
           const SizedBox(height: 8),
 
@@ -274,8 +282,9 @@ class AppDrawer extends StatelessWidget {
 /// Modern drawer header with layered design
 class _DrawerHeader extends StatelessWidget {
   final ThemeData theme;
+  final String appName;
 
-  const _DrawerHeader({required this.theme});
+  const _DrawerHeader({required this.theme, required this.appName});
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +326,7 @@ class _DrawerHeader extends StatelessWidget {
               const SizedBox(height: 16),
               // App name
               Text(
-                'Trufi App',
+                appName,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onSurface,
