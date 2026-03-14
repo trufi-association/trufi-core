@@ -107,6 +107,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   MapMoveCallback? _mapMoveCallback;
   StopSelectionCallback? _stopSelectionCallback;
   int? _selectedStopIndex;
+  double? _headerMinSize; // Computed from measured header height
 
   @override
   void initState() {
@@ -601,24 +602,42 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         _buildTopBar(context, theme, colorScheme),
 
         // Bottom sheet with stops only
-        TrufiBottomSheet(
-          controller: _sheetController,
-          initialChildSize: 0.35,
-          minChildSize: 0.15,
-          maxChildSize: 0.5,
-          snap: true,
-          snapSizes: const [0.15, 0.35, 0.5],
-          builder: (context, scrollController) => _StopsSheetContent(
-            route: _route!,
-            scrollController: scrollController,
-            selectedStopIndex: _selectedStopIndex,
-            onStopTap: (index, lat, lng) {
-              HapticFeedback.selectionClick();
-              setState(() => _selectedStopIndex = index);
-              _mapMoveCallback?.call(lat, lng);
-              _stopSelectionCallback?.call(index);
-            },
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final screenHeight = constraints.maxHeight;
+            // Grabber height in TrufiBottomSheet: 12 top + 4 bar + 8 bottom = 24
+            const grabberHeight = 24.0;
+            final minSize = _headerMinSize != null
+                ? ((_headerMinSize! + grabberHeight) / screenHeight)
+                    .clamp(0.1, 0.4)
+                : 0.12;
+            final snapSizes = [minSize, 0.35, 0.85];
+
+            return TrufiBottomSheet(
+              controller: _sheetController,
+              initialChildSize: 0.35,
+              minChildSize: minSize,
+              maxChildSize: 0.85,
+              snap: true,
+              snapSizes: snapSizes,
+              builder: (context, scrollController) => _StopsSheetContent(
+                route: _route!,
+                scrollController: scrollController,
+                selectedStopIndex: _selectedStopIndex,
+                onHeaderMeasured: (height) {
+                  if (_headerMinSize != height) {
+                    setState(() => _headerMinSize = height);
+                  }
+                },
+                onStopTap: (index, lat, lng) {
+                  HapticFeedback.selectionClick();
+                  setState(() => _selectedStopIndex = index);
+                  _mapMoveCallback?.call(lat, lng);
+                  _stopSelectionCallback?.call(index);
+                },
+              ),
+            );
+          },
         ),
       ],
     );
@@ -751,62 +770,118 @@ class _RouteDistanceCalculator {
 }
 
 /// Content for the stops bottom sheet
-class _StopsSheetContent extends StatelessWidget {
+class _StopsSheetContent extends StatefulWidget {
   final TransportRouteDetails route;
   final ScrollController scrollController;
   final int? selectedStopIndex;
   final void Function(int index, double lat, double lng)? onStopTap;
+  final void Function(double headerHeight)? onHeaderMeasured;
 
   const _StopsSheetContent({
     required this.route,
     required this.scrollController,
     this.selectedStopIndex,
     this.onStopTap,
+    this.onHeaderMeasured,
   });
+
+  @override
+  State<_StopsSheetContent> createState() => _StopsSheetContentState();
+}
+
+class _StopsSheetContentState extends State<_StopsSheetContent> {
+  final _headerKey = GlobalKey();
+  double _headerHeight = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureHeader());
+  }
+
+  @override
+  void didUpdateWidget(covariant _StopsSheetContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureHeader());
+  }
+
+  void _measureHeader() {
+    final box = _headerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box != null && box.hasSize && box.size.height != _headerHeight) {
+      setState(() => _headerHeight = box.size.height);
+      widget.onHeaderMeasured?.call(box.size.height);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = route.stops ?? [];
+    final stops = widget.route.stops ?? [];
 
-    return Column(
-      children: [
-        // Fixed header section
-        _buildHeader(context, theme, colorScheme, stops),
+    final header = KeyedSubtree(
+      key: _headerKey,
+      child: _buildHeader(context, theme, colorScheme, stops),
+    );
 
-        // Scrollable stops list
-        Expanded(
-          child: stops.isEmpty
-              ? const _EmptyStopsInline()
-              : ListView.builder(
-                  controller: scrollController,
-                  padding: EdgeInsets.zero,
-                  itemCount: stops.length,
-                  itemBuilder: (context, index) {
-                    final stop = stops[index];
-                    final isFirst = index == 0;
-                    final isLast = index == stops.length - 1;
-                    final isSelected = selectedStopIndex == index;
-                    final routeColor =
-                        route.backgroundColor ?? colorScheme.primary;
+    // Before measurement, use Column so the header can size itself.
+    // After measurement, switch to CustomScrollView with pinned header.
+    if (_headerHeight == 0) {
+      return Column(
+        children: [
+          header,
+          Expanded(child: ListView(controller: widget.scrollController)),
+        ],
+      );
+    }
 
-                    return _StopTimelineItem(
-                      stop: stop,
-                      isFirst: isFirst,
-                      isLast: isLast,
-                      isSelected: isSelected,
-                      routeColor: routeColor,
-                      onTap: onStopTap != null
-                          ? () {
-                              HapticFeedback.selectionClick();
-                              onStopTap!(index, stop.latitude, stop.longitude);
-                            }
-                          : null,
-                    );
-                  },
-                ),
+    return CustomScrollView(
+      controller: widget.scrollController,
+      slivers: [
+        // Pinned header — stays fixed at top, drag on it still expands the sheet
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverHeaderDelegate(
+            child: header,
+            height: _headerHeight,
+          ),
         ),
+
+        // Stops list
+        if (stops.isEmpty)
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: _EmptyStopsInline(),
+          )
+        else
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final stop = stops[index];
+                final isFirst = index == 0;
+                final isLast = index == stops.length - 1;
+                final isSelected = widget.selectedStopIndex == index;
+                final routeColor =
+                    widget.route.backgroundColor ?? colorScheme.primary;
+
+                return _StopTimelineItem(
+                  stop: stop,
+                  isFirst: isFirst,
+                  isLast: isLast,
+                  isSelected: isSelected,
+                  routeColor: routeColor,
+                  onTap: widget.onStopTap != null
+                      ? () {
+                          HapticFeedback.selectionClick();
+                          widget.onStopTap!(
+                              index, stop.latitude, stop.longitude);
+                        }
+                      : null,
+                );
+              },
+              childCount: stops.length,
+            ),
+          ),
       ],
     );
   }
@@ -817,14 +892,14 @@ class _StopsSheetContent extends StatelessWidget {
     ColorScheme colorScheme,
     List<TransportStop> stops,
   ) {
-    final routeColor = route.backgroundColor ?? colorScheme.primary;
-    final distance = _RouteDistanceCalculator.calculate(route.geometry);
+    final routeColor = widget.route.backgroundColor ?? colorScheme.primary;
+    final distance = _RouteDistanceCalculator.calculate(widget.route.geometry);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Origin/Destination header (Google Maps style)
-        if (route.hasOriginDestination)
+        if (widget.route.hasOriginDestination)
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
             child: Row(
@@ -876,7 +951,7 @@ class _StopsSheetContent extends StatelessWidget {
                     children: [
                       // Origin
                       Text(
-                        route.longNameStart,
+                        widget.route.longNameStart,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -887,7 +962,7 @@ class _StopsSheetContent extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        route.longNameLast,
+                        widget.route.longNameLast,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -945,12 +1020,12 @@ class _StopsSheetContent extends StatelessWidget {
                 // Mode
                 Expanded(
                   child: _StatItem(
-                    icon: route.modeIcon != null
+                    icon: widget.route.modeIcon != null
                         ? null
                         : Icons.directions_bus_rounded,
-                    customIcon: route.modeIcon,
+                    customIcon: widget.route.modeIcon,
                     label: 'Mode',
-                    value: route.modeName ?? 'Bus',
+                    value: widget.route.modeName ?? 'Bus',
                     color: routeColor,
                   ),
                 ),
@@ -983,6 +1058,35 @@ class _StopsSheetContent extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Delegate for pinned header with a known height.
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  _SliverHeaderDelegate({required this.child, required this.height});
+
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _SliverHeaderDelegate oldDelegate) =>
+      height != oldDelegate.height || child != oldDelegate.child;
 }
 
 /// Inline empty stops state for sliver
