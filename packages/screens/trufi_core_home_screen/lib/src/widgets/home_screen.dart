@@ -729,6 +729,34 @@ class _HomeScreenState extends State<HomeScreen>
             allowOverlap: true,
           ),
         );
+
+        // Boarding stop marker (where you get on)
+        if (leg.fromPlace != null) {
+          markers.add(
+            TrufiMarker(
+              id: 'boarding-$i',
+              position: leg.fromPlace!.latLng,
+              widget: _TransitStopMarker(color: color, isBoarding: true),
+              size: const Size(20, 20),
+              layerLevel: 2,
+              allowOverlap: true,
+            ),
+          );
+        }
+
+        // Alighting stop marker (where you get off)
+        if (leg.toPlace != null) {
+          markers.add(
+            TrufiMarker(
+              id: 'alighting-$i',
+              position: leg.toPlace!.latLng,
+              widget: _TransitStopMarker(color: color, isBoarding: false),
+              size: const Size(20, 20),
+              layerLevel: 2,
+              allowOverlap: true,
+            ),
+          );
+        }
       }
 
       // Add bicycle label at midpoint for bicycle legs
@@ -2391,6 +2419,34 @@ class _TransitRouteLabel extends StatelessWidget {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Marker for transit boarding/alighting stops on itinerary map
+class _TransitStopMarker extends StatelessWidget {
+  final Color color;
+  final bool isBoarding;
+
+  const _TransitStopMarker({required this.color, required this.isBoarding});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
     );
