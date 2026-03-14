@@ -1663,7 +1663,7 @@ class _HomeScreenState extends State<HomeScreen>
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              '${itineraries.length} ${itineraries.length == 1 ? 'route' : 'routes'} found',
+              HomeScreenLocalizations.of(context).routesFound(itineraries.length),
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
