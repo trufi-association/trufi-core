@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
-import 'package:trufi_core_utils/trufi_core_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/feedback_localizations.dart';
@@ -213,28 +212,8 @@ class _FeedbackContentState extends State<_FeedbackContent>
     HapticFeedback.lightImpact();
 
     try {
-      final localization = FeedbackLocalizations.of(context);
-      final version = await PackageInfoPlatform.version();
-
-      String geoParam = '';
-      if (widget.config.getCurrentLocation != null) {
-        final location = await widget.config.getCurrentLocation!();
-        if (location != null) {
-          geoParam = '${location.$1},${location.$2}';
-        }
-      }
-
-      final uri = Uri.parse(widget.config.feedbackUrl).replace(
-        queryParameters: {
-          'lang': localization.localeName,
-          if (geoParam.isNotEmpty) 'geo': geoParam,
-          'app': version,
-        },
-      );
-
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
+      final uri = Uri.parse(widget.config.feedbackUrl);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -582,11 +561,6 @@ class _FeedbackItem extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-          ),
-          Icon(
-            Icons.chevron_right_rounded,
-            size: 20,
-            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
         ],
       ),
