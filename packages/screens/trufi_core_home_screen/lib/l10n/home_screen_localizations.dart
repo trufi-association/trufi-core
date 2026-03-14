@@ -127,7 +127,7 @@ abstract class HomeScreenLocalizations {
   /// **'Select origin and destination to find routes'**
   String get selectLocations;
 
-  /// Message shown when no routes are available
+  /// Detailed message shown when no routes are available
   ///
   /// In en, this message translates to:
   /// **'No public transit routes found for this trip. Try a different destination or adjust your search settings.'**

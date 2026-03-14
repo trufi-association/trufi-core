@@ -37,6 +37,12 @@ class FlutterMapEngine implements ITrufiMapEngine {
       displayDescription ?? 'Classic OpenStreetMap with raster tiles';
 
   @override
+  String localizedName(BuildContext context) => name;
+
+  @override
+  String localizedDescription(BuildContext context) => description;
+
+  @override
   Widget? get previewWidget =>
       preview ??
       Container(
