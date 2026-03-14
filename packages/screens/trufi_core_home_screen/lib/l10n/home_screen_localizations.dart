@@ -786,6 +786,12 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'No walking route on map'**
   String get limitationNoWalkingRoute;
+
+  /// Disclaimer shown above route results about estimated times
+  ///
+  /// In en, this message translates to:
+  /// **'Travel times are estimated and may vary due to traffic'**
+  String get estimatedTimesDisclaimer;
 }
 
 class _HomeScreenLocalizationsDelegate

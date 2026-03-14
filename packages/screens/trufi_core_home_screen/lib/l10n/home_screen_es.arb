@@ -113,5 +113,6 @@
   "engineOfflineDescription": "Enrutamiento basado en GTFS. Funciona sin internet.",
   "limitationRequiresInternet": "Requiere internet",
   "limitationSlower": "Respuesta más lenta",
-  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"
+  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa",
+  "estimatedTimesDisclaimer": "Los tiempos son estimados y pueden variar según el tráfico"
 }

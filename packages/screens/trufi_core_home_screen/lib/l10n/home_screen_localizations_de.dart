@@ -414,4 +414,8 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get limitationNoWalkingRoute => 'Keine Fußweg-Route auf Karte';
+
+  @override
+  String get estimatedTimesDisclaimer =>
+      'Reisezeiten sind geschätzt und können je nach Verkehr variieren';
 }

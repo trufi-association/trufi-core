@@ -113,5 +113,6 @@
   "engineOfflineDescription": "GTFS-basiertes Routing. Funktioniert ohne Internet.",
   "limitationRequiresInternet": "Erfordert Internet",
   "limitationSlower": "Langsamere Antwort",
-  "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte"
+  "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte",
+  "estimatedTimesDisclaimer": "Reisezeiten sind geschätzt und können je nach Verkehr variieren"
 }

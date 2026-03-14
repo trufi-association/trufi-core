@@ -213,16 +213,18 @@ class _ItineraryListState extends State<ItineraryList> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       shrinkWrap: widget.shrinkWrap,
       physics: widget.shrinkWrap ? const NeverScrollableScrollPhysics() : null,
-      itemCount: groups.length,
+      itemCount: groups.length + 1,
       itemBuilder: (context, index) {
-        final group = groups[index];
+        if (index == 0) return _EstimatedTimesBanner(l10n: l10n);
+        final groupIndex = index - 1;
+        final group = groups[groupIndex];
         final isExpanded = _expandedGroups.contains(group.signature);
         final isSelected = group.alternatives.contains(state.selectedItinerary);
 
         return TweenAnimationBuilder<double>(
-          key: ValueKey('group-$index'),
+          key: ValueKey('group-$groupIndex'),
           tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 200 + (index * 50)),
+          duration: Duration(milliseconds: 200 + (groupIndex * 50)),
           curve: Curves.easeOutCubic,
           builder: (context, value, child) {
             return Transform.translate(
@@ -326,19 +328,22 @@ class _ItineraryListState extends State<ItineraryList> {
     RoutePlannerState state,
     RoutePlannerCubit cubit,
   ) {
+    final l10n = HomeScreenLocalizations.of(context);
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 4),
       shrinkWrap: widget.shrinkWrap,
       physics: widget.shrinkWrap ? const NeverScrollableScrollPhysics() : null,
-      itemCount: itineraries.length,
+      itemCount: itineraries.length + 1,
       itemBuilder: (context, index) {
-        final itinerary = itineraries[index];
+        if (index == 0) return _EstimatedTimesBanner(l10n: l10n);
+        final itemIndex = index - 1;
+        final itinerary = itineraries[itemIndex];
         final isSelected = itinerary == state.selectedItinerary;
 
         return TweenAnimationBuilder<double>(
-          key: ValueKey('itinerary-$index'),
+          key: ValueKey('itinerary-$itemIndex'),
           tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 200 + (index * 50)),
+          duration: Duration(milliseconds: 200 + (itemIndex * 50)),
           curve: Curves.easeOutCubic,
           builder: (context, value, child) {
             return Transform.translate(
@@ -692,6 +697,41 @@ class _AlternativeTimeCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Banner shown above route results to indicate times are estimated.
+class _EstimatedTimesBanner extends StatelessWidget {
+  final HomeScreenLocalizations l10n;
+
+  const _EstimatedTimesBanner({required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: Row(
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            size: 16,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.estimatedTimesDisclaimer,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

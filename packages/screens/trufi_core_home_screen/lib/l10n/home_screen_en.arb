@@ -595,5 +595,9 @@
   "limitationNoWalkingRoute": "No walking route on map",
   "@limitationNoWalkingRoute": {
     "description": "Limitation tag for engines that don't show walking routes on map"
+  },
+  "estimatedTimesDisclaimer": "Travel times are estimated and may vary due to traffic",
+  "@estimatedTimesDisclaimer": {
+    "description": "Disclaimer shown above route results about estimated times"
   }
 }
