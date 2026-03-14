@@ -21,7 +21,11 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   String get selectLocations => 'Selecciona origen y destino para buscar rutas';
 
   @override
-  String get noRoutesFound => 'No se encontraron rutas';
+  String get noRoutesFound =>
+      'No encontramos rutas de transporte público para este trayecto. Intenta con otro destino o ajusta los parámetros de búsqueda.';
+
+  @override
+  String get noRoutesFoundShort => 'No se encontraron rutas para este trayecto';
 
   @override
   String get errorNoRoutes => 'Error al cargar rutas';

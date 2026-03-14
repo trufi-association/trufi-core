@@ -1612,7 +1612,7 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                state.error ?? l10n.errorNoRoutes,
+                _resolveError(state.error, l10n),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.error,
                 ),
@@ -1701,6 +1701,12 @@ class _HomeScreenState extends State<HomeScreen>
         ],
       ),
     );
+  }
+
+  /// Resolve error key to localized short string (for banners).
+  String _resolveError(String? error, HomeScreenLocalizations l10n) {
+    if (error == noRoutesErrorKey) return l10n.noRoutesFoundShort;
+    return error ?? l10n.errorNoRoutes;
   }
 
   Widget _buildCloseButton() {
@@ -1984,7 +1990,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 if (state.hasError)
                   Text(
-                    state.error ?? l10n.errorNoRoutes,
+                    _resolveError(state.error, l10n),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.error,
                     ),

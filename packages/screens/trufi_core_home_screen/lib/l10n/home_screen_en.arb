@@ -16,9 +16,13 @@
   "@selectLocations": {
     "description": "Message shown when no locations are selected"
   },
-  "noRoutesFound": "No routes found",
+  "noRoutesFound": "No public transit routes found for this trip. Try a different destination or adjust your search settings.",
   "@noRoutesFound": {
-    "description": "Message shown when no routes are available"
+    "description": "Detailed message shown when no routes are available"
+  },
+  "noRoutesFoundShort": "No routes found for this trip",
+  "@noRoutesFoundShort": {
+    "description": "Short message for error banner when no routes are available"
   },
   "errorNoRoutes": "Error loading routes",
   "@errorNoRoutes": {

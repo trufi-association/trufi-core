@@ -130,8 +130,14 @@ abstract class HomeScreenLocalizations {
   /// Message shown when no routes are available
   ///
   /// In en, this message translates to:
-  /// **'No routes found'**
+  /// **'No public transit routes found for this trip. Try a different destination or adjust your search settings.'**
   String get noRoutesFound;
+
+  /// Short message for error banner when no routes are available
+  ///
+  /// In en, this message translates to:
+  /// **'No routes found for this trip'**
+  String get noRoutesFoundShort;
 
   /// Error message when routes fail to load
   ///

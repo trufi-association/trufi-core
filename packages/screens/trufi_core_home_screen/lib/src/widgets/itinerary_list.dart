@@ -425,7 +425,9 @@ class _ItineraryListState extends State<ItineraryList> {
           ),
           const SizedBox(height: 16),
           Text(
-            state.error ?? l10n.errorNoRoutes,
+            state.error == noRoutesErrorKey
+                ? l10n.noRoutesFound
+                : (state.error ?? l10n.errorNoRoutes),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,

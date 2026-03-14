@@ -21,7 +21,11 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   String get selectLocations => 'Wähle Start und Ziel, um Routen zu finden';
 
   @override
-  String get noRoutesFound => 'Keine Routen gefunden';
+  String get noRoutesFound =>
+      'Keine ÖPNV-Routen für diese Strecke gefunden. Versuche ein anderes Ziel oder passe die Sucheinstellungen an.';
+
+  @override
+  String get noRoutesFoundShort => 'Keine Routen für diese Strecke gefunden';
 
   @override
   String get errorNoRoutes => 'Fehler beim Laden der Routen';
