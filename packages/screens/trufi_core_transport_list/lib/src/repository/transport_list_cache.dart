@@ -182,6 +182,9 @@ class CachedRoutePattern {
   final String? color;
   final String? textColor;
   final String? mode;
+  final String? agencyName;
+  final String? headsign;
+  final int? directionId;
 
   const CachedRoutePattern({
     required this.id,
@@ -192,6 +195,9 @@ class CachedRoutePattern {
     this.color,
     this.textColor,
     this.mode,
+    this.agencyName,
+    this.headsign,
+    this.directionId,
   });
 
   factory CachedRoutePattern.fromJson(Map<String, dynamic> json) {
@@ -204,6 +210,9 @@ class CachedRoutePattern {
       color: json['color'] as String?,
       textColor: json['textColor'] as String?,
       mode: json['mode'] as String?,
+      agencyName: json['agencyName'] as String?,
+      headsign: json['headsign'] as String?,
+      directionId: json['directionId'] as int?,
     );
   }
 
@@ -217,6 +226,9 @@ class CachedRoutePattern {
       'color': color,
       'textColor': textColor,
       'mode': mode,
+      'agencyName': agencyName,
+      'headsign': headsign,
+      'directionId': directionId,
     };
   }
 }
@@ -235,6 +247,9 @@ class CachedRouteDetails extends CachedRoutePattern {
     super.color,
     super.textColor,
     super.mode,
+    super.agencyName,
+    super.headsign,
+    super.directionId,
     this.geometry,
     this.stops,
   });
@@ -249,6 +264,8 @@ class CachedRouteDetails extends CachedRoutePattern {
       color: json['color'] as String?,
       textColor: json['textColor'] as String?,
       mode: json['mode'] as String?,
+      agencyName: json['agencyName'] as String?,
+      headsign: json['headsign'] as String?,
       geometry: (json['geometry'] as List<dynamic>?)
           ?.map((e) => CachedLatLng.fromJson(e as Map<String, dynamic>))
           .toList(),

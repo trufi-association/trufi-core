@@ -76,6 +76,9 @@ class TransportDetailScreen extends StatefulWidget {
         textColor: route.route?.textColor != null
             ? Color(int.parse('FF${route.route!.textColor}', radix: 16))
             : null,
+        agencyName: route.route?.agencyName,
+        headsign: route.headsign,
+        directionId: route.directionId,
         geometry: route.geometry
             ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
             .toList(),
@@ -819,7 +822,9 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = widget.route.stops ?? [];
+    final stops = widget.route.directionId == 1
+        ? (widget.route.stops ?? []).reversed.toList()
+        : widget.route.stops ?? [];
 
     final header = KeyedSubtree(
       key: _headerKey,
@@ -953,7 +958,9 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     children: [
                       // Origin
                       Text(
-                        widget.route.longNameStart,
+                        widget.route.directionId == 1
+                            ? widget.route.longNameLast
+                            : widget.route.longNameStart,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -964,7 +971,9 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        widget.route.longNameLast,
+                        widget.route.directionId == 1
+                            ? widget.route.longNameStart
+                            : widget.route.longNameLast,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -1369,7 +1378,9 @@ class _SidePanelStopsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = route.stops ?? [];
+    final stops = route.directionId == 1
+        ? (route.stops ?? []).reversed.toList()
+        : route.stops ?? [];
     final routeColor = route.backgroundColor ?? colorScheme.primary;
     final distance = _RouteDistanceCalculator.calculate(route.geometry);
 
@@ -1428,7 +1439,9 @@ class _SidePanelStopsContent extends StatelessWidget {
                     children: [
                       // Origin
                       Text(
-                        route.longNameStart,
+                        route.directionId == 1
+                            ? route.longNameLast
+                            : route.longNameStart,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -1439,7 +1452,9 @@ class _SidePanelStopsContent extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        route.longNameLast,
+                        route.directionId == 1
+                            ? route.longNameStart
+                            : route.longNameLast,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -1757,7 +1772,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
     TransportRouteDetails route,
     List<TrufiMarker> markers,
   ) {
-    final stops = route.stops ?? [];
+    final stops = route.directionId == 1
+        ? (route.stops ?? []).reversed.toList()
+        : route.stops ?? [];
     if (stops.isEmpty) return;
 
     final routeColor = route.backgroundColor ?? Colors.blue;

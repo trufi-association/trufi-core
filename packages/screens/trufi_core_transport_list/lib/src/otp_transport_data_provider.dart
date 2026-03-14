@@ -265,6 +265,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(route.route?.color),
       textColor: _parseColor(route.route?.textColor),
       modeIcon: _getModeIcon(route.route?.mode),
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
     );
   }
 
@@ -279,6 +282,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(route.route?.color),
       textColor: _parseColor(route.route?.textColor),
       modeIcon: _getModeIcon(route.route?.mode),
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
       modeName: route.route?.mode?.name,
       geometry: route.geometry
           ?.map(
@@ -310,6 +316,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       color: route.route?.color,
       textColor: route.route?.textColor,
       mode: route.route?.mode?.name,
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
     );
   }
 
@@ -324,6 +333,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       color: route.route?.color,
       textColor: route.route?.textColor,
       mode: route.route?.mode?.name,
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
       geometry: route.geometry
           ?.map(
             (latLng) => CachedLatLng(
@@ -356,6 +368,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(cached.color),
       textColor: _parseColor(cached.textColor),
       modeIcon: _getModeIconFromString(cached.mode),
+      agencyName: cached.agencyName,
+      headsign: cached.headsign,
+      directionId: cached.directionId,
     );
   }
 
@@ -372,6 +387,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(cached.color),
       textColor: _parseColor(cached.textColor),
       modeIcon: _getModeIconFromString(cached.mode),
+      agencyName: cached.agencyName,
+      headsign: cached.headsign,
+      directionId: cached.directionId,
       modeName: cached.mode,
       geometry: cached.geometry
           ?.map(

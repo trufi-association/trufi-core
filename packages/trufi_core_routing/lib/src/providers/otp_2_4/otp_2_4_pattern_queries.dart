@@ -5,12 +5,17 @@ const String allPatterns = r'''
     id
     name
     code
+    directionId
+    headsign
     route {
       longName
       shortName
       color
       mode
       textColor
+      agency {
+        name
+      }
     }
   }
 }
@@ -23,12 +28,17 @@ query pattern($id: String!) {
     id
     name
     code
+    directionId
+    headsign
     route {
       longName
       shortName
       color
       mode
       textColor
+      agency {
+        name
+      }
     }
     geometry {
       lat

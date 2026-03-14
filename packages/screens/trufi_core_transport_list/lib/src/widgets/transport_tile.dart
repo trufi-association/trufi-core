@@ -9,8 +9,12 @@ class TransportTile extends StatelessWidget {
 
   const TransportTile({super.key, required this.route, required this.onTap});
 
-  /// Get the primary text to display (destination or route name)
+  /// Get the primary text to display (headsign or destination)
   String _getPrimaryText(TransportRoute route) {
+    // Use headsign if available (shows direction-specific destination)
+    if (route.headsign != null && route.headsign!.isNotEmpty) {
+      return route.headsign!;
+    }
     // If has origin → destination format, show destination
     if (route.hasOriginDestination) {
       return route.longNameLast;
@@ -23,8 +27,12 @@ class TransportTile extends StatelessWidget {
   }
 
   /// Get the secondary text (origin → destination or null)
+  /// For directionId=1 (reverse), invert the origin/destination.
   String? _getSecondaryText(TransportRoute route) {
     if (route.hasOriginDestination) {
+      if (route.directionId == 1) {
+        return '${route.longNameLast} → ${route.longNameStart}';
+      }
       return '${route.longNameStart} → ${route.longNameLast}';
     }
     return null;
