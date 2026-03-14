@@ -667,31 +667,38 @@ class _LegItemState extends State<_LegItem> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: widget.onRouteTap != null ? _handleRouteTap : null,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                decoration: BoxDecoration(
-                  color: widget.lineColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      _getModeIcon(leg.transportMode),
-                      size: 14,
-                      color: Colors.white,
+              child: Builder(
+                builder: (context) {
+                  final badgeTextColor = widget.lineColor.computeLuminance() > 0.5
+                      ? Colors.black87
+                      : Colors.white;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: widget.lineColor,
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      leg.displayName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _getModeIcon(leg.transportMode),
+                          size: 14,
+                          color: badgeTextColor,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          leg.displayName,
+                          style: TextStyle(
+                            color: badgeTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 8),

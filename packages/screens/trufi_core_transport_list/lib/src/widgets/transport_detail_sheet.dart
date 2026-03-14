@@ -28,7 +28,6 @@ class TransportDetailSheet extends StatelessWidget {
         final isFirst = index == 0;
         final isLast = index == stops.length - 1;
         final routeColor = route.backgroundColor ?? colorScheme.primary;
-
         return _StopTimelineItem(
           stop: stop,
           isFirst: isFirst,
@@ -266,7 +265,9 @@ class _TimelineNode extends StatelessWidget {
         child: Icon(
           isStart ? Icons.trip_origin_rounded : Icons.location_on_rounded,
           size: 16,
-          color: Colors.white,
+          color: routeColor.computeLuminance() > 0.5
+              ? Colors.black87
+              : Colors.white,
         ),
       );
     }

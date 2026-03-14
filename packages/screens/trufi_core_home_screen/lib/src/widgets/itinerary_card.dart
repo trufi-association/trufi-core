@@ -314,6 +314,9 @@ class _LegChip extends StatelessWidget {
 
     // Transit leg
     final color = _getRouteColor(leg);
+    final textColor = color.computeLuminance() > 0.5
+        ? Colors.black87
+        : Colors.white;
     final routeName = leg.shortName ?? leg.route?.shortName ?? '';
 
     return Container(
@@ -325,13 +328,13 @@ class _LegChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(_getModeIcon(leg.transportMode), size: 16, color: Colors.white),
+          Icon(_getModeIcon(leg.transportMode), size: 16, color: textColor),
           if (routeName.isNotEmpty) ...[
             const SizedBox(width: 4),
             Text(
               routeName,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: textColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),

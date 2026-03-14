@@ -205,7 +205,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     ColorScheme colorScheme,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ?? Colors.white;
+    final textColor = _route?.textColor ??
+        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
@@ -438,7 +439,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     double width,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ?? Colors.white;
+    final textColor = _route?.textColor ??
+        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
