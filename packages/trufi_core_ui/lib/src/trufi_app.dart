@@ -170,6 +170,7 @@ class _TrufiMaterialApp extends StatelessWidget {
       localizationsDelegates: [
         CoreLocalizations.delegate,
         ...screenDelegates,
+        ...config.extraLocalizationsDelegates,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

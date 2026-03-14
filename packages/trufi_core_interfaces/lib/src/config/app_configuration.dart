@@ -118,6 +118,11 @@ class AppConfiguration {
   /// If null, a beautiful default initialization screen is shown.
   final AppInitScreenBuilder? initScreenBuilder;
 
+  /// Additional localization delegates from the app.
+  ///
+  /// Use this to register app-level ARB localizations (e.g., custom map names).
+  final List<LocalizationsDelegate> extraLocalizationsDelegates;
+
   const AppConfiguration({
     required this.appName,
     required this.screens,
@@ -128,5 +133,6 @@ class AppConfiguration {
     this.defaultLocale,
     this.providers = const [],
     this.initScreenBuilder,
+    this.extraLocalizationsDelegates = const [],
   });
 }

@@ -38,6 +38,8 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   final String? engineId;
   final String? displayName;
   final String? displayDescription;
+  final LocalizedStringBuilder? nameBuilder;
+  final LocalizedStringBuilder? descriptionBuilder;
   final Widget? preview;
 
   String? _cachedStylePath;
@@ -48,6 +50,8 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     this.engineId,
     this.displayName,
     this.displayDescription,
+    this.nameBuilder,
+    this.descriptionBuilder,
     this.preview,
   });
 
@@ -59,6 +63,14 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
   @override
   String get description => displayDescription ?? 'Mapa completamente offline';
+
+  @override
+  String localizedName(BuildContext context) =>
+      nameBuilder?.call(context) ?? name;
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      descriptionBuilder?.call(context) ?? description;
 
   @override
   Widget? get previewWidget =>

@@ -409,8 +409,8 @@ class _MapSettingsCardState extends State<_MapSettingsCard> {
                 bottom: displayIndex < filteredEngines.length - 1 ? 8 : 0,
               ),
               child: _EngineOptionTile(
-                name: engine.name,
-                description: engine.description,
+                name: engine.localizedName(context),
+                description: engine.localizedDescription(context),
                 icon: Icons.layers_rounded,
                 isSelected: actualIndex == mapEngineManager.currentIndex,
                 onTap: () {

@@ -427,8 +427,8 @@ class _OnboardingMapSectionState extends State<_OnboardingMapSection> {
                 bottom: displayIndex < filteredEngines.length - 1 ? 8 : 0,
               ),
               child: _EngineOption(
-                name: engine.name,
-                description: engine.description,
+                name: engine.localizedName(context),
+                description: engine.localizedDescription(context),
                 icon: Icons.layers_rounded,
                 isSelected: actualIndex == mapEngineManager.currentIndex,
                 onTap: () {

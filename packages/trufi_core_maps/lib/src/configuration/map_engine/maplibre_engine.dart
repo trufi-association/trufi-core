@@ -25,6 +25,8 @@ class MapLibreEngine implements ITrufiMapEngine {
   final String? engineId;
   final String? displayName;
   final String? displayDescription;
+  final LocalizedStringBuilder? nameBuilder;
+  final LocalizedStringBuilder? descriptionBuilder;
   final Widget? preview;
 
   const MapLibreEngine({
@@ -32,6 +34,8 @@ class MapLibreEngine implements ITrufiMapEngine {
     this.engineId,
     this.displayName,
     this.displayDescription,
+    this.nameBuilder,
+    this.descriptionBuilder,
     this.preview,
   });
 
@@ -45,6 +49,14 @@ class MapLibreEngine implements ITrufiMapEngine {
   String get description =>
       displayDescription ??
       'Vector map with modern styling and better performance';
+
+  @override
+  String localizedName(BuildContext context) =>
+      nameBuilder?.call(context) ?? name;
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      descriptionBuilder?.call(context) ?? description;
 
   @override
   Widget? get previewWidget =>

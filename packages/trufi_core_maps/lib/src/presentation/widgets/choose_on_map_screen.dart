@@ -289,7 +289,7 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       MaterialPageRoute(
         builder: (context) => MapTypeSettingsScreen(
           currentMapIndex: mapEngineManager.currentIndex,
-          mapOptions: mapEngineManager.engines.toMapTypeOptions(),
+          mapOptions: mapEngineManager.engines.toMapTypeOptions(context),
           onMapTypeChanged: (index) {
             mapEngineManager.setEngine(mapEngineManager.engines[index]);
           },
