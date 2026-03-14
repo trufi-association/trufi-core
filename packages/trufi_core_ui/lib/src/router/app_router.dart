@@ -11,6 +11,7 @@ class AppRouter {
   final GlobalKey<NavigatorState> rootNavigatorKey;
   final GlobalKey<NavigatorState> shellNavigatorKey;
   final String appName;
+  final String? appTagline;
 
   /// Initial route to navigate to (for web deep linking)
   final String? initialRoute;
@@ -22,6 +23,7 @@ class AppRouter {
     this.socialMediaLinks = const [],
     this.initialRoute,
     this.appName = 'Trufi App',
+    this.appTagline,
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
   }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
@@ -102,6 +104,7 @@ class AppRouter {
               screens: screens,
               socialMediaLinks: socialMediaLinks,
               appName: appName,
+              appTagline: appTagline,
               child: child,
             );
           },
@@ -135,6 +138,7 @@ class AppShell extends StatelessWidget {
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
   final String appName;
+  final String? appTagline;
 
   const AppShell({
     super.key,
@@ -143,6 +147,7 @@ class AppShell extends StatelessWidget {
     required this.screens,
     this.socialMediaLinks = const [],
     this.appName = 'Trufi App',
+    this.appTagline,
   });
 
   @override
@@ -181,6 +186,7 @@ class AppShell extends StatelessWidget {
         screens: screens,
         socialMediaLinks: socialMediaLinks,
         appName: appName,
+        appTagline: appTagline,
       ),
       body: child,
     );
@@ -202,6 +208,7 @@ class AppDrawer extends StatelessWidget {
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
   final String appName;
+  final String? appTagline;
 
   const AppDrawer({
     super.key,
@@ -209,6 +216,7 @@ class AppDrawer extends StatelessWidget {
     required this.screens,
     this.socialMediaLinks = const [],
     this.appName = 'Trufi App',
+    this.appTagline,
   });
 
   @override
@@ -221,7 +229,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           // Modern header with layered design
-          _DrawerHeader(theme: theme, appName: appName),
+          _DrawerHeader(theme: theme, appName: appName, appTagline: appTagline),
 
           const SizedBox(height: 8),
 
@@ -283,8 +291,9 @@ class AppDrawer extends StatelessWidget {
 class _DrawerHeader extends StatelessWidget {
   final ThemeData theme;
   final String appName;
+  final String? appTagline;
 
-  const _DrawerHeader({required this.theme, required this.appName});
+  const _DrawerHeader({required this.theme, required this.appName, this.appTagline});
 
   @override
   Widget build(BuildContext context) {
@@ -334,12 +343,13 @@ class _DrawerHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               // Tagline
-              Text(
-                'Tu compañero de transporte público',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+              if (appTagline != null)
+                Text(
+                  appTagline!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
             ],
           ),
         ),

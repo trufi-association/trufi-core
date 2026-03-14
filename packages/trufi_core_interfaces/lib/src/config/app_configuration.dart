@@ -70,6 +70,7 @@ typedef AppInitScreenBuilder =
 /// Application configuration
 class AppConfiguration {
   final String appName;
+  final String? appTagline;
   final List<TrufiScreen> screens;
   final TrufiLocaleConfig localeConfig;
   final TrufiThemeConfig themeConfig;
@@ -125,6 +126,7 @@ class AppConfiguration {
 
   const AppConfiguration({
     required this.appName,
+    this.appTagline,
     required this.screens,
     this.localeConfig = const TrufiLocaleConfig(),
     this.themeConfig = const TrufiThemeConfig(),
