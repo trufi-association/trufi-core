@@ -46,12 +46,16 @@ class Otp28RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
+  /// Whether to show the wheelchair accessibility option in preferences UI.
+  final bool showWheelchairOption;
+
   Otp28RoutingProvider({
     required this.endpoint,
     this.useSimpleQuery = false,
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.showWheelchairOption = true,
   });
 
   late final _prefs = Otp28PreferencesState();
@@ -74,7 +78,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
 
   @override
   Widget? buildPreferencesUI(BuildContext context) =>
-      Otp28Preferences(state: _prefs);
+      Otp28Preferences(state: _prefs, showWheelchair: showWheelchairOption);
 
   @override
   void resetPreferences() => _prefs.reset();
