@@ -724,7 +724,7 @@ class _HomeScreenState extends State<HomeScreen>
               routeName: routeName,
               icon: modeIcon,
             ),
-            size: const Size(72, 28),
+            size: const Size(90, 28),
             layerLevel: 2,
             allowOverlap: true,
           ),
@@ -775,7 +775,7 @@ class _HomeScreenState extends State<HomeScreen>
               routeName: '$durationMin\'',
               icon: Icons.directions_bike_rounded,
             ),
-            size: const Size(72, 28),
+            size: const Size(90, 28),
             layerLevel: 2,
             allowOverlap: true,
           ),
@@ -2396,6 +2396,10 @@ class _TransitRouteLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onColor = color.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -2413,15 +2417,19 @@ class _TransitRouteLabel extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 16),
+          Icon(icon, color: onColor, size: 16),
           if (routeName.isNotEmpty) ...[
             const SizedBox(width: 4),
-            Text(
-              routeName,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+            Flexible(
+              child: Text(
+                routeName,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: onColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
             ),
           ],
@@ -2440,20 +2448,27 @@ class _TransitStopMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onColor =
+        color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
     return Container(
       width: 20,
       height: 20,
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 3),
+        border: Border.all(color: Colors.white, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.25),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
           ),
         ],
+      ),
+      child: Icon(
+        Icons.directions_bus_rounded,
+        color: onColor,
+        size: 11,
       ),
     );
   }

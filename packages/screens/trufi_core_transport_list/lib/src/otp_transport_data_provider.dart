@@ -466,6 +466,6 @@ class OtpTransportDataProvider extends TransportListDataProvider {
         iconData = Icons.directions_transit;
     }
 
-    return Icon(iconData, size: 16, color: Colors.white);
+    return Icon(iconData, size: 16);
   }
 }

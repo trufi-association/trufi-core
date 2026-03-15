@@ -62,7 +62,7 @@ class Otp28PreferencesState extends ChangeNotifier {
 
   bool _wheelchair = false;
   double _walkSpeed = 1.33;
-  double? _maxWalkDistance;
+  double? _maxWalkDistance = 800;
   double _walkReluctance = 2.0;
   double _bikeSpeed = 5.0;
   Set<RoutingMode> _transportModes = const {
@@ -93,7 +93,7 @@ class Otp28PreferencesState extends ChangeNotifier {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _wheelchair = map['wheelchair'] as bool? ?? false;
         _walkSpeed = (map['walkSpeed'] as num?)?.toDouble() ?? 1.33;
-        _maxWalkDistance = (map['maxWalkDistance'] as num?)?.toDouble();
+        _maxWalkDistance = (map['maxWalkDistance'] as num?)?.toDouble() ?? 800;
         _walkReluctance = (map['walkReluctance'] as num?)?.toDouble() ?? 2.0;
         _bikeSpeed = (map['bikeSpeed'] as num?)?.toDouble() ?? 5.0;
         _transportModes =
@@ -173,7 +173,7 @@ class Otp28PreferencesState extends ChangeNotifier {
   void reset() {
     _wheelchair = false;
     _walkSpeed = 1.33;
-    _maxWalkDistance = null;
+    _maxWalkDistance = 800;
     _walkReluctance = 2.0;
     _bikeSpeed = 5.0;
     _transportModes = const {RoutingMode.transit, RoutingMode.walk};
