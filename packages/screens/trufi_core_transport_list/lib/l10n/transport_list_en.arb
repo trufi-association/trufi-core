@@ -20,6 +20,8 @@
   "@routeLoadError": {
     "description": "Error message when route fails to load"
   },
+  "pullDownToRefresh": "Pull down to refresh",
+  "tryDifferentSearch": "Try a different search term",
   "buttonGoBack": "Go back",
   "@buttonGoBack": {
     "description": "Go back button label"

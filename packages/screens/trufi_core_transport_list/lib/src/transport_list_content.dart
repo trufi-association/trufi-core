@@ -744,7 +744,9 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              isSearch ? 'Try a different search term' : 'Pull down to refresh',
+              isSearch
+                  ? TransportListLocalizations.of(context).tryDifferentSearch
+                  : TransportListLocalizations.of(context).pullDownToRefresh,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),

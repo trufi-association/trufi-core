@@ -12,6 +12,8 @@
       }
     }
   },
+  "pullDownToRefresh": "Nach unten ziehen zum Aktualisieren",
+  "tryDifferentSearch": "Versuche einen anderen Suchbegriff",
   "routeNotFound": "Linie nicht gefunden",
   "routeLoadError": "Die Linie konnte nicht geladen werden",
   "buttonGoBack": "Zurück"

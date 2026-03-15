@@ -32,5 +32,11 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get routeLoadError => 'Die Linie konnte nicht geladen werden';
 
   @override
+  String get pullDownToRefresh => 'Nach unten ziehen zum Aktualisieren';
+
+  @override
+  String get tryDifferentSearch => 'Versuche einen anderen Suchbegriff';
+
+  @override
   String get buttonGoBack => 'Zurück';
 }

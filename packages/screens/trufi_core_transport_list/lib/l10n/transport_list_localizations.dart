@@ -145,6 +145,18 @@ abstract class TransportListLocalizations {
   /// **'The route could not be loaded'**
   String get routeLoadError;
 
+  /// No description provided for @pullDownToRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull down to refresh'**
+  String get pullDownToRefresh;
+
+  /// No description provided for @tryDifferentSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search term'**
+  String get tryDifferentSearch;
+
   /// Go back button label
   ///
   /// In en, this message translates to:
