@@ -124,6 +124,12 @@ class AppConfiguration {
   /// Use this to register app-level ARB localizations (e.g., custom map names).
   final List<LocalizationsDelegate> extraLocalizationsDelegates;
 
+  /// Optional widget displayed above the drawer footer (e.g., partner logos).
+  final Widget? drawerFooterExtra;
+
+  /// Optional logo widget (used in drawer header, etc.).
+  final Widget? logo;
+
   const AppConfiguration({
     required this.appName,
     this.appTagline,
@@ -136,5 +142,7 @@ class AppConfiguration {
     this.providers = const [],
     this.initScreenBuilder,
     this.extraLocalizationsDelegates = const [],
+    this.drawerFooterExtra,
+    this.logo,
   });
 }

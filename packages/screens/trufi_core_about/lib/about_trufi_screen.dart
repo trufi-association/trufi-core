@@ -13,6 +13,7 @@ class AboutScreenConfig {
   final String countryName;
   final String emailContact;
   final String? logoAssetPath;
+  final Widget? logoWidget;
   final String? websiteUrl;
   final String? twitterUrl;
   final String? facebookUrl;
@@ -28,6 +29,7 @@ class AboutScreenConfig {
     required this.countryName,
     required this.emailContact,
     this.logoAssetPath,
+    this.logoWidget,
     this.websiteUrl,
     this.twitterUrl,
     this.facebookUrl,
@@ -459,19 +461,21 @@ class _AboutHeroCard extends StatelessWidget {
               color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: config.logoAssetPath != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: Image.asset(
-                      config.logoAssetPath!,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : Icon(
-                    Icons.directions_bus_rounded,
-                    size: 44,
-                    color: colorScheme.onPrimaryContainer,
-                  ),
+            child: config.logoWidget != null
+                ? config.logoWidget!
+                : config.logoAssetPath != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(22),
+                        child: Image.asset(
+                          config.logoAssetPath!,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Icon(
+                        Icons.directions_bus_rounded,
+                        size: 44,
+                        color: colorScheme.onPrimaryContainer,
+                      ),
           ),
           const SizedBox(height: 20),
           // App name

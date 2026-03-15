@@ -12,12 +12,16 @@ class DefaultInitScreen extends StatefulWidget {
   /// Optional custom logo widget to display instead of the default bus icon.
   final Widget? logo;
 
+  /// Optional widget displayed at the bottom of the screen (e.g., partner logos).
+  final Widget? bottomWidget;
+
   const DefaultInitScreen({
     super.key,
     this.currentStep,
     this.errorMessage,
     required this.onRetry,
     this.logo,
+    this.bottomWidget,
   });
 
   @override
@@ -107,13 +111,20 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: widget.errorMessage != null
-                  ? _buildErrorContent(context)
-                  : _buildLoadingContent(context),
-            ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: widget.errorMessage != null
+                        ? _buildErrorContent(context)
+                        : _buildLoadingContent(context),
+                  ),
+                ),
+              ),
+              if (widget.bottomWidget != null) widget.bottomWidget!,
+            ],
           ),
         ),
       ),
