@@ -15,6 +15,10 @@ class DefaultInitScreen extends StatefulWidget {
   /// Optional widget displayed at the bottom of the screen (e.g., partner logos).
   final Widget? bottomWidget;
 
+  /// Optional function to override the display text for each init step.
+  /// If null, English defaults are used.
+  final String Function(AppInitStep step)? stepTextBuilder;
+
   const DefaultInitScreen({
     super.key,
     this.currentStep,
@@ -22,6 +26,7 @@ class DefaultInitScreen extends StatefulWidget {
     required this.onRetry,
     this.logo,
     this.bottomWidget,
+    this.stepTextBuilder,
   });
 
   @override
@@ -75,6 +80,9 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
   }
 
   String _stepToDisplayText(AppInitStep step) {
+    if (widget.stepTextBuilder != null) {
+      return widget.stepTextBuilder!(step);
+    }
     return switch (step) {
       AppInitStep.starting => 'Starting',
       AppInitStep.initializingOverlays => 'Initializing',
