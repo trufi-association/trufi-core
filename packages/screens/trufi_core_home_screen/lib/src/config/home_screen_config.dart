@@ -25,6 +25,11 @@ class HomeScreenConfig {
   /// When set, shared routes will include a deep link URL.
   final String? deepLinkScheme;
 
+  /// Base URL for web-based route sharing (e.g., 'https://maps.trujillo.trufi.dev').
+  /// When set, shared routes use a web URL instead of the deep link scheme,
+  /// making shared links openable from any platform/browser.
+  final String? shareBaseUrl;
+
   /// Optional custom map layers to display on the home screen map.
   ///
   /// Use this to add POI layers or other custom map layers.
@@ -63,6 +68,7 @@ class HomeScreenConfig {
     this.myPlaces = const [],
     this.appName,
     this.deepLinkScheme,
+    this.shareBaseUrl,
     this.customMapLayers,
     this.poiLayersManager,
   });

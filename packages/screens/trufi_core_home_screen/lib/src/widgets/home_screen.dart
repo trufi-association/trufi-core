@@ -1658,6 +1658,7 @@ class _HomeScreenState extends State<HomeScreen>
                       : null,
                   appName: appName,
                   deepLinkScheme: widget.config.deepLinkScheme,
+                  webBaseUrl: widget.config.shareBaseUrl,
                   strings: ShareRouteStrings(
                     title: l10n.shareRouteTitle,
                     origin: l10n.shareRouteOrigin,
@@ -2025,6 +2026,7 @@ class _HomeScreenState extends State<HomeScreen>
                       : null,
                   appName: appName,
                   deepLinkScheme: widget.config.deepLinkScheme,
+                  webBaseUrl: widget.config.shareBaseUrl,
                   strings: ShareRouteStrings(
                     title: l10n.shareRouteTitle,
                     origin: l10n.shareRouteOrigin,

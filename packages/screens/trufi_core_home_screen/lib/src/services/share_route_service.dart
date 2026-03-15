@@ -37,6 +37,7 @@ class ShareRouteService {
     int? selectedItineraryIndex,
     required String appName,
     String? deepLinkScheme,
+    String? webBaseUrl,
   }) async {
     final text = generateShareText(
       from: from,
@@ -46,6 +47,7 @@ class ShareRouteService {
       selectedItineraryIndex: selectedItineraryIndex,
       appName: appName,
       deepLinkScheme: deepLinkScheme,
+      webBaseUrl: webBaseUrl,
     );
 
     await Share.share(text);
@@ -60,6 +62,7 @@ class ShareRouteService {
     int? selectedItineraryIndex,
     required String appName,
     String? deepLinkScheme,
+    String? webBaseUrl,
   }) {
     final buffer = StringBuffer();
     final timeFormat = DateFormat('HH:mm');
@@ -89,8 +92,20 @@ class ShareRouteService {
     // Route summary
     buffer.writeln('🚍 ${strings.itinerary(_generateRouteSummary(itinerary))}');
 
-    // Deep link
-    if (deepLinkScheme != null) {
+    // Share link: prefer web URL over deep link
+    if (webBaseUrl != null) {
+      buffer.writeln();
+      buffer.writeln('📲 ${strings.openInApp}');
+      buffer.writeln(
+        generateWebLink(
+          from: from,
+          to: to,
+          itinerary: itinerary,
+          selectedItineraryIndex: selectedItineraryIndex,
+          baseUrl: webBaseUrl,
+        ),
+      );
+    } else if (deepLinkScheme != null) {
       buffer.writeln();
       buffer.writeln('📲 ${strings.openInApp}');
       buffer.writeln(
