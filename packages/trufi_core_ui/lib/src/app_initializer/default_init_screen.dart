@@ -15,6 +15,9 @@ class DefaultInitScreen extends StatefulWidget {
   /// Optional widget displayed at the bottom of the screen (e.g., partner logos).
   final Widget? bottomWidget;
 
+  /// Optional widget displayed at the top of the screen (e.g., branding header).
+  final Widget? topWidget;
+
   /// Optional function to override the display text for each init step.
   /// If null, English defaults are used.
   final String Function(AppInitStep step)? stepTextBuilder;
@@ -26,6 +29,7 @@ class DefaultInitScreen extends StatefulWidget {
     required this.onRetry,
     this.logo,
     this.bottomWidget,
+    this.topWidget,
     this.stepTextBuilder,
   });
 
@@ -121,6 +125,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
         child: SafeArea(
           child: Column(
             children: [
+              if (widget.topWidget != null) widget.topWidget!,
               Expanded(
                 child: Center(
                   child: Padding(
