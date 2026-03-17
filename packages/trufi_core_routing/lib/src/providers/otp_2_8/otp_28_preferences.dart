@@ -186,8 +186,9 @@ class Otp28PreferencesState extends ChangeNotifier {
 class Otp28Preferences extends StatelessWidget {
   final Otp28PreferencesState state;
   final bool showWheelchair;
+  final bool showBicycle;
 
-  const Otp28Preferences({super.key, required this.state, this.showWheelchair = true});
+  const Otp28Preferences({super.key, required this.state, this.showWheelchair = true, this.showBicycle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +207,7 @@ class Otp28Preferences extends StatelessWidget {
             const SizedBox(height: 24),
             _MaxWalkDistanceSection(state: state),
             const SizedBox(height: 24),
-            _TransportModesSection(state: state),
+            _TransportModesSection(state: state, showBicycle: showBicycle),
           ],
         );
       },
@@ -515,7 +516,8 @@ class _DistanceChip extends StatelessWidget {
 
 class _TransportModesSection extends StatelessWidget {
   final Otp28PreferencesState state;
-  const _TransportModesSection({required this.state});
+  final bool showBicycle;
+  const _TransportModesSection({required this.state, this.showBicycle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -560,15 +562,16 @@ class _TransportModesSection extends StatelessWidget {
                 state.toggleTransportMode(RoutingMode.walk);
               },
             ),
-            _TransportModeChip(
-              icon: Icons.directions_bike_rounded,
-              label: 'Bicycle',
-              isSelected: state.transportModes.contains(RoutingMode.bicycle),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                state.toggleTransportMode(RoutingMode.bicycle);
-              },
-            ),
+            if (showBicycle)
+              _TransportModeChip(
+                icon: Icons.directions_bike_rounded,
+                label: 'Bicycle',
+                isSelected: state.transportModes.contains(RoutingMode.bicycle),
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  state.toggleTransportMode(RoutingMode.bicycle);
+                },
+              ),
           ],
         ),
       ],
