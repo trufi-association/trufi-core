@@ -44,8 +44,8 @@ abstract class ITrufiMapEngine {
     ValueChanged<TrufiCameraPosition>? onCameraChanged,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
-    List<TrufiLayer> layers,
-    List<WidgetMarker> widgetMarkers,
+    List<TrufiLayer> layers = const [],
+    List<WidgetMarker> widgetMarkers = const [],
   });
 }
 

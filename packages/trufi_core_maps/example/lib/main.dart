@@ -18,16 +18,16 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   static final List<ITrufiMapEngine> mapEngines = [
+    const MapLibreEngine(
+      styleString: 'https://tiles.openfreemap.org/styles/liberty',
+      displayName: 'MapLibre GL',
+      displayDescription: 'Vector map with Liberty style',
+    ),
     const FlutterMapEngine(
       tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
       userAgentPackageName: 'com.example.trufi_core_maps_example',
       displayName: 'OpenStreetMap',
       displayDescription: 'Standard OSM raster tiles',
-    ),
-    const MapLibreEngine(
-      styleString: 'https://tiles.openfreemap.org/styles/liberty',
-      displayName: 'MapLibre GL',
-      displayDescription: 'Vector map with Liberty style',
     ),
   ];
 
