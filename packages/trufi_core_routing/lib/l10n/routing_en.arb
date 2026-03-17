@@ -1,0 +1,55 @@
+{
+  "@@locale": "en",
+  "prefsWalkingSpeed": "Walking speed",
+  "@prefsWalkingSpeed": {
+    "description": "Title for walking speed preference section"
+  },
+  "prefsSpeedSlow": "Slow",
+  "@prefsSpeedSlow": {
+    "description": "Label for slow walking speed option"
+  },
+  "prefsSpeedNormal": "Normal",
+  "@prefsSpeedNormal": {
+    "description": "Label for normal walking speed option"
+  },
+  "prefsSpeedFast": "Fast",
+  "@prefsSpeedFast": {
+    "description": "Label for fast walking speed option"
+  },
+  "prefsMaxWalkDistance": "Maximum walking distance",
+  "@prefsMaxWalkDistance": {
+    "description": "Title for maximum walking distance preference section"
+  },
+  "prefsNoLimit": "No limit",
+  "@prefsNoLimit": {
+    "description": "Label for no walk distance limit option"
+  },
+  "prefsTransportModes": "Transport modes",
+  "@prefsTransportModes": {
+    "description": "Title for transport modes preference section"
+  },
+  "prefsModeTransit": "Transit",
+  "@prefsModeTransit": {
+    "description": "Label for transit transport mode"
+  },
+  "prefsModeWalk": "Walk",
+  "@prefsModeWalk": {
+    "description": "Label for walk transport mode"
+  },
+  "prefsModeBicycle": "Bicycle",
+  "@prefsModeBicycle": {
+    "description": "Label for bicycle transport mode"
+  },
+  "prefsWheelchairAccessible": "Wheelchair accessible",
+  "@prefsWheelchairAccessible": {
+    "description": "Label for wheelchair accessibility toggle"
+  },
+  "prefsWheelchairOn": "Routes avoid stairs and steep slopes",
+  "@prefsWheelchairOn": {
+    "description": "Description when wheelchair mode is enabled"
+  },
+  "prefsWheelchairOff": "Include all routes",
+  "@prefsWheelchairOff": {
+    "description": "Description when wheelchair mode is disabled"
+  }
+}

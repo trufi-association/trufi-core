@@ -6,6 +6,8 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../l10n/navigation_localizations.dart';
+
 import '../cubit/navigation_cubit.dart';
 import '../models/navigation_config.dart';
 import '../models/navigation_state.dart';
@@ -231,7 +233,7 @@ class _NavigationScreenState extends State<NavigationScreen>
 
       case NavigationStatus.error:
         return NavigationErrorPanel(
-          errorMessage: state.errorMessage ?? 'An error occurred',
+          errorMessage: state.errorMessage ?? NavigationLocalizations.of(context).navError,
           onRetry: () => _cubit.startNavigation(widget.route),
           onClose: () => Navigator.of(context).pop(),
           onOpenSettings: state.errorMessage?.contains('settings') == true
@@ -274,14 +276,14 @@ class _NavigationScreenState extends State<NavigationScreen>
             ),
             const SizedBox(height: 16),
             Text(
-              'Starting navigation...',
+              NavigationLocalizations.of(context).navStarting,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'Getting your location',
+              NavigationLocalizations.of(context).navGettingLocation,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),

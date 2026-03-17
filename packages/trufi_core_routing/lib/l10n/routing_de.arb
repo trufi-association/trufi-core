@@ -1,0 +1,16 @@
+{
+  "@@locale": "de",
+  "prefsWalkingSpeed": "Gehgeschwindigkeit",
+  "prefsSpeedSlow": "Langsam",
+  "prefsSpeedNormal": "Normal",
+  "prefsSpeedFast": "Schnell",
+  "prefsMaxWalkDistance": "Maximale Gehentfernung",
+  "prefsNoLimit": "Kein Limit",
+  "prefsTransportModes": "Verkehrsmittel",
+  "prefsModeTransit": "ÖPNV",
+  "prefsModeWalk": "Zu Fuß",
+  "prefsModeBicycle": "Fahrrad",
+  "prefsWheelchairAccessible": "Rollstuhlgerecht",
+  "prefsWheelchairOn": "Routen vermeiden Treppen und steile Hänge",
+  "prefsWheelchairOff": "Alle Routen einschließen"
+}

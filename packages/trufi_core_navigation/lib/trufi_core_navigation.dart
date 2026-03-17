@@ -12,3 +12,6 @@ export 'src/utils/itinerary_converter.dart';
 // Presentation
 export 'src/presentation/navigation_screen.dart';
 export 'src/presentation/layers/navigation_layer.dart';
+
+// Localizations
+export 'l10n/navigation_localizations.dart';
