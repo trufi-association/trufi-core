@@ -12,12 +12,25 @@ class DefaultInitScreen extends StatefulWidget {
   /// Optional custom logo widget to display instead of the default bus icon.
   final Widget? logo;
 
+  /// Optional widget displayed at the bottom of the screen (e.g., partner logos).
+  final Widget? bottomWidget;
+
+  /// Optional widget displayed at the top of the screen (e.g., branding header).
+  final Widget? topWidget;
+
+  /// Optional function to override the display text for each init step.
+  /// If null, English defaults are used.
+  final String Function(AppInitStep step)? stepTextBuilder;
+
   const DefaultInitScreen({
     super.key,
     this.currentStep,
     this.errorMessage,
     required this.onRetry,
     this.logo,
+    this.bottomWidget,
+    this.topWidget,
+    this.stepTextBuilder,
   });
 
   @override
@@ -71,6 +84,9 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
   }
 
   String _stepToDisplayText(AppInitStep step) {
+    if (widget.stepTextBuilder != null) {
+      return widget.stepTextBuilder!(step);
+    }
     return switch (step) {
       AppInitStep.starting => 'Starting',
       AppInitStep.initializingOverlays => 'Initializing',
@@ -107,13 +123,21 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: widget.errorMessage != null
-                  ? _buildErrorContent(context)
-                  : _buildLoadingContent(context),
-            ),
+          child: Column(
+            children: [
+              if (widget.topWidget != null) widget.topWidget!,
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: widget.errorMessage != null
+                        ? _buildErrorContent(context)
+                        : _buildLoadingContent(context),
+                  ),
+                ),
+              ),
+              if (widget.bottomWidget != null) widget.bottomWidget!,
+            ],
           ),
         ),
       ),

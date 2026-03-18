@@ -10,6 +10,10 @@ class AppRouter {
   final List<SocialMediaLink> socialMediaLinks;
   final GlobalKey<NavigatorState> rootNavigatorKey;
   final GlobalKey<NavigatorState> shellNavigatorKey;
+  final String appName;
+  final String? appTagline;
+  final Widget? drawerFooterExtra;
+  final Widget? logo;
 
   /// Initial route to navigate to (for web deep linking)
   final String? initialRoute;
@@ -20,6 +24,10 @@ class AppRouter {
     required this.screens,
     this.socialMediaLinks = const [],
     this.initialRoute,
+    this.appName = 'Trufi App',
+    this.appTagline,
+    this.drawerFooterExtra,
+    this.logo,
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
   }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
@@ -99,6 +107,10 @@ class AppRouter {
               currentPath: state.uri.path,
               screens: screens,
               socialMediaLinks: socialMediaLinks,
+              appName: appName,
+              appTagline: appTagline,
+              drawerFooterExtra: drawerFooterExtra,
+              logo: logo,
               child: child,
             );
           },
@@ -131,6 +143,10 @@ class AppShell extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
+  final String appName;
+  final String? appTagline;
+  final Widget? drawerFooterExtra;
+  final Widget? logo;
 
   const AppShell({
     super.key,
@@ -138,6 +154,10 @@ class AppShell extends StatelessWidget {
     required this.currentPath,
     required this.screens,
     this.socialMediaLinks = const [],
+    this.appName = 'Trufi App',
+    this.appTagline,
+    this.drawerFooterExtra,
+    this.logo,
   });
 
   @override
@@ -175,6 +195,10 @@ class AppShell extends StatelessWidget {
         currentPath: currentPath,
         screens: screens,
         socialMediaLinks: socialMediaLinks,
+        appName: appName,
+        appTagline: appTagline,
+        footerExtra: drawerFooterExtra,
+        logo: logo,
       ),
       body: child,
     );
@@ -186,7 +210,7 @@ class AppShell extends StatelessWidget {
         return screen.getLocalizedTitle(context);
       }
     }
-    return 'Trufi App';
+    return appName;
   }
 }
 
@@ -195,12 +219,20 @@ class AppDrawer extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
   final List<SocialMediaLink> socialMediaLinks;
+  final String appName;
+  final String? appTagline;
+  final Widget? footerExtra;
+  final Widget? logo;
 
   const AppDrawer({
     super.key,
     required this.currentPath,
     required this.screens,
     this.socialMediaLinks = const [],
+    this.appName = 'Trufi App',
+    this.appTagline,
+    this.footerExtra,
+    this.logo,
   });
 
   @override
@@ -213,7 +245,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           // Modern header with layered design
-          _DrawerHeader(theme: theme),
+          _DrawerHeader(theme: theme, appName: appName, appTagline: appTagline, logo: logo),
 
           const SizedBox(height: 8),
 
@@ -226,7 +258,7 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // Modern footer
-          _DrawerFooter(theme: theme, socialMediaLinks: socialMediaLinks),
+          _DrawerFooter(theme: theme, socialMediaLinks: socialMediaLinks, extra: footerExtra),
         ],
       ),
     );
@@ -274,8 +306,11 @@ class AppDrawer extends StatelessWidget {
 /// Modern drawer header with layered design
 class _DrawerHeader extends StatelessWidget {
   final ThemeData theme;
+  final String appName;
+  final String? appTagline;
+  final Widget? logo;
 
-  const _DrawerHeader({required this.theme});
+  const _DrawerHeader({required this.theme, required this.appName, this.appTagline, this.logo});
 
   @override
   Widget build(BuildContext context) {
@@ -294,30 +329,32 @@ class _DrawerHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Logo/Avatar with modern styling
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: colorScheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+              logo != null
+                  ? SizedBox(width: 56, height: 56, child: logo!)
+                  : Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.primary.withValues(alpha: 0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.directions_bus_rounded,
+                        size: 32,
+                        color: colorScheme.onPrimary,
+                      ),
                     ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.directions_bus_rounded,
-                  size: 32,
-                  color: colorScheme.onPrimary,
-                ),
-              ),
               const SizedBox(height: 16),
               // App name
               Text(
-                'Trufi App',
+                appName,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onSurface,
@@ -325,12 +362,13 @@ class _DrawerHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               // Tagline
-              Text(
-                'Tu compañero de transporte público',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+              if (appTagline != null)
+                Text(
+                  appTagline!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -422,8 +460,9 @@ class _DrawerMenuItem extends StatelessWidget {
 class _DrawerFooter extends StatelessWidget {
   final ThemeData theme;
   final List<SocialMediaLink> socialMediaLinks;
+  final Widget? extra;
 
-  const _DrawerFooter({required this.theme, this.socialMediaLinks = const []});
+  const _DrawerFooter({required this.theme, this.socialMediaLinks = const [], this.extra});
 
   @override
   Widget build(BuildContext context) {
@@ -440,6 +479,10 @@ class _DrawerFooter extends StatelessWidget {
       ),
       child: Column(
         children: [
+          if (extra != null) ...[
+            extra!,
+            const SizedBox(height: 12),
+          ],
           // Version info
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -18,7 +18,6 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_svg: ^2.2.3
   latlong2: ^0.9.1
-  maplibre: ^0.3.3+2
   maplibre_gl: ^0.25.0
   shared_preferences: ^2.5.4
   path_provider: ^2.1.5

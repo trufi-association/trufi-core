@@ -21,7 +21,11 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
   String get selectLocations => 'Select origin and destination to find routes';
 
   @override
-  String get noRoutesFound => 'No routes found';
+  String get noRoutesFound =>
+      'No public transit routes found for this trip. Try a different destination or adjust your search settings.';
+
+  @override
+  String get noRoutesFoundShort => 'No routes found for this trip';
 
   @override
   String get errorNoRoutes => 'Error loading routes';
@@ -403,7 +407,7 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
 
   @override
   String get engineOfflineDescription =>
-      'GTFS-based routing inspired by GuíaCochala. Works without internet.';
+      'GTFS-based routing. Works without internet.';
 
   @override
   String get limitationRequiresInternet => 'Requires internet';
@@ -413,4 +417,8 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
 
   @override
   String get limitationNoWalkingRoute => 'No walking route on map';
+
+  @override
+  String get estimatedTimesDisclaimer =>
+      'Travel times are estimated and may vary due to traffic';
 }

@@ -1,10 +1,17 @@
-/// A Flutter package for map rendering with maplibre_gl.
+/// A Flutter package for declarative map rendering with MapLibre.
 ///
-/// This package follows a 3-layer architecture:
-/// - **Presentation Layer**: Map widgets (TrufiMap, TrufiMapLibreMap)
-/// - **Domain Layer**: Business logic (TrufiMapController, TrufiLayer, entities)
-/// - **Data Layer**: Data access (tile fetching, spatial indexing, utilities)
-/// - **Configuration**: Map configuration, markers, and copyright
+/// Pass layers and markers as data — all synchronization with the native
+/// map engine is handled internally.
+///
+/// ```dart
+/// TrufiMap(
+///   styleString: 'https://tiles.openfreemap.org/styles/liberty',
+///   initialCamera: TrufiCameraPosition(target: LatLng(-17.39, -66.15), zoom: 14),
+///   layers: [
+///     TrufiLayer(id: 'route', markers: routeMarkers, lines: routeLines),
+///   ],
+/// )
+/// ```
 library;
 
 // ============================================
@@ -33,6 +40,7 @@ export 'src/domain/entities/bounds.dart';
 export 'src/domain/entities/camera.dart';
 export 'src/domain/entities/marker.dart';
 export 'src/domain/entities/line.dart';
+export 'src/domain/entities/widget_marker.dart';
 
 // ============================================
 // DOMAIN LAYER - Controller
@@ -40,17 +48,16 @@ export 'src/domain/entities/line.dart';
 export 'src/domain/controller/map_controller.dart';
 
 // ============================================
-// DOMAIN LAYER - Layers
+// DOMAIN LAYER - Layers & Utilities
 // ============================================
 export 'src/domain/layers/trufi_layer.dart';
 export 'src/domain/layers/layer_utils.dart';
 export 'src/domain/layers/fit_camera_layer.dart';
 
 // ============================================
-// PRESENTATION LAYER - Map Widgets
+// PRESENTATION LAYER - Map Widget
 // ============================================
 export 'src/presentation/map/trufi_map.dart';
-export 'src/presentation/map/maplibre_map.dart';
 
 // ============================================
 // PRESENTATION LAYER - Utils

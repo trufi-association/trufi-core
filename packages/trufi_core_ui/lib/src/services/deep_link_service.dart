@@ -41,8 +41,8 @@ class DeepLinkService {
   void _handleUri(Uri uri) {
     debugPrint('DeepLinkService: Received URI: $uri');
 
-    // Check if scheme matches (if specified)
-    if (scheme != null && uri.scheme != scheme) {
+    // Check if scheme matches (if specified), but always allow https
+    if (scheme != null && uri.scheme != scheme && uri.scheme != 'https') {
       debugPrint('DeepLinkService: Ignoring URI with scheme ${uri.scheme}');
       return;
     }

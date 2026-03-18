@@ -9,7 +9,7 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   SettingsLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get onboardingTitle => 'Bienvenido!';
+  String get onboardingTitle => '¡Bienvenido!';
 
   @override
   String get onboardingSubtitle => 'Vamos a configurar tus preferencias';
@@ -43,10 +43,10 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
 
   @override
   String get privacyConsentSubtitle =>
-      'Ayudanos a mejorar la app compartiendo datos de uso anonimos';
+      'Ayúdanos a mejorar la app compartiendo datos de uso anónimos';
 
   @override
-  String get privacyConsentInfoTitle => 'Que recopilamos';
+  String get privacyConsentInfoTitle => 'Qué recopilamos';
 
   @override
   String get privacyConsentInfoLogs =>
@@ -54,11 +54,11 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
 
   @override
   String get privacyConsentInfoRoutes =>
-      'Busquedas de rutas para mejorar los datos de transporte';
+      'Búsquedas de rutas para mejorar los datos de transporte';
 
   @override
   String get privacyConsentInfoAnonymous =>
-      'Todos los datos son completamente anonimos';
+      'Todos los datos son completamente anónimos';
 
   @override
   String get privacyConsentAccept => 'Aceptar y continuar';
@@ -67,7 +67,7 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get privacyConsentDecline => 'No, gracias';
 
   @override
-  String get settingsTitle => 'Configuracion';
+  String get settingsTitle => 'Configuración';
 
   @override
   String get settingsLanguage => 'Idioma';
@@ -110,25 +110,25 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get settingsPrivacySubtitle => 'Ayuda a mejorar la app';
 
   @override
-  String get settingsPrivacyShareData => 'Compartir datos de uso anonimos';
+  String get settingsPrivacyShareData => 'Compartir datos de uso anónimos';
 
   @override
   String get settingsPrivacyShareDataDescription =>
-      'Ayudanos a corregir errores y mejorar los datos de transporte';
+      'Ayúdanos a corregir errores y mejorar los datos de transporte';
 
   @override
-  String get engineOnlineName => 'Online';
+  String get engineOnlineName => 'En línea';
 
   @override
   String get engineOnlineDescription =>
       'OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.';
 
   @override
-  String get engineOfflineName => 'Offline';
+  String get engineOfflineName => 'Sin conexión';
 
   @override
   String get engineOfflineDescription =>
-      'Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.';
+      'Enrutamiento basado en GTFS. Funciona sin internet.';
 
   @override
   String get limitationRequiresInternet => 'Requiere internet';

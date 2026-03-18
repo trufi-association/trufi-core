@@ -21,7 +21,7 @@ class AboutLocalizationsEs extends AboutLocalizations {
 
   @override
   String aboutContent(String appName, String city) {
-    return '¿Necesitas ir a algún lado y no sabes qué trufi o micro tomar?\n¡Con $appName facilito es!\n\nTrufi Association es un equipo conformado por voluntarios de Bolivia y otros países. Amamos La Llajta y el transporte público, por eso desarrollamos esta aplicación para que transportarse sea fácil. Nuestro objetivo es brindarte una herramienta práctica que te permita navegar con confianza.\n\nEstamos comprometidos con la mejora continua de $appName para ofrecerte información cada vez más precisa y útil. Sabemos que el sistema de transporte en $city experimenta cambios debido a diversas razones, por ello es posible que algunas rutas no estén completamente actualizadas.\n\nPara hacer de $appName una herramienta aún más efectiva, confiamos en la colaboración de nuestros usuarios. Si conoces cambios en algunas rutas o paradas, te animamos a compartir esta información con nosotros. Tu contribución no solo ayudará a mantener la aplicación al día, sino que también beneficiará a otros usuarios que confían en $appName.\n\nGracias por elegir $appName para moverte en $city. ¡Esperamos que disfrutes la experiencia con nosotros!';
+    return '¿Necesitas ir a algún lado y no sabes qué bus o combi tomar?\n¡Con $appName es más fácil!\n\nTrufi Association es un equipo internacional de voluntarios. Amamos el transporte público, por eso desarrollamos esta aplicación para que movilizarte sea fácil. Nuestro objetivo es brindarte una herramienta práctica que te permita navegar con confianza.\n\nEstamos comprometidos con la mejora continua de $appName para ofrecerte información cada vez más precisa y útil. Sabemos que el sistema de transporte en $city experimenta cambios debido a diversas razones, por ello es posible que algunas rutas no estén completamente actualizadas.\n\nPara hacer de $appName una herramienta aún más efectiva, confiamos en la colaboración de nuestros usuarios. Si conoces cambios en algunas rutas o paradas, te animamos a compartir esta información con nosotros. Tu contribución no solo ayudará a mantener la aplicación al día, sino que también beneficiará a otros usuarios que confían en $appName.\n\nGracias por elegir $appName para moverte en $city. ¡Esperamos que disfrutes la experiencia con nosotros!';
   }
 
   @override
@@ -29,7 +29,7 @@ class AboutLocalizationsEs extends AboutLocalizations {
 
   @override
   String get aboutOpenSource =>
-      'Esta aplicación está publicada como código abierto en GitHub. Siéntase libre de contribuir  o utilizarlo para su propia ciudad.';
+      'Esta aplicación está publicada como código abierto en GitHub. Siéntase libre de contribuir o utilizarlo para su propia ciudad.';
 
   @override
   String get menuAbout => 'Sobre nosotros';

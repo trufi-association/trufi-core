@@ -7,34 +7,19 @@ import 'package:latlong2/latlong.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../domain/controller/map_controller.dart';
-import '../../presentation/map/maplibre_map.dart';
+import '../../domain/entities/camera.dart';
+import '../../domain/entities/widget_marker.dart';
+import '../../domain/layers/trufi_layer.dart';
+import '../../presentation/map/trufi_map.dart';
 import 'trufi_map_engine.dart';
 
 /// Configuration for fully offline maps.
-///
-/// All paths are relative to the assets folder.
 class OfflineMapConfig {
-  /// Path to mbtiles file in assets (e.g., 'assets/offline/cochabamba.mbtiles')
   final String mbtilesAsset;
-
-  /// Path to style.json in assets (e.g., 'assets/offline/styles/osm-bright/style.json')
   final String styleAsset;
-
-  /// Path to sprites directory in assets (e.g., 'assets/offline/styles/osm-bright/')
-  /// Should contain sprite.json, sprite.png, sprite@2x.json, sprite@2x.png
   final String spritesAssetDir;
-
-  /// Path to fonts directory in assets (e.g., 'assets/offline/fonts/')
-  /// Should contain subdirectories for each font (e.g., 'OpenSansRegular/')
   final String fontsAssetDir;
-
-  /// Map of font names: asset directory name -> style font name
-  /// e.g., {'OpenSansRegular': 'Open Sans Regular'}
-  /// The key is the directory name in assets (without spaces for Flutter compatibility)
-  /// The value is the font name used in the style.json (with spaces)
   final Map<String, String> fontMapping;
-
-  /// List of font ranges to copy (e.g., ['0-255', '256-511'])
   final List<String> fontRanges;
 
   const OfflineMapConfig({
@@ -48,45 +33,16 @@ class OfflineMapConfig {
 }
 
 /// Offline MapLibre GL engine that uses local mbtiles and style files.
-///
-/// This engine copies all necessary assets to the device's cache directory
-/// and generates a style.json that points to local resources.
-///
-/// Example:
-/// ```dart
-/// OfflineMapLibreEngine(
-///   engineId: 'offline_map',
-///   config: OfflineMapConfig(
-///     mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
-///     styleAsset: 'assets/offline/styles/osm-bright/style.json',
-///     spritesAssetDir: 'assets/offline/styles/osm-bright/',
-///     fontsAssetDir: 'assets/offline/fonts/',
-///     fontNames: ['Open Sans Regular', 'Open Sans Bold', 'Open Sans Italic'],
-///     fontRanges: ['0-255', '256-511', '512-767', '768-1023'],
-///   ),
-///   displayName: 'Offline Map',
-/// )
-/// ```
 class OfflineMapLibreEngine implements ITrufiMapEngine {
-  /// Configuration for offline assets.
   final OfflineMapConfig config;
-
-  /// Custom engine ID (optional).
   final String? engineId;
-
-  /// Custom display name (optional).
   final String? displayName;
-
-  /// Custom description (optional).
   final String? displayDescription;
-
-  /// Custom preview widget (optional).
+  final LocalizedStringBuilder? nameBuilder;
+  final LocalizedStringBuilder? descriptionBuilder;
   final Widget? preview;
 
-  /// Cached generated style path.
   String? _cachedStylePath;
-
-  /// Whether initialization is complete.
   bool _initialized = false;
 
   OfflineMapLibreEngine({
@@ -94,6 +50,8 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     this.engineId,
     this.displayName,
     this.displayDescription,
+    this.nameBuilder,
+    this.descriptionBuilder,
     this.preview,
   });
 
@@ -107,6 +65,14 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   String get description => displayDescription ?? 'Mapa completamente offline';
 
   @override
+  String localizedName(BuildContext context) =>
+      nameBuilder?.call(context) ?? name;
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      descriptionBuilder?.call(context) ?? description;
+
+  @override
   Widget? get previewWidget =>
       preview ??
       Container(
@@ -116,60 +82,39 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
         ),
       );
 
-  /// Copy an asset file to the cache directory.
+  bool get isInitialized => _initialized;
+  String? get stylePath => _cachedStylePath;
+
   Future<String> _copyAsset(String assetPath, String targetPath) async {
     final targetFile = File(targetPath);
-
-    // Skip if already exists
-    if (await targetFile.exists()) {
-      return targetPath;
-    }
-
-    // Ensure parent directory exists
+    if (await targetFile.exists()) return targetPath;
     await targetFile.parent.create(recursive: true);
-
-    // Copy from assets
     final data = await rootBundle.load(assetPath);
     final bytes = data.buffer.asUint8List();
     await targetFile.writeAsBytes(bytes, flush: true);
-
     return targetPath;
   }
 
-  /// Whether the engine is initialized.
-  bool get isInitialized => _initialized;
-
-  /// The cached style path (available after initialization).
-  String? get stylePath => _cachedStylePath;
-
   @override
   Future<void> initialize() async {
-    if (_initialized && _cachedStylePath != null) {
-      return;
-    }
+    if (_initialized && _cachedStylePath != null) return;
     await _initializeOfflineResources();
   }
 
-  /// Internal initialization logic.
   Future<String> _initializeOfflineResources() async {
-    if (_initialized && _cachedStylePath != null) {
-      return _cachedStylePath!;
-    }
+    if (_initialized && _cachedStylePath != null) return _cachedStylePath!;
 
     final cacheDir = await getApplicationCacheDirectory();
     final offlineDir = Directory('${cacheDir.path}/offline_maps/$id');
     await offlineDir.create(recursive: true);
 
-    // 1. Copy mbtiles
     final mbtilesPath = await _copyAsset(
       config.mbtilesAsset,
       '${offlineDir.path}/tiles.mbtiles',
     );
 
-    // 2. Copy sprites
     final spritesDir = '${offlineDir.path}/sprites';
     await Directory(spritesDir).create(recursive: true);
-
     for (final spriteFile in [
       'sprite.json',
       'sprite.png',
@@ -186,11 +131,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // 3. Load style.json to parse font stacks
     final styleData = await rootBundle.loadString(config.styleAsset);
     final style = json.decode(styleData) as Map<String, dynamic>;
 
-    // Extract all unique font stacks from the style
     final Set<List<String>> fontStacks = {};
     if (style.containsKey('layers')) {
       final layers = style['layers'] as List<dynamic>;
@@ -207,18 +150,12 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // 4. Copy fonts
-    // fontMapping: assetDirName -> styleFontName
-    // e.g., 'OpenSansRegular' -> 'Open Sans Regular'
     final fontsDir = '${offlineDir.path}/fonts';
-
-    // First, copy individual fonts
     for (final entry in config.fontMapping.entries) {
-      final assetFontName = entry.key; // e.g., 'OpenSansRegular'
-      final styleFontName = entry.value; // e.g., 'Open Sans Regular'
+      final assetFontName = entry.key;
+      final styleFontName = entry.value;
       final fontDir = '$fontsDir/$styleFontName';
       await Directory(fontDir).create(recursive: true);
-
       for (final range in config.fontRanges) {
         try {
           await _copyAsset(
@@ -226,7 +163,6 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
             '$fontDir/$range.pbf',
           );
         } catch (e) {
-          // Font range might not exist, skip it
           debugPrint(
             'Warning: Could not copy font $assetFontName/$range.pbf: $e',
           );
@@ -234,18 +170,13 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // Second, create font stack directories (for combined fonts like "Font A,Font B")
     for (final fontStack in fontStacks) {
       if (fontStack.length > 1) {
-        // This is a font stack with multiple fonts
         final stackName = fontStack.join(',');
         final stackDir = '$fontsDir/$stackName';
         await Directory(stackDir).create(recursive: true);
-
-        // Copy from the first font in the stack (primary font)
         final primaryFont = fontStack.first;
         final primaryFontDir = '$fontsDir/$primaryFont';
-
         for (final range in config.fontRanges) {
           try {
             final sourceFile = File('$primaryFontDir/$range.pbf');
@@ -261,9 +192,6 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // 5. Modify style.json (already loaded above)
-    // Update sources to use local mbtiles
-    // Format: mbtiles:///absolute/path/to/file.mbtiles
     if (style.containsKey('sources')) {
       final sources = style['sources'] as Map<String, dynamic>;
       for (final key in sources.keys) {
@@ -275,52 +203,65 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       }
     }
 
-    // Update sprite to use local files
     style['sprite'] = 'file://$spritesDir/sprite';
-
-    // Update glyphs to use local files
     style['glyphs'] = 'file://$fontsDir/{fontstack}/{range}.pbf';
 
-    // Save modified style
     final stylePath = '${offlineDir.path}/style.json';
     await File(stylePath).writeAsString(json.encode(style));
 
     _cachedStylePath = stylePath;
     _initialized = true;
-
     return stylePath;
   }
 
   @override
   Widget buildMap({
-    required TrufiMapController controller,
+    TrufiMapController? controller,
+    required TrufiCameraPosition initialCamera,
+    TrufiCameraPosition? camera,
+    ValueChanged<TrufiCameraPosition>? onCameraChanged,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
-    bool isDarkMode = false,
+    List<TrufiLayer> layers = const [],
+    List<WidgetMarker> widgetMarkers = const [],
   }) {
     return _OfflineMapWrapper(
       key: ValueKey(id),
       engine: this,
       controller: controller,
+      initialCamera: initialCamera,
+      camera: camera,
+      onCameraChanged: onCameraChanged,
       onMapClick: onMapClick,
       onMapLongClick: onMapLongClick,
+      layers: layers,
+      widgetMarkers: widgetMarkers,
     );
   }
 }
 
-/// Wrapper widget that initializes offline resources before rendering the map.
 class _OfflineMapWrapper extends StatefulWidget {
   final OfflineMapLibreEngine engine;
-  final TrufiMapController controller;
+  final TrufiMapController? controller;
+  final TrufiCameraPosition initialCamera;
+  final TrufiCameraPosition? camera;
+  final ValueChanged<TrufiCameraPosition>? onCameraChanged;
   final void Function(LatLng)? onMapClick;
   final void Function(LatLng)? onMapLongClick;
+  final List<TrufiLayer> layers;
+  final List<WidgetMarker> widgetMarkers;
 
   const _OfflineMapWrapper({
     super.key,
     required this.engine,
     required this.controller,
+    required this.initialCamera,
+    this.camera,
+    this.onCameraChanged,
     this.onMapClick,
     this.onMapLongClick,
+    this.layers = const [],
+    this.widgetMarkers = const [],
   });
 
   @override
@@ -339,7 +280,6 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
   }
 
   Future<void> _ensureInitialized() async {
-    // If already initialized during app startup, this returns immediately
     try {
       final stylePath = await widget.engine._initializeOfflineResources();
       if (mounted) {
@@ -361,14 +301,12 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    // If engine was pre-initialized, show map immediately
     if (widget.engine.isInitialized && _stylePath == null) {
       _stylePath = widget.engine.stylePath;
       _loading = false;
     }
 
     if (_loading) {
-      // Brief loading state - should be instant if pre-initialized
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -408,12 +346,17 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
       );
     }
 
-    return TrufiMapLibreMap(
+    return TrufiMap(
       key: ValueKey(_stylePath),
       controller: widget.controller,
+      initialCamera: widget.initialCamera,
+      camera: widget.camera,
       styleString: _stylePath!,
+      onCameraChanged: widget.onCameraChanged,
       onMapClick: widget.onMapClick,
       onMapLongClick: widget.onMapLongClick,
+      layers: widget.layers,
+      widgetMarkers: widget.widgetMarkers,
     );
   }
 }

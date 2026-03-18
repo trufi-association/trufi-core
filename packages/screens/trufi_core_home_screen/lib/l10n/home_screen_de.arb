@@ -4,7 +4,8 @@
   "searchOrigin": "Startort auswählen",
   "searchDestination": "Zielort auswählen",
   "selectLocations": "Wähle Start und Ziel, um Routen zu finden",
-  "noRoutesFound": "Keine Routen gefunden",
+  "noRoutesFound": "Keine ÖPNV-Routen für diese Strecke gefunden. Versuche ein anderes Ziel oder passe die Sucheinstellungen an.",
+  "noRoutesFoundShort": "Keine Routen für diese Strecke gefunden",
   "errorNoRoutes": "Fehler beim Laden der Routen",
   "durationMinutes": "{minutes} Min",
   "durationHoursMinutes": "{hours}h {minutes}Min",
@@ -110,8 +111,9 @@
   "engineOnlineName": "Online",
   "engineOnlineDescription": "OpenTripPlanner 2.8. Echtzeit-Routing mit detaillierten Fußweganweisungen.",
   "engineOfflineName": "Offline",
-  "engineOfflineDescription": "GTFS-basiertes Routing, inspiriert von GuíaCochala. Funktioniert ohne Internet.",
+  "engineOfflineDescription": "GTFS-basiertes Routing. Funktioniert ohne Internet.",
   "limitationRequiresInternet": "Erfordert Internet",
   "limitationSlower": "Langsamere Antwort",
-  "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte"
+  "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte",
+  "estimatedTimesDisclaimer": "Reisezeiten sind geschätzt und können je nach Verkehr variieren"
 }

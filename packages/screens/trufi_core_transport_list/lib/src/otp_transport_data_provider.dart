@@ -139,6 +139,13 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       return 1;
     });
 
+    // Deduplicate: keep one pattern per shortName + directionId combination
+    final seen = <String>{};
+    patterns.removeWhere((p) {
+      final key = '${p.route?.shortName ?? p.code}_${p.directionId ?? 0}';
+      return !seen.add(key);
+    });
+
     final routes = patterns.map(_convertToTransportRoute).toList();
 
     // Cache the patterns if cache is available
@@ -265,6 +272,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(route.route?.color),
       textColor: _parseColor(route.route?.textColor),
       modeIcon: _getModeIcon(route.route?.mode),
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
     );
   }
 
@@ -279,6 +289,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(route.route?.color),
       textColor: _parseColor(route.route?.textColor),
       modeIcon: _getModeIcon(route.route?.mode),
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
       modeName: route.route?.mode?.name,
       geometry: route.geometry
           ?.map(
@@ -310,6 +323,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       color: route.route?.color,
       textColor: route.route?.textColor,
       mode: route.route?.mode?.name,
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
     );
   }
 
@@ -324,6 +340,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       color: route.route?.color,
       textColor: route.route?.textColor,
       mode: route.route?.mode?.name,
+      agencyName: route.route?.agencyName,
+      headsign: route.headsign,
+      directionId: route.directionId,
       geometry: route.geometry
           ?.map(
             (latLng) => CachedLatLng(
@@ -356,6 +375,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(cached.color),
       textColor: _parseColor(cached.textColor),
       modeIcon: _getModeIconFromString(cached.mode),
+      agencyName: cached.agencyName,
+      headsign: cached.headsign,
+      directionId: cached.directionId,
     );
   }
 
@@ -372,6 +394,9 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       backgroundColor: _parseColor(cached.color),
       textColor: _parseColor(cached.textColor),
       modeIcon: _getModeIconFromString(cached.mode),
+      agencyName: cached.agencyName,
+      headsign: cached.headsign,
+      directionId: cached.directionId,
       modeName: cached.mode,
       geometry: cached.geometry
           ?.map(
@@ -441,6 +466,6 @@ class OtpTransportDataProvider extends TransportListDataProvider {
         iconData = Icons.directions_transit;
     }
 
-    return Icon(iconData, size: 16, color: Colors.white);
+    return Icon(iconData, size: 16);
   }
 }

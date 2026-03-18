@@ -21,7 +21,11 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   String get selectLocations => 'Selecciona origen y destino para buscar rutas';
 
   @override
-  String get noRoutesFound => 'No se encontraron rutas';
+  String get noRoutesFound =>
+      'No encontramos rutas de transporte público para este trayecto. Intenta con otro destino o ajusta los parámetros de búsqueda.';
+
+  @override
+  String get noRoutesFoundShort => 'No se encontraron rutas para este trayecto';
 
   @override
   String get errorNoRoutes => 'Error al cargar rutas';
@@ -393,18 +397,18 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
       'Intenta online primero, usa offline si falla';
 
   @override
-  String get engineOnlineName => 'Online';
+  String get engineOnlineName => 'En línea';
 
   @override
   String get engineOnlineDescription =>
       'OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.';
 
   @override
-  String get engineOfflineName => 'Offline';
+  String get engineOfflineName => 'Sin conexión';
 
   @override
   String get engineOfflineDescription =>
-      'Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.';
+      'Enrutamiento basado en GTFS. Funciona sin internet.';
 
   @override
   String get limitationRequiresInternet => 'Requiere internet';
@@ -414,4 +418,8 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
 
   @override
   String get limitationNoWalkingRoute => 'Sin ruta de caminata en mapa';
+
+  @override
+  String get estimatedTimesDisclaimer =>
+      'Los tiempos son estimados y pueden variar según el tráfico';
 }

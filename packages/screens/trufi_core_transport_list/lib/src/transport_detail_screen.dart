@@ -76,6 +76,9 @@ class TransportDetailScreen extends StatefulWidget {
         textColor: route.route?.textColor != null
             ? Color(int.parse('FF${route.route!.textColor}', radix: 16))
             : null,
+        agencyName: route.route?.agencyName,
+        headsign: route.headsign,
+        directionId: route.directionId,
         geometry: route.geometry
             ?.map((p) => (latitude: p.latitude, longitude: p.longitude))
             .toList(),
@@ -107,6 +110,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   MapMoveCallback? _mapMoveCallback;
   StopSelectionCallback? _stopSelectionCallback;
   int? _selectedStopIndex;
+  double? _headerMinSize; // Computed from measured header height
 
   @override
   void initState() {
@@ -204,7 +208,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     ColorScheme colorScheme,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ?? Colors.white;
+    final textColor = _route?.textColor ??
+        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
@@ -437,7 +442,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     double width,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ?? Colors.white;
+    final textColor = _route?.textColor ??
+        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
@@ -601,24 +607,42 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         _buildTopBar(context, theme, colorScheme),
 
         // Bottom sheet with stops only
-        TrufiBottomSheet(
-          controller: _sheetController,
-          initialChildSize: 0.35,
-          minChildSize: 0.15,
-          maxChildSize: 0.5,
-          snap: true,
-          snapSizes: const [0.15, 0.35, 0.5],
-          builder: (context, scrollController) => _StopsSheetContent(
-            route: _route!,
-            scrollController: scrollController,
-            selectedStopIndex: _selectedStopIndex,
-            onStopTap: (index, lat, lng) {
-              HapticFeedback.selectionClick();
-              setState(() => _selectedStopIndex = index);
-              _mapMoveCallback?.call(lat, lng);
-              _stopSelectionCallback?.call(index);
-            },
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final screenHeight = constraints.maxHeight;
+            // Grabber height in TrufiBottomSheet: 12 top + 4 bar + 8 bottom = 24
+            const grabberHeight = 24.0;
+            final minSize = _headerMinSize != null
+                ? ((_headerMinSize! + grabberHeight) / screenHeight)
+                    .clamp(0.1, 0.4)
+                : 0.12;
+            final snapSizes = [minSize, 0.35, 0.85];
+
+            return TrufiBottomSheet(
+              controller: _sheetController,
+              initialChildSize: 0.35,
+              minChildSize: minSize,
+              maxChildSize: 0.85,
+              snap: true,
+              snapSizes: snapSizes,
+              builder: (context, scrollController) => _StopsSheetContent(
+                route: _route!,
+                scrollController: scrollController,
+                selectedStopIndex: _selectedStopIndex,
+                onHeaderMeasured: (height) {
+                  if (_headerMinSize != height) {
+                    setState(() => _headerMinSize = height);
+                  }
+                },
+                onStopTap: (index, lat, lng) {
+                  HapticFeedback.selectionClick();
+                  setState(() => _selectedStopIndex = index);
+                  _mapMoveCallback?.call(lat, lng);
+                  _stopSelectionCallback?.call(index);
+                },
+              ),
+            );
+          },
         ),
       ],
     );
@@ -751,62 +775,120 @@ class _RouteDistanceCalculator {
 }
 
 /// Content for the stops bottom sheet
-class _StopsSheetContent extends StatelessWidget {
+class _StopsSheetContent extends StatefulWidget {
   final TransportRouteDetails route;
   final ScrollController scrollController;
   final int? selectedStopIndex;
   final void Function(int index, double lat, double lng)? onStopTap;
+  final void Function(double headerHeight)? onHeaderMeasured;
 
   const _StopsSheetContent({
     required this.route,
     required this.scrollController,
     this.selectedStopIndex,
     this.onStopTap,
+    this.onHeaderMeasured,
   });
+
+  @override
+  State<_StopsSheetContent> createState() => _StopsSheetContentState();
+}
+
+class _StopsSheetContentState extends State<_StopsSheetContent> {
+  final _headerKey = GlobalKey();
+  double _headerHeight = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureHeader());
+  }
+
+  @override
+  void didUpdateWidget(covariant _StopsSheetContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureHeader());
+  }
+
+  void _measureHeader() {
+    final box = _headerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box != null && box.hasSize && box.size.height != _headerHeight) {
+      setState(() => _headerHeight = box.size.height);
+      widget.onHeaderMeasured?.call(box.size.height);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = route.stops ?? [];
+    final stops = widget.route.directionId == 1
+        ? (widget.route.stops ?? []).reversed.toList()
+        : widget.route.stops ?? [];
 
-    return Column(
-      children: [
-        // Fixed header section
-        _buildHeader(context, theme, colorScheme, stops),
+    final header = KeyedSubtree(
+      key: _headerKey,
+      child: _buildHeader(context, theme, colorScheme, stops),
+    );
 
-        // Scrollable stops list
-        Expanded(
-          child: stops.isEmpty
-              ? const _EmptyStopsInline()
-              : ListView.builder(
-                  controller: scrollController,
-                  padding: EdgeInsets.zero,
-                  itemCount: stops.length,
-                  itemBuilder: (context, index) {
-                    final stop = stops[index];
-                    final isFirst = index == 0;
-                    final isLast = index == stops.length - 1;
-                    final isSelected = selectedStopIndex == index;
-                    final routeColor =
-                        route.backgroundColor ?? colorScheme.primary;
+    // Before measurement, use Column so the header can size itself.
+    // After measurement, switch to CustomScrollView with pinned header.
+    if (_headerHeight == 0) {
+      return Column(
+        children: [
+          header,
+          Expanded(child: ListView(controller: widget.scrollController)),
+        ],
+      );
+    }
 
-                    return _StopTimelineItem(
-                      stop: stop,
-                      isFirst: isFirst,
-                      isLast: isLast,
-                      isSelected: isSelected,
-                      routeColor: routeColor,
-                      onTap: onStopTap != null
-                          ? () {
-                              HapticFeedback.selectionClick();
-                              onStopTap!(index, stop.latitude, stop.longitude);
-                            }
-                          : null,
-                    );
-                  },
-                ),
+    return CustomScrollView(
+      controller: widget.scrollController,
+      slivers: [
+        // Pinned header — stays fixed at top, drag on it still expands the sheet
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverHeaderDelegate(
+            child: header,
+            height: _headerHeight,
+          ),
         ),
+
+        // Stops list
+        if (stops.isEmpty)
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: _EmptyStopsInline(),
+          )
+        else
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final stop = stops[index];
+                final isFirst = index == 0;
+                final isLast = index == stops.length - 1;
+                final isSelected = widget.selectedStopIndex == index;
+                final routeColor =
+                    widget.route.backgroundColor ?? colorScheme.primary;
+
+                return _StopTimelineItem(
+                  stop: stop,
+                  isFirst: isFirst,
+                  isLast: isLast,
+                  isSelected: isSelected,
+                  routeColor: routeColor,
+                  onTap: widget.onStopTap != null
+                      ? () {
+                          HapticFeedback.selectionClick();
+                          widget.onStopTap!(
+                              index, stop.latitude, stop.longitude);
+                        }
+                      : null,
+                );
+              },
+              childCount: stops.length,
+            ),
+          ),
       ],
     );
   }
@@ -817,14 +899,14 @@ class _StopsSheetContent extends StatelessWidget {
     ColorScheme colorScheme,
     List<TransportStop> stops,
   ) {
-    final routeColor = route.backgroundColor ?? colorScheme.primary;
-    final distance = _RouteDistanceCalculator.calculate(route.geometry);
+    final routeColor = widget.route.backgroundColor ?? colorScheme.primary;
+    final distance = _RouteDistanceCalculator.calculate(widget.route.geometry);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Origin/Destination header (Google Maps style)
-        if (route.hasOriginDestination)
+        if (widget.route.hasOriginDestination)
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
             child: Row(
@@ -876,7 +958,9 @@ class _StopsSheetContent extends StatelessWidget {
                     children: [
                       // Origin
                       Text(
-                        route.longNameStart,
+                        widget.route.directionId == 1
+                            ? widget.route.longNameLast
+                            : widget.route.longNameStart,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -887,7 +971,9 @@ class _StopsSheetContent extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        route.longNameLast,
+                        widget.route.directionId == 1
+                            ? widget.route.longNameStart
+                            : widget.route.longNameLast,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -945,12 +1031,12 @@ class _StopsSheetContent extends StatelessWidget {
                 // Mode
                 Expanded(
                   child: _StatItem(
-                    icon: route.modeIcon != null
+                    icon: widget.route.modeIcon != null
                         ? null
                         : Icons.directions_bus_rounded,
-                    customIcon: route.modeIcon,
+                    customIcon: widget.route.modeIcon,
                     label: 'Mode',
-                    value: route.modeName ?? 'Bus',
+                    value: widget.route.modeName ?? 'Bus',
                     color: routeColor,
                   ),
                 ),
@@ -983,6 +1069,35 @@ class _StopsSheetContent extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Delegate for pinned header with a known height.
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  _SliverHeaderDelegate({required this.child, required this.height});
+
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _SliverHeaderDelegate oldDelegate) =>
+      height != oldDelegate.height || child != oldDelegate.child;
 }
 
 /// Inline empty stops state for sliver
@@ -1263,7 +1378,9 @@ class _SidePanelStopsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = route.stops ?? [];
+    final stops = route.directionId == 1
+        ? (route.stops ?? []).reversed.toList()
+        : route.stops ?? [];
     final routeColor = route.backgroundColor ?? colorScheme.primary;
     final distance = _RouteDistanceCalculator.calculate(route.geometry);
 
@@ -1322,7 +1439,9 @@ class _SidePanelStopsContent extends StatelessWidget {
                     children: [
                       // Origin
                       Text(
-                        route.longNameStart,
+                        route.directionId == 1
+                            ? route.longNameLast
+                            : route.longNameStart,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -1333,7 +1452,9 @@ class _SidePanelStopsContent extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        route.longNameLast,
+                        route.directionId == 1
+                            ? route.longNameStart
+                            : route.longNameLast,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -1533,8 +1654,17 @@ class _RouteMapView extends StatefulWidget {
 
 class _RouteMapViewState extends State<_RouteMapView> {
   TrufiMapController? _mapController;
-  FitCameraLayer? _fitCameraLayer;
-  _RouteLayer? _routeLayer;
+  final FitCameraUtil _fitCamera = FitCameraUtil();
+
+  // Declarative layer state
+  List<TrufiMarker> _routeMarkers = const [];
+  List<TrufiLine> _routeLines = const [];
+  TrufiCameraPosition? _camera;
+  TrufiCameraPosition? _initialCamera;
+
+  TransportRouteDetails? _currentRoute;
+  int? _selectedStopIndex;
+  bool _outOfFocus = false;
 
   @override
   void initState() {
@@ -1544,24 +1674,31 @@ class _RouteMapViewState extends State<_RouteMapView> {
   }
 
   void _onStopSelected(int? stopIndex) {
-    _routeLayer?.setSelectedStop(stopIndex);
+    _selectedStopIndex = stopIndex;
+    if (_currentRoute != null) {
+      setState(() {
+        _rebuildRouteLayer(_currentRoute!);
+      });
+    }
   }
 
   void _moveToLocation(double latitude, double longitude) {
-    _mapController?.setCameraPosition(
-      TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
-    );
+    setState(() {
+      _camera = TrufiCameraPosition(
+        target: LatLng(latitude, longitude),
+        zoom: 16,
+      );
+    });
   }
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
     if (_mapController == null) {
-      _mapController = TrufiMapController(
-        initialCameraPosition: TrufiCameraPosition(
-          target: mapEngineManager.defaultCenter,
-          zoom: mapEngineManager.defaultZoom,
-        ),
+      _mapController = TrufiMapController();
+      _initialCamera = TrufiCameraPosition(
+        target: mapEngineManager.defaultCenter,
+        zoom: mapEngineManager.defaultZoom,
       );
-      _fitCameraLayer = FitCameraLayer(_mapController!);
+      _camera = _initialCamera;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _updateRoute();
@@ -1583,30 +1720,166 @@ class _RouteMapViewState extends State<_RouteMapView> {
       return;
     }
 
-    if (_routeLayer != null) {
-      _mapController!.removeLayer(_routeLayer!.id);
-    }
-
-    _routeLayer = _RouteLayer(_mapController!);
-    _routeLayer!.setRoute(route);
+    _currentRoute = route;
+    _selectedStopIndex = null;
 
     final points = route.geometry!
         .map((p) => LatLng(p.latitude, p.longitude))
         .toList();
 
     if (points.length > 1) {
-      _fitCameraLayer?.setFitPoints(points);
+      final fitCam = _fitCamera.cameraForPoints(
+        points,
+        _camera ?? _initialCamera!,
+      );
+      if (fitCam != null) {
+        _camera = fitCam;
+      }
+    }
+
+    setState(() {
+      _rebuildRouteLayer(route);
+    });
+  }
+
+  void _rebuildRouteLayer(TransportRouteDetails route) {
+    final markers = <TrufiMarker>[];
+    final lines = <TrufiLine>[];
+
+    if (route.geometry != null && route.geometry!.isNotEmpty) {
+      final routeColor = route.backgroundColor ?? Colors.blue;
+      final points = route.geometry!
+          .map((p) => LatLng(p.latitude, p.longitude))
+          .toList();
+
+      lines.add(
+        TrufiLine(
+          id: 'route-line',
+          position: points,
+          color: routeColor,
+          lineWidth: 5,
+        ),
+      );
+
+      _buildStopMarkers(route, markers);
+    }
+
+    _routeMarkers = markers;
+    _routeLines = lines;
+  }
+
+  void _buildStopMarkers(
+    TransportRouteDetails route,
+    List<TrufiMarker> markers,
+  ) {
+    final stops = route.directionId == 1
+        ? (route.stops ?? []).reversed.toList()
+        : route.stops ?? [];
+    if (stops.isEmpty) return;
+
+    final routeColor = route.backgroundColor ?? Colors.blue;
+    final colorHex = routeColor.toARGB32().toRadixString(16);
+    final intermediateImageKey = 'stop_intermediate_$colorHex';
+    final selectedImageKey = 'stop_selected_$colorHex';
+
+    for (int i = 0; i < stops.length; i++) {
+      final stop = stops[i];
+      final isFirst = i == 0;
+      final isLast = i == stops.length - 1;
+      final isSelected = i == _selectedStopIndex;
+
+      if (isFirst || isLast || isSelected) continue;
+
+      markers.add(
+        TrufiMarker(
+          id: 'stop-$i',
+          position: LatLng(stop.latitude, stop.longitude),
+          widget: _StopMarker(color: routeColor),
+          size: const Size(12, 12),
+          layerLevel: 1,
+          imageCacheKey: intermediateImageKey,
+        ),
+      );
+    }
+
+    final firstStop = stops.first;
+    markers.add(
+      TrufiMarker(
+        id: 'origin-marker',
+        position: LatLng(firstStop.latitude, firstStop.longitude),
+        widget: const _OriginMarker(),
+        size: const Size(28, 28),
+        layerLevel: 5,
+        imageCacheKey: 'origin_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    final lastStop = stops.last;
+    markers.add(
+      TrufiMarker(
+        id: 'destination-marker',
+        position: LatLng(lastStop.latitude, lastStop.longitude),
+        widget: const _DestinationMarker(),
+        size: const Size(36, 36),
+        alignment: Alignment.topCenter,
+        layerLevel: 5,
+        imageCacheKey: 'destination_marker_v2',
+        allowOverlap: true,
+      ),
+    );
+
+    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
+      final selectedStop = stops[_selectedStopIndex!];
+      markers.add(
+        TrufiMarker(
+          id: 'selected-stop',
+          position: LatLng(selectedStop.latitude, selectedStop.longitude),
+          widget: _SelectedStopMarker(color: routeColor),
+          size: const Size(24, 24),
+          layerLevel: 10,
+          imageCacheKey: selectedImageKey,
+        ),
+      );
     }
   }
 
-  @override
-  void dispose() {
-    _mapController?.dispose();
-    super.dispose();
+  void _onCameraChanged(TrufiCameraPosition cam) {
+    final nowOutOfFocus = _fitCamera.isOutOfFocus(cam);
+    if (nowOutOfFocus != _outOfFocus) {
+      setState(() {
+        _outOfFocus = nowOutOfFocus;
+      });
+    }
+  }
+
+  void _reFitCamera() {
+    final refitted = _fitCamera.reFitCamera(
+      _camera ?? _initialCamera!,
+    );
+    if (refitted != null) {
+      setState(() {
+        _camera = refitted;
+        _outOfFocus = false;
+      });
+    }
   }
 
   Widget _buildMap(ITrufiMapEngine engine) {
-    return engine.buildMap(controller: _mapController!);
+    return engine.buildMap(
+      controller: _mapController!,
+      initialCamera: _initialCamera!,
+      camera: _camera,
+      onCameraChanged: _onCameraChanged,
+      layers: [
+        TrufiLayer(
+          id: 'route-layer',
+          markers: _routeMarkers,
+          lines: _routeLines,
+          layerLevel: 1,
+        ),
+      ],
+    );
   }
 
   @override
@@ -1624,7 +1897,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
           left: viewPadding.left,
           right: viewPadding.right,
         );
-        _fitCameraLayer?.updateViewport(
+        _fitCamera.updateViewport(
           Size(constraints.maxWidth, constraints.maxHeight),
           adjustedPadding,
         );
@@ -1652,44 +1925,37 @@ class _RouteMapViewState extends State<_RouteMapView> {
                     ),
                     const SizedBox(height: 8),
                   ],
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-                    builder: (context, outOfFocus, _) {
-                      return AnimatedOpacity(
-                        opacity: outOfFocus ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 200),
-                        child: AnimatedScale(
-                          scale: outOfFocus ? 1.0 : 0.8,
-                          duration: const Duration(milliseconds: 200),
-                          child: Material(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.surface.withValues(alpha: 0.95),
-                            borderRadius: BorderRadius.circular(12),
-                            elevation: 2,
-                            shadowColor: Colors.black26,
-                            child: InkWell(
-                              onTap: outOfFocus
-                                  ? _fitCameraLayer!.reFitCamera
-                                  : null,
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                width: 44,
-                                height: 44,
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.crop_free_rounded,
-                                  size: 22,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
-                              ),
+                  AnimatedOpacity(
+                    opacity: _outOfFocus ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedScale(
+                      scale: _outOfFocus ? 1.0 : 0.8,
+                      duration: const Duration(milliseconds: 200),
+                      child: Material(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surface.withValues(alpha: 0.95),
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 2,
+                        shadowColor: Colors.black26,
+                        child: InkWell(
+                          onTap: _outOfFocus ? _reFitCamera : null,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            width: 44,
+                            height: 44,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.crop_free_rounded,
+                              size: 22,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface,
                             ),
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1698,123 +1964,6 @@ class _RouteMapViewState extends State<_RouteMapView> {
         );
       },
     );
-  }
-}
-
-/// Custom layer for displaying route on map
-class _RouteLayer extends TrufiLayer {
-  _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
-
-  TransportRouteDetails? _currentRoute;
-  int? _selectedStopIndex;
-
-  void setSelectedStop(int? stopIndex) {
-    _selectedStopIndex = stopIndex;
-    if (_currentRoute != null) {
-      _updateStopMarkers(_currentRoute!);
-    }
-  }
-
-  void setRoute(TransportRouteDetails route) {
-    _currentRoute = route;
-    clearMarkers();
-    clearLines();
-
-    if (route.geometry == null || route.geometry!.isEmpty) return;
-
-    final routeColor = route.backgroundColor ?? Colors.blue;
-    final points = route.geometry!
-        .map((p) => LatLng(p.latitude, p.longitude))
-        .toList();
-
-    addLine(
-      TrufiLine(
-        id: 'route-line',
-        position: points,
-        color: routeColor,
-        lineWidth: 5,
-      ),
-    );
-
-    _updateStopMarkers(route);
-  }
-
-  void _updateStopMarkers(TransportRouteDetails route) {
-    final stops = route.stops ?? [];
-    for (int i = 0; i < stops.length; i++) {
-      removeMarkerById('stop-$i');
-    }
-    removeMarkerById('selected-stop');
-    removeMarkerById('origin-marker');
-    removeMarkerById('destination-marker');
-
-    if (stops.isEmpty) return;
-
-    final routeColor = route.backgroundColor ?? Colors.blue;
-    final colorHex = routeColor.toARGB32().toRadixString(16);
-    final intermediateImageKey = 'stop_intermediate_$colorHex';
-    final selectedImageKey = 'stop_selected_$colorHex';
-
-    for (int i = 0; i < stops.length; i++) {
-      final stop = stops[i];
-      final isFirst = i == 0;
-      final isLast = i == stops.length - 1;
-      final isSelected = i == _selectedStopIndex;
-
-      if (isFirst || isLast || isSelected) continue;
-
-      addMarker(
-        TrufiMarker(
-          id: 'stop-$i',
-          position: LatLng(stop.latitude, stop.longitude),
-          widget: _StopMarker(color: routeColor),
-          size: const Size(12, 12),
-          layerLevel: 1,
-          imageCacheKey: intermediateImageKey,
-        ),
-      );
-    }
-
-    final firstStop = stops.first;
-    addMarker(
-      TrufiMarker(
-        id: 'origin-marker',
-        position: LatLng(firstStop.latitude, firstStop.longitude),
-        widget: const _OriginMarker(),
-        size: const Size(28, 28),
-        layerLevel: 5,
-        imageCacheKey: 'origin_marker_v2',
-        allowOverlap: true,
-      ),
-    );
-
-    final lastStop = stops.last;
-    addMarker(
-      TrufiMarker(
-        id: 'destination-marker',
-        position: LatLng(lastStop.latitude, lastStop.longitude),
-        widget: const _DestinationMarker(),
-        size: const Size(36, 36),
-        alignment: Alignment.topCenter,
-        layerLevel: 5,
-        imageCacheKey: 'destination_marker_v2',
-        allowOverlap: true,
-      ),
-    );
-
-    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
-      final selectedStop = stops[_selectedStopIndex!];
-      addMarker(
-        TrufiMarker(
-          id: 'selected-stop',
-          position: LatLng(selectedStop.latitude, selectedStop.longitude),
-          widget: _SelectedStopMarker(color: routeColor),
-          size: const Size(24, 24),
-          layerLevel: 10,
-          imageCacheKey: selectedImageKey,
-        ),
-      );
-    }
   }
 }
 

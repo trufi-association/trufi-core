@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../l10n/routing_localizations.dart';
+
 /// Simplified walk speed levels for UI.
 enum WalkSpeedLevel {
   slow,
@@ -62,7 +64,7 @@ class Otp28PreferencesState extends ChangeNotifier {
 
   bool _wheelchair = false;
   double _walkSpeed = 1.33;
-  double? _maxWalkDistance;
+  double? _maxWalkDistance = 800;
   double _walkReluctance = 2.0;
   double _bikeSpeed = 5.0;
   Set<RoutingMode> _transportModes = const {
@@ -93,7 +95,7 @@ class Otp28PreferencesState extends ChangeNotifier {
         final map = jsonDecode(json) as Map<String, dynamic>;
         _wheelchair = map['wheelchair'] as bool? ?? false;
         _walkSpeed = (map['walkSpeed'] as num?)?.toDouble() ?? 1.33;
-        _maxWalkDistance = (map['maxWalkDistance'] as num?)?.toDouble();
+        _maxWalkDistance = (map['maxWalkDistance'] as num?)?.toDouble() ?? 800;
         _walkReluctance = (map['walkReluctance'] as num?)?.toDouble() ?? 2.0;
         _bikeSpeed = (map['bikeSpeed'] as num?)?.toDouble() ?? 5.0;
         _transportModes =
@@ -173,7 +175,7 @@ class Otp28PreferencesState extends ChangeNotifier {
   void reset() {
     _wheelchair = false;
     _walkSpeed = 1.33;
-    _maxWalkDistance = null;
+    _maxWalkDistance = 800;
     _walkReluctance = 2.0;
     _bikeSpeed = 5.0;
     _transportModes = const {RoutingMode.transit, RoutingMode.walk};
@@ -185,8 +187,10 @@ class Otp28PreferencesState extends ChangeNotifier {
 /// Complete preferences UI for OTP 2.8 provider.
 class Otp28Preferences extends StatelessWidget {
   final Otp28PreferencesState state;
+  final bool showWheelchair;
+  final bool showBicycle;
 
-  const Otp28Preferences({super.key, required this.state});
+  const Otp28Preferences({super.key, required this.state, this.showWheelchair = true, this.showBicycle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -197,13 +201,15 @@ class Otp28Preferences extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _AccessibilitySection(state: state),
-            const SizedBox(height: 24),
+            if (showWheelchair) ...[
+              _AccessibilitySection(state: state),
+              const SizedBox(height: 24),
+            ],
             _WalkSpeedSection(state: state),
             const SizedBox(height: 24),
             _MaxWalkDistanceSection(state: state),
             const SizedBox(height: 24),
-            _TransportModesSection(state: state),
+            _TransportModesSection(state: state, showBicycle: showBicycle),
           ],
         );
       },
@@ -235,13 +241,13 @@ class _AccessibilitySection extends StatelessWidget {
               size: 24,
             ),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Wheelchair accessible')),
+            Expanded(child: Text(RoutingLocalizations.of(context).prefsWheelchairAccessible)),
           ],
         ),
         subtitle: Text(
           state.wheelchair
-              ? 'Routes avoid stairs and steep slopes'
-              : 'Include all routes',
+              ? RoutingLocalizations.of(context).prefsWheelchairOn
+              : RoutingLocalizations.of(context).prefsWheelchairOff,
           style: theme.textTheme.bodySmall?.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),
@@ -279,7 +285,7 @@ class _WalkSpeedSection extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Walking speed',
+              RoutingLocalizations.of(context).prefsWalkingSpeed,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -296,7 +302,7 @@ class _WalkSpeedSection extends StatelessWidget {
                   right: level != WalkSpeedLevel.fast ? 8 : 0,
                 ),
                 child: _SpeedChip(
-                  label: _speedLabel(level),
+                  label: _speedLabel(context, level),
                   icon: _speedIcon(level),
                   isSelected: isSelected,
                   onTap: () {
@@ -312,14 +318,15 @@ class _WalkSpeedSection extends StatelessWidget {
     );
   }
 
-  static String _speedLabel(WalkSpeedLevel level) {
+  static String _speedLabel(BuildContext context, WalkSpeedLevel level) {
+    final l10n = RoutingLocalizations.of(context);
     switch (level) {
       case WalkSpeedLevel.slow:
-        return 'Slow';
+        return l10n.prefsSpeedSlow;
       case WalkSpeedLevel.normal:
-        return 'Normal';
+        return l10n.prefsSpeedNormal;
       case WalkSpeedLevel.fast:
-        return 'Fast';
+        return l10n.prefsSpeedFast;
     }
   }
 
@@ -424,7 +431,7 @@ class _MaxWalkDistanceSection extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Maximum walking distance',
+              RoutingLocalizations.of(context).prefsMaxWalkDistance,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -469,7 +476,7 @@ class _DistanceChip extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     final label = distance == null
-        ? 'No limit'
+        ? RoutingLocalizations.of(context).prefsNoLimit
         : distance! >= 1000
         ? '${(distance! / 1000).toStringAsFixed(1)} km'
         : '${distance!.toInt()} m';
@@ -512,7 +519,8 @@ class _DistanceChip extends StatelessWidget {
 
 class _TransportModesSection extends StatelessWidget {
   final Otp28PreferencesState state;
-  const _TransportModesSection({required this.state});
+  final bool showBicycle;
+  const _TransportModesSection({required this.state, this.showBicycle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -527,7 +535,7 @@ class _TransportModesSection extends StatelessWidget {
             Icon(Icons.commute_rounded, color: colorScheme.primary, size: 20),
             const SizedBox(width: 8),
             Text(
-              'Transport modes',
+              RoutingLocalizations.of(context).prefsTransportModes,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -541,7 +549,7 @@ class _TransportModesSection extends StatelessWidget {
           children: [
             _TransportModeChip(
               icon: Icons.directions_bus_rounded,
-              label: 'Transit',
+              label: RoutingLocalizations.of(context).prefsModeTransit,
               isSelected: state.transportModes.contains(RoutingMode.transit),
               onTap: () {
                 HapticFeedback.selectionClick();
@@ -550,22 +558,23 @@ class _TransportModesSection extends StatelessWidget {
             ),
             _TransportModeChip(
               icon: Icons.directions_walk_rounded,
-              label: 'Walk',
+              label: RoutingLocalizations.of(context).prefsModeWalk,
               isSelected: state.transportModes.contains(RoutingMode.walk),
               onTap: () {
                 HapticFeedback.selectionClick();
                 state.toggleTransportMode(RoutingMode.walk);
               },
             ),
-            _TransportModeChip(
-              icon: Icons.directions_bike_rounded,
-              label: 'Bicycle',
-              isSelected: state.transportModes.contains(RoutingMode.bicycle),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                state.toggleTransportMode(RoutingMode.bicycle);
-              },
-            ),
+            if (showBicycle)
+              _TransportModeChip(
+                icon: Icons.directions_bike_rounded,
+                label: RoutingLocalizations.of(context).prefsModeBicycle,
+                isSelected: state.transportModes.contains(RoutingMode.bicycle),
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  state.toggleTransportMode(RoutingMode.bicycle);
+                },
+              ),
           ],
         ),
       ],

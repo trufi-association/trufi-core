@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/navigation_localizations.dart';
 import '../../models/navigation_instruction.dart';
 import '../../models/navigation_state.dart';
 
@@ -157,8 +158,8 @@ class NavigationInstructionCard extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             isOffRoute
-                ? 'You appear to be off the route'
-                : 'GPS signal is weak',
+                ? NavigationLocalizations.of(context).navOffRoute
+                : NavigationLocalizations.of(context).navWeakGps,
             style: TextStyle(
               color: isError
                   ? colorScheme.onErrorContainer
@@ -315,7 +316,7 @@ class NavigationInstructionCard extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            'Next: ',
+            NavigationLocalizations.of(context).navNext,
             style: theme.textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

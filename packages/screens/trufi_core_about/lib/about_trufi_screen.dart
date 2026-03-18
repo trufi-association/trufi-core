@@ -13,9 +13,15 @@ class AboutScreenConfig {
   final String countryName;
   final String emailContact;
   final String? logoAssetPath;
+  final Widget? logoWidget;
   final String? websiteUrl;
   final String? twitterUrl;
   final String? facebookUrl;
+
+  /// Custom sections to display between the Hero card and the Licenses button.
+  /// When null, the default sections are shown (mission, volunteer, open source, contact).
+  /// Pass an explicit list to control exactly which sections appear.
+  final List<Widget>? sections;
 
   const AboutScreenConfig({
     required this.appName,
@@ -23,9 +29,11 @@ class AboutScreenConfig {
     required this.countryName,
     required this.emailContact,
     this.logoAssetPath,
+    this.logoWidget,
     this.websiteUrl,
     this.twitterUrl,
     this.facebookUrl,
+    this.sections,
   });
 }
 
@@ -195,7 +203,7 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
   Widget _buildAnimatedItem({
     required int index,
     required Widget child,
-    int totalItems = 6,
+    required int totalItems,
   }) {
     final startTime = (index / totalItems).clamp(0.0, 0.6);
     final endTime = ((index / totalItems) + 0.4).clamp(0.0, 1.0);
@@ -219,171 +227,168 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
     );
   }
 
-  Future<void> _launchUrl(String url) async {
-    HapticFeedback.lightImpact();
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
+  /// Build the default sections when no custom sections are provided
+  List<Widget> _buildDefaultSections(BuildContext context) {
+    final localization = AboutLocalizations.of(context);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final config = widget.config;
+
+    return [
+      // Mission section
+      AboutSectionCard(
+        icon: Icons.favorite_rounded,
+        iconColor: Colors.red,
+        title: localization.aboutCollapseTitle,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              localization.aboutCollapseContent,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                height: 1.6,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.handshake_rounded,
+                    color: colorScheme.primary,
+                    size: 22,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      localization.aboutCollapseContentFoot,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Get involved section
+      AboutSectionCard(
+        icon: Icons.people_rounded,
+        iconColor: Colors.blue,
+        title: localization.volunteerTrufi,
+        child: Column(
+          children: [
+            AboutLinkTile(
+              icon: Icons.language_rounded,
+              iconColor: Colors.teal,
+              title: localization.trufiWebsite,
+              onTap: () => _openUrl(
+                'https://www.trufi-association.org/?utm_source=${config.cityName}-${config.countryName}&utm_medium=${localization.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website',
+              ),
+            ),
+            const SizedBox(height: 10),
+            AboutLinkTile(
+              icon: Icons.volunteer_activism_rounded,
+              iconColor: Colors.pink,
+              title: localization.volunteerTrufi,
+              onTap: () => _openUrl(
+                'https://www.trufi-association.org/volunteering/?utm_source=${config.cityName}-${config.countryName}&utm_medium=${localization.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi',
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Open source section
+      AboutSectionCard(
+        icon: Icons.code_rounded,
+        iconColor: Colors.green,
+        title: 'Open Source',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              localization.aboutOpenSource,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                height: 1.6,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 14),
+            AboutLinkTile(
+              icon: Icons.open_in_new_rounded,
+              iconColor: Colors.deepPurple,
+              title: 'GitHub',
+              subtitle: 'trufi-association/trufi-core',
+              onTap: () => _openUrl(
+                'https://github.com/trufi-association/trufi-core',
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // Contact section
+      AboutSectionCard(
+        icon: Icons.mail_rounded,
+        iconColor: Colors.orange,
+        title: 'Contact',
+        child: AboutLinkTile(
+          icon: Icons.email_rounded,
+          iconColor: Colors.indigo,
+          title: config.emailContact,
+          subtitle: 'Send us feedback',
+          onTap: () => _openUrl(
+            'mailto:${config.emailContact}?subject=${config.appName} Feedback',
+          ),
+        ),
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AboutLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final sectionWidgets =
+        widget.config.sections ?? _buildDefaultSections(context);
+    final totalItems = sectionWidgets.length + 2; // hero + sections + licenses
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         children: [
-          // Hero card with app info
+          // Hero card (always first)
           _buildAnimatedItem(
             index: 0,
+            totalItems: totalItems,
             child: _AboutHeroCard(config: widget.config),
           ),
           const SizedBox(height: 20),
 
-          // Mission section
-          _buildAnimatedItem(
-            index: 1,
-            child: _AboutSectionCard(
-              icon: Icons.favorite_rounded,
-              iconColor: Colors.red,
-              title: localization.aboutCollapseTitle,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    localization.aboutCollapseContent,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      height: 1.6,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer.withValues(
-                        alpha: 0.3,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.handshake_rounded,
-                          color: colorScheme.primary,
-                          size: 22,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            localization.aboutCollapseContentFoot,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          // Configurable sections
+          for (int i = 0; i < sectionWidgets.length; i++) ...[
+            _buildAnimatedItem(
+              index: i + 1,
+              totalItems: totalItems,
+              child: sectionWidgets[i],
             ),
-          ),
-          const SizedBox(height: 16),
+            SizedBox(height: i < sectionWidgets.length - 1 ? 16 : 24),
+          ],
 
-          // Get involved section
+          // Licenses button (always last)
           _buildAnimatedItem(
-            index: 2,
-            child: _AboutSectionCard(
-              icon: Icons.people_rounded,
-              iconColor: Colors.blue,
-              title: localization.volunteerTrufi,
-              child: Column(
-                children: [
-                  _AboutLinkTile(
-                    icon: Icons.language_rounded,
-                    iconColor: Colors.teal,
-                    title: localization.trufiWebsite,
-                    onTap: () => _launchUrl(
-                      'https://www.trufi-association.org/?utm_source=${widget.config.cityName}-${widget.config.countryName}&utm_medium=${localization.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _AboutLinkTile(
-                    icon: Icons.volunteer_activism_rounded,
-                    iconColor: Colors.pink,
-                    title: localization.volunteerTrufi,
-                    onTap: () => _launchUrl(
-                      'https://www.trufi-association.org/volunteering/?utm_source=${widget.config.cityName}-${widget.config.countryName}&utm_medium=${localization.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Open source section
-          _buildAnimatedItem(
-            index: 3,
-            child: _AboutSectionCard(
-              icon: Icons.code_rounded,
-              iconColor: Colors.green,
-              title: 'Open Source',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    localization.aboutOpenSource,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      height: 1.6,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  _AboutLinkTile(
-                    icon: Icons.open_in_new_rounded,
-                    iconColor: Colors.deepPurple,
-                    title: 'GitHub',
-                    subtitle: 'trufi-association/trufi-core',
-                    onTap: () => _launchUrl(
-                      'https://github.com/trufi-association/trufi-core',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Contact section
-          _buildAnimatedItem(
-            index: 4,
-            child: _AboutSectionCard(
-              icon: Icons.mail_rounded,
-              iconColor: Colors.orange,
-              title: 'Contact',
-              child: _AboutLinkTile(
-                icon: Icons.email_rounded,
-                iconColor: Colors.indigo,
-                title: widget.config.emailContact,
-                subtitle: 'Send us feedback',
-                onTap: () => _launchUrl(
-                  'mailto:${widget.config.emailContact}?subject=${widget.config.appName} Feedback',
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Licenses button
-          _buildAnimatedItem(
-            index: 5,
+            index: sectionWidgets.length + 1,
+            totalItems: totalItems,
             child: SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -456,19 +461,21 @@ class _AboutHeroCard extends StatelessWidget {
               color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: config.logoAssetPath != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: Image.asset(
-                      config.logoAssetPath!,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : Icon(
-                    Icons.directions_bus_rounded,
-                    size: 44,
-                    color: colorScheme.onPrimaryContainer,
-                  ),
+            child: config.logoWidget != null
+                ? config.logoWidget!
+                : config.logoAssetPath != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(22),
+                        child: Image.asset(
+                          config.logoAssetPath!,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Icon(
+                        Icons.directions_bus_rounded,
+                        size: 44,
+                        color: colorScheme.onPrimaryContainer,
+                      ),
           ),
           const SizedBox(height: 20),
           // App name
@@ -520,14 +527,24 @@ class _AboutHeroCard extends StatelessWidget {
   }
 }
 
-/// Section card with colored header
-class _AboutSectionCard extends StatelessWidget {
+/// Launch a URL externally with haptic feedback
+Future<void> _openUrl(String url) async {
+  HapticFeedback.lightImpact();
+  final uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+}
+
+/// Section card with colored header — reusable building block for About sections
+class AboutSectionCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String title;
   final Widget child;
 
-  const _AboutSectionCard({
+  const AboutSectionCard({
+    super.key,
     required this.icon,
     required this.iconColor,
     required this.title,
@@ -591,15 +608,16 @@ class _AboutSectionCard extends StatelessWidget {
   }
 }
 
-/// Reusable link tile widget with modern styling
-class _AboutLinkTile extends StatelessWidget {
+/// Reusable link tile widget with modern styling — building block for About sections
+class AboutLinkTile extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String title;
   final String? subtitle;
   final VoidCallback onTap;
 
-  const _AboutLinkTile({
+  const AboutLinkTile({
+    super.key,
     required this.icon,
     required this.iconColor,
     required this.title,

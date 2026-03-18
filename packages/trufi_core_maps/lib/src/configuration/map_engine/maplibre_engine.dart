@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../domain/controller/map_controller.dart';
-import '../../presentation/map/maplibre_map.dart';
+import '../../domain/entities/camera.dart';
+import '../../domain/entities/widget_marker.dart';
+import '../../domain/layers/trufi_layer.dart';
+import '../../presentation/map/trufi_map.dart';
 import 'trufi_map_engine.dart';
 
 /// MapLibre GL engine implementation.
@@ -18,27 +21,12 @@ import 'trufi_map_engine.dart';
 /// )
 /// ```
 class MapLibreEngine implements ITrufiMapEngine {
-  /// Style URL for MapLibre.
-  ///
-  /// Common styles:
-  /// - OpenFreeMap Liberty: 'https://tiles.openfreemap.org/styles/liberty'
-  /// - OpenFreeMap Dark: 'https://tiles.openfreemap.org/styles/dark'
-  /// - MapLibre Demo: 'https://demotiles.maplibre.org/style.json'
   final String styleString;
-
-  /// Custom engine ID (optional).
-  ///
-  /// If not provided, defaults to 'maplibre'.
-  /// Use unique IDs when creating multiple MapLibreEngine instances.
   final String? engineId;
-
-  /// Custom display name (optional).
   final String? displayName;
-
-  /// Custom description (optional).
   final String? displayDescription;
-
-  /// Custom preview widget (optional).
+  final LocalizedStringBuilder? nameBuilder;
+  final LocalizedStringBuilder? descriptionBuilder;
   final Widget? preview;
 
   const MapLibreEngine({
@@ -46,6 +34,8 @@ class MapLibreEngine implements ITrufiMapEngine {
     this.engineId,
     this.displayName,
     this.displayDescription,
+    this.nameBuilder,
+    this.descriptionBuilder,
     this.preview,
   });
 
@@ -59,6 +49,14 @@ class MapLibreEngine implements ITrufiMapEngine {
   String get description =>
       displayDescription ??
       'Vector map with modern styling and better performance';
+
+  @override
+  String localizedName(BuildContext context) =>
+      nameBuilder?.call(context) ?? name;
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      descriptionBuilder?.call(context) ?? description;
 
   @override
   Widget? get previewWidget =>
@@ -75,17 +73,26 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   @override
   Widget buildMap({
-    required TrufiMapController controller,
+    TrufiMapController? controller,
+    required TrufiCameraPosition initialCamera,
+    TrufiCameraPosition? camera,
+    ValueChanged<TrufiCameraPosition>? onCameraChanged,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
-    bool isDarkMode = false,
+    List<TrufiLayer> layers = const [],
+    List<WidgetMarker> widgetMarkers = const [],
   }) {
-    return TrufiMapLibreMap(
+    return TrufiMap(
       key: ValueKey(id),
       controller: controller,
+      initialCamera: initialCamera,
+      camera: camera,
       styleString: styleString,
+      onCameraChanged: onCameraChanged,
       onMapClick: onMapClick,
       onMapLongClick: onMapLongClick,
+      layers: layers,
+      widgetMarkers: widgetMarkers,
     );
   }
 }

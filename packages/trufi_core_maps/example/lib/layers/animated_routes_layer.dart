@@ -21,19 +21,23 @@ class AnimatedRoute {
   double dashOffset = 0;
 }
 
-/// Layer that displays many polylines with animated effects
-class AnimatedRoutesLayer extends TrufiLayer {
+/// State holder that produces line and marker data for animated routes.
+class AnimatedRoutesLayer {
   static const String layerId = 'animated-routes-layer';
-
-  AnimatedRoutesLayer(super.controller) : super(id: layerId, layerLevel: 4);
 
   final List<AnimatedRoute> _routes = [];
   Timer? _animationTimer;
-  int _lineCount = 0;
 
-  final ValueNotifier<int> lineCountNotifier = ValueNotifier(0);
+  /// Callback invoked after each animation tick so the host can call setState.
+  VoidCallback? onUpdate;
 
   int get routeCount => _routes.length;
+
+  /// Current line data to pass into a TrufiLayer.
+  List<TrufiLine> get lines => _buildLines();
+
+  /// Current marker data (route endpoints) to pass into a TrufiLayer.
+  List<TrufiMarker> get markers => _buildMarkers();
 
   /// Generate random routes around a center point
   void generateRoutes({
@@ -44,8 +48,6 @@ class AnimatedRoutesLayer extends TrufiLayer {
   }) {
     final random = Random();
     _routes.clear();
-    clearLines();
-    clearMarkers();
 
     final colors = [
       Colors.blue.shade600,
@@ -63,23 +65,18 @@ class AnimatedRoutesLayer extends TrufiLayer {
     for (var i = 0; i < count; i++) {
       final points = <latlng.LatLng>[];
 
-      // Start point
       var lat =
           center.latitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
       var lng =
           center.longitude + (random.nextDouble() - 0.5) * spreadRadius * 2;
 
-      // Generate wandering path
       final direction = random.nextDouble() * 2 * pi;
       var currentDirection = direction;
 
       for (var j = 0; j < pointsPerRoute; j++) {
         points.add(latlng.LatLng(lat, lng));
-
-        // Random walk with smooth direction changes
         currentDirection += (random.nextDouble() - 0.5) * 0.5;
         final step = 0.002 + random.nextDouble() * 0.003;
-
         lat += sin(currentDirection) * step;
         lng += cos(currentDirection) * step;
       }
@@ -94,56 +91,50 @@ class AnimatedRoutesLayer extends TrufiLayer {
           width: 3 + random.nextDouble() * 3,
         ),
       );
-
-      // Add start marker
-      addMarker(
-        TrufiMarker(
-          id: 'route-start-$i',
-          position: points.first,
-          widget: _RouteEndpointMarker(color: color, isStart: true),
-          size: const Size(24, 24),
-          alignment: Alignment.center,
-          layerLevel: layerLevel + 1,
-          imageCacheKey: 'route_start_${color.toARGB32()}',
-        ),
-      );
-
-      // Add end marker
-      addMarker(
-        TrufiMarker(
-          id: 'route-end-$i',
-          position: points.last,
-          widget: _RouteEndpointMarker(color: color, isStart: false),
-          size: const Size(24, 24),
-          alignment: Alignment.center,
-          layerLevel: layerLevel + 1,
-          imageCacheKey: 'route_end_${color.toARGB32()}',
-        ),
-      );
     }
-
-    _updateLines();
-    _lineCount = _routes.length;
-    lineCountNotifier.value = _lineCount;
   }
 
-  void _updateLines() {
-    final lines = <TrufiLine>[];
-
-    for (final route in _routes) {
-      lines.add(
+  List<TrufiLine> _buildLines() {
+    return [
+      for (final route in _routes)
         TrufiLine(
           id: route.id,
           position: route.points,
           color: route.color,
           lineWidth: route.width,
           activeDots: false,
-          layerLevel: layerLevel,
+          layerLevel: 4,
+        ),
+    ];
+  }
+
+  List<TrufiMarker> _buildMarkers() {
+    final markers = <TrufiMarker>[];
+    for (final route in _routes) {
+      markers.add(
+        TrufiMarker(
+          id: 'route-start-${route.id}',
+          position: route.points.first,
+          widget: _RouteEndpointMarker(color: route.color, isStart: true),
+          size: const Size(24, 24),
+          alignment: Alignment.center,
+          layerLevel: 5,
+          imageCacheKey: 'route_start_${route.color.toARGB32()}',
+        ),
+      );
+      markers.add(
+        TrufiMarker(
+          id: 'route-end-${route.id}',
+          position: route.points.last,
+          widget: _RouteEndpointMarker(color: route.color, isStart: false),
+          size: const Size(24, 24),
+          alignment: Alignment.center,
+          layerLevel: 5,
+          imageCacheKey: 'route_end_${route.color.toARGB32()}',
         ),
       );
     }
-
-    setLines(lines);
+    return markers;
   }
 
   void startAnimation({int fps = 20}) {
@@ -162,9 +153,7 @@ class AnimatedRoutesLayer extends TrufiLayer {
         route.dashOffset = 0;
       }
     }
-    // Note: For true dash animation we'd need to rebuild lines
-    // This is a simplified version that just tracks the offset
-    mutateLayers();
+    onUpdate?.call();
   }
 
   void stopAnimation() {
@@ -175,17 +164,10 @@ class AnimatedRoutesLayer extends TrufiLayer {
   void clearRoutes() {
     stopAnimation();
     _routes.clear();
-    clearLines();
-    clearMarkers();
-    _lineCount = 0;
-    lineCountNotifier.value = 0;
   }
 
-  @override
   void dispose() {
     stopAnimation();
-    lineCountNotifier.dispose();
-    super.dispose();
   }
 }
 

@@ -4,7 +4,7 @@
   "@menuFeedback": {
     "description": "Menu item for feedback screen"
   },
-  "feedbackTitle": "Nos encantaría saber de ti!",
+  "feedbackTitle": "¡Nos encantaría saber de ti!",
   "@feedbackTitle": {
     "description": "Title on feedback screen"
   },

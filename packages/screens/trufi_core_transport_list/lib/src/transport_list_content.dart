@@ -150,6 +150,9 @@ class _TransportListContentState extends State<TransportListContent>
       );
     }
 
+    // Build grouped list: agency headers + route tiles
+    final listItems = _buildGroupedItems(state.filteredRoutes, _searchController.text.isNotEmpty);
+
     return Stack(
       children: [
         RefreshIndicator(
@@ -158,17 +161,17 @@ class _TransportListContentState extends State<TransportListContent>
           backgroundColor: colorScheme.surface,
           child: ListView.builder(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            itemCount: state.filteredRoutes.length,
+            itemCount: listItems.length,
             itemBuilder: (context, index) {
-              final route = state.filteredRoutes[index];
+              final item = listItems[index];
 
               // Staggered animation
               final animation = Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(
                   parent: _listAnimationController,
                   curve: Interval(
-                    (index / state.filteredRoutes.length) * 0.5,
-                    ((index + 1) / state.filteredRoutes.length) * 0.5 + 0.5,
+                    (index / listItems.length) * 0.5,
+                    ((index + 1) / listItems.length) * 0.5 + 0.5,
                     curve: Curves.easeOutCubic,
                   ),
                 ),
@@ -182,16 +185,21 @@ class _TransportListContentState extends State<TransportListContent>
                     child: Opacity(opacity: animation.value, child: child),
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TransportTile(
-                    route: route,
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      widget.onRouteTap(route);
-                    },
-                  ),
-                ),
+                child: item.isHeader
+                    ? _AgencyHeader(
+                        name: item.headerName!,
+                        routeCount: item.headerRouteCount!,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: TransportTile(
+                          route: item.route!,
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            widget.onRouteTap(item.route!);
+                          },
+                        ),
+                      ),
               );
             },
           ),
@@ -221,6 +229,112 @@ class _TransportListContentState extends State<TransportListContent>
             ),
           ),
       ],
+    );
+  }
+
+  /// Build a flat list of grouped items (agency headers + routes).
+  /// When searching, skip headers for a flat filtered list.
+  static List<_GroupedListItem> _buildGroupedItems(
+    List<TransportRoute> routes,
+    bool isSearching,
+  ) {
+    // During search, show flat list without headers
+    if (isSearching) {
+      return routes.map((r) => _GroupedListItem.route(r)).toList();
+    }
+
+    // Group routes by agency
+    final grouped = <String, List<TransportRoute>>{};
+    for (final route in routes) {
+      final agency = route.agencyName ?? '';
+      (grouped[agency] ??= []).add(route);
+    }
+
+    // Sort agencies alphabetically
+    final sortedAgencies = grouped.keys.toList()..sort();
+
+    final items = <_GroupedListItem>[];
+    for (final agency in sortedAgencies) {
+      final agencyRoutes = grouped[agency]!;
+      items.add(_GroupedListItem.header(
+        agency.isEmpty ? 'Otros' : agency,
+        agencyRoutes.length,
+      ));
+      for (final route in agencyRoutes) {
+        items.add(_GroupedListItem.route(route));
+      }
+    }
+    return items;
+  }
+}
+
+/// Item in the grouped list — either an agency header or a route tile.
+class _GroupedListItem {
+  final bool isHeader;
+  final String? headerName;
+  final int? headerRouteCount;
+  final TransportRoute? route;
+
+  const _GroupedListItem._({
+    required this.isHeader,
+    this.headerName,
+    this.headerRouteCount,
+    this.route,
+  });
+
+  factory _GroupedListItem.header(String name, int count) =>
+      _GroupedListItem._(isHeader: true, headerName: name, headerRouteCount: count);
+
+  factory _GroupedListItem.route(TransportRoute route) =>
+      _GroupedListItem._(isHeader: false, route: route);
+}
+
+/// Agency section header widget.
+class _AgencyHeader extends StatelessWidget {
+  final String name;
+  final int routeCount;
+
+  const _AgencyHeader({required this.name, required this.routeCount});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
+      child: Row(
+        children: [
+          Icon(
+            Icons.business_rounded,
+            size: 16,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              name,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              '$routeCount',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -630,7 +744,9 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              isSearch ? 'Try a different search term' : 'Pull down to refresh',
+              isSearch
+                  ? TransportListLocalizations.of(context).tryDifferentSearch
+                  : TransportListLocalizations.of(context).pullDownToRefresh,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),

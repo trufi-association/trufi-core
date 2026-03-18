@@ -32,5 +32,11 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
   String get routeLoadError => 'No se pudo cargar la ruta';
 
   @override
+  String get pullDownToRefresh => 'Desliza hacia abajo para actualizar';
+
+  @override
+  String get tryDifferentSearch => 'Intenta con otro término de búsqueda';
+
+  @override
   String get buttonGoBack => 'Volver';
 }

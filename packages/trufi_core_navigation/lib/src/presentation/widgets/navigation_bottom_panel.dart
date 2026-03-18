@@ -1,46 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../l10n/navigation_localizations.dart';
 import '../../models/navigation_state.dart';
 import 'navigation_instruction_card.dart';
-
-/// Localized strings for navigation panels.
-class NavigationPanelStrings {
-  final String exitNavigation;
-  final String exitNavigationTitle;
-  final String exitNavigationMessage;
-  final String buttonCancel;
-  final String buttonExit;
-  final String buttonClose;
-  final String buttonRetry;
-  final String buttonSettings;
-  final String arrivedMessage;
-
-  const NavigationPanelStrings({
-    this.exitNavigation = 'Exit Navigation',
-    this.exitNavigationTitle = 'Exit Navigation?',
-    this.exitNavigationMessage =
-        'Are you sure you want to stop navigating this route?',
-    this.buttonCancel = 'Cancel',
-    this.buttonExit = 'Exit',
-    this.buttonClose = 'Close',
-    this.buttonRetry = 'Retry',
-    this.buttonSettings = 'Settings',
-    this.arrivedMessage = 'You have arrived!',
-  });
-}
 
 /// Bottom panel for navigation with instruction card and exit button.
 class NavigationBottomPanel extends StatelessWidget {
   final NavigationState state;
   final VoidCallback onExitNavigation;
-  final NavigationPanelStrings strings;
 
   const NavigationBottomPanel({
     super.key,
     required this.state,
     required this.onExitNavigation,
-    this.strings = const NavigationPanelStrings(),
   });
 
   @override
@@ -81,7 +54,7 @@ class NavigationBottomPanel extends StatelessWidget {
                   _showExitConfirmation(context);
                 },
                 icon: const Icon(Icons.close_rounded, size: 18),
-                label: Text(strings.exitNavigation),
+                label: Text(NavigationLocalizations.of(context).navExitNavigation),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: colorScheme.error,
@@ -96,22 +69,23 @@ class NavigationBottomPanel extends StatelessWidget {
   }
 
   void _showExitConfirmation(BuildContext context) {
+    final loc = NavigationLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(strings.exitNavigationTitle),
-        content: Text(strings.exitNavigationMessage),
+        title: Text(loc.navExitConfirmTitle),
+        content: Text(loc.navExitConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(strings.buttonCancel),
+            child: Text(loc.navCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
               onExitNavigation();
             },
-            child: Text(strings.buttonExit),
+            child: Text(loc.navExit),
           ),
         ],
       ),
@@ -123,13 +97,11 @@ class NavigationBottomPanel extends StatelessWidget {
 class NavigationCompletedPanel extends StatelessWidget {
   final String? destinationName;
   final VoidCallback onClose;
-  final NavigationPanelStrings strings;
 
   const NavigationCompletedPanel({
     super.key,
     this.destinationName,
     required this.onClose,
-    this.strings = const NavigationPanelStrings(),
   });
 
   @override
@@ -174,7 +146,7 @@ class NavigationCompletedPanel extends StatelessWidget {
 
             // Title
             Text(
-              strings.arrivedMessage,
+              NavigationLocalizations.of(context).navArrived,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
@@ -205,7 +177,7 @@ class NavigationCompletedPanel extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: Text(strings.buttonClose),
+                child: Text(NavigationLocalizations.of(context).navClose),
               ),
             ),
           ],
@@ -221,7 +193,6 @@ class NavigationErrorPanel extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onClose;
   final VoidCallback? onOpenSettings;
-  final NavigationPanelStrings strings;
 
   const NavigationErrorPanel({
     super.key,
@@ -229,7 +200,6 @@ class NavigationErrorPanel extends StatelessWidget {
     required this.onRetry,
     required this.onClose,
     this.onOpenSettings,
-    this.strings = const NavigationPanelStrings(),
   });
 
   @override
@@ -289,7 +259,7 @@ class NavigationErrorPanel extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: onClose,
-                    child: Text(strings.buttonClose),
+                    child: Text(NavigationLocalizations.of(context).navClose),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -297,7 +267,7 @@ class NavigationErrorPanel extends StatelessWidget {
                   Expanded(
                     child: FilledButton.tonal(
                       onPressed: onOpenSettings,
-                      child: Text(strings.buttonSettings),
+                      child: Text(NavigationLocalizations.of(context).navSettings),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -305,7 +275,7 @@ class NavigationErrorPanel extends StatelessWidget {
                 Expanded(
                   child: FilledButton(
                     onPressed: onRetry,
-                    child: Text(strings.buttonRetry),
+                    child: Text(NavigationLocalizations.of(context).navRetry),
                   ),
                 ),
               ],

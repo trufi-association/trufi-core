@@ -100,8 +100,10 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     super.initState();
     _nameController = TextEditingController(text: widget.place?.name ?? '');
     _selectedType = widget.place?.type ?? SavedPlaceType.other;
-    _latitude = widget.place?.latitude ?? widget.defaultLatitude;
-    _longitude = widget.place?.longitude ?? widget.defaultLongitude;
+    // For new places, start with no location (0.0) so the user must select one.
+    // For existing places, use their saved coordinates.
+    _latitude = widget.place?.latitude ?? 0.0;
+    _longitude = widget.place?.longitude ?? 0.0;
     _selectedIcon = widget.place?.iconName ?? 'place';
   }
 
@@ -170,8 +172,8 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     _nameFocusNode.unfocus();
 
     final result = await widget.onChooseOnMap!(
-      initialLatitude: _hasLocation ? _latitude : null,
-      initialLongitude: _hasLocation ? _longitude : null,
+      initialLatitude: _hasLocation ? _latitude : widget.defaultLatitude,
+      initialLongitude: _hasLocation ? _longitude : widget.defaultLongitude,
     );
 
     if (result != null) {

@@ -4,7 +4,8 @@
   "searchOrigin": "Seleccionar origen",
   "searchDestination": "Seleccionar destino",
   "selectLocations": "Selecciona origen y destino para buscar rutas",
-  "noRoutesFound": "No se encontraron rutas",
+  "noRoutesFound": "No encontramos rutas de transporte público para este trayecto. Intenta con otro destino o ajusta los parámetros de búsqueda.",
+  "noRoutesFoundShort": "No se encontraron rutas para este trayecto",
   "errorNoRoutes": "Error al cargar rutas",
   "durationMinutes": "{minutes} min",
   "durationHoursMinutes": "{hours}h {minutes}min",
@@ -107,11 +108,12 @@
   "routingProvider": "Proveedor de rutas",
   "autoFallback": "Respaldo automático",
   "autoFallbackDescription": "Intenta online primero, usa offline si falla",
-  "engineOnlineName": "Online",
+  "engineOnlineName": "En línea",
   "engineOnlineDescription": "OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.",
-  "engineOfflineName": "Offline",
-  "engineOfflineDescription": "Routing basado en GTFS, inspirado en GuíaCochala. Funciona sin internet.",
+  "engineOfflineName": "Sin conexión",
+  "engineOfflineDescription": "Enrutamiento basado en GTFS. Funciona sin internet.",
   "limitationRequiresInternet": "Requiere internet",
   "limitationSlower": "Respuesta más lenta",
-  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"
+  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa",
+  "estimatedTimesDisclaimer": "Los tiempos son estimados y pueden variar según el tráfico"
 }

@@ -4,53 +4,29 @@ import 'package:latlong2/latlong.dart';
 
 import '../../configuration/map_engine/map_engine_manager.dart';
 import '../../configuration/map_engine/trufi_map_engine.dart';
-import '../../domain/controller/map_controller.dart';
 import '../../domain/entities/camera.dart';
 import 'map_type_settings_screen.dart';
 
-/// Represents the center position of the map.
 class MapCenter {
   final double latitude;
   final double longitude;
-
   const MapCenter(this.latitude, this.longitude);
 }
 
-/// Result returned by [ChooseOnMapScreen] when user confirms selection.
 class MapLocationResult {
   final double latitude;
   final double longitude;
-
   const MapLocationResult({required this.latitude, required this.longitude});
 }
 
-/// Configuration for the ChooseOnMapScreen appearance.
 class ChooseOnMapConfiguration {
-  /// Title shown in the app bar.
   final String title;
-
-  /// Text for the confirm button.
   final String confirmButtonText;
-
-  /// Widget to show as the center marker.
   final Widget? centerMarker;
-
-  /// Whether to show coordinates card.
   final bool showCoordinates;
-
-  /// Initial latitude for the map center.
-  /// If null, uses MapEngineManager.defaultCenter.latitude from context.
   final double? initialLatitude;
-
-  /// Initial longitude for the map center.
-  /// If null, uses MapEngineManager.defaultCenter.longitude from context.
   final double? initialLongitude;
-
-  /// Initial zoom level.
-  /// If null, uses MapEngineManager.defaultZoom from context.
   final double? initialZoom;
-
-  /// Whether to show the map type button.
   final bool showMapTypeButton;
 
   const ChooseOnMapConfiguration({
@@ -87,36 +63,7 @@ class ChooseOnMapConfiguration {
   }
 }
 
-/// A screen for choosing a location on a map.
-///
-/// Uses [MapEngineManager] from Provider to render the map.
-/// Make sure to provide a [MapEngineManager] in the widget tree.
-///
-/// Returns a [MapLocationResult] when the user confirms their selection.
-///
-/// Example usage:
-/// ```dart
-/// // Ensure MapEngineManager is provided in the widget tree
-/// ChangeNotifierProvider(
-///   create: (_) => MapEngineManager(engines: defaultMapEngines),
-///   child: ...,
-/// )
-///
-/// // Then use ChooseOnMapScreen
-/// final result = await Navigator.push<MapLocationResult>(
-///   context,
-///   MaterialPageRoute(
-///     builder: (context) => const ChooseOnMapScreen(
-///       configuration: ChooseOnMapConfiguration(
-///         initialLatitude: -17.3920,
-///         initialLongitude: -66.1575,
-///       ),
-///     ),
-///   ),
-/// );
-/// ```
 class ChooseOnMapScreen extends StatefulWidget {
-  /// Configuration for the screen appearance.
   final ChooseOnMapConfiguration configuration;
 
   const ChooseOnMapScreen({
@@ -129,9 +76,9 @@ class ChooseOnMapScreen extends StatefulWidget {
 }
 
 class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
-  TrufiMapController? _mapController;
   late double _currentLatitude;
   late double _currentLongitude;
+  late TrufiCameraPosition _initialCamera;
   bool _initialized = false;
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
@@ -144,27 +91,14 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
           config.initialLongitude ?? mapEngineManager.defaultCenter.longitude;
       final zoom = config.initialZoom ?? mapEngineManager.defaultZoom;
 
-      _mapController = TrufiMapController(
-        initialCameraPosition: TrufiCameraPosition(
-          target: LatLng(_currentLatitude, _currentLongitude),
-          zoom: zoom,
-        ),
+      _initialCamera = TrufiCameraPosition(
+        target: LatLng(_currentLatitude, _currentLongitude),
+        zoom: zoom,
       );
-
-      _mapController!.cameraPositionNotifier.addListener(_onCameraChanged);
     }
   }
 
-  @override
-  void dispose() {
-    _mapController?.cameraPositionNotifier.removeListener(_onCameraChanged);
-    _mapController?.dispose();
-    super.dispose();
-  }
-
-  void _onCameraChanged() {
-    final position = _mapController?.cameraPositionNotifier.value;
-    if (position == null) return;
+  void _onCameraChanged(TrufiCameraPosition position) {
     setState(() {
       _currentLatitude = position.target.latitude;
       _currentLongitude = position.target.longitude;
@@ -182,10 +116,10 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
-          // Map using the current engine
-          mapEngineManager.currentEngine.buildMap(controller: _mapController!),
-
-          // Center marker with modern design
+          mapEngineManager.currentEngine.buildMap(
+            initialCamera: _initialCamera,
+            onCameraChanged: _onCameraChanged,
+          ),
           Center(
             child: IgnorePointer(
               child:
@@ -193,8 +127,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                   _DefaultCenterMarker(colorScheme: colorScheme),
             ),
           ),
-
-          // Modern header with back button and title
           Positioned(
             top: 0,
             left: 0,
@@ -205,7 +137,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: Row(
                   children: [
-                    // Back button
                     Material(
                       color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(14),
@@ -230,7 +161,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Title card
                     Expanded(
                       child: Material(
                         color: colorScheme.surface,
@@ -252,7 +182,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                         ),
                       ),
                     ),
-                    // Map type button
                     if (widget.configuration.showMapTypeButton &&
                         mapEngineManager.engines.length > 1) ...[
                       const SizedBox(width: 12),
@@ -285,8 +214,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
               ),
             ),
           ),
-
-          // Coordinates display with modern styling
           if (widget.configuration.showCoordinates)
             Positioned(
               top: 0,
@@ -305,8 +232,6 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                 ),
               ),
             ),
-
-          // Bottom action area with confirm button
           Positioned(
             bottom: 0,
             left: 0,
@@ -364,7 +289,7 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       MaterialPageRoute(
         builder: (context) => MapTypeSettingsScreen(
           currentMapIndex: mapEngineManager.currentIndex,
-          mapOptions: mapEngineManager.engines.toMapTypeOptions(),
+          mapOptions: mapEngineManager.engines.toMapTypeOptions(context),
           onMapTypeChanged: (index) {
             mapEngineManager.setEngine(mapEngineManager.engines[index]);
           },
@@ -374,10 +299,8 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
   }
 }
 
-/// Default center marker with modern design
 class _DefaultCenterMarker extends StatelessWidget {
   final ColorScheme colorScheme;
-
   const _DefaultCenterMarker({required this.colorScheme});
 
   @override
@@ -405,7 +328,6 @@ class _DefaultCenterMarker extends StatelessWidget {
             size: 28,
           ),
         ),
-        // Pin tail
         Container(
           width: 3,
           height: 20,
@@ -425,18 +347,15 @@ class _DefaultCenterMarker extends StatelessWidget {
   }
 }
 
-/// Coordinates card with modern styling
 class _CoordinatesCard extends StatelessWidget {
   final double latitude;
   final double longitude;
-
   const _CoordinatesCard({required this.latitude, required this.longitude});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
     return Material(
       color: colorScheme.surface,
       borderRadius: BorderRadius.circular(12),

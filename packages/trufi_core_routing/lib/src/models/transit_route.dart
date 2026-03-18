@@ -12,6 +12,8 @@ class TransitRoute {
   final String name;
   final String code;
   final TransitRouteInfo? route;
+  final int? directionId;
+  final String? headsign;
   final List<LatLng>? geometry;
   final List<Stop>? stops;
 
@@ -20,6 +22,8 @@ class TransitRoute {
     required this.name,
     required this.code,
     this.route,
+    this.directionId,
+    this.headsign,
     this.geometry,
     this.stops,
   });
@@ -29,6 +33,8 @@ class TransitRoute {
     String? name,
     String? code,
     TransitRouteInfo? route,
+    int? directionId,
+    String? headsign,
     List<LatLng>? geometry,
     List<Stop>? stops,
   }) {
@@ -37,6 +43,8 @@ class TransitRoute {
       name: name ?? this.name,
       code: code ?? this.code,
       route: route ?? this.route,
+      directionId: directionId ?? this.directionId,
+      headsign: headsign ?? this.headsign,
       geometry: geometry ?? this.geometry,
       stops: stops ?? this.stops,
     );
@@ -46,6 +54,8 @@ class TransitRoute {
     id: json['id'].toString(),
     name: json['name'].toString(),
     code: json['code'].toString(),
+    directionId: json['directionId'] as int?,
+    headsign: json['headsign'] as String?,
     route: json['route'] != null
         ? TransitRouteInfo.fromJson(json['route'] as Map<String, dynamic>)
         : null,
@@ -100,6 +110,7 @@ class TransitRouteInfo {
   final TransportMode? mode;
   final String? color;
   final String? textColor;
+  final String? agencyName;
 
   const TransitRouteInfo({
     this.shortName,
@@ -107,6 +118,7 @@ class TransitRouteInfo {
     this.mode,
     this.color,
     this.textColor,
+    this.agencyName,
   });
 
   factory TransitRouteInfo.fromJson(Map<String, dynamic> json) =>
@@ -116,6 +128,7 @@ class TransitRouteInfo {
         mode: TransportModeExtension.fromString(json['mode']?.toString()),
         color: json['color'] as String?,
         textColor: json['textColor'] as String?,
+        agencyName: (json['agency'] as Map<String, dynamic>?)?['name'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -124,6 +137,7 @@ class TransitRouteInfo {
     'mode': mode?.name,
     'color': color,
     'textColor': textColor,
+    'agencyName': agencyName,
   };
 
   /// Returns the last part of longName after "→ "

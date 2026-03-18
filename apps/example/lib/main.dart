@@ -26,7 +26,7 @@ import 'package:trufi_core_ui/trufi_core_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
-const _photonUrl = 'https://photon.trufi.dev';
+const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
 const _deepLinkScheme = 'trufiapp';
@@ -50,16 +50,16 @@ final List<IRoutingProvider> _routingEngines = [
   if (kIsWeb)
     TrufiPlannerProvider(
       config: const TrufiPlannerConfig.remote(
-        serverUrl: 'http://localhost:9090/',
+        serverUrl: 'https://planner.trufi.app',
       ),
     ),
   // Online routing via OTP (dev servers)
   Otp28RoutingProvider(
-    endpoint: 'https://otp281.trufi.dev',
+    endpoint: 'https://otp281.trufi.app',
     displayName: 'OTP 2.8.1',
   ),
   Otp15RoutingProvider(
-    endpoint: 'https://otp150.trufi.dev',
+    endpoint: 'https://otp150.trufi.app',
     displayName: 'OTP 1.5.0',
   ),
 ];
@@ -182,25 +182,25 @@ final List<ITrufiMapEngine> _mapEngines = [
   // Online maps
   const MapLibreEngine(
     engineId: 'osm_bright',
-    styleString: 'https://maps.trufi.dev/styles/osm-bright/style.json',
+    styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
     displayDescription: 'Mapa claro',
   ),
   const MapLibreEngine(
     engineId: 'osm_liberty',
-    styleString: 'https://maps.trufi.dev/styles/osm-liberty/style.json',
+    styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
     displayDescription: 'Mapa estándar',
   ),
   const MapLibreEngine(
     engineId: 'dark_matter',
-    styleString: 'https://maps.trufi.dev/styles/dark-matter/style.json',
+    styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
     displayDescription: 'Mapa oscuro',
   ),
   const MapLibreEngine(
     engineId: 'fiord_color',
-    styleString: 'https://maps.trufi.dev/styles/fiord-color/style.json',
+    styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
     displayName: 'Fiord Color',
     displayDescription: 'Mapa colorido',
   ),

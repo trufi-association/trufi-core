@@ -22,26 +22,19 @@ import 'models/poi_category_config.dart';
 /// - Synchronizes layer visibility with internal state
 /// - Notifies listeners when state changes
 /// - Manages POI selection state for detail panel
+/// - Exposes [buildLayers] to produce declarative [TrufiLayer] objects
 ///
 /// Example usage:
 /// ```dart
-/// // In providers - just add the manager, home screen will auto-detect it
-/// MultiProvider(
-///   providers: [
-///     ChangeNotifierProvider(
-///       create: (_) => POILayersManager(assetsBasePath: 'assets/pois'),
-///     ),
-///   ],
-///   child: ...
+/// // In providers
+/// ChangeNotifierProvider(
+///   create: (_) => POILayersManager(assetsBasePath: 'assets/pois'),
 /// )
 ///
-/// // Watch for changes in settings
-/// final poiManager = context.watch<POILayersManager>();
-///
-/// // Handle POI selection
-/// if (poiManager.selectedPOI != null) {
-///   // Show POI detail panel
-/// }
+/// // In the map widget
+/// TrufiMap(
+///   layers: [...poiManager.buildLayers()],
+/// )
 /// ```
 class POILayersManager extends ChangeNotifier {
   /// Storage key for persisting enabled subcategories
@@ -93,16 +86,21 @@ class POILayersManager extends ChangeNotifier {
   /// Get all available categories from metadata
   List<POICategoryConfig> get categories => _metadata?.categories ?? [];
 
-  /// Initialize the layers with a dynamic map controller.
+  /// Initialize the layers.
   /// Called automatically when the map is ready.
   Future<void> initializeLayers(dynamic mapController) async {
-    if (mapController is TrufiMapController) {
-      await initialize(mapController);
-    }
+    await initialize();
+  }
+
+  /// Build declarative [TrufiLayer] objects from current state.
+  ///
+  /// The consumer passes these to `TrufiMap(layers: [...poiManager.buildLayers()])`.
+  List<TrufiLayer> buildLayers() {
+    return _layers.map((layer) => layer.toTrufiLayer()).toList();
   }
 
   /// Get the list of map layers to display.
-  List<dynamic> get mapLayers => _layers;
+  List<TrufiLayer> get mapLayers => buildLayers();
 
   /// Get all POI layers
   List<POICategoryLayer> get layers => List.unmodifiable(_layers);
@@ -150,9 +148,6 @@ class POILayersManager extends ChangeNotifier {
     return subcats.contains(poi.subcategory);
   }
 
-  /// The controller that layers are currently registered with
-  TrufiMapController? _currentController;
-
   /// Initialize the manager by loading POI data and creating layers.
   ///
   /// This method:
@@ -161,20 +156,8 @@ class POILayersManager extends ChangeNotifier {
   /// 3. Creates a POICategoryLayer for each category
   /// 4. Sets up layer visibility based on current state
   ///
-  /// If called with a different controller after initial setup, it will
-  /// re-create layers on the new controller.
-  ///
-  /// Parameters:
-  /// - [mapController]: The TrufiMapController to create layers on
-  ///
   /// Returns a Future that completes when initialization is done.
-  Future<void> initialize(TrufiMapController mapController) async {
-    // Check if we need to re-register layers on a new controller
-    if (_initialized && _currentController != mapController) {
-      await _reRegisterLayers(mapController);
-      return;
-    }
-
+  Future<void> initialize() async {
     if (_initialized) {
       debugPrint('⚠️ POILayersManager already initialized');
       return;
@@ -215,7 +198,6 @@ class POILayersManager extends ChangeNotifier {
       // Create one layer per category
       for (final entry in loadedData) {
         final layer = POICategoryLayer(
-          controller: mapController,
           category: entry.key,
           pois: entry.value,
           poiFilter: (poi) => isPOIEnabled(poi),
@@ -227,7 +209,6 @@ class POILayersManager extends ChangeNotifier {
       _updateLayerVisibility();
 
       _initialized = true;
-      _currentController = mapController;
 
       debugPrint(
         '✅ POILayersManager initialized with ${_layers.length} layers',
@@ -246,36 +227,11 @@ class POILayersManager extends ChangeNotifier {
     }
   }
 
-  /// Re-register existing layers on a new controller.
-  /// Called when the map controller changes (e.g., after navigation).
-  Future<void> _reRegisterLayers(TrufiMapController newController) async {
-    // Clear old layers and create new ones with the same data
-    final oldLayers = List<POICategoryLayer>.from(_layers);
-    _layers.clear();
-
-    for (final oldLayer in oldLayers) {
-      final newLayer = POICategoryLayer(
-        controller: newController,
-        category: oldLayer.category,
-        pois: oldLayer.pois,
-        poiFilter: (poi) => isPOIEnabled(poi),
-      );
-      _layers.add(newLayer);
-    }
-
-    // Apply visibility state
-    _updateLayerVisibility();
-    _currentController = newController;
-
-    notifyListeners();
-  }
-
   /// Update layer visibility based on current state
   void _updateLayerVisibility() {
     for (final layer in _layers) {
       layer.visible = isCategoryEnabled(layer.category.name);
       layer.poiFilter = (poi) => isPOIEnabled(poi);
-      layer.updateMarkers();
     }
   }
 

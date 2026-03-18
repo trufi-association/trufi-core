@@ -233,7 +233,7 @@ class _MapTypeButtonFromEngines extends StatelessWidget {
   Widget build(BuildContext context) {
     return _MapTypeButtonBase(
       currentMapIndex: currentEngineIndex,
-      mapOptions: engines.toMapTypeOptions(),
+      mapOptions: engines.toMapTypeOptions(context),
       onMapTypeChanged: (index) => onEngineChanged(engines[index]),
       tooltip: tooltip,
       icon: icon,

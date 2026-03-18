@@ -70,6 +70,7 @@ typedef AppInitScreenBuilder =
 /// Application configuration
 class AppConfiguration {
   final String appName;
+  final String? appTagline;
   final List<TrufiScreen> screens;
   final TrufiLocaleConfig localeConfig;
   final TrufiThemeConfig themeConfig;
@@ -118,8 +119,20 @@ class AppConfiguration {
   /// If null, a beautiful default initialization screen is shown.
   final AppInitScreenBuilder? initScreenBuilder;
 
+  /// Additional localization delegates from the app.
+  ///
+  /// Use this to register app-level ARB localizations (e.g., custom map names).
+  final List<LocalizationsDelegate> extraLocalizationsDelegates;
+
+  /// Optional widget displayed above the drawer footer (e.g., partner logos).
+  final Widget? drawerFooterExtra;
+
+  /// Optional logo widget (used in drawer header, etc.).
+  final Widget? logo;
+
   const AppConfiguration({
     required this.appName,
+    this.appTagline,
     required this.screens,
     this.localeConfig = const TrufiLocaleConfig(),
     this.themeConfig = const TrufiThemeConfig(),
@@ -128,5 +141,8 @@ class AppConfiguration {
     this.defaultLocale,
     this.providers = const [],
     this.initScreenBuilder,
+    this.extraLocalizationsDelegates = const [],
+    this.drawerFooterExtra,
+    this.logo,
   });
 }

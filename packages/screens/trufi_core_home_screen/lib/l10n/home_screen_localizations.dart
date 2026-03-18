@@ -127,11 +127,17 @@ abstract class HomeScreenLocalizations {
   /// **'Select origin and destination to find routes'**
   String get selectLocations;
 
-  /// Message shown when no routes are available
+  /// Detailed message shown when no routes are available
   ///
   /// In en, this message translates to:
-  /// **'No routes found'**
+  /// **'No public transit routes found for this trip. Try a different destination or adjust your search settings.'**
   String get noRoutesFound;
+
+  /// Short message for error banner when no routes are available
+  ///
+  /// In en, this message translates to:
+  /// **'No routes found for this trip'**
+  String get noRoutesFoundShort;
 
   /// Error message when routes fail to load
   ///
@@ -766,7 +772,7 @@ abstract class HomeScreenLocalizations {
   /// Description for offline routing engine
   ///
   /// In en, this message translates to:
-  /// **'GTFS-based routing inspired by GuíaCochala. Works without internet.'**
+  /// **'GTFS-based routing. Works without internet.'**
   String get engineOfflineDescription;
 
   /// Limitation tag for engines that require internet
@@ -786,6 +792,12 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'No walking route on map'**
   String get limitationNoWalkingRoute;
+
+  /// Disclaimer shown above route results about estimated times
+  ///
+  /// In en, this message translates to:
+  /// **'Travel times are estimated and may vary due to traffic'**
+  String get estimatedTimesDisclaimer;
 }
 
 class _HomeScreenLocalizationsDelegate

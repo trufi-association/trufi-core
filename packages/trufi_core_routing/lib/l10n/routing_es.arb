@@ -1,0 +1,16 @@
+{
+  "@@locale": "es",
+  "prefsWalkingSpeed": "Velocidad de caminata",
+  "prefsSpeedSlow": "Lento",
+  "prefsSpeedNormal": "Normal",
+  "prefsSpeedFast": "Rápido",
+  "prefsMaxWalkDistance": "Distancia máxima de caminata",
+  "prefsNoLimit": "Sin límite",
+  "prefsTransportModes": "Modos de transporte",
+  "prefsModeTransit": "Tránsito",
+  "prefsModeWalk": "A pie",
+  "prefsModeBicycle": "Bicicleta",
+  "prefsWheelchairAccessible": "Accesible en silla de ruedas",
+  "prefsWheelchairOn": "Las rutas evitan escaleras y pendientes pronunciadas",
+  "prefsWheelchairOff": "Incluir todas las rutas"
+}

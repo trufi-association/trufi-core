@@ -57,6 +57,11 @@ export 'src/providers/otp_2_8/otp_2_8_queries.dart';
 export 'src/providers/otp_2_8/otp_2_8_response_parser.dart';
 
 // ============================================
+// Localizations
+// ============================================
+export 'l10n/routing_localizations.dart';
+
+// ============================================
 // TRUFI PLANNER (local + remote routing)
 // ============================================
 export 'src/providers/trufi_planner/trufi_planner_provider.dart';

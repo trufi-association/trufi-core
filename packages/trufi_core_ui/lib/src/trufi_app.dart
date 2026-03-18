@@ -76,6 +76,7 @@ class _TrufiAppState extends State<TrufiApp> {
       defaultLocale:
           widget.config.defaultLocale ??
           widget.config.localeConfig.defaultLocale,
+      supportedLocales: widget.config.localeConfig.supportedLocales,
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,
@@ -84,6 +85,10 @@ class _TrufiAppState extends State<TrufiApp> {
       screens: widget.config.screens,
       socialMediaLinks: widget.config.socialMediaLinks,
       initialRoute: _initialRoute,
+      appName: widget.config.appName,
+      appTagline: widget.config.appTagline,
+      drawerFooterExtra: widget.config.drawerFooterExtra,
+      logo: widget.config.logo,
     );
     _sharedRouteNotifier = SharedRouteNotifier();
 
@@ -170,6 +175,7 @@ class _TrufiMaterialApp extends StatelessWidget {
       localizationsDelegates: [
         CoreLocalizations.delegate,
         ...screenDelegates,
+        ...config.extraLocalizationsDelegates,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

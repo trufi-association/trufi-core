@@ -16,9 +16,13 @@
   "@selectLocations": {
     "description": "Message shown when no locations are selected"
   },
-  "noRoutesFound": "No routes found",
+  "noRoutesFound": "No public transit routes found for this trip. Try a different destination or adjust your search settings.",
   "@noRoutesFound": {
-    "description": "Message shown when no routes are available"
+    "description": "Detailed message shown when no routes are available"
+  },
+  "noRoutesFoundShort": "No routes found for this trip",
+  "@noRoutesFoundShort": {
+    "description": "Short message for error banner when no routes are available"
   },
   "errorNoRoutes": "Error loading routes",
   "@errorNoRoutes": {
@@ -580,7 +584,7 @@
   "@engineOfflineName": {
     "description": "Name for offline routing engine"
   },
-  "engineOfflineDescription": "GTFS-based routing inspired by GuíaCochala. Works without internet.",
+  "engineOfflineDescription": "GTFS-based routing. Works without internet.",
   "@engineOfflineDescription": {
     "description": "Description for offline routing engine"
   },
@@ -595,5 +599,9 @@
   "limitationNoWalkingRoute": "No walking route on map",
   "@limitationNoWalkingRoute": {
     "description": "Limitation tag for engines that don't show walking routes on map"
+  },
+  "estimatedTimesDisclaimer": "Travel times are estimated and may vary due to traffic",
+  "@estimatedTimesDisclaimer": {
+    "description": "Disclaimer shown above route results about estimated times"
   }
 }

@@ -3,44 +3,55 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:vector_tile/vector_tile.dart';
 
+import '../../domain/entities/camera.dart';
 import '../../domain/entities/line.dart';
-import '../../domain/layers/trufi_layer.dart';
 import 'cached_fetch.dart';
 import 'tile_utils.dart';
 
+/// Fetches and decodes vector tile data based on a camera position.
+///
+/// This is a stateless utility — call [fetchForCamera] when the camera changes
+/// and use the results to build layers declaratively.
+///
+/// ```dart
+/// final grid = TileGrid<MyPoi>(
+///   uriTemplate: 'https://tiles.example.com/{z}/{x}/{y}.pbf',
+///   fromGeoJsonPoint: (point) => MyPoi.fromGeoJson(point),
+/// );
+///
+/// // In your state management:
+/// void onCameraChanged(TrufiCameraPosition camera) async {
+///   final pois = await grid.fetchForCamera(camera);
+///   setState(() => _pois = pois);
+/// }
+/// ```
 class TileGrid<T> {
   TileGrid({
-    required this.layer,
     required this.uriTemplate,
     required this.fromGeoJsonPoint,
-    required this.onFetchElements,
     this.granularityLevels = 0,
-    this.color = Colors.blue,
     this.showGrid = false,
-  }) {
-    layer.controller.cameraPositionNotifier.addListener(_onCameraChanged);
-  }
+    this.gridColor = Colors.blue,
+  });
 
-  final TrufiLayer layer;
-  final int granularityLevels;
-  final Color color;
-  final Set<String> _drawnBoxes = <String>{};
-  final bool showGrid;
   final String uriTemplate;
   final T? Function(GeoJsonPoint) fromGeoJsonPoint;
-  final void Function(List<T>) onFetchElements;
+  final int granularityLevels;
+  final bool showGrid;
+  final Color gridColor;
 
-  void dispose() {
-    layer.controller.cameraPositionNotifier.removeListener(_onCameraChanged);
-  }
+  final Set<String> _drawnBoxes = <String>{};
 
-  void _onCameraChanged() {
-    final cam = layer.controller.cameraPositionNotifier.value;
-    final z = cam.zoom.floor();
-
+  /// Fetch elements for the given camera position.
+  /// Returns the decoded elements and optional grid lines for debug.
+  Future<({List<T> elements, List<TrufiLine> gridLines})> fetchForCamera(
+    TrufiCameraPosition camera, {
+    String layerId = 'tile-grid',
+  }) async {
+    final z = camera.zoom.floor();
     final bounds =
-        cam.visibleRegion ??
-        TileUtils.approxBoundsAround(cam.target, meters: 800);
+        camera.visibleRegion ??
+        TileUtils.approxBoundsAround(camera.target, meters: 800);
 
     final tiles = TileUtils.tilesForBounds(
       bounds: bounds,
@@ -48,38 +59,32 @@ class TileGrid<T> {
       granularityLevels: granularityLevels,
     );
 
-    final newLines = <TrufiLine>[];
-    Future.wait([for (final t in tiles) fetchPBF(t.z, t.x, t.y)])
-        .then((results) {
-          final elements = results.expand((e) => e).toList();
-          onFetchElements(elements);
-        })
-        .catchError((error) {
-          debugPrint("Batch error: $error");
-        });
+    final results = await Future.wait([
+      for (final t in tiles) fetchPBF(t.z, t.x, t.y),
+    ]);
+    final elements = results.expand((e) => e).toList();
 
-    if (!showGrid) return;
-
-    for (final t in tiles) {
-      final id = 'box-${layer.id}-${layer.id}-${t.z}-${t.x}-${t.y}';
-      if (_drawnBoxes.contains(id)) continue;
-      final outline = TileUtils.tileOutline(x: t.x, y: t.y, z: t.z);
-      newLines.add(
-        TrufiLine(
-          id: id,
-          position: outline,
-          activeDots: false,
-          color: color,
-          layerLevel: 5,
-          lineWidth: 2,
-        ),
-      );
-      _drawnBoxes.add(id);
+    final gridLines = <TrufiLine>[];
+    if (showGrid) {
+      for (final t in tiles) {
+        final id = 'box-$layerId-${t.z}-${t.x}-${t.y}';
+        if (_drawnBoxes.contains(id)) continue;
+        final outline = TileUtils.tileOutline(x: t.x, y: t.y, z: t.z);
+        gridLines.add(
+          TrufiLine(
+            id: id,
+            position: outline,
+            activeDots: false,
+            color: gridColor,
+            layerLevel: 5,
+            lineWidth: 2,
+          ),
+        );
+        _drawnBoxes.add(id);
+      }
     }
 
-    if (newLines.isNotEmpty) {
-      layer.addLines(newLines);
-    }
+    return (elements: elements, gridLines: gridLines);
   }
 
   Future<List<T>> fetchPBF(int z, int x, int y) async {
@@ -94,15 +99,12 @@ class TileGrid<T> {
       final tile = VectorTile.fromBytes(bytes: bodyByte);
 
       final markersToAdd = <T>[];
-
       for (final VectorTileLayer layer in tile.layers) {
         for (final VectorTileFeature feature in layer.features) {
           feature.decodeGeometry();
-
           if (feature.geometryType != GeometryType.Point) {
             throw Exception("Unexpected geometry type. Expected Point.");
           }
-
           final geojson = feature.toGeoJson<GeoJsonPoint>(x: x, y: y, z: z);
           if (geojson == null) continue;
           final element = fromGeoJsonPoint(geojson);

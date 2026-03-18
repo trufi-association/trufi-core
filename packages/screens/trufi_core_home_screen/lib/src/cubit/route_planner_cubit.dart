@@ -8,6 +8,9 @@ import '../repository/home_screen_repository.dart';
 import '../repository/home_screen_repository_impl.dart';
 import '../services/request_plan_service.dart';
 
+/// Error key emitted when no routes are found (UI resolves to localized string).
+const String noRoutesErrorKey = 'no_routes_found';
+
 /// Cubit for managing route planning state.
 ///
 /// If [repository] is not provided, uses [HomeScreenRepositoryImpl] by default.
@@ -158,7 +161,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       }
 
       if (!plan.hasItineraries) {
-        emit(state.copyWith(isLoading: false, error: 'No routes found'));
+        emit(state.copyWith(isLoading: false, error: noRoutesErrorKey));
         return;
       }
 

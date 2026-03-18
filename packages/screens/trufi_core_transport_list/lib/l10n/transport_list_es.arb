@@ -12,6 +12,8 @@
       }
     }
   },
+  "pullDownToRefresh": "Desliza hacia abajo para actualizar",
+  "tryDifferentSearch": "Intenta con otro término de búsqueda",
   "routeNotFound": "Ruta no encontrada",
   "routeLoadError": "No se pudo cargar la ruta",
   "buttonGoBack": "Volver"

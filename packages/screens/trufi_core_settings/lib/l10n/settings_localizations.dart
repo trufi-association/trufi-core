@@ -328,7 +328,7 @@ abstract class SettingsLocalizations {
   /// Description for offline routing engine
   ///
   /// In en, this message translates to:
-  /// **'GTFS-based routing inspired by GuíaCochala. Works without internet.'**
+  /// **'GTFS-based routing. Works without internet.'**
   String get engineOfflineDescription;
 
   /// Limitation tag for engines that require internet

@@ -7,9 +7,12 @@ class LocaleManager extends ChangeNotifier {
   static const _storageKey = 'trufi_locale';
 
   Locale _currentLocale;
+  final List<Locale> supportedLocales;
 
-  LocaleManager({required Locale defaultLocale})
-    : _currentLocale = defaultLocale {
+  LocaleManager({
+    required Locale defaultLocale,
+    this.supportedLocales = const [Locale('en'), Locale('es'), Locale('de')],
+  }) : _currentLocale = defaultLocale {
     _loadSavedLocale();
   }
 
@@ -39,6 +42,19 @@ class LocaleManager extends ChangeNotifier {
 
   void setLocaleByCode(String languageCode) {
     setLocale(Locale(languageCode));
+  }
+
+  /// Returns a human-readable display name for a language code.
+  static String displayNameForCode(String code) {
+    switch (code) {
+      case 'en': return 'English';
+      case 'es': return 'Español';
+      case 'de': return 'Deutsch';
+      case 'fr': return 'Français';
+      case 'pt': return 'Português';
+      case 'it': return 'Italiano';
+      default: return code.toUpperCase();
+    }
   }
 
   static LocaleManager read(BuildContext context) =>

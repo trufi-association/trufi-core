@@ -18,16 +18,16 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   static final List<ITrufiMapEngine> mapEngines = [
+    const MapLibreEngine(
+      styleString: 'https://tiles.openfreemap.org/styles/liberty',
+      displayName: 'MapLibre GL',
+      displayDescription: 'Vector map with Liberty style',
+    ),
     const FlutterMapEngine(
       tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
       userAgentPackageName: 'com.example.trufi_core_maps_example',
       displayName: 'OpenStreetMap',
       displayDescription: 'Standard OSM raster tiles',
-    ),
-    const MapLibreEngine(
-      styleString: 'https://tiles.openfreemap.org/styles/liberty',
-      displayName: 'MapLibre GL',
-      displayDescription: 'Vector map with Liberty style',
     ),
   ];
 
@@ -63,8 +63,7 @@ class PerformanceDemoPage extends StatefulWidget {
 }
 
 class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
-  late final TrufiMapController _controller;
-  late final FitCameraLayer _fitCameraLayer;
+  final TrufiMapController _controller = TrufiMapController();
   late final AnimatedMarkersLayer _animatedMarkersLayer;
   late final AnimatedRoutesLayer _animatedRoutesLayer;
   late final DebugGridLayer _debugGridLayer;
@@ -72,6 +71,12 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
 
   bool _isAnimating = false;
   bool _showGrid = false;
+
+  // Track camera for debug grid updates
+  TrufiCameraPosition _camera = const TrufiCameraPosition(
+    target: _initialPosition,
+    zoom: _initialZoom,
+  );
 
   // Performance test parameters
   int _markerCount = 100;
@@ -85,37 +90,24 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
   @override
   void initState() {
     super.initState();
-    _controller = TrufiMapController(
-      initialCameraPosition: const TrufiCameraPosition(
-        target: _initialPosition,
-        zoom: _initialZoom,
-      ),
-    );
 
-    _fitCameraLayer = FitCameraLayer(
-      _controller,
-      showCornerDots: false,
-      debugFlag: false,
-    );
-
-    _animatedMarkersLayer = AnimatedMarkersLayer(_controller);
-    _animatedRoutesLayer = AnimatedRoutesLayer(_controller);
-    _debugGridLayer = DebugGridLayer(_controller);
-    _clickMarkersLayer = ClickMarkersLayer(_controller);
+    _animatedMarkersLayer = AnimatedMarkersLayer()
+      ..onUpdate = () => setState(() {});
+    _animatedRoutesLayer = AnimatedRoutesLayer()
+      ..onUpdate = () => setState(() {});
+    _debugGridLayer = DebugGridLayer()..onUpdate = () => setState(() {});
+    _clickMarkersLayer = ClickMarkersLayer()..onUpdate = () => setState(() {});
   }
 
   @override
   void dispose() {
     _animatedMarkersLayer.dispose();
     _animatedRoutesLayer.dispose();
-    _debugGridLayer.dispose();
-    _clickMarkersLayer.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
   void _applySettings() {
-    final center = _controller.cameraPositionNotifier.value.target;
+    final center = _camera.target;
 
     debugPrint(
       'Applying settings: markers=$_markerCount, lines=$_lineCount, fps=$_fps',
@@ -167,11 +159,49 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
     _clickMarkersLayer.addMarkerAt(position);
   }
 
-  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
+  void _onCameraChanged(TrufiCameraPosition cam) {
+    _camera = cam;
+    _debugGridLayer.updateFromCamera(cam);
+  }
+
+  /// Build the list of TrufiLayer data objects from all layer state holders.
+  List<TrufiLayer> _buildLayers() {
+    return [
+      TrufiLayer(
+        id: AnimatedRoutesLayer.layerId,
+        markers: _animatedRoutesLayer.markers,
+        lines: _animatedRoutesLayer.lines,
+        layerLevel: 4,
+      ),
+      TrufiLayer(
+        id: AnimatedMarkersLayer.layerId,
+        markers: _animatedMarkersLayer.markers,
+        layerLevel: 7,
+      ),
+      TrufiLayer(
+        id: ClickMarkersLayer.layerId,
+        markers: _clickMarkersLayer.markers,
+        layerLevel: 8,
+      ),
+      TrufiLayer(
+        id: DebugGridLayer.layerId,
+        lines: _debugGridLayer.lines,
+        visible: _showGrid,
+        layerLevel: 10,
+      ),
+    ];
+  }
+
+  Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
       controller: _controller,
+      initialCamera: const TrufiCameraPosition(
+        target: _initialPosition,
+        zoom: _initialZoom,
+      ),
+      onCameraChanged: _onCameraChanged,
       onMapClick: _onMapClick,
-      isDarkMode: isDarkMode,
+      layers: _buildLayers(),
     );
   }
 
@@ -180,101 +210,89 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
     final mapEngineManager = MapEngineManager.watch(context);
 
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final padding = MediaQuery.of(context).viewPadding;
-            _fitCameraLayer.updateViewport(
-              Size(constraints.maxWidth, constraints.maxHeight),
-              padding,
-            );
-          });
+      body: Stack(
+        children: [
+          // Map
+          _buildMap(mapEngineManager.currentEngine),
 
-          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-          return Stack(
-            children: [
-              // Map
-              _buildMap(mapEngineManager.currentEngine, isDarkMode: isDarkMode),
-
-              // Performance Stats (top-left)
-              Positioned(
-                top: 16,
-                left: 16,
-                child: SafeArea(
-                  child: PerformanceStatsOverlay(
-                    statsNotifier: _animatedMarkersLayer.statsNotifier,
-                    lineCount: _animatedRoutesLayer.routeCount,
-                  ),
-                ),
+          // Performance Stats (top-left)
+          Positioned(
+            top: 16,
+            left: 16,
+            child: SafeArea(
+              child: PerformanceStatsOverlay(
+                statsNotifier: _animatedMarkersLayer.statsNotifier,
+                lineCount: _animatedRoutesLayer.routeCount,
               ),
+            ),
+          ),
 
-              // Action buttons (top-right)
-              Positioned(
-                top: 16,
-                right: 16,
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      MapTypeButton.fromEngines(
-                        engines: mapEngineManager.engines,
-                        currentEngineIndex: mapEngineManager.currentIndex,
-                        onEngineChanged: (engine) {
-                          mapEngineManager.setEngine(engine);
-                        },
-                        settingsAppBarTitle: 'Map Settings',
-                        settingsSectionTitle: 'Map Type',
-                        settingsApplyButtonText: 'Apply Changes',
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.grid_on,
-                        onPressed: () {
-                          setState(() => _showGrid = !_showGrid);
-                          _debugGridLayer.setVisible(_showGrid);
-                        },
-                        highlighted: _showGrid,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.my_location,
-                        onPressed: () => _controller.updateCamera(
-                          target: _initialPosition,
-                          zoom: _initialZoom,
-                        ),
-                      ),
-                    ],
+          // Action buttons (top-right)
+          Positioned(
+            top: 16,
+            right: 16,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  MapTypeButton.fromEngines(
+                    engines: mapEngineManager.engines,
+                    currentEngineIndex: mapEngineManager.currentIndex,
+                    onEngineChanged: (engine) {
+                      mapEngineManager.setEngine(engine);
+                    },
+                    settingsAppBarTitle: 'Map Settings',
+                    settingsSectionTitle: 'Map Type',
+                    settingsApplyButtonText: 'Apply Changes',
                   ),
-                ),
-              ),
-
-              // Control Panel (bottom)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: PerformanceControlPanel(
-                      markerCount: _markerCount,
-                      lineCount: _lineCount,
-                      fps: _fps,
-                      isAnimating: _isAnimating,
-                      hasData: _animatedMarkersLayer.vehicleCount > 0,
-                      onMarkerCountChanged: (v) =>
-                          setState(() => _markerCount = v),
-                      onLineCountChanged: (v) => setState(() => _lineCount = v),
-                      onFpsChanged: (v) => setState(() => _fps = v),
-                      onStart: _applySettings,
-                      onStop: _stopAll,
+                  const SizedBox(height: 8),
+                  _ActionButton(
+                    icon: Icons.grid_on,
+                    onPressed: () {
+                      setState(() => _showGrid = !_showGrid);
+                      _debugGridLayer.setVisible(_showGrid);
+                    },
+                    highlighted: _showGrid,
+                  ),
+                  const SizedBox(height: 8),
+                  _ActionButton(
+                    icon: Icons.my_location,
+                    onPressed: () => _controller.moveCamera(
+                      const TrufiCameraPosition(
+                        target: _initialPosition,
+                        zoom: _initialZoom,
+                      ),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+
+          // Control Panel (bottom)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: PerformanceControlPanel(
+                  markerCount: _markerCount,
+                  lineCount: _lineCount,
+                  fps: _fps,
+                  isAnimating: _isAnimating,
+                  hasData: _animatedMarkersLayer.vehicleCount > 0,
+                  onMarkerCountChanged: (v) =>
+                      setState(() => _markerCount = v),
+                  onLineCountChanged: (v) => setState(() => _lineCount = v),
+                  onFpsChanged: (v) => setState(() => _fps = v),
+                  onStart: _applySettings,
+                  onStop: _stopAll,
                 ),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

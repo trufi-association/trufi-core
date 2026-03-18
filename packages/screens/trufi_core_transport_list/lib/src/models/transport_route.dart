@@ -10,6 +10,9 @@ class TransportRoute {
   final Color? backgroundColor;
   final Color? textColor;
   final Widget? modeIcon;
+  final String? agencyName;
+  final String? headsign;
+  final int? directionId;
 
   const TransportRoute({
     required this.id,
@@ -20,6 +23,9 @@ class TransportRoute {
     this.backgroundColor,
     this.textColor,
     this.modeIcon,
+    this.agencyName,
+    this.headsign,
+    this.directionId,
   });
 
   String get displayName => shortName ?? name;
@@ -84,6 +90,9 @@ class TransportRouteDetails extends TransportRoute {
     super.backgroundColor,
     super.textColor,
     super.modeIcon,
+    super.agencyName,
+    super.headsign,
+    super.directionId,
     this.geometry,
     this.stops,
     this.modeName,
