@@ -89,9 +89,10 @@ class _HomeScreenState extends State<HomeScreen>
       DraggableScrollableController();
 
   // Sheet snap positions
-  static const double _sheetMinSize = 0.08;
+  static const double _sheetMinHeightPx = 240;
   static const double _sheetMidSize = 0.35;
   static const double _sheetMaxSize = 0.85;
+  double _cachedSheetMinSize = 0.15; // updated in _buildBottomSheet
 
   // Deep link handling
   SharedRouteNotifier? _sharedRouteNotifier;
@@ -1737,7 +1738,7 @@ class _HomeScreenState extends State<HomeScreen>
     HapticFeedback.selectionClick();
     final currentSize = _sheetController.size;
     final targetSize = currentSize > _sheetMidSize
-        ? _sheetMinSize
+        ? _cachedSheetMinSize
         : _sheetMidSize;
 
     _sheetController.animateTo(
@@ -2063,13 +2064,14 @@ class _HomeScreenState extends State<HomeScreen>
     ThemeData theme,
     BoxConstraints constraints,
   ) {
+    _cachedSheetMinSize = (_sheetMinHeightPx / constraints.maxHeight).clamp(0.05, 0.25);
     return TrufiBottomSheet(
       controller: _sheetController,
       initialChildSize: _sheetMidSize,
-      minChildSize: _sheetMinSize,
+      minChildSize: _cachedSheetMinSize,
       maxChildSize: _sheetMaxSize,
       snap: true,
-      snapSizes: const [_sheetMinSize, _sheetMidSize],
+      snapSizes: [_cachedSheetMinSize, _sheetMidSize],
       onHeightChanged: (height) {
         final maxHeight = constraints.maxHeight;
         _fitCameraUtil?.updatePadding(
