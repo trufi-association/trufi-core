@@ -150,6 +150,8 @@ abstract class FeedbackLocalizations {
   /// In en, this message translates to:
   /// **'Send Feedback'**
   String get feedbackSend;
+
+  String get feedbackSubtitle;
 }
 
 class _FeedbackLocalizationsDelegate

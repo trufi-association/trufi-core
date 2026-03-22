@@ -39,4 +39,22 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get buttonGoBack => 'Go back';
+
+  @override
+  String routeCount(int count) => '$count ${count == 1 ? 'route' : 'routes'}';
+
+  @override
+  String get labelDistance => 'Distance';
+
+  @override
+  String get labelStops => 'Stops';
+
+  @override
+  String get labelMode => 'Mode';
+
+  @override
+  String get noStopsAvailable => 'No stops available';
+
+  @override
+  String get loadingRoute => 'Loading route...';
 }

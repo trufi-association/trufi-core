@@ -571,14 +571,14 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Error')),
+      appBar: AppBar(title: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Error' : 'Error')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            const Text('Page not found', style: TextStyle(fontSize: 24)),
+            Text(Localizations.localeOf(context).languageCode == 'es' ? 'Página no encontrada' : 'Page not found', style: TextStyle(fontSize: 24)),
             const SizedBox(height: 8),
             if (error != null)
               Text(
@@ -588,7 +588,7 @@ class ErrorScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.go('/'),
-              child: const Text('Go Home'),
+              child: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Ir al inicio' : 'Go Home'),
             ),
           ],
         ),

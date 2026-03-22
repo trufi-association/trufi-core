@@ -32,4 +32,7 @@ class FeedbackLocalizationsEn extends FeedbackLocalizations {
 
   @override
   String get feedbackSend => 'Send Feedback';
+
+  @override
+  String get feedbackSubtitle => 'Your voice matters to us';
 }

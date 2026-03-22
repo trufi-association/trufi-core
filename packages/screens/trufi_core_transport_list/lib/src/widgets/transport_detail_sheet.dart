@@ -316,7 +316,7 @@ class _EmptyStopsState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No stops available',
+              Localizations.localeOf(context).languageCode == 'es' ? 'Sin paradas disponibles' : 'No stops available',
               style: theme.textTheme.titleSmall?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,

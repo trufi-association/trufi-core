@@ -16,5 +16,18 @@
   "tryDifferentSearch": "Intenta con otro término de búsqueda",
   "routeNotFound": "Ruta no encontrada",
   "routeLoadError": "No se pudo cargar la ruta",
-  "buttonGoBack": "Volver"
+  "buttonGoBack": "Volver",
+  "routeCount": "{count} rutas",
+  "@routeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "labelDistance": "Distancia",
+  "labelStops": "Paradas",
+  "labelMode": "Modo",
+  "noStopsAvailable": "Sin paradas disponibles",
+  "loadingRoute": "Cargando ruta..."
 }

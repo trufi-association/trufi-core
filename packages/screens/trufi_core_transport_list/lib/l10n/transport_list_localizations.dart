@@ -162,6 +162,18 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Go back'**
   String get buttonGoBack;
+
+  String routeCount(int count);
+
+  String get labelDistance;
+
+  String get labelStops;
+
+  String get labelMode;
+
+  String get noStopsAvailable;
+
+  String get loadingRoute;
 }
 
 class _TransportListLocalizationsDelegate

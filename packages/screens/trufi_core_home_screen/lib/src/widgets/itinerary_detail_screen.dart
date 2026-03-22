@@ -172,7 +172,7 @@ class ItineraryDetailContent extends StatelessWidget {
                     onStartNavigation!();
                   },
                   icon: const Icon(Icons.navigation_rounded, size: 16),
-                  label: const Text('Go'),
+                  label: Text(l10n.buttonGo),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,

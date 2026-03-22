@@ -319,8 +319,8 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
-              const Text(
-                'Error al cargar el mapa offline',
+              Text(
+                Localizations.localeOf(context).languageCode == 'es' ? 'Error al cargar el mapa offline' : 'Error loading offline map',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
@@ -338,7 +338,7 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
                   });
                   _ensureInitialized();
                 },
-                child: const Text('Reintentar'),
+                child: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Reintentar' : 'Retry'),
               ),
             ],
           ),

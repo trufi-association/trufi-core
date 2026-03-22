@@ -31,5 +31,9 @@
   "feedbackSend": "Feedback senden",
   "@feedbackSend": {
     "description": "Button to open feedback form"
+  },
+  "feedbackSubtitle": "Deine Stimme ist uns wichtig",
+  "@feedbackSubtitle": {
+    "description": "Subtitle on feedback hero card"
   }
 }

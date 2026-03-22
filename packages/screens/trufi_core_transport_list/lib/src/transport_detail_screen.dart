@@ -167,7 +167,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading route: $e'),
+            content: Text(TransportListLocalizations.of(context).routeLoadError),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -714,7 +714,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Share: $uri'),
+        content: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Compartir: $uri' : 'Share: $uri'),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -1004,7 +1004,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                 Expanded(
                   child: _StatItem(
                     icon: Icons.straighten_rounded,
-                    label: 'Distance',
+                    label: TransportListLocalizations.of(context).labelDistance,
                     value: _RouteDistanceCalculator.format(distance),
                     color: routeColor,
                   ),
@@ -1018,7 +1018,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                 Expanded(
                   child: _StatItem(
                     icon: Icons.pin_drop_rounded,
-                    label: 'Stops',
+                    label: TransportListLocalizations.of(context).labelStops,
                     value: '${stops.length}',
                     color: routeColor,
                   ),
@@ -1035,7 +1035,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                         ? null
                         : Icons.directions_bus_rounded,
                     customIcon: widget.route.modeIcon,
-                    label: 'Mode',
+                    label: TransportListLocalizations.of(context).labelMode,
                     value: widget.route.modeName ?? 'Bus',
                     color: routeColor,
                   ),
@@ -1051,7 +1051,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
           child: Row(
             children: [
               Text(
-                'Stops',
+                TransportListLocalizations.of(context).labelStops,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w600,
@@ -1120,7 +1120,7 @@ class _EmptyStopsInline extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No stops available',
+            TransportListLocalizations.of(context).noStopsAvailable,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -1255,7 +1255,7 @@ class _LoadingState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Loading route...',
+            TransportListLocalizations.of(context).loadingRoute,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -1485,7 +1485,7 @@ class _SidePanelStopsContent extends StatelessWidget {
                 Expanded(
                   child: _StatItem(
                     icon: Icons.straighten_rounded,
-                    label: 'Distance',
+                    label: TransportListLocalizations.of(context).labelDistance,
                     value: _RouteDistanceCalculator.format(distance),
                     color: routeColor,
                   ),
@@ -1499,7 +1499,7 @@ class _SidePanelStopsContent extends StatelessWidget {
                 Expanded(
                   child: _StatItem(
                     icon: Icons.pin_drop_rounded,
-                    label: 'Stops',
+                    label: TransportListLocalizations.of(context).labelStops,
                     value: '${stops.length}',
                     color: routeColor,
                   ),
@@ -1516,7 +1516,7 @@ class _SidePanelStopsContent extends StatelessWidget {
                         ? null
                         : Icons.directions_bus_rounded,
                     customIcon: route.modeIcon,
-                    label: 'Mode',
+                    label: TransportListLocalizations.of(context).labelMode,
                     value: route.modeName ?? 'Bus',
                     color: routeColor,
                   ),
@@ -1532,7 +1532,7 @@ class _SidePanelStopsContent extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Stops',
+                TransportListLocalizations.of(context).labelStops,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w600,
@@ -1919,9 +1919,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
                       onEngineChanged: (engine) {
                         mapEngineManager.setEngine(engine);
                       },
-                      settingsAppBarTitle: 'Map Settings',
-                      settingsSectionTitle: 'Map Type',
-                      settingsApplyButtonText: 'Apply Changes',
+                      settingsAppBarTitle: Localizations.localeOf(context).languageCode == 'es' ? 'Configuración del mapa' : 'Map Settings',
+                      settingsSectionTitle: Localizations.localeOf(context).languageCode == 'es' ? 'Tipo de mapa' : 'Map Type',
+                      settingsApplyButtonText: Localizations.localeOf(context).languageCode == 'es' ? 'Aplicar cambios' : 'Apply Changes',
                     ),
                     const SizedBox(height: 8),
                   ],

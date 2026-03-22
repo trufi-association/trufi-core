@@ -547,7 +547,7 @@ class _RouteCountIndicator extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  '$count ${count == 1 ? 'route' : 'routes'}',
+                  TransportListLocalizations.of(context).routeCount(count),
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: isFiltered
                         ? colorScheme.onTertiaryContainer
