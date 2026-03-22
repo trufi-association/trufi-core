@@ -139,13 +139,6 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       return 1;
     });
 
-    // Deduplicate: keep one pattern per shortName + directionId combination
-    final seen = <String>{};
-    patterns.removeWhere((p) {
-      final key = '${p.route?.shortName ?? p.code}_${p.directionId ?? 0}';
-      return !seen.add(key);
-    });
-
     final routes = patterns.map(_convertToTransportRoute).toList();
 
     // Cache the patterns if cache is available
