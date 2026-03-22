@@ -85,11 +85,17 @@ class LocationService extends ChangeNotifier {
 
   /// Checks the current permission status without requesting.
   Future<LocationPermissionStatus> checkPermission() async {
-    final serviceEnabled = await isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
-      _safeNotifyListeners();
-      return LocationPermissionStatus.serviceDisabled;
+    // On web, isLocationServiceEnabled() is not a meaningful concept
+    // (browsers don't have a "location services" toggle like mobile).
+    // Skipping this check on web allows the browser to handle geolocation
+    // permissions natively.
+    if (!kIsWeb) {
+      final serviceEnabled = await isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
+        _safeNotifyListeners();
+        return LocationPermissionStatus.serviceDisabled;
+      }
     }
 
     final permission = await Geolocator.checkPermission();
@@ -102,11 +108,13 @@ class LocationService extends ChangeNotifier {
   ///
   /// Returns the new permission status after the request.
   Future<LocationPermissionStatus> requestPermission() async {
-    final serviceEnabled = await isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
-      _safeNotifyListeners();
-      return LocationPermissionStatus.serviceDisabled;
+    if (!kIsWeb) {
+      final serviceEnabled = await isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _lastPermissionStatus = LocationPermissionStatus.serviceDisabled;
+        _safeNotifyListeners();
+        return LocationPermissionStatus.serviceDisabled;
+      }
     }
 
     final permission = await Geolocator.requestPermission();
@@ -119,22 +127,53 @@ class LocationService extends ChangeNotifier {
   ///
   /// Returns null if permission is not granted or location services are disabled.
   /// Throws [LocationServiceException] if an error occurs.
+  ///
+  /// On web, the browser handles permissions natively through the
+  /// geolocation API prompt, so we skip the permission pre-check and
+  /// call getCurrentPosition() directly.
   Future<LocationResult?> getCurrentLocation({
     LocationAccuracy accuracy = LocationAccuracy.high,
     Duration? timeout,
   }) async {
-    final status = await checkPermission();
-    if (status != LocationPermissionStatus.granted) {
-      return null;
+    // On mobile, check permission first to avoid unnecessary API calls.
+    // On web, skip this — the browser will show its own permission dialog
+    // when getCurrentPosition() is called, and the Permissions API state
+    // may not accurately reflect whether access will be granted.
+    if (!kIsWeb) {
+      final status = await checkPermission();
+      if (status != LocationPermissionStatus.granted) {
+        return null;
+      }
     }
 
     try {
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
-          accuracy: accuracy,
-          timeLimit: timeout ?? const Duration(seconds: 15),
-        ),
-      );
+      // On web/desktop, high accuracy may fail because there's no GPS hardware.
+      // Try with the requested accuracy first, then fall back to low accuracy
+      // (IP-based geolocation) which is more reliable on desktop browsers.
+      final effectiveTimeout = timeout ?? const Duration(seconds: 15);
+      Position? position;
+
+      try {
+        position = await Geolocator.getCurrentPosition(
+          locationSettings: LocationSettings(
+            accuracy: accuracy,
+            timeLimit: effectiveTimeout,
+          ),
+        );
+      } catch (e) {
+        // On web/desktop, high accuracy often fails because there's no GPS
+        // hardware. Retry with low accuracy (IP-based geolocation).
+        if (kIsWeb && accuracy != LocationAccuracy.low) {
+          position = await Geolocator.getCurrentPosition(
+            locationSettings: LocationSettings(
+              accuracy: LocationAccuracy.low,
+              timeLimit: effectiveTimeout,
+            ),
+          );
+        } else {
+          rethrow;
+        }
+      }
 
       _lastKnownPosition = position;
       _safeNotifyListeners();

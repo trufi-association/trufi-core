@@ -496,22 +496,44 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           onYourLocation: () async {
             // Try to get GPS location
-            var status = await _locationService.checkPermission();
+            try {
+              if (kIsWeb) {
+                // On web, getCurrentLocation() calls the browser's
+                // geolocation API directly, which handles its own
+                // permission dialog. No need for separate permission checks.
+                final location =
+                    await _locationService.getCurrentLocation();
+                if (location != null) {
+                  return SearchLocation(
+                    id: 'current_location',
+                    displayName: l10n.yourLocation,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                  );
+                }
+              } else {
+                // On mobile, check and request permissions explicitly
+                var status = await _locationService.checkPermission();
 
-            if (status == LocationPermissionStatus.denied) {
-              status = await _locationService.requestPermission();
-            }
+                if (status == LocationPermissionStatus.denied) {
+                  status = await _locationService.requestPermission();
+                }
 
-            if (status == LocationPermissionStatus.granted) {
-              final location = await _locationService.getCurrentLocation();
-              if (location != null) {
-                return SearchLocation(
-                  id: 'current_location',
-                  displayName: l10n.yourLocation,
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                );
+                if (status == LocationPermissionStatus.granted) {
+                  final location =
+                      await _locationService.getCurrentLocation();
+                  if (location != null) {
+                    return SearchLocation(
+                      id: 'current_location',
+                      displayName: l10n.yourLocation,
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    );
+                  }
+                }
               }
+            } catch (e) {
+              debugPrint('Failed to get user location: $e');
             }
 
             // Fallback to default center if GPS not available
