@@ -330,7 +330,7 @@ class _DrawerHeader extends StatelessWidget {
             children: [
               // Logo/Avatar with modern styling
               logo != null
-                  ? SizedBox(width: 56, height: 56, child: logo!)
+                  ? ConstrainedBox(constraints: const BoxConstraints(maxHeight: 56), child: logo!)
                   : Container(
                       width: 56,
                       height: 56,

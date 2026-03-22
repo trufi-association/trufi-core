@@ -21,7 +21,6 @@ query plan(
   $walkReluctance: Float,
   $walkSpeed: Float,
   $bikeSpeed: Float,
-  $maxWalkDistance: Float,
   $wheelchair: Boolean,
   $locale: String
 ) {
@@ -38,7 +37,6 @@ query plan(
     walkReluctance: $walkReluctance,
     walkSpeed: $walkSpeed,
     bikeSpeed: $bikeSpeed,
-    maxWalkDistance: $maxWalkDistance,
     wheelchair: $wheelchair,
     locale: $locale
   ) {

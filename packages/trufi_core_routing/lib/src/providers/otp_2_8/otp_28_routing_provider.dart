@@ -130,9 +130,6 @@ class Otp28RoutingProvider implements IRoutingProvider {
       }
       variables['walkSpeed'] = _prefs.walkSpeed;
       variables['walkReluctance'] = _prefs.walkReluctance;
-      if (_prefs.maxWalkDistance != null) {
-        variables['maxWalkDistance'] = _prefs.maxWalkDistance;
-      }
       if (_prefs.transportModes.contains(RoutingMode.bicycle)) {
         variables['bikeSpeed'] = _prefs.bikeSpeed;
       }

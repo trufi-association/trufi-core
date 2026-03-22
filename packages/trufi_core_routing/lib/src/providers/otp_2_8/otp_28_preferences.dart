@@ -207,8 +207,6 @@ class Otp28Preferences extends StatelessWidget {
             ],
             _WalkSpeedSection(state: state),
             const SizedBox(height: 24),
-            _MaxWalkDistanceSection(state: state),
-            const SizedBox(height: 24),
             _TransportModesSection(state: state, showBicycle: showBicycle),
           ],
         );
@@ -399,115 +397,6 @@ class _SpeedChip extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// --- Max Walk Distance ---
-
-class _MaxWalkDistanceSection extends StatelessWidget {
-  final Otp28PreferencesState state;
-  const _MaxWalkDistanceSection({required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    final distances = <double?>[null, 300, 500, 800, 1000, 1500];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.straighten_rounded,
-              color: colorScheme.primary,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              RoutingLocalizations.of(context).prefsMaxWalkDistance,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: distances.map((distance) {
-            final isSelected = state.maxWalkDistance == distance;
-            return _DistanceChip(
-              distance: distance,
-              isSelected: isSelected,
-              onTap: () {
-                HapticFeedback.selectionClick();
-                state.setMaxWalkDistance(distance);
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _DistanceChip extends StatelessWidget {
-  final double? distance;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _DistanceChip({
-    required this.distance,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    final label = distance == null
-        ? RoutingLocalizations.of(context).prefsNoLimit
-        : distance! >= 1000
-        ? '${(distance! / 1000).toStringAsFixed(1)} km'
-        : '${distance!.toInt()} m';
-
-    return Material(
-      color: isSelected
-          ? colorScheme.primaryContainer
-          : colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Text(
-            label,
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: isSelected
-                  ? colorScheme.onPrimaryContainer
-                  : colorScheme.onSurfaceVariant,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            ),
           ),
         ),
       ),

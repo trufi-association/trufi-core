@@ -455,8 +455,7 @@ class _AboutHeroCard extends StatelessWidget {
         children: [
           // App icon with decorative background
           Container(
-            width: 88,
-            height: 88,
+            constraints: const BoxConstraints(maxHeight: 88),
             decoration: BoxDecoration(
               color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(22),
