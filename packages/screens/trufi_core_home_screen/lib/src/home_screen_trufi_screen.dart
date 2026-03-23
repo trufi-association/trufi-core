@@ -38,6 +38,11 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   /// Provides the route code to allow navigation to route details screen.
   final void Function(BuildContext context, String routeCode)? onRouteTap;
 
+  /// Optional OTP endpoint for fetching walk-only routes with real street
+  /// geometry. When provided, walking alternatives are automatically
+  /// included in route results for short-distance trips.
+  final String? walkRouteEndpoint;
+
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
   static Future<void> init() async {
@@ -50,6 +55,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     this.onItineraryDetails,
     this.onStartNavigation,
     this.onRouteTap,
+    this.walkRouteEndpoint,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
   }
@@ -57,7 +63,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   /// Creates the appropriate request service based on available context.
   RequestPlanService _createRequestService(BuildContext context) {
     final routingEngineManager = routing.RoutingEngineManager.read(context);
-    return RoutingEngineRequestPlanService(manager: routingEngineManager);
+    return RoutingEngineRequestPlanService(
+      manager: routingEngineManager,
+      walkRouteEndpoint: walkRouteEndpoint,
+    );
   }
 
   @override
