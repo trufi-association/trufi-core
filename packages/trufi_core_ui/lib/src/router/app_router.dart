@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart' show PackageInfoPlatform;
 import 'package:url_launcher/url_launcher.dart';
 
 /// Application router using GoRouter with dynamic screen support
@@ -484,22 +485,29 @@ class _DrawerFooter extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           // Version info
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.info_outline_rounded,
-                size: 14,
-                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'Versión 1.0.0',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
+          FutureBuilder<String>(
+            future: PackageInfoPlatform.version(),
+            builder: (context, snapshot) {
+              final version = snapshot.data ?? '';
+              if (version.isEmpty) return const SizedBox.shrink();
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 14,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'v$version',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           if (socialMediaLinks.isNotEmpty) ...[
             const SizedBox(height: 12),
