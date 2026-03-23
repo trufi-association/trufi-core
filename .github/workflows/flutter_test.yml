@@ -32,7 +32,8 @@ jobs:
       - name: Translation Check
         run: |
           melos run l10n --no-select
-          # Stage changes so git diff includes newly created files
+          # Stage changes so git diff includes newly created files (but ignore lock files)
           git add -A
+          git reset HEAD pubspec.lock '*/pubspec.lock' 2>/dev/null || true
           # Fail if there are any changes in the staged area
           git diff --staged --exit-code || (echo "Error: Localization files are out of sync. Run 'melos run l10n' locally and commit the changes." && exit 1)
