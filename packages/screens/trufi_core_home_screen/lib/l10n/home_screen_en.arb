@@ -16,7 +16,7 @@
   "@selectLocations": {
     "description": "Message shown when no locations are selected"
   },
-  "noRoutesFound": "No public transit routes found for this trip. Try a different destination or adjust your search settings.",
+  "noRoutesFound": "No public transit routes found for this trip. This may be due to the selected time or lack of coverage between these points. Try a different time or destination.",
   "@noRoutesFound": {
     "description": "Detailed message shown when no routes are available"
   },
