@@ -11,6 +11,16 @@ import 'package:trufi_core_routing/trufi_core_routing.dart';
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
 
+/// Returns a darkened version of [color] if it's too light for use as
+/// foreground (icons, dots) on white/light backgrounds.
+Color _foregroundColor(Color color) {
+  if (color.computeLuminance() > 0.4) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness * 0.5).clamp(0.0, 0.5)).toColor();
+  }
+  return color;
+}
+
 /// Callback type for moving the map to a specific location
 typedef MapMoveCallback = void Function(double latitude, double longitude);
 
@@ -876,7 +886,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                   isFirst: isFirst,
                   isLast: isLast,
                   isSelected: isSelected,
-                  routeColor: routeColor,
+                  routeColor: _foregroundColor(routeColor),
                   onTap: widget.onStopTap != null
                       ? () {
                           HapticFeedback.selectionClick();
@@ -1006,7 +1016,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     icon: Icons.straighten_rounded,
                     label: TransportListLocalizations.of(context).labelDistance,
                     value: _RouteDistanceCalculator.format(distance),
-                    color: routeColor,
+                    color: _foregroundColor(routeColor),
                   ),
                 ),
                 Container(
@@ -1020,7 +1030,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     icon: Icons.pin_drop_rounded,
                     label: TransportListLocalizations.of(context).labelStops,
                     value: '${stops.length}',
-                    color: routeColor,
+                    color: _foregroundColor(routeColor),
                   ),
                 ),
                 Container(
@@ -1037,7 +1047,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     customIcon: widget.route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
                     value: widget.route.modeName ?? 'Bus',
-                    color: routeColor,
+                    color: _foregroundColor(routeColor),
                   ),
                 ),
               ],
@@ -1568,7 +1578,7 @@ class _SidePanelStopsContent extends StatelessWidget {
                       isFirst: isFirst,
                       isLast: isLast,
                       isSelected: isSelected,
-                      routeColor: routeColor,
+                      routeColor: _foregroundColor(routeColor),
                       onTap: onStopTap != null
                           ? () {
                               HapticFeedback.selectionClick();

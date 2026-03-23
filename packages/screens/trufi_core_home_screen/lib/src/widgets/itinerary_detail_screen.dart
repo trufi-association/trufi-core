@@ -5,6 +5,15 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
 import '../../l10n/home_screen_localizations.dart';
 
+/// Returns a darkened version of [color] if it's too light for text on white.
+Color _legibleColor(Color color) {
+  if (color.computeLuminance() > 0.4) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness * 0.5).clamp(0.0, 0.5)).toColor();
+  }
+  return color;
+}
+
 /// Content widget for displaying itinerary details inline (without Scaffold).
 /// Use this when you want to show details within an existing panel/sheet.
 class ItineraryDetailContent extends StatelessWidget {
@@ -723,7 +732,7 @@ class _LegItemState extends State<_LegItem> {
                     Text(
                       '$stopsCount ${widget.l10n.stops}',
                       style: TextStyle(
-                        color: widget.lineColor,
+                        color: _legibleColor(widget.lineColor),
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -733,7 +742,7 @@ class _LegItemState extends State<_LegItem> {
                           ? Icons.expand_less_rounded
                           : Icons.expand_more_rounded,
                       size: 18,
-                      color: widget.lineColor,
+                      color: _legibleColor(widget.lineColor),
                     ),
                   ],
                 ),
