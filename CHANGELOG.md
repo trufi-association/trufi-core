@@ -1,3 +1,95 @@
+## 5.6.0
+
+### Features
+- UI improvements (#866)
+- Maps migration: restructured maps architecture (#862)
+
+---
+
+## 5.5.0
+
+### Maintenance
+- Update pubspec.lock files to fix CI l10n check
+- Add release workflow for automated GitHub releases on tags
+
+---
+
+## 5.4.0
+
+### Features
+- Add topWidget parameter to DefaultInitScreen
+- Add l10n support to routing preferences and navigation UI (en/es/de)
+- Add showBicycleOption to OTP 2.8 provider for per-app transport mode control
+- Add web-based route sharing and allow https deep links
+- Add stepTextBuilder parameter to DefaultInitScreen for localization
+- Add logo, drawerFooterExtra, and bottomWidget support for app branding
+- Add boarding/alighting stop markers on itinerary map
+- Make About screen sections configurable via List<Widget>
+- Add configurable appTagline to replace hardcoded drawer tagline
+- Pass appName from config to drawer instead of hardcoding 'Trufi App'
+- Add estimated travel times disclaimer banner to itinerary list
+- Add agency grouping, headsign, and directionId to transport list
+- Make language options dynamic based on supportedLocales from LocaleManager
+- Add showWheelchairOption to Otp28RoutingProvider to allow hiding wheelchair setting
+
+### Bug Fixes
+- Fix maps rendering issues
+- Improve transit markers, fix color contrast, and default walk distance to 800m
+- Localize hardcoded strings in transport list empty state
+- Fix FlutterMapEngine example missing localizedName/Description overrides
+- Simplify feedback screen: remove non-functional chevrons and URL params
+- Improve 'No routes found' error with localized descriptive messages
+- Deduplicate patterns by shortName + directionId
+- Fix text contrast on route badges with light background colors
+- Fix hardcoded English 'routes found' string to use l10n
+- Fix stops panel: expand to 85%, pin header, dynamic min height (#834)
+- Fix delete confirmation showing closure reference instead of message (#854)
+- Fix new saved place pre-filling location instead of prompting user to select (#855)
+- Fix l10n: correct accents, translate English strings, remove Bolivian references (#852, #853)
+
+### Maintenance
+- Remove unused maplibre dependency from maps package and example app
+- Refactor maps architecture: simplify TrufiLayer API and centralize rendering in TrufiMap
+- Add localized name/description support to map engines
+- Update pubspec.lock files across packages
+
+---
+
+## 5.3.0
+
+### Features
+- Refactor routing preferences integration tests and update repository (#814)
+
+---
+
+## 5.2.0
+
+### Features
+- Integrate planner functionality (#813)
+
+---
+
+## 5.1.2
+
+### Bug Fixes
+- Fix OTP routing issues (#811)
+
+---
+
+## 5.1.1
+
+### Features
+- Enhance configuration documentation and integrate OTP routing in HomeScreen and TransportList (#810)
+
+---
+
+## 5.1.0
+
+### Features
+- Improve performance (#809)
+
+---
+
 ## 5.0.0
 
 ### ✨ Features
