@@ -85,7 +85,6 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
     final theme = Theme.of(context);
 
     return SafeArea(
-      bottom: false,
       child: DraggableScrollableSheet(
         controller: widget.controller,
         initialChildSize: widget.initialChildSize,
