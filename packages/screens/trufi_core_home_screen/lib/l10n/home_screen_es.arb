@@ -4,7 +4,7 @@
   "searchOrigin": "Seleccionar origen",
   "searchDestination": "Seleccionar destino",
   "selectLocations": "Selecciona origen y destino para buscar rutas",
-  "noRoutesFound": "No encontramos rutas de transporte público para este trayecto. Intenta con otro destino o ajusta los parámetros de búsqueda.",
+  "noRoutesFound": "No encontramos rutas de transporte público para este trayecto. Puede deberse al horario seleccionado o a que no hay cobertura entre estos puntos. Intenta con un horario diferente u otro destino.",
   "noRoutesFoundShort": "No se encontraron rutas para este trayecto",
   "errorNoRoutes": "Error al cargar rutas",
   "durationMinutes": "{minutes} min",

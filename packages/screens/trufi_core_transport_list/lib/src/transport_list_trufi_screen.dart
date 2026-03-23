@@ -9,6 +9,7 @@ import 'otp_transport_data_provider.dart';
 import 'repository/transport_list_cache.dart';
 import 'transport_detail_screen.dart';
 import 'transport_list_content.dart';
+import 'models/transport_route.dart';
 import 'transport_list_data_provider.dart';
 
 /// Transport List screen module for TrufiApp integration with OTP and Map support.
@@ -21,7 +22,10 @@ import 'transport_list_data_provider.dart';
 /// - `/routes` - shows the list of transit routes
 /// - `/routes/:id` - shows route detail for the given pattern ID (path parameter)
 class TransportListTrufiScreen extends TrufiScreen {
-  TransportListTrufiScreen();
+  final TransportListDataProvider Function(BuildContext context)?
+      dataProviderBuilder;
+
+  TransportListTrufiScreen({this.dataProviderBuilder});
 
   @override
   String get id => 'transport_list';
@@ -31,7 +35,9 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   Widget Function(BuildContext context) get builder =>
-      (_) => const _TransportListScreenWidget();
+      (_) => _TransportListScreenWidget(
+            dataProviderBuilder: dataProviderBuilder,
+          );
 
   @override
   List<TrufiSubRoute> get subRoutes => [
@@ -40,11 +46,25 @@ class TransportListTrufiScreen extends TrufiScreen {
       builder: (context, params) {
         final routeId = params['id'];
         if (routeId == null || routeId.isEmpty) {
-          return const _TransportListScreenWidget();
+          return _TransportListScreenWidget(
+            dataProviderBuilder: dataProviderBuilder,
+          );
         }
+
+        final Future<TransportRouteDetails?> Function(String) getDetails;
+        if (dataProviderBuilder != null) {
+          final provider = dataProviderBuilder!(context);
+          getDetails = (code) async {
+            await provider.load();
+            return provider.getRouteDetails(code);
+          };
+        } else {
+          getDetails = TransportDetailScreen.createGetRouteDetails(context);
+        }
+
         return TransportDetailScreen(
           routeCode: routeId,
-          getRouteDetails: TransportDetailScreen.createGetRouteDetails(context),
+          getRouteDetails: getDetails,
         );
       },
     ),
@@ -76,7 +96,10 @@ class TransportListTrufiScreen extends TrufiScreen {
 }
 
 class _TransportListScreenWidget extends StatefulWidget {
-  const _TransportListScreenWidget();
+  final TransportListDataProvider Function(BuildContext context)?
+      dataProviderBuilder;
+
+  const _TransportListScreenWidget({this.dataProviderBuilder});
 
   @override
   State<_TransportListScreenWidget> createState() =>
@@ -101,15 +124,19 @@ class _TransportListScreenWidgetState
   }
 
   void _initializeDataProvider() {
-    _cache = TransportListCache();
-    _cache!.initialize();
+    if (widget.dataProviderBuilder != null) {
+      _dataProvider = widget.dataProviderBuilder!(context);
+    } else {
+      _cache = TransportListCache();
+      _cache!.initialize();
 
-    final routingManager = RoutingEngineManager.read(context);
+      final routingManager = RoutingEngineManager.read(context);
 
-    _dataProvider = OtpTransportDataProvider(
-      manager: routingManager,
-      cache: _cache,
-    );
+      _dataProvider = OtpTransportDataProvider(
+        manager: routingManager,
+        cache: _cache,
+      );
+    }
   }
 
   @override

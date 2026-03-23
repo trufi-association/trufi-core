@@ -25,5 +25,18 @@
   "buttonGoBack": "Go back",
   "@buttonGoBack": {
     "description": "Go back button label"
-  }
+  },
+  "routeCount": "{count} {count, plural, =1{route} other{routes}}",
+  "@routeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "labelDistance": "Distance",
+  "labelStops": "Stops",
+  "labelMode": "Mode",
+  "noStopsAvailable": "No stops available",
+  "loadingRoute": "Loading route..."
 }

@@ -363,7 +363,7 @@ class _FeedbackHeroCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Your voice matters to us',
+            FeedbackLocalizations.of(context).feedbackSubtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
             ),

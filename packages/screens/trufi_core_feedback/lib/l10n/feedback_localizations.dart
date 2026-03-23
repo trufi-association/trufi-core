@@ -150,6 +150,12 @@ abstract class FeedbackLocalizations {
   /// In en, this message translates to:
   /// **'Send Feedback'**
   String get feedbackSend;
+
+  /// Subtitle on feedback hero card
+  ///
+  /// In en, this message translates to:
+  /// **'Your voice matters to us'**
+  String get feedbackSubtitle;
 }
 
 class _FeedbackLocalizationsDelegate

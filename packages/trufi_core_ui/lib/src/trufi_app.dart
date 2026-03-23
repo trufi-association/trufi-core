@@ -136,6 +136,7 @@ class _TrufiAppState extends State<TrufiApp> {
         screens: widget.config.screens,
         screenBuilder: widget.config.initScreenBuilder,
         theme: themeConfig.theme,
+        minSplashDuration: widget.config.minSplashDuration,
         // Layer 3: Show the actual app once initialized
         child: _TrufiMaterialApp(
           config: widget.config,

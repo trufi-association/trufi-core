@@ -22,7 +22,7 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
 
   @override
   String get noRoutesFound =>
-      'No public transit routes found for this trip. Try a different destination or adjust your search settings.';
+      'No public transit routes found for this trip. This may be due to the selected time or lack of coverage between these points. Try a different time or destination.';
 
   @override
   String get noRoutesFoundShort => 'No routes found for this trip';

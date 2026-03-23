@@ -130,9 +130,6 @@ class Otp28RoutingProvider implements IRoutingProvider {
       }
       variables['walkSpeed'] = _prefs.walkSpeed;
       variables['walkReluctance'] = _prefs.walkReluctance;
-      if (_prefs.maxWalkDistance != null) {
-        variables['maxWalkDistance'] = _prefs.maxWalkDistance;
-      }
       if (_prefs.transportModes.contains(RoutingMode.bicycle)) {
         variables['bikeSpeed'] = _prefs.bikeSpeed;
       }
@@ -181,7 +178,18 @@ class Otp28RoutingProvider implements IRoutingProvider {
       await Future.delayed(const Duration(milliseconds: 200));
     }
 
-    return Otp28ResponseParser.parsePlan(result.data!);
+    final plan = Otp28ResponseParser.parsePlan(result.data!);
+
+    // Filter out walk-only itineraries longer than 1 km — these are not useful
+    // transit results and usually appear when no service is available.
+    if (plan.itineraries != null) {
+      final filtered = plan.itineraries!
+          .where((it) => !(it.isWalkOnly && it.walkDistance > 1000))
+          .toList();
+      return plan.copyWith(itineraries: filtered);
+    }
+
+    return plan;
   }
 
   // --- Transit routes (same schema as OTP 2.4) ---

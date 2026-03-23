@@ -342,7 +342,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         labelText: localization?.name ?? 'Name',
-        hintText: localization?.enterName ?? 'Enter a name for this place',
+        hintText: localization?.enterName ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Ingresa un nombre para este lugar' : 'Enter a name for this place'),
         filled: true,
         fillColor: theme.colorScheme.surfaceContainerHighest,
         border: OutlineInputBorder(
@@ -465,7 +465,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                               ? (localization?.locationSelected ??
                                     'Location selected')
                               : (localization?.noLocationSelected ??
-                                    'No location selected'),
+                                    (Localizations.localeOf(context).languageCode == 'es' ? 'Sin ubicación seleccionada' : 'No location selected')),
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: hasError ? theme.colorScheme.error : null,
@@ -583,7 +583,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
         onPressed: _save,
         icon: const Icon(Icons.check),
         label: Text(
-          localization?.save ?? 'Save Place',
+          localization?.save ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Guardar lugar' : 'Save Place'),
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         style: FilledButton.styleFrom(

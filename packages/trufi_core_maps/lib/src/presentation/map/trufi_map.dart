@@ -624,6 +624,15 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
         _loadedImages.clear();
         _sourceInit.clear();
         _scheduleSync();
+        // Retry sync after a delay to handle race conditions in profile/release
+        // where widget-to-image rasterization may fail on first attempt
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted && _mapReady) {
+            _loadedImages.clear();
+            _imageLoaders.clear();
+            _scheduleSync();
+          }
+        });
       },
       onCameraIdle: _handleCameraIdle,
       onMapLongClick: kIsWeb

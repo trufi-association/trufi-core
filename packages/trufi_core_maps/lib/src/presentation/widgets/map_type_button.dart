@@ -295,7 +295,7 @@ class _MapTypeButtonBase extends StatelessWidget {
       elevation: 4,
       borderRadius: BorderRadius.circular(borderRadius),
       child: Tooltip(
-        message: tooltip ?? 'Change map type',
+        message: tooltip ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Cambiar tipo de mapa' : 'Change map type'),
         child: IconButton(
           iconSize: iconSize,
           icon: Icon(icon, color: effectiveIconColor),

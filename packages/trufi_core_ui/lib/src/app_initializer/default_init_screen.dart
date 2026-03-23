@@ -88,10 +88,10 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
       return widget.stepTextBuilder!(step);
     }
     return switch (step) {
-      AppInitStep.starting => 'Starting',
-      AppInitStep.initializingOverlays => 'Initializing',
-      AppInitStep.loadingMaps => 'Loading maps',
-      AppInitStep.loadingRoutes => 'Loading routes',
+      AppInitStep.starting => Localizations.localeOf(context).languageCode == 'es' ? 'Iniciando' : 'Starting',
+      AppInitStep.initializingOverlays => Localizations.localeOf(context).languageCode == 'es' ? 'Inicializando' : 'Initializing',
+      AppInitStep.loadingMaps => Localizations.localeOf(context).languageCode == 'es' ? 'Cargando mapas' : 'Loading maps',
+      AppInitStep.loadingRoutes => Localizations.localeOf(context).languageCode == 'es' ? 'Cargando rutas' : 'Loading routes',
       AppInitStep.preparingScreens => 'Almost ready',
     };
   }
@@ -265,7 +265,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
           child: Text(
             widget.currentStep != null
                 ? _stepToDisplayText(widget.currentStep!)
-                : 'Loading...',
+                : Localizations.localeOf(context).languageCode == 'es' ? 'Cargando...' : 'Loading...',
             key: ValueKey(widget.currentStep),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.8),
@@ -412,7 +412,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
         FilledButton.icon(
           onPressed: widget.onRetry,
           icon: const Icon(Icons.refresh_rounded),
-          label: const Text('Try again'),
+          label: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Reintentar' : 'Try again'),
           style: FilledButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             shape: RoundedRectangleBorder(

@@ -27,12 +27,16 @@ class AppInitializer extends StatefulWidget {
   /// Defaults to a green Material 3 theme.
   final ThemeData? theme;
 
+  /// Minimum duration the splash/init screen is shown.
+  final Duration minSplashDuration;
+
   const AppInitializer({
     super.key,
     required this.screens,
     this.screenBuilder,
     required this.child,
     this.theme,
+    this.minSplashDuration = Duration.zero,
   });
 
   @override
@@ -94,6 +98,8 @@ class _AppInitializerState extends State<AppInitializer> {
 
   /// Performs the actual initialization of managers and screens.
   Future<void> _performInitialization() async {
+    final stopwatch = Stopwatch()..start();
+
     // Capture all managers before async operations to avoid BuildContext issues
     final overlayManager = OverlayManager.read(context);
     final mapManager = MapEngineManager.read(context);
@@ -112,6 +118,12 @@ class _AppInitializerState extends State<AppInitializer> {
     _setStep(AppInitStep.preparingScreens);
     for (final screen in widget.screens) {
       await screen.initialize();
+    }
+
+    // Ensure splash screen is shown for the minimum duration
+    final remaining = widget.minSplashDuration - stopwatch.elapsed;
+    if (remaining > Duration.zero) {
+      await Future.delayed(remaining);
     }
   }
 

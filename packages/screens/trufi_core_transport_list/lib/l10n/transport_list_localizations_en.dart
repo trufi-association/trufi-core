@@ -39,4 +39,30 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get buttonGoBack => 'Go back';
+
+  @override
+  String routeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'routes',
+      one: 'route',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get labelDistance => 'Distance';
+
+  @override
+  String get labelStops => 'Stops';
+
+  @override
+  String get labelMode => 'Mode';
+
+  @override
+  String get noStopsAvailable => 'No stops available';
+
+  @override
+  String get loadingRoute => 'Loading route...';
 }

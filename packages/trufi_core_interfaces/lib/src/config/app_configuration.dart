@@ -130,6 +130,10 @@ class AppConfiguration {
   /// Optional logo widget (used in drawer header, etc.).
   final Widget? logo;
 
+  /// Minimum duration the splash/init screen is shown.
+  /// Defaults to Duration.zero (no minimum).
+  final Duration minSplashDuration;
+
   const AppConfiguration({
     required this.appName,
     this.appTagline,
@@ -144,5 +148,6 @@ class AppConfiguration {
     this.extraLocalizationsDelegates = const [],
     this.drawerFooterExtra,
     this.logo,
+    this.minSplashDuration = Duration.zero,
   });
 }

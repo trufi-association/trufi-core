@@ -7,6 +7,9 @@ export 'src/transport_list_data_provider.dart';
 // OTP Data provider (connects to OpenTripPlanner)
 export 'src/otp_transport_data_provider.dart';
 
+// GTFS Data provider (reads from local GTFS zip asset)
+export 'src/gtfs_transport_data_provider.dart';
+
 // Cache (persistence)
 export 'src/repository/transport_list_cache.dart';
 

@@ -16,5 +16,18 @@
   "tryDifferentSearch": "Versuche einen anderen Suchbegriff",
   "routeNotFound": "Linie nicht gefunden",
   "routeLoadError": "Die Linie konnte nicht geladen werden",
-  "buttonGoBack": "Zurück"
+  "buttonGoBack": "Zurück",
+  "routeCount": "{count} Linien",
+  "@routeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "labelDistance": "Entfernung",
+  "labelStops": "Haltestellen",
+  "labelMode": "Verkehrsmittel",
+  "noStopsAvailable": "Keine Haltestellen verfügbar",
+  "loadingRoute": "Linie wird geladen..."
 }

@@ -89,9 +89,10 @@ class _HomeScreenState extends State<HomeScreen>
       DraggableScrollableController();
 
   // Sheet snap positions
-  static const double _sheetMinSize = 0.08;
+  static const double _sheetMinHeightPx = 240;
   static const double _sheetMidSize = 0.35;
   static const double _sheetMaxSize = 0.85;
+  double _cachedSheetMinSize = 0.15;
 
   // Deep link handling
   SharedRouteNotifier? _sharedRouteNotifier;
@@ -1439,12 +1440,14 @@ class _HomeScreenState extends State<HomeScreen>
                     isWideScreen: isWideScreen,
                   ),
 
-                  // Narrow screens: bottom sheet for results
+                  // Narrow screens: bottom sheet for results, fixed panel for errors
                   // Hide when POI is selected (POI panel takes priority)
                   if (!isWideScreen &&
                       hasResults &&
                       widget.config.poiLayersManager?.selectedPOI == null)
-                    _buildBottomSheet(state, theme, constraints),
+                    (state.hasError || (!state.isLoading && state.plan != null && !state.plan!.hasItineraries))
+                        ? _buildErrorPanel(state, theme)
+                        : _buildBottomSheet(state, theme, constraints),
 
                   // POI detail panel (narrow screens only) - shows at bottom
                   if (!isWideScreen &&
@@ -1737,7 +1740,7 @@ class _HomeScreenState extends State<HomeScreen>
     HapticFeedback.selectionClick();
     final currentSize = _sheetController.size;
     final targetSize = currentSize > _sheetMidSize
-        ? _sheetMinSize
+        ? _cachedSheetMinSize
         : _sheetMidSize;
 
     _sheetController.animateTo(
@@ -2057,19 +2060,113 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  /// Fixed panel for error/empty states — avoids bottom sheet safe area issues.
+  Widget _buildErrorPanel(RoutePlannerState state, ThemeData theme) {
+    final l10n = HomeScreenLocalizations.of(context);
+    final isError = state.hasError;
+    final message = isError
+        ? (state.error == noRoutesErrorKey
+            ? l10n.noRoutesFound
+            : (state.error ?? l10n.errorNoRoutes))
+        : l10n.noRoutesFound;
+
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(40),
+                blurRadius: 16,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<RoutePlannerCubit>().clearPlan();
+                  },
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: 20,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: isError
+                      ? theme.colorScheme.errorContainer
+                      : theme.colorScheme.surfaceContainerHighest,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isError ? Icons.error_outline_rounded : Icons.search_off_rounded,
+                  size: 28,
+                  color: isError
+                      ? theme.colorScheme.error
+                      : theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              if (isError) ...[
+                const SizedBox(height: 12),
+                FilledButton.tonal(
+                  onPressed: () {
+                    context.read<RoutePlannerCubit>().fetchPlan();
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.refresh_rounded, size: 18),
+                      const SizedBox(width: 8),
+                      Text(l10n.buttonTryAgain),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   /// Builds the bottom sheet for narrow screens (<600px).
   Widget _buildBottomSheet(
     RoutePlannerState state,
     ThemeData theme,
     BoxConstraints constraints,
   ) {
+    _cachedSheetMinSize = (_sheetMinHeightPx / constraints.maxHeight).clamp(0.05, 0.25);
     return TrufiBottomSheet(
       controller: _sheetController,
       initialChildSize: _sheetMidSize,
-      minChildSize: _sheetMinSize,
+      minChildSize: _cachedSheetMinSize,
       maxChildSize: _sheetMaxSize,
       snap: true,
-      snapSizes: const [_sheetMinSize, _sheetMidSize],
+      snapSizes: [_cachedSheetMinSize, _sheetMidSize],
       onHeightChanged: (height) {
         final maxHeight = constraints.maxHeight;
         _fitCameraUtil?.updatePadding(

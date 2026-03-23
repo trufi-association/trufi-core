@@ -264,7 +264,7 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                     );
                   },
                   icon: const Icon(Icons.check_rounded, size: 22),
-                  label: Text(widget.configuration.confirmButtonText),
+                  label: Text(widget.configuration.confirmButtonText == 'Confirm Location' && Localizations.localeOf(context).languageCode == 'es' ? 'Confirmar ubicación' : widget.configuration.confirmButtonText),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
