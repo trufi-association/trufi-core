@@ -41,7 +41,9 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get buttonGoBack => 'Zurück';
 
   @override
-  String routeCount(int count) => '$count ${count == 1 ? 'Linie' : 'Linien'}';
+  String routeCount(int count) {
+    return '$count Linien';
+  }
 
   @override
   String get labelDistance => 'Entfernung';

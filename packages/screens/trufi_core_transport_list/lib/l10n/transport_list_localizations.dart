@@ -163,16 +163,40 @@ abstract class TransportListLocalizations {
   /// **'Go back'**
   String get buttonGoBack;
 
+  /// No description provided for @routeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{route} other{routes}}'**
   String routeCount(int count);
 
+  /// No description provided for @labelDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
   String get labelDistance;
 
+  /// No description provided for @labelStops.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops'**
   String get labelStops;
 
+  /// No description provided for @labelMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
   String get labelMode;
 
+  /// No description provided for @noStopsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No stops available'**
   String get noStopsAvailable;
 
+  /// No description provided for @loadingRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading route...'**
   String get loadingRoute;
 }
 
