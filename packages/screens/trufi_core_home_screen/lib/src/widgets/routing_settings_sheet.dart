@@ -113,7 +113,7 @@ class RoutingSettingsSheet extends StatelessWidget {
           ),
           // Apply button
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+            padding: EdgeInsets.fromLTRB(20, 8, 20, 24 + MediaQuery.of(context).padding.bottom),
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
