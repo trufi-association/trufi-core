@@ -39,7 +39,7 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get onboardingComplete => 'Comenzar';
 
   @override
-  String get privacyConsentTitle => 'Ayuda a mejorar Trufi';
+  String get privacyConsentTitle => 'Ayuda a mejorar la app';
 
   @override
   String get privacyConsentSubtitle =>

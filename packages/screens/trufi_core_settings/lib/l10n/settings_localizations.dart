@@ -166,7 +166,7 @@ abstract class SettingsLocalizations {
   /// Privacy consent dialog title
   ///
   /// In en, this message translates to:
-  /// **'Help Improve Trufi'**
+  /// **'Help Improve the App'**
   String get privacyConsentTitle;
 
   /// Privacy consent dialog subtitle

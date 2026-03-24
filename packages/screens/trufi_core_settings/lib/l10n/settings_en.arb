@@ -51,7 +51,7 @@
     "description": "Button to complete onboarding"
   },
 
-  "privacyConsentTitle": "Help Improve Trufi",
+  "privacyConsentTitle": "Help Improve the App",
   "@privacyConsentTitle": {
     "description": "Privacy consent dialog title"
   },
