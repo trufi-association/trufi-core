@@ -64,11 +64,19 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
       totalStopwatch.stop();
       _logSuccess(plan, totalStopwatch.elapsedMilliseconds);
 
-      // Sort itineraries
-      if (plan.itineraries != null && plan.itineraries!.isNotEmpty) {
-        final sortedItineraries = List<routing.Itinerary>.from(
-          plan.itineraries!,
-        );
+      // For OTP engines, apply filtering and improved sorting client-side.
+      // The planner backend already handles this in /api/plan.
+      if (engine.requiresInternet &&
+          plan.itineraries != null &&
+          plan.itineraries!.isNotEmpty) {
+        // Remove redundant same-line transfers (e.g., Line 209 → Line 209)
+        final filtered = plan.itineraries!
+            .where((it) => !_hasRedundantSameLineTransfer(it))
+            .toList();
+        final itineraries =
+            filtered.isNotEmpty ? filtered : plan.itineraries!;
+
+        final sortedItineraries = List<routing.Itinerary>.from(itineraries);
         sortedItineraries.sort((a, b) {
           final weightA = _calculateWeight(a);
           final weightB = _calculateWeight(b);
@@ -112,9 +120,34 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
     );
   }
 
+  /// Calculates a weight for sorting itineraries (lower = better).
+  /// Applied only to OTP results where the backend doesn't handle sorting.
   double _calculateWeight(routing.Itinerary itinerary) {
-    return (itinerary.numberOfTransfers * 0.65) +
-        (itinerary.walkDistance * 0.3) +
-        ((itinerary.distance / 100) * 0.05);
+    final durationMin = itinerary.duration.inMinutes.toDouble();
+    final transfers = itinerary.numberOfTransfers;
+    final walkDistanceKm = itinerary.walkDistance / 1000;
+
+    if (itinerary.isWalkOnly && durationMin <= 20) {
+      return durationMin * 0.5;
+    }
+
+    return (transfers * 15) + (durationMin * 1.0) + (walkDistanceKm * 3);
+  }
+
+  /// Detects itineraries where the same transit line appears consecutively
+  /// (e.g., Line 209 → Line 209), which indicates an inefficient routing
+  /// artifact from OTP.
+  bool _hasRedundantSameLineTransfer(routing.Itinerary itinerary) {
+    final transitLegs = itinerary.transitLegs;
+    if (transitLegs.length < 2) return false;
+
+    for (int i = 0; i < transitLegs.length - 1; i++) {
+      final currentName = transitLegs[i].displayName;
+      final nextName = transitLegs[i + 1].displayName;
+      if (currentName.isNotEmpty && currentName == nextName) {
+        return true;
+      }
+    }
+    return false;
   }
 }
