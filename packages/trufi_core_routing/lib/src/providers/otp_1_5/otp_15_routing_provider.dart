@@ -50,11 +50,15 @@ class Otp15RoutingProvider implements IRoutingProvider {
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
 
+  /// Whether to show the wheelchair accessibility toggle in preferences UI.
+  final bool showWheelchairOption;
+
   Otp15RoutingProvider({
     required this.endpoint,
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.showWheelchairOption = true,
     http.Client? httpClient,
   }) : _injectedHttpClient = httpClient;
 
@@ -78,7 +82,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
 
   @override
   Widget? buildPreferencesUI(BuildContext context) =>
-      Otp15Preferences(state: _prefs);
+      Otp15Preferences(state: _prefs, showWheelchair: showWheelchairOption);
 
   @override
   void resetPreferences() => _prefs.reset();
