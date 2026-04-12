@@ -5,6 +5,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/home_screen_localizations.dart';
@@ -84,6 +85,8 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     ...HomeScreenLocalizations.localizationsDelegates,
     // Include POI layers localizations if POI layers are configured
     if (config.poiLayersManager != null) POILayersLocalizations.delegate,
+    routing.RoutingLocalizations.delegate,
+    NavigationLocalizations.delegate,
   ];
 
   @override
