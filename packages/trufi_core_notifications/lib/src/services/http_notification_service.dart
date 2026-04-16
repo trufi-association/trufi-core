@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/notification.dart';
 import 'notification_service.dart';
@@ -11,10 +13,18 @@ class HttpNotificationService implements NotificationService {
   final NotificationServiceConfig config;
   final http.Client _client;
 
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
+
   bool _isDisposed = false;
 
-  HttpNotificationService({required this.config, http.Client? client})
-    : _client = client ?? http.Client();
+  HttpNotificationService({
+    required this.config,
+    http.Client? client,
+    DeviceIdService? deviceIdService,
+  }) : _client = client ?? http.Client(),
+       _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   Future<Map<String, String>> _getHeaders() async {
     final headers = <String, String>{
@@ -29,11 +39,9 @@ class HttpNotificationService implements NotificationService {
       }
     }
 
-    if (config.getDeviceId != null) {
-      final deviceId = await config.getDeviceId!();
-      if (deviceId.isNotEmpty) {
-        headers['X-Device-Id'] = deviceId;
-      }
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isNotEmpty) {
+      headers['X-Device-Id'] = deviceId;
     }
 
     return headers;

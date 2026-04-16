@@ -27,6 +27,9 @@ export './src/places/my_places_provider.dart';
 // Storage interfaces
 export './src/storage/storage_service.dart';
 
+// Device interfaces
+export './src/device/device_id_service.dart';
+
 // Overlay interfaces
 export './src/overlay/overlay_service.dart';
 

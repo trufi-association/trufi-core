@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/search_location.dart';
 import 'search_location_service.dart';
@@ -28,12 +30,12 @@ class PhotonSearchService implements SearchLocationService {
   /// Optional bounding box to limit results [minLon, minLat, maxLon, maxLat].
   final List<double>? boundingBox;
 
-  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
-  /// on every outgoing request.
-  final Future<String?> Function()? deviceIdProvider;
-
   /// HTTP client for making requests.
   final http.Client _client;
+
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
 
   PhotonSearchService({
     required this.baseUrl,
@@ -42,15 +44,14 @@ class PhotonSearchService implements SearchLocationService {
     this.biasLongitude,
     this.limit = 10,
     this.boundingBox,
-    this.deviceIdProvider,
     http.Client? client,
-  }) : _client = client ?? http.Client();
+    DeviceIdService? deviceIdService,
+  }) : _client = client ?? http.Client(),
+       _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   Future<Map<String, String>?> _buildHeaders() async {
-    final provider = deviceIdProvider;
-    if (provider == null) return null;
-    final deviceId = await provider();
-    if (deviceId == null || deviceId.isEmpty) return null;
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isEmpty) return null;
     return {'X-Device-Id': deviceId};
   }
 

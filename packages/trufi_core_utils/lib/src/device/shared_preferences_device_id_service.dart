@@ -1,17 +1,22 @@
 import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
-class DeviceIdProvider {
-  DeviceIdProvider._();
-
-  static final DeviceIdProvider instance = DeviceIdProvider._();
+/// SharedPreferences implementation of [DeviceIdService].
+///
+/// Generates a UUID v4 on first call, persists it under the
+/// `trufi.device_id` key, caches it in memory for subsequent calls within the
+/// same instance, and returns the same value for the lifetime of the install.
+class SharedPreferencesDeviceIdService implements DeviceIdService {
+  SharedPreferencesDeviceIdService();
 
   static const String _prefsKey = 'trufi.device_id';
 
   String? _cached;
   Future<String>? _pending;
 
+  @override
   Future<String> getDeviceId() {
     if (_cached != null) return Future.value(_cached);
     return _pending ??= _load();

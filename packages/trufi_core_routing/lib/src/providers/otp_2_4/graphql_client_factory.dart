@@ -1,5 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 /// Factory for creating GraphQL clients.
 class GraphQLClientFactory {
@@ -11,15 +13,17 @@ class GraphQLClientFactory {
   /// Creates a GraphQL client for the given endpoint.
   ///
   /// [timeout] defaults to 60 seconds.
+  /// [deviceIdService] defaults to [SharedPreferencesDeviceIdService] and is
+  /// used to inject the `X-Device-Id` header on every outgoing request.
   static GraphQLClient create(
     String endpoint, {
     Duration timeout = defaultTimeout,
-    Future<String?> Function()? deviceIdProvider,
+    DeviceIdService? deviceIdService,
   }) {
     final httpClient = _OtpHttpClient(
       http.Client(),
       timeout,
-      deviceIdProvider,
+      deviceIdService ?? SharedPreferencesDeviceIdService(),
     );
 
     final httpLink = HttpLink(
@@ -39,23 +43,20 @@ class GraphQLClientFactory {
   }
 }
 
-/// HTTP client wrapper that adds a timeout and optionally injects the
-/// `X-Device-Id` header into every outgoing request.
+/// HTTP client wrapper that adds a timeout and injects the `X-Device-Id`
+/// header read from a [DeviceIdService] on every outgoing request.
 class _OtpHttpClient extends http.BaseClient {
-  _OtpHttpClient(this._inner, this._timeout, this._deviceIdProvider);
+  _OtpHttpClient(this._inner, this._timeout, this._deviceIdService);
 
   final http.Client _inner;
   final Duration _timeout;
-  final Future<String?> Function()? _deviceIdProvider;
+  final DeviceIdService _deviceIdService;
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final provider = _deviceIdProvider;
-    if (provider != null) {
-      final deviceId = await provider();
-      if (deviceId != null && deviceId.isNotEmpty) {
-        request.headers['X-Device-Id'] = deviceId;
-      }
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isNotEmpty) {
+      request.headers['X-Device-Id'] = deviceId;
     }
     return _inner.send(request).timeout(_timeout);
   }

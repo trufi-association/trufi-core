@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../utils/polyline_decoder.dart';
 import '../../models/plan.dart';
@@ -47,21 +49,22 @@ class Otp15RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
-  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
-  /// on every outgoing request.
-  final Future<String?> Function()? deviceIdProvider;
-
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
+
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
 
   Otp15RoutingProvider({
     required this.endpoint,
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
-    this.deviceIdProvider,
     http.Client? httpClient,
-  }) : _injectedHttpClient = httpClient;
+    DeviceIdService? deviceIdService,
+  }) : _injectedHttpClient = httpClient,
+       _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   late final _prefs = Otp15PreferencesState();
 
@@ -332,10 +335,8 @@ class Otp15RoutingProvider implements IRoutingProvider {
   }
 
   Future<void> _applyDeviceId(Map<String, String> headers) async {
-    final provider = deviceIdProvider;
-    if (provider == null) return;
-    final deviceId = await provider();
-    if (deviceId != null && deviceId.isNotEmpty) {
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isNotEmpty) {
       headers['X-Device-Id'] = deviceId;
     }
   }

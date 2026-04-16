@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import 'graphql_client_factory.dart';
 import '../../models/plan.dart';
@@ -46,9 +47,9 @@ class Otp24RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
-  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
-  /// on every outgoing request (plan, transit routes, pattern lookups).
-  final Future<String?> Function()? deviceIdProvider;
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService? deviceIdService;
 
   Otp24RoutingProvider({
     required this.endpoint,
@@ -56,7 +57,7 @@ class Otp24RoutingProvider implements IRoutingProvider {
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
-    this.deviceIdProvider,
+    this.deviceIdService,
   });
 
   late final _prefs = Otp24PreferencesState();
@@ -91,7 +92,7 @@ class Otp24RoutingProvider implements IRoutingProvider {
 
   late final GraphQLClient _client = GraphQLClientFactory.create(
     _graphqlEndpoint,
-    deviceIdProvider: deviceIdProvider,
+    deviceIdService: deviceIdService,
   );
 
   // --- Plan ---

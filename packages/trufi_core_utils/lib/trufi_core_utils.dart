@@ -10,4 +10,4 @@ export './src/storage/shared_preferences_storage.dart';
 export './src/location_service.dart';
 
 // Device
-export './src/device/device_id_provider.dart';
+export './src/device/shared_preferences_device_id_service.dart';
