@@ -29,6 +29,13 @@ class HttpNotificationService implements NotificationService {
       }
     }
 
+    if (config.getDeviceId != null) {
+      final deviceId = await config.getDeviceId!();
+      if (deviceId.isNotEmpty) {
+        headers['X-Device-Id'] = deviceId;
+      }
+    }
+
     return headers;
   }
 

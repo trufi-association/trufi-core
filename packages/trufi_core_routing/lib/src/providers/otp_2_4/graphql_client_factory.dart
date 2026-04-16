@@ -14,9 +14,13 @@ class GraphQLClientFactory {
   static GraphQLClient create(
     String endpoint, {
     Duration timeout = defaultTimeout,
+    Future<String?> Function()? deviceIdProvider,
   }) {
-    // Create HTTP client with timeout
-    final httpClient = _TimeoutHttpClient(http.Client(), timeout);
+    final httpClient = _OtpHttpClient(
+      http.Client(),
+      timeout,
+      deviceIdProvider,
+    );
 
     final httpLink = HttpLink(
       endpoint,
@@ -35,15 +39,24 @@ class GraphQLClientFactory {
   }
 }
 
-/// HTTP client wrapper that adds timeout to all requests.
-class _TimeoutHttpClient extends http.BaseClient {
-  _TimeoutHttpClient(this._inner, this._timeout);
+/// HTTP client wrapper that adds a timeout and optionally injects the
+/// `X-Device-Id` header into every outgoing request.
+class _OtpHttpClient extends http.BaseClient {
+  _OtpHttpClient(this._inner, this._timeout, this._deviceIdProvider);
 
   final http.Client _inner;
   final Duration _timeout;
+  final Future<String?> Function()? _deviceIdProvider;
 
   @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    final provider = _deviceIdProvider;
+    if (provider != null) {
+      final deviceId = await provider();
+      if (deviceId != null && deviceId.isNotEmpty) {
+        request.headers['X-Device-Id'] = deviceId;
+      }
+    }
     return _inner.send(request).timeout(_timeout);
   }
 

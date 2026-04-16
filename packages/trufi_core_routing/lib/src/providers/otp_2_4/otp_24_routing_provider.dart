@@ -46,12 +46,17 @@ class Otp24RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
+  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
+  /// on every outgoing request (plan, transit routes, pattern lookups).
+  final Future<String?> Function()? deviceIdProvider;
+
   Otp24RoutingProvider({
     required this.endpoint,
     this.useSimpleQuery = false,
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.deviceIdProvider,
   });
 
   late final _prefs = Otp24PreferencesState();
@@ -86,6 +91,7 @@ class Otp24RoutingProvider implements IRoutingProvider {
 
   late final GraphQLClient _client = GraphQLClientFactory.create(
     _graphqlEndpoint,
+    deviceIdProvider: deviceIdProvider,
   );
 
   // --- Plan ---

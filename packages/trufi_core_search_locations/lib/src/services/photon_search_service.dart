@@ -28,6 +28,10 @@ class PhotonSearchService implements SearchLocationService {
   /// Optional bounding box to limit results [minLon, minLat, maxLon, maxLat].
   final List<double>? boundingBox;
 
+  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
+  /// on every outgoing request.
+  final Future<String?> Function()? deviceIdProvider;
+
   /// HTTP client for making requests.
   final http.Client _client;
 
@@ -38,8 +42,17 @@ class PhotonSearchService implements SearchLocationService {
     this.biasLongitude,
     this.limit = 10,
     this.boundingBox,
+    this.deviceIdProvider,
     http.Client? client,
   }) : _client = client ?? http.Client();
+
+  Future<Map<String, String>?> _buildHeaders() async {
+    final provider = deviceIdProvider;
+    if (provider == null) return null;
+    final deviceId = await provider();
+    if (deviceId == null || deviceId.isEmpty) return null;
+    return {'X-Device-Id': deviceId};
+  }
 
   @override
   Future<List<SearchLocation>> search(String query) async {
@@ -68,7 +81,7 @@ class PhotonSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(uri);
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         throw SearchLocationException(
@@ -106,7 +119,7 @@ class PhotonSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(uri);
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         return null;

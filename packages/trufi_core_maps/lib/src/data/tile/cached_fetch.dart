@@ -1,6 +1,16 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 
+/// Shared configuration for the tile fetcher.
+///
+/// Set [deviceIdProvider] once at app startup to include the `X-Device-Id`
+/// header on every tile request.
+class CachedFetchConfig {
+  CachedFetchConfig._();
+
+  static Future<String?> Function()? deviceIdProvider;
+}
+
 final Dio _dio = Dio();
 final Map<String, CancelToken> _activeRequests = {};
 
@@ -24,10 +34,22 @@ Future<Uint8List> cachedFirstFetch(Uri uri, int z, int x, int y) async {
   final cancelToken = CancelToken();
   _activeRequests[key] = cancelToken;
 
+  final headers = <String, dynamic>{};
+  final provider = CachedFetchConfig.deviceIdProvider;
+  if (provider != null) {
+    final deviceId = await provider();
+    if (deviceId != null && deviceId.isNotEmpty) {
+      headers['X-Device-Id'] = deviceId;
+    }
+  }
+
   try {
     final response = await _dio.get<List<int>>(
       key,
-      options: Options(responseType: ResponseType.bytes),
+      options: Options(
+        responseType: ResponseType.bytes,
+        headers: headers.isEmpty ? null : headers,
+      ),
       cancelToken: cancelToken,
     );
 

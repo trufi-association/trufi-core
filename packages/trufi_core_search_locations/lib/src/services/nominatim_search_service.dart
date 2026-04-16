@@ -40,6 +40,10 @@ class NominatimSearchService implements SearchLocationService {
   /// Radius in degrees for the viewbox around bias point.
   final double biasRadius;
 
+  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
+  /// on every outgoing request.
+  final Future<String?> Function()? deviceIdProvider;
+
   /// HTTP client for making requests.
   final http.Client _client;
 
@@ -53,8 +57,21 @@ class NominatimSearchService implements SearchLocationService {
     this.biasLatitude,
     this.biasLongitude,
     this.biasRadius = 0.5,
+    this.deviceIdProvider,
     http.Client? client,
   }) : _client = client ?? http.Client();
+
+  Future<Map<String, String>> _buildHeaders() async {
+    final headers = <String, String>{'User-Agent': userAgent};
+    final provider = deviceIdProvider;
+    if (provider != null) {
+      final deviceId = await provider();
+      if (deviceId != null && deviceId.isNotEmpty) {
+        headers['X-Device-Id'] = deviceId;
+      }
+    }
+    return headers;
+  }
 
   @override
   Future<List<SearchLocation>> search(String query) async {
@@ -96,10 +113,7 @@ class NominatimSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(
-        uri,
-        headers: {'User-Agent': userAgent},
-      );
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         throw SearchLocationException(
@@ -138,10 +152,7 @@ class NominatimSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(
-        uri,
-        headers: {'User-Agent': userAgent},
-      );
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         return null;

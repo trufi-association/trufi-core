@@ -8,3 +8,6 @@ export './src/storage/shared_preferences_storage.dart';
 
 // Location
 export './src/location_service.dart';
+
+// Device
+export './src/device/device_id_provider.dart';

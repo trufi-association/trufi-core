@@ -46,6 +46,10 @@ class Otp28RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
+  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
+  /// on every outgoing request.
+  final Future<String?> Function()? deviceIdProvider;
+
   /// Whether to show the wheelchair accessibility option in preferences UI.
   final bool showWheelchairOption;
 
@@ -58,6 +62,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.deviceIdProvider,
     this.showWheelchairOption = true,
     this.showBicycleOption = true,
   });
@@ -94,6 +99,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
 
   late final GraphQLClient _client = GraphQLClientFactory.create(
     _graphqlEndpoint,
+    deviceIdProvider: deviceIdProvider,
   );
 
   // --- Plan ---

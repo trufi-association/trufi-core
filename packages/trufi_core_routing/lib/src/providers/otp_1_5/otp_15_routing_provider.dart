@@ -47,6 +47,10 @@ class Otp15RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
+  /// Optional callback to provide a stable device id, sent as `X-Device-Id`
+  /// on every outgoing request.
+  final Future<String?> Function()? deviceIdProvider;
+
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
 
@@ -55,6 +59,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.deviceIdProvider,
     http.Client? httpClient,
   }) : _injectedHttpClient = httpClient;
 
@@ -141,6 +146,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
       if (planHeaderProvider != null) {
         headers.addAll(await planHeaderProvider!(from, to));
       }
+      await _applyDeviceId(headers);
 
       final response = await _httpClient
           .get(uri, headers: headers)
@@ -311,8 +317,11 @@ class Otp15RoutingProvider implements IRoutingProvider {
   }
 
   Future<dynamic> _getJson(String url) async {
+    final headers = <String, String>{'Accept': 'application/json'};
+    await _applyDeviceId(headers);
+
     final response = await _httpClient
-        .get(Uri.parse(url), headers: {'Accept': 'application/json'})
+        .get(Uri.parse(url), headers: headers)
         .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
@@ -320,6 +329,15 @@ class Otp15RoutingProvider implements IRoutingProvider {
     }
 
     return jsonDecode(response.body);
+  }
+
+  Future<void> _applyDeviceId(Map<String, String> headers) async {
+    final provider = deviceIdProvider;
+    if (provider == null) return;
+    final deviceId = await provider();
+    if (deviceId != null && deviceId.isNotEmpty) {
+      headers['X-Device-Id'] = deviceId;
+    }
   }
 
   // --- Endpoint helpers ---
