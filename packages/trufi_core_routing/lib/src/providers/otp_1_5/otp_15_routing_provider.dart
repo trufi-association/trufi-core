@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../utils/polyline_decoder.dart';
 import '../../models/plan.dart';
@@ -50,13 +52,19 @@ class Otp15RoutingProvider implements IRoutingProvider {
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
 
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
+
   Otp15RoutingProvider({
     required this.endpoint,
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
     http.Client? httpClient,
-  }) : _injectedHttpClient = httpClient;
+    DeviceIdService? deviceIdService,
+  }) : _injectedHttpClient = httpClient,
+       _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   late final _prefs = Otp15PreferencesState();
 
@@ -141,6 +149,7 @@ class Otp15RoutingProvider implements IRoutingProvider {
       if (planHeaderProvider != null) {
         headers.addAll(await planHeaderProvider!(from, to));
       }
+      await _applyDeviceId(headers);
 
       final response = await _httpClient
           .get(uri, headers: headers)
@@ -311,8 +320,11 @@ class Otp15RoutingProvider implements IRoutingProvider {
   }
 
   Future<dynamic> _getJson(String url) async {
+    final headers = <String, String>{'Accept': 'application/json'};
+    await _applyDeviceId(headers);
+
     final response = await _httpClient
-        .get(Uri.parse(url), headers: {'Accept': 'application/json'})
+        .get(Uri.parse(url), headers: headers)
         .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
@@ -320,6 +332,13 @@ class Otp15RoutingProvider implements IRoutingProvider {
     }
 
     return jsonDecode(response.body);
+  }
+
+  Future<void> _applyDeviceId(Map<String, String> headers) async {
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isNotEmpty) {
+      headers['X-Device-Id'] = deviceId;
+    }
   }
 
   // --- Endpoint helpers ---

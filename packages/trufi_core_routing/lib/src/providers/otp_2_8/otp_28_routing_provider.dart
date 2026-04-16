@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../otp_2_4/graphql_client_factory.dart';
 import '../../models/plan.dart';
@@ -46,6 +47,10 @@ class Otp28RoutingProvider implements IRoutingProvider {
   /// Optional callback to provide extra HTTP headers per plan request.
   final PlanHeaderProvider? planHeaderProvider;
 
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService? deviceIdService;
+
   /// Whether to show the wheelchair accessibility option in preferences UI.
   final bool showWheelchairOption;
 
@@ -58,6 +63,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.deviceIdService,
     this.showWheelchairOption = true,
     this.showBicycleOption = true,
   });
@@ -94,6 +100,7 @@ class Otp28RoutingProvider implements IRoutingProvider {
 
   late final GraphQLClient _client = GraphQLClientFactory.create(
     _graphqlEndpoint,
+    deviceIdService: deviceIdService,
   );
 
   // --- Plan ---

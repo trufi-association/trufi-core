@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 import 'package:vector_tile/vector_tile.dart';
 
 import '../../domain/entities/camera.dart';
@@ -32,13 +34,19 @@ class TileGrid<T> {
     this.granularityLevels = 0,
     this.showGrid = false,
     this.gridColor = Colors.blue,
-  });
+    DeviceIdService? deviceIdService,
+  }) : _deviceIdService =
+           deviceIdService ?? SharedPreferencesDeviceIdService();
 
   final String uriTemplate;
   final T? Function(GeoJsonPoint) fromGeoJsonPoint;
   final int granularityLevels;
   final bool showGrid;
   final Color gridColor;
+
+  /// Service used to inject the `X-Device-Id` header on every tile fetch.
+  /// Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
 
   final Set<String> _drawnBoxes = <String>{};
 
@@ -95,7 +103,13 @@ class TileGrid<T> {
           .replaceAll('{y}', '$y');
       final uri = Uri.parse(replaced);
 
-      final Uint8List bodyByte = await cachedFirstFetch(uri, z, x, y);
+      final Uint8List bodyByte = await cachedFirstFetch(
+        uri,
+        z,
+        x,
+        y,
+        deviceIdService: _deviceIdService,
+      );
       final tile = VectorTile.fromBytes(bytes: bodyByte);
 
       final markersToAdd = <T>[];

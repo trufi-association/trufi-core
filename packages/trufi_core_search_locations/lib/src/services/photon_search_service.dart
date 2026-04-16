@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/search_location.dart';
 import 'search_location_service.dart';
@@ -31,6 +33,10 @@ class PhotonSearchService implements SearchLocationService {
   /// HTTP client for making requests.
   final http.Client _client;
 
+  /// Service used to inject the `X-Device-Id` header on every outgoing
+  /// request. Defaults to [SharedPreferencesDeviceIdService].
+  final DeviceIdService _deviceIdService;
+
   PhotonSearchService({
     required this.baseUrl,
     this.language,
@@ -39,7 +45,15 @@ class PhotonSearchService implements SearchLocationService {
     this.limit = 10,
     this.boundingBox,
     http.Client? client,
-  }) : _client = client ?? http.Client();
+    DeviceIdService? deviceIdService,
+  }) : _client = client ?? http.Client(),
+       _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
+
+  Future<Map<String, String>?> _buildHeaders() async {
+    final deviceId = await _deviceIdService.getDeviceId();
+    if (deviceId.isEmpty) return null;
+    return {'X-Device-Id': deviceId};
+  }
 
   @override
   Future<List<SearchLocation>> search(String query) async {
@@ -68,7 +82,7 @@ class PhotonSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(uri);
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         throw SearchLocationException(
@@ -106,7 +120,7 @@ class PhotonSearchService implements SearchLocationService {
     ).replace(queryParameters: queryParams);
 
     try {
-      final response = await _client.get(uri);
+      final response = await _client.get(uri, headers: await _buildHeaders());
 
       if (response.statusCode != 200) {
         return null;

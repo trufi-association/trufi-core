@@ -14,11 +14,27 @@ import 'planner_routing_client.dart';
 /// Used on web platforms where GTFS data is processed server-side.
 class RemotePlannerClient implements PlannerRoutingClient {
   final String serverUrl;
+  final Future<String?> Function()? deviceIdProvider;
   final http.Client _httpClient;
   bool _isReady = false;
 
-  RemotePlannerClient({required this.serverUrl, http.Client? httpClient})
-    : _httpClient = httpClient ?? http.Client();
+  RemotePlannerClient({
+    required this.serverUrl,
+    this.deviceIdProvider,
+    http.Client? httpClient,
+  }) : _httpClient = httpClient ?? http.Client();
+
+  Future<Map<String, String>> _buildHeaders([Map<String, String>? base]) async {
+    final headers = <String, String>{...?base};
+    final provider = deviceIdProvider;
+    if (provider != null) {
+      final deviceId = await provider();
+      if (deviceId != null && deviceId.isNotEmpty) {
+        headers['X-Device-Id'] = deviceId;
+      }
+    }
+    return headers;
+  }
 
   String get _baseUrl => serverUrl.endsWith('/')
       ? serverUrl.substring(0, serverUrl.length - 1)
@@ -29,7 +45,10 @@ class RemotePlannerClient implements PlannerRoutingClient {
 
   @override
   Future<void> initialize() async {
-    final response = await _httpClient.get(Uri.parse('$_baseUrl/health'));
+    final response = await _httpClient.get(
+      Uri.parse('$_baseUrl/health'),
+      headers: await _buildHeaders(),
+    );
     if (response.statusCode == 200) {
       _isReady = true;
     } else {
@@ -46,7 +65,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
   }) async {
     final response = await _httpClient.post(
       Uri.parse('$_baseUrl/plan'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _buildHeaders({'Content-Type': 'application/json'}),
       body: jsonEncode({
         'from': {'lat': origin.latitude, 'lon': origin.longitude},
         'to': {'lat': destination.latitude, 'lon': destination.longitude},
@@ -70,7 +89,10 @@ class RemotePlannerClient implements PlannerRoutingClient {
 
   @override
   Future<List<GtfsRoute>> getRoutes() async {
-    final response = await _httpClient.get(Uri.parse('$_baseUrl/routes'));
+    final response = await _httpClient.get(
+      Uri.parse('$_baseUrl/routes'),
+      headers: await _buildHeaders(),
+    );
     if (response.statusCode != 200) return [];
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -85,7 +107,10 @@ class RemotePlannerClient implements PlannerRoutingClient {
     final uri = limit != null
         ? Uri.parse('$_baseUrl/stops?limit=$limit')
         : Uri.parse('$_baseUrl/stops');
-    final response = await _httpClient.get(uri);
+    final response = await _httpClient.get(
+      uri,
+      headers: await _buildHeaders(),
+    );
     if (response.statusCode != 200) return [];
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -109,6 +134,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
         '&maxDistance=$maxDistance'
         '&maxResults=$maxResults',
       ),
+      headers: await _buildHeaders(),
     );
     if (response.statusCode != 200) return [];
 
@@ -129,6 +155,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
   Future<RouteDetail?> getRouteDetail(String routeId) async {
     final response = await _httpClient.get(
       Uri.parse('$_baseUrl/routes/$routeId'),
+      headers: await _buildHeaders(),
     );
     if (response.statusCode != 200) return null;
 
