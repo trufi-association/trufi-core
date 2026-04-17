@@ -41,7 +41,7 @@ import 'trufi_planner_preferences.dart';
 ///   ),
 /// )
 /// ```
-class TrufiPlannerProvider implements IRoutingProvider {
+class TrufiPlannerProvider extends IRoutingProvider {
   final TrufiPlannerConfig config;
   late final TrufiPlannerDataSource _dataSource;
 

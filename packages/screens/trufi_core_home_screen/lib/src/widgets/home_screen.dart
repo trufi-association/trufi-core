@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -6,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     hide ITrufiMapEngine;
@@ -18,6 +20,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 import '../config/home_screen_config.dart';
+import 'live_vehicles_settings_section.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
 import '../services/share_route_service.dart';
@@ -97,6 +100,20 @@ class _HomeScreenState extends State<HomeScreen>
   // Deep link handling
   SharedRouteNotifier? _sharedRouteNotifier;
 
+  // Live vehicles (GTFS-RT). These are fully owned by HomeScreen so any deploy
+  // that provides a `realtimeVehiclesProvider` in its config gets the toggle UI
+  // and map rendering "for free" — no controller/notifier plumbing required in
+  // the consuming app.
+  static const _liveVehiclesStorageKey = 'trufi_live_vehicles_enabled';
+  final ValueNotifier<bool> _liveVehiclesEnabled = ValueNotifier<bool>(false);
+  final StorageService _liveVehiclesStorage = SharedPreferencesStorage();
+  List<VehiclePosition> _liveVehicles = const [];
+  Set<String> _selectedTransitRouteIds = const {};
+  StreamSubscription<List<VehiclePosition>>? _liveVehiclesSub;
+
+  routing.RoutingEngineManager? _routingEngineManager;
+  RealtimeVehiclesProvider? _realtimeVehiclesProvider;
+
   @override
   void initState() {
     super.initState();
@@ -104,9 +121,76 @@ class _HomeScreenState extends State<HomeScreen>
     _locationService.addListener(_onLocationUpdate);
     // Listen to POI selection changes
     widget.config.poiLayersManager?.addListener(_onPOISelectionChanged);
+    _liveVehiclesEnabled.addListener(_onLiveVehiclesEnabledChanged);
+    _restoreLiveVehiclesToggle();
+  }
+
+  Future<void> _restoreLiveVehiclesToggle() async {
+    try {
+      await _liveVehiclesStorage.initialize();
+      final saved = await _liveVehiclesStorage.readBool(
+        _liveVehiclesStorageKey,
+      );
+      if (!mounted || saved == null) return;
+      if (_liveVehiclesEnabled.value != saved) {
+        _liveVehiclesEnabled.value = saved;
+      }
+    } catch (_) {
+      // Best-effort: if storage fails, just use the default (off).
+    }
   }
 
   void _onPOISelectionChanged() {
+    if (mounted) setState(() {});
+  }
+
+  /// Rebuilds the live-vehicles wiring when the currently-selected routing
+  /// engine changes. Cancels any previous subscription and, if the new engine
+  /// exposes a [RealtimeVehiclesProvider], subscribes to its stream.
+  void _rewireRealtimeVehicles(RealtimeVehiclesProvider? provider) {
+    if (identical(provider, _realtimeVehiclesProvider)) return;
+
+    _liveVehiclesSub?.cancel();
+    _liveVehiclesSub = null;
+    _realtimeVehiclesProvider?.stop();
+    _liveVehicles = const [];
+
+    _realtimeVehiclesProvider = provider;
+    if (provider == null) {
+      if (mounted) setState(() {});
+      return;
+    }
+
+    _liveVehicles = provider.latest;
+    _liveVehiclesSub = provider.positionsStream.listen((positions) {
+      if (!mounted) return;
+      setState(() => _liveVehicles = positions);
+    });
+    if (_liveVehiclesEnabled.value) {
+      provider.start();
+    }
+    if (mounted) setState(() {});
+  }
+
+  void _onRoutingEngineChanged() {
+    _rewireRealtimeVehicles(
+      _routingEngineManager?.currentEngine.realtimeVehiclesProvider,
+    );
+  }
+
+  void _onLiveVehiclesEnabledChanged() {
+    _liveVehiclesStorage.writeBool(
+      _liveVehiclesStorageKey,
+      _liveVehiclesEnabled.value,
+    );
+    final realtime = _realtimeVehiclesProvider;
+    if (realtime == null) return;
+    if (_liveVehiclesEnabled.value) {
+      realtime.start();
+    } else {
+      realtime.stop();
+      _liveVehicles = const [];
+    }
     if (mounted) setState(() {});
   }
 
@@ -117,6 +201,15 @@ class _HomeScreenState extends State<HomeScreen>
     _setupSharedRouteListener();
     // Parse URL parameters on first load (web only)
     _parseUrlAndSetPlaces();
+    // Wire the realtime-vehicles provider from the currently-active routing
+    // engine. Re-wires automatically when the user switches engines.
+    final manager = context.read<routing.RoutingEngineManager?>();
+    if (_routingEngineManager != manager) {
+      _routingEngineManager?.removeListener(_onRoutingEngineChanged);
+      _routingEngineManager = manager;
+      _routingEngineManager?.addListener(_onRoutingEngineChanged);
+      _rewireRealtimeVehicles(manager?.currentEngine.realtimeVehiclesProvider);
+    }
   }
 
   @override
@@ -393,6 +486,11 @@ class _HomeScreenState extends State<HomeScreen>
     _sharedRouteNotifier?.removeListener(_onSharedRouteChanged);
     _locationService.removeListener(_onLocationUpdate);
     widget.config.poiLayersManager?.removeListener(_onPOISelectionChanged);
+    _routingEngineManager?.removeListener(_onRoutingEngineChanged);
+    _liveVehiclesEnabled.removeListener(_onLiveVehiclesEnabledChanged);
+    _liveVehiclesSub?.cancel();
+    _realtimeVehiclesProvider?.stop();
+    _liveVehiclesEnabled.dispose();
     _locationService.dispose();
     _sheetController.dispose();
     super.dispose();
@@ -609,6 +707,7 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       _routeMarkers = const [];
       _routeLines = const [];
+      _selectedTransitRouteIds = const {};
     });
   }
 
@@ -811,9 +910,17 @@ class _HomeScreenState extends State<HomeScreen>
       );
     }
 
+    final routeIds = <String>{};
+    for (final leg in itinerary.legs) {
+      if (!leg.transitLeg) continue;
+      final id = leg.route?.gtfsId;
+      if (id != null && id.isNotEmpty) routeIds.add(id);
+    }
+
     setState(() {
       _routeMarkers = markers;
       _routeLines = lines;
+      _selectedTransitRouteIds = routeIds;
     });
   }
 
@@ -1196,6 +1303,36 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  Widget? _buildMapLayerExtras() {
+    final sections = <Widget>[];
+    if (widget.config.poiLayersManager != null) {
+      sections.add(const POILayersSettingsSection());
+    }
+    if (_realtimeVehiclesProvider != null) {
+      sections.add(
+        LiveVehiclesSettingsSection(
+          enabled: _liveVehiclesEnabled,
+          onChanged: (v) => _liveVehiclesEnabled.value = v,
+        ),
+      );
+    }
+    if (widget.config.extraMapLayerSettings != null) {
+      sections.add(widget.config.extraMapLayerSettings!);
+    }
+    if (sections.isEmpty) return null;
+    if (sections.length == 1) return sections.first;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (int i = 0; i < sections.length; i++) ...[
+          if (i > 0) const SizedBox(height: 16),
+          sections[i],
+        ],
+      ],
+    );
+  }
+
   /// Build the list of TrufiLayer data objects from current state.
   List<TrufiLayer> _buildLayers() {
     final layers = <TrufiLayer>[];
@@ -1218,11 +1355,11 @@ class _HomeScreenState extends State<HomeScreen>
       ));
     }
 
-    // Route layer
-    if (_routeMarkers.isNotEmpty || _routeLines.isNotEmpty) {
+    // Route lines (polylines) sit below live/realtime layers so vehicles
+    // render on top of them.
+    if (_routeLines.isNotEmpty) {
       layers.add(TrufiLayer(
-        id: 'route-layer',
-        markers: _routeMarkers,
+        id: 'route-lines-layer',
         lines: _routeLines,
         layerLevel: 1000,
       ));
@@ -1232,6 +1369,36 @@ class _HomeScreenState extends State<HomeScreen>
     final poiManager = widget.config.poiLayersManager;
     if (poiManager != null) {
       layers.addAll(poiManager.buildLayers());
+    }
+
+    // Live vehicles layer (GTFS-RT) — between route lines and route markers
+    // (origin/destination/transit labels). Rendered only when a provider is
+    // wired and the runtime toggle is on.
+    if (_realtimeVehiclesProvider != null &&
+        _liveVehiclesEnabled.value &&
+        _liveVehicles.isNotEmpty) {
+      final toShow = _selectedTransitRouteIds.isEmpty
+          ? _liveVehicles
+          : _liveVehicles
+                .where(
+                  (v) =>
+                      v.routeId != null &&
+                      _selectedTransitRouteIds.contains(v.routeId),
+                )
+                .toList(growable: false);
+      if (toShow.isNotEmpty) {
+        layers.add(buildVehiclePositionsLayer(vehicles: toShow));
+      }
+    }
+
+    // Route markers (origin/destination/boarding/transit labels) stay on top
+    // so they aren't hidden by live vehicle markers.
+    if (_routeMarkers.isNotEmpty) {
+      layers.add(TrufiLayer(
+        id: 'route-markers-layer',
+        markers: _routeMarkers,
+        layerLevel: 2000,
+      ));
     }
 
     return layers;
@@ -1256,7 +1423,9 @@ class _HomeScreenState extends State<HomeScreen>
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return Provider<RealtimeVehiclesProvider?>.value(
+      value: _realtimeVehiclesProvider,
+      child: Scaffold(
       body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
         listener: (context, state) {
           _updateLocationMarkers(state);
@@ -1463,6 +1632,7 @@ class _HomeScreenState extends State<HomeScreen>
           );
         },
       ),
+      ),
     );
   }
 
@@ -1492,9 +1662,7 @@ class _HomeScreenState extends State<HomeScreen>
                   onEngineChanged: (engine) {
                     mapEngineManager.setEngine(engine);
                   },
-                  additionalSettings: widget.config.poiLayersManager != null
-                      ? const POILayersSettingsSection()
-                      : null,
+                  additionalSettings: _buildMapLayerExtras(),
                 ),
                 const SizedBox(height: 8),
               ],

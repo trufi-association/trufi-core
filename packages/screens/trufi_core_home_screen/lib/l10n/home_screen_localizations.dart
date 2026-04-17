@@ -798,6 +798,36 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Travel times are estimated and may vary due to traffic'**
   String get estimatedTimesDisclaimer;
+
+  /// Title of the live vehicles section in the map settings sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Live buses'**
+  String get liveVehiclesTitle;
+
+  /// Subtitle describing what the live vehicles toggle does
+  ///
+  /// In en, this message translates to:
+  /// **'Show the live position of buses on the map'**
+  String get liveVehiclesSubtitle;
+
+  /// Label for the toggle row of the live vehicles section
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get liveVehiclesEnable;
+
+  /// Secondary label when the live vehicles toggle is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get liveVehiclesStateOn;
+
+  /// Secondary label when the live vehicles toggle is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get liveVehiclesStateOff;
 }
 
 class _HomeScreenLocalizationsDelegate

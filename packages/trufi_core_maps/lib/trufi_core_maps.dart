@@ -27,6 +27,7 @@ export 'src/configuration/map_layer/map_layer_storage_impl.dart';
 export 'src/configuration/markers/from_marker.dart';
 export 'src/configuration/markers/to_marker.dart';
 export 'src/configuration/markers/my_location_marker.dart';
+export 'src/configuration/markers/vehicle_position_marker.dart';
 export 'src/configuration/map_engine/trufi_map_engine.dart';
 export 'src/configuration/map_engine/maplibre_engine.dart';
 export 'src/configuration/map_engine/map_engine_manager.dart';
@@ -58,6 +59,11 @@ export 'src/domain/layers/fit_camera_layer.dart';
 // PRESENTATION LAYER - Map Widget
 // ============================================
 export 'src/presentation/map/trufi_map.dart';
+
+// ============================================
+// PRESENTATION LAYER - Vehicles
+// ============================================
+export 'src/presentation/vehicles/vehicle_positions_layer.dart';
 
 // ============================================
 // PRESENTATION LAYER - Utils

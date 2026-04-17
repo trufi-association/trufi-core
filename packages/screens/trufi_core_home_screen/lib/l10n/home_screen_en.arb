@@ -603,5 +603,26 @@
   "estimatedTimesDisclaimer": "Travel times are estimated and may vary due to traffic",
   "@estimatedTimesDisclaimer": {
     "description": "Disclaimer shown above route results about estimated times"
+  },
+
+  "liveVehiclesTitle": "Live buses",
+  "@liveVehiclesTitle": {
+    "description": "Title of the live vehicles section in the map settings sheet"
+  },
+  "liveVehiclesSubtitle": "Show the live position of buses on the map",
+  "@liveVehiclesSubtitle": {
+    "description": "Subtitle describing what the live vehicles toggle does"
+  },
+  "liveVehiclesEnable": "Enable",
+  "@liveVehiclesEnable": {
+    "description": "Label for the toggle row of the live vehicles section"
+  },
+  "liveVehiclesStateOn": "On",
+  "@liveVehiclesStateOn": {
+    "description": "Secondary label when the live vehicles toggle is enabled"
+  },
+  "liveVehiclesStateOff": "Off",
+  "@liveVehiclesStateOff": {
+    "description": "Secondary label when the live vehicles toggle is disabled"
   }
 }

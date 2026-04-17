@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 
@@ -318,6 +321,7 @@ class _LegChip extends StatelessWidget {
         ? Colors.black87
         : Colors.white;
     final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+    final realtime = context.watch<RealtimeVehiclesProvider?>();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -338,6 +342,15 @@ class _LegChip extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
+            ),
+          ],
+          if (realtime != null) ...[
+            const SizedBox(width: 6),
+            LiveBusBadge.whenLive(
+              provider: realtime,
+              leg: leg,
+              color: textColor,
+              size: 10,
             ),
           ],
         ],
