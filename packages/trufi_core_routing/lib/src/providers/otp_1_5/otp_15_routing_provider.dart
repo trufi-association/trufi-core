@@ -31,7 +31,7 @@ import 'otp_1_5_response_parser.dart';
 ///   endpoint: 'https://otp.example.com',
 /// );
 /// ```
-class Otp15RoutingProvider implements IRoutingProvider {
+class Otp15RoutingProvider extends IRoutingProvider {
   /// The OTP endpoint URL.
   ///
   /// Can be the base URL (e.g., "https://example.com/otp") or

@@ -422,4 +422,20 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   @override
   String get estimatedTimesDisclaimer =>
       'Reisezeiten sind geschätzt und können je nach Verkehr variieren';
+
+  @override
+  String get liveVehiclesTitle => 'Live-Busse';
+
+  @override
+  String get liveVehiclesSubtitle =>
+      'Zeige die Live-Position der Busse auf der Karte';
+
+  @override
+  String get liveVehiclesEnable => 'Aktivieren';
+
+  @override
+  String get liveVehiclesStateOn => 'Ein';
+
+  @override
+  String get liveVehiclesStateOff => 'Aus';
 }

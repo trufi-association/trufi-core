@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../models/plan.dart';
 import '../models/routing_location.dart';
@@ -106,6 +107,19 @@ abstract class IRoutingProvider {
 
   /// Resets provider-specific preferences to defaults.
   void resetPreferences() {}
+
+  /// Optional companion provider of live (GTFS-Realtime) vehicle positions.
+  ///
+  /// Return non-null when this routing engine has a paired source of live
+  /// vehicle data (e.g. OTP 2.x with GTFS-RT vehiclePositions). When set,
+  /// `trufi_core_home_screen` automatically:
+  /// - Shows a "Live buses" toggle in the map settings sheet.
+  /// - Renders interpolated bus markers on the map filtered by the selected
+  ///   itinerary's routes.
+  /// - Lets itinerary tiles render a "live" badge on matching routes.
+  ///
+  /// Default: null (no live vehicles).
+  RealtimeVehiclesProvider? get realtimeVehiclesProvider => null;
 }
 
 /// Option for routing provider selection UI.

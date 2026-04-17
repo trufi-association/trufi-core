@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
@@ -31,36 +32,19 @@ class HomeScreenConfig {
   final String? shareBaseUrl;
 
   /// Optional custom map layers to display on the home screen map.
-  ///
-  /// Use this to add POI layers or other custom map layers.
-  /// Each layer will be automatically added to the map controller.
-  ///
-  /// Example:
-  /// ```dart
-  /// customMapLayers: [
-  ///   POITrufiLayerAdapter(poiLayersCubit),
-  /// ]
-  /// ```
   final List<TrufiLayer> Function(TrufiMapController controller)?
   customMapLayers;
 
   /// Optional POI layers manager for displaying points of interest on the map.
-  ///
-  /// When provided, the HomeScreen will:
-  /// 1. Initialize the layers when the map is ready
-  /// 2. Register the provider in the widget tree for child widgets to access
-  /// 3. Show POI settings in the map type button automatically
-  ///
-  /// Default enabled subcategories are determined by `defaultActive: true`
-  /// in the metadata.json file for each subcategory.
-  ///
-  /// Example:
-  /// ```dart
-  /// poiLayersManager: POILayersManager(
-  ///   assetsBasePath: 'assets/pois',
-  /// ),
-  /// ```
   final POILayersManager? poiLayersManager;
+
+  /// Optional extra section appended under the built-in sections in the map
+  /// settings bottom sheet. Use this for deploy-specific overlays beyond POIs
+  /// and live vehicles.
+  ///
+  /// Note: live vehicle support is wired automatically via the currently-active
+  /// [IRoutingProvider.realtimeVehiclesProvider] — no config needed here.
+  final Widget? extraMapLayerSettings;
 
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
@@ -71,5 +55,6 @@ class HomeScreenConfig {
     this.shareBaseUrl,
     this.customMapLayers,
     this.poiLayersManager,
+    this.extraMapLayerSettings,
   });
 }

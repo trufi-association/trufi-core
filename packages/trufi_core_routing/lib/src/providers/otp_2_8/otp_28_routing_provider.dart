@@ -2,12 +2,14 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../otp_2_4/graphql_client_factory.dart';
 import '../../models/plan.dart';
 import '../../models/routing_location.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
+import '../../services/vehicle_positions_service.dart';
 import '../otp_2_4/otp_2_4_pattern_queries.dart' as pattern_queries;
 import '../routing_provider.dart';
 import 'otp_28_preferences.dart';
@@ -27,7 +29,7 @@ import 'otp_2_8_response_parser.dart';
 ///   endpoint: 'https://otp.trufi.app',
 /// );
 /// ```
-class Otp28RoutingProvider implements IRoutingProvider {
+class Otp28RoutingProvider extends IRoutingProvider {
   /// The OTP endpoint URL.
   ///
   /// Can be the base URL (e.g., "https://example.com/otp") or
@@ -52,6 +54,15 @@ class Otp28RoutingProvider implements IRoutingProvider {
   /// Whether to show the bicycle transport mode option in preferences UI.
   final bool showBicycleOption;
 
+  /// Whether this provider exposes a companion GTFS-Realtime vehicle positions
+  /// source. When true, [realtimeVehiclesProvider] returns a lazily-created
+  /// [OtpVehiclePositionsProvider] bound to the same [endpoint].
+  final bool liveVehiclesEnabled;
+
+  /// Poll interval for the live vehicle positions stream. Ignored when
+  /// [liveVehiclesEnabled] is false.
+  final Duration liveVehiclesPollInterval;
+
   Otp28RoutingProvider({
     required this.endpoint,
     this.useSimpleQuery = false,
@@ -60,7 +71,20 @@ class Otp28RoutingProvider implements IRoutingProvider {
     this.planHeaderProvider,
     this.showWheelchairOption = true,
     this.showBicycleOption = true,
+    this.liveVehiclesEnabled = false,
+    this.liveVehiclesPollInterval = const Duration(seconds: 10),
   });
+
+  OtpVehiclePositionsProvider? _realtimeVehiclesProvider;
+
+  @override
+  RealtimeVehiclesProvider? get realtimeVehiclesProvider {
+    if (!liveVehiclesEnabled) return null;
+    return _realtimeVehiclesProvider ??= OtpVehiclePositionsProvider(
+      endpoint: endpoint,
+      pollInterval: liveVehiclesPollInterval,
+    );
+  }
 
   late final _prefs = Otp28PreferencesState();
 

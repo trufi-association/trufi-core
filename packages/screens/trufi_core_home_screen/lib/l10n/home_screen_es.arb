@@ -115,5 +115,11 @@
   "limitationRequiresInternet": "Requiere internet",
   "limitationSlower": "Respuesta más lenta",
   "limitationNoWalkingRoute": "Sin ruta de caminata en mapa",
-  "estimatedTimesDisclaimer": "Los tiempos son estimados y pueden variar según el tráfico"
+  "estimatedTimesDisclaimer": "Los tiempos son estimados y pueden variar según el tráfico",
+
+  "liveVehiclesTitle": "Buses en tiempo real",
+  "liveVehiclesSubtitle": "Mostrar la posición en vivo de los buses sobre el mapa",
+  "liveVehiclesEnable": "Activar",
+  "liveVehiclesStateOn": "Encendido",
+  "liveVehiclesStateOff": "Apagado"
 }
