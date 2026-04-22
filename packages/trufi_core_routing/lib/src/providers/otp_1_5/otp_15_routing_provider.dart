@@ -52,6 +52,8 @@ class Otp15RoutingProvider extends IRoutingProvider {
   /// Optional HTTP client, primarily for testing.
   final http.Client? _injectedHttpClient;
 
+  /// Whether to show the wheelchair accessibility toggle in preferences UI.
+  final bool showWheelchairOption;
   /// Service used to inject the `X-Device-Id` header on every outgoing
   /// request. Defaults to [SharedPreferencesDeviceIdService].
   final DeviceIdService _deviceIdService;
@@ -61,6 +63,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
     this.displayName,
     this.displayDescription,
     this.planHeaderProvider,
+    this.showWheelchairOption = true,
     http.Client? httpClient,
     DeviceIdService? deviceIdService,
   }) : _injectedHttpClient = httpClient,
@@ -86,7 +89,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
 
   @override
   Widget? buildPreferencesUI(BuildContext context) =>
-      Otp15Preferences(state: _prefs);
+      Otp15Preferences(state: _prefs, showWheelchair: showWheelchairOption);
 
   @override
   void resetPreferences() => _prefs.reset();

@@ -185,8 +185,9 @@ class Otp15PreferencesState extends ChangeNotifier {
 /// Complete preferences UI for OTP 1.5 provider.
 class Otp15Preferences extends StatelessWidget {
   final Otp15PreferencesState state;
+  final bool showWheelchair;
 
-  const Otp15Preferences({super.key, required this.state});
+  const Otp15Preferences({super.key, required this.state, this.showWheelchair = true});
 
   @override
   Widget build(BuildContext context) {
@@ -197,8 +198,10 @@ class Otp15Preferences extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _AccessibilitySection(state: state),
-            const SizedBox(height: 24),
+            if (showWheelchair) ...[
+              _AccessibilitySection(state: state),
+              const SizedBox(height: 24),
+            ],
             _WalkSpeedSection(state: state),
             const SizedBox(height: 24),
             _MaxWalkDistanceSection(state: state),
