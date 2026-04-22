@@ -82,6 +82,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
     ...HomeScreenLocalizations.localizationsDelegates,
+    routing.RoutingLocalizations.delegate,
     // Include POI layers localizations if POI layers are configured
     if (config.poiLayersManager != null) POILayersLocalizations.delegate,
   ];

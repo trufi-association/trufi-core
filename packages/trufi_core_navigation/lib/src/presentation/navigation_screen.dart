@@ -64,12 +64,16 @@ class NavigationScreen extends StatefulWidget {
     return Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            NavigationScreen(
-              route: route,
-              mapBuilder: mapBuilder,
-              locationService: locationService,
-              config: config,
-              modeIcon: modeIcon,
+            Localizations.override(
+              context: context,
+              delegates: const [NavigationLocalizations.delegate],
+              child: NavigationScreen(
+                route: route,
+                mapBuilder: mapBuilder,
+                locationService: locationService,
+                config: config,
+                modeIcon: modeIcon,
+              ),
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
