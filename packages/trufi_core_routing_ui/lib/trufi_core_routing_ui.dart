@@ -15,5 +15,8 @@ export 'src/transport_mode_ui.dart';
 export 'src/leg_ui.dart';
 export 'src/itinerary_ui.dart';
 
+// Live / real-time UI
+export 'src/live_bus_badge.dart';
+
 // SVG Icons
 export 'src/icons/transport_icons.dart';

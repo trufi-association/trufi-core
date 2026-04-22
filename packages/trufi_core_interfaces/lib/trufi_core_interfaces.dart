@@ -16,6 +16,8 @@ export './src/models/trufi_latlng.dart';
 export './src/models/trufi_location.dart';
 export './src/models/trufi_place.dart';
 export './src/models/journey_plan.dart';
+export './src/models/vehicle_position.dart';
+export './src/models/realtime_vehicles_provider.dart';
 
 // Map interfaces
 export './src/map/map_engine.dart';
@@ -26,6 +28,9 @@ export './src/places/my_places_provider.dart';
 
 // Storage interfaces
 export './src/storage/storage_service.dart';
+
+// Device interfaces
+export './src/device/device_id_service.dart';
 
 // Overlay interfaces
 export './src/overlay/overlay_service.dart';

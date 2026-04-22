@@ -1,12 +1,19 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 final Dio _dio = Dio();
 final Map<String, CancelToken> _activeRequests = {};
 
 int? _lastZ, _lastX, _lastY;
 
-Future<Uint8List> cachedFirstFetch(Uri uri, int z, int x, int y) async {
+Future<Uint8List> cachedFirstFetch(
+  Uri uri,
+  int z,
+  int x,
+  int y, {
+  DeviceIdService? deviceIdService,
+}) async {
   final key = uri.toString();
 
   if (_lastZ != null) {
@@ -24,10 +31,21 @@ Future<Uint8List> cachedFirstFetch(Uri uri, int z, int x, int y) async {
   final cancelToken = CancelToken();
   _activeRequests[key] = cancelToken;
 
+  String? deviceId;
+  if (deviceIdService != null) {
+    deviceId = await deviceIdService.getDeviceId();
+  }
+  final headers = (deviceId == null || deviceId.isEmpty)
+      ? null
+      : {'X-Device-Id': deviceId};
+
   try {
     final response = await _dio.get<List<int>>(
       key,
-      options: Options(responseType: ResponseType.bytes),
+      options: Options(
+        responseType: ResponseType.bytes,
+        headers: headers,
+      ),
       cancelToken: cancelToken,
     );
 

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 
@@ -709,6 +712,23 @@ class _LegItemState extends State<_LegItem> {
                   );
                 },
               ),
+            ),
+            // Live indicator: pulses when a live vehicle is reported for this
+            // leg's route. Only visible if a RealtimeVehiclesProvider is wired.
+            Builder(
+              builder: (context) {
+                final realtime = context.watch<RealtimeVehiclesProvider?>();
+                if (realtime == null) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: LiveBusBadge.whenLive(
+                    provider: realtime,
+                    leg: leg,
+                    color: widget.lineColor,
+                    size: 12,
+                  ),
+                );
+              },
             ),
             const SizedBox(width: 8),
             // Duration and distance

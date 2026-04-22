@@ -103,6 +103,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
 
   // Source tracking
   final Set<String> _initializedSources = {};
+  final Map<String, int> _initializedLayerLevels = {};
   final Map<String, Future<void>> _sourceInit = {};
 
   // Spatial indices for marker picking
@@ -332,6 +333,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       await ctl.removeSource(sourceId);
     } catch (_) {}
     _initializedSources.remove(sourceId);
+    _initializedLayerLevels.remove(sourceId);
     _markerIndices.remove(sourceId);
   }
 
@@ -346,6 +348,21 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
     if (inFlight != null) {
       await inFlight;
       return;
+    }
+
+    // MapLibre z-order is determined by layer addition order, not by any
+    // native "level" concept. To render this TrufiLayer between existing
+    // ones, find the lowest-layerLevel layer already initialized whose level
+    // is higher than ours and insert this one below its sublayers.
+    String? belowLayerId;
+    int? lowestHigherLevel;
+    for (final entry in _initializedLayerLevels.entries) {
+      if (entry.value > layer.layerLevel) {
+        if (lowestHigherLevel == null || entry.value < lowestHigherLevel) {
+          lowestHigherLevel = entry.value;
+          belowLayerId = '${entry.key}_dotted';
+        }
+      }
     }
 
     final future = () async {
@@ -364,6 +381,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           lineDasharray: [2, 1],
           lineJoin: "round",
         ),
+        belowLayerId: belowLayerId,
         filter: [
           "==",
           ["get", "dotted"],
@@ -382,6 +400,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           lineJoin: "round",
           lineCap: "round",
         ),
+        belowLayerId: belowLayerId,
         filter: [
           "==",
           ["get", "dotted"],
@@ -401,6 +420,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           iconRotate: ["get", "rotate"],
           symbolSortKey: ["get", "layerLevel"],
         ),
+        belowLayerId: belowLayerId,
         filter: [
           "==",
           ["get", "allowOverlap"],
@@ -420,6 +440,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           iconRotate: ["get", "rotate"],
           symbolSortKey: ["get", "layerLevel"],
         ),
+        belowLayerId: belowLayerId,
         filter: [
           "==",
           ["get", "allowOverlap"],
@@ -429,6 +450,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       );
 
       _initializedSources.add(sourceId);
+      _initializedLayerLevels[sourceId] = layer.layerLevel;
     }();
 
     _sourceInit[sourceId] = future;
@@ -620,6 +642,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       onStyleLoadedCallback: () async {
         _mapReady = true;
         _initializedSources.clear();
+        _initializedLayerLevels.clear();
         _imageLoaders.clear();
         _loadedImages.clear();
         _sourceInit.clear();
