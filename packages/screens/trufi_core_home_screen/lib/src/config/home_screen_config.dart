@@ -46,6 +46,10 @@ class HomeScreenConfig {
   /// [IRoutingProvider.realtimeVehiclesProvider] — no config needed here.
   final Widget? extraMapLayerSettings;
 
+  /// Whether to show the departure time chip above the map.
+  /// Set to false to hide the "Leave now / Arrive by" selector.
+  final bool showDepartureTimeChip;
+
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
     this.searchService,
@@ -56,5 +60,6 @@ class HomeScreenConfig {
     this.customMapLayers,
     this.poiLayersManager,
     this.extraMapLayerSettings,
+    this.showDepartureTimeChip = true,
   });
 }
