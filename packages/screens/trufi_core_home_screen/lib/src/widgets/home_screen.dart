@@ -1586,8 +1586,9 @@ class _HomeScreenState extends State<HomeScreen>
                                 onMenuPressed: widget.onMenuPressed,
                               ),
                               // Departure time chip (visible when locations are set)
-                              if (state.fromPlace != null ||
-                                  state.toPlace != null)
+                              if (widget.config.showDepartureTimeChip &&
+                                  (state.fromPlace != null ||
+                                      state.toPlace != null))
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8),
                                   child: _DepartureTimeChip(
