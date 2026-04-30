@@ -270,9 +270,15 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                         onYourLocation: widget.onYourLocation != null
                             ? () async {
                                 HapticFeedback.lightImpact();
-                                final location = await widget.onYourLocation!();
-                                if (location != null && context.mounted) {
-                                  Navigator.pop(context, location);
+                                try {
+                                  final location =
+                                      await widget.onYourLocation!();
+                                  if (location != null && context.mounted) {
+                                    Navigator.pop(context, location);
+                                  }
+                                } catch (e) {
+                                  debugPrint(
+                                      'Error getting your location: $e');
                                 }
                               }
                             : null,
