@@ -24,6 +24,10 @@ class TrufiLatLng extends Equatable {
 
   LatLng toLatLng() => LatLng(latitude, longitude);
 
+  /// Great-circle distance to [other], in meters.
+  double distanceTo(TrufiLatLng other) =>
+      const Distance().as(LengthUnit.Meter, toLatLng(), other.toLatLng());
+
   static List<LatLng> toListLatLng(List<TrufiLatLng> listTrufiLatLng) {
     return listTrufiLatLng.map((e) => e.toLatLng()).toList();
   }

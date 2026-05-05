@@ -31,6 +31,10 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   String get errorNoRoutes => 'Error al cargar rutas';
 
   @override
+  String get originDestinationTooClose =>
+      'Estás muy cerca de tu destino. Caminar es la mejor opción.';
+
+  @override
   String durationMinutes(int minutes) {
     return '$minutes min';
   }

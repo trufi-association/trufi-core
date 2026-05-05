@@ -11,6 +11,14 @@ import '../services/request_plan_service.dart';
 /// Error key emitted when no routes are found (UI resolves to localized string).
 const String noRoutesErrorKey = 'no_routes_found';
 
+/// Error key emitted when origin and destination are within
+/// [minPlanningDistanceMeters] of each other.
+const String tooCloseErrorKey = 'origin_destination_too_close';
+
+/// Below this distance (meters), planning is short-circuited and the user is
+/// shown a "too close" message instead of a degenerate routing-engine result.
+const double minPlanningDistanceMeters = 100;
+
 /// Cubit for managing route planning state.
 ///
 /// If [repository] is not provided, uses [HomeScreenRepositoryImpl] by default.
@@ -115,6 +123,20 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   /// Fetch route plan.
   Future<void> fetchPlan({int? selectedItineraryIndex}) async {
     if (state.fromPlace == null || state.toPlace == null) return;
+
+    if (state.fromPlace!.latLng.distanceTo(state.toPlace!.latLng) <
+        minPlanningDistanceMeters) {
+      await _cancelCurrentFetch();
+      emit(
+        state.copyWithNullable(
+          isLoading: false,
+          plan: const Optional(null),
+          selectedItinerary: const Optional(null),
+          error: Optional(tooCloseErrorKey),
+        ),
+      );
+      return;
+    }
 
     await _cancelCurrentFetch();
 

@@ -145,6 +145,12 @@ abstract class HomeScreenLocalizations {
   /// **'Error loading routes'**
   String get errorNoRoutes;
 
+  /// Banner message when origin and destination are the same point or within the minimum planning distance
+  ///
+  /// In en, this message translates to:
+  /// **'You are very close to your destination. Walking is the fastest option.'**
+  String get originDestinationTooClose;
+
   /// Duration in minutes
   ///
   /// In en, this message translates to:

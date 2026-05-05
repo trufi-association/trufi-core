@@ -1879,6 +1879,14 @@ class _HomeScreenState extends State<HomeScreen>
   /// Resolve error key to localized short string (for banners).
   String _resolveError(String? error, HomeScreenLocalizations l10n) {
     if (error == noRoutesErrorKey) return l10n.noRoutesFoundShort;
+    if (error == tooCloseErrorKey) return l10n.originDestinationTooClose;
+    return error ?? l10n.errorNoRoutes;
+  }
+
+  /// Resolve error key to localized long-form string (for error panel).
+  String _resolveErrorLong(String? error, HomeScreenLocalizations l10n) {
+    if (error == noRoutesErrorKey) return l10n.noRoutesFound;
+    if (error == tooCloseErrorKey) return l10n.originDestinationTooClose;
     return error ?? l10n.errorNoRoutes;
   }
 
@@ -2234,9 +2242,7 @@ class _HomeScreenState extends State<HomeScreen>
     final l10n = HomeScreenLocalizations.of(context);
     final isError = state.hasError;
     final message = isError
-        ? (state.error == noRoutesErrorKey
-            ? l10n.noRoutesFound
-            : (state.error ?? l10n.errorNoRoutes))
+        ? _resolveErrorLong(state.error, l10n)
         : l10n.noRoutesFound;
 
     return Positioned(

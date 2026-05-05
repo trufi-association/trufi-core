@@ -28,6 +28,10 @@
   "@errorNoRoutes": {
     "description": "Error message when routes fail to load"
   },
+  "originDestinationTooClose": "You are very close to your destination. Walking is the fastest option.",
+  "@originDestinationTooClose": {
+    "description": "Banner message when origin and destination are the same point or within the minimum planning distance"
+  },
   "durationMinutes": "{minutes} min",
   "@durationMinutes": {
     "description": "Duration in minutes",

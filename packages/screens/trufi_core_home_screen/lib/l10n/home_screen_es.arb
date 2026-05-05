@@ -7,6 +7,7 @@
   "noRoutesFound": "No encontramos rutas de transporte público para este trayecto. Puede deberse al horario seleccionado o a que no hay cobertura entre estos puntos. Intenta con un horario diferente u otro destino.",
   "noRoutesFoundShort": "No se encontraron rutas para este trayecto",
   "errorNoRoutes": "Error al cargar rutas",
+  "originDestinationTooClose": "Estás muy cerca de tu destino. Caminar es la mejor opción.",
   "durationMinutes": "{minutes} min",
   "durationHoursMinutes": "{hours}h {minutes}min",
   "distanceMeters": "{meters} m",

@@ -7,6 +7,7 @@
   "noRoutesFound": "Keine ÖPNV-Routen für diese Strecke gefunden. Versuche ein anderes Ziel oder passe die Sucheinstellungen an.",
   "noRoutesFoundShort": "Keine Routen für diese Strecke gefunden",
   "errorNoRoutes": "Fehler beim Laden der Routen",
+  "originDestinationTooClose": "Sie sind sehr nah am Ziel. Zu Fuß gehen ist am schnellsten.",
   "durationMinutes": "{minutes} Min",
   "durationHoursMinutes": "{hours}h {minutes}Min",
   "distanceMeters": "{meters} m",
