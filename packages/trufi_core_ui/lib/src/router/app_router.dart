@@ -544,7 +544,7 @@ class _DrawerFooter extends StatelessWidget {
 
 /// Social media icon button for the drawer footer
 class _SocialIconButton extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String url;
   final String? label;
   final ColorScheme colorScheme;
@@ -559,7 +559,7 @@ class _SocialIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(icon),
+      icon: icon,
       iconSize: 20,
       color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
       onPressed: () => launchUrl(Uri.parse(url)),

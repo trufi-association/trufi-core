@@ -1,3 +1,14 @@
+## 5.9.0
+
+### Breaking
+- `SocialMediaLink.icon` is now `Widget` instead of `IconData`. Apps that pass an `IconData` must wrap it: `icon: Icons.facebook` → `icon: const Icon(Icons.facebook)`. The migration is mechanical and small (1 line per link).
+
+### Features
+- New `SocialMediaPreset` enum (exported from `trufi_core_ui`) with brand-correct icons for Facebook, Instagram, WhatsApp and Twitter/X. Use as `icon: SocialMediaPreset.instagram.icon`. Brand SVGs sourced from [Simple Icons](https://simpleicons.org) (CC0 1.0). Inherits color from the ambient `IconTheme`.
+- `trufi_core_ui` declares `flutter_svg` as a direct dependency (was already transitive via `trufi_core_maps`).
+
+---
+
 ## 5.6.0
 
 ### Features

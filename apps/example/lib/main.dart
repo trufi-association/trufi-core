@@ -214,20 +214,20 @@ void main() {
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
       themeConfig: const TrufiThemeConfig(),
-      socialMediaLinks: const [
+      socialMediaLinks: [
         SocialMediaLink(
           url: _facebookUrl,
-          icon: Icons.facebook,
+          icon: SocialMediaPreset.facebook.icon,
           label: 'Facebook',
         ),
         SocialMediaLink(
           url: _xTwitterUrl,
-          icon: Icons.close,
+          icon: SocialMediaPreset.twitter.icon,
           label: 'X (Twitter)',
         ),
         SocialMediaLink(
           url: _instagramUrl,
-          icon: Icons.camera_alt_outlined,
+          icon: SocialMediaPreset.instagram.icon,
           label: 'Instagram',
         ),
       ],
