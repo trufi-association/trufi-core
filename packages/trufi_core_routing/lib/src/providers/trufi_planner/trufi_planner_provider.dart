@@ -336,6 +336,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
     final routeIndex = _dataSource.routeIndex;
     if (routeIndex == null) return [];
 
+    final agencyNames = _buildAgencyNameMap();
     final patterns = <TransitRoute>[];
 
     for (final pattern in routeIndex.patterns) {
@@ -364,6 +365,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
             mode: _routeTypeToMode(route.type),
             color: route.colorHex,
             textColor: route.textColorHex,
+            agencyName: agencyNames[route.agencyId],
           ),
         ),
       );
@@ -468,10 +470,16 @@ class TrufiPlannerProvider extends IRoutingProvider {
         mode: _routeTypeToMode(route.type),
         color: route.colorHex,
         textColor: route.textColorHex,
+        agencyName: _buildAgencyNameMap()[route.agencyId],
       ),
       geometry: shape?.polyline,
       stops: stops,
     );
+  }
+
+  Map<String, String> _buildAgencyNameMap() {
+    final agencies = _dataSource.data?.agencies ?? const [];
+    return {for (final a in agencies) a.id: a.name};
   }
 
   Future<TransitRoute> _fetchTransitRouteByIdRemote(String id) async {

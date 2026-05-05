@@ -216,9 +216,11 @@ class Otp15RoutingProvider extends IRoutingProvider {
 
       var routeId = patternData['routeId'] as String?;
       if (routeId == null) {
+        // Pattern id format: feedId:routeId:directionId:patternIndex
+        // (the /index/patterns list endpoint omits routeId, so derive it).
         final parts = patternId.split(':');
-        if (parts.length >= 2) {
-          routeId = parts.sublist(0, parts.length - 1).join(':');
+        if (parts.length >= 3) {
+          routeId = parts.sublist(0, parts.length - 2).join(':');
         }
       }
       final routeData = routeId != null ? routeMap[routeId] : null;
@@ -265,9 +267,10 @@ class Otp15RoutingProvider extends IRoutingProvider {
     TransitRouteInfo? routeInfo;
     var routeId = patternData['routeId'] as String?;
     if (routeId == null) {
+      // Pattern id format: feedId:routeId:directionId:patternIndex.
       final parts = id.split(':');
-      if (parts.length >= 2) {
-        routeId = parts.sublist(0, parts.length - 1).join(':');
+      if (parts.length >= 3) {
+        routeId = parts.sublist(0, parts.length - 2).join(':');
       }
     }
     if (routeId != null) {
@@ -302,12 +305,17 @@ class Otp15RoutingProvider extends IRoutingProvider {
 
   TransitRouteInfo _parseRouteInfo(Map<String, dynamic> json) {
     final modeStr = json['mode'] as String?;
+    // OTP 1.5 inconsistency: /index/routes (list) returns `agencyName`
+    // top-level; /index/routes/{id} (detail) returns `agency.name` nested.
+    final agencyJson = json['agency'] as Map<String, dynamic>?;
     return TransitRouteInfo(
       shortName: json['shortName'] as String?,
       longName: json['longName'] as String?,
       mode: modeStr != null ? TransportModeExtension.fromString(modeStr) : null,
       color: json['color'] as String?,
       textColor: json['textColor'] as String?,
+      agencyName:
+          agencyJson?['name'] as String? ?? json['agencyName'] as String?,
     );
   }
 

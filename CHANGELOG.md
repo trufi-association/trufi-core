@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 - Block route planning when origin and destination are within 100 m of each other (#821). Previously, identical points caused the routing engine to either return a 404 (OTP 1.5) or a nonsensical itinerary (OTP 2.8). The new banner message asks the user to walk instead. Provider-agnostic: applies to OTP 1.5/2.4/2.8 and the offline GTFS planner.
+- Standardize transport list display across providers (#832). `Otp15RoutingProvider` was failing to match patterns to their parent route (incorrect parsing of pattern id `feedId:routeId:directionId:patternIndex`), so route badges were empty and route names fell back to the raw OTP `desc` field, which leaks identifiers like `(cochabamba:3663487388)`. The match is now correct and `agencyName` is parsed for both `Otp15RoutingProvider` and `TrufiPlannerProvider`'s offline (GTFS) mode, bringing both to parity with `Otp28RoutingProvider`.
 
 ---
 
