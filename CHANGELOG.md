@@ -1,3 +1,13 @@
+## 5.10.0
+
+### Features
+- `TrufiLatLng.distanceTo(other)` returns the great-circle distance (meters) between two coordinates.
+
+### Bug Fixes
+- Block route planning when origin and destination are within 100 m of each other (#821). Previously, identical points caused the routing engine to either return a 404 (OTP 1.5) or a nonsensical itinerary (OTP 2.8). The new banner message asks the user to walk instead. Provider-agnostic: applies to OTP 1.5/2.4/2.8 and the offline GTFS planner.
+
+---
+
 ## 5.9.0
 
 ### Breaking
