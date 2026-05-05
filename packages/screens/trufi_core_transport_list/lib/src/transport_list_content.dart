@@ -70,6 +70,23 @@ class _TransportListContentState extends State<TransportListContent>
     setState(() => _isSearchFocused = _searchFocusNode.hasFocus);
   }
 
+  /// Refresh the route list while preserving the active search filter.
+  /// Used by both the header refresh button and pull-to-refresh.
+  ///
+  /// `dataProvider.refresh()` re-fetches and resets `filteredRoutes` to all
+  /// routes, which would visually contradict the still-populated search bar.
+  /// We re-apply the current query after refresh so the user keeps their
+  /// intent and the filtered count stays consistent with the input field.
+  /// Use the explicit clear (X) affordance inside the search bar to remove
+  /// the filter.
+  Future<void> _refreshKeepingFilter() async {
+    final query = _searchController.text.trim().toLowerCase();
+    await widget.dataProvider.refresh();
+    if (query.isNotEmpty) {
+      widget.dataProvider.filter(query);
+    }
+  }
+
   /// Try to open the drawer from the nearest ancestor Scaffold
   void _tryOpenDrawer(BuildContext context) {
     final scaffold = Scaffold.maybeOf(context);
@@ -105,7 +122,7 @@ class _TransportListContentState extends State<TransportListContent>
                 widget.dataProvider.filter('');
                 _searchFocusNode.unfocus();
               },
-              onRefresh: () => widget.dataProvider.refresh(),
+              onRefresh: _refreshKeepingFilter,
               onMenuPressed: widget.showMenuButton
                   ? () {
                       HapticFeedback.lightImpact();
@@ -156,7 +173,7 @@ class _TransportListContentState extends State<TransportListContent>
     return Stack(
       children: [
         RefreshIndicator(
-          onRefresh: () => widget.dataProvider.refresh(),
+          onRefresh: _refreshKeepingFilter,
           color: colorScheme.primary,
           backgroundColor: colorScheme.surface,
           child: ListView.builder(
