@@ -56,7 +56,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
   @override
   String get name =>
       config.displayName ??
-      (config.isLocal ? 'Offline (GTFS)' : 'Online (Planner)');
+      (config.isLocal ? 'Offline (GTFS)' : 'Online (Public Transport)');
 
   @override
   String get description =>

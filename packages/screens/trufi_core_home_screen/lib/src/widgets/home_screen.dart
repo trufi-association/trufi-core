@@ -2521,7 +2521,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void _setPoiAsOrigin(POI poi) {
+  Future<void> _setPoiAsOrigin(POI poi) async {
     final location = TrufiLocation(
       description: poi.displayName,
       latitude: poi.position.latitude,
@@ -2529,12 +2529,16 @@ class _HomeScreenState extends State<HomeScreen>
       address: poi.address,
     );
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setFromPlace(location);
+    // Must await: setFromPlace persists asynchronously and only emits the new
+    // state after that completes. Without await, _fetchPlanIfReady runs against
+    // the stale state and skips the fetch when the other place was just cleared.
+    // See #839.
+    await cubit.setFromPlace(location);
     widget.config.poiLayersManager?.clearSelection();
     _fetchPlanIfReady();
   }
 
-  void _setPoiAsDestination(POI poi) {
+  Future<void> _setPoiAsDestination(POI poi) async {
     final location = TrufiLocation(
       description: poi.displayName,
       latitude: poi.position.latitude,
@@ -2542,7 +2546,7 @@ class _HomeScreenState extends State<HomeScreen>
       address: poi.address,
     );
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setToPlace(location);
+    await cubit.setToPlace(location);
     widget.config.poiLayersManager?.clearSelection();
     _fetchPlanIfReady();
   }
