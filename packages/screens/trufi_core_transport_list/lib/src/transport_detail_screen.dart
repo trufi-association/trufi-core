@@ -832,9 +832,10 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = widget.route.directionId == 1
-        ? (widget.route.stops ?? []).reversed.toList()
-        : widget.route.stops ?? [];
+    // Backend returns stops in cronological order of the pattern's trip
+    // (first = origin, last = destination) for both directionId 0 and 1, so
+    // we use them as-is. See #870.
+    final stops = widget.route.stops ?? [];
 
     final header = KeyedSubtree(
       key: _headerKey,
@@ -1388,9 +1389,9 @@ class _SidePanelStopsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final stops = route.directionId == 1
-        ? (route.stops ?? []).reversed.toList()
-        : route.stops ?? [];
+    // Stops come from the backend already in trip order (first = origin) for
+    // both directionId 0 and 1; no client-side reversal needed. See #870.
+    final stops = route.stops ?? [];
     final routeColor = route.backgroundColor ?? colorScheme.primary;
     final distance = _RouteDistanceCalculator.calculate(route.geometry);
 
@@ -1782,9 +1783,9 @@ class _RouteMapViewState extends State<_RouteMapView> {
     TransportRouteDetails route,
     List<TrufiMarker> markers,
   ) {
-    final stops = route.directionId == 1
-        ? (route.stops ?? []).reversed.toList()
-        : route.stops ?? [];
+    // Stops come from the backend in trip order (first = origin, last =
+    // destination) for both directionId 0 and 1. Do not reverse here. See #870.
+    final stops = route.stops ?? [];
     if (stops.isEmpty) return;
 
     final routeColor = route.backgroundColor ?? Colors.blue;
