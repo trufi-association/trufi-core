@@ -16,29 +16,68 @@ class MyApp extends StatelessWidget {
         currency: 'Bs.',
         lastUpdated: DateTime(2024, 1, 15),
         additionalNotes:
-            'Fares may vary depending on the route and time of day. Children under 5 ride free.',
+            'Fares may vary depending on the route and time of day. '
+            'Children under 5 ride free.',
         externalFareUrl: 'https://example.com/fares',
-        fares: [
-          const FareInfo(
-            transportType: 'Trufi',
+        fares: const [
+          FareInfo(
+            title: 'Trufi',
             icon: Icons.directions_bus,
-            regularFare: '2.00',
-            studentFare: '1.50',
-            seniorFare: '1.00',
+            primary: FareCategory(
+              label: 'Regular',
+              price: '2.00',
+              icon: Icons.person_rounded,
+            ),
+            additional: [
+              FareCategory(
+                label: 'Student',
+                price: '1.50',
+                icon: Icons.school_rounded,
+              ),
+              FareCategory(
+                label: 'Senior',
+                price: '1.00',
+                icon: Icons.elderly_rounded,
+              ),
+            ],
             notes: 'Valid for urban routes within the city center',
           ),
-          const FareInfo(
-            transportType: 'Micro',
+          FareInfo(
+            title: 'Micro',
             icon: Icons.airport_shuttle,
-            regularFare: '1.50',
-            studentFare: '1.00',
-            seniorFare: '0.75',
+            primary: FareCategory(
+              label: 'Regular',
+              price: '1.50',
+              icon: Icons.person_rounded,
+            ),
+            additional: [
+              FareCategory(
+                label: 'Student',
+                price: '1.00',
+                icon: Icons.school_rounded,
+              ),
+              FareCategory(
+                label: 'Senior',
+                price: '0.75',
+                icon: Icons.elderly_rounded,
+              ),
+            ],
           ),
-          const FareInfo(
-            transportType: 'Minibus',
+          FareInfo(
+            title: 'Minibus',
             icon: Icons.directions_bus_filled,
-            regularFare: '2.50',
-            studentFare: '2.00',
+            primary: FareCategory(
+              label: 'Regular',
+              price: '2.50',
+              icon: Icons.person_rounded,
+            ),
+            additional: [
+              FareCategory(
+                label: 'Student',
+                price: '2.00',
+                icon: Icons.school_rounded,
+              ),
+            ],
             notes: 'Covers longer routes to peripheral areas',
           ),
         ],

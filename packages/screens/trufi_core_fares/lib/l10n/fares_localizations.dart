@@ -118,24 +118,6 @@ abstract class FaresLocalizations {
   /// **'Current prices for public transportation'**
   String get faresSubtitle;
 
-  /// Label for regular fare
-  ///
-  /// In en, this message translates to:
-  /// **'Regular'**
-  String get faresRegular;
-
-  /// Label for student fare
-  ///
-  /// In en, this message translates to:
-  /// **'Student'**
-  String get faresStudent;
-
-  /// Label for senior/elderly fare
-  ///
-  /// In en, this message translates to:
-  /// **'Senior'**
-  String get faresSenior;
-
   /// Shows when fare info was last updated
   ///
   /// In en, this message translates to:

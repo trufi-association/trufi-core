@@ -12,18 +12,6 @@
   "@faresSubtitle": {
     "description": "Subtitle explaining the fares screen"
   },
-  "faresRegular": "Regular",
-  "@faresRegular": {
-    "description": "Label for regular fare"
-  },
-  "faresStudent": "Estudiante",
-  "@faresStudent": {
-    "description": "Label for student fare"
-  },
-  "faresSenior": "Adulto Mayor",
-  "@faresSenior": {
-    "description": "Label for senior/elderly fare"
-  },
   "faresLastUpdated": "Última actualización: {date}",
   "@faresLastUpdated": {
     "description": "Shows when fare info was last updated",

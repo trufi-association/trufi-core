@@ -4,13 +4,17 @@ Display fare/pricing information for public transportation.
 
 ## Features
 
-- Show fares by transport type (bus, trufi, metro, etc.)
-- Support for regular, student, and senior prices
-- Notes per fare type
+- Group prices by transport mode, tariff regime, or any other label
+- Arbitrary price categories per group (general, student, senior, disability,
+  employee, etc.) — labels are consumer-provided so each deployment owns
+  its own taxonomy
+- Per-group and per-screen notes
 - Last updated date
-- Optional external link for more info
-- Localization support (EN, ES, DE)
+- Optional external "More info" link
+- Localization support (EN, ES, DE) for the screen chrome
 - Material 3 design
+- Public composable widgets (`FaresHero`, `FareCard`, `FareCategoryChip`,
+  `FaresNotesCard`) for consumers that want a custom layout
 
 ## Quick Start
 
@@ -18,30 +22,38 @@ Display fare/pricing information for public transportation.
 FaresTrufiScreen(
   config: FaresConfig(
     currency: 'Bs.',
-    fares: [
+    fares: const [
       FareInfo(
-        transportType: 'Trufi',
-        icon: Icons.directions_bus,
-        regularFare: '2.00',
-        studentFare: '1.50',
-        seniorFare: '1.00',
+        title: 'Pasaje urbano (Cercado)',
+        icon: Icons.directions_bus_rounded,
+        primary: FareCategory(
+          label: 'Usuarios en general',
+          price: '3.00',
+          icon: Icons.person_rounded,
+        ),
+        additional: [
+          FareCategory(label: 'Estudiante sec./universitario', price: '2.00'),
+          FareCategory(label: 'Estudiante de primaria',         price: '1.00'),
+          FareCategory(label: 'Adulto mayor',                    price: '2.50'),
+          FareCategory(label: 'Persona con discapacidad',        price: '2.50'),
+        ],
       ),
     ],
   ),
 )
 ```
 
-## Configuration
+## Models
 
 ### FaresConfig
 
 ```dart
 FaresConfig(
   currency: String,                 // Required - e.g., 'Bs.', '$', '€'
-  fares: List<FareInfo>,           // Required - list of fare information
+  fares: List<FareInfo>,           // Required - groups to render
   externalFareUrl: String?,        // Optional - link to more info
-  lastUpdated: DateTime?,          // Optional - when fares were updated
-  additionalNotes: String?,        // Optional - general notes
+  lastUpdated: DateTime?,          // Optional - when fares were verified
+  additionalNotes: String?,        // Optional - screen-wide notes
 )
 ```
 
@@ -49,12 +61,43 @@ FaresConfig(
 
 ```dart
 FareInfo(
-  transportType: String,           // Required - e.g., 'Bus', 'Metro'
-  icon: IconData,                  // Required - icon for this type
-  regularFare: String,             // Required - regular price
-  studentFare: String?,            // Optional - student price
-  seniorFare: String?,             // Optional - senior price
-  notes: String?,                  // Optional - notes for this fare
+  title: String,                   // Required - card header (e.g., 'Trufi')
+  icon: IconData,                  // Required - icon next to the title
+  primary: FareCategory,           // Required - headline price (badge)
+  additional: List<FareCategory>,  // Optional - rendered as chips
+  color: Color?,                   // Optional - accent color
+  notes: String?,                  // Optional - card footer notes
+)
+```
+
+### FareCategory
+
+```dart
+FareCategory(
+  label: String,                   // Required - already-localized label
+  price: String,                   // Required - formatted, no currency
+  icon: IconData?,                 // Optional - category icon
+  color: Color?,                   // Optional - chip accent color
+  note: String?,                   // Optional - sub-note under the price
+)
+```
+
+## Composable widgets
+
+If you don't want the opinionated `FaresTrufiScreen`, the package exports the
+building blocks the screen uses internally:
+
+- `FaresHero` — gradient hero card
+- `FareCard` — header + chips + notes for one `FareInfo`
+- `FareCategoryChip` — a single `FareCategory` chip
+- `FaresNotesCard` — tip-style notes card
+
+```dart
+Column(
+  children: [
+    const FaresHero(title: 'Tarifas', subtitle: '...'),
+    for (final fare in fares) FareCard(fare: fare, currency: 'Bs.'),
+  ],
 )
 ```
 
@@ -66,20 +109,17 @@ screens: [
   FaresTrufiScreen(
     config: FaresConfig(
       currency: 'Bs.',
-      lastUpdated: DateTime(2024, 1, 15),
+      lastUpdated: DateTime(2026, 5, 6),
       additionalNotes: 'Children under 5 ride free.',
-      fares: [
+      fares: const [
         FareInfo(
-          transportType: 'Trufi',
+          title: 'Trufi',
           icon: Icons.directions_bus,
-          regularFare: '2.00',
-          studentFare: '1.50',
-          seniorFare: '1.00',
-        ),
-        FareInfo(
-          transportType: 'Micro',
-          icon: Icons.airport_shuttle,
-          regularFare: '1.50',
+          primary: FareCategory(label: 'Regular', price: '2.00'),
+          additional: [
+            FareCategory(label: 'Student', price: '1.50'),
+            FareCategory(label: 'Senior',  price: '1.00'),
+          ],
         ),
       ],
     ),
