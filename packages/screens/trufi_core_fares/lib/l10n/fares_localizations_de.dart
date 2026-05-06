@@ -18,15 +18,6 @@ class FaresLocalizationsDe extends FaresLocalizations {
   String get faresSubtitle => 'Aktuelle Preise für den öffentlichen Nahverkehr';
 
   @override
-  String get faresRegular => 'Normal';
-
-  @override
-  String get faresStudent => 'Schüler/Student';
-
-  @override
-  String get faresSenior => 'Senior';
-
-  @override
   String faresLastUpdated(String date) {
     return 'Zuletzt aktualisiert: $date';
   }

@@ -1,3 +1,17 @@
+## 5.12.0
+
+### Breaking
+- `trufi_core_fares` data model is rebuilt around arbitrary categories instead of fixed regular/student/senior slots (#848). `FareInfo` now requires a `title`, an `icon`, a `primary: FareCategory`, an optional `additional: List<FareCategory>` and an optional `notes`. The old `transportType`/`regularFare`/`studentFare`/`seniorFare` fields are removed — apps need to migrate their wiring to the new `FareCategory(label, price, icon?, color?, note?)` tuple. The previous schema couldn't represent tariffs that have more than three age tiers (e.g. Cochabamba's official Cercado tariff covers `general / primary student / secondary‑uni student / disability / senior`), and locked the chip labels into the package's localization (`faresStudent`, `faresSenior`).
+- `FaresLocalizations` no longer ships the `faresRegular`, `faresStudent`, `faresSenior` strings. Category labels come from each app's own localization (or raw strings) via `FareCategory.label`. Apps that built their own fares screen on top of `FaresLocalizations` strings need to provide the labels themselves.
+
+### Features
+- `trufi_core_fares` exposes its previously-private layout primitives as public widgets so apps can compose a custom fares screen without rewriting the chrome: `FaresHero` (gradient hero card), `FareCard` (header + chips + notes for one `FareInfo`), `FareCategoryChip` (single category chip), `FaresNotesCard` (tip-style footer card). The opinionated `FaresTrufiScreen(config: …)` keeps working as before for apps that don't need a custom layout.
+
+### Bug Fixes
+- Fix outdated Cochabamba fares (#848). `trufi-app` now ships the official Cercado tariff issued by the Movilidad Urbana de Cochabamba (`Bs 3 / Bs 2 / Bs 1 / Bs 2.50 / Bs 2.50` for general / secondary‑university student / primary student / senior / disability) and a note clarifying the tariff applies only inside the Cercado and that operator-charged fares may differ.
+
+---
+
 ## 5.11.0
 
 ### Breaking
