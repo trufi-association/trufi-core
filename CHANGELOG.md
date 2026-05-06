@@ -1,3 +1,22 @@
+## 5.11.0
+
+### Breaking
+- `TrufiPlannerProvider` now suppresses transfer itineraries when at least one direct option exists (#859). Previously, transfers and directs were merged in the same result list — apps showed `133 → X10` next to `X10` direct for the same trip, which is misleading because each ride is a separate fare and the transfer is rarely worth the cost. With strict-direct-vs-transfer split, transfers only appear when no direct exists. Apps that relied on always seeing both classes need to either accept the new behavior or call `findRoutes` with their own filter on top.
+- `TrufiPlannerProvider.name` no longer differentiates local/remote ("Offline (GTFS)" / "Online (Public Transport)"). Both modes return `"Trufi Planner"`. Apps that compare against the old strings need to update; apps using `config.displayName` are unaffected.
+- Removed the `Maximum walking distance` preferences UI from the Trufi Planner provider — the chip was wired to a server parameter the backend ignored, so toggling it had no effect. Internal classes `TrufiPlannerPreferencesState` and `TrufiPlannerPreferences` are deleted (they were not exported). The provider now ships a "Acerca de Trufi Planner" info card explaining the engine instead.
+- Frontend itinerary sort in `routing_engine_request_plan_service.dart` is removed — each provider owns its ranking now. OTP providers already return sorted itineraries; `TrufiPlannerProvider` ranks via the backend (distance-based) plus walk-only injection at index 0.
+
+### Features
+- Walk-only itinerary auto-injected at the top of the result list when origin and destination are within 1.5 km in straight line. Renders as a single dashed leg from origin to destination, time = `distance / 1.2 m/s`. Spares the user from being shown a 3-block bus trip when walking is the obvious option.
+- `TrufiPlannerProvider` settings sheet now shows an "Acerca de Trufi Planner" card that explains the engine and offline/online mode (different copy for `config.isLocal` vs remote). Replaces the non-functional walking-distance chips.
+- Backend `gtfs_routing_service` ranks paths by total distance (`walkDistance + transitDistance`). Drops the time-based weighting that was skewed by schedule-driven transfer waits — e.g. a fast transfer no longer beats a direct just because its scheduled wait is 1 minute shorter.
+- Pattern-level performance work in `gtfs_route_index`: precomputed `cumDist` (cumulative haversine distance per stop) and per-pattern bbox enable O(1) "is this pattern near point P" pruning before heavier per-stop work. Bench p99 ~9ms on 200 random Cochabamba queries.
+
+### Bug Fixes
+- Fix the absurd routes reported in #859 (e.g. `209 → 209` taking 7.4 km / 32 min for a 400 m straight-line trip). Root cause was the old `transfers*1000 + walkDistance*2 + transitDistance*1` score letting transit-only distance dominate after walking penalties cancelled out across competing paths. With distance-based scoring + strict-direct-vs-transfer split + the upstream feed densification ([trufi-association/trufi-app PR](https://github.com/trufi-association/trufi-app/pulls?q=is%3Apr+v2.12.0)), the same query now returns 5 sensible direct options.
+
+---
+
 ## 5.10.0
 
 ### Features

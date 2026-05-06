@@ -64,19 +64,9 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
       totalStopwatch.stop();
       _logSuccess(plan, totalStopwatch.elapsedMilliseconds);
 
-      // Sort itineraries
-      if (plan.itineraries != null && plan.itineraries!.isNotEmpty) {
-        final sortedItineraries = List<routing.Itinerary>.from(
-          plan.itineraries!,
-        );
-        sortedItineraries.sort((a, b) {
-          final weightA = _calculateWeight(a);
-          final weightB = _calculateWeight(b);
-          return weightA.compareTo(weightB);
-        });
-        return plan.copyWith(itineraries: sortedItineraries);
-      }
-
+      // Itineraries are returned in the order each provider chose. Each
+      // provider owns its ranking logic (e.g. trufi_planner sorts by
+      // distance with tier ordering, OTP returns its own scored list).
       return plan;
     } catch (e) {
       totalStopwatch.stop();
@@ -110,11 +100,5 @@ class RoutingEngineRequestPlanService implements RequestPlanService {
     debugPrint(
       '╚══════════════════════════════════════════════════════════════',
     );
-  }
-
-  double _calculateWeight(routing.Itinerary itinerary) {
-    return (itinerary.numberOfTransfers * 0.65) +
-        (itinerary.walkDistance * 0.3) +
-        ((itinerary.distance / 100) * 0.05);
   }
 }

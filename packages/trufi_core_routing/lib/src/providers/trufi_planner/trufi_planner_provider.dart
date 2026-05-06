@@ -1,4 +1,6 @@
-import 'package:flutter/widgets.dart';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../utils/polyline_decoder.dart';
@@ -16,7 +18,15 @@ import '../routing_provider.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 import 'trufi_planner_config.dart';
 import 'trufi_planner_data_source.dart';
-import 'trufi_planner_preferences.dart';
+
+/// Below this straight-line distance (meters), offer a walk-only itinerary
+/// alongside transit options. The tier-ordering in the home screen lifts it
+/// to the top of the list as the preferred option.
+const double _walkOnlyThresholdMeters = 1500;
+
+/// Walking speed used to estimate walk durations (m/s). 1.2 m/s ≈ 4.3 km/h
+/// matches the existing per-leg walk timing in this provider.
+const double _walkSpeedMps = 1.2;
 
 /// Routing provider using TrufiPlanner.
 ///
@@ -48,22 +58,18 @@ class TrufiPlannerProvider extends IRoutingProvider {
   TrufiPlannerProvider({required this.config})
     : _dataSource = TrufiPlannerDataSource(config: config);
 
-  late final _prefs = TrufiPlannerPreferencesState();
-
   @override
   String get id => config.providerId ?? 'trufi_planner';
 
   @override
-  String get name =>
-      config.displayName ??
-      (config.isLocal ? 'Offline (GTFS)' : 'Online (Public Transport)');
+  String get name => config.displayName ?? 'Trufi Planner';
 
   @override
   String get description =>
       config.description ??
       (config.isLocal
-          ? 'Routing sin conexión usando datos GTFS'
-          : 'Routing en línea usando Trufi Planner');
+          ? 'Funciona offline con datos GTFS empacados en la app'
+          : 'Motor de rutas propio servido desde nuestro backend');
 
   @override
   bool get supportsTransitRoutes => true;
@@ -73,10 +79,10 @@ class TrufiPlannerProvider extends IRoutingProvider {
 
   @override
   Widget? buildPreferencesUI(BuildContext context) =>
-      TrufiPlannerPreferences(state: _prefs);
+      _TrufiPlannerInfo(isLocal: config.isLocal);
 
   @override
-  void resetPreferences() => _prefs.reset();
+  void resetPreferences() {}
 
   /// Whether data is loaded and ready.
   bool get isLoaded => _dataSource.isLoaded;
@@ -92,7 +98,6 @@ class TrufiPlannerProvider extends IRoutingProvider {
 
   @override
   Future<void> initialize() async {
-    await _prefs.initialize();
     await _dataSource.preload();
   }
 
@@ -124,12 +129,11 @@ class TrufiPlannerProvider extends IRoutingProvider {
     }
 
     final sw = Stopwatch()..start();
-    final maxWalkDistance = _prefs.maxWalkDistance ?? 500.0;
 
     final paths = await _dataSource.client.findRoutes(
       origin: from.position,
       destination: to.position,
-      maxWalkDistance: maxWalkDistance,
+      maxWalkDistance: 500.0,
       maxResults: numItineraries,
     );
 
@@ -138,23 +142,76 @@ class TrufiPlannerProvider extends IRoutingProvider {
       'TrufiPlannerProvider: Found ${paths.length} paths in ${sw.elapsedMilliseconds}ms',
     );
 
-    if (paths.isEmpty) {
-      return Plan(
-        from: _createPlanLocation(from),
-        to: _createPlanLocation(to),
-        itineraries: [],
-      );
-    }
-
+    // Backend ranks transit paths by total distance and applies the
+    // direct-vs-transfer bucket rule. Provider only handles walk-only
+    // injection; otherwise we trust the backend order.
     final itineraries = paths
         .map((path) => _convertToItinerary(path, from, to, dateTime))
         .toList();
+
+    final straightDistance = _haversineMeters(from.position, to.position);
+    if (straightDistance <= _walkOnlyThresholdMeters) {
+      itineraries.insert(
+        0,
+        _buildWalkOnlyItinerary(from, to, dateTime, straightDistance),
+      );
+    }
 
     return Plan(
       from: _createPlanLocation(from),
       to: _createPlanLocation(to),
       itineraries: itineraries,
     );
+  }
+
+  Itinerary _buildWalkOnlyItinerary(
+    RoutingLocation from,
+    RoutingLocation to,
+    DateTime startTime,
+    double distance,
+  ) {
+    final duration = Duration(seconds: (distance / _walkSpeedMps).round());
+    final points = [from.position, to.position];
+    final leg = Leg(
+      mode: 'WALK',
+      distance: distance,
+      duration: duration,
+      transitLeg: false,
+      fromPlace: Place(
+        name: from.description,
+        lat: from.position.latitude,
+        lon: from.position.longitude,
+      ),
+      toPlace: Place(
+        name: to.description,
+        lat: to.position.latitude,
+        lon: to.position.longitude,
+      ),
+      encodedPoints: PolylineCodec.encode(points),
+      decodedPoints: points,
+      startTime: startTime,
+      endTime: startTime.add(duration),
+    );
+    return Itinerary(
+      legs: [leg],
+      startTime: startTime,
+      endTime: startTime.add(duration),
+      duration: duration,
+      walkDistance: distance,
+      walkTime: duration,
+      transfers: 0,
+    );
+  }
+
+  static double _haversineMeters(LatLng a, LatLng b) {
+    const r = 6371000.0;
+    final lat1 = a.latitude * pi / 180;
+    final lat2 = b.latitude * pi / 180;
+    final dLat = (b.latitude - a.latitude) * pi / 180;
+    final dLon = (b.longitude - a.longitude) * pi / 180;
+    final h = sin(dLat / 2) * sin(dLat / 2) +
+        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+    return 2 * r * asin(sqrt(h));
   }
 
   Itinerary _convertToItinerary(
@@ -571,5 +628,72 @@ class TrufiPlannerProvider extends IRoutingProvider {
   /// Clear all loaded data from memory.
   void clear() {
     _dataSource.clear();
+  }
+}
+
+/// Info card explaining what Trufi Planner is and why its results may differ
+/// from OTP-based engines. Shown in the routing settings sheet in place of
+/// configurable preferences.
+class _TrufiPlannerInfo extends StatelessWidget {
+  final bool isLocal;
+
+  const _TrufiPlannerInfo({required this.isLocal});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final lines = isLocal
+        ? const [
+            'Trufi Planner es nuestro motor de rutas propio (no OTP).',
+            'En esta versión móvil corre 100% offline, usando los datos GTFS empacados con la app — por eso los resultados pueden diferir de motores online.',
+          ]
+        : const [
+            'Trufi Planner es nuestro motor de rutas propio (no OTP).',
+            'Esta versión web consulta nuestro servidor; los resultados pueden diferir de OTP por usar un algoritmo y datos distintos.',
+          ];
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                isLocal
+                    ? Icons.offline_bolt_rounded
+                    : Icons.cloud_rounded,
+                color: colorScheme.primary,
+                size: 22,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'Acerca de Trufi Planner',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          for (final line in lines) ...[
+            Text(
+              line,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ],
+      ),
+    );
   }
 }

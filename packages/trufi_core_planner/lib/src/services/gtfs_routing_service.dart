@@ -22,6 +22,10 @@ class RoutingSegment {
   /// Empty during routing; resolved for final results only.
   final List<LatLng> shapePoints;
 
+  /// Approximate in-vehicle distance along the pattern's stops, in meters.
+  /// Computed in O(1) via the pattern's precomputed `cumDist`.
+  final double transitDistance;
+
   const RoutingSegment({
     required this.route,
     required this.fromStop,
@@ -31,6 +35,7 @@ class RoutingSegment {
     required this.pattern,
     this.scheduledDuration,
     this.shapePoints = const [],
+    this.transitDistance = 0,
   });
 
   /// Stop IDs for this segment (derived from stops).
@@ -62,6 +67,7 @@ class RoutingSegment {
               ?.map((p) => LatLng((p as List)[0] as double, p[1] as double))
               .toList() ??
           const [],
+      transitDistance: (json['transitDistance'] as num?)?.toDouble() ?? 0,
     );
   }
 
@@ -78,6 +84,7 @@ class RoutingSegment {
     'scheduledDuration': scheduledDuration?.inSeconds,
     if (shapePoints.isNotEmpty)
       'shape': shapePoints.map((p) => [p.latitude, p.longitude]).toList(),
+    if (transitDistance > 0) 'transitDistance': transitDistance,
   };
 }
 
@@ -103,10 +110,14 @@ class RoutingPath {
   double get totalWalkDistance => originWalkDistance + destinationWalkDistance;
 
   /// Number of transfers.
-  int get transfers => segments.length - 1;
+  int get transfers => segments.isEmpty ? 0 : segments.length - 1;
 
   /// Total number of stops.
   int get totalStops => segments.fold(0, (sum, seg) => sum + seg.stopCount);
+
+  /// Total in-vehicle distance across all transit segments, in meters.
+  double get totalTransitDistance =>
+      segments.fold(0, (sum, seg) => sum + seg.transitDistance);
 
   factory RoutingPath.fromJson(Map<String, dynamic> json) {
     return RoutingPath(
@@ -150,12 +161,23 @@ class GtfsRoutingService {
 
   /// Find routes between two locations.
   /// Supports direct routes and routes with 1 transfer.
+  ///
+  /// Results are returned in two buckets back-to-back:
+  ///   1. up to [maxDirects] zero-transfer paths (best by score)
+  ///   2. up to [maxTransferPaths] one-transfer paths (best by score)
+  /// Direct routes always come first in the returned list.
+  ///
+  /// [maxResults] is kept as a backwards-compatible upper bound — the final
+  /// list is truncated to it. Pass it >= maxDirects + maxTransferPaths to
+  /// keep the bucket caps decisive.
   List<RoutingPath> findRoutes({
     required LatLng origin,
     required LatLng destination,
     double maxWalkDistance = 500,
-    int maxResults = 5,
+    int maxResults = 10,
     int maxTransfers = 1,
+    int maxDirects = 5,
+    int maxTransferPaths = 5,
   }) {
     final originStops = spatialIndex.findNearestStops(
       origin,
@@ -174,19 +196,13 @@ class GtfsRoutingService {
     }
 
     final paths = <RoutingPath>[];
-    final segmentCache = <String, RoutingSegment?>{};
 
     // Phase 1: Find direct routes (no transfers)
-    _findDirectRoutes(originStops, destinationStops, paths, segmentCache);
+    _findDirectRoutes(originStops, destinationStops, paths);
 
     // Phase 2: Find routes with 1 transfer
     if (maxTransfers >= 1) {
-      _findOneTransferRoutes(
-        originStops,
-        destinationStops,
-        paths,
-        segmentCache,
-      );
+      _findOneTransferRoutes(originStops, destinationStops, paths);
     }
 
     // Sort all paths by score (lower is better)
@@ -204,49 +220,70 @@ class GtfsRoutingService {
       }
     }
 
-    return uniquePaths.take(maxResults).map(_resolvePathStops).toList();
+    // Split into direct vs transfer buckets. In Cochabamba each ride is a
+    // separate fare, so a transfer doubles the cost — only worth offering
+    // when there's no direct option. Suppress transfers entirely if at
+    // least one direct exists.
+    final directs = <RoutingPath>[];
+    final transfers = <RoutingPath>[];
+    for (final p in uniquePaths) {
+      if (p.segments.length <= 1) {
+        if (directs.length < maxDirects) directs.add(p);
+      } else {
+        if (transfers.length < maxTransferPaths) transfers.add(p);
+      }
+      if (directs.length >= maxDirects && transfers.length >= maxTransferPaths) {
+        break;
+      }
+    }
+    final ordered = directs.isNotEmpty ? directs : transfers;
+    return ordered.take(maxResults).map(_resolvePathStops).toList();
   }
 
   /// Find direct routes (0 transfers) between origin and destination stops.
+  ///
+  /// Pattern-first iteration: for each origin stop, scan the patterns
+  /// passing through it and check if any destination stop appears later
+  /// in the same pattern (which encodes the correct travel direction).
   void _findDirectRoutes(
     List<NearbyStop> originStops,
     List<NearbyStop> destinationStops,
     List<RoutingPath> paths,
-    Map<String, RoutingSegment?> segmentCache,
   ) {
     for (final originNearby in originStops) {
-      for (final destNearby in destinationStops) {
-        final originStop = originNearby.stop;
-        final destStop = destNearby.stop;
+      final originPatterns =
+          routeIndex.getPatternsAtStop(originNearby.stop.id);
+      for (final pattern in originPatterns) {
+        final originIdx = pattern.indexOfStop(originNearby.stop.id);
+        if (originIdx < 0) continue;
 
-        final connectingRoutes = routeIndex.findConnectingRoutes(
-          originStop.id,
-          destStop.id,
-        );
+        for (final destNearby in destinationStops) {
+          final destIdx = pattern.indexOfStop(destNearby.stop.id);
+          if (destIdx <= originIdx) continue;
 
-        for (final routeId in connectingRoutes) {
-          final route = data.routes[routeId];
+          final route = data.routes[pattern.routeId];
           if (route == null) continue;
 
-          final segment = _buildSegmentCached(
-            segmentCache,
-            route,
-            originStop,
-            destStop,
+          final segment = _buildSegmentForPattern(
+            pattern: pattern,
+            fromIdx: originIdx,
+            toIdx: destIdx,
+            route: route,
+            fromStop: originNearby.stop,
+            toStop: destNearby.stop,
           );
-          if (segment == null) continue;
 
           paths.add(
             RoutingPath(
               originWalkDistance: originNearby.distance,
-              originStop: originStop,
+              originStop: originNearby.stop,
               segments: [segment],
-              destinationStop: destStop,
+              destinationStop: destNearby.stop,
               destinationWalkDistance: destNearby.distance,
               score: _calculateScore(
                 walkDistance: originNearby.distance + destNearby.distance,
                 transfers: 0,
-                totalStops: segment.stopCount,
+                transitDistance: segment.transitDistance,
               ),
             ),
           );
@@ -255,150 +292,170 @@ class GtfsRoutingService {
     }
   }
 
-  /// Find routes with 1 transfer between origin and destination stops.
+  /// Find routes with 1 transfer using precomputed pattern connections.
   ///
-  /// Optimized strategy:
-  /// 1. Precompute which stops can reach destination via which routes
-  /// 2. Scan origin patterns and check intermediate stops against that map
+  /// For each origin pattern that contains an origin stop, walk the
+  /// precomputed connections (other-pattern transfer points) and check
+  /// if any destination stop is reachable on the other pattern after the
+  /// transfer point. No per-query candidate map: transfer geometry is
+  /// fixed at index build time.
   void _findOneTransferRoutes(
     List<NearbyStop> originStops,
     List<NearbyStop> destinationStops,
     List<RoutingPath> paths,
-    Map<String, RoutingSegment?> segmentCache,
   ) {
-    // Step 1: Build transfer candidate map.
-    // For each destination stop, find routes that serve it.
-    // For each such route's pattern, all stops BEFORE the dest stop
-    // are potential transfer points.
-    // transferCandidates: transferStopId -> {destRouteId -> [destNearby]}
-    final transferCandidates = <String, Map<String, List<NearbyStop>>>{};
-
+    // Precompute which destination-side patterns are relevant for this query
+    // and which dest stops each carries. Acts as the pruning filter that the
+    // raw connection list lacks: most patterns crossing the origin don't
+    // serve any destination stop, so we skip them fast.
+    final relevantDestStops = <int, List<NearbyStop>>{};
     for (final destNearby in destinationStops) {
-      final routesAtDest = routeIndex.getRoutesAtStop(destNearby.stop.id);
-      for (final destRouteId in routesAtDest) {
-        final patterns = routeIndex.getPatternsForRoute(destRouteId);
-        for (final pattern in patterns) {
-          final destIdx = pattern.indexOfStop(destNearby.stop.id);
-          if (destIdx < 0) continue;
-
-          // All stops before destIdx are potential transfer points
-          for (int i = 0; i < destIdx; i++) {
-            final stopId = pattern.stopIds[i];
-            transferCandidates
-                .putIfAbsent(stopId, () => {})
-                .putIfAbsent(destRouteId, () => [])
-                .add(destNearby);
-          }
-        }
+      for (final p in routeIndex.getPatternsAtStop(destNearby.stop.id)) {
+        relevantDestStops.putIfAbsent(p.id, () => []).add(destNearby);
       }
     }
+    if (relevantDestStops.isEmpty) return;
 
-    if (transferCandidates.isEmpty) return;
+    // Bounding box around the destination's nearby stops. We use this to
+    // discard transfer points that are obviously far from the destination
+    // region. The threshold scales with the trip's straight-line distance
+    // so we don't over-prune cross-city queries: a long trip may have
+    // legitimate transfer points kilometres from the dest, while a short
+    // trip should keep transfers tight.
+    final destBbox = _bboxOfStops(destinationStops);
+    final straightLine =
+        _haversine(originStops.first.stop.position, destinationStops.first.stop.position);
+    // "Transfer point shouldn't be further from dest than origin is" — rules
+    // out detours ratio > 2× without a computed score. Hard floor of 3 km
+    // keeps short trips from being over-pruned (close pairs may still need
+    // a transfer at a hub that's a few km away).
+    final transferMaxDistFromDestM = max(3000.0, straightLine);
 
-    // Step 2: Scan origin patterns, check intermediate stops
-    // against the precomputed transfer map.
+    // Hard cap on total candidate enumeration. In dense feeds with
+    // transit-saturated city centers, the precomputed connection list can
+    // still produce thousands of valid transfer candidates per query.
+    // Beyond a reasonable count, additional candidates rarely change the
+    // top-K result — score-sort + bucket cap discard them anyway. Cutting
+    // the inner loop bounds tail latency without affecting the user-visible
+    // top results.
+    const maxCandidatesEnumerated = 1500;
+    var enumerated = 0;
+
     for (final originNearby in originStops) {
-      final originStopRoutes = routeIndex.getRoutesAtStop(originNearby.stop.id);
+      final originPatterns =
+          routeIndex.getPatternsAtStop(originNearby.stop.id);
+      for (final originPattern in originPatterns) {
+        final originIdx = originPattern.indexOfStop(originNearby.stop.id);
+        if (originIdx < 0) continue;
 
-      for (final originRouteId in originStopRoutes) {
-        final originRoute = data.routes[originRouteId];
-        if (originRoute == null) continue;
+        for (final conn in routeIndex.getConnectionsFor(originPattern.id)) {
+          // Transfer stop must be AFTER the origin within the origin pattern.
+          if (conn.myStopIdx <= originIdx) continue;
 
-        final patterns = routeIndex.getPatternsForRoute(originRouteId);
+          // Skip patterns that don't serve any destination stop.
+          final destStopsOnOther = relevantDestStops[conn.otherPatternId];
+          if (destStopsOnOther == null) continue;
 
-        for (final pattern in patterns) {
-          final originIdx = pattern.indexOfStop(originNearby.stop.id);
-          if (originIdx < 0) continue;
+          // Discard transfers that happen far from the destination region.
+          // The check is on the transfer point itself, not the pattern's
+          // overall bbox: a long route may sweep through the dest area at
+          // some point, but its bbox alone isn't enough to know which stop
+          // does. This pointwise version preserves valid transfers and
+          // skips the "ride past the destination then come back" candidates.
+          if (destBbox != null) {
+            final transferStop =
+                data.stops[originPattern.stopIds[conn.myStopIdx]];
+            if (transferStop != null &&
+                !_pointNearBbox(
+                  transferStop.lat,
+                  transferStop.lon,
+                  destBbox,
+                  transferMaxDistFromDestM,
+                )) {
+              continue;
+            }
+          }
 
-          // Check stops after origin as potential transfer points
-          for (int i = originIdx + 1; i < pattern.stopIds.length; i++) {
-            final transferStopId = pattern.stopIds[i];
-            final destRouteMap = transferCandidates[transferStopId];
-            if (destRouteMap == null) continue; // Not a transfer point
+          final otherPattern = routeIndex.patternById(conn.otherPatternId);
 
+          for (final destNearby in destStopsOnOther) {
+            final destIdx = otherPattern.indexOfStop(destNearby.stop.id);
+            if (destIdx <= conn.otherStopIdx) continue;
+
+            final transferStopId = originPattern.stopIds[conn.myStopIdx];
             final transferStop = data.stops[transferStopId];
             if (transferStop == null) continue;
 
-            for (final entry in destRouteMap.entries) {
-              final destRouteId = entry.key;
-              if (destRouteId == originRouteId) continue;
+            final originRoute = data.routes[originPattern.routeId];
+            final destRoute = data.routes[otherPattern.routeId];
+            if (originRoute == null || destRoute == null) continue;
 
-              final destRoute = data.routes[destRouteId];
-              if (destRoute == null) continue;
+            final seg1 = _buildSegmentForPattern(
+              pattern: originPattern,
+              fromIdx: originIdx,
+              toIdx: conn.myStopIdx,
+              route: originRoute,
+              fromStop: originNearby.stop,
+              toStop: transferStop,
+            );
+            final seg2 = _buildSegmentForPattern(
+              pattern: otherPattern,
+              fromIdx: conn.otherStopIdx,
+              toIdx: destIdx,
+              route: destRoute,
+              fromStop: transferStop,
+              toStop: destNearby.stop,
+            );
 
-              // Build first segment: origin -> transfer
-              final seg1 = _buildSegmentCached(
-                segmentCache,
-                originRoute,
-                originNearby.stop,
-                transferStop,
-              );
-              if (seg1 == null) continue;
-
-              for (final destNearby in entry.value) {
-                // Build second segment: transfer -> destination
-                final seg2 = _buildSegmentCached(
-                  segmentCache,
-                  destRoute,
-                  transferStop,
-                  destNearby.stop,
-                );
-                if (seg2 == null) continue;
-
-                final totalStops = seg1.stopCount + seg2.stopCount;
-                paths.add(
-                  RoutingPath(
-                    originWalkDistance: originNearby.distance,
-                    originStop: originNearby.stop,
-                    segments: [seg1, seg2],
-                    destinationStop: destNearby.stop,
-                    destinationWalkDistance: destNearby.distance,
-                    score: _calculateScore(
-                      walkDistance: originNearby.distance + destNearby.distance,
-                      transfers: 1,
-                      totalStops: totalStops,
-                    ),
-                  ),
-                );
-              }
-            }
+            paths.add(
+              RoutingPath(
+                originWalkDistance: originNearby.distance,
+                originStop: originNearby.stop,
+                segments: [seg1, seg2],
+                destinationStop: destNearby.stop,
+                destinationWalkDistance: destNearby.distance,
+                score: _calculateScore(
+                  walkDistance: originNearby.distance + destNearby.distance,
+                  transfers: 1,
+                  transitDistance: seg1.transitDistance + seg2.transitDistance,
+                ),
+              ),
+            );
+            enumerated++;
+            if (enumerated >= maxCandidatesEnumerated) return;
           }
         }
       }
     }
   }
 
-  /// Build segment with cache. Uses O(1) indexOfStop lookups.
-  RoutingSegment? _buildSegmentCached(
-    Map<String, RoutingSegment?> cache,
-    GtfsRoute route,
-    GtfsStop fromStop,
-    GtfsStop toStop,
-  ) {
-    final key = '${route.id}:${fromStop.id}:${toStop.id}';
-    if (cache.containsKey(key)) return cache[key];
-
-    final patterns = routeIndex.getPatternsForRoute(route.id);
-    for (final pattern in patterns) {
-      final fromIndex = pattern.indexOfStop(fromStop.id);
-      if (fromIndex < 0) continue;
-      final toIndex = pattern.indexOfStop(toStop.id);
-      if (toIndex <= fromIndex) continue;
-
-      final stopCount = toIndex - fromIndex + 1;
-      final result = RoutingSegment(
-        route: route,
-        fromStop: fromStop,
-        toStop: toStop,
-        stopCount: stopCount,
-        stops: const [],
-        pattern: pattern,
-      );
-      cache[key] = result;
-      return result;
-    }
-    cache[key] = null;
-    return null;
+  /// Build a transit segment from a known pattern and stop indices.
+  /// `transitDistance` is read in O(1) from the pattern's precomputed `cumDist`.
+  RoutingSegment _buildSegmentForPattern({
+    required RoutePattern pattern,
+    required int fromIdx,
+    required int toIdx,
+    required GtfsRoute route,
+    required GtfsStop fromStop,
+    required GtfsStop toStop,
+  }) {
+    final stopCount = toIdx - fromIdx + 1;
+    final transit = pattern.distanceBetween(fromIdx, toIdx);
+    // Estimate in-vehicle time from transit distance at ~18 km/h average
+    // urban transit speed. Independent of stop spacing — works for both
+    // sparse feeds (stops every ~500m) and dense feeds (stops every ~30m).
+    // The downstream UI converts this to "X min" display.
+    final estDuration = Duration(seconds: (transit / 5).round());
+    return RoutingSegment(
+      route: route,
+      fromStop: fromStop,
+      toStop: toStop,
+      stopCount: stopCount,
+      stops: const [],
+      pattern: pattern,
+      transitDistance: transit,
+      scheduledDuration: estDuration,
+    );
   }
 
   /// Resolve full GtfsStop objects and shape polylines for all segments.
@@ -433,6 +490,7 @@ class GtfsRoutingService {
             pattern: seg.pattern,
             scheduledDuration: seg.scheduledDuration,
             shapePoints: shapePoints,
+            transitDistance: seg.transitDistance,
           );
         }
         return seg;
@@ -581,12 +639,64 @@ class GtfsRoutingService {
   }
 
   /// Calculate routing score (lower is better).
-  /// Formula: transfers * 1000 + walkDistance * 2 + totalStops * 10
+  ///
+  /// Pure total-distance: `walkDistance + transitDistance` (meters). Time
+  /// is intentionally ignored — schedule-driven transfer waits would skew
+  /// rankings and make "fastest by 1 minute" beat genuinely shorter trips.
+  /// The strict-direct-vs-transfer split (see [findRoutes]) keeps transfers
+  /// out of results when any direct exists, so the per-transfer friction
+  /// term that the old formula carried is no longer needed here.
   double _calculateScore({
     required double walkDistance,
     required int transfers,
-    required int totalStops,
+    required double transitDistance,
   }) {
-    return transfers * 1000 + walkDistance * 2 + totalStops * 10;
+    return walkDistance + transitDistance;
+  }
+
+  /// Tight bounding box around a list of nearby stops, in degrees.
+  /// Returns null if the list is empty.
+  static ({double minLat, double minLon, double maxLat, double maxLon})?
+      _bboxOfStops(List<NearbyStop> stops) {
+    if (stops.isEmpty) return null;
+    var minLat = double.infinity,
+        minLon = double.infinity,
+        maxLat = double.negativeInfinity,
+        maxLon = double.negativeInfinity;
+    for (final s in stops) {
+      if (s.stop.lat < minLat) minLat = s.stop.lat;
+      if (s.stop.lat > maxLat) maxLat = s.stop.lat;
+      if (s.stop.lon < minLon) minLon = s.stop.lon;
+      if (s.stop.lon > maxLon) maxLon = s.stop.lon;
+    }
+    return (minLat: minLat, minLon: minLon, maxLat: maxLat, maxLon: maxLon);
+  }
+
+  /// True if (lat, lon) lies inside [bbox] padded by [marginM] meters.
+  static bool _pointNearBbox(
+    double lat,
+    double lon,
+    ({double minLat, double minLon, double maxLat, double maxLon}) bbox,
+    double marginM,
+  ) {
+    final dLat = marginM / 111111;
+    final centerLat = (bbox.minLat + bbox.maxLat) / 2;
+    final dLon = marginM / (111111 * cos(centerLat * pi / 180));
+    return lat >= bbox.minLat - dLat &&
+        lat <= bbox.maxLat + dLat &&
+        lon >= bbox.minLon - dLon &&
+        lon <= bbox.maxLon + dLon;
+  }
+
+  /// Great-circle distance between two LatLng points, in meters.
+  static double _haversine(LatLng a, LatLng b) {
+    const r = 6371000.0;
+    final lat1 = a.latitude * pi / 180;
+    final lat2 = b.latitude * pi / 180;
+    final dLat = (b.latitude - a.latitude) * pi / 180;
+    final dLon = (b.longitude - a.longitude) * pi / 180;
+    final h = sin(dLat / 2) * sin(dLat / 2) +
+        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+    return 2 * r * asin(sqrt(h));
   }
 }
