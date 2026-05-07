@@ -664,81 +664,139 @@ class _LegItemState extends State<_LegItem> {
       );
     }
 
-    // Get route name - prefer routeLongName, fallback to headsign
+    // Title: corridor descriptor (e.g. "Trufi 134"). Falls back to the
+    // headsign when no route_long_name is set on the leg.
     final routeName = leg.routeLongName ?? leg.headsign;
+    // Subtitle: route variant ("Verde", "Bandera Roja") when distinct
+    // from the title. Surfaces the OSM `description` of the trip for
+    // feeds where multiple branches share a route_short_name. Skipped
+    // when headsign equals the title (already shown above).
+    final routeVariant = (leg.headsign != null &&
+            leg.headsign!.isNotEmpty &&
+            leg.headsign != routeName)
+        ? leg.headsign
+        : null;
+
+    final badgeTextColor = widget.lineColor.computeLuminance() > 0.5
+        ? Colors.black87
+        : Colors.white;
+
+    // The whole identity (badge + name + variant + chevron) is a
+    // single tap target that opens the route detail screen. The
+    // chevron at the end is an explicit affordance — without it the
+    // tappable area looked like static metadata. The "stops count" on
+    // the right is intentionally outside this InkWell because it
+    // toggles inline expansion, a different action.
+    final identityRow = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Route badge with icon
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          decoration: BoxDecoration(
+            color: widget.lineColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                _getModeIcon(leg.transportMode),
+                size: 14,
+                color: badgeTextColor,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                leg.displayName,
+                style: TextStyle(
+                  color: badgeTextColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Live indicator: pulses when a live vehicle is reported for
+        // this leg's route. Only visible if a RealtimeVehiclesProvider
+        // is wired.
+        Builder(
+          builder: (context) {
+            final realtime = context.watch<RealtimeVehiclesProvider?>();
+            if (realtime == null) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(left: 6),
+              child: LiveBusBadge.whenLive(
+                provider: realtime,
+                leg: leg,
+                color: widget.lineColor,
+                size: 12,
+              ),
+            );
+          },
+        ),
+        const SizedBox(width: 8),
+        // Route name + (optional) variant inline. Mirrors the
+        // identity layout used in the transit list (TransportTile)
+        // and the route detail header — `routeLongName` first,
+        // headsign as a tinted suffix after a "·" separator when
+        // it carries a distinct branch label.
+        if (routeName != null)
+          Flexible(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: routeName,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (routeVariant != null)
+                    TextSpan(
+                      text: '  ·  $routeVariant',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
+              // Wrap to a second line when the variant is long
+              // (e.g. "Panter blanco: bandera roja"); ellipsize
+              // beyond that. Keeps short cases on one line and
+              // long ones legible without crashing the layout.
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+      ],
+    );
 
     // Transit leg - badge on first row, info below
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // First row: badge + stops count
+        // First row: identity (tappable) + stops count (tappable, toggles)
         Row(
           children: [
-            // Route badge with icon (tappable)
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: widget.onRouteTap != null ? _handleRouteTap : null,
-              child: Builder(
-                builder: (context) {
-                  final badgeTextColor = widget.lineColor.computeLuminance() > 0.5
-                      ? Colors.black87
-                      : Colors.white;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: widget.lineColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _getModeIcon(leg.transportMode),
-                          size: 14,
-                          color: badgeTextColor,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          leg.displayName,
-                          style: TextStyle(
-                            color: badgeTextColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            // Live indicator: pulses when a live vehicle is reported for this
-            // leg's route. Only visible if a RealtimeVehiclesProvider is wired.
-            Builder(
-              builder: (context) {
-                final realtime = context.watch<RealtimeVehiclesProvider?>();
-                if (realtime == null) return const SizedBox.shrink();
-                return Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: LiveBusBadge.whenLive(
-                    provider: realtime,
-                    leg: leg,
-                    color: widget.lineColor,
-                    size: 12,
-                  ),
-                );
-              },
+            // Tappable identity row, flat (no border). Ripple from
+            // InkWell signals interactivity on press; the chevron at
+            // the end acts as the static affordance — same pattern
+            // Google Maps uses for transit legs.
+            Expanded(
+              child: widget.onRouteTap != null
+                  ? InkWell(
+                      onTap: _handleRouteTap,
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: identityRow,
+                      ),
+                    )
+                  : identityRow,
             ),
             const SizedBox(width: 8),
-            // Duration and distance
-            Text(
-              '$durationText, $distanceText',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const Spacer(),
             // Stops count (tappable)
             if (hasStops)
               GestureDetector(
@@ -769,19 +827,19 @@ class _LegItemState extends State<_LegItem> {
               ),
           ],
         ),
-        // Second row: route name (if available)
-        if (routeName != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Text(
-              routeName,
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+        // Second row: duration and distance below the identity, so
+        // the route name reads as the primary label and the trip
+        // metrics sit underneath as secondary information (mirrors
+        // how the search list and detail header are stacked).
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            '$durationText, $distanceText',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
+        ),
         // Third row: Agency info (if available)
         if (leg.agency?.name != null)
           Padding(

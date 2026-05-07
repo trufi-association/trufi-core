@@ -308,21 +308,17 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                             ),
                           ),
                           const SizedBox(width: 10),
-                          // Route name (show prefix like "MiniBus 1", origin/destination is in bottom sheet)
-                          if (_route!.longNamePrefix.isNotEmpty)
-                            Expanded(
-                              child: Text(
-                                _route!.longNamePrefix,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: colorScheme.onSurface,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          else
-                            const Spacer(),
+                          // Route corridor + variant. Mirrors TransportTile's
+                          // title/subtitle: longName for the corridor
+                          // ("Trufi 134"), headsign for the variant ("Verde",
+                          // "Rojo") or destination when no variant exists.
+                          Expanded(
+                            child: _RouteIdentity(
+                              route: _route!,
+                              theme: theme,
+                              colorScheme: colorScheme,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -536,17 +532,13 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                         ),
                       ),
                     const SizedBox(width: 12),
-                    // Route name
-                    if (_route != null && _route!.longNamePrefix.isNotEmpty)
+                    // Route corridor + variant (same shape as the list tile).
+                    if (_route != null)
                       Expanded(
-                        child: Text(
-                          _route!.longNamePrefix,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurface,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        child: _RouteIdentity(
+                          route: _route!,
+                          theme: theme,
+                          colorScheme: colorScheme,
                         ),
                       )
                     else
@@ -913,11 +905,34 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
     final routeColor = widget.route.backgroundColor ?? colorScheme.primary;
     final distance = _RouteDistanceCalculator.calculate(widget.route.geometry);
 
+    // Origin/destination labels for the timeline header.
+    // Prefer the trip's actual first/last stop (always available when
+    // we have stops), and fall back to longName parsing for legacy
+    // feeds that pack "<from> → <to>" into route_long_name.
+    String? originLabel;
+    String? destinationLabel;
+    if (stops.length >= 2) {
+      originLabel = stops.first.name;
+      destinationLabel = stops.last.name;
+    } else if (widget.route.hasOriginDestination) {
+      originLabel = widget.route.directionId == 1
+          ? widget.route.longNameLast
+          : widget.route.longNameStart;
+      destinationLabel = widget.route.directionId == 1
+          ? widget.route.longNameStart
+          : widget.route.longNameLast;
+    }
+    final hasOriginDestination =
+        originLabel != null &&
+        destinationLabel != null &&
+        originLabel.isNotEmpty &&
+        destinationLabel.isNotEmpty;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Origin/Destination header (Google Maps style)
-        if (widget.route.hasOriginDestination)
+        if (hasOriginDestination)
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
             child: Row(
@@ -969,9 +984,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     children: [
                       // Origin
                       Text(
-                        widget.route.directionId == 1
-                            ? widget.route.longNameLast
-                            : widget.route.longNameStart,
+                        originLabel,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -982,9 +995,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                       const SizedBox(height: 16),
                       // Destination
                       Text(
-                        widget.route.directionId == 1
-                            ? widget.route.longNameStart
-                            : widget.route.longNameLast,
+                        destinationLabel,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurface,
@@ -2056,6 +2067,78 @@ class _SelectedStopMarker extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Title (corridor) + subtitle (variant) shown alongside the route
+/// badge in the detail screen header. Mirrors the layout used by
+/// [TransportTile] in the list so the user sees the same identity in
+/// both places.
+class _RouteIdentity extends StatelessWidget {
+  final TransportRoute route;
+  final ThemeData theme;
+  final ColorScheme colorScheme;
+
+  const _RouteIdentity({
+    required this.route,
+    required this.theme,
+    required this.colorScheme,
+  });
+
+  String? get _title {
+    if (route.longName != null && route.longName!.isNotEmpty) {
+      return route.longName;
+    }
+    if (route.headsign != null && route.headsign!.isNotEmpty) {
+      return route.headsign;
+    }
+    return route.name.isNotEmpty ? route.name : null;
+  }
+
+  String? get _subtitle {
+    final hasLongName =
+        route.longName != null && route.longName!.isNotEmpty;
+    if (!hasLongName) return null;
+    if (route.headsign != null && route.headsign!.isNotEmpty) {
+      return route.headsign;
+    }
+    if (route.description != null && route.description!.isNotEmpty) {
+      return route.description;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = _title;
+    final subtitle = _subtitle;
+    if (title == null) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (subtitle != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ],
     );
   }
 }

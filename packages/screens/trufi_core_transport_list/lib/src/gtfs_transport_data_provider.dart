@@ -12,8 +12,6 @@ import 'transport_list_data_provider.dart';
 class GtfsTransportDataProvider extends TransportListDataProvider {
   final String _assetPath;
 
-  TransportListState _state = const TransportListState(isLoading: true);
-
   GtfsData? _gtfsData;
 
   /// Mapping from trip ID to its ordered stop IDs (built on first load).
@@ -23,14 +21,11 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
       : _assetPath = assetPath;
 
   @override
-  TransportListState get state => _state;
-
-  @override
   Future<void> load() async {
-    if (_state.routes.isNotEmpty) return;
+    if (state.routes.isNotEmpty) return;
 
-    _state = _state.copyWith(isLoading: true);
-    _notifySafe();
+    state = state.copyWith(isLoading: true);
+    notifySafe();
 
     try {
       final bytes = await rootBundle.load(_assetPath);
@@ -40,42 +35,25 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
 
       final routes = _buildRoutes(_gtfsData!);
 
-      _state = _state.copyWith(
+      state = state.copyWith(
         routes: routes,
         filteredRoutes: routes,
         isLoading: false,
       );
     } catch (e) {
       debugPrint('GtfsTransportDataProvider: Error loading GTFS: $e');
-      _state = _state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false);
     }
-    _notifySafe();
+    notifySafe();
   }
 
   @override
   Future<void> refresh() async {
     _gtfsData = null;
     _tripStops = null;
-    _state = const TransportListState(isLoading: true);
-    _notifySafe();
+    state = const TransportListState(isLoading: true);
+    notifySafe();
     await load();
-  }
-
-  @override
-  void filter(String query) {
-    if (query.isEmpty) {
-      _state = _state.copyWith(filteredRoutes: _state.routes);
-    } else {
-      final lowerQuery = query.toLowerCase();
-      final filtered = _state.routes.where((route) {
-        final searchText =
-            '${route.name} ${route.shortName ?? ''} ${route.longName ?? ''} ${route.agencyName ?? ''}'
-                .toLowerCase();
-        return searchText.contains(lowerQuery);
-      }).toList();
-      _state = _state.copyWith(filteredRoutes: filtered);
-    }
-    _notifySafe();
   }
 
   @override
@@ -83,14 +61,14 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
     final data = _gtfsData;
     if (data == null) return null;
 
-    _state = _state.copyWith(isLoadingDetails: true);
-    _notifySafe();
+    state = state.copyWith(isLoadingDetails: true);
+    notifySafe();
 
     try {
       final trip = data.trips[code];
       if (trip == null) {
-        _state = _state.copyWith(isLoadingDetails: false);
-        _notifySafe();
+        state = state.copyWith(isLoadingDetails: false);
+        notifySafe();
         return null;
       }
 
@@ -125,8 +103,8 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
             .toList();
       }
 
-      _state = _state.copyWith(isLoadingDetails: false);
-      _notifySafe();
+      state = state.copyWith(isLoadingDetails: false);
+      notifySafe();
 
       return TransportRouteDetails(
         id: trip.id,
@@ -146,8 +124,8 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
       );
     } catch (e) {
       debugPrint('GtfsTransportDataProvider: Error loading details: $e');
-      _state = _state.copyWith(isLoadingDetails: false);
-      _notifySafe();
+      state = state.copyWith(isLoadingDetails: false);
+      notifySafe();
       return null;
     }
   }
@@ -206,6 +184,7 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
         modeIcon: _getModeIcon(route?.type),
         agencyName: agency?.name,
         headsign: trip.headsign,
+        description: route?.description,
         directionId: trip.directionId?.value,
       ));
     }
@@ -264,11 +243,5 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
         iconData = Icons.directions_transit;
     }
     return Icon(iconData, size: 16);
-  }
-
-  void _notifySafe() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
   }
 }

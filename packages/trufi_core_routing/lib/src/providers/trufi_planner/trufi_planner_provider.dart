@@ -312,6 +312,13 @@ class TrufiPlannerProvider extends IRoutingProvider {
           shortName: segment.route.shortName,
           routeLongName: segment.route.longName,
           headsign: segment.headsign,
+          // Composite "<routeId>#<patternId>" so a tap on this leg
+          // opens the detail of the *specific* pattern variant the
+          // planner picked. Without this the detail screen falls back
+          // to `route.id`, which `getPattern(routeId)` collapses to
+          // the first pattern of the route — opening the wrong
+          // variant whenever a route has > 1 pattern.
+          tripPatternId: '${segment.route.id}#${segment.pattern.id}',
           intermediatePlaces: intermediatePlaces,
         ),
       );
@@ -400,6 +407,10 @@ class TrufiPlannerProvider extends IRoutingProvider {
       final route = _dataSource.getRoute(pattern.routeId);
       if (route == null) continue;
 
+      // Prefer the GTFS `route_long_name` (a corridor descriptor like
+      // "Trufi 134"). Fall back to a generated "first stop → last stop"
+      // string only when the GTFS field is empty — useful for feeds
+      // that intentionally leave route_long_name blank.
       String? generatedLongName;
       if (pattern.stopIds.length >= 2) {
         final firstStop = _dataSource.getStop(pattern.stopIds.first);
@@ -409,13 +420,20 @@ class TrufiPlannerProvider extends IRoutingProvider {
         }
       }
 
-      final effectiveLongName = generatedLongName ?? route.longName;
+      final effectiveLongName =
+          route.longName.isNotEmpty ? route.longName : generatedLongName;
 
+      // Use a composite id ("<routeId>#<patternId>") so each variant
+      // of a route gets its own list entry and detail page. Using just
+      // `pattern.routeId` made every variant share an identifier,
+      // collapsing the detail navigation to a single pattern.
+      final patternRouteId = '${pattern.routeId}#${pattern.id}';
       patterns.add(
         TransitRoute(
-          id: pattern.routeId,
+          id: patternRouteId,
           name: pattern.headsign ?? route.longName,
-          code: pattern.routeId,
+          code: patternRouteId,
+          headsign: pattern.headsign,
           route: TransitRouteInfo(
             shortName: route.shortName,
             longName: effectiveLongName,
@@ -493,8 +511,20 @@ class TrufiPlannerProvider extends IRoutingProvider {
     final routeIndex = _dataSource.routeIndex;
     if (routeIndex == null) throw Exception('Route index not available');
 
-    final pattern = routeIndex.getPattern(id);
-    final route = _dataSource.getRoute(id);
+    // Composite id format from `_fetchTransitRoutesLocal`:
+    // "<routeId>#<patternId>". Resolve the specific pattern variant.
+    // For backwards-compat (and external callers), fall back to the
+    // first pattern of `routeId` when the suffix is missing.
+    final hashIdx = id.indexOf('#');
+    final routeId = hashIdx >= 0 ? id.substring(0, hashIdx) : id;
+    final patternIdStr = hashIdx >= 0 ? id.substring(hashIdx + 1) : null;
+    final patternIdInt = patternIdStr != null
+        ? int.tryParse(patternIdStr)
+        : null;
+    final pattern = patternIdInt != null
+        ? routeIndex.patternById(patternIdInt)
+        : routeIndex.getPattern(routeId);
+    final route = _dataSource.getRoute(routeId);
 
     if (pattern == null || route == null) {
       throw Exception('Route not found: $id');
@@ -515,12 +545,17 @@ class TrufiPlannerProvider extends IRoutingProvider {
       generatedLongName = '${stops.first.name} → ${stops.last.name}';
     }
 
-    final effectiveLongName = generatedLongName ?? route.longName;
+    final effectiveLongName =
+        route.longName.isNotEmpty ? route.longName : generatedLongName;
 
+    // Echo back the composite id so callers (and any caching layers)
+    // keep the route_id ↔ pattern_id mapping that `id` was tagged with.
+    final patternRouteId = '${pattern.routeId}#${pattern.id}';
     return TransitRoute(
-      id: pattern.routeId,
+      id: patternRouteId,
       name: pattern.headsign ?? route.longName,
-      code: pattern.routeId,
+      code: patternRouteId,
+      headsign: pattern.headsign,
       route: TransitRouteInfo(
         shortName: route.shortName,
         longName: effectiveLongName,
@@ -553,7 +588,8 @@ class TrufiPlannerProvider extends IRoutingProvider {
       generatedLongName = '${stops.first.name} → ${stops.last.name}';
     }
 
-    final effectiveLongName = generatedLongName ?? route.longName;
+    final effectiveLongName =
+        route.longName.isNotEmpty ? route.longName : generatedLongName;
 
     return TransitRoute(
       id: route.id,
