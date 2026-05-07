@@ -16,9 +16,6 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   final RoutingEngineManager _manager;
   final TransportListCache? _cache;
 
-  // Start with isLoading=true so shimmer shows immediately
-  TransportListState _state = const TransportListState(isLoading: true);
-
   /// In-memory cache of full route details (with geometry and stops)
   final Map<String, TransportRouteDetails> _detailsCache = {};
 
@@ -28,23 +25,20 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   }) : _manager = manager,
        _cache = cache;
 
-  @override
-  TransportListState get state => _state;
-
   String get _providerId => _manager.currentEngine.id;
 
   @override
   Future<void> load() async {
     if (!_manager.currentEngine.supportsTransitRoutes) {
-      _state = _state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false);
       notifyListeners();
       return;
     }
 
-    if (_state.routes.isNotEmpty) return;
+    if (state.routes.isNotEmpty) return;
 
-    _state = _state.copyWith(isLoading: true);
-    _notifySafe();
+    state = state.copyWith(isLoading: true);
+    notifySafe();
 
     // Try loading from cache first
     if (_cache != null) {
@@ -68,12 +62,12 @@ class OtpTransportDataProvider extends TransportListDataProvider {
           final routes = cachedRoutes
               .map(_convertCachedToTransportRoute)
               .toList();
-          _state = _state.copyWith(
+          state = state.copyWith(
             routes: routes,
             filteredRoutes: routes,
             isLoading: false,
           );
-          _notifySafe();
+          notifySafe();
           return; // Loaded from cache, no network needed
         }
       } catch (e) {
@@ -85,8 +79,8 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     try {
       await _fetchAndCacheRoutes();
     } catch (e) {
-      _state = _state.copyWith(isLoading: false);
-      _notifySafe();
+      state = state.copyWith(isLoading: false);
+      notifySafe();
       rethrow;
     }
   }
@@ -99,14 +93,14 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       );
     }
 
-    _state = _state.copyWith(isLoading: true);
-    _notifySafe();
+    state = state.copyWith(isLoading: true);
+    notifySafe();
 
     try {
       await _fetchAndCacheRoutes();
     } catch (e) {
-      _state = _state.copyWith(isLoading: false);
-      _notifySafe();
+      state = state.copyWith(isLoading: false);
+      notifySafe();
       rethrow;
     }
   }
@@ -152,29 +146,12 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       }
     }
 
-    _state = _state.copyWith(
+    state = state.copyWith(
       routes: routes,
       filteredRoutes: routes,
       isLoading: false,
     );
-    _notifySafe();
-  }
-
-  @override
-  void filter(String query) {
-    if (query.isEmpty) {
-      _state = _state.copyWith(filteredRoutes: _state.routes);
-    } else {
-      final lowerQuery = query.toLowerCase();
-      final filtered = _state.routes.where((route) {
-        final searchText =
-            '${route.name} ${route.shortName ?? ''} ${route.longName ?? ''}'
-                .toLowerCase();
-        return searchText.contains(lowerQuery);
-      }).toList();
-      _state = _state.copyWith(filteredRoutes: filtered);
-    }
-    _notifySafe();
+    notifySafe();
   }
 
   @override
@@ -210,14 +187,14 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       }
     }
 
-    _state = _state.copyWith(isLoadingDetails: true);
-    _notifySafe();
+    state = state.copyWith(isLoadingDetails: true);
+    notifySafe();
 
     try {
       final pattern = await _manager.fetchRouteById(code);
       if (pattern == null) {
-        _state = _state.copyWith(isLoadingDetails: false);
-        _notifySafe();
+        state = state.copyWith(isLoadingDetails: false);
+        notifySafe();
         return null;
       }
       final details = _convertToTransportRouteDetails(pattern);
@@ -234,22 +211,15 @@ class OtpTransportDataProvider extends TransportListDataProvider {
         }
       }
 
-      _state = _state.copyWith(isLoadingDetails: false);
-      _notifySafe();
+      state = state.copyWith(isLoadingDetails: false);
+      notifySafe();
 
       return details;
     } catch (e) {
-      _state = _state.copyWith(isLoadingDetails: false);
-      _notifySafe();
+      state = state.copyWith(isLoadingDetails: false);
+      notifySafe();
       rethrow;
     }
-  }
-
-  /// Safely notify listeners (deferred to next frame to avoid build errors)
-  void _notifySafe() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
   }
 
   // ============ Conversion methods ============

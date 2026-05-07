@@ -12,6 +12,7 @@ class TransportRoute {
   final Widget? modeIcon;
   final String? agencyName;
   final String? headsign;
+  final String? description;
   final int? directionId;
 
   const TransportRoute({
@@ -25,6 +26,7 @@ class TransportRoute {
     this.modeIcon,
     this.agencyName,
     this.headsign,
+    this.description,
     this.directionId,
   });
 
@@ -92,6 +94,7 @@ class TransportRouteDetails extends TransportRoute {
     super.modeIcon,
     super.agencyName,
     super.headsign,
+    super.description,
     super.directionId,
     this.geometry,
     this.stops,

@@ -9,31 +9,37 @@ class TransportTile extends StatelessWidget {
 
   const TransportTile({super.key, required this.route, required this.onTap});
 
-  /// Get the primary text to display (headsign or destination)
+  /// Primary title — corridor descriptor.
+  ///
+  /// Prefer `route_long_name` (e.g. "Trufi 134"). When the feed has
+  /// no long name, fall back to the trip headsign (typical for feeds
+  /// where each relation is named only by direction). Last resort is
+  /// the generic `name` field.
   String _getPrimaryText(TransportRoute route) {
-    // Use headsign if available (shows direction-specific destination)
-    if (route.headsign != null && route.headsign!.isNotEmpty) {
-      return route.headsign!;
-    }
-    // If has origin → destination format, show destination
-    if (route.hasOriginDestination) {
-      return route.longNameLast;
-    }
-    // Otherwise show the long name or name
     if (route.longName != null && route.longName!.isNotEmpty) {
       return route.longName!;
+    }
+    if (route.headsign != null && route.headsign!.isNotEmpty) {
+      return route.headsign!;
     }
     return route.name;
   }
 
-  /// Get the secondary text (origin → destination or null)
-  /// For directionId=1 (reverse), invert the origin/destination.
+  /// Subtitle — variant or destination of the specific trip.
+  ///
+  /// Only emitted when the primary line is `route_long_name`. Prefer
+  /// `trip_headsign` (carries the OSM `description` variant when set,
+  /// e.g. "Verde", "Bandera Roja"; otherwise the OSM `to` tag).
+  /// Falls back to `route_desc` when present.
   String? _getSecondaryText(TransportRoute route) {
-    if (route.hasOriginDestination) {
-      if (route.directionId == 1) {
-        return '${route.longNameLast} → ${route.longNameStart}';
-      }
-      return '${route.longNameStart} → ${route.longNameLast}';
+    final hasLongName =
+        route.longName != null && route.longName!.isNotEmpty;
+    if (!hasLongName) return null;
+    if (route.headsign != null && route.headsign!.isNotEmpty) {
+      return route.headsign;
+    }
+    if (route.description != null && route.description!.isNotEmpty) {
+      return route.description;
     }
     return null;
   }
