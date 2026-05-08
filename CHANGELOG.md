@@ -1,3 +1,10 @@
+## 5.14.1
+
+### Bug Fixes
+- `AppConfiguration` is now exposed via `Provider<AppConfiguration?>` (nullable) so that consumer reads with `context.watch<AppConfiguration?>()` resolve correctly. Previously the provider was registered as `Provider<AppConfiguration>` (non-nullable), and because `provider` treats `T` and `T?` as different types when resolving, every consumer silently received `null`. Effect: `routingTimeOverride` was being read as null in `itinerary_card`, `itinerary_list` and `itinerary_detail_screen`, so the absolute HH:mm labels stayed visible even when an override was set.
+
+---
+
 ## 5.14.0
 
 ### Breaking

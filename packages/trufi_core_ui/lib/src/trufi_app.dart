@@ -129,7 +129,11 @@ class _TrufiAppState extends State<TrufiApp> {
     // without threading them through every constructor.
     return MultiProvider(
       providers: [
-        Provider<AppConfiguration>.value(value: widget.config),
+        // Registered as nullable so deep widgets can read it
+        // defensively with `context.watch<AppConfiguration?>()` —
+        // `provider` treats `T` and `T?` as different types when
+        // resolving, and the consumer side is nullable everywhere.
+        Provider<AppConfiguration?>.value(value: widget.config),
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
         ChangeNotifierProvider.value(value: _sharedRouteNotifier),
