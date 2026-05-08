@@ -12,5 +12,10 @@
   "prefsModeBicycle": "Fahrrad",
   "prefsWheelchairAccessible": "Rollstuhlgerecht",
   "prefsWheelchairOn": "Routen vermeiden Treppen und steile Hänge",
-  "prefsWheelchairOff": "Alle Routen einschließen"
+  "prefsWheelchairOff": "Alle Routen einschließen",
+  "serviceActiveClosesAt": "Aktiv · schließt um {time}",
+  "serviceClosedOpensAt": "Geschlossen · öffnet um {time}",
+  "serviceClosedOpensDayAt": "Geschlossen · öffnet {day} um {time}",
+  "serviceClosed": "Geschlossen",
+  "serviceTomorrow": "morgen"
 }

@@ -1010,6 +1010,17 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
             ),
           ),
 
+        // Operating hours indicator (when the feed exposes service
+        // calendar + frequencies). One-line dot+label so the user
+        // sees "is the bus running right now?" before committing.
+        if (widget.route.serviceHours != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+            child: ServiceHoursIndicator(
+              serviceHours: widget.route.serviceHours!,
+            ),
+          ),
+
         // Route statistics
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
@@ -2142,3 +2153,7 @@ class _RouteIdentity extends StatelessWidget {
     );
   }
 }
+
+// `ServiceHoursIndicator` lives in widgets/service_hours_indicator.dart so
+// both the list tile and this detail screen can render the same
+// dot+label badge without duplicating the status logic.

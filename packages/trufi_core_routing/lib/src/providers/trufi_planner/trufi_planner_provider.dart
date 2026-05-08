@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../utils/polyline_decoder.dart';
+import '../../models/agency.dart';
 import '../../models/itinerary.dart';
 import '../../models/leg.dart';
 import '../../models/place.dart';
@@ -11,6 +12,7 @@ import '../../models/plan.dart';
 import '../../models/plan_location.dart';
 import '../../models/route.dart' as domain;
 import '../../models/routing_location.dart';
+import '../../models/service_hours.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
 import '../../models/transport_mode.dart';
@@ -256,6 +258,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
     }
 
     // Transit segments
+    final agencyNames = _buildAgencyNameMap();
     for (final segment in path.segments) {
       final points = segment.shapePoints.isNotEmpty
           ? segment.shapePoints
@@ -320,6 +323,17 @@ class TrufiPlannerProvider extends IRoutingProvider {
           // variant whenever a route has > 1 pattern.
           tripPatternId: '${segment.route.id}#${segment.pattern.id}',
           intermediatePlaces: intermediatePlaces,
+          serviceHours: _buildServiceHours(segment),
+          // Resolve agency from the GTFS agencies list so the leg
+          // exposes the same "operated by …" line that OTP-backed
+          // legs show. Without this, only OTP plans displayed the
+          // agency, creating a visible inconsistency.
+          agency: (segment.route.agencyId?.isNotEmpty ?? false)
+              ? Agency(
+                  gtfsId: segment.route.agencyId,
+                  name: agencyNames[segment.route.agencyId!],
+                )
+              : null,
         ),
       );
 
@@ -568,6 +582,11 @@ class TrufiPlannerProvider extends IRoutingProvider {
       stops: stops,
     );
   }
+
+  /// Build a [ServiceHours] for the route a [segment] belongs to,
+  /// by delegating to the data source's public lookup.
+  ServiceHours? _buildServiceHours(RoutingSegment segment) =>
+      _dataSource.serviceHoursForRouteId(segment.route.id);
 
   Map<String, String> _buildAgencyNameMap() {
     final agencies = _dataSource.data?.agencies ?? const [];

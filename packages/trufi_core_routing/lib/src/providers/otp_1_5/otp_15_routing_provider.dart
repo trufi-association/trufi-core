@@ -127,6 +127,12 @@ class Otp15RoutingProvider extends IRoutingProvider {
       'date': date,
       'time': time,
       if (arriveBy) 'arriveBy': 'true',
+      // Without this, OTP 1.5 returns only the boarding/alighting
+      // stops on each transit leg — the detail screen then has no
+      // intermediate stops to show. The local Trufi planner emits
+      // them by default, so requesting them here keeps OTP-backed
+      // legs at parity.
+      'showIntermediateStops': 'true',
     };
 
     if (_prefs.wheelchair) {

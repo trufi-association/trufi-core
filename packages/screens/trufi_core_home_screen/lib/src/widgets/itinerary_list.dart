@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:provider/provider.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
@@ -663,25 +665,31 @@ class _AlternativeTimeCard extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  l10n.departsAt(timeFormat.format(itinerary.startTime)),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+                // Hide absolute clock times when the app pins the
+                // routing time to a fixed value — startTime/endTime
+                // are then synthetic and would mislead the user.
+                if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
+                    null) ...[
+                  Text(
+                    l10n.departsAt(timeFormat.format(itinerary.startTime)),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 14,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  timeFormat.format(itinerary.endTime),
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 14,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Text(
+                    timeFormat.format(itinerary.endTime),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
                 const Spacer(),
                 if (isSelected)
                   Icon(

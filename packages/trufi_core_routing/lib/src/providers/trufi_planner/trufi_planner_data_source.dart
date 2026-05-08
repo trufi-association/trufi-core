@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 
+import '../../models/service_hours.dart';
+import '../../models/service_hours_lookup.dart';
 import 'trufi_planner_config.dart';
 
 /// Status of the data source.
@@ -29,7 +32,7 @@ class _GtfsLoadResult {
 ///
 /// Manages a [PlannerRoutingClient] that can be either local or remote,
 /// and provides convenience methods for accessing data.
-class TrufiPlannerDataSource {
+class TrufiPlannerDataSource implements ServiceHoursLookup {
   final TrufiPlannerConfig config;
   late final PlannerRoutingClient _client;
 
@@ -81,6 +84,63 @@ class TrufiPlannerDataSource {
 
   /// Raw GTFS data (local mode only).
   GtfsData? get data => _localData;
+
+  /// Resolve [routeId] → [ServiceHours] using the bundled GTFS feed.
+  ///
+  /// Tolerant of OTP-style `feedId:routeId` ids: tries the literal id
+  /// first, then falls back to the suffix after `:`. Returns null when
+  /// the route, its calendar, or its frequencies are missing — the UI
+  /// then suppresses the indicator instead of rendering half-empty.
+  @override
+  ServiceHours? serviceHoursForRouteId(String routeId) {
+    final data = _localData;
+    if (data == null) return null;
+    final candidates = <String>{
+      routeId,
+      if (routeId.contains(':')) routeId.split(':').last,
+    };
+    GtfsTrip? trip;
+    for (final t in data.trips.values) {
+      if (candidates.contains(t.routeId)) {
+        trip = t;
+        break;
+      }
+    }
+    if (trip == null) return null;
+    final calendar = data.calendars[trip.serviceId];
+    if (calendar == null) return null;
+    final days = <int>{
+      if (calendar.monday) DateTime.monday,
+      if (calendar.tuesday) DateTime.tuesday,
+      if (calendar.wednesday) DateTime.wednesday,
+      if (calendar.thursday) DateTime.thursday,
+      if (calendar.friday) DateTime.friday,
+      if (calendar.saturday) DateTime.saturday,
+      if (calendar.sunday) DateTime.sunday,
+    };
+    if (days.isEmpty) return null;
+
+    Duration? minStart;
+    Duration? maxEnd;
+    for (final f in data.frequencies) {
+      if (f.tripId != trip.id) continue;
+      if (minStart == null || f.startTime < minStart) minStart = f.startTime;
+      if (maxEnd == null || f.endTime > maxEnd) maxEnd = f.endTime;
+    }
+    if (minStart == null || maxEnd == null) return null;
+
+    return ServiceHours(
+      daysOfWeek: days,
+      startTime: TimeOfDay(
+        hour: minStart.inHours % 24,
+        minute: minStart.inMinutes % 60,
+      ),
+      endTime: TimeOfDay(
+        hour: maxEnd.inHours % 24,
+        minute: maxEnd.inMinutes % 60,
+      ),
+    );
+  }
 
   /// Preload data. Call at app startup.
   Future<void> preload() async {
