@@ -2000,8 +2000,15 @@ class _HomeScreenState extends State<HomeScreen>
                       onRoutingSettings: _onRoutingSettings,
                       onMenuPressed: widget.onMenuPressed,
                     ),
-                    // Departure time chip
-                    if (state.fromPlace != null || state.toPlace != null)
+                    // Departure time chip — same guard as the mobile
+                    // layout above: hidden when an app-level
+                    // `routingTimeOverride` is set, since every plan
+                    // request resolves to a fixed time of day.
+                    if (context
+                                .read<AppConfiguration?>()
+                                ?.routingTimeOverride ==
+                            null &&
+                        (state.fromPlace != null || state.toPlace != null))
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: _DepartureTimeChip(

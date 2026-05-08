@@ -120,6 +120,11 @@ class Leg extends Equatable {
       interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
       headsign: json['headsign'] as String?,
       tripPatternId: json['tripPatternId'] as String?,
+      serviceHours: json['serviceHours'] != null
+          ? ServiceHours.fromJson(
+              json['serviceHours'] as Map<String, dynamic>,
+            )
+          : null,
     );
   }
 
@@ -164,6 +169,7 @@ class Leg extends Equatable {
       'interlineWithPreviousLeg': interlineWithPreviousLeg,
       'headsign': headsign,
       'tripPatternId': tripPatternId,
+      'serviceHours': serviceHours?.toJson(),
     };
   }
 
