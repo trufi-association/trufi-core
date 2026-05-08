@@ -44,4 +44,23 @@ class ServiceHours {
     }
     return mins >= start || mins < end;
   }
+
+  /// JSON shape: `{daysOfWeek: [1,2,...], startMinutes: int, endMinutes: int}`.
+  /// Encoding minutes-from-midnight is more compact than a `HH:mm` string
+  /// and matches how the model is reasoned about internally.
+  Map<String, dynamic> toJson() => {
+    'daysOfWeek': daysOfWeek.toList(),
+    'startMinutes': startTime.hour * 60 + startTime.minute,
+    'endMinutes': endTime.hour * 60 + endTime.minute,
+  };
+
+  factory ServiceHours.fromJson(Map<String, dynamic> json) {
+    final start = (json['startMinutes'] as num).toInt();
+    final end = (json['endMinutes'] as num).toInt();
+    return ServiceHours(
+      daysOfWeek: (json['daysOfWeek'] as List).map((e) => e as int).toSet(),
+      startTime: TimeOfDay(hour: start ~/ 60, minute: start % 60),
+      endTime: TimeOfDay(hour: end ~/ 60, minute: end % 60),
+    );
+  }
 }

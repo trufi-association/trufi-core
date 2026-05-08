@@ -1,3 +1,11 @@
+## 5.14.1
+
+### Bug Fixes
+- Departure-time chip is now also hidden in the wide/web home layout when `AppConfiguration.routingTimeOverride` is set. The 5.14.0 release added the guard around the chip in the mobile layout but the wide layout (used on landscape phones, tablets and web) had a second copy of the chip without the guard, so apps that set `routingTimeOverride` still saw "Salir ahora" / "Leave now" on those surfaces. Both copies now share the same guard.
+- `Leg.serviceHours` is now serialized through `toJson` / `fromJson`. The 5.14.0 release added the field but didn't include it in the JSON shape, so any plan persisted to disk by `HomeScreenRepository` lost it on reload — visible as the operating-hours indicator disappearing after rotating the device or relaunching the app, even though the same plan showed it right after the original fetch. `ServiceHours` itself gains `toJson` / `fromJson` (encoded as `{daysOfWeek, startMinutes, endMinutes}`).
+
+---
+
 ## 5.14.0
 
 ### Breaking
