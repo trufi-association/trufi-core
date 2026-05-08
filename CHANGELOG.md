@@ -1,3 +1,10 @@
+## 5.14.2
+
+### Bug Fixes
+- `PackageInfoPlatform.version()` and `appName()` now use `package_info_plus` on every platform (including web). The previous implementation deliberately fell back to the browser user-agent on web — surfacing literal `Mozilla/5.0 …` strings in the drawer footer and anywhere else the app version is displayed. `package_info_plus` reads the version from `version.json` bundled at `flutter build web`, so the web build now reports the same version as the mobile build. The unused `device_info_plus` dependency is dropped from `trufi_core_utils`.
+
+---
+
 ## 5.14.1
 
 ### Bug Fixes
