@@ -186,10 +186,53 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
         headsign: trip.headsign,
         description: route?.description,
         directionId: trip.directionId?.value,
+        serviceHours: _serviceHoursForTrip(data, trip),
       ));
     }
 
     return routes;
+  }
+
+  /// Build a [ServiceHours] for [trip] by combining its `calendar`
+  /// (which days the service runs) with its `frequencies` (or
+  /// `stop_times` as fallback) for the daily start/end window.
+  ///
+  /// Returns null if the feed has neither calendar nor any usable
+  /// time bounds — the UI then suppresses the operating-hours card.
+  ServiceHours? _serviceHoursForTrip(GtfsData data, GtfsTrip trip) {
+    final calendar = data.calendars[trip.serviceId];
+    if (calendar == null) return null;
+    final days = <int>{
+      if (calendar.monday) DateTime.monday,
+      if (calendar.tuesday) DateTime.tuesday,
+      if (calendar.wednesday) DateTime.wednesday,
+      if (calendar.thursday) DateTime.thursday,
+      if (calendar.friday) DateTime.friday,
+      if (calendar.saturday) DateTime.saturday,
+      if (calendar.sunday) DateTime.sunday,
+    };
+    if (days.isEmpty) return null;
+
+    Duration? minStart;
+    Duration? maxEnd;
+    for (final f in data.frequencies) {
+      if (f.tripId != trip.id) continue;
+      if (minStart == null || f.startTime < minStart) minStart = f.startTime;
+      if (maxEnd == null || f.endTime > maxEnd) maxEnd = f.endTime;
+    }
+    if (minStart == null || maxEnd == null) return null;
+
+    return ServiceHours(
+      daysOfWeek: days,
+      startTime: TimeOfDay(
+        hour: minStart.inHours % 24,
+        minute: minStart.inMinutes % 60,
+      ),
+      endTime: TimeOfDay(
+        hour: maxEnd.inHours % 24,
+        minute: maxEnd.inMinutes % 60,
+      ),
+    );
   }
 
   List<String> _getStopsForTrip(GtfsData data, String tripId) {

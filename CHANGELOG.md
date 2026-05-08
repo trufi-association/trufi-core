@@ -1,3 +1,23 @@
+## 5.14.0
+
+### Breaking
+- `HomeScreenConfig.showDepartureTimeChip` is removed. The chip is now driven by the new `AppConfiguration.routingTimeOverride: TimeOfDay?` — when null (default) the user picks their departure time as before; when set, the chip is hidden and every plan is resolved against today at the override time. Cities like Cochabamba that ran with a fixed mid-day request can switch from `showDepartureTimeChip: false` to `routingTimeOverride: TimeOfDay(hour: 12, minute: 0)`.
+- All absolute HH:mm labels in the home screen (itinerary card start/end, itinerary list "departs at … arrives at …", itinerary detail header + per-place arrival times) are suppressed when `routingTimeOverride` is set, since they would be the override time projected onto a real day and confuse users.
+
+### Features
+- New `ServiceHoursIndicator` widget in `trufi_core_routing` — one-line "🟢 Activo · cierra a las 22:00 ⌄" / "🔴 Cerrado · abre lun a las 06:00 ⌄" badge, evaluated against `DateTime.now()` (not `routingTimeOverride`) so it always answers "is this bus running right now?". Tap expands a 7-day schedule inline. Localized via `RoutingLocalizations` (es/en/de) with `intl` `DateFormat` for locale-aware day names. Re-renders every minute aligned to the wall-clock so the label flips at open/close time without the user having to reopen the screen.
+- New `ServiceHours` model + `ServiceHoursLookup` interface in `trufi_core_routing`. `TrufiPlannerDataSource` implements the lookup by deriving daysOfWeek + start/end from the bundled GTFS calendar and frequencies. The lookup tolerates OTP-style `feedId:routeId` ids by falling back to the `:`-suffix.
+- The indicator is rendered in three surfaces: the transit list `TransportTile`, the route detail screen, and each transit leg of the itinerary detail. The shared widget lives in `trufi_core_routing` so transit list and home screen render identical badges without depending on each other.
+- `RoutePlannerCubit` accepts an optional `ServiceHoursLookup` and post-processes every plan to enrich `Leg.serviceHours` for legs that the provider didn't populate. This makes the indicator work for OTP 1.5 / OTP 2.4 / OTP 2.8 plans as well, not just the local Trufi planner — OTP REST/GraphQL doesn't expose calendar+frequencies in a usable shape, so we side-channel them through the bundled GTFS.
+- `Leg` gains a nullable `serviceHours` field (preserved through `copyWith` and `toJson` / `fromJson`).
+- The itinerary detail leg row is reorganized so identity (badge + route name) takes a full row, with duration/distance, the operating-hours indicator, and the right-aligned "X paradas" toggle stacked underneath. The timeline line uses `IntrinsicHeight` so it grows with the leg's content (previously a fixed 90px height left a visible gap when the schedule was expanded).
+
+### Bug Fixes
+- The local `TrufiPlannerProvider` now sets `Leg.agency` from the GTFS agencies list, so transit legs show "Operado por …" the same way OTP-backed legs do. Previously only OTP plans rendered the operator line, creating a visible inconsistency.
+- OTP 1.5 plan requests now include `showIntermediateStops=true`. Without it, OTP 1.5 only returned boarding/alighting stops on each transit leg, leaving the detail screen with nothing to show under "X paradas". OTP 2.x already requested them via GraphQL; this aligns OTP 1.5 with the local planner and 2.x.
+
+---
+
 ## 5.12.0
 
 ### Breaking

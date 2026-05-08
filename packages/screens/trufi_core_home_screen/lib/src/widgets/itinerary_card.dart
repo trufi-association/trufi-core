@@ -71,7 +71,7 @@ class ItineraryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Top row: Duration and time
-                _buildHeaderRow(theme, l10n),
+                _buildHeaderRow(context, theme, l10n),
                 const SizedBox(height: 10),
                 // Transport modes summary
                 _buildTransportSummary(context),
@@ -86,7 +86,11 @@ class ItineraryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderRow(ThemeData theme, HomeScreenLocalizations l10n) {
+  Widget _buildHeaderRow(
+    BuildContext context,
+    ThemeData theme,
+    HomeScreenLocalizations l10n,
+  ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -107,33 +111,39 @@ class ItineraryCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        // Time range
-        Expanded(
-          child: Row(
-            children: [
-              Text(
-                DateFormat('HH:mm').format(itinerary.startTime),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+        // Time range. Hidden when `routingTimeOverride` is set on the
+        // app config — under that mode the routing request uses a
+        // fixed time-of-day, so the resulting `startTime`/`endTime`
+        // are not the user's real wall-clock and would mislead.
+        if (context.watch<AppConfiguration?>()?.routingTimeOverride == null)
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  DateFormat('HH:mm').format(itinerary.startTime),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 16,
-                  color: theme.colorScheme.onSurfaceVariant,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              Text(
-                DateFormat('HH:mm').format(itinerary.endTime),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+                Text(
+                  DateFormat('HH:mm').format(itinerary.endTime),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          )
+        else
+          const Spacer(),
         // Go button or selection indicator
         if (isSelected && onStartNavigation != null)
           FilledButton.icon(

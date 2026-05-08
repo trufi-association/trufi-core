@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show ServiceHoursIndicator;
 
 import '../models/transport_route.dart';
 
@@ -131,6 +133,17 @@ class TransportTile extends StatelessWidget {
                                     ),
                                   ),
                                 ],
+                              ),
+                            ],
+                            // Service status indicator (when feed has
+                            // calendar + frequencies). Always evaluates
+                            // against `DateTime.now()`, independent of
+                            // the app's `routingTimeOverride`, so the
+                            // user sees whether the bus runs *right now*.
+                            if (route.serviceHours != null) ...[
+                              const SizedBox(height: 4),
+                              ServiceHoursIndicator(
+                                serviceHours: route.serviceHours!,
                               ),
                             ],
                           ],

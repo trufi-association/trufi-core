@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
@@ -26,14 +27,54 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   final HomeScreenRepository _repository;
   final RequestPlanService _requestService;
 
+  /// Optional fixed time-of-day used in place of `DateTime.now()` for
+  /// routing requests. Threaded down from `AppConfiguration` (see
+  /// `routingTimeOverride`). When non-null, every plan request is
+  /// resolved against today at this time.
+  final TimeOfDay? _routingTimeOverride;
+
+  /// Optional GTFS-backed lookup used to enrich [routing.Leg.serviceHours]
+  /// after the provider has parsed a plan. OTP REST/GraphQL doesn't
+  /// expose calendar+frequencies in a directly usable shape, so this
+  /// side-channel lets OTP-backed legs show the same operating-hours
+  /// indicator as the local Trufi planner.
+  final routing.ServiceHoursLookup? _serviceHoursLookup;
+
   CancelableOperation<routing.Plan>? _currentFetchOperation;
 
   RoutePlannerCubit({
     HomeScreenRepository? repository,
     required RequestPlanService requestService,
+    TimeOfDay? routingTimeOverride,
+    routing.ServiceHoursLookup? serviceHoursLookup,
   }) : _repository = repository ?? HomeScreenRepositoryImpl(),
        _requestService = requestService,
+       _routingTimeOverride = routingTimeOverride,
+       _serviceHoursLookup = serviceHoursLookup,
        super(const RoutePlannerState());
+
+  /// Returns [plan] with each transit leg's `serviceHours` populated
+  /// when the lookup has a record for the leg's route id. Legs that
+  /// already have `serviceHours` (e.g. produced by the local Trufi
+  /// planner) are left untouched.
+  routing.Plan _enrichServiceHours(routing.Plan plan) {
+    final lookup = _serviceHoursLookup;
+    if (lookup == null) return plan;
+    final itineraries = plan.itineraries;
+    if (itineraries == null) return plan;
+    return plan.copyWith(
+      itineraries: itineraries.map((it) {
+        final newLegs = it.legs.map((leg) {
+          if (leg.serviceHours != null) return leg;
+          final routeId = leg.route?.gtfsId;
+          if (routeId == null || routeId.isEmpty) return leg;
+          final sh = lookup.serviceHoursForRouteId(routeId);
+          return sh != null ? leg.copyWith(serviceHours: sh) : leg;
+        }).toList();
+        return it.copyWith(legs: newLegs);
+      }).toList(),
+    );
+  }
 
   /// Initialize and load saved state.
   Future<void> initialize() async {
@@ -149,20 +190,45 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       ),
     );
 
-    // Compute dateTime and arriveBy from time settings
+    // Compute dateTime and arriveBy from time settings.
+    //
+    // Two modes:
+    //
+    // - `routingTimeOverride` set → resolve every request against
+    //   today @ override-time, ignoring `state.timeMode/dateTime`.
+    //   The picker UI is hidden in this mode, so the user can't
+    //   even reach the other branch.
+    //
+    // - Override not set → honour the user's choice from the
+    //   departure-time chip: `leaveNow` uses `DateTime.now()`,
+    //   `departAt`/`arriveBy` use the time the user picked
+    //   (`state.dateTime`), with `arriveBy` flipping the flag.
+    final DateTime now = DateTime.now();
     final DateTime effectiveDateTime;
     final bool arriveBy;
 
-    switch (state.timeMode) {
-      case TimeMode.leaveNow:
-        effectiveDateTime = DateTime.now();
-        arriveBy = false;
-      case TimeMode.departAt:
-        effectiveDateTime = state.dateTime ?? DateTime.now();
-        arriveBy = false;
-      case TimeMode.arriveBy:
-        effectiveDateTime = state.dateTime ?? DateTime.now();
-        arriveBy = true;
+    final override = _routingTimeOverride;
+    if (override != null) {
+      effectiveDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        override.hour,
+        override.minute,
+      );
+      arriveBy = false;
+    } else {
+      switch (state.timeMode) {
+        case TimeMode.leaveNow:
+          effectiveDateTime = now;
+          arriveBy = false;
+        case TimeMode.departAt:
+          effectiveDateTime = state.dateTime ?? now;
+          arriveBy = false;
+        case TimeMode.arriveBy:
+          effectiveDateTime = state.dateTime ?? now;
+          arriveBy = true;
+      }
     }
 
     try {
@@ -175,17 +241,21 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
         ),
       );
 
-      final plan = await _currentFetchOperation?.valueOrCancellation();
+      final rawPlan = await _currentFetchOperation?.valueOrCancellation();
 
-      if (plan == null) {
+      if (rawPlan == null) {
         // Operation was cancelled
         return;
       }
 
-      if (!plan.hasItineraries) {
+      if (!rawPlan.hasItineraries) {
         emit(state.copyWith(isLoading: false, error: noRoutesErrorKey));
         return;
       }
+
+      // Enrich legs with operating hours from the bundled GTFS so OTP
+      // 1.5/2.8 plans show the indicator just like the local planner.
+      final plan = _enrichServiceHours(rawPlan);
 
       final index = selectedItineraryIndex ?? 0;
       final selectedItinerary =

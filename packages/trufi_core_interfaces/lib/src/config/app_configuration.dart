@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter/widgets.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -134,6 +135,23 @@ class AppConfiguration {
   /// Defaults to Duration.zero (no minimum).
   final Duration minSplashDuration;
 
+  /// Optional fixed time-of-day used for every transit-routing
+  /// request on the current calendar day. When set, the
+  /// departure-time picker is hidden and absolute `HH:mm` labels in
+  /// itinerary cards/details are also hidden — the routing time is
+  /// fictitious, so showing it would mislead the user.
+  ///
+  /// Use this for cities where service doesn't run 24h: planning at
+  /// 02:00 against the real `now` returns 0 results because no
+  /// service is active. Setting this to e.g.
+  /// `TimeOfDay(hour: 12, minute: 0)` makes every request resolve
+  /// against midday on today's date, so the user always sees
+  /// representative routes regardless of when they open the app.
+  ///
+  /// Default: null → users see the picker, requests use
+  /// `DateTime.now()`, and time labels render normally.
+  final TimeOfDay? routingTimeOverride;
+
   const AppConfiguration({
     required this.appName,
     this.appTagline,
@@ -149,5 +167,6 @@ class AppConfiguration {
     this.drawerFooterExtra,
     this.logo,
     this.minSplashDuration = Duration.zero,
+    this.routingTimeOverride,
   });
 }

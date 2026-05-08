@@ -122,9 +122,14 @@ class _TrufiAppState extends State<TrufiApp> {
         .expand((s) => s.providers)
         .toList();
 
-    // Layer 1: Inject all providers (without initializing yet)
+    // Layer 1: Inject all providers (without initializing yet).
+    // The `AppConfiguration` itself is exposed via Provider so deep
+    // widgets (home_screen, itinerary cards, routing engines wired
+    // up later) can read app-wide flags like `routingTimeOverride`
+    // without threading them through every constructor.
     return MultiProvider(
       providers: [
+        Provider<AppConfiguration>.value(value: widget.config),
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
         ChangeNotifierProvider.value(value: _sharedRouteNotifier),

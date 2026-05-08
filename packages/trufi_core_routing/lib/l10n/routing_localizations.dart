@@ -180,6 +180,36 @@ abstract class RoutingLocalizations {
   /// In en, this message translates to:
   /// **'Include all routes'**
   String get prefsWheelchairOff;
+
+  /// Service-hours indicator label when the route is currently running. {time} is the closing time, e.g. '22:00'.
+  ///
+  /// In en, this message translates to:
+  /// **'Active · closes at {time}'**
+  String serviceActiveClosesAt(String time);
+
+  /// Service-hours indicator label when the route runs today but the current time is before its start. {time} is the opening time.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed · opens at {time}'**
+  String serviceClosedOpensAt(String time);
+
+  /// Service-hours indicator label when the next service is on a different weekday. {day} is the localized day name (e.g. 'tomorrow', 'Mon'), {time} is the opening time.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed · opens {day} at {time}'**
+  String serviceClosedOpensDayAt(String day, String time);
+
+  /// Fallback service-hours label and per-day cell when the route doesn't operate that day.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get serviceClosed;
+
+  /// Used inside serviceClosedOpensDayAt when the next service is on the next calendar day.
+  ///
+  /// In en, this message translates to:
+  /// **'tomorrow'**
+  String get serviceTomorrow;
 }
 
 class _RoutingLocalizationsDelegate

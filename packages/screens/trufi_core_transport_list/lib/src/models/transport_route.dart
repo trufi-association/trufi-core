@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' show ServiceHours;
+
+export 'package:trufi_core_routing/trufi_core_routing.dart' show ServiceHours;
 
 /// Represents a transport route for display in the list
 class TransportRoute {
@@ -14,6 +17,7 @@ class TransportRoute {
   final String? headsign;
   final String? description;
   final int? directionId;
+  final ServiceHours? serviceHours;
 
   const TransportRoute({
     required this.id,
@@ -28,6 +32,7 @@ class TransportRoute {
     this.headsign,
     this.description,
     this.directionId,
+    this.serviceHours,
   });
 
   String get displayName => shortName ?? name;
@@ -96,6 +101,7 @@ class TransportRouteDetails extends TransportRoute {
     super.headsign,
     super.description,
     super.directionId,
+    super.serviceHours,
     this.geometry,
     this.stops,
     this.modeName,

@@ -154,27 +154,32 @@ class ItineraryDetailContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              // Time range
-              Text(
-                DateFormat('HH:mm').format(itinerary.startTime),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+              // Time range — hidden when the app pins routing time to
+              // a fixed value, since startTime/endTime would be
+              // synthetic ("today @ 12:xx") and confuse the user.
+              if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
+                  null) ...[
+                Text(
+                  DateFormat('HH:mm').format(itinerary.startTime),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Icon(
-                  Icons.arrow_forward_rounded,
-                  size: 16,
-                  color: colorScheme.onSurfaceVariant,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 16,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              Text(
-                DateFormat('HH:mm').format(itinerary.endTime),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+                Text(
+                  DateFormat('HH:mm').format(itinerary.endTime),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
+              ],
               const Spacer(),
               // Go button
               if (onStartNavigation != null)
@@ -444,8 +449,10 @@ class _PlaceItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        // Time
-        if (time != null)
+        // Time — hidden when the routing time is overridden, since
+        // the value would be from a synthetic "midday" plan.
+        if (time != null &&
+            context.watch<AppConfiguration?>()?.routingTimeOverride == null)
           Text(
             DateFormat('HH:mm').format(time!),
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -582,58 +589,62 @@ class _LegItemState extends State<_LegItem> {
         leg.intermediatePlaces != null && leg.intermediatePlaces!.isNotEmpty;
     final stopsCount = leg.intermediatePlaces?.length ?? 0;
 
+    // IntrinsicHeight + stretch lets the timeline line grow with the
+    // content. Without it the line had a fixed height and visibly
+    // ended mid-leg when extra rows (expanded service hours, stops
+    // count) pushed the leg content below 90px.
     return Column(
       children: [
-        // Main leg row
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Icon + Timeline column
-            Column(
-              children: [
-                // Icon (only for walking/biking)
-                SizedBox(
-                  width: 32,
-                  height: 24,
-                  child: (isWalk || isBike)
-                      ? Icon(
-                          _getModeIcon(leg.transportMode),
-                          size: 20,
-                          color: colorScheme.onSurfaceVariant,
-                        )
-                      : null,
-                ),
-              ],
-            ),
-            // Timeline line with fixed height based on content type
-            SizedBox(
-              width: 20,
-              height: (isWalk || isBike) ? 32 : 90,
-              child: Center(
-                child: Container(
-                  width: 4,
-                  color: (isWalk || isBike)
-                      ? widget.lineColor.withValues(alpha: 0.5)
-                      : widget.lineColor,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Icon (only for walking/biking) — fixed-size, top-aligned.
+              SizedBox(
+                width: 32,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: 24,
+                    child: (isWalk || isBike)
+                        ? Icon(
+                            _getModeIcon(leg.transportMode),
+                            size: 20,
+                            color: colorScheme.onSurfaceVariant,
+                          )
+                        : null,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            // Leg content
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2, bottom: 4),
-                child: _buildLegContent(
-                  theme,
-                  colorScheme,
-                  isWalk,
-                  isBike,
-                  hasStops,
-                  stopsCount,
+              // Timeline line — stretches vertically with the row.
+              SizedBox(
+                width: 20,
+                child: Center(
+                  child: Container(
+                    width: 4,
+                    color: (isWalk || isBike)
+                        ? widget.lineColor.withValues(alpha: 0.5)
+                        : widget.lineColor,
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              // Leg content
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                  child: _buildLegContent(
+                    theme,
+                    colorScheme,
+                    isWalk,
+                    isBike,
+                    hasStops,
+                    stopsCount,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
 
         // Expanded stops
@@ -777,33 +788,61 @@ class _LegItemState extends State<_LegItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // First row: identity (tappable) + stops count (tappable, toggles)
-        Row(
-          children: [
-            // Tappable identity row, flat (no border). Ripple from
-            // InkWell signals interactivity on press; the chevron at
-            // the end acts as the static affordance — same pattern
-            // Google Maps uses for transit legs.
-            Expanded(
-              child: widget.onRouteTap != null
-                  ? InkWell(
-                      onTap: _handleRouteTap,
-                      borderRadius: BorderRadius.circular(6),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: identityRow,
-                      ),
-                    )
-                  : identityRow,
+        // First row: identity (tappable, full width). The "stops count"
+        // toggle used to live here, but it created a visual inconsistency
+        // — placing it on the same line as the route name made it look
+        // like part of the identity. It now sits below the operating
+        // hours, in document order, as just another expand control.
+        widget.onRouteTap != null
+            ? InkWell(
+                onTap: _handleRouteTap,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: identityRow,
+                ),
+              )
+            : identityRow,
+        // Second row: duration and distance below the identity, so
+        // the route name reads as the primary label and the trip
+        // metrics sit underneath as secondary information (mirrors
+        // how the search list and detail header are stacked).
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            '$durationText, $distanceText',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(width: 8),
-            // Stops count (tappable)
-            if (hasStops)
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  setState(() => _isExpanded = !_isExpanded);
-                },
+          ),
+        ),
+        // Third row: live operating-hours indicator (only when the
+        // local planner has populated `serviceHours` from the bundled
+        // GTFS — OTP providers don't expose calendar+frequencies via
+        // their public APIs, so this row is silently skipped there).
+        if (leg.serviceHours != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: routing.ServiceHoursIndicator(
+              serviceHours: leg.serviceHours!,
+            ),
+          ),
+        // Fourth row: stops count toggle, right-aligned. Same expand
+        // pattern as the operating-hours indicator above — tap flips
+        // the chevron and reveals the stop list inline. Aligned right
+        // so it doesn't compete with the leg's left-anchored content
+        // (route name, duration, hours).
+        if (hasStops)
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                setState(() => _isExpanded = !_isExpanded);
+              },
+              borderRadius: BorderRadius.circular(4),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -819,27 +858,14 @@ class _LegItemState extends State<_LegItem> {
                       _isExpanded
                           ? Icons.expand_less_rounded
                           : Icons.expand_more_rounded,
-                      size: 18,
+                      size: 16,
                       color: _legibleColor(widget.lineColor),
                     ),
                   ],
                 ),
               ),
-          ],
-        ),
-        // Second row: duration and distance below the identity, so
-        // the route name reads as the primary label and the trip
-        // metrics sit underneath as secondary information (mirrors
-        // how the search list and detail header are stacked).
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Text(
-            '$durationText, $distanceText',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
             ),
           ),
-        ),
         // Third row: Agency info (if available)
         if (leg.agency?.name != null)
           Padding(
@@ -932,8 +958,10 @@ class _LegItemState extends State<_LegItem> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // Time
-                if (stop.arrivalTime != null)
+                // Time — hidden under routing time override (synthetic).
+                if (stop.arrivalTime != null &&
+                    context.watch<AppConfiguration?>()?.routingTimeOverride ==
+                        null)
                   Text(
                     DateFormat('HH:mm').format(stop.arrivalTime!),
                     style: theme.textTheme.bodySmall?.copyWith(

@@ -1585,8 +1585,16 @@ class _HomeScreenState extends State<HomeScreen>
                                 onRoutingSettings: _onRoutingSettings,
                                 onMenuPressed: widget.onMenuPressed,
                               ),
-                              // Departure time chip (visible when locations are set)
-                              if (widget.config.showDepartureTimeChip &&
+                              // Departure time chip (visible when
+                              // locations are set, and only when no
+                              // app-level `routingTimeOverride` is
+                              // configured — when set, every request
+                              // resolves against a fixed time of day
+                              // and the picker would mislead).
+                              if (context
+                                          .read<AppConfiguration?>()
+                                          ?.routingTimeOverride ==
+                                      null &&
                                   (state.fromPlace != null ||
                                       state.toPlace != null))
                                 Padding(

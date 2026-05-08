@@ -7,6 +7,7 @@ import 'agency.dart';
 import 'place.dart';
 import 'realtime_state.dart';
 import 'route.dart';
+import 'service_hours.dart';
 import 'step.dart';
 import 'transport_mode.dart';
 
@@ -34,6 +35,7 @@ class Leg extends Equatable {
     this.interlineWithPreviousLeg,
     this.headsign,
     this.tripPatternId,
+    this.serviceHours,
   });
 
   final String mode;
@@ -57,6 +59,13 @@ class Leg extends Equatable {
   final bool? interlineWithPreviousLeg;
   final String? headsign;
   final String? tripPatternId;
+
+  /// Operating hours for the route this leg belongs to. Set by the
+  /// local planner (which can read `calendar.txt` + `frequencies.txt`
+  /// directly from the bundled GTFS); remote OTP providers leave it
+  /// null. UI consumers (e.g. the itinerary plan leg) render a small
+  /// status badge when this is non-null.
+  final ServiceHours? serviceHours;
 
   /// Returns the transport mode enum.
   TransportMode get transportMode =>
@@ -181,6 +190,7 @@ class Leg extends Equatable {
     bool? interlineWithPreviousLeg,
     String? headsign,
     String? tripPatternId,
+    ServiceHours? serviceHours,
   }) {
     return Leg(
       mode: mode ?? this.mode,
@@ -205,6 +215,7 @@ class Leg extends Equatable {
           interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       headsign: headsign ?? this.headsign,
       tripPatternId: tripPatternId ?? this.tripPatternId,
+      serviceHours: serviceHours ?? this.serviceHours,
     );
   }
 

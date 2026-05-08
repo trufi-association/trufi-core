@@ -47,4 +47,25 @@ class RoutingLocalizationsEs extends RoutingLocalizations {
 
   @override
   String get prefsWheelchairOff => 'Incluir todas las rutas';
+
+  @override
+  String serviceActiveClosesAt(String time) {
+    return 'Activo · cierra a las $time';
+  }
+
+  @override
+  String serviceClosedOpensAt(String time) {
+    return 'Cerrado · abre a las $time';
+  }
+
+  @override
+  String serviceClosedOpensDayAt(String day, String time) {
+    return 'Cerrado · abre $day a las $time';
+  }
+
+  @override
+  String get serviceClosed => 'Cerrado';
+
+  @override
+  String get serviceTomorrow => 'mañana';
 }

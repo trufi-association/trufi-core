@@ -17,6 +17,8 @@ export 'src/models/plan_location.dart';
 export 'src/models/realtime_state.dart';
 export 'src/models/route.dart';
 export 'src/models/routing_location.dart';
+export 'src/models/service_hours.dart';
+export 'src/models/service_hours_lookup.dart';
 export 'src/models/step.dart';
 export 'src/models/stop.dart';
 export 'src/models/transit_route.dart';
@@ -62,6 +64,11 @@ export 'src/providers/otp_2_8/otp_2_8_response_parser.dart';
 // `VehiclePositionsService` is a deprecated typedef for
 // `OtpVehiclePositionsProvider` — both are exported for compatibility.
 export 'src/services/vehicle_positions_service.dart';
+
+// ============================================
+// Widgets
+// ============================================
+export 'src/widgets/service_hours_indicator.dart';
 
 // ============================================
 // Localizations

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart' show ChangeNotifierProvider;
+import 'package:provider/provider.dart' show ChangeNotifierProvider, Provider;
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
@@ -61,6 +61,22 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     return RoutingEngineRequestPlanService(manager: routingEngineManager);
   }
 
+  /// Pick a [routing.ServiceHoursLookup] from the registered engines,
+  /// falling back to a [routing.TrufiPlannerProvider]'s data source if
+  /// present. Returns null when no engine can answer the lookup.
+  routing.ServiceHoursLookup? _findServiceHoursLookup(BuildContext context) {
+    final manager = routing.RoutingEngineManager.read(context);
+    for (final engine in manager.engines) {
+      if (engine is routing.ServiceHoursLookup) {
+        return engine as routing.ServiceHoursLookup;
+      }
+      if (engine is routing.TrufiPlannerProvider) {
+        return engine.dataSource;
+      }
+    }
+    return null;
+  }
+
   @override
   String get id => 'home';
 
@@ -98,6 +114,19 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       create: (context) => RoutePlannerCubit(
         repository: _repository,
         requestService: _createRequestService(context),
+        // Read once at create-time. The override is a startup
+        // config, not something that can flip while the cubit is
+        // live, so a non-listening read is fine.
+        routingTimeOverride: Provider.of<AppConfiguration?>(
+          context,
+          listen: false,
+        )?.routingTimeOverride,
+        // Pick the first ServiceHoursLookup-capable engine (typically
+        // the bundled-GTFS Trufi planner). OTP engines don't expose
+        // calendar+frequencies in a usable shape, so we side-channel
+        // operating hours through this lookup regardless of which
+        // engine produced the plan.
+        serviceHoursLookup: _findServiceHoursLookup(context),
       )..initialize(),
     ),
     if (config.poiLayersManager != null)

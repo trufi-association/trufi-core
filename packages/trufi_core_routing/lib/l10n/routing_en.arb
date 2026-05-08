@@ -51,5 +51,35 @@
   "prefsWheelchairOff": "Include all routes",
   "@prefsWheelchairOff": {
     "description": "Description when wheelchair mode is disabled"
+  },
+  "serviceActiveClosesAt": "Active · closes at {time}",
+  "@serviceActiveClosesAt": {
+    "description": "Service-hours indicator label when the route is currently running. {time} is the closing time, e.g. '22:00'.",
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "serviceClosedOpensAt": "Closed · opens at {time}",
+  "@serviceClosedOpensAt": {
+    "description": "Service-hours indicator label when the route runs today but the current time is before its start. {time} is the opening time.",
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "serviceClosedOpensDayAt": "Closed · opens {day} at {time}",
+  "@serviceClosedOpensDayAt": {
+    "description": "Service-hours indicator label when the next service is on a different weekday. {day} is the localized day name (e.g. 'tomorrow', 'Mon'), {time} is the opening time.",
+    "placeholders": {
+      "day": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "serviceClosed": "Closed",
+  "@serviceClosed": {
+    "description": "Fallback service-hours label and per-day cell when the route doesn't operate that day."
+  },
+  "serviceTomorrow": "tomorrow",
+  "@serviceTomorrow": {
+    "description": "Used inside serviceClosedOpensDayAt when the next service is on the next calendar day."
   }
 }
