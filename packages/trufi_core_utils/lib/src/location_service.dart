@@ -52,6 +52,16 @@ enum LocationPermissionStatus {
 /// }
 /// ```
 class LocationService extends ChangeNotifier {
+  /// Creates a [LocationService].
+  ///
+  /// [platform] can be provided to inject a custom [GeolocatorPlatform]
+  /// implementation; defaults to [GeolocatorPlatform.instance]. Primarily
+  /// useful for unit testing — production code should leave it null.
+  LocationService({GeolocatorPlatform? platform})
+    : _platform = platform ?? GeolocatorPlatform.instance;
+
+  final GeolocatorPlatform _platform;
+
   Position? _lastKnownPosition;
   LocationPermissionStatus? _lastPermissionStatus;
   StreamSubscription<Position>? _positionStreamSubscription;
@@ -80,7 +90,7 @@ class LocationService extends ChangeNotifier {
 
   /// Checks if location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
-    return Geolocator.isLocationServiceEnabled();
+    return _platform.isLocationServiceEnabled();
   }
 
   /// Checks the current permission status without requesting.
@@ -92,7 +102,7 @@ class LocationService extends ChangeNotifier {
       return LocationPermissionStatus.serviceDisabled;
     }
 
-    final permission = await Geolocator.checkPermission();
+    final permission = await _platform.checkPermission();
     _lastPermissionStatus = _mapPermission(permission);
     _safeNotifyListeners();
     return _lastPermissionStatus!;
@@ -109,7 +119,7 @@ class LocationService extends ChangeNotifier {
       return LocationPermissionStatus.serviceDisabled;
     }
 
-    final permission = await Geolocator.requestPermission();
+    final permission = await _platform.requestPermission();
     _lastPermissionStatus = _mapPermission(permission);
     _safeNotifyListeners();
     return _lastPermissionStatus!;
@@ -129,7 +139,7 @@ class LocationService extends ChangeNotifier {
     }
 
     try {
-      final position = await Geolocator.getCurrentPosition(
+      final position = await _platform.getCurrentPosition(
         locationSettings: LocationSettings(
           accuracy: accuracy,
           timeLimit: timeout ?? const Duration(seconds: 15),
@@ -159,7 +169,7 @@ class LocationService extends ChangeNotifier {
     }
 
     try {
-      final position = await Geolocator.getLastKnownPosition();
+      final position = await _platform.getLastKnownPosition();
       if (position == null) return null;
 
       _lastKnownPosition = position;
@@ -179,14 +189,14 @@ class LocationService extends ChangeNotifier {
   ///
   /// Use this when location services are disabled.
   Future<bool> openLocationSettings() async {
-    return Geolocator.openLocationSettings();
+    return _platform.openLocationSettings();
   }
 
   /// Opens the app's settings page.
   ///
   /// Use this when permission is permanently denied.
   Future<bool> openAppSettings() async {
-    return Geolocator.openAppSettings();
+    return _platform.openAppSettings();
   }
 
   /// Calculates the distance in meters between two points.
@@ -196,7 +206,7 @@ class LocationService extends ChangeNotifier {
     double endLatitude,
     double endLongitude,
   ) {
-    return Geolocator.distanceBetween(
+    return _platform.distanceBetween(
       startLatitude,
       startLongitude,
       endLatitude,
@@ -231,7 +241,7 @@ class LocationService extends ChangeNotifier {
       );
 
       _positionStreamSubscription =
-          Geolocator.getPositionStream(
+          _platform.getPositionStream(
             locationSettings: locationSettings,
           ).listen(
             (Position position) {
@@ -252,10 +262,15 @@ class LocationService extends ChangeNotifier {
 
       _isTracking = true;
 
-      // Get initial position immediately so the marker shows right away
+      // Get initial position immediately so the marker shows right away.
+      // timeLimit prevents hangs on web where high-accuracy fixes can be slow
+      // or never arrive; the stream will keep providing updates regardless.
       try {
-        final initialPosition = await Geolocator.getCurrentPosition(
-          locationSettings: LocationSettings(accuracy: accuracy),
+        final initialPosition = await _platform.getCurrentPosition(
+          locationSettings: LocationSettings(
+            accuracy: accuracy,
+            timeLimit: const Duration(seconds: 10),
+          ),
         );
         _lastKnownPosition = initialPosition;
         _currentLocation = LocationResult(
@@ -285,8 +300,11 @@ class LocationService extends ChangeNotifier {
   }
 
   /// Disposes of the service and stops any active tracking.
+  ///
+  /// Safe to call multiple times; subsequent calls are no-ops.
   @override
   void dispose() {
+    if (_isDisposed) return;
     _isDisposed = true;
     _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;

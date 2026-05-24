@@ -594,15 +594,42 @@ class _HomeScreenState extends State<HomeScreen>
             chooseOnMapText: l10n.chooseOnMap,
           ),
           onYourLocation: () async {
-            // Try to get GPS location
+            // Fast path: reuse a fresh location when the map is already tracking.
+            if (_locationService.isTracking &&
+                _locationService.currentLocation != null) {
+              final loc = _locationService.currentLocation!;
+              return SearchLocation(
+                id: 'current_location',
+                displayName: l10n.yourLocation,
+                latitude: loc.latitude,
+                longitude: loc.longitude,
+              );
+            }
+
             var status = await _locationService.checkPermission();
 
             if (status == LocationPermissionStatus.denied) {
               status = await _locationService.requestPermission();
             }
 
-            if (status == LocationPermissionStatus.granted) {
-              final location = await _locationService.getCurrentLocation();
+            if (status == LocationPermissionStatus.deniedForever) {
+              if (mounted) _showPermissionDeniedDialog();
+              return null;
+            }
+
+            if (status == LocationPermissionStatus.serviceDisabled) {
+              if (mounted) _showLocationDisabledDialog();
+              return null;
+            }
+
+            if (status != LocationPermissionStatus.granted) {
+              return null;
+            }
+
+            try {
+              final location = await _locationService.getCurrentLocation(
+                timeout: const Duration(seconds: 10),
+              );
               if (location != null) {
                 return SearchLocation(
                   id: 'current_location',
@@ -611,15 +638,13 @@ class _HomeScreenState extends State<HomeScreen>
                   longitude: location.longitude,
                 );
               }
+            } catch (_) {
+              // Timeout or geolocator failure — fall through to null so the
+              // user stays on the search screen instead of being silently
+              // teleported to the city's default center.
             }
 
-            // Fallback to default center if GPS not available
-            return SearchLocation(
-              id: 'current_location',
-              displayName: l10n.yourLocation,
-              latitude: defaultCenter.latitude,
-              longitude: defaultCenter.longitude,
-            );
+            return null;
           },
           onChooseOnMap: () async {
             final result = await Navigator.push<MapLocationResult>(
@@ -1034,18 +1059,30 @@ class _HomeScreenState extends State<HomeScreen>
       }
 
       if (status == LocationPermissionStatus.granted) {
-        // Start tracking location continuously
+        // Fast path: center on last-known position instantly so the user gets
+        // immediate feedback while the accurate fix is still being acquired.
+        final lastKnown = await _locationService.getLastKnownLocation();
+        if (lastKnown != null && mounted) {
+          _mapController?.moveCamera(
+            TrufiCameraPosition(
+              target: LatLng(lastKnown.latitude, lastKnown.longitude),
+              zoom: 16,
+            ),
+          );
+        }
+
+        // Start tracking; this also captures an initial accurate position
+        // into _locationService.currentLocation — no need to fetch it again.
         final started = await _locationService.startTracking();
 
         if (started && mounted) {
-          // Get initial location to center the map
-          final location = await _locationService.getCurrentLocation();
-          if (location != null && mounted) {
-            final position = LatLng(location.latitude, location.longitude);
-
-            // Move camera to location
+          final location = _locationService.currentLocation;
+          if (location != null) {
             _mapController?.moveCamera(
-              TrufiCameraPosition(target: position, zoom: 16),
+              TrufiCameraPosition(
+                target: LatLng(location.latitude, location.longitude),
+                zoom: 16,
+              ),
             );
           }
         }
