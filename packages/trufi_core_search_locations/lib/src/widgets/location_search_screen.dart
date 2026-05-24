@@ -104,6 +104,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   List<SearchLocation> _searchResults = [];
   bool _isSearching = false;
   List<SearchLocation> _loadedPlaces = [];
+  bool _isLoadingYourLocation = false;
 
   @override
   void initState() {
@@ -267,10 +268,22 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     _buildAnimatedItem(
                       index: 1,
                       child: _QuickActionsSection(
+                        isLoadingYourLocation: _isLoadingYourLocation,
                         onYourLocation: widget.onYourLocation != null
                             ? () async {
+                                if (_isLoadingYourLocation) return;
                                 HapticFeedback.lightImpact();
-                                final location = await widget.onYourLocation!();
+                                setState(() => _isLoadingYourLocation = true);
+                                SearchLocation? location;
+                                try {
+                                  location = await widget.onYourLocation!();
+                                } finally {
+                                  if (mounted) {
+                                    setState(
+                                      () => _isLoadingYourLocation = false,
+                                    );
+                                  }
+                                }
                                 if (location != null && context.mounted) {
                                   Navigator.pop(context, location);
                                 }
@@ -502,6 +515,7 @@ class _QuickActionsSection extends StatelessWidget {
   final String chooseOnMapText;
   final IconData yourLocationIcon;
   final IconData chooseOnMapIcon;
+  final bool isLoadingYourLocation;
 
   const _QuickActionsSection({
     this.onYourLocation,
@@ -510,6 +524,7 @@ class _QuickActionsSection extends StatelessWidget {
     required this.chooseOnMapText,
     required this.yourLocationIcon,
     required this.chooseOnMapIcon,
+    this.isLoadingYourLocation = false,
   });
 
   @override
@@ -535,6 +550,7 @@ class _QuickActionsSection extends StatelessWidget {
               onTap: onYourLocation!,
               isFirst: true,
               isLast: onChooseOnMap == null,
+              isLoading: isLoadingYourLocation,
             ),
           if (onYourLocation != null && onChooseOnMap != null)
             Divider(
@@ -565,6 +581,7 @@ class _QuickActionItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool isFirst;
   final bool isLast;
+  final bool isLoading;
 
   const _QuickActionItem({
     required this.icon,
@@ -573,6 +590,7 @@ class _QuickActionItem extends StatelessWidget {
     required this.onTap,
     this.isFirst = false,
     this.isLast = false,
+    this.isLoading = false,
   });
 
   @override
@@ -583,7 +601,7 @@ class _QuickActionItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isLoading ? null : onTap,
         borderRadius: BorderRadius.vertical(
           top: isFirst ? const Radius.circular(16) : Radius.zero,
           bottom: isLast ? const Radius.circular(16) : Radius.zero,
@@ -599,7 +617,18 @@ class _QuickActionItem extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: iconColor, size: 22),
+                child: isLoading
+                    ? Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.2,
+                            valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+                          ),
+                        ),
+                      )
+                    : Icon(icon, color: iconColor, size: 22),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -607,7 +636,9 @@ class _QuickActionItem extends StatelessWidget {
                   title,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: colorScheme.onSurface,
+                    color: isLoading
+                        ? colorScheme.onSurface.withValues(alpha: 0.6)
+                        : colorScheme.onSurface,
                   ),
                 ),
               ),
