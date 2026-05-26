@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  void _onSharedRouteChanged() {
+  Future<void> _onSharedRouteChanged() async {
     final route = _sharedRouteNotifier?.pendingRoute;
     if (route == null) return;
 
@@ -257,10 +257,13 @@ class _HomeScreenState extends State<HomeScreen>
       longitude: route.toLng,
     );
 
-    // Set locations and fetch plan with selected itinerary index
-    cubit.setFromPlace(fromPlace);
-    cubit.setToPlace(toPlace);
-    cubit.fetchPlan(selectedItineraryIndex: route.selectedItineraryIndex);
+    // Await the place updates before fetching: setFromPlace/setToPlace emit
+    // their state asynchronously, and fetchPlan bails out early when
+    // fromPlace/toPlace are still null. Without awaiting, the shared link
+    // populated the fields but never planned the trip.
+    await cubit.setFromPlace(fromPlace);
+    await cubit.setToPlace(toPlace);
+    await cubit.fetchPlan(selectedItineraryIndex: route.selectedItineraryIndex);
   }
 
   // ============================================================
