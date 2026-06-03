@@ -34,3 +34,5 @@ build/
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/Flutter/flutter_export_environment.plist
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/ephemeral/
