@@ -1,5 +1,5 @@
 name: trufi_core_maps
-description: A Flutter package for map rendering with support for flutter_map, maplibre_gl, and maplibre.
+description: A Flutter package for declarative map rendering backed by MapLibre GL (online and offline).
 version: 1.0.0
 homepage: https://github.com/trufi-association/trufi-core
 publish_to: none
@@ -18,11 +18,11 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_svg: ^2.2.3
   latlong2: ^0.9.1
-  maplibre_gl: ^0.25.0
+  maplibre_gl: ^0.26.1
   shared_preferences: ^2.5.4
   path_provider: ^2.1.5
   url_launcher: ^6.3.2
-  vector_tile: ^3.0.0
+  vector_tile: ^4.0.0
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
 

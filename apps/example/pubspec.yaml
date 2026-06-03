@@ -32,7 +32,7 @@ dependencies:
   trufi_core_navigation: ^1.0.0
   trufi_core_poi_layers: ^1.0.0
   latlong2: ^0.9.1
-  maplibre_gl: ^0.25.0
+  maplibre_gl: ^0.26.1
 
 dev_dependencies:
   flutter_test:

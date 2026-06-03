@@ -50,7 +50,7 @@ class ShareRouteService {
       webBaseUrl: webBaseUrl,
     );
 
-    await Share.share(text);
+    await SharePlus.instance.share(ShareParams(text: text));
   }
 
   /// Generates human-readable text for sharing

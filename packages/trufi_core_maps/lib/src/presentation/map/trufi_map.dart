@@ -165,7 +165,9 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   }) {
     final newCam = TrufiCameraFit.fitBoundsOnCamera(
       camera: _currentCamera.copyWith(
-        viewportSize: _currentCamera.viewportSize,
+        // viewportSize is never tracked internally; fall back to the actual
+        // rendered size so fitBounds zooms-to-fit instead of only recentering.
+        viewportSize: _currentCamera.viewportSize ?? context.size,
       ),
       bounds: bounds,
       padding: padding,

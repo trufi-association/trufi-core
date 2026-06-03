@@ -325,11 +325,16 @@ A pure utility for computing camera positions that fit a set of points.
 ```dart
 final fitUtil = FitCameraUtil(padding: const EdgeInsets.all(40));
 
-// Compute camera that fits all route points
+// Required before computing — give it the current viewport (logical pixels).
+// Returns null until this is called.
+fitUtil.updateViewport(viewportSize, viewPadding);
+
+// Compute camera that fits all route points (also stores them internally).
 final camera = fitUtil.cameraForPoints(routePoints, currentCamera);
 
-// Check whether points are currently visible
-if (fitUtil.isOutOfFocus(currentCamera, routePoints)) {
+// Later, check whether the last-fitted points are still visible.
+// isOutOfFocus takes only the camera — the points come from cameraForPoints.
+if (camera != null && fitUtil.isOutOfFocus(currentCamera)) {
   controller.moveCamera(camera);
 }
 ```
