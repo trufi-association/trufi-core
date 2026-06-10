@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import '../../l10n/home_screen_localizations.dart';
@@ -7,7 +8,7 @@ import '../../l10n/home_screen_localizations.dart';
 /// Shows the routing settings bottom sheet.
 /// Returns `true` if the user tapped "Apply" to confirm changes.
 Future<bool?> showRoutingSettingsSheet(BuildContext context) {
-  return showModalBottomSheet<bool>(
+  return showTrufiModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,

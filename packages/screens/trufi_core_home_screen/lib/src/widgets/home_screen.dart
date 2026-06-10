@@ -1215,7 +1215,7 @@ class _HomeScreenState extends State<HomeScreen>
     // Add haptic feedback
     HapticFeedback.mediumImpact();
 
-    final result = await showModalBottomSheet<String>(
+    final result = await showTrufiModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
@@ -3036,7 +3036,7 @@ class _DepartureTimeChip extends StatelessWidget {
     DateTime? currentDateTime,
   ) {
     HapticFeedback.selectionClick();
-    showModalBottomSheet<void>(
+    showTrufiModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
