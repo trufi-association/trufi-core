@@ -680,13 +680,9 @@ class _HomeScreenState extends State<HomeScreen>
             );
 
             if (result != null) {
-              return SearchLocation(
-                id: 'map_${DateTime.now().millisecondsSinceEpoch}',
-                displayName: l10n.selectedLocation,
-                address:
-                    '${result.latitude.toStringAsFixed(5)}, ${result.longitude.toStringAsFixed(5)}',
-                latitude: result.latitude,
-                longitude: result.longitude,
+              return await _resolvePickedLocation(
+                result.latitude,
+                result.longitude,
               );
             }
             return null;
@@ -1329,27 +1325,23 @@ class _HomeScreenState extends State<HomeScreen>
     final cubit = context.read<RoutePlannerCubit>();
 
     if (result == 'origin') {
-      final location = TrufiLocation(
-        description: l10n.selectedLocation,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        address:
-            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      final resolved = await _resolvePickedLocation(
+        position.latitude,
+        position.longitude,
       );
-      await cubit.setFromPlace(location);
+      if (!mounted) return;
+      await cubit.setFromPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.toPlace != null) {
         cubit.fetchPlan();
       }
     } else if (result == 'destination') {
-      final location = TrufiLocation(
-        description: l10n.selectedLocation,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        address:
-            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      final resolved = await _resolvePickedLocation(
+        position.latitude,
+        position.longitude,
       );
-      await cubit.setToPlace(location);
+      if (!mounted) return;
+      await cubit.setToPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.fromPlace != null) {
         cubit.fetchPlan();
@@ -2587,6 +2579,52 @@ class _HomeScreenState extends State<HomeScreen>
           onSetAsDestination: () => _setPoiAsDestination(poi),
         ),
       ),
+    );
+  }
+
+  /// Resolves an arbitrary point picked on the map into a [SearchLocation]
+  /// with a human-readable place name.
+  ///
+  /// Attempts reverse geocoding through [SearchLocationsCubit]; on timeout,
+  /// failure, an empty result, or when the cubit is not provided, it falls back
+  /// to a generic label keeping the raw coordinates only in [address]. This is
+  /// what lets map-picked origins/destinations show real place names instead of
+  /// bare coordinates. See #904.
+  Future<SearchLocation> _resolvePickedLocation(
+    double latitude,
+    double longitude,
+  ) async {
+    final l10n = HomeScreenLocalizations.of(context);
+    final coordinates =
+        '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}';
+
+    SearchLocation? reverse;
+    try {
+      reverse = await context
+          .read<SearchLocationsCubit>()
+          .reverseGeocode(latitude, longitude)
+          .timeout(const Duration(seconds: 5), onTimeout: () => null);
+    } catch (_) {
+      // SearchLocationsCubit not provided, or the lookup failed — fall back to
+      // the generic label below so route planning is never blocked.
+    }
+
+    if (reverse != null && reverse.displayName.isNotEmpty) {
+      return SearchLocation(
+        id: 'map_${latitude}_$longitude',
+        displayName: reverse.displayName,
+        address: reverse.address,
+        latitude: latitude,
+        longitude: longitude,
+      );
+    }
+
+    return SearchLocation(
+      id: 'map_${latitude}_$longitude',
+      displayName: l10n.selectedLocation,
+      address: coordinates,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 
