@@ -102,6 +102,11 @@ class NavigationRoute extends Equatable {
   final List<NavigationLeg> legs;
   final String? modeName;
 
+  /// Total planned trip duration from the itinerary (the value shown in the
+  /// route results). Used to keep the navigation ETA consistent with the
+  /// planned route instead of re-estimating it. See #917.
+  final Duration duration;
+
   const NavigationRoute({
     required this.id,
     required this.code,
@@ -114,6 +119,7 @@ class NavigationRoute extends Equatable {
     required this.stops,
     this.legs = const [],
     this.modeName,
+    this.duration = Duration.zero,
   });
 
   String get displayName => shortName ?? name;
@@ -131,6 +137,7 @@ class NavigationRoute extends Equatable {
     stops,
     legs,
     modeName,
+    duration,
   ];
 }
 
