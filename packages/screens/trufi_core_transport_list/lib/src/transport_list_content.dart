@@ -15,11 +15,18 @@ class TransportListContent extends StatefulWidget {
   /// Scaffold's drawer when pressed.
   final bool showMenuButton;
 
+  /// Called when the user dismisses the active operator/agency chip.
+  /// Defaults to clearing the filter on [dataProvider]; hosts that mirror
+  /// the filter elsewhere (e.g. the `operator` URL parameter) pass their
+  /// own handler.
+  final VoidCallback? onClearAgencyFilter;
+
   const TransportListContent({
     super.key,
     required this.dataProvider,
     required this.onRouteTap,
     this.showMenuButton = true,
+    this.onClearAgencyFilter,
   });
 
   @override
@@ -42,8 +49,12 @@ class _TransportListContentState extends State<TransportListContent>
     );
     widget.dataProvider.addListener(_onDataChanged);
     _searchFocusNode.addListener(_onSearchFocusChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.dataProvider.load();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // `load` resets `filteredRoutes` to the full list, so re-scope it
+      // to any filter that was applied before/while loading (e.g. an
+      // `operator` deep-link filter set by the host screen).
+      await widget.dataProvider.load();
+      widget.dataProvider.reapplyFilters();
     });
   }
 
@@ -70,21 +81,17 @@ class _TransportListContentState extends State<TransportListContent>
     setState(() => _isSearchFocused = _searchFocusNode.hasFocus);
   }
 
-  /// Refresh the route list while preserving the active search filter.
+  /// Refresh the route list while preserving the active filters.
   /// Used by both the header refresh button and pull-to-refresh.
   ///
   /// `dataProvider.refresh()` re-fetches and resets `filteredRoutes` to all
-  /// routes, which would visually contradict the still-populated search bar.
-  /// We re-apply the current query after refresh so the user keeps their
-  /// intent and the filtered count stays consistent with the input field.
-  /// Use the explicit clear (X) affordance inside the search bar to remove
-  /// the filter.
+  /// routes, which would visually contradict the still-populated search bar
+  /// or an active operator chip. Re-applying keeps the user's intent and
+  /// the filtered count consistent with the visible controls. Use the
+  /// explicit clear (X) affordances to remove a filter.
   Future<void> _refreshKeepingFilter() async {
-    final query = _searchController.text.trim().toLowerCase();
     await widget.dataProvider.refresh();
-    if (query.isNotEmpty) {
-      widget.dataProvider.filter(query);
-    }
+    widget.dataProvider.reapplyFilters();
   }
 
   /// Try to open the drawer from the nearest ancestor Scaffold
@@ -131,11 +138,22 @@ class _TransportListContentState extends State<TransportListContent>
                   : null,
             ),
 
+            // Active operator/agency filter (e.g. from a QR deep link)
+            if (state.agencyFilter != null)
+              _AgencyFilterChip(
+                agencyName: state.agencyFilter!,
+                onClear:
+                    widget.onClearAgencyFilter ??
+                    () => widget.dataProvider.setAgencyFilter(null),
+              ),
+
             // Route count indicator
             if (!state.isLoading && state.filteredRoutes.isNotEmpty)
               _RouteCountIndicator(
                 count: state.filteredRoutes.length,
-                isFiltered: _searchController.text.isNotEmpty,
+                isFiltered:
+                    _searchController.text.isNotEmpty ||
+                    state.agencyFilter != null,
               ),
 
             // Main content
@@ -163,12 +181,16 @@ class _TransportListContentState extends State<TransportListContent>
     if (state.filteredRoutes.isEmpty) {
       return _EmptyState(
         message: localization.noRoutesFound,
-        isSearch: _searchController.text.isNotEmpty,
+        isSearch:
+            _searchController.text.isNotEmpty || state.agencyFilter != null,
       );
     }
 
     // Build grouped list: agency headers + route tiles
-    final listItems = _buildGroupedItems(state.filteredRoutes, _searchController.text.isNotEmpty);
+    final listItems = _buildGroupedItems(
+      state.filteredRoutes,
+      _searchController.text.isNotEmpty,
+    );
 
     return Stack(
       children: [
@@ -273,10 +295,12 @@ class _TransportListContentState extends State<TransportListContent>
     final items = <_GroupedListItem>[];
     for (final agency in sortedAgencies) {
       final agencyRoutes = grouped[agency]!;
-      items.add(_GroupedListItem.header(
-        agency.isEmpty ? 'Otros' : agency,
-        agencyRoutes.length,
-      ));
+      items.add(
+        _GroupedListItem.header(
+          agency.isEmpty ? 'Otros' : agency,
+          agencyRoutes.length,
+        ),
+      );
       for (final route in agencyRoutes) {
         items.add(_GroupedListItem.route(route));
       }
@@ -299,8 +323,11 @@ class _GroupedListItem {
     this.route,
   });
 
-  factory _GroupedListItem.header(String name, int count) =>
-      _GroupedListItem._(isHeader: true, headerName: name, headerRouteCount: count);
+  factory _GroupedListItem.header(String name, int count) => _GroupedListItem._(
+    isHeader: true,
+    headerName: name,
+    headerRouteCount: count,
+  );
 
   factory _GroupedListItem.route(TransportRoute route) =>
       _GroupedListItem._(isHeader: false, route: route);
@@ -522,6 +549,56 @@ class _RefreshButton extends StatelessWidget {
                   color: colorScheme.onPrimaryContainer,
                   size: 24,
                 ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Chip showing the active operator/agency restriction with a clear
+/// affordance. Shown when the list was opened via a QR/deep link like
+/// `/routes?operator=...` or the filter was set programmatically.
+class _AgencyFilterChip extends StatelessWidget {
+  final String agencyName;
+  final VoidCallback onClear;
+
+  const _AgencyFilterChip({required this.agencyName, required this.onClear});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: InputChip(
+          avatar: Icon(
+            Icons.business_rounded,
+            size: 16,
+            color: colorScheme.onSecondaryContainer,
+          ),
+          label: Text(agencyName),
+          labelStyle: theme.textTheme.labelLarge?.copyWith(
+            color: colorScheme.onSecondaryContainer,
+            fontWeight: FontWeight.w600,
+          ),
+          backgroundColor: colorScheme.secondaryContainer,
+          side: BorderSide.none,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          deleteIcon: Icon(
+            Icons.close_rounded,
+            size: 18,
+            color: colorScheme.onSecondaryContainer,
+          ),
+          onDeleted: () {
+            HapticFeedback.lightImpact();
+            onClear();
+          },
         ),
       ),
     );

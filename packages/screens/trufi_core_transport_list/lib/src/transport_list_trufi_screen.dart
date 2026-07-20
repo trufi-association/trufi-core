@@ -23,7 +23,7 @@ import 'transport_list_data_provider.dart';
 /// - `/routes/:id` - shows route detail for the given pattern ID (path parameter)
 class TransportListTrufiScreen extends TrufiScreen {
   final TransportListDataProvider Function(BuildContext context)?
-      dataProviderBuilder;
+  dataProviderBuilder;
 
   TransportListTrufiScreen({this.dataProviderBuilder});
 
@@ -35,9 +35,8 @@ class TransportListTrufiScreen extends TrufiScreen {
 
   @override
   Widget Function(BuildContext context) get builder =>
-      (_) => _TransportListScreenWidget(
-            dataProviderBuilder: dataProviderBuilder,
-          );
+      (_) =>
+          _TransportListScreenWidget(dataProviderBuilder: dataProviderBuilder);
 
   @override
   List<TrufiSubRoute> get subRoutes => [
@@ -97,7 +96,7 @@ class TransportListTrufiScreen extends TrufiScreen {
 
 class _TransportListScreenWidget extends StatefulWidget {
   final TransportListDataProvider Function(BuildContext context)?
-      dataProviderBuilder;
+  dataProviderBuilder;
 
   const _TransportListScreenWidget({this.dataProviderBuilder});
 
@@ -112,6 +111,11 @@ class _TransportListScreenWidgetState
   TransportListCache? _cache;
   bool _initialized = false;
 
+  /// Last `operator` query parameter applied from the URL. Tracked so the
+  /// URL only drives the filter when it actually changes — a user clearing
+  /// the filter in the UI isn't fought by an unchanged URL.
+  String? _appliedOperator;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -120,6 +124,46 @@ class _TransportListScreenWidgetState
     if (!_initialized) {
       _initialized = true;
       _initializeDataProvider();
+    }
+
+    _syncOperatorFromUrl();
+  }
+
+  /// Applies the `operator` query parameter of `/routes?operator=...`
+  /// deep links (QR codes at stops/vehicles) as the agency filter.
+  void _syncOperatorFromUrl() {
+    Uri uri;
+    try {
+      uri = GoRouterState.of(context).uri;
+    } catch (_) {
+      // Not hosted under GoRouter (e.g. embedded usage) — nothing to sync.
+      return;
+    }
+
+    // Only sync while the list route itself is active; when a detail
+    // sub-route is on top the URL has no `operator` and syncing would
+    // wrongly clear the filter underneath it.
+    if (uri.path != '/routes') return;
+
+    final operator = uri.queryParameters['operator'];
+    if (operator == _appliedOperator) return;
+    _appliedOperator = operator;
+    _dataProvider?.setAgencyFilter(operator);
+  }
+
+  /// Clears the agency filter and drops the `operator` parameter from the
+  /// URL so the address bar/share state stays consistent.
+  void _clearAgencyFilter() {
+    _dataProvider?.setAgencyFilter(null);
+    try {
+      final router = GoRouter.of(context);
+      final uri = router.routeInformationProvider.value.uri;
+      if (uri.path == '/routes' &&
+          uri.queryParameters.containsKey('operator')) {
+        router.replace('/routes');
+      }
+    } catch (_) {
+      // Not hosted under GoRouter — the in-memory filter is already cleared.
     }
   }
 
@@ -156,6 +200,7 @@ class _TransportListScreenWidgetState
     // This widget only shows the list - detail is handled by sub-route
     return TransportListContent(
       dataProvider: dataProvider,
+      onClearAgencyFilter: _clearAgencyFilter,
       onRouteTap: (route) {
         // Push to /routes/{id} so pop() returns here
         // URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs
