@@ -21,12 +21,18 @@ class TransportListContent extends StatefulWidget {
   /// own handler.
   final VoidCallback? onClearAgencyFilter;
 
+  /// Called with an agency name when the user asks for its shareable QR
+  /// code (button on each agency header and next to the active operator
+  /// chip). When null the QR affordances are hidden.
+  final void Function(String agencyName)? onShowOperatorQr;
+
   const TransportListContent({
     super.key,
     required this.dataProvider,
     required this.onRouteTap,
     this.showMenuButton = true,
     this.onClearAgencyFilter,
+    this.onShowOperatorQr,
   });
 
   @override
@@ -145,6 +151,7 @@ class _TransportListContentState extends State<TransportListContent>
                 onClear:
                     widget.onClearAgencyFilter ??
                     () => widget.dataProvider.setAgencyFilter(null),
+                onShowQr: widget.onShowOperatorQr,
               ),
 
             // Route count indicator
@@ -228,6 +235,11 @@ class _TransportListContentState extends State<TransportListContent>
                     ? _AgencyHeader(
                         name: item.headerName!,
                         routeCount: item.headerRouteCount!,
+                        onQrTap:
+                            item.headerAgency != null &&
+                                widget.onShowOperatorQr != null
+                            ? () => widget.onShowOperatorQr!(item.headerAgency!)
+                            : null,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -299,6 +311,9 @@ class _TransportListContentState extends State<TransportListContent>
         _GroupedListItem.header(
           agency.isEmpty ? 'Otros' : agency,
           agencyRoutes.length,
+          // Routes without an agency get a synthetic header — no real
+          // operator to encode in a QR.
+          agency: agency.isEmpty ? null : agency,
         ),
       );
       for (final route in agencyRoutes) {
@@ -314,20 +329,24 @@ class _GroupedListItem {
   final bool isHeader;
   final String? headerName;
   final int? headerRouteCount;
+  final String? headerAgency;
   final TransportRoute? route;
 
   const _GroupedListItem._({
     required this.isHeader,
     this.headerName,
     this.headerRouteCount,
+    this.headerAgency,
     this.route,
   });
 
-  factory _GroupedListItem.header(String name, int count) => _GroupedListItem._(
-    isHeader: true,
-    headerName: name,
-    headerRouteCount: count,
-  );
+  factory _GroupedListItem.header(String name, int count, {String? agency}) =>
+      _GroupedListItem._(
+        isHeader: true,
+        headerName: name,
+        headerRouteCount: count,
+        headerAgency: agency,
+      );
 
   factory _GroupedListItem.route(TransportRoute route) =>
       _GroupedListItem._(isHeader: false, route: route);
@@ -338,7 +357,14 @@ class _AgencyHeader extends StatelessWidget {
   final String name;
   final int routeCount;
 
-  const _AgencyHeader({required this.name, required this.routeCount});
+  /// Opens the shareable QR for this agency; hidden when null.
+  final VoidCallback? onQrTap;
+
+  const _AgencyHeader({
+    required this.name,
+    required this.routeCount,
+    this.onQrTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -364,6 +390,17 @@ class _AgencyHeader extends StatelessWidget {
               ),
             ),
           ),
+          if (onQrTap != null)
+            IconButton(
+              icon: const Icon(Icons.qr_code_2_rounded, size: 20),
+              color: colorScheme.onSurfaceVariant,
+              visualDensity: VisualDensity.compact,
+              tooltip: 'QR',
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onQrTap!();
+              },
+            ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
@@ -562,7 +599,14 @@ class _AgencyFilterChip extends StatelessWidget {
   final String agencyName;
   final VoidCallback onClear;
 
-  const _AgencyFilterChip({required this.agencyName, required this.onClear});
+  /// Opens the shareable QR for the active operator; hidden when null.
+  final void Function(String agencyName)? onShowQr;
+
+  const _AgencyFilterChip({
+    required this.agencyName,
+    required this.onClear,
+    this.onShowQr,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -572,34 +616,47 @@ class _AgencyFilterChip extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: InputChip(
-          avatar: Icon(
-            Icons.business_rounded,
-            size: 16,
-            color: colorScheme.onSecondaryContainer,
+      child: Row(
+        children: [
+          Flexible(
+            child: InputChip(
+              avatar: Icon(
+                Icons.business_rounded,
+                size: 16,
+                color: colorScheme.onSecondaryContainer,
+              ),
+              label: Text(agencyName),
+              labelStyle: theme.textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+              backgroundColor: colorScheme.secondaryContainer,
+              side: BorderSide.none,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              deleteIcon: Icon(
+                Icons.close_rounded,
+                size: 18,
+                color: colorScheme.onSecondaryContainer,
+              ),
+              onDeleted: () {
+                HapticFeedback.lightImpact();
+                onClear();
+              },
+            ),
           ),
-          label: Text(agencyName),
-          labelStyle: theme.textTheme.labelLarge?.copyWith(
-            color: colorScheme.onSecondaryContainer,
-            fontWeight: FontWeight.w600,
-          ),
-          backgroundColor: colorScheme.secondaryContainer,
-          side: BorderSide.none,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          deleteIcon: Icon(
-            Icons.close_rounded,
-            size: 18,
-            color: colorScheme.onSecondaryContainer,
-          ),
-          onDeleted: () {
-            HapticFeedback.lightImpact();
-            onClear();
-          },
-        ),
+          if (onShowQr != null)
+            IconButton(
+              icon: const Icon(Icons.qr_code_2_rounded),
+              color: colorScheme.onSurfaceVariant,
+              tooltip: 'QR',
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onShowQr!(agencyName);
+              },
+            ),
+        ],
       ),
     );
   }
