@@ -69,6 +69,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
       body: jsonEncode({
         'from': {'lat': origin.latitude, 'lon': origin.longitude},
         'to': {'lat': destination.latitude, 'lon': destination.longitude},
+        'maxWalkDistance': maxWalkDistance,
       }),
     );
 
@@ -122,8 +123,9 @@ class RemotePlannerClient implements PlannerRoutingClient {
       final route = GtfsRoute.fromJson(r);
       final patternsJson = r['patterns'] as List? ?? const [];
       final patterns = patternsJson
-          .map((p) =>
-              RemoteRoutePatternInfo.fromJson(p as Map<String, dynamic>))
+          .map(
+            (p) => RemoteRoutePatternInfo.fromJson(p as Map<String, dynamic>),
+          )
           .toList();
       return RouteWithPatterns(
         route: route,
@@ -138,10 +140,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
     final uri = limit != null
         ? Uri.parse('$_baseUrl/stops?limit=$limit')
         : Uri.parse('$_baseUrl/stops');
-    final response = await _httpClient.get(
-      uri,
-      headers: await _buildHeaders(),
-    );
+    final response = await _httpClient.get(uri, headers: await _buildHeaders());
     if (response.statusCode != 200) return [];
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;

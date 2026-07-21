@@ -35,7 +35,10 @@ class TrufiPlannerConfig {
   /// Custom description for UI.
   final String? description;
 
-  /// Maximum walking distance to a stop in meters (default: 500m).
+  /// Maximum walking distance to a stop in meters (default: 800m).
+  ///
+  /// Walking a few extra blocks to board a direct line usually beats a
+  /// transfer (issue #926), so the radius errs on the generous side.
   final double maxWalkingDistance;
 
   /// Walking speed in meters per second (default: 1.2 m/s).
@@ -50,7 +53,7 @@ class TrufiPlannerConfig {
     this.providerId,
     this.displayName,
     this.description,
-    this.maxWalkingDistance = 500,
+    this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
   }) : serverUrl = null;
@@ -61,7 +64,7 @@ class TrufiPlannerConfig {
     this.providerId,
     this.displayName,
     this.description,
-    this.maxWalkingDistance = 500,
+    this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
   }) : gtfsAsset = null;

@@ -135,7 +135,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
     final paths = await _dataSource.client.findRoutes(
       origin: from.position,
       destination: to.position,
-      maxWalkDistance: 500.0,
+      maxWalkDistance: config.maxWalkingDistance,
       maxResults: numItineraries,
     );
 
@@ -211,7 +211,8 @@ class TrufiPlannerProvider extends IRoutingProvider {
     final lat2 = b.latitude * pi / 180;
     final dLat = (b.latitude - a.latitude) * pi / 180;
     final dLon = (b.longitude - a.longitude) * pi / 180;
-    final h = sin(dLat / 2) * sin(dLat / 2) +
+    final h =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     return 2 * r * asin(sqrt(h));
   }
@@ -434,8 +435,9 @@ class TrufiPlannerProvider extends IRoutingProvider {
         }
       }
 
-      final effectiveLongName =
-          route.longName.isNotEmpty ? route.longName : generatedLongName;
+      final effectiveLongName = route.longName.isNotEmpty
+          ? route.longName
+          : generatedLongName;
 
       // Use a composite id ("<routeId>#<patternId>") so each variant
       // of a route gets its own list entry and detail page. Using just
@@ -475,8 +477,8 @@ class TrufiPlannerProvider extends IRoutingProvider {
     // its trip patterns and resolved agency name. When the backend is
     // older and the response has no patterns, the loop below falls
     // back to one TransitRoute per route — matching the legacy shape.
-    final richRoutes =
-        await (_dataSource.client as RemotePlannerClient).getRoutesWithPatterns();
+    final richRoutes = await (_dataSource.client as RemotePlannerClient)
+        .getRoutesWithPatterns();
 
     final patterns = <TransitRoute>[];
     for (final rich in richRoutes) {
@@ -508,8 +510,9 @@ class TrufiPlannerProvider extends IRoutingProvider {
         if (p.firstStop != null && p.lastStop != null) {
           generatedLongName = '${p.firstStop} → ${p.lastStop}';
         }
-        final effectiveLongName =
-            route.longName.isNotEmpty ? route.longName : generatedLongName;
+        final effectiveLongName = route.longName.isNotEmpty
+            ? route.longName
+            : generatedLongName;
 
         final compositeId = '${route.id}#${p.id}';
         patterns.add(
@@ -600,8 +603,9 @@ class TrufiPlannerProvider extends IRoutingProvider {
       generatedLongName = '${stops.first.name} → ${stops.last.name}';
     }
 
-    final effectiveLongName =
-        route.longName.isNotEmpty ? route.longName : generatedLongName;
+    final effectiveLongName = route.longName.isNotEmpty
+        ? route.longName
+        : generatedLongName;
 
     // Echo back the composite id so callers (and any caching layers)
     // keep the route_id ↔ pattern_id mapping that `id` was tagged with.
@@ -648,8 +652,9 @@ class TrufiPlannerProvider extends IRoutingProvider {
       generatedLongName = '${stops.first.name} → ${stops.last.name}';
     }
 
-    final effectiveLongName =
-        route.longName.isNotEmpty ? route.longName : generatedLongName;
+    final effectiveLongName = route.longName.isNotEmpty
+        ? route.longName
+        : generatedLongName;
 
     return TransitRoute(
       id: route.id,
@@ -762,9 +767,7 @@ class _TrufiPlannerInfo extends StatelessWidget {
           Row(
             children: [
               Icon(
-                isLocal
-                    ? Icons.offline_bolt_rounded
-                    : Icons.cloud_rounded,
+                isLocal ? Icons.offline_bolt_rounded : Icons.cloud_rounded,
                 color: colorScheme.primary,
                 size: 22,
               ),
