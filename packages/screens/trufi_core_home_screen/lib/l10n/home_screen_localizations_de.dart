@@ -442,4 +442,15 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get liveVehiclesStateOff => 'Aus';
+
+  @override
+  String get placeOrigin => 'Start';
+
+  @override
+  String get placeDestination => 'Ziel';
+
+  @override
+  String providerNoOptions(String provider) {
+    return 'Der Anbieter \"$provider\" hat keine konfigurierbaren Optionen.';
+  }
 }
