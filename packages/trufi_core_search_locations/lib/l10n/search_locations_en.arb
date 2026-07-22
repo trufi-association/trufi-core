@@ -1,0 +1,39 @@
+{
+  "@@locale": "en",
+  "selectOrigin": "Select origin",
+  "@selectOrigin": {
+    "description": "Default hint text for the origin field in the search location bar"
+  },
+  "selectDestination": "Select destination",
+  "@selectDestination": {
+    "description": "Default hint text for the destination field in the search location bar"
+  },
+  "searchOrigin": "Search origin...",
+  "@searchOrigin": {
+    "description": "Default hint text for the origin search field on the location search screen"
+  },
+  "searchDestination": "Search destination...",
+  "@searchDestination": {
+    "description": "Default hint text for the destination search field on the location search screen"
+  },
+  "yourLocation": "Your Location",
+  "@yourLocation": {
+    "description": "Label for the quick action that uses the device's current location"
+  },
+  "chooseOnMap": "Choose on Map",
+  "@chooseOnMap": {
+    "description": "Label for the quick action that opens the map picker"
+  },
+  "yourPlaces": "YOUR PLACES",
+  "@yourPlaces": {
+    "description": "Uppercase section title above the saved places list"
+  },
+  "searchResults": "SEARCH RESULTS",
+  "@searchResults": {
+    "description": "Uppercase section title above the search results list"
+  },
+  "noResultsFound": "No results found",
+  "@noResultsFound": {
+    "description": "Message shown when a search returns no results"
+  }
+}
