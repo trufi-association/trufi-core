@@ -66,4 +66,28 @@ class CoreLocalizationsEs extends CoreLocalizations {
 
   @override
   String get markAllAsRead => 'Marcar todo como leído';
+
+  @override
+  String get initStepStarting => 'Iniciando';
+
+  @override
+  String get initStepInitializing => 'Inicializando';
+
+  @override
+  String get initStepLoadingMaps => 'Cargando mapas';
+
+  @override
+  String get initStepLoadingRoutes => 'Cargando rutas';
+
+  @override
+  String get initStepAlmostReady => 'Casi listo';
+
+  @override
+  String get errorUnableToStart => 'No se pudo iniciar';
+
+  @override
+  String get errorUnexpected => 'Ocurrió un error inesperado';
+
+  @override
+  String get poweredByTrufi => 'Powered by Trufi Association';
 }

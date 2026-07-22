@@ -213,6 +213,54 @@ abstract class CoreLocalizations {
   /// In en, this message translates to:
   /// **'Mark all as read'**
   String get markAllAsRead;
+
+  /// Init screen step: the app is starting
+  ///
+  /// In en, this message translates to:
+  /// **'Starting'**
+  String get initStepStarting;
+
+  /// Init screen step: initializing app services
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing'**
+  String get initStepInitializing;
+
+  /// Init screen step: loading map engines
+  ///
+  /// In en, this message translates to:
+  /// **'Loading maps'**
+  String get initStepLoadingMaps;
+
+  /// Init screen step: loading routing engines
+  ///
+  /// In en, this message translates to:
+  /// **'Loading routes'**
+  String get initStepLoadingRoutes;
+
+  /// Init screen step: preparing screens
+  ///
+  /// In en, this message translates to:
+  /// **'Almost ready'**
+  String get initStepAlmostReady;
+
+  /// Title shown when app initialization fails
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to start'**
+  String get errorUnableToStart;
+
+  /// Fallback message when an error has no details
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get errorUnexpected;
+
+  /// Brand tagline in the drawer footer; keep identical in all languages
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by Trufi Association'**
+  String get poweredByTrufi;
 }
 
 class _CoreLocalizationsDelegate
