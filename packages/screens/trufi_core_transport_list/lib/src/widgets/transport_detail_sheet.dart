@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../l10n/transport_list_localizations.dart';
 import '../models/transport_route.dart';
 
 /// Bottom sheet showing transport route stops with modern timeline design
@@ -130,7 +131,13 @@ class _StopTimelineItem extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    isFirst ? 'Start' : 'End',
+                                    isFirst
+                                        ? TransportListLocalizations.of(
+                                            context,
+                                          ).stopStart
+                                        : TransportListLocalizations.of(
+                                            context,
+                                          ).stopEnd,
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: routeColor,
                                       fontWeight: FontWeight.w600,
@@ -316,7 +323,7 @@ class _EmptyStopsState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              Localizations.localeOf(context).languageCode == 'es' ? 'Sin paradas disponibles' : 'No stops available',
+              TransportListLocalizations.of(context).noStopsAvailable,
               style: theme.textTheme.titleSmall?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
@@ -324,7 +331,7 @@ class _EmptyStopsState extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Stop information is not available for this route',
+              TransportListLocalizations.of(context).stopInfoNotAvailable,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),

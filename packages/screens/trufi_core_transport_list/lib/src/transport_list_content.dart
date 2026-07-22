@@ -168,7 +168,11 @@ class _TransportListContentState extends State<TransportListContent>
     }
 
     // Build grouped list: agency headers + route tiles
-    final listItems = _buildGroupedItems(state.filteredRoutes, _searchController.text.isNotEmpty);
+    final listItems = _buildGroupedItems(
+      state.filteredRoutes,
+      _searchController.text.isNotEmpty,
+      localization.otherAgencies,
+    );
 
     return Stack(
       children: [
@@ -254,6 +258,7 @@ class _TransportListContentState extends State<TransportListContent>
   static List<_GroupedListItem> _buildGroupedItems(
     List<TransportRoute> routes,
     bool isSearching,
+    String otherAgenciesLabel,
   ) {
     // During search, show flat list without headers
     if (isSearching) {
@@ -273,10 +278,12 @@ class _TransportListContentState extends State<TransportListContent>
     final items = <_GroupedListItem>[];
     for (final agency in sortedAgencies) {
       final agencyRoutes = grouped[agency]!;
-      items.add(_GroupedListItem.header(
-        agency.isEmpty ? 'Otros' : agency,
-        agencyRoutes.length,
-      ));
+      items.add(
+        _GroupedListItem.header(
+          agency.isEmpty ? otherAgenciesLabel : agency,
+          agencyRoutes.length,
+        ),
+      );
       for (final route in agencyRoutes) {
         items.add(_GroupedListItem.route(route));
       }
@@ -299,8 +306,11 @@ class _GroupedListItem {
     this.route,
   });
 
-  factory _GroupedListItem.header(String name, int count) =>
-      _GroupedListItem._(isHeader: true, headerName: name, headerRouteCount: count);
+  factory _GroupedListItem.header(String name, int count) => _GroupedListItem._(
+    isHeader: true,
+    headerName: name,
+    headerRouteCount: count,
+  );
 
   factory _GroupedListItem.route(TransportRoute route) =>
       _GroupedListItem._(isHeader: false, route: route);
