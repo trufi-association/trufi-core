@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../l10n/navigation_localizations.dart';
+
 /// Type of navigation instruction.
 enum InstructionType {
   // Transit instructions
@@ -42,13 +44,35 @@ enum InstructionType {
   depart,
 }
 
+/// Localizable text key for instruction texts that are produced in layers
+/// without a [BuildContext] (e.g. the navigation cubit).
+///
+/// Resolved to a localized string at the widget layer via
+/// [NavigationInstruction.resolvedPrimaryText].
+enum InstructionTextKey {
+  /// "You have arrived" — shown when the destination is reached.
+  youHaveArrived,
+
+  /// "Final destination" — preview label for the last stop.
+  finalDestination,
+}
+
 /// A navigation instruction to display to the user.
 class NavigationInstruction {
   /// The type of instruction.
   final InstructionType type;
 
   /// Primary text to display (e.g., "Turn left onto Main Street").
+  ///
+  /// Widgets should render [resolvedPrimaryText] instead of reading this
+  /// field directly, so that [primaryTextKey] based texts get localized.
   final String primaryText;
+
+  /// Localizable key for the primary text.
+  ///
+  /// When set, it takes precedence over [primaryText] in
+  /// [resolvedPrimaryText]. Used by layers without a [BuildContext].
+  final InstructionTextKey? primaryTextKey;
 
   /// Secondary text (e.g., "in 50m").
   final String? secondaryText;
@@ -79,7 +103,8 @@ class NavigationInstruction {
 
   const NavigationInstruction({
     required this.type,
-    required this.primaryText,
+    this.primaryText = '',
+    this.primaryTextKey,
     this.secondaryText,
     this.stopName,
     this.distance,
@@ -90,6 +115,16 @@ class NavigationInstruction {
     this.routeShortName,
     this.modeIcon,
   });
+
+  /// The primary text to render, resolving [primaryTextKey] to a localized
+  /// string when set and falling back to [primaryText] otherwise.
+  String resolvedPrimaryText(NavigationLocalizations localizations) {
+    return switch (primaryTextKey) {
+      InstructionTextKey.youHaveArrived => localizations.navArrivedShort,
+      InstructionTextKey.finalDestination => localizations.navFinalDestination,
+      null => primaryText,
+    };
+  }
 
   /// Get the appropriate icon for this instruction type.
   IconData get icon {
@@ -128,6 +163,7 @@ class NavigationInstruction {
   NavigationInstruction copyWith({
     InstructionType? type,
     String? primaryText,
+    InstructionTextKey? primaryTextKey,
     String? secondaryText,
     String? stopName,
     double? distance,
@@ -141,6 +177,7 @@ class NavigationInstruction {
     return NavigationInstruction(
       type: type ?? this.type,
       primaryText: primaryText ?? this.primaryText,
+      primaryTextKey: primaryTextKey ?? this.primaryTextKey,
       secondaryText: secondaryText ?? this.secondaryText,
       stopName: stopName ?? this.stopName,
       distance: distance ?? this.distance,

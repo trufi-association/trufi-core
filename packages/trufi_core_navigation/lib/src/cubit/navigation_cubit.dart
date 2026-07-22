@@ -28,7 +28,7 @@ class NavigationCubit extends Cubit<NavigationState> {
       emit(
         state.copyWith(
           status: NavigationStatus.error,
-          errorMessage: _getPermissionErrorMessage(permissionStatus),
+          errorType: _getPermissionError(permissionStatus),
         ),
       );
       return;
@@ -43,7 +43,7 @@ class NavigationCubit extends Cubit<NavigationState> {
       emit(
         state.copyWith(
           status: NavigationStatus.error,
-          errorMessage: 'Could not start location tracking',
+          errorType: NavigationError.trackingStartFailed,
         ),
       );
       return;
@@ -282,7 +282,7 @@ class NavigationCubit extends Cubit<NavigationState> {
         remainingStops: 0,
         currentInstruction: NavigationInstruction(
           type: InstructionType.arriveDestination,
-          primaryText: 'You have arrived',
+          primaryTextKey: InstructionTextKey.youHaveArrived,
           stopName: route?.stops.lastOrNull?.name,
         ),
         nextInstruction: null,
@@ -447,9 +447,9 @@ class NavigationCubit extends Cubit<NavigationState> {
     int stopIndex,
   ) {
     if (stopIndex >= route.stops.length) {
-      return NavigationInstruction(
+      return const NavigationInstruction(
         type: InstructionType.arriveDestination,
-        primaryText: 'Final destination',
+        primaryTextKey: InstructionTextKey.finalDestination,
       );
     }
 
@@ -461,14 +461,14 @@ class NavigationCubit extends Cubit<NavigationState> {
     );
   }
 
-  String _getPermissionErrorMessage(LocationPermissionStatus status) {
+  NavigationError? _getPermissionError(LocationPermissionStatus status) {
     return switch (status) {
-      LocationPermissionStatus.denied => 'Location permission denied',
+      LocationPermissionStatus.denied => NavigationError.permissionDenied,
       LocationPermissionStatus.deniedForever =>
-        'Location permission permanently denied. Please enable in settings.',
+        NavigationError.permissionDeniedForever,
       LocationPermissionStatus.serviceDisabled =>
-        'Location services are disabled. Please enable them.',
-      LocationPermissionStatus.granted => '',
+        NavigationError.serviceDisabled,
+      LocationPermissionStatus.granted => null,
     };
   }
 

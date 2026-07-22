@@ -59,5 +59,7 @@
   "navTransfer": "Transfer",
   "@navTransfer": { "description": "Label for a transfer point between routes" },
   "navDestination": "Destination",
-  "@navDestination": { "description": "Label for the route destination point" }
+  "@navDestination": { "description": "Label for the route destination point" },
+  "navRoute": "Route",
+  "@navRoute": { "description": "Fallback name for a route without a name" }
 }
