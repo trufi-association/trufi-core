@@ -69,6 +69,10 @@ class RemotePlannerClient implements PlannerRoutingClient {
       body: jsonEncode({
         'from': {'lat': origin.latitude, 'lon': origin.longitude},
         'to': {'lat': destination.latitude, 'lon': destination.longitude},
+        // Forward the requested result count so an app-level override
+        // reaches the server (older servers ignore unknown fields; the
+        // planner server clamps it to its own limits).
+        'maxResults': maxResults,
       }),
     );
 
