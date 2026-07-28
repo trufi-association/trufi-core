@@ -79,9 +79,9 @@ class NavigationCubit extends Cubit<NavigationState> {
         nextInstruction: nextInstruction,
         currentLocation: currentLocation,
         isMapFollowingUser: true,
-        // Show the planned trip duration immediately so it matches the route
-        // results, even before the first location fix refines it. See #917.
-        etaToDestination: route.duration,
+        // No etaToDestination seed: NavigationState derives the initial ETA
+        // from route.duration, so it matches the route results without
+        // storing a duplicate. See #917.
       ),
     );
 
@@ -317,13 +317,13 @@ class NavigationCubit extends Cubit<NavigationState> {
     // value shown in the route results) and scale it by how many stops are
     // left, instead of the previous fixed "2 minutes per remaining stop"
     // guess that inflated long routes to ~1h. See #917.
-    final plannedDuration = state.route?.duration ?? Duration.zero;
+    // state.route is non-null here: nextStop above already requires it.
     final rideStops = state.totalStops - 1; // stops after the origin
     final Duration etaToDestination;
-    if (plannedDuration > Duration.zero && rideStops > 0) {
+    if (state.route!.duration > Duration.zero && rideStops > 0) {
       final fraction = (state.remainingStops / rideStops).clamp(0.0, 1.0);
       etaToDestination = Duration(
-        seconds: (plannedDuration.inSeconds * fraction).round(),
+        seconds: (state.route!.duration.inSeconds * fraction).round(),
       );
     } else {
       // No planned duration available: fall back to the leg-pace estimate.

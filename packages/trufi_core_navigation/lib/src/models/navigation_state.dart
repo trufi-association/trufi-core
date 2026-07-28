@@ -179,8 +179,17 @@ class NavigationState extends Equatable {
   /// Estimated time to next stop.
   final Duration? etaToNextStop;
 
+  /// Live ETA computed from location updates, if any. Kept private so the
+  /// public [etaToDestination] stays consistent with the planned route.
+  final Duration? _measuredEtaToDestination;
+
   /// Estimated time to final destination.
-  final Duration? etaToDestination;
+  ///
+  /// Prefers the live estimate computed from location updates; before the
+  /// first GPS fix it falls back to the planned [NavigationRoute.duration]
+  /// (the value shown in the route results). Derived instead of stored so
+  /// the state never holds a duplicate of `route.duration`. See #917.
+  Duration? get etaToDestination => _measuredEtaToDestination ?? route?.duration;
 
   /// Error message if status is error.
   final String? errorMessage;
@@ -213,14 +222,14 @@ class NavigationState extends Equatable {
     this.currentLocation,
     this.distanceToNextStop,
     this.etaToNextStop,
-    this.etaToDestination,
+    Duration? etaToDestination,
     this.errorMessage,
     this.isOffRoute = false,
     this.distanceFromRoute,
     this.isGpsWeak = false,
     this.isMapFollowingUser = true,
     this.isInBackground = false,
-  });
+  }) : _measuredEtaToDestination = etaToDestination;
 
   /// Whether navigation is active.
   bool get isNavigating => status == NavigationStatus.navigating;
@@ -292,7 +301,9 @@ class NavigationState extends Equatable {
       currentLocation: currentLocation ?? this.currentLocation,
       distanceToNextStop: distanceToNextStop ?? this.distanceToNextStop,
       etaToNextStop: etaToNextStop ?? this.etaToNextStop,
-      etaToDestination: etaToDestination ?? this.etaToDestination,
+      // Intentionally the private field: copying through the public getter
+      // would bake the route-duration fallback into storage and duplicate it.
+      etaToDestination: etaToDestination ?? _measuredEtaToDestination,
       errorMessage: errorMessage ?? this.errorMessage,
       isOffRoute: isOffRoute ?? this.isOffRoute,
       distanceFromRoute: distanceFromRoute ?? this.distanceFromRoute,
@@ -327,7 +338,7 @@ class NavigationState extends Equatable {
     currentLocation,
     distanceToNextStop,
     etaToNextStop,
-    etaToDestination,
+    _measuredEtaToDestination,
     errorMessage,
     isOffRoute,
     distanceFromRoute,
