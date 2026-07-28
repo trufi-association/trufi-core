@@ -45,6 +45,7 @@ class _TransportListContentState extends State<TransportListContent>
   final _searchFocusNode = FocusNode();
   late AnimationController _listAnimationController;
   bool _isSearchFocused = false;
+  bool _loadFailed = false;
 
   @override
   void initState() {
@@ -55,13 +56,33 @@ class _TransportListContentState extends State<TransportListContent>
     );
     widget.dataProvider.addListener(_onDataChanged);
     _searchFocusNode.addListener(_onSearchFocusChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // `load` resets `filteredRoutes` to the full list, so re-scope it
-      // to any filter that was applied before/while loading (e.g. an
-      // `operator` deep-link filter set by the host screen).
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initialLoad());
+  }
+
+  /// Initial fetch. `load` resets `filteredRoutes` to the full list, so
+  /// re-scope it to any filter that was applied before/while loading
+  /// (e.g. an `operator` deep-link filter set by the host screen).
+  ///
+  /// `load` implementations talk to the network/asset layer and can throw;
+  /// without the catch the exception would be unhandled (the provider may
+  /// be left in `isLoading`, showing an eternal shimmer with no feedback).
+  Future<void> _initialLoad() async {
+    try {
       await widget.dataProvider.load();
       widget.dataProvider.reapplyFilters();
-    });
+      if (mounted && _loadFailed) setState(() => _loadFailed = false);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _loadFailed = true);
+      _showLoadError(e);
+    }
+  }
+
+  void _showLoadError(Object error) {
+    final localization = TransportListLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${localization.errorLoadingRoutes}\n$error')),
+    );
   }
 
   @override
@@ -96,8 +117,19 @@ class _TransportListContentState extends State<TransportListContent>
   /// the filtered count consistent with the visible controls. Use the
   /// explicit clear (X) affordances to remove a filter.
   Future<void> _refreshKeepingFilter() async {
-    await widget.dataProvider.refresh();
-    widget.dataProvider.reapplyFilters();
+    try {
+      await widget.dataProvider.refresh();
+      widget.dataProvider.reapplyFilters();
+      if (mounted && _loadFailed) setState(() => _loadFailed = false);
+    } catch (e) {
+      if (!mounted) return;
+      // Keep showing the current list if we have one; only fall back to the
+      // full-screen error state when there is nothing to show.
+      if (widget.dataProvider.state.filteredRoutes.isEmpty) {
+        setState(() => _loadFailed = true);
+      }
+      _showLoadError(e);
+    }
   }
 
   /// Try to open the drawer from the nearest ancestor Scaffold
@@ -178,6 +210,16 @@ class _TransportListContentState extends State<TransportListContent>
   ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    // Load failed and there is nothing cached to show: error + retry,
+    // instead of the eternal shimmer a stuck `isLoading` would produce.
+    if (_loadFailed && state.filteredRoutes.isEmpty) {
+      return _LoadErrorState(
+        message: localization.errorLoadingRoutes,
+        retryLabel: localization.retry,
+        onRetry: _initialLoad,
+      );
+    }
 
     // Loading state with shimmer
     if (state.isLoading && state.filteredRoutes.isEmpty) {
@@ -852,6 +894,63 @@ class _ShimmerCard extends StatelessWidget {
 }
 
 /// Empty state widget
+class _LoadErrorState extends StatelessWidget {
+  final String message;
+  final String retryLabel;
+  final VoidCallback onRetry;
+
+  const _LoadErrorState({
+    required this.message,
+    required this.retryLabel,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.cloud_off_rounded,
+                size: 40,
+                color: colorScheme.onErrorContainer.withValues(alpha: 0.8),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              message,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(retryLabel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _EmptyState extends StatelessWidget {
   final String message;
   final bool isSearch;

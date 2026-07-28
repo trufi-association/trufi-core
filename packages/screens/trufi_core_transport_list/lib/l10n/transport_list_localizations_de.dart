@@ -59,4 +59,10 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
 
   @override
   String get loadingRoute => 'Linie wird geladen...';
+
+  @override
+  String get errorLoadingRoutes => 'Die Linien konnten nicht geladen werden';
+
+  @override
+  String get retry => 'Erneut versuchen';
 }

@@ -59,4 +59,10 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get loadingRoute => 'Cargando ruta...';
+
+  @override
+  String get errorLoadingRoutes => 'No se pudieron cargar las rutas';
+
+  @override
+  String get retry => 'Reintentar';
 }

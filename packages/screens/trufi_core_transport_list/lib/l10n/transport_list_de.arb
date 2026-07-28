@@ -29,5 +29,7 @@
   "labelStops": "Haltestellen",
   "labelMode": "Verkehrsmittel",
   "noStopsAvailable": "Keine Haltestellen verfügbar",
-  "loadingRoute": "Linie wird geladen..."
+  "loadingRoute": "Linie wird geladen...",
+  "errorLoadingRoutes": "Die Linien konnten nicht geladen werden",
+  "retry": "Erneut versuchen"
 }

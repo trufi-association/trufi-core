@@ -29,5 +29,7 @@
   "labelStops": "Paradas",
   "labelMode": "Modo",
   "noStopsAvailable": "Sin paradas disponibles",
-  "loadingRoute": "Cargando ruta..."
+  "loadingRoute": "Cargando ruta...",
+  "errorLoadingRoutes": "No se pudieron cargar las rutas",
+  "retry": "Reintentar"
 }

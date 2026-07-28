@@ -38,5 +38,7 @@
   "labelStops": "Stops",
   "labelMode": "Mode",
   "noStopsAvailable": "No stops available",
-  "loadingRoute": "Loading route..."
+  "loadingRoute": "Loading route...",
+  "errorLoadingRoutes": "Could not load routes",
+  "retry": "Retry"
 }

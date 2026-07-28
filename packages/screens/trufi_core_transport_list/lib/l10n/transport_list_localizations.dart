@@ -198,6 +198,18 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Loading route...'**
   String get loadingRoute;
+
+  /// No description provided for @errorLoadingRoutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load routes'**
+  String get errorLoadingRoutes;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _TransportListLocalizationsDelegate
