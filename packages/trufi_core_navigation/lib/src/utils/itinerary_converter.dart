@@ -170,6 +170,7 @@ class ItineraryConverter {
       geometry: allPoints,
       stops: stops,
       legs: navigationLegs,
+      duration: itinerary.duration,
     );
   }
 }
