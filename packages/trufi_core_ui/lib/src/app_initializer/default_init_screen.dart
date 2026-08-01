@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
+import '../l10n/core_localizations.dart';
+
 /// Beautiful default initialization screen with animations.
 class DefaultInitScreen extends StatefulWidget {
   final AppInitStep? currentStep;
@@ -19,7 +21,7 @@ class DefaultInitScreen extends StatefulWidget {
   final Widget? topWidget;
 
   /// Optional function to override the display text for each init step.
-  /// If null, English defaults are used.
+  /// If null, localized defaults are used.
   final String Function(AppInitStep step)? stepTextBuilder;
 
   const DefaultInitScreen({
@@ -83,16 +85,22 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
     return _steps.indexOf(widget.currentStep!);
   }
 
+  /// Resolves [CoreLocalizations], falling back to English when this screen
+  /// is mounted without the CoreLocalizations delegate registered.
+  CoreLocalizations get _l10n =>
+      Localizations.of<CoreLocalizations>(context, CoreLocalizations) ??
+      lookupCoreLocalizations(const Locale('en'));
+
   String _stepToDisplayText(AppInitStep step) {
     if (widget.stepTextBuilder != null) {
       return widget.stepTextBuilder!(step);
     }
     return switch (step) {
-      AppInitStep.starting => Localizations.localeOf(context).languageCode == 'es' ? 'Iniciando' : 'Starting',
-      AppInitStep.initializingOverlays => Localizations.localeOf(context).languageCode == 'es' ? 'Inicializando' : 'Initializing',
-      AppInitStep.loadingMaps => Localizations.localeOf(context).languageCode == 'es' ? 'Cargando mapas' : 'Loading maps',
-      AppInitStep.loadingRoutes => Localizations.localeOf(context).languageCode == 'es' ? 'Cargando rutas' : 'Loading routes',
-      AppInitStep.preparingScreens => 'Almost ready',
+      AppInitStep.starting => _l10n.initStepStarting,
+      AppInitStep.initializingOverlays => _l10n.initStepInitializing,
+      AppInitStep.loadingMaps => _l10n.initStepLoadingMaps,
+      AppInitStep.loadingRoutes => _l10n.initStepLoadingRoutes,
+      AppInitStep.preparingScreens => _l10n.initStepAlmostReady,
     };
   }
 
@@ -265,7 +273,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
           child: Text(
             widget.currentStep != null
                 ? _stepToDisplayText(widget.currentStep!)
-                : Localizations.localeOf(context).languageCode == 'es' ? 'Cargando...' : 'Loading...',
+                : _l10n.appLoading,
             key: ValueKey(widget.currentStep),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.8),
@@ -384,7 +392,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
 
         // Error title
         Text(
-          'Unable to start',
+          _l10n.errorUnableToStart,
           style: Theme.of(
             context,
           ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -399,7 +407,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            widget.errorMessage ?? 'An unexpected error occurred',
+            widget.errorMessage ?? _l10n.errorUnexpected,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.8),
@@ -412,7 +420,7 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
         FilledButton.icon(
           onPressed: widget.onRetry,
           icon: const Icon(Icons.refresh_rounded),
-          label: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Reintentar' : 'Try again'),
+          label: Text(_l10n.actionRetry),
           style: FilledButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             shape: RoundedRectangleBorder(
