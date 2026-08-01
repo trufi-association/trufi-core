@@ -28,7 +28,8 @@ class NavigationScreen extends StatefulWidget {
     BuildContext context,
     NavigationState state,
     List<TrufiLayer> navigationLayers,
-  ) mapBuilder;
+  )
+  mapBuilder;
 
   /// Location service to use for tracking.
   final LocationService locationService;
@@ -56,7 +57,8 @@ class NavigationScreen extends StatefulWidget {
       BuildContext context,
       NavigationState state,
       List<TrufiLayer> navigationLayers,
-    ) mapBuilder,
+    )
+    mapBuilder,
     required LocationService locationService,
     NavigationConfig config = const NavigationConfig(),
     Widget? modeIcon,
@@ -73,15 +75,13 @@ class NavigationScreen extends StatefulWidget {
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-              ),
-            ),
+            position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+                .animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
             child: child,
           );
         },
@@ -99,7 +99,14 @@ class NavigationScreen extends StatefulWidget {
     NavigationConfig config = const NavigationConfig(),
     Widget? modeIcon,
   }) {
-    final route = ItineraryConverter.toNavigationRoute(itinerary);
+    final l10n = NavigationLocalizations.of(context);
+    final route = ItineraryConverter.toNavigationRoute(
+      itinerary,
+      originLabel: l10n.navOrigin,
+      transferLabel: l10n.navTransfer,
+      destinationLabel: l10n.navDestination,
+      routeLabel: l10n.navRoute,
+    );
     final currentLocation = locationService.currentLocation;
     final fallbackCenter = route.geometry.isNotEmpty
         ? route.geometry.first
@@ -232,11 +239,17 @@ class _NavigationScreenState extends State<NavigationScreen>
         );
 
       case NavigationStatus.error:
+        final l10n = NavigationLocalizations.of(context);
         return NavigationErrorPanel(
-          errorMessage: state.errorMessage ?? NavigationLocalizations.of(context).navError,
+          errorMessage:
+              state.errorType?.localizedMessage(l10n) ??
+              state.errorMessage ??
+              l10n.navError,
           onRetry: () => _cubit.startNavigation(widget.route),
           onClose: () => Navigator.of(context).pop(),
-          onOpenSettings: state.errorMessage?.contains('settings') == true
+          onOpenSettings:
+              state.errorType == NavigationError.permissionDeniedForever ||
+                  state.errorMessage?.contains('settings') == true
               ? () => widget.locationService.openAppSettings()
               : null,
         );

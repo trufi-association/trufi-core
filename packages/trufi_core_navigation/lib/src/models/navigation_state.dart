@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
+import '../../l10n/navigation_localizations.dart';
 import 'navigation_instruction.dart';
 
 /// Status of the navigation session.
@@ -32,6 +33,40 @@ enum NavigationSegmentType {
 
   /// Walking between stops or to destination.
   walking,
+}
+
+/// Machine-readable navigation error.
+///
+/// Carried in [NavigationState.errorType] by [NavigationCubit], which has no
+/// [BuildContext], and resolved to localized text at the widget layer via
+/// [NavigationErrorLocalization.localizedMessage].
+enum NavigationError {
+  /// Location tracking could not be started.
+  trackingStartFailed,
+
+  /// Location permission was denied.
+  permissionDenied,
+
+  /// Location permission was permanently denied.
+  permissionDeniedForever,
+
+  /// Location services are disabled on the device.
+  serviceDisabled,
+}
+
+/// Resolves a [NavigationError] to a localized, user-visible message.
+extension NavigationErrorLocalization on NavigationError {
+  /// The localized message for this error.
+  String localizedMessage(NavigationLocalizations localizations) {
+    return switch (this) {
+      NavigationError.trackingStartFailed =>
+        localizations.navCouldNotStartTracking,
+      NavigationError.permissionDenied => localizations.navPermissionDenied,
+      NavigationError.permissionDeniedForever =>
+        localizations.navPermissionPermanentlyDenied,
+      NavigationError.serviceDisabled => localizations.navLocationDisabled,
+    };
+  }
 }
 
 /// Represents a stop in navigation context.
@@ -192,7 +227,16 @@ class NavigationState extends Equatable {
   Duration? get etaToDestination => _measuredEtaToDestination ?? route?.duration;
 
   /// Error message if status is error.
+  ///
+  /// Prefer [errorType] for errors emitted by the cubit; this free-form
+  /// message remains for externally supplied error texts.
   final String? errorMessage;
+
+  /// Machine-readable error if status is error.
+  ///
+  /// Resolved to a localized message at the widget layer via
+  /// [NavigationErrorLocalization.localizedMessage].
+  final NavigationError? errorType;
 
   /// Whether user is off the route.
   final bool isOffRoute;
@@ -224,6 +268,7 @@ class NavigationState extends Equatable {
     this.etaToNextStop,
     Duration? etaToDestination,
     this.errorMessage,
+    this.errorType,
     this.isOffRoute = false,
     this.distanceFromRoute,
     this.isGpsWeak = false,
@@ -282,6 +327,7 @@ class NavigationState extends Equatable {
     Duration? etaToNextStop,
     Duration? etaToDestination,
     String? errorMessage,
+    NavigationError? errorType,
     bool? isOffRoute,
     double? distanceFromRoute,
     bool? isGpsWeak,
@@ -305,6 +351,7 @@ class NavigationState extends Equatable {
       // would bake the route-duration fallback into storage and duplicate it.
       etaToDestination: etaToDestination ?? _measuredEtaToDestination,
       errorMessage: errorMessage ?? this.errorMessage,
+      errorType: errorType ?? this.errorType,
       isOffRoute: isOffRoute ?? this.isOffRoute,
       distanceFromRoute: distanceFromRoute ?? this.distanceFromRoute,
       isGpsWeak: isGpsWeak ?? this.isGpsWeak,
@@ -340,6 +387,7 @@ class NavigationState extends Equatable {
     etaToNextStop,
     _measuredEtaToDestination,
     errorMessage,
+    errorType,
     isOffRoute,
     distanceFromRoute,
     isGpsWeak,

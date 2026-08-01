@@ -15,7 +15,19 @@ class ItineraryConverter {
   /// - Transit leg information (route name, color, short name)
   /// - Intermediate stops from transit legs
   /// - Leg segments for proper rendering with colors and styles
-  static NavigationRoute toNavigationRoute(routing.Itinerary itinerary) {
+  ///
+  /// [originLabel], [transferLabel], [destinationLabel] and [routeLabel] are
+  /// used as fallback names for unnamed places and routes. Callers with a
+  /// `BuildContext` should pass localized values (see
+  /// `NavigationLocalizations`); the English defaults only exist for
+  /// backward compatibility.
+  static NavigationRoute toNavigationRoute(
+    routing.Itinerary itinerary, {
+    String originLabel = 'Origin',
+    String transferLabel = 'Transfer',
+    String destinationLabel = 'Destination',
+    String routeLabel = 'Route',
+  }) {
     // Get all points from all legs for geometry
     final allPoints = <LatLng>[];
     final navigationLegs = <NavigationLeg>[];
@@ -71,7 +83,7 @@ class ItineraryConverter {
         stops.add(
           NavigationStop(
             id: 'stop-$stopIndex',
-            name: fromPlace.name.isNotEmpty ? fromPlace.name : 'Origin',
+            name: fromPlace.name.isNotEmpty ? fromPlace.name : originLabel,
             position: LatLng(fromPlace.lat, fromPlace.lon),
           ),
         );
@@ -80,7 +92,7 @@ class ItineraryConverter {
         stops.add(
           NavigationStop(
             id: 'stop-$stopIndex',
-            name: 'Origin',
+            name: originLabel,
             position: firstLeg.decodedPoints.first,
           ),
         );
@@ -114,7 +126,7 @@ class ItineraryConverter {
           stops.add(
             NavigationStop(
               id: 'stop-$stopIndex',
-              name: toPlace.name.isNotEmpty ? toPlace.name : 'Transfer',
+              name: toPlace.name.isNotEmpty ? toPlace.name : transferLabel,
               position: LatLng(toPlace.lat, toPlace.lon),
             ),
           );
@@ -123,7 +135,7 @@ class ItineraryConverter {
           stops.add(
             NavigationStop(
               id: 'stop-$stopIndex',
-              name: 'Transfer',
+              name: transferLabel,
               position: leg.decodedPoints.last,
             ),
           );
@@ -140,7 +152,7 @@ class ItineraryConverter {
         stops.add(
           NavigationStop(
             id: 'stop-$stopIndex',
-            name: toPlace.name.isNotEmpty ? toPlace.name : 'Destination',
+            name: toPlace.name.isNotEmpty ? toPlace.name : destinationLabel,
             position: LatLng(toPlace.lat, toPlace.lon),
           ),
         );
@@ -148,7 +160,7 @@ class ItineraryConverter {
         stops.add(
           NavigationStop(
             id: 'stop-$stopIndex',
-            name: 'Destination',
+            name: destinationLabel,
             position: lastLeg.decodedPoints.last,
           ),
         );
@@ -164,7 +176,7 @@ class ItineraryConverter {
     return NavigationRoute(
       id: 'route-${DateTime.now().millisecondsSinceEpoch}',
       code: transitLeg.shortName ?? 'ROUTE',
-      name: transitLeg.route?.longName ?? transitLeg.shortName ?? 'Route',
+      name: transitLeg.route?.longName ?? transitLeg.shortName ?? routeLabel,
       shortName: transitLeg.shortName,
       backgroundColor: backgroundColor,
       geometry: allPoints,

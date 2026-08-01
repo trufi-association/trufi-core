@@ -96,4 +96,7 @@ class NavigationLocalizationsEs extends NavigationLocalizations {
 
   @override
   String get navDestination => 'Destino';
+
+  @override
+  String get navRoute => 'Ruta';
 }
