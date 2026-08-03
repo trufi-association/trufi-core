@@ -28,7 +28,7 @@ class NavigationCubit extends Cubit<NavigationState> {
       emit(
         state.copyWith(
           status: NavigationStatus.error,
-          errorMessage: _getPermissionErrorMessage(permissionStatus),
+          errorType: _getPermissionError(permissionStatus),
         ),
       );
       return;
@@ -43,7 +43,7 @@ class NavigationCubit extends Cubit<NavigationState> {
       emit(
         state.copyWith(
           status: NavigationStatus.error,
-          errorMessage: 'Could not start location tracking',
+          errorType: NavigationError.trackingStartFailed,
         ),
       );
       return;
@@ -79,6 +79,9 @@ class NavigationCubit extends Cubit<NavigationState> {
         nextInstruction: nextInstruction,
         currentLocation: currentLocation,
         isMapFollowingUser: true,
+        // No etaToDestination seed: NavigationState derives the initial ETA
+        // from route.duration, so it matches the route results without
+        // storing a duplicate. See #917.
       ),
     );
 
@@ -282,7 +285,7 @@ class NavigationCubit extends Cubit<NavigationState> {
         remainingStops: 0,
         currentInstruction: NavigationInstruction(
           type: InstructionType.arriveDestination,
-          primaryText: 'You have arrived',
+          primaryTextKey: InstructionTextKey.youHaveArrived,
           stopName: route?.stops.lastOrNull?.name,
         ),
         nextInstruction: null,
@@ -303,25 +306,35 @@ class NavigationCubit extends Cubit<NavigationState> {
       nextStop.position.longitude,
     );
 
-    // Estimate time based on average transit speed (30 km/h = 8.33 m/s)
-    // For walking: ~1.4 m/s (5 km/h)
+    // Estimate time to the next stop based on average transit speed
+    // (30 km/h = 8.33 m/s); walking: ~1.4 m/s (5 km/h).
     final speedMs = state.segmentType == NavigationSegmentType.transit
         ? 8.33
         : 1.4;
     final etaSeconds = distanceToNext / speedMs;
 
-    // Estimate total ETA based on remaining stops
-    // Assume average 2 minutes per stop for transit
-    final remainingStopsEta = state.segmentType == NavigationSegmentType.transit
-        ? Duration(minutes: state.remainingStops * 2)
-        : Duration.zero;
+    // Remaining trip time: anchor to the itinerary's planned duration (the
+    // value shown in the route results) and scale it by how many stops are
+    // left, instead of the previous fixed "2 minutes per remaining stop"
+    // guess that inflated long routes to ~1h. See #917.
+    // state.route is non-null here: nextStop above already requires it.
+    final rideStops = state.totalStops - 1; // stops after the origin
+    final Duration etaToDestination;
+    if (state.route!.duration > Duration.zero && rideStops > 0) {
+      final fraction = (state.remainingStops / rideStops).clamp(0.0, 1.0);
+      etaToDestination = Duration(
+        seconds: (state.route!.duration.inSeconds * fraction).round(),
+      );
+    } else {
+      // No planned duration available: fall back to the leg-pace estimate.
+      etaToDestination = Duration(seconds: etaSeconds.round());
+    }
 
     emit(
       state.copyWith(
         distanceToNextStop: distanceToNext,
         etaToNextStop: Duration(seconds: etaSeconds.round()),
-        etaToDestination:
-            Duration(seconds: etaSeconds.round()) + remainingStopsEta,
+        etaToDestination: etaToDestination,
       ),
     );
   }
@@ -447,9 +460,9 @@ class NavigationCubit extends Cubit<NavigationState> {
     int stopIndex,
   ) {
     if (stopIndex >= route.stops.length) {
-      return NavigationInstruction(
+      return const NavigationInstruction(
         type: InstructionType.arriveDestination,
-        primaryText: 'Final destination',
+        primaryTextKey: InstructionTextKey.finalDestination,
       );
     }
 
@@ -461,14 +474,14 @@ class NavigationCubit extends Cubit<NavigationState> {
     );
   }
 
-  String _getPermissionErrorMessage(LocationPermissionStatus status) {
+  NavigationError? _getPermissionError(LocationPermissionStatus status) {
     return switch (status) {
-      LocationPermissionStatus.denied => 'Location permission denied',
+      LocationPermissionStatus.denied => NavigationError.permissionDenied,
       LocationPermissionStatus.deniedForever =>
-        'Location permission permanently denied. Please enable in settings.',
+        NavigationError.permissionDeniedForever,
       LocationPermissionStatus.serviceDisabled =>
-        'Location services are disabled. Please enable them.',
-      LocationPermissionStatus.granted => '',
+        NavigationError.serviceDisabled,
+      LocationPermissionStatus.granted => null,
     };
   }
 

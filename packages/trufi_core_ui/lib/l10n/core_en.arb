@@ -100,5 +100,45 @@
   "markAllAsRead": "Mark all as read",
   "@markAllAsRead": {
     "description": "Button to mark all notifications as read"
+  },
+
+  "initStepStarting": "Starting",
+  "@initStepStarting": {
+    "description": "Init screen step: the app is starting"
+  },
+
+  "initStepInitializing": "Initializing",
+  "@initStepInitializing": {
+    "description": "Init screen step: initializing app services"
+  },
+
+  "initStepLoadingMaps": "Loading maps",
+  "@initStepLoadingMaps": {
+    "description": "Init screen step: loading map engines"
+  },
+
+  "initStepLoadingRoutes": "Loading routes",
+  "@initStepLoadingRoutes": {
+    "description": "Init screen step: loading routing engines"
+  },
+
+  "initStepAlmostReady": "Almost ready",
+  "@initStepAlmostReady": {
+    "description": "Init screen step: preparing screens"
+  },
+
+  "errorUnableToStart": "Unable to start",
+  "@errorUnableToStart": {
+    "description": "Title shown when app initialization fails"
+  },
+
+  "errorUnexpected": "An unexpected error occurred",
+  "@errorUnexpected": {
+    "description": "Fallback message when an error has no details"
+  },
+
+  "poweredByTrufi": "Powered by Trufi Association",
+  "@poweredByTrufi": {
+    "description": "Brand tagline in the drawer footer; keep identical in all languages"
   }
 }

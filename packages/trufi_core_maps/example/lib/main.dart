@@ -45,6 +45,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Trufi Maps - Performance Demo',
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: MapsLocalizations.localizationsDelegates,
+        supportedLocales: MapsLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
@@ -282,8 +284,7 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
                   fps: _fps,
                   isAnimating: _isAnimating,
                   hasData: _animatedMarkersLayer.vehicleCount > 0,
-                  onMarkerCountChanged: (v) =>
-                      setState(() => _markerCount = v),
+                  onMarkerCountChanged: (v) => setState(() => _markerCount = v),
                   onLineCountChanged: (v) => setState(() => _lineCount = v),
                   onFpsChanged: (v) => setState(() => _fps = v),
                   onStart: _applySettings,

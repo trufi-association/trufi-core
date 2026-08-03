@@ -61,6 +61,36 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get loadingRoute => 'Linie wird geladen...';
 
   @override
+  String get otherAgencies => 'Sonstige';
+
+  @override
+  String shareRouteMessage(String uri) {
+    return 'Teilen: $uri';
+  }
+
+  @override
+  String get defaultModeBus => 'Bus';
+
+  @override
+  String get mapSettingsTitle => 'Karteneinstellungen';
+
+  @override
+  String get mapTypeLabel => 'Kartentyp';
+
+  @override
+  String get applyChanges => 'Änderungen übernehmen';
+
+  @override
+  String get stopStart => 'Start';
+
+  @override
+  String get stopEnd => 'Ende';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'Für diese Linie sind keine Haltestelleninformationen verfügbar';
+
+  @override
   String get errorLoadingRoutes => 'Die Linien konnten nicht geladen werden';
 
   @override

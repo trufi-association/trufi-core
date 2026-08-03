@@ -26,5 +26,6 @@
   "navLocationDisabled": "Los servicios de ubicación están deshabilitados. Habilítalos.",
   "navOrigin": "Origen",
   "navTransfer": "Transbordo",
-  "navDestination": "Destino"
+  "navDestination": "Destino",
+  "navRoute": "Ruta"
 }

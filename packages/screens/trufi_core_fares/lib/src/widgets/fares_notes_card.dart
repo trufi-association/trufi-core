@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/fares_localizations.dart';
+
 /// Tip card with a lightbulb icon, used at the bottom of the fares screen.
 class FaresNotesCard extends StatelessWidget {
   final String notes;
-  final String label;
 
-  const FaresNotesCard({super.key, required this.notes, this.label = 'Tips'});
+  /// Custom label for the card. When null, a localized "Tips" label is used.
+  final String? label;
+
+  const FaresNotesCard({super.key, required this.notes, this.label});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final label = this.label ?? FaresLocalizations.of(context).faresTips;
 
     return Container(
       width: double.infinity,

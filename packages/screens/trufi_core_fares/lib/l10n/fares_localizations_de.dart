@@ -24,4 +24,7 @@ class FaresLocalizationsDe extends FaresLocalizations {
 
   @override
   String get faresMoreInfo => 'Weitere Informationen';
+
+  @override
+  String get faresTips => 'Tipps';
 }

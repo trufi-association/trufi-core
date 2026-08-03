@@ -40,5 +40,7 @@
   "locationRequired": "Location is required",
   "locationSelected": "Location selected",
   "tapToSelectLocation": "Tap to select on map",
-  "change": "Change"
+  "change": "Change",
+  "errorLoadingPlaces": "Error loading places",
+  "retry": "Retry"
 }

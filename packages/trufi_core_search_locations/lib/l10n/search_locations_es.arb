@@ -1,0 +1,12 @@
+{
+  "@@locale": "es",
+  "selectOrigin": "Seleccionar origen",
+  "selectDestination": "Seleccionar destino",
+  "searchOrigin": "Buscar origen...",
+  "searchDestination": "Buscar destino...",
+  "yourLocation": "Tu ubicación",
+  "chooseOnMap": "Elegir en el mapa",
+  "yourPlaces": "TUS LUGARES",
+  "searchResults": "RESULTADOS DE BÚSQUEDA",
+  "noResultsFound": "No se encontraron resultados"
+}

@@ -67,6 +67,36 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   String get loadingRoute => 'Loading route...';
 
   @override
+  String get otherAgencies => 'Others';
+
+  @override
+  String shareRouteMessage(String uri) {
+    return 'Share: $uri';
+  }
+
+  @override
+  String get defaultModeBus => 'Bus';
+
+  @override
+  String get mapSettingsTitle => 'Map Settings';
+
+  @override
+  String get mapTypeLabel => 'Map Type';
+
+  @override
+  String get applyChanges => 'Apply Changes';
+
+  @override
+  String get stopStart => 'Start';
+
+  @override
+  String get stopEnd => 'End';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'Stop information is not available for this route';
+
+  @override
   String get errorLoadingRoutes => 'Could not load routes';
 
   @override

@@ -30,6 +30,22 @@
   "labelMode": "Verkehrsmittel",
   "noStopsAvailable": "Keine Haltestellen verfügbar",
   "loadingRoute": "Linie wird geladen...",
+  "otherAgencies": "Sonstige",
+  "shareRouteMessage": "Teilen: {uri}",
+  "@shareRouteMessage": {
+    "placeholders": {
+      "uri": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultModeBus": "Bus",
+  "mapSettingsTitle": "Karteneinstellungen",
+  "mapTypeLabel": "Kartentyp",
+  "applyChanges": "Änderungen übernehmen",
+  "stopStart": "Start",
+  "stopEnd": "Ende",
+  "stopInfoNotAvailable": "Für diese Linie sind keine Haltestelleninformationen verfügbar",
   "errorLoadingRoutes": "Die Linien konnten nicht geladen werden",
   "retry": "Erneut versuchen"
 }

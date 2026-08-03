@@ -5,6 +5,7 @@ import 'package:graphql/client.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../otp_2_4/graphql_client_factory.dart';
+import '../../models/itinerary.dart';
 import '../../models/plan.dart';
 import '../../models/routing_location.dart';
 import '../../models/stop.dart';
@@ -110,8 +111,11 @@ class Otp28RoutingProvider extends IRoutingProvider {
   bool get requiresInternet => true;
 
   @override
-  Widget? buildPreferencesUI(BuildContext context) =>
-      Otp28Preferences(state: _prefs, showWheelchair: showWheelchairOption, showBicycle: showBicycleOption);
+  Widget? buildPreferencesUI(BuildContext context) => Otp28Preferences(
+    state: _prefs,
+    showWheelchair: showWheelchairOption,
+    showBicycle: showBicycleOption,
+  );
 
   @override
   void resetPreferences() => _prefs.reset();
@@ -210,16 +214,34 @@ class Otp28RoutingProvider extends IRoutingProvider {
 
     final plan = Otp28ResponseParser.parsePlan(result.data!);
 
-    // Filter out walk-only itineraries longer than 1 km — these are not useful
-    // transit results and usually appear when no service is available.
-    if (plan.itineraries != null) {
-      final filtered = plan.itineraries!
-          .where((it) => !(it.isWalkOnly && it.walkDistance > 1000))
-          .toList();
-      return plan.copyWith(itineraries: filtered);
-    }
+    final walkOnlyRequested =
+        !useSimpleQuery &&
+        _prefs.transportModes.length == 1 &&
+        _prefs.transportModes.single == RoutingMode.walk;
 
-    return plan;
+    return plan.copyWith(
+      itineraries: filterLongWalks(
+        plan.itineraries,
+        walkOnlyRequested: walkOnlyRequested,
+      ),
+    );
+  }
+
+  /// Drops walk-only itineraries longer than 1 km — in a transit search
+  /// those usually mean no service was available and only add noise.
+  ///
+  /// When the rider explicitly restricted the search to walking, every
+  /// result is a walk and dropping the long ones would empty the list
+  /// for any non-trivial trip (issue #900), so the filter is skipped.
+  @visibleForTesting
+  static List<Itinerary>? filterLongWalks(
+    List<Itinerary>? itineraries, {
+    required bool walkOnlyRequested,
+  }) {
+    if (itineraries == null || walkOnlyRequested) return itineraries;
+    return itineraries
+        .where((it) => !(it.isWalkOnly && it.walkDistance > 1000))
+        .toList();
   }
 
   // --- Transit routes (same schema as OTP 2.4) ---

@@ -177,7 +177,9 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(TransportListLocalizations.of(context).routeLoadError),
+            content: Text(
+              TransportListLocalizations.of(context).routeLoadError,
+            ),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -218,7 +220,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     ColorScheme colorScheme,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ??
+    final textColor =
+        _route?.textColor ??
         (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
@@ -448,7 +451,8 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     double width,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor = _route?.textColor ??
+    final textColor =
+        _route?.textColor ??
         (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
@@ -615,8 +619,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
             // Grabber height in TrufiBottomSheet: 12 top + 4 bar + 8 bottom = 24
             const grabberHeight = 24.0;
             final minSize = _headerMinSize != null
-                ? ((_headerMinSize! + grabberHeight) / screenHeight)
-                    .clamp(0.1, 0.4)
+                ? ((_headerMinSize! + grabberHeight) / screenHeight).clamp(
+                    0.1,
+                    0.4,
+                  )
                 : 0.12;
             final snapSizes = [minSize, 0.35, 0.85];
 
@@ -716,7 +722,9 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Compartir: $uri' : 'Share: $uri'),
+        content: Text(
+          TransportListLocalizations.of(context).shareRouteMessage('$uri'),
+        ),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -851,10 +859,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
         // Pinned header — stays fixed at top, drag on it still expands the sheet
         SliverPersistentHeader(
           pinned: true,
-          delegate: _SliverHeaderDelegate(
-            child: header,
-            height: _headerHeight,
-          ),
+          delegate: _SliverHeaderDelegate(child: header, height: _headerHeight),
         ),
 
         // Stops list
@@ -865,32 +870,28 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
           )
         else
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final stop = stops[index];
-                final isFirst = index == 0;
-                final isLast = index == stops.length - 1;
-                final isSelected = widget.selectedStopIndex == index;
-                final routeColor =
-                    widget.route.backgroundColor ?? colorScheme.primary;
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final stop = stops[index];
+              final isFirst = index == 0;
+              final isLast = index == stops.length - 1;
+              final isSelected = widget.selectedStopIndex == index;
+              final routeColor =
+                  widget.route.backgroundColor ?? colorScheme.primary;
 
-                return _StopTimelineItem(
-                  stop: stop,
-                  isFirst: isFirst,
-                  isLast: isLast,
-                  isSelected: isSelected,
-                  routeColor: _foregroundColor(routeColor),
-                  onTap: widget.onStopTap != null
-                      ? () {
-                          HapticFeedback.selectionClick();
-                          widget.onStopTap!(
-                              index, stop.latitude, stop.longitude);
-                        }
-                      : null,
-                );
-              },
-              childCount: stops.length,
-            ),
+              return _StopTimelineItem(
+                stop: stop,
+                isFirst: isFirst,
+                isLast: isLast,
+                isSelected: isSelected,
+                routeColor: _foregroundColor(routeColor),
+                onTap: widget.onStopTap != null
+                    ? () {
+                        HapticFeedback.selectionClick();
+                        widget.onStopTap!(index, stop.latitude, stop.longitude);
+                      }
+                    : null,
+              );
+            }, childCount: stops.length),
           ),
       ],
     );
@@ -1069,7 +1070,9 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                         : Icons.directions_bus_rounded,
                     customIcon: widget.route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
-                    value: widget.route.modeName ?? 'Bus',
+                    value:
+                        widget.route.modeName ??
+                        TransportListLocalizations.of(context).defaultModeBus,
                     color: _foregroundColor(routeColor),
                   ),
                 ),
@@ -1122,10 +1125,7 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Material(
-      color: Theme.of(context).colorScheme.surface,
-      child: child,
-    );
+    return Material(color: Theme.of(context).colorScheme.surface, child: child);
   }
 
   @override
@@ -1550,7 +1550,9 @@ class _SidePanelStopsContent extends StatelessWidget {
                         : Icons.directions_bus_rounded,
                     customIcon: route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
-                    value: route.modeName ?? 'Bus',
+                    value:
+                        route.modeName ??
+                        TransportListLocalizations.of(context).defaultModeBus,
                     color: routeColor,
                   ),
                 ),
@@ -1887,9 +1889,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
   }
 
   void _reFitCamera() {
-    final refitted = _fitCamera.reFitCamera(
-      _camera ?? _initialCamera!,
-    );
+    final refitted = _fitCamera.reFitCamera(_camera ?? _initialCamera!);
     if (refitted != null) {
       setState(() {
         _camera = refitted;
@@ -1952,9 +1952,15 @@ class _RouteMapViewState extends State<_RouteMapView> {
                       onEngineChanged: (engine) {
                         mapEngineManager.setEngine(engine);
                       },
-                      settingsAppBarTitle: Localizations.localeOf(context).languageCode == 'es' ? 'Configuración del mapa' : 'Map Settings',
-                      settingsSectionTitle: Localizations.localeOf(context).languageCode == 'es' ? 'Tipo de mapa' : 'Map Type',
-                      settingsApplyButtonText: Localizations.localeOf(context).languageCode == 'es' ? 'Aplicar cambios' : 'Apply Changes',
+                      settingsAppBarTitle: TransportListLocalizations.of(
+                        context,
+                      ).mapSettingsTitle,
+                      settingsSectionTitle: TransportListLocalizations.of(
+                        context,
+                      ).mapTypeLabel,
+                      settingsApplyButtonText: TransportListLocalizations.of(
+                        context,
+                      ).applyChanges,
                     ),
                     const SizedBox(height: 8),
                   ],
@@ -1981,9 +1987,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
                             child: Icon(
                               Icons.crop_free_rounded,
                               size: 22,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -2108,8 +2112,7 @@ class _RouteIdentity extends StatelessWidget {
   }
 
   String? get _subtitle {
-    final hasLongName =
-        route.longName != null && route.longName!.isNotEmpty;
+    final hasLongName = route.longName != null && route.longName!.isNotEmpty;
     if (!hasLongName) return null;
     if (route.headsign != null && route.headsign!.isNotEmpty) {
       return route.headsign;

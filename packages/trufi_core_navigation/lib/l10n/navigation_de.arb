@@ -26,5 +26,6 @@
   "navLocationDisabled": "Standortdienste sind deaktiviert. Bitte aktivieren Sie diese.",
   "navOrigin": "Startpunkt",
   "navTransfer": "Umstieg",
-  "navDestination": "Ziel"
+  "navDestination": "Ziel",
+  "navRoute": "Route"
 }

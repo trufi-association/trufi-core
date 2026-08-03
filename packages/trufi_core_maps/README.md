@@ -9,6 +9,7 @@ The core idea is a **declarative data flow**: you pass layers, markers, and line
 ## Contents
 
 - [Quick Start](#quick-start)
+- [Localization](#localization)
 - [Core Concepts](#core-concepts)
 - [Map Engines](#map-engines)
 - [Data Types](#data-types)
@@ -63,6 +64,39 @@ class MyMapScreen extends StatelessWidget {
   }
 }
 ```
+
+---
+
+## Localization
+
+**Breaking change (since the l10n migration):** widgets that render text
+(`MapTypeButton`, `ChooseOnMapScreen`, `MapOnlineOfflineToggle`, the map type
+settings screen, and engine `localizedName`/`localizedDescription`) resolve
+their default strings through `MapsLocalizations.of(context)`. There is no
+implicit English fallback — if the delegate is not registered, these widgets
+throw a null-check error at build time.
+
+Apps built with `TrufiApp` get the delegate automatically (screens merge it
+into the `MaterialApp`). If you embed these widgets in your own `MaterialApp`,
+register the delegate yourself:
+
+```dart
+MaterialApp(
+  localizationsDelegates: MapsLocalizations.localizationsDelegates,
+  supportedLocales: MapsLocalizations.supportedLocales,
+  // ...
+)
+```
+
+Supported locales: `en`, `es`, `de`. Widgets that accept explicit strings
+(e.g. `MapTypeButton(tooltip: ...)`, `ChooseOnMapConfiguration(title: ...)`)
+still use them verbatim and skip the lookup, but the delegate is required
+whenever any text field is left `null`.
+
+The same applies to `trufi_core_search_locations`: register
+`SearchLocationsLocalizations.delegate` (plus `MapsLocalizations.delegate` if
+you use `ChooseOnMapScreen`) before embedding `SearchLocationBar` or
+`LocationSearchScreen` outside `TrufiApp`.
 
 ---
 

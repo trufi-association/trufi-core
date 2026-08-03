@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../l10n/search_locations_localizations.dart';
 import '../models/search_location_bar_configuration.dart';
 import '../models/search_location_state.dart';
 
@@ -12,6 +13,11 @@ import '../models/search_location_state.dart';
 /// - Visual connection between origin and destination
 /// - Responsive layout for portrait/landscape
 /// - Haptic feedback on interactions
+///
+/// When the configuration hint texts are null they resolve through
+/// [SearchLocationsLocalizations]: the enclosing app must register
+/// [SearchLocationsLocalizations.delegate] (`TrufiApp` does this
+/// automatically) or the lookup throws at build time.
 class SearchLocationBar extends StatelessWidget {
   /// The current state containing origin and destination.
   final SearchLocationState state;
@@ -148,7 +154,9 @@ class SearchLocationBar extends StatelessWidget {
                     // Origin field with clear button
                     _LocationFieldWithClear(
                       isOrigin: true,
-                      hintText: configuration.originHintText,
+                      hintText:
+                          configuration.originHintText ??
+                          SearchLocationsLocalizations.of(context).selectOrigin,
                       value: state.origin,
                       onTap: () => _handleSearch(context, isOrigin: true),
                       onClear: onClearLocation != null
@@ -163,7 +171,11 @@ class SearchLocationBar extends StatelessWidget {
                     // Destination field with clear button
                     _LocationFieldWithClear(
                       isOrigin: false,
-                      hintText: configuration.destinationHintText,
+                      hintText:
+                          configuration.destinationHintText ??
+                          SearchLocationsLocalizations.of(
+                            context,
+                          ).selectDestination,
                       value: state.destination,
                       onTap: () => _handleSearch(context, isOrigin: false),
                       onClear: onClearLocation != null
@@ -259,7 +271,9 @@ class SearchLocationBar extends StatelessWidget {
         Expanded(
           child: _LocationFieldModernWithClear(
             isOrigin: true,
-            hintText: configuration.originHintText,
+            hintText:
+                configuration.originHintText ??
+                SearchLocationsLocalizations.of(context).selectOrigin,
             value: state.origin,
             onTap: () => _handleSearch(context, isOrigin: true),
             onClear: onClearLocation != null && state.origin != null
@@ -299,7 +313,9 @@ class SearchLocationBar extends StatelessWidget {
         Expanded(
           child: _LocationFieldModernWithClear(
             isOrigin: false,
-            hintText: configuration.destinationHintText,
+            hintText:
+                configuration.destinationHintText ??
+                SearchLocationsLocalizations.of(context).selectDestination,
             value: state.destination,
             onTap: () => _handleSearch(context, isOrigin: false),
             onClear: onClearLocation != null && state.destination != null

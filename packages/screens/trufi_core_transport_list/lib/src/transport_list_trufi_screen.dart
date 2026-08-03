@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart' show MapsLocalizations;
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import '../l10n/transport_list_localizations.dart';
@@ -84,6 +85,7 @@ class TransportListTrufiScreen extends TrufiScreen {
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
     ...TransportListLocalizations.localizationsDelegates,
+    MapsLocalizations.delegate,
   ];
 
   @override

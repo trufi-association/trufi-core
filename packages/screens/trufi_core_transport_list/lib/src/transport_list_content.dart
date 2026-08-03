@@ -242,6 +242,7 @@ class _TransportListContentState extends State<TransportListContent>
     final listItems = _buildGroupedItems(
       state.filteredRoutes,
       _searchController.text.isNotEmpty,
+      localization.otherAgencies,
     );
 
     return Stack(
@@ -333,6 +334,7 @@ class _TransportListContentState extends State<TransportListContent>
   static List<_GroupedListItem> _buildGroupedItems(
     List<TransportRoute> routes,
     bool isSearching,
+    String otherAgenciesLabel,
   ) {
     // During search, show flat list without headers
     if (isSearching) {
@@ -354,7 +356,7 @@ class _TransportListContentState extends State<TransportListContent>
       final agencyRoutes = grouped[agency]!;
       items.add(
         _GroupedListItem.header(
-          agency.isEmpty ? 'Otros' : agency,
+          agency.isEmpty ? otherAgenciesLabel : agency,
           agencyRoutes.length,
           // Routes without an agency get a synthetic header — no real
           // operator to encode in a QR.
