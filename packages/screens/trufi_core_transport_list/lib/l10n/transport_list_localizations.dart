@@ -276,6 +276,12 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Copy QR'**
   String get copyQrImage;
+
+  /// Snackbar shown when copying the QR image to the clipboard fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t copy the QR'**
+  String get copyQrImageFailed;
 }
 
 class _TransportListLocalizationsDelegate

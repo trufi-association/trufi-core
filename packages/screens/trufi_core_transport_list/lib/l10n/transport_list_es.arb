@@ -49,5 +49,6 @@
   "errorLoadingRoutes": "No se pudieron cargar las rutas",
   "retry": "Reintentar",
   "qrShareSubtitle": "Escanea para abrir las rutas de este operador",
-  "copyQrImage": "Copiar QR"
+  "copyQrImage": "Copiar QR",
+  "copyQrImageFailed": "No se pudo copiar el QR"
 }

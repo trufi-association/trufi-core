@@ -101,4 +101,7 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get copyQrImage => 'Copiar QR';
+
+  @override
+  String get copyQrImageFailed => 'No se pudo copiar el QR';
 }

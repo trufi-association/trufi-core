@@ -47,7 +47,8 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
   /// zone, so the copied image scans as reliably as the on-screen one.
   Future<Uint8List> _qrPngBytes() async {
     const size = 768.0;
-    const margin = 64.0;
+    // ~4 modules of quiet zone (QR spec) for a version-6-ish code.
+    const margin = 80.0;
     final painter = QrPainter(
       data: widget.link,
       version: QrVersions.auto,
@@ -65,8 +66,12 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
       size.toInt(),
       size.toInt(),
     );
-    final data = await image.toByteData(format: ui.ImageByteFormat.png);
-    return data!.buffer.asUint8List();
+    try {
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      return data!.buffer.asUint8List();
+    } finally {
+      image.dispose();
+    }
   }
 
   @override
@@ -219,9 +224,20 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                   child: OutlinedButton.icon(
                     onPressed: () async {
                       HapticFeedback.lightImpact();
-                      final bytes = await _qrPngBytes();
-                      await Pasteboard.writeImage(bytes);
-                      if (mounted) setState(() => _imageCopied = true);
+                      final messenger = ScaffoldMessenger.of(context);
+                      try {
+                        final bytes = await _qrPngBytes();
+                        await Pasteboard.writeImage(bytes);
+                        if (mounted) setState(() => _imageCopied = true);
+                      } catch (e) {
+                        // Most likely a host app missing the FileProvider
+                        // setup (see package README) — fail visibly, not
+                        // with an unhandled PlatformException.
+                        debugPrint('OperatorQrSheet: copy image failed: \$e');
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(l10n.copyQrImageFailed)),
+                        );
+                      }
                     },
                     icon: Icon(
                       _imageCopied

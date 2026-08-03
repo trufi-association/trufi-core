@@ -89,5 +89,9 @@
   "copyQrImage": "Copy QR",
   "@copyQrImage": {
     "description": "Button that copies the QR code image to the clipboard"
+  },
+  "copyQrImageFailed": "Couldn't copy the QR",
+  "@copyQrImageFailed": {
+    "description": "Snackbar shown when copying the QR image to the clipboard fails"
   }
 }
