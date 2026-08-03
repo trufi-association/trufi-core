@@ -60,8 +60,9 @@ class RemotePlannerClient implements PlannerRoutingClient {
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
-    double maxWalkDistance = 500,
+    double maxWalkDistance = 800,
     int maxResults = 5,
+    int maxStopCandidates = 60,
   }) async {
     final response = await _httpClient.post(
       Uri.parse('$_baseUrl/plan'),
@@ -73,6 +74,8 @@ class RemotePlannerClient implements PlannerRoutingClient {
         // reaches the server (older servers ignore unknown fields; the
         // planner server clamps it to its own limits).
         'maxResults': maxResults,
+        'maxWalkDistance': maxWalkDistance,
+        'maxStopCandidates': maxStopCandidates,
       }),
     );
 
@@ -126,8 +129,9 @@ class RemotePlannerClient implements PlannerRoutingClient {
       final route = GtfsRoute.fromJson(r);
       final patternsJson = r['patterns'] as List? ?? const [];
       final patterns = patternsJson
-          .map((p) =>
-              RemoteRoutePatternInfo.fromJson(p as Map<String, dynamic>))
+          .map(
+            (p) => RemoteRoutePatternInfo.fromJson(p as Map<String, dynamic>),
+          )
           .toList();
       return RouteWithPatterns(
         route: route,
@@ -142,10 +146,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
     final uri = limit != null
         ? Uri.parse('$_baseUrl/stops?limit=$limit')
         : Uri.parse('$_baseUrl/stops');
-    final response = await _httpClient.get(
-      uri,
-      headers: await _buildHeaders(),
-    );
+    final response = await _httpClient.get(uri, headers: await _buildHeaders());
     if (response.statusCode != 200) return [];
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;

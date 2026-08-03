@@ -70,8 +70,9 @@ class LocalPlannerClient implements PlannerRoutingClient {
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
-    double maxWalkDistance = 500,
+    double maxWalkDistance = 800,
     int maxResults = 5,
+    int maxStopCandidates = 60,
   }) async {
     if (_routingService == null) return [];
     return _routingService!.findRoutes(
@@ -79,6 +80,7 @@ class LocalPlannerClient implements PlannerRoutingClient {
       destination: destination,
       maxWalkDistance: maxWalkDistance,
       maxResults: maxResults,
+      maxStopCandidates: maxStopCandidates,
       // Scale the per-bucket caps with the requested result count so an
       // app-level maxItineraries override isn't silently clipped to the
       // service defaults (5 directs + 5 transfers). At the default
