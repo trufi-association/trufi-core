@@ -45,5 +45,10 @@
   "applyChanges": "Änderungen übernehmen",
   "stopStart": "Start",
   "stopEnd": "Ende",
-  "stopInfoNotAvailable": "Für diese Linie sind keine Haltestelleninformationen verfügbar"
+  "stopInfoNotAvailable": "Für diese Linie sind keine Haltestelleninformationen verfügbar",
+  "errorLoadingRoutes": "Die Linien konnten nicht geladen werden",
+  "retry": "Erneut versuchen",
+  "qrShareSubtitle": "Scannen, um die Linien dieses Betreibers zu öffnen",
+  "copyQrImage": "QR kopieren",
+  "copyQrImageFailed": "QR konnte nicht kopiert werden"
 }

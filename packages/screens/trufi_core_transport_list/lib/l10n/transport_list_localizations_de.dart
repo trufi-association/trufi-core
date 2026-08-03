@@ -89,4 +89,20 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   @override
   String get stopInfoNotAvailable =>
       'Für diese Linie sind keine Haltestelleninformationen verfügbar';
+
+  @override
+  String get errorLoadingRoutes => 'Die Linien konnten nicht geladen werden';
+
+  @override
+  String get retry => 'Erneut versuchen';
+
+  @override
+  String get qrShareSubtitle =>
+      'Scannen, um die Linien dieses Betreibers zu öffnen';
+
+  @override
+  String get copyQrImage => 'QR kopieren';
+
+  @override
+  String get copyQrImageFailed => 'QR konnte nicht kopiert werden';
 }

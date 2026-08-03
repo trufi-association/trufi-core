@@ -252,6 +252,36 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Stop information is not available for this route'**
   String get stopInfoNotAvailable;
+
+  /// No description provided for @errorLoadingRoutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load routes'**
+  String get errorLoadingRoutes;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Subtitle of the operator QR dialog explaining what scanning does
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to open this operator\'s routes'**
+  String get qrShareSubtitle;
+
+  /// Button that copies the QR code image to the clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copy QR'**
+  String get copyQrImage;
+
+  /// Snackbar shown when copying the QR image to the clipboard fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t copy the QR'**
+  String get copyQrImageFailed;
 }
 
 class _TransportListLocalizationsDelegate

@@ -89,4 +89,19 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
   @override
   String get stopInfoNotAvailable =>
       'La información de paradas no está disponible para esta ruta';
+
+  @override
+  String get errorLoadingRoutes => 'No se pudieron cargar las rutas';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String get qrShareSubtitle => 'Escanea para abrir las rutas de este operador';
+
+  @override
+  String get copyQrImage => 'Copiar QR';
+
+  @override
+  String get copyQrImageFailed => 'No se pudo copiar el QR';
 }

@@ -99,9 +99,26 @@ class _TrufiAppState extends State<TrufiApp> {
         onRouteReceived: (route) {
           _sharedRouteNotifier.setPendingRoute(route);
         },
+        onLocationReceived: _goToDeepLinkLocation,
       );
       _deepLinkService!.initialize();
     }
+  }
+
+  /// Navigates to an in-app location received via deep link
+  /// (e.g. `trufi://routes?operator=X` → `/routes?operator=X`), but only
+  /// when it targets a registered screen — unknown links stay ignored
+  /// instead of surfacing the router's error page.
+  void _goToDeepLinkLocation(String location) {
+    final path = Uri.parse(location).path;
+    final known = widget.config.screens.any(
+      (screen) => path == screen.path || path.startsWith('${screen.path}/'),
+    );
+    if (!known) {
+      debugPrint('TrufiApp: Ignoring deep link to unregistered path: $path');
+      return;
+    }
+    _router.router.go(location);
   }
 
   @override

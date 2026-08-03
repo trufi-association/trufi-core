@@ -79,5 +79,19 @@
   "stopInfoNotAvailable": "Stop information is not available for this route",
   "@stopInfoNotAvailable": {
     "description": "Explanation shown when a route has no stop data"
+  },
+  "errorLoadingRoutes": "Could not load routes",
+  "retry": "Retry",
+  "qrShareSubtitle": "Scan to open this operator's routes",
+  "@qrShareSubtitle": {
+    "description": "Subtitle of the operator QR dialog explaining what scanning does"
+  },
+  "copyQrImage": "Copy QR",
+  "@copyQrImage": {
+    "description": "Button that copies the QR code image to the clipboard"
+  },
+  "copyQrImageFailed": "Couldn't copy the QR",
+  "@copyQrImageFailed": {
+    "description": "Snackbar shown when copying the QR image to the clipboard fails"
   }
 }
