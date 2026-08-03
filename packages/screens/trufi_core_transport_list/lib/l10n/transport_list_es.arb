@@ -47,5 +47,6 @@
   "stopEnd": "Fin",
   "stopInfoNotAvailable": "La información de paradas no está disponible para esta ruta",
   "errorLoadingRoutes": "No se pudieron cargar las rutas",
-  "retry": "Reintentar"
+  "retry": "Reintentar",
+  "qrShareSubtitle": "Escanea para abrir las rutas de este operador"
 }

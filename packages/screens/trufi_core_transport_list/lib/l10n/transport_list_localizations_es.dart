@@ -95,4 +95,7 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get retry => 'Reintentar';
+
+  @override
+  String get qrShareSubtitle => 'Escanea para abrir las rutas de este operador';
 }

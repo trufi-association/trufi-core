@@ -264,6 +264,12 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// Subtitle of the operator QR dialog explaining what scanning does
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to open this operator\'s routes'**
+  String get qrShareSubtitle;
 }
 
 class _TransportListLocalizationsDelegate

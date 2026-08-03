@@ -101,4 +101,7 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get qrShareSubtitle => 'Scan to open this operator\'s routes';
 }

@@ -95,4 +95,8 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
 
   @override
   String get retry => 'Erneut versuchen';
+
+  @override
+  String get qrShareSubtitle =>
+      'Scannen, um die Linien dieses Betreibers zu öffnen';
 }

@@ -81,5 +81,9 @@
     "description": "Explanation shown when a route has no stop data"
   },
   "errorLoadingRoutes": "Could not load routes",
-  "retry": "Retry"
+  "retry": "Retry",
+  "qrShareSubtitle": "Scan to open this operator's routes",
+  "@qrShareSubtitle": {
+    "description": "Subtitle of the operator QR dialog explaining what scanning does"
+  }
 }

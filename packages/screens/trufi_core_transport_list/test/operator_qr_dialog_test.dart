@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:trufi_core_transport_list/l10n/transport_list_localizations.dart';
 import 'package:trufi_core_transport_list/src/widgets/operator_qr_dialog.dart';
 
 void main() {
@@ -9,6 +10,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates:
+            TransportListLocalizations.localizationsDelegates,
+        supportedLocales: TransportListLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: Center(

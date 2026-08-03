@@ -47,5 +47,6 @@
   "stopEnd": "Ende",
   "stopInfoNotAvailable": "Für diese Linie sind keine Haltestelleninformationen verfügbar",
   "errorLoadingRoutes": "Die Linien konnten nicht geladen werden",
-  "retry": "Erneut versuchen"
+  "retry": "Erneut versuchen",
+  "qrShareSubtitle": "Scannen, um die Linien dieses Betreibers zu öffnen"
 }
