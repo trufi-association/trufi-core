@@ -644,5 +644,9 @@
         "type": "String"
       }
     }
+  },
+  "resolvingLocation": "Finding place name…",
+  "@resolvingLocation": {
+    "description": "Transient snackbar while reverse-geocoding a point picked on the map"
   }
 }

@@ -453,4 +453,7 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   String providerNoOptions(String provider) {
     return 'El proveedor \"$provider\" no tiene opciones configurables.';
   }
+
+  @override
+  String get resolvingLocation => 'Obteniendo el nombre del lugar…';
 }

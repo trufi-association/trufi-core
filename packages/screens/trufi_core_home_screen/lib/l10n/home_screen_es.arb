@@ -124,5 +124,6 @@
   "liveVehiclesStateOff": "Apagado",
   "placeOrigin": "Origen",
   "placeDestination": "Destino",
-  "providerNoOptions": "El proveedor \"{provider}\" no tiene opciones configurables."
+  "providerNoOptions": "El proveedor \"{provider}\" no tiene opciones configurables.",
+  "resolvingLocation": "Obteniendo el nombre del lugar…"
 }

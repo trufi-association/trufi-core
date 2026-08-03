@@ -852,6 +852,12 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'The \"{provider}\" provider has no configurable options.'**
   String providerNoOptions(String provider);
+
+  /// Transient snackbar while reverse-geocoding a point picked on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Finding place name…'**
+  String get resolvingLocation;
 }
 
 class _HomeScreenLocalizationsDelegate
