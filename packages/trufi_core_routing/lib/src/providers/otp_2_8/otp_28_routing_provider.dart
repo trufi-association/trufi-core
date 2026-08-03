@@ -16,6 +16,7 @@ import '../routing_provider.dart';
 import 'otp_28_preferences.dart';
 import 'otp_2_8_queries.dart';
 import 'otp_2_8_response_parser.dart';
+import '../../../l10n/routing_localizations.dart';
 
 /// Routing provider for OpenTripPlanner 2.8.
 ///
@@ -103,6 +104,11 @@ class Otp28RoutingProvider extends IRoutingProvider {
   @override
   String get description =>
       displayDescription ?? 'OpenTripPlanner 2.8 (Online)';
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      displayDescription ??
+      RoutingLocalizations.of(context).otpOnlineDescription('2.8');
 
   @override
   bool get supportsTransitRoutes => true;

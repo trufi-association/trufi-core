@@ -210,6 +210,48 @@ abstract class RoutingLocalizations {
   /// In en, this message translates to:
   /// **'tomorrow'**
   String get serviceTomorrow;
+
+  /// Description of the offline Trufi Planner engine in selectors
+  ///
+  /// In en, this message translates to:
+  /// **'Runs offline with the GTFS data bundled in the app'**
+  String get trufiPlannerLocalDescription;
+
+  /// Description of the server-backed Trufi Planner engine in selectors
+  ///
+  /// In en, this message translates to:
+  /// **'Our own routing engine served from our backend'**
+  String get trufiPlannerRemoteDescription;
+
+  /// Title of the Trufi Planner info card in routing preferences
+  ///
+  /// In en, this message translates to:
+  /// **'About Trufi Planner'**
+  String get trufiPlannerInfoTitle;
+
+  /// First line of the Trufi Planner info card
+  ///
+  /// In en, this message translates to:
+  /// **'Trufi Planner is our own routing engine (not OTP).'**
+  String get trufiPlannerInfoIntro;
+
+  /// Info card body for the offline variant
+  ///
+  /// In en, this message translates to:
+  /// **'On mobile it runs 100% offline, using the GTFS data bundled with the app — results may differ from online engines.'**
+  String get trufiPlannerInfoLocalBody;
+
+  /// Info card body for the server-backed variant
+  ///
+  /// In en, this message translates to:
+  /// **'This web version queries our server; results may differ from OTP because it uses a different algorithm and data.'**
+  String get trufiPlannerInfoRemoteBody;
+
+  /// Default description for OpenTripPlanner engines; {version} is e.g. 2.8
+  ///
+  /// In en, this message translates to:
+  /// **'OpenTripPlanner {version} (Online)'**
+  String otpOnlineDescription(String version);
 }
 
 class _RoutingLocalizationsDelegate

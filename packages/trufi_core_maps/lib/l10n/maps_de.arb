@@ -14,5 +14,9 @@
   "retry": "Erneut versuchen",
   "vectorMapDescription": "Vektorkarte mit modernem Design und besserer Leistung",
   "lightVectorMapDescription": "Helle Vektorkarte",
-  "darkVectorMapDescription": "Dunkle Vektorkarte"
+  "darkVectorMapDescription": "Dunkle Vektorkarte",
+  "mapStyleStandardDescription": "Standardkarte",
+  "mapStyleLightDescription": "Helle Karte",
+  "mapStyleDarkDescription": "Dunkle Karte",
+  "mapStyleColorfulDescription": "Bunte Karte"
 }

@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 
 import '../../models/notification.dart';
 
+import 'package:intl/intl.dart';
+
+import '../../../l10n/notifications_localizations.dart';
+
 /// A tile displaying a single notification
 class NotificationTile extends StatelessWidget {
   /// The notification to display
@@ -99,7 +103,7 @@ class NotificationTile extends StatelessWidget {
                       const SizedBox(height: 6),
                       // Time
                       Text(
-                        _formatTimeAgo(notification.createdAt),
+                        _formatTimeAgo(context, notification.createdAt),
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: colorScheme.onSurfaceVariant.withAlpha(180),
                         ),
@@ -178,20 +182,29 @@ class NotificationTile extends StatelessWidget {
     );
   }
 
-  String _formatTimeAgo(DateTime dateTime) {
+  String _formatTimeAgo(BuildContext context, DateTime dateTime) {
+    final l10n = NotificationsLocalizations.of(context);
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return l10n.justNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return l10n.minutesAgo(difference.inMinutes);
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return l10n.hoursAgo(difference.inHours);
     } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
+      return l10n.daysAgo(difference.inDays);
     } else {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+      // Locale-aware date order (falls back to the default pattern for
+      // languages intl has no symbols for).
+      try {
+        return DateFormat.yMd(
+          Localizations.localeOf(context).toLanguageTag(),
+        ).format(dateTime);
+      } on ArgumentError {
+        return DateFormat.yMd().format(dateTime);
+      }
     }
   }
 }

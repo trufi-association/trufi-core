@@ -17,5 +17,12 @@
   "serviceClosedOpensAt": "Geschlossen · öffnet um {time}",
   "serviceClosedOpensDayAt": "Geschlossen · öffnet {day} um {time}",
   "serviceClosed": "Geschlossen",
-  "serviceTomorrow": "morgen"
+  "serviceTomorrow": "morgen",
+  "trufiPlannerLocalDescription": "Läuft offline mit den in der App gebündelten GTFS-Daten",
+  "trufiPlannerRemoteDescription": "Unsere eigene Routing-Engine von unserem Server",
+  "trufiPlannerInfoTitle": "Über Trufi Planner",
+  "trufiPlannerInfoIntro": "Trufi Planner ist unsere eigene Routing-Engine (kein OTP).",
+  "trufiPlannerInfoLocalBody": "Auf dem Gerät läuft er zu 100% offline mit den gebündelten GTFS-Daten — Ergebnisse können daher von Online-Engines abweichen.",
+  "trufiPlannerInfoRemoteBody": "Diese Web-Version fragt unseren Server ab; Ergebnisse können von OTP abweichen, da Algorithmus und Daten unterschiedlich sind.",
+  "otpOnlineDescription": "OpenTripPlanner {version} (online)"
 }

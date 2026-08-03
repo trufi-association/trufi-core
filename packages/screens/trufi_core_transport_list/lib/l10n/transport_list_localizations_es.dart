@@ -104,4 +104,34 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get copyQrImageFailed => 'No se pudo copiar el QR';
+
+  @override
+  String get modeTram => 'Tranvía';
+
+  @override
+  String get modeSubway => 'Metro';
+
+  @override
+  String get modeRail => 'Tren';
+
+  @override
+  String get modeBus => 'Bus';
+
+  @override
+  String get modeFerry => 'Ferry';
+
+  @override
+  String get modeCableTram => 'Tranvía de cable';
+
+  @override
+  String get modeAerialLift => 'Teleférico';
+
+  @override
+  String get modeFunicular => 'Funicular';
+
+  @override
+  String get modeTrolleybus => 'Trolebús';
+
+  @override
+  String get modeMonorail => 'Monorriel';
 }

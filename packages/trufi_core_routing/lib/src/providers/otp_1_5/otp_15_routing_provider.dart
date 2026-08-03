@@ -16,6 +16,7 @@ import '../../models/transport_mode.dart';
 import '../routing_provider.dart';
 import 'otp_15_preferences.dart';
 import 'otp_1_5_response_parser.dart';
+import '../../../l10n/routing_localizations.dart';
 
 /// Routing provider for OpenTripPlanner 1.5.
 ///
@@ -80,6 +81,11 @@ class Otp15RoutingProvider extends IRoutingProvider {
   @override
   String get description =>
       displayDescription ?? 'OpenTripPlanner 1.5 (Online)';
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      displayDescription ??
+      RoutingLocalizations.of(context).otpOnlineDescription('1.5');
 
   @override
   bool get supportsTransitRoutes => true;

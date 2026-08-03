@@ -93,5 +93,45 @@
   "copyQrImageFailed": "Couldn't copy the QR",
   "@copyQrImageFailed": {
     "description": "Snackbar shown when copying the QR image to the clipboard fails"
+  },
+  "modeTram": "Tram",
+  "@modeTram": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeSubway": "Subway",
+  "@modeSubway": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeRail": "Rail",
+  "@modeRail": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeBus": "Bus",
+  "@modeBus": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeFerry": "Ferry",
+  "@modeFerry": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeCableTram": "Cable Tram",
+  "@modeCableTram": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeAerialLift": "Aerial Lift",
+  "@modeAerialLift": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeFunicular": "Funicular",
+  "@modeFunicular": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeTrolleybus": "Trolleybus",
+  "@modeTrolleybus": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeMonorail": "Monorail",
+  "@modeMonorail": {
+    "description": "GTFS route type shown as the transport mode"
   }
 }

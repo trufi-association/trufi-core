@@ -224,7 +224,8 @@ class NavigationState extends Equatable {
   /// first GPS fix it falls back to the planned [NavigationRoute.duration]
   /// (the value shown in the route results). Derived instead of stored so
   /// the state never holds a duplicate of `route.duration`. See #917.
-  Duration? get etaToDestination => _measuredEtaToDestination ?? route?.duration;
+  Duration? get etaToDestination =>
+      _measuredEtaToDestination ?? route?.duration;
 
   /// Error message if status is error.
   ///

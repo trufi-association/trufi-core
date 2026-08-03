@@ -55,6 +55,13 @@ enum InstructionTextKey {
 
   /// "Final destination" — preview label for the last stop.
   finalDestination,
+
+  /// "Exit at {stopName}" — uses [NavigationInstruction.stopName].
+  exitAtStop,
+
+  /// "{count} stops remaining" — uses
+  /// [NavigationInstruction.remainingStops].
+  stopsRemaining,
 }
 
 /// A navigation instruction to display to the user.
@@ -73,6 +80,14 @@ class NavigationInstruction {
   /// When set, it takes precedence over [primaryText] in
   /// [resolvedPrimaryText]. Used by layers without a [BuildContext].
   final InstructionTextKey? primaryTextKey;
+
+  /// Localizable key for the secondary text, resolved in
+  /// [resolvedSecondaryText] the same way [primaryTextKey] is.
+  final InstructionTextKey? secondaryTextKey;
+
+  /// Stops left before the exit stop; feeds
+  /// [InstructionTextKey.stopsRemaining].
+  final int? remainingStops;
 
   /// Secondary text (e.g., "in 50m").
   final String? secondaryText;
@@ -105,6 +120,8 @@ class NavigationInstruction {
     required this.type,
     this.primaryText = '',
     this.primaryTextKey,
+    this.secondaryTextKey,
+    this.remainingStops,
     this.secondaryText,
     this.stopName,
     this.distance,
@@ -119,10 +136,27 @@ class NavigationInstruction {
   /// The primary text to render, resolving [primaryTextKey] to a localized
   /// string when set and falling back to [primaryText] otherwise.
   String resolvedPrimaryText(NavigationLocalizations localizations) {
-    return switch (primaryTextKey) {
+    return _resolve(primaryTextKey, localizations) ?? primaryText;
+  }
+
+  /// The secondary text to render, resolving [secondaryTextKey] to a
+  /// localized string when set and falling back to [secondaryText].
+  String? resolvedSecondaryText(NavigationLocalizations localizations) {
+    return _resolve(secondaryTextKey, localizations) ?? secondaryText;
+  }
+
+  String? _resolve(
+    InstructionTextKey? key,
+    NavigationLocalizations localizations,
+  ) {
+    return switch (key) {
       InstructionTextKey.youHaveArrived => localizations.navArrivedShort,
       InstructionTextKey.finalDestination => localizations.navFinalDestination,
-      null => primaryText,
+      InstructionTextKey.exitAtStop => localizations.navExitAt(stopName ?? ''),
+      InstructionTextKey.stopsRemaining => localizations.navStopsRemaining(
+        remainingStops ?? 0,
+      ),
+      null => null,
     };
   }
 

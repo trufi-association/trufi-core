@@ -23,7 +23,8 @@ class NavigationLayer {
     List<TrufiMarker> markers,
     List<TrufiLine> lines,
     TrufiCameraPosition? cameraPosition,
-  }) buildLayerData(NavigationState state) {
+  })
+  buildLayerData(NavigationState state) {
     final markers = <TrufiMarker>[];
     final lines = <TrufiLine>[];
 
@@ -70,17 +71,10 @@ class NavigationLayer {
       cameraPosition = TrufiCameraPosition(target: userPos, zoom: 16);
     }
 
-    return (
-      markers: markers,
-      lines: lines,
-      cameraPosition: cameraPosition,
-    );
+    return (markers: markers, lines: lines, cameraPosition: cameraPosition);
   }
 
-  void _buildUserLocation(
-    NavigationState state,
-    List<TrufiMarker> markers,
-  ) {
+  void _buildUserLocation(NavigationState state, List<TrufiMarker> markers) {
     final location = state.currentLocation;
     if (location == null) return;
 

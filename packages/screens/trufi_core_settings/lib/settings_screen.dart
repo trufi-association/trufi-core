@@ -443,8 +443,8 @@ class _RoutingSettingsCard extends StatelessWidget {
               bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
             ),
             child: _EngineOptionTile(
-              name: engine.name,
-              description: engine.description,
+              name: engine.localizedName(context),
+              description: engine.localizedDescription(context),
               icon: isOffline
                   ? Icons.offline_bolt_rounded
                   : Icons.cloud_rounded,

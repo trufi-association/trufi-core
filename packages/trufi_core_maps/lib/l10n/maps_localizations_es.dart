@@ -53,4 +53,16 @@ class MapsLocalizationsEs extends MapsLocalizations {
 
   @override
   String get darkVectorMapDescription => 'Mapa vectorial oscuro';
+
+  @override
+  String get mapStyleStandardDescription => 'Mapa estándar';
+
+  @override
+  String get mapStyleLightDescription => 'Mapa claro';
+
+  @override
+  String get mapStyleDarkDescription => 'Mapa oscuro';
+
+  @override
+  String get mapStyleColorfulDescription => 'Mapa colorido';
 }

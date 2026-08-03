@@ -1931,6 +1931,9 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: l10n.shareRouteDuration,
                     itinerary: l10n.shareRouteItinerary,
                     openInApp: l10n.shareRouteOpenInApp,
+                    durationMinutes: l10n.durationMinutes,
+                    durationHoursMinutes: l10n.durationHoursMinutes,
+                    localeTag: Localizations.localeOf(context).toLanguageTag(),
                   ),
                 );
               },
@@ -2316,6 +2319,9 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: l10n.shareRouteDuration,
                     itinerary: l10n.shareRouteItinerary,
                     openInApp: l10n.shareRouteOpenInApp,
+                    durationMinutes: l10n.durationMinutes,
+                    durationHoursMinutes: l10n.durationHoursMinutes,
+                    localeTag: Localizations.localeOf(context).toLanguageTag(),
                   ),
                 );
               },

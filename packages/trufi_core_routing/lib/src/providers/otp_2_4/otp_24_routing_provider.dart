@@ -14,6 +14,7 @@ import 'otp_24_preferences.dart';
 import 'otp_2_4_pattern_queries.dart' as pattern_queries;
 import 'otp_2_4_queries.dart';
 import 'otp_2_4_response_parser.dart';
+import '../../../l10n/routing_localizations.dart';
 
 /// Routing provider for OpenTripPlanner 2.4.
 ///
@@ -71,6 +72,11 @@ class Otp24RoutingProvider extends IRoutingProvider {
   @override
   String get description =>
       displayDescription ?? 'OpenTripPlanner 2.4 (Online)';
+
+  @override
+  String localizedDescription(BuildContext context) =>
+      displayDescription ??
+      RoutingLocalizations.of(context).otpOnlineDescription('2.4');
 
   @override
   bool get supportsTransitRoutes => true;

@@ -458,8 +458,8 @@ class _OnboardingRoutingSection extends StatelessWidget {
               bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
             ),
             child: _EngineOption(
-              name: engine.name,
-              description: engine.description,
+              name: engine.localizedName(context),
+              description: engine.localizedDescription(context),
               icon: engine.requiresInternet
                   ? Icons.cloud_rounded
                   : Icons.offline_bolt_rounded,

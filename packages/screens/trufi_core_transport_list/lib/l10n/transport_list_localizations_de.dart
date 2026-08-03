@@ -105,4 +105,34 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
 
   @override
   String get copyQrImageFailed => 'QR konnte nicht kopiert werden';
+
+  @override
+  String get modeTram => 'Straßenbahn';
+
+  @override
+  String get modeSubway => 'U-Bahn';
+
+  @override
+  String get modeRail => 'Bahn';
+
+  @override
+  String get modeBus => 'Bus';
+
+  @override
+  String get modeFerry => 'Fähre';
+
+  @override
+  String get modeCableTram => 'Kabelstraßenbahn';
+
+  @override
+  String get modeAerialLift => 'Seilbahn';
+
+  @override
+  String get modeFunicular => 'Standseilbahn';
+
+  @override
+  String get modeTrolleybus => 'Oberleitungsbus';
+
+  @override
+  String get modeMonorail => 'Einschienenbahn';
 }

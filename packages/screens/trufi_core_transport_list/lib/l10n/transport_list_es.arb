@@ -50,5 +50,15 @@
   "retry": "Reintentar",
   "qrShareSubtitle": "Escanea para abrir las rutas de este operador",
   "copyQrImage": "Copiar QR",
-  "copyQrImageFailed": "No se pudo copiar el QR"
+  "copyQrImageFailed": "No se pudo copiar el QR",
+  "modeTram": "Tranvía",
+  "modeSubway": "Metro",
+  "modeRail": "Tren",
+  "modeBus": "Bus",
+  "modeFerry": "Ferry",
+  "modeCableTram": "Tranvía de cable",
+  "modeAerialLift": "Teleférico",
+  "modeFunicular": "Funicular",
+  "modeTrolleybus": "Trolebús",
+  "modeMonorail": "Monorriel"
 }

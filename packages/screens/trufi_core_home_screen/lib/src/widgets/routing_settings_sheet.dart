@@ -308,8 +308,8 @@ class _EngineCard extends StatelessWidget {
     final l10n = HomeScreenLocalizations.of(context);
 
     final isOffline = !engine.requiresInternet;
-    final name = engine.name;
-    final description = engine.description;
+    final name = engine.localizedName(context);
+    final description = engine.localizedDescription(context);
 
     final limitations = <String>[];
     if (isOffline) {

@@ -61,5 +61,14 @@
   "navDestination": "Destination",
   "@navDestination": { "description": "Label for the route destination point" },
   "navRoute": "Route",
-  "@navRoute": { "description": "Fallback name for a route without a name" }
+  "@navRoute": { "description": "Fallback name for a route without a name" },
+  "navStopsRemaining": "{count, plural, =1{1 stop remaining} other{{count} stops remaining}}",
+  "@navStopsRemaining": {
+    "description": "How many stops remain before exiting the vehicle",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

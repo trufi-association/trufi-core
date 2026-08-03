@@ -20,6 +20,7 @@ import '../routing_provider.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 import 'trufi_planner_config.dart';
 import 'trufi_planner_data_source.dart';
+import '../../../l10n/routing_localizations.dart';
 
 /// Below this straight-line distance (meters), offer a walk-only itinerary
 /// alongside transit options. The tier-ordering in the home screen lifts it
@@ -72,6 +73,15 @@ class TrufiPlannerProvider extends IRoutingProvider {
       (config.isLocal
           ? 'Funciona offline con datos GTFS empacados en la app'
           : 'Motor de rutas propio servido desde nuestro backend');
+
+  @override
+  String localizedDescription(BuildContext context) {
+    if (config.description != null) return config.description!;
+    final l10n = RoutingLocalizations.of(context);
+    return config.isLocal
+        ? l10n.trufiPlannerLocalDescription
+        : l10n.trufiPlannerRemoteDescription;
+  }
 
   @override
   bool get supportsTransitRoutes => true;
@@ -746,15 +756,11 @@ class _TrufiPlannerInfo extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final lines = isLocal
-        ? const [
-            'Trufi Planner es nuestro motor de rutas propio (no OTP).',
-            'En esta versión móvil corre 100% offline, usando los datos GTFS empacados con la app — por eso los resultados pueden diferir de motores online.',
-          ]
-        : const [
-            'Trufi Planner es nuestro motor de rutas propio (no OTP).',
-            'Esta versión web consulta nuestro servidor; los resultados pueden diferir de OTP por usar un algoritmo y datos distintos.',
-          ];
+    final l10n = RoutingLocalizations.of(context);
+    final lines = [
+      l10n.trufiPlannerInfoIntro,
+      isLocal ? l10n.trufiPlannerInfoLocalBody : l10n.trufiPlannerInfoRemoteBody,
+    ];
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -774,7 +780,7 @@ class _TrufiPlannerInfo extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                'Acerca de Trufi Planner',
+                l10n.trufiPlannerInfoTitle,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
