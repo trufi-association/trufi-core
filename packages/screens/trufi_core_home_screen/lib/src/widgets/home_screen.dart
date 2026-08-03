@@ -67,10 +67,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  /// Monotonic token so only the LATEST map-picked point applies its
-  /// reverse-geocode result — two quick long-presses no longer race
-  /// (last-to-resolve used to win; see review of #916).
-  int _pickResolveSeq = 0;
+  /// Per-field monotonic tokens so only the LATEST map-picked point for
+  /// EACH field applies its reverse-geocode result — two quick long-presses
+  /// on the same field no longer race (last-to-resolve used to win), while
+  /// an origin pick followed by a quick destination pick keeps both.
+  int _originResolveSeq = 0;
+  int _destinationResolveSeq = 0;
 
   TrufiMapController? _mapController;
   FitCameraUtil? _fitCameraUtil;
@@ -1328,7 +1330,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     if (result != 'origin' && result != 'destination') return;
 
-    final seq = ++_pickResolveSeq;
+    final isOrigin = result == 'origin';
+    final seq = isOrigin ? ++_originResolveSeq : ++_destinationResolveSeq;
     final messenger = ScaffoldMessenger.of(context);
     // Reverse geocoding can take up to 5 s on a slow network — show what
     // is happening instead of appearing frozen.
@@ -1354,10 +1357,11 @@ class _HomeScreenState extends State<HomeScreen>
       position.longitude,
     );
     messenger.hideCurrentSnackBar();
-    // A newer pick superseded this one while we were resolving — drop it.
-    if (!mounted || seq != _pickResolveSeq) return;
+    // A newer pick for the SAME field superseded this one — drop it.
+    final latest = isOrigin ? _originResolveSeq : _destinationResolveSeq;
+    if (!mounted || seq != latest) return;
 
-    if (result == 'origin') {
+    if (isOrigin) {
       await cubit.setFromPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.toPlace != null) {
@@ -2653,7 +2657,7 @@ class _HomeScreenState extends State<HomeScreen>
       return SearchLocation(
         id: 'map_${latitude}_$longitude',
         displayName: reverse.displayName,
-        address: reverse.address,
+        address: reverse.address ?? coordinates,
         latitude: latitude,
         longitude: longitude,
       );
