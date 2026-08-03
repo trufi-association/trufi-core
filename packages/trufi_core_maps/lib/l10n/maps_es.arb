@@ -1,0 +1,18 @@
+{
+  "@@locale": "es",
+  "online": "En línea",
+  "offline": "Sin conexión",
+  "mapSettings": "Configuración del mapa",
+  "mapType": "Tipo de mapa",
+  "chooseMapStyle": "Elige tu estilo de mapa preferido",
+  "changeMapType": "Cambiar tipo de mapa",
+  "chooseOnMap": "Elegir en el mapa",
+  "confirmLocation": "Confirmar ubicación",
+  "offlineMapName": "Mapa offline",
+  "offlineMapDescription": "Mapa completamente offline",
+  "errorLoadingOfflineMap": "Error al cargar el mapa offline",
+  "retry": "Reintentar",
+  "vectorMapDescription": "Mapa vectorial con estilo moderno y mejor rendimiento",
+  "lightVectorMapDescription": "Mapa vectorial claro",
+  "darkVectorMapDescription": "Mapa vectorial oscuro"
+}

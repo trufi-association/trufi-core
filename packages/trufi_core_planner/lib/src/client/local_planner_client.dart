@@ -81,6 +81,12 @@ class LocalPlannerClient implements PlannerRoutingClient {
       maxWalkDistance: maxWalkDistance,
       maxResults: maxResults,
       maxStopCandidates: maxStopCandidates,
+      // Scale the per-bucket caps with the requested result count so an
+      // app-level maxItineraries override isn't silently clipped to the
+      // service defaults (5 directs + 5 transfers). At the default
+      // maxResults = 5 this is identical to the previous behavior.
+      maxDirects: maxResults,
+      maxTransferPaths: maxResults,
     );
   }
 

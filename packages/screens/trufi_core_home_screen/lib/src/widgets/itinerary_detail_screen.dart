@@ -682,7 +682,8 @@ class _LegItemState extends State<_LegItem> {
     // from the title. Surfaces the OSM `description` of the trip for
     // feeds where multiple branches share a route_short_name. Skipped
     // when headsign equals the title (already shown above).
-    final routeVariant = (leg.headsign != null &&
+    final routeVariant =
+        (leg.headsign != null &&
             leg.headsign!.isNotEmpty &&
             leg.headsign != routeName)
         ? leg.headsign
@@ -1127,7 +1128,7 @@ class ItineraryDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 2),
                 Text(
-                  '$totalWalkingMinutes min',
+                  l10n.durationMinutes(totalWalkingMinutes),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),

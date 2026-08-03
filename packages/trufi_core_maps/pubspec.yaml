@@ -12,6 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
   cached_network_image: ^3.4.1
   dio: ^5.9.0
   equatable: ^2.0.8
@@ -32,3 +35,4 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+  generate: true

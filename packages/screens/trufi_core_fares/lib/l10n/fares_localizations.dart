@@ -129,6 +129,12 @@ abstract class FaresLocalizations {
   /// In en, this message translates to:
   /// **'More Information'**
   String get faresMoreInfo;
+
+  /// Label for the additional notes card on the fares screen
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get faresTips;
 }
 
 class _FaresLocalizationsDelegate

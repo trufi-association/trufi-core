@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/maps_localizations.dart';
+
 /// Shared widget for toggling between online and offline maps.
 ///
 /// This widget provides a consistent UI across different screens
 /// (onboarding, settings, map type selection) for switching between
 /// online and offline map types.
+///
+/// The labels resolve through [MapsLocalizations]: the enclosing app must
+/// register [MapsLocalizations.delegate] (`TrufiApp` does this automatically)
+/// or the lookup throws at build time.
 class MapOnlineOfflineToggle extends StatelessWidget {
   /// Whether to show online maps (true) or offline maps (false).
   final bool showOnline;
@@ -27,17 +33,18 @@ class MapOnlineOfflineToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = MapsLocalizations.of(context);
 
     return SegmentedButton<bool>(
       segments: [
         ButtonSegment<bool>(
           value: true,
-          label: const Text('Online'),
+          label: Text(l10n.online),
           icon: Icon(Icons.cloud_outlined, size: compact ? 18 : 20),
         ),
         ButtonSegment<bool>(
           value: false,
-          label: const Text('Offline'),
+          label: Text(l10n.offline),
           icon: Icon(Icons.offline_bolt_outlined, size: compact ? 18 : 20),
         ),
       ],

@@ -19,5 +19,13 @@
   "actionGoHome": "Zur Startseite",
   "titleError": "Fehler",
   "unreadCount": "{count} ungelesen",
-  "markAllAsRead": "Alle als gelesen markieren"
+  "markAllAsRead": "Alle als gelesen markieren",
+  "initStepStarting": "Wird gestartet",
+  "initStepInitializing": "Wird initialisiert",
+  "initStepLoadingMaps": "Karten werden geladen",
+  "initStepLoadingRoutes": "Routen werden geladen",
+  "initStepAlmostReady": "Fast fertig",
+  "errorUnableToStart": "Start nicht möglich",
+  "errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten",
+  "poweredByTrufi": "Powered by Trufi Association"
 }

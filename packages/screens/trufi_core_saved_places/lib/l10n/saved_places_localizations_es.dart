@@ -105,4 +105,10 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
 
   @override
   String get change => 'Cambiar';
+
+  @override
+  String get errorLoadingPlaces => 'Error al cargar lugares';
+
+  @override
+  String get retry => 'Reintentar';
 }

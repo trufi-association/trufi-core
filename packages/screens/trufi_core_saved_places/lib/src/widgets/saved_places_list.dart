@@ -65,7 +65,9 @@ class _SavedPlacesListState extends State<SavedPlacesList>
 
         if (state.status == SavedPlacesStatus.error) {
           return _ErrorState(
-            message: state.errorMessage ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Error al cargar lugares' : 'Error loading places'),
+            message:
+                state.errorMessage ??
+                SavedPlacesLocalizations.of(context).errorLoadingPlaces,
             onRetry: () => context.read<SavedPlacesCubit>().initialize(),
           );
         }
@@ -688,7 +690,7 @@ class _ErrorState extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Reintentar' : 'Retry'),
+                label: Text(SavedPlacesLocalizations.of(context).retry),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,

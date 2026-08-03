@@ -3,8 +3,10 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart' show MapEngineManager;
 import 'package:trufi_core_routing/trufi_core_routing.dart'
     show RoutingEngineManager;
-import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
+import 'package:trufi_core_utils/trufi_core_utils.dart'
+    show LocaleManager, OverlayManager;
 
+import '../l10n/core_localizations.dart';
 import 'default_init_screen.dart';
 
 /// Widget that initializes screens and managers before showing the app.
@@ -143,9 +145,15 @@ class _AppInitializerState extends State<AppInitializer> {
           onRetry: retry,
         );
 
+    // This MaterialApp lives OUTSIDE the main _TrufiMaterialApp, so it must
+    // register its own localizations and resolve the locale from the
+    // LocaleManager provided above it for the init screen to be localized.
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: widget.theme,
+      locale: LocaleManager.watch(context).currentLocale,
+      supportedLocales: CoreLocalizations.supportedLocales,
+      localizationsDelegates: CoreLocalizations.localizationsDelegates,
       home: builder(
         context,
         _hasError ? null : _currentStep,

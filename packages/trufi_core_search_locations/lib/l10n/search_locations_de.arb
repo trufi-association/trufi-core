@@ -1,0 +1,12 @@
+{
+  "@@locale": "de",
+  "selectOrigin": "Startort auswählen",
+  "selectDestination": "Zielort auswählen",
+  "searchOrigin": "Startort suchen...",
+  "searchDestination": "Zielort suchen...",
+  "yourLocation": "Dein Standort",
+  "chooseOnMap": "Auf der Karte wählen",
+  "yourPlaces": "DEINE ORTE",
+  "searchResults": "SUCHERGEBNISSE",
+  "noResultsFound": "Keine Ergebnisse gefunden"
+}
