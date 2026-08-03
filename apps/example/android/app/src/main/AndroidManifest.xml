@@ -82,6 +82,17 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Required by pasteboard: exposes the QR PNG to the clipboard
+             via a content URI when the user taps "Copy QR". -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

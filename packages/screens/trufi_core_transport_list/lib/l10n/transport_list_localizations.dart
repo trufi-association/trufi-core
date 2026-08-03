@@ -270,6 +270,12 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Scan to open this operator\'s routes'**
   String get qrShareSubtitle;
+
+  /// Button that copies the QR code image to the clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copy QR'**
+  String get copyQrImage;
 }
 
 class _TransportListLocalizationsDelegate

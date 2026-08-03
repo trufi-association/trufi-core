@@ -99,4 +99,7 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   @override
   String get qrShareSubtitle =>
       'Scannen, um die Linien dieses Betreibers zu öffnen';
+
+  @override
+  String get copyQrImage => 'QR kopieren';
 }

@@ -85,5 +85,9 @@
   "qrShareSubtitle": "Scan to open this operator's routes",
   "@qrShareSubtitle": {
     "description": "Subtitle of the operator QR dialog explaining what scanning does"
+  },
+  "copyQrImage": "Copy QR",
+  "@copyQrImage": {
+    "description": "Button that copies the QR code image to the clipboard"
   }
 }

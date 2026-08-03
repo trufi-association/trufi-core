@@ -1,5 +1,8 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
@@ -37,7 +40,34 @@ class _OperatorQrSheet extends StatefulWidget {
 }
 
 class _OperatorQrSheetState extends State<_OperatorQrSheet> {
-  bool _copied = false;
+  bool _linkCopied = false;
+  bool _imageCopied = false;
+
+  /// Renders the QR at print quality on a white background with a quiet
+  /// zone, so the copied image scans as reliably as the on-screen one.
+  Future<Uint8List> _qrPngBytes() async {
+    const size = 768.0;
+    const margin = 64.0;
+    final painter = QrPainter(
+      data: widget.link,
+      version: QrVersions.auto,
+      errorCorrectionLevel: QrErrorCorrectLevel.M,
+    );
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    canvas.drawRect(
+      const Rect.fromLTWH(0, 0, size, size),
+      Paint()..color = Colors.white,
+    );
+    canvas.translate(margin, margin);
+    painter.paint(canvas, const Size(size - 2 * margin, size - 2 * margin));
+    final image = await recorder.endRecording().toImage(
+      size.toInt(),
+      size.toInt(),
+    );
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    return data!.buffer.asUint8List();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,35 +158,54 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // The canonical link, selectable for manual sharing.
-                    SelectableText(
-                      widget.link,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+                    // The canonical link with an inline copy affordance.
+                    Container(
+                      padding: const EdgeInsets.only(left: 14, right: 4),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextButton.icon(
-                      onPressed: () async {
-                        HapticFeedback.lightImpact();
-                        await Clipboard.setData(
-                          ClipboardData(text: widget.link),
-                        );
-                        if (mounted) setState(() => _copied = true);
-                      },
-                      icon: Icon(
-                        _copied ? Icons.check_rounded : Icons.copy_rounded,
-                        size: 20,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SelectableText(
+                              widget.link,
+                              maxLines: 1,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: materialLocalizations.copyButtonLabel,
+                            icon: Icon(
+                              _linkCopied
+                                  ? Icons.check_rounded
+                                  : Icons.copy_rounded,
+                              size: 20,
+                              color: _linkCopied
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                            ),
+                            onPressed: () async {
+                              HapticFeedback.lightImpact();
+                              await Clipboard.setData(
+                                ClipboardData(text: widget.link),
+                              );
+                              if (mounted) {
+                                setState(() => _linkCopied = true);
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      label: Text(materialLocalizations.copyButtonLabel),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          // Share button
+          // Actions: copy the QR image / share the link
           Padding(
             padding: EdgeInsets.fromLTRB(
               20,
@@ -164,22 +213,49 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
               20,
               24 + MediaQuery.of(context).padding.bottom,
             ),
-            child: SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {
-                  HapticFeedback.mediumImpact();
-                  SharePlus.instance.share(ShareParams(text: widget.link));
-                },
-                icon: const Icon(Icons.share_rounded),
-                label: Text(materialLocalizations.shareButtonLabel),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      HapticFeedback.lightImpact();
+                      final bytes = await _qrPngBytes();
+                      await Pasteboard.writeImage(bytes);
+                      if (mounted) setState(() => _imageCopied = true);
+                    },
+                    icon: Icon(
+                      _imageCopied
+                          ? Icons.check_rounded
+                          : Icons.qr_code_rounded,
+                      size: 20,
+                    ),
+                    label: Text(l10n.copyQrImage),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      SharePlus.instance.share(ShareParams(text: widget.link));
+                    },
+                    icon: const Icon(Icons.share_rounded),
+                    label: Text(materialLocalizations.shareButtonLabel),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

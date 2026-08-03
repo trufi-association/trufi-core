@@ -98,4 +98,7 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get qrShareSubtitle => 'Escanea para abrir las rutas de este operador';
+
+  @override
+  String get copyQrImage => 'Copiar QR';
 }
