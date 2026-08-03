@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 
 import '../../l10n/transport_list_localizations.dart';
 
@@ -15,209 +16,173 @@ Future<void> showOperatorQrDialog(
   required String operatorName,
   required String link,
 }) {
-  return showDialog<void>(
+  return showTrufiModalBottomSheet<void>(
     context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    backgroundColor: Colors.transparent,
     builder: (context) =>
-        _OperatorQrDialog(operatorName: operatorName, link: link),
+        _OperatorQrSheet(operatorName: operatorName, link: link),
   );
 }
 
-class _OperatorQrDialog extends StatefulWidget {
+class _OperatorQrSheet extends StatefulWidget {
   final String operatorName;
   final String link;
 
-  const _OperatorQrDialog({required this.operatorName, required this.link});
+  const _OperatorQrSheet({required this.operatorName, required this.link});
 
   @override
-  State<_OperatorQrDialog> createState() => _OperatorQrDialogState();
+  State<_OperatorQrSheet> createState() => _OperatorQrSheetState();
 }
 
-class _OperatorQrDialogState extends State<_OperatorQrDialog> {
+class _OperatorQrSheetState extends State<_OperatorQrSheet> {
   bool _copied = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
+    final colorScheme = theme.colorScheme;
     final materialLocalizations = MaterialLocalizations.of(context);
-    final localization = TransportListLocalizations.of(context);
-    // The QR always sits on the white card below; brand it with the
-    // primary color when it is dark enough to stay scannable, otherwise
-    // fall back to near-black.
-    final qrColor = scheme.primary.computeLuminance() < 0.35
-        ? scheme.primary
-        : const Color(0xFF1F1F1F);
+    final l10n = TransportListLocalizations.of(context);
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      clipBehavior: Clip.antiAlias,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 340),
-        // Scroll on short viewports (small phones, landscape) instead of
-        // overflowing the dialog.
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Tinted header: operator identity + what this dialog is for.
-              Container(
-                width: double.infinity,
-                color: scheme.surfaceContainerHighest,
-                padding: const EdgeInsets.fromLTRB(20, 16, 8, 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: scheme.primaryContainer,
-                      child: Icon(
-                        Icons.business_rounded,
-                        color: scheme.onPrimaryContainer,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.operatorName,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            localization.qrShareSubtitle,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: scheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close_rounded),
-                      tooltip: materialLocalizations.closeButtonTooltip,
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Header with operator name
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.qr_code_2_rounded,
+                  color: colorScheme.primary,
+                  size: 24,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.operatorName,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        l10n.qrShareSubtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // White backdrop and generous quiet zone so the code stays
-                    // scannable when printed or shown in dark mode. The
-                    // fixed-size SizedBox is required: QrImageView uses a
-                    // LayoutBuilder, which cannot answer intrinsic-dimension
-                    // queries made inside dialogs.
+                    // White backdrop and generous quiet zone so the code
+                    // stays scannable when printed or shown in dark mode.
+                    // The fixed-size SizedBox is required: QrImageView uses
+                    // a LayoutBuilder, which cannot answer the
+                    // intrinsic-dimension queries made around it.
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: scheme.outlineVariant),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: colorScheme.outlineVariant),
                       ),
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(16),
                       child: SizedBox(
-                        width: 208,
-                        height: 208,
+                        width: 200,
+                        height: 200,
                         child: QrImageView(
                           data: widget.link,
                           version: QrVersions.auto,
                           errorCorrectionLevel: QrErrorCorrectLevel.M,
                           backgroundColor: Colors.white,
-                          eyeStyle: QrEyeStyle(
-                            eyeShape: QrEyeShape.square,
-                            color: qrColor,
-                          ),
-                          dataModuleStyle: QrDataModuleStyle(
-                            dataModuleShape: QrDataModuleShape.square,
-                            color: qrColor,
-                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     // The canonical link, selectable for manual sharing.
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: scheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.link_rounded,
-                            size: 16,
-                            color: scheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: SelectableText(
-                              widget.link,
-                              maxLines: 1,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: scheme.onSurfaceVariant,
-                                fontFamily: 'monospace',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: FilledButton.icon(
-                        icon: const Icon(Icons.share_rounded),
-                        label: Text(materialLocalizations.shareButtonLabel),
-                        style: FilledButton.styleFrom(
-                          shape: const StadiumBorder(),
-                        ),
-                        onPressed: () {
-                          SharePlus.instance.share(
-                            ShareParams(text: widget.link),
-                          );
-                        },
+                    SelectableText(
+                      widget.link,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 44,
-                      child: TextButton.icon(
-                        icon: Icon(
-                          _copied ? Icons.check_rounded : Icons.copy_rounded,
-                        ),
-                        label: Text(materialLocalizations.copyButtonLabel),
-                        style: TextButton.styleFrom(
-                          shape: const StadiumBorder(),
-                        ),
-                        onPressed: () async {
-                          await Clipboard.setData(
-                            ClipboardData(text: widget.link),
-                          );
-                          if (mounted) setState(() => _copied = true);
-                        },
+                    TextButton.icon(
+                      onPressed: () async {
+                        HapticFeedback.lightImpact();
+                        await Clipboard.setData(
+                          ClipboardData(text: widget.link),
+                        );
+                        if (mounted) setState(() => _copied = true);
+                      },
+                      icon: Icon(
+                        _copied ? Icons.check_rounded : Icons.copy_rounded,
+                        size: 20,
                       ),
+                      label: Text(materialLocalizations.copyButtonLabel),
                     ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          // Share button
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              20,
+              8,
+              20,
+              24 + MediaQuery.of(context).padding.bottom,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () {
+                  HapticFeedback.mediumImpact();
+                  SharePlus.instance.share(ShareParams(text: widget.link));
+                },
+                icon: const Icon(Icons.share_rounded),
+                label: Text(materialLocalizations.shareButtonLabel),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
