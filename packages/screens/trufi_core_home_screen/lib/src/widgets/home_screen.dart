@@ -67,6 +67,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  /// Monotonic token so only the LATEST map-picked point applies its
+  /// reverse-geocode result — two quick long-presses no longer race
+  /// (last-to-resolve used to win; see review of #916).
+  int _pickResolveSeq = 0;
+
   TrufiMapController? _mapController;
   FitCameraUtil? _fitCameraUtil;
   bool _customLayersInitialized = false;
@@ -1321,23 +1326,44 @@ class _HomeScreenState extends State<HomeScreen>
 
     final cubit = context.read<RoutePlannerCubit>();
 
+    if (result != 'origin' && result != 'destination') return;
+
+    final seq = ++_pickResolveSeq;
+    final messenger = ScaffoldMessenger.of(context);
+    // Reverse geocoding can take up to 5 s on a slow network — show what
+    // is happening instead of appearing frozen.
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        content: Row(
+          children: [
+            const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 12),
+            Text(l10n.resolvingLocation),
+          ],
+        ),
+      ),
+    );
+
+    final resolved = await _resolvePickedLocation(
+      position.latitude,
+      position.longitude,
+    );
+    messenger.hideCurrentSnackBar();
+    // A newer pick superseded this one while we were resolving — drop it.
+    if (!mounted || seq != _pickResolveSeq) return;
+
     if (result == 'origin') {
-      final resolved = await _resolvePickedLocation(
-        position.latitude,
-        position.longitude,
-      );
-      if (!mounted) return;
       await cubit.setFromPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.toPlace != null) {
         cubit.fetchPlan();
       }
-    } else if (result == 'destination') {
-      final resolved = await _resolvePickedLocation(
-        position.latitude,
-        position.longitude,
-      );
-      if (!mounted) return;
+    } else {
       await cubit.setToPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.fromPlace != null) {
