@@ -79,9 +79,12 @@ class _TransportListContentState extends State<TransportListContent>
   }
 
   void _showLoadError(Object error) {
+    // Keep the raw exception out of the UI; it still lands in the log for
+    // debugging while users get the localized message only.
+    debugPrint('TransportList: failed to load routes: $error');
     final localization = TransportListLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${localization.errorLoadingRoutes}\n$error')),
+      SnackBar(content: Text(localization.errorLoadingRoutes)),
     );
   }
 

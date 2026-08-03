@@ -63,6 +63,10 @@ void main() {
     provider.failLoad = false;
     await tester.tap(find.text('Retry'));
     await tester.pumpAndSettle();
+    // Let the error snackbar (now exactly this text) time out before
+    // asserting the error state is gone.
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
 
     expect(find.text('Could not load routes'), findsNothing);
     expect(find.text('Linea A'), findsOneWidget);

@@ -12,6 +12,26 @@ void main() {
       );
     });
 
+    test('dot segments cannot dodge the screen guard (platform invariant)', () {
+      // Dart's Uri collapses dot segments while parsing, before
+      // resolveInAppLocation ever sees the path — crafted links cannot
+      // escape the host-derived prefix (custom scheme) nor reach an
+      // unregistered path unnormalized (https). This test pins that
+      // invariant so a future refactor away from Uri notices.
+      expect(
+        DeepLinkService.resolveInAppLocation(
+          Uri.parse('trufiapp://routes/x/../../settings-hack'),
+        ),
+        '/routes/settings-hack',
+      );
+      expect(
+        DeepLinkService.resolveInAppLocation(
+          Uri.parse('https://app.example.com/routes/x/../../settings-hack'),
+        ),
+        '/settings-hack',
+      );
+    });
+
     test('custom scheme with sub-path keeps it', () {
       expect(
         DeepLinkService.resolveInAppLocation(Uri.parse('trufiapp://routes/42')),
