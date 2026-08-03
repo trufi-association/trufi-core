@@ -23,6 +23,7 @@ class SettingsTrufiScreen extends TrufiScreen {
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
     SettingsLocalizations.delegate,
+    MapsLocalizations.delegate,
   ];
 
   @override

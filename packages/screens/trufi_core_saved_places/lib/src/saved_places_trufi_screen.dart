@@ -53,6 +53,7 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
     ...SavedPlacesLocalizations.localizationsDelegates,
+    MapsLocalizations.delegate,
   ];
 
   @override
