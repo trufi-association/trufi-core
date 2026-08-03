@@ -213,6 +213,15 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
+      localeConfig: const TrufiLocaleConfig(
+        supportedLocales: [
+          Locale('es'),
+          Locale('en'),
+          Locale('de'),
+          Locale('qu'),
+        ],
+        languageNames: {'qu': 'Runasimi'},
+      ),
       themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: [
         SocialMediaLink(

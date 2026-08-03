@@ -261,7 +261,7 @@ class _OnboardingLanguageSection extends StatelessWidget {
             if (i > 0) const SizedBox(height: 8),
             _LanguageOption(
               languageCode: locales[i].languageCode,
-              languageName: LocaleManager.displayNameForCode(locales[i].languageCode),
+              languageName: localeManager.displayName(locales[i].languageCode),
               isSelected: localeManager.currentLocale.languageCode ==
                   locales[i].languageCode,
               onSelect: () {
