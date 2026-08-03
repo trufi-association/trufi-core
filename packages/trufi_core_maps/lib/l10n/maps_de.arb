@@ -1,0 +1,18 @@
+{
+  "@@locale": "de",
+  "online": "Online",
+  "offline": "Offline",
+  "mapSettings": "Karteneinstellungen",
+  "mapType": "Kartentyp",
+  "chooseMapStyle": "Wähle deinen bevorzugten Kartenstil",
+  "changeMapType": "Kartentyp ändern",
+  "chooseOnMap": "Auf der Karte wählen",
+  "confirmLocation": "Standort bestätigen",
+  "offlineMapName": "Offline-Karte",
+  "offlineMapDescription": "Vollständig offline nutzbare Karte",
+  "errorLoadingOfflineMap": "Fehler beim Laden der Offline-Karte",
+  "retry": "Erneut versuchen",
+  "vectorMapDescription": "Vektorkarte mit modernem Design und besserer Leistung",
+  "lightVectorMapDescription": "Helle Vektorkarte",
+  "darkVectorMapDescription": "Dunkle Vektorkarte"
+}

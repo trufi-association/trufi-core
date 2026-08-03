@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../l10n/maps_localizations.dart';
 import '../../domain/controller/map_controller.dart';
 import '../../domain/entities/camera.dart';
 import '../../domain/entities/widget_marker.dart';
@@ -62,15 +63,19 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   String get name => displayName ?? 'Offline Map';
 
   @override
-  String get description => displayDescription ?? 'Mapa completamente offline';
+  String get description => displayDescription ?? 'Fully offline map';
 
   @override
   String localizedName(BuildContext context) =>
-      nameBuilder?.call(context) ?? name;
+      nameBuilder?.call(context) ??
+      displayName ??
+      MapsLocalizations.of(context).offlineMapName;
 
   @override
   String localizedDescription(BuildContext context) =>
-      descriptionBuilder?.call(context) ?? description;
+      descriptionBuilder?.call(context) ??
+      displayDescription ??
+      MapsLocalizations.of(context).offlineMapDescription;
 
   @override
   Widget? get previewWidget =>
@@ -311,6 +316,7 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
     }
 
     if (_error != null) {
+      final l10n = MapsLocalizations.of(context);
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -320,8 +326,8 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                Localizations.localeOf(context).languageCode == 'es' ? 'Error al cargar el mapa offline' : 'Error loading offline map',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                l10n.errorLoadingOfflineMap,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
@@ -338,7 +344,7 @@ class _OfflineMapWrapperState extends State<_OfflineMapWrapper> {
                   });
                   _ensureInitialized();
                 },
-                child: Text(Localizations.localeOf(context).languageCode == 'es' ? 'Reintentar' : 'Retry'),
+                child: Text(l10n.retry),
               ),
             ],
           ),

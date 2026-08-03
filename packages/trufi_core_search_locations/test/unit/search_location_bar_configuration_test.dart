@@ -8,8 +8,9 @@ void main() {
     test('creates instance with default values', () {
       const config = SearchLocationBarConfiguration();
 
-      expect(config.originHintText, 'Select origin');
-      expect(config.destinationHintText, 'Select destination');
+      // Hint texts default to null; widgets resolve localized defaults.
+      expect(config.originHintText, isNull);
+      expect(config.destinationHintText, isNull);
       expect(config.originLeadingWidget, isNull);
       expect(config.destinationLeadingWidget, isNull);
       expect(
@@ -52,7 +53,7 @@ void main() {
       );
 
       expect(config.originHintText, 'Custom Origin');
-      expect(config.destinationHintText, 'Select destination');
+      expect(config.destinationHintText, isNull);
       expect(config.fieldHeight, 50.0);
       expect(config.padding, const EdgeInsets.all(5.0));
     });
