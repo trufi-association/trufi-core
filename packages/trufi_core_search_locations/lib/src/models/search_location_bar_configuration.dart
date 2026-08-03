@@ -5,10 +5,12 @@ import 'search_location.dart';
 /// Configuration for the search location bar appearance and behavior.
 class SearchLocationBarConfiguration {
   /// Hint text shown when origin field is empty.
-  final String originHintText;
+  /// If null, a localized default is used.
+  final String? originHintText;
 
   /// Hint text shown when destination field is empty.
-  final String destinationHintText;
+  /// If null, a localized default is used.
+  final String? destinationHintText;
 
   /// Widget shown as leading icon for the origin field.
   final Widget? originLeadingWidget;
@@ -26,8 +28,8 @@ class SearchLocationBarConfiguration {
   final EdgeInsets padding;
 
   const SearchLocationBarConfiguration({
-    this.originHintText = 'Select origin',
-    this.destinationHintText = 'Select destination',
+    this.originHintText,
+    this.destinationHintText,
     this.originLeadingWidget,
     this.destinationLeadingWidget,
     this.fieldBorderRadius = const BorderRadius.all(Radius.circular(8.0)),

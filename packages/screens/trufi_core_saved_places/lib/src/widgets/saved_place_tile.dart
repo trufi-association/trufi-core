@@ -155,12 +155,12 @@ class SavedPlaceTile extends StatelessWidget {
     }
   }
 
-  String _getDisplayName(SavedPlacesLocalizations? localization) {
+  String _getDisplayName(SavedPlacesLocalizations localization) {
     if (place.type == SavedPlaceType.home && !place.name.contains('_')) {
-      return localization?.home ?? 'Home';
+      return localization.home;
     }
     if (place.type == SavedPlaceType.work && !place.name.contains('_')) {
-      return localization?.work ?? 'Work';
+      return localization.work;
     }
     return place.name;
   }
@@ -213,9 +213,13 @@ class _FavoriteButton extends StatelessWidget {
 class _MoreOptionsButton extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final SavedPlacesLocalizations? localization;
+  final SavedPlacesLocalizations localization;
 
-  const _MoreOptionsButton({this.onEdit, this.onDelete, this.localization});
+  const _MoreOptionsButton({
+    this.onEdit,
+    this.onDelete,
+    required this.localization,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +269,7 @@ class _MoreOptionsButton extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    localization?.editPlace ?? 'Edit',
+                    localization.editPlace,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -294,7 +298,7 @@ class _MoreOptionsButton extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    localization?.removePlace ?? 'Remove',
+                    localization.removePlace,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.error,
                       fontWeight: FontWeight.w500,

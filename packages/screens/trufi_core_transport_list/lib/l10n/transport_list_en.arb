@@ -38,5 +38,60 @@
   "labelStops": "Stops",
   "labelMode": "Mode",
   "noStopsAvailable": "No stops available",
-  "loadingRoute": "Loading route..."
+  "loadingRoute": "Loading route...",
+  "otherAgencies": "Others",
+  "@otherAgencies": {
+    "description": "Group header for routes whose agency is unknown"
+  },
+  "shareRouteMessage": "Share: {uri}",
+  "@shareRouteMessage": {
+    "description": "Snackbar message shown when sharing a route link",
+    "placeholders": {
+      "uri": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultModeBus": "Bus",
+  "@defaultModeBus": {
+    "description": "Fallback transport mode label when a route has no mode name"
+  },
+  "mapSettingsTitle": "Map Settings",
+  "@mapSettingsTitle": {
+    "description": "App bar title of the map settings screen"
+  },
+  "mapTypeLabel": "Map Type",
+  "@mapTypeLabel": {
+    "description": "Section title for choosing the map type"
+  },
+  "applyChanges": "Apply Changes",
+  "@applyChanges": {
+    "description": "Button label to apply map settings changes"
+  },
+  "stopStart": "Start",
+  "@stopStart": {
+    "description": "Badge label for the first stop of a route"
+  },
+  "stopEnd": "End",
+  "@stopEnd": {
+    "description": "Badge label for the last stop of a route"
+  },
+  "stopInfoNotAvailable": "Stop information is not available for this route",
+  "@stopInfoNotAvailable": {
+    "description": "Explanation shown when a route has no stop data"
+  },
+  "errorLoadingRoutes": "Could not load routes",
+  "retry": "Retry",
+  "qrShareSubtitle": "Scan to open this operator's routes",
+  "@qrShareSubtitle": {
+    "description": "Subtitle of the operator QR dialog explaining what scanning does"
+  },
+  "copyQrImage": "Copy QR",
+  "@copyQrImage": {
+    "description": "Button that copies the QR code image to the clipboard"
+  },
+  "copyQrImageFailed": "Couldn't copy the QR",
+  "@copyQrImageFailed": {
+    "description": "Snackbar shown when copying the QR image to the clipboard fails"
+  }
 }

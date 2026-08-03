@@ -834,6 +834,24 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Off'**
   String get liveVehiclesStateOff;
+
+  /// Fallback name for an origin set without a label (e.g. deep links)
+  ///
+  /// In en, this message translates to:
+  /// **'Origin'**
+  String get placeOrigin;
+
+  /// Fallback name for a destination set without a label (e.g. deep links)
+  ///
+  /// In en, this message translates to:
+  /// **'Destination'**
+  String get placeDestination;
+
+  /// Shown when the selected routing provider exposes no settings
+  ///
+  /// In en, this message translates to:
+  /// **'The \"{provider}\" provider has no configurable options.'**
+  String providerNoOptions(String provider);
 }
 
 class _HomeScreenLocalizationsDelegate

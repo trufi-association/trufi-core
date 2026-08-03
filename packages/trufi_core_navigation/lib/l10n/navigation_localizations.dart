@@ -264,6 +264,12 @@ abstract class NavigationLocalizations {
   /// In en, this message translates to:
   /// **'Destination'**
   String get navDestination;
+
+  /// Fallback name for a route without a name
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get navRoute;
 }
 
 class _NavigationLocalizationsDelegate

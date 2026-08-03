@@ -15,11 +15,24 @@ class TransportListContent extends StatefulWidget {
   /// Scaffold's drawer when pressed.
   final bool showMenuButton;
 
+  /// Called when the user dismisses the active operator/agency chip.
+  /// Defaults to clearing the filter on [dataProvider]; hosts that mirror
+  /// the filter elsewhere (e.g. the `operator` URL parameter) pass their
+  /// own handler.
+  final VoidCallback? onClearAgencyFilter;
+
+  /// Called with an agency name when the user asks for its shareable QR
+  /// code (button on each agency header and next to the active operator
+  /// chip). When null the QR affordances are hidden.
+  final void Function(String agencyName)? onShowOperatorQr;
+
   const TransportListContent({
     super.key,
     required this.dataProvider,
     required this.onRouteTap,
     this.showMenuButton = true,
+    this.onClearAgencyFilter,
+    this.onShowOperatorQr,
   });
 
   @override
@@ -32,6 +45,7 @@ class _TransportListContentState extends State<TransportListContent>
   final _searchFocusNode = FocusNode();
   late AnimationController _listAnimationController;
   bool _isSearchFocused = false;
+  bool _loadFailed = false;
 
   @override
   void initState() {
@@ -42,9 +56,36 @@ class _TransportListContentState extends State<TransportListContent>
     );
     widget.dataProvider.addListener(_onDataChanged);
     _searchFocusNode.addListener(_onSearchFocusChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.dataProvider.load();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initialLoad());
+  }
+
+  /// Initial fetch. `load` resets `filteredRoutes` to the full list, so
+  /// re-scope it to any filter that was applied before/while loading
+  /// (e.g. an `operator` deep-link filter set by the host screen).
+  ///
+  /// `load` implementations talk to the network/asset layer and can throw;
+  /// without the catch the exception would be unhandled (the provider may
+  /// be left in `isLoading`, showing an eternal shimmer with no feedback).
+  Future<void> _initialLoad() async {
+    try {
+      await widget.dataProvider.load();
+      widget.dataProvider.reapplyFilters();
+      if (mounted && _loadFailed) setState(() => _loadFailed = false);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _loadFailed = true);
+      _showLoadError(e);
+    }
+  }
+
+  void _showLoadError(Object error) {
+    // Keep the raw exception out of the UI; it still lands in the log for
+    // debugging while users get the localized message only.
+    debugPrint('TransportList: failed to load routes: $error');
+    final localization = TransportListLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(localization.errorLoadingRoutes)),
+    );
   }
 
   @override
@@ -70,20 +111,27 @@ class _TransportListContentState extends State<TransportListContent>
     setState(() => _isSearchFocused = _searchFocusNode.hasFocus);
   }
 
-  /// Refresh the route list while preserving the active search filter.
+  /// Refresh the route list while preserving the active filters.
   /// Used by both the header refresh button and pull-to-refresh.
   ///
   /// `dataProvider.refresh()` re-fetches and resets `filteredRoutes` to all
-  /// routes, which would visually contradict the still-populated search bar.
-  /// We re-apply the current query after refresh so the user keeps their
-  /// intent and the filtered count stays consistent with the input field.
-  /// Use the explicit clear (X) affordance inside the search bar to remove
-  /// the filter.
+  /// routes, which would visually contradict the still-populated search bar
+  /// or an active operator chip. Re-applying keeps the user's intent and
+  /// the filtered count consistent with the visible controls. Use the
+  /// explicit clear (X) affordances to remove a filter.
   Future<void> _refreshKeepingFilter() async {
-    final query = _searchController.text.trim().toLowerCase();
-    await widget.dataProvider.refresh();
-    if (query.isNotEmpty) {
-      widget.dataProvider.filter(query);
+    try {
+      await widget.dataProvider.refresh();
+      widget.dataProvider.reapplyFilters();
+      if (mounted && _loadFailed) setState(() => _loadFailed = false);
+    } catch (e) {
+      if (!mounted) return;
+      // Keep showing the current list if we have one; only fall back to the
+      // full-screen error state when there is nothing to show.
+      if (widget.dataProvider.state.filteredRoutes.isEmpty) {
+        setState(() => _loadFailed = true);
+      }
+      _showLoadError(e);
     }
   }
 
@@ -131,11 +179,23 @@ class _TransportListContentState extends State<TransportListContent>
                   : null,
             ),
 
+            // Active operator/agency filter (e.g. from a QR deep link)
+            if (state.agencyFilter != null)
+              _AgencyFilterChip(
+                agencyName: state.agencyFilter!,
+                onClear:
+                    widget.onClearAgencyFilter ??
+                    () => widget.dataProvider.setAgencyFilter(null),
+                onShowQr: widget.onShowOperatorQr,
+              ),
+
             // Route count indicator
             if (!state.isLoading && state.filteredRoutes.isNotEmpty)
               _RouteCountIndicator(
                 count: state.filteredRoutes.length,
-                isFiltered: _searchController.text.isNotEmpty,
+                isFiltered:
+                    _searchController.text.isNotEmpty ||
+                    state.agencyFilter != null,
               ),
 
             // Main content
@@ -154,6 +214,16 @@ class _TransportListContentState extends State<TransportListContent>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    // Load failed and there is nothing cached to show: error + retry,
+    // instead of the eternal shimmer a stuck `isLoading` would produce.
+    if (_loadFailed && state.filteredRoutes.isEmpty) {
+      return _LoadErrorState(
+        message: localization.errorLoadingRoutes,
+        retryLabel: localization.retry,
+        onRetry: _initialLoad,
+      );
+    }
+
     // Loading state with shimmer
     if (state.isLoading && state.filteredRoutes.isEmpty) {
       return _ShimmerList();
@@ -163,12 +233,17 @@ class _TransportListContentState extends State<TransportListContent>
     if (state.filteredRoutes.isEmpty) {
       return _EmptyState(
         message: localization.noRoutesFound,
-        isSearch: _searchController.text.isNotEmpty,
+        isSearch:
+            _searchController.text.isNotEmpty || state.agencyFilter != null,
       );
     }
 
     // Build grouped list: agency headers + route tiles
-    final listItems = _buildGroupedItems(state.filteredRoutes, _searchController.text.isNotEmpty);
+    final listItems = _buildGroupedItems(
+      state.filteredRoutes,
+      _searchController.text.isNotEmpty,
+      localization.otherAgencies,
+    );
 
     return Stack(
       children: [
@@ -206,6 +281,11 @@ class _TransportListContentState extends State<TransportListContent>
                     ? _AgencyHeader(
                         name: item.headerName!,
                         routeCount: item.headerRouteCount!,
+                        onQrTap:
+                            item.headerAgency != null &&
+                                widget.onShowOperatorQr != null
+                            ? () => widget.onShowOperatorQr!(item.headerAgency!)
+                            : null,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(bottom: 12),
@@ -254,6 +334,7 @@ class _TransportListContentState extends State<TransportListContent>
   static List<_GroupedListItem> _buildGroupedItems(
     List<TransportRoute> routes,
     bool isSearching,
+    String otherAgenciesLabel,
   ) {
     // During search, show flat list without headers
     if (isSearching) {
@@ -273,10 +354,15 @@ class _TransportListContentState extends State<TransportListContent>
     final items = <_GroupedListItem>[];
     for (final agency in sortedAgencies) {
       final agencyRoutes = grouped[agency]!;
-      items.add(_GroupedListItem.header(
-        agency.isEmpty ? 'Otros' : agency,
-        agencyRoutes.length,
-      ));
+      items.add(
+        _GroupedListItem.header(
+          agency.isEmpty ? otherAgenciesLabel : agency,
+          agencyRoutes.length,
+          // Routes without an agency get a synthetic header — no real
+          // operator to encode in a QR.
+          agency: agency.isEmpty ? null : agency,
+        ),
+      );
       for (final route in agencyRoutes) {
         items.add(_GroupedListItem.route(route));
       }
@@ -290,17 +376,24 @@ class _GroupedListItem {
   final bool isHeader;
   final String? headerName;
   final int? headerRouteCount;
+  final String? headerAgency;
   final TransportRoute? route;
 
   const _GroupedListItem._({
     required this.isHeader,
     this.headerName,
     this.headerRouteCount,
+    this.headerAgency,
     this.route,
   });
 
-  factory _GroupedListItem.header(String name, int count) =>
-      _GroupedListItem._(isHeader: true, headerName: name, headerRouteCount: count);
+  factory _GroupedListItem.header(String name, int count, {String? agency}) =>
+      _GroupedListItem._(
+        isHeader: true,
+        headerName: name,
+        headerRouteCount: count,
+        headerAgency: agency,
+      );
 
   factory _GroupedListItem.route(TransportRoute route) =>
       _GroupedListItem._(isHeader: false, route: route);
@@ -311,7 +404,14 @@ class _AgencyHeader extends StatelessWidget {
   final String name;
   final int routeCount;
 
-  const _AgencyHeader({required this.name, required this.routeCount});
+  /// Opens the shareable QR for this agency; hidden when null.
+  final VoidCallback? onQrTap;
+
+  const _AgencyHeader({
+    required this.name,
+    required this.routeCount,
+    this.onQrTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -337,6 +437,17 @@ class _AgencyHeader extends StatelessWidget {
               ),
             ),
           ),
+          if (onQrTap != null)
+            IconButton(
+              icon: const Icon(Icons.qr_code_2_rounded, size: 20),
+              color: colorScheme.onSurfaceVariant,
+              visualDensity: VisualDensity.compact,
+              tooltip: 'QR',
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onQrTap!();
+              },
+            ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
@@ -523,6 +634,76 @@ class _RefreshButton extends StatelessWidget {
                   size: 24,
                 ),
         ),
+      ),
+    );
+  }
+}
+
+/// Chip showing the active operator/agency restriction with a clear
+/// affordance. Shown when the list was opened via a QR/deep link like
+/// `/routes?operator=...` or the filter was set programmatically.
+class _AgencyFilterChip extends StatelessWidget {
+  final String agencyName;
+  final VoidCallback onClear;
+
+  /// Opens the shareable QR for the active operator; hidden when null.
+  final void Function(String agencyName)? onShowQr;
+
+  const _AgencyFilterChip({
+    required this.agencyName,
+    required this.onClear,
+    this.onShowQr,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Row(
+        children: [
+          Flexible(
+            child: InputChip(
+              avatar: Icon(
+                Icons.business_rounded,
+                size: 16,
+                color: colorScheme.onSecondaryContainer,
+              ),
+              label: Text(agencyName),
+              labelStyle: theme.textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+              backgroundColor: colorScheme.secondaryContainer,
+              side: BorderSide.none,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              deleteIcon: Icon(
+                Icons.close_rounded,
+                size: 18,
+                color: colorScheme.onSecondaryContainer,
+              ),
+              onDeleted: () {
+                HapticFeedback.lightImpact();
+                onClear();
+              },
+            ),
+          ),
+          if (onShowQr != null)
+            IconButton(
+              icon: const Icon(Icons.qr_code_2_rounded),
+              color: colorScheme.onSurfaceVariant,
+              tooltip: 'QR',
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onShowQr!(agencyName);
+              },
+            ),
+        ],
       ),
     );
   }
@@ -718,6 +899,63 @@ class _ShimmerCard extends StatelessWidget {
 }
 
 /// Empty state widget
+class _LoadErrorState extends StatelessWidget {
+  final String message;
+  final String retryLabel;
+  final VoidCallback onRetry;
+
+  const _LoadErrorState({
+    required this.message,
+    required this.retryLabel,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.cloud_off_rounded,
+                size: 40,
+                color: colorScheme.onErrorContainer.withValues(alpha: 0.8),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              message,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(retryLabel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _EmptyState extends StatelessWidget {
   final String message;
   final bool isSearch;

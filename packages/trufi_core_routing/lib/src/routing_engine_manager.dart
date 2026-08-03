@@ -43,14 +43,27 @@ class RoutingEngineManager extends ChangeNotifier {
   int _currentIndex;
   bool _isPreloading = false;
 
+  /// Maximum number of itineraries requested per plan when [fetchPlan] is
+  /// called without an explicit `numItineraries`.
+  ///
+  /// Defaults to 5 (the historical behavior). Apps that want more results
+  /// override it at construction time instead of patching trufi-core:
+  ///
+  /// ```dart
+  /// RoutingEngineManager(engines: [...], maxItineraries: 20)
+  /// ```
+  final int maxItineraries;
+
   RoutingEngineManager({
     required List<IRoutingProvider> engines,
     int defaultIndex = 0,
+    this.maxItineraries = 5,
   }) : assert(engines.isNotEmpty, 'At least one engine is required'),
        assert(
          defaultIndex >= 0 && defaultIndex < engines.length,
          'defaultIndex must be valid',
        ),
+       assert(maxItineraries > 0, 'maxItineraries must be positive'),
        _engines = engines,
        _currentIndex = defaultIndex {
     _loadSavedEngine();
@@ -159,10 +172,13 @@ class RoutingEngineManager extends ChangeNotifier {
   }
 
   /// Fetches a trip plan using the current engine.
+  ///
+  /// When [numItineraries] is omitted, the manager's [maxItineraries]
+  /// (app-configurable via the constructor) is used.
   Future<Plan> fetchPlan({
     required RoutingLocation from,
     required RoutingLocation to,
-    int numItineraries = 5,
+    int? numItineraries,
     String? locale,
     required DateTime dateTime,
     bool arriveBy = false,
@@ -170,7 +186,7 @@ class RoutingEngineManager extends ChangeNotifier {
     return currentEngine.fetchPlan(
       from: from,
       to: to,
-      numItineraries: numItineraries,
+      numItineraries: numItineraries ?? maxItineraries,
       locale: locale,
       dateTime: dateTime,
       arriveBy: arriveBy,

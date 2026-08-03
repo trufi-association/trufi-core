@@ -313,7 +313,7 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
       AboutSectionCard(
         icon: Icons.code_rounded,
         iconColor: Colors.green,
-        title: 'Open Source',
+        title: localization.aboutOpenSourceTitle,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -342,12 +342,12 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
       AboutSectionCard(
         icon: Icons.mail_rounded,
         iconColor: Colors.orange,
-        title: 'Contact',
+        title: localization.aboutContact,
         child: AboutLinkTile(
           icon: Icons.email_rounded,
           iconColor: Colors.indigo,
           title: config.emailContact,
-          subtitle: 'Send us feedback',
+          subtitle: localization.aboutSendFeedback,
           onTap: () => _openUrl(
             'mailto:${config.emailContact}?subject=${config.appName} Feedback',
           ),

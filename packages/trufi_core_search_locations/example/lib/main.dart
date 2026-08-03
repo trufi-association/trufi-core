@@ -22,6 +22,11 @@ class MyApp extends StatelessWidget {
       ),
       child: MaterialApp(
         title: 'Search Locations Example',
+        localizationsDelegates: const [
+          SearchLocationsLocalizations.delegate,
+          ...MapsLocalizations.localizationsDelegates,
+        ],
+        supportedLocales: SearchLocationsLocalizations.supportedLocales,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,

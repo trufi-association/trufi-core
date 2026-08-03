@@ -1,5 +1,14 @@
+import 'package:flutter/widgets.dart';
+
+import '../../../l10n/maps_localizations.dart';
 import 'maplibre_engine.dart';
 import 'trufi_map_engine.dart';
+
+String _libertyDescription(BuildContext context) =>
+    MapsLocalizations.of(context).lightVectorMapDescription;
+
+String _darkDescription(BuildContext context) =>
+    MapsLocalizations.of(context).darkVectorMapDescription;
 
 /// Default map engines for Trufi apps.
 ///
@@ -11,12 +20,12 @@ const List<ITrufiMapEngine> defaultMapEngines = [
     engineId: 'maplibre_liberty',
     styleString: 'https://tiles.openfreemap.org/styles/liberty',
     displayName: 'Liberty',
-    displayDescription: 'Mapa vectorial claro',
+    descriptionBuilder: _libertyDescription,
   ),
   MapLibreEngine(
     engineId: 'maplibre_dark',
     styleString: 'https://tiles.openfreemap.org/styles/dark',
     displayName: 'Dark',
-    displayDescription: 'Mapa vectorial oscuro',
+    descriptionBuilder: _darkDescription,
   ),
 ];

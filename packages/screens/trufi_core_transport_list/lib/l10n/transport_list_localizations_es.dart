@@ -59,4 +59,49 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get loadingRoute => 'Cargando ruta...';
+
+  @override
+  String get otherAgencies => 'Otros';
+
+  @override
+  String shareRouteMessage(String uri) {
+    return 'Compartir: $uri';
+  }
+
+  @override
+  String get defaultModeBus => 'Bus';
+
+  @override
+  String get mapSettingsTitle => 'Configuración del mapa';
+
+  @override
+  String get mapTypeLabel => 'Tipo de mapa';
+
+  @override
+  String get applyChanges => 'Aplicar cambios';
+
+  @override
+  String get stopStart => 'Inicio';
+
+  @override
+  String get stopEnd => 'Fin';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'La información de paradas no está disponible para esta ruta';
+
+  @override
+  String get errorLoadingRoutes => 'No se pudieron cargar las rutas';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String get qrShareSubtitle => 'Escanea para abrir las rutas de este operador';
+
+  @override
+  String get copyQrImage => 'Copiar QR';
+
+  @override
+  String get copyQrImageFailed => 'No se pudo copiar el QR';
 }

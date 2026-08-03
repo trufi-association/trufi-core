@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../l10n/maps_localizations.dart';
 import 'map_type_option.dart';
 import 'map_selection_widgets.dart';
 
 /// Full-screen settings screen for selecting map type and optional POI layers.
+///
+/// Text defaults resolve through [MapsLocalizations]: the enclosing app must
+/// register [MapsLocalizations.delegate] (`TrufiApp` does this automatically)
+/// or the lookup throws at build time.
 class MapTypeSettingsScreen extends StatefulWidget {
   /// Currently selected map index.
   final int currentMapIndex;
@@ -125,7 +130,9 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
             _buildAnimatedItem(
               index: 0,
               child: _MapSettingsHeader(
-                title: widget.appBarTitle ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Configuración del mapa' : 'Map Settings'),
+                title:
+                    widget.appBarTitle ??
+                    MapsLocalizations.of(context).mapSettings,
                 onClose: () => Navigator.of(context).pop(),
               ),
             ),
@@ -139,7 +146,9 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
                   _buildAnimatedItem(
                     index: 1,
                     child: _MapTypeHeroSection(
-                      title: widget.sectionTitle ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Tipo de mapa' : 'Map Type'),
+                      title:
+                          widget.sectionTitle ??
+                          MapsLocalizations.of(context).mapType,
                     ),
                   ),
 
@@ -284,9 +293,7 @@ class _MapTypeHeroSection extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            Localizations.localeOf(context).languageCode == 'es'
-                ? 'Elige tu estilo de mapa preferido'
-                : 'Choose your preferred map style',
+            MapsLocalizations.of(context).chooseMapStyle,
             style: theme.textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

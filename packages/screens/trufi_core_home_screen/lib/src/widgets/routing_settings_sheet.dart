@@ -114,7 +114,12 @@ class RoutingSettingsSheet extends StatelessWidget {
           ),
           // Apply button
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 8, 20, 24 + MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.fromLTRB(
+              20,
+              8,
+              20,
+              24 + MediaQuery.of(context).padding.bottom,
+            ),
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
@@ -165,7 +170,7 @@ class _NoOptionsMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'El proveedor "$providerName" no tiene opciones configurables.',
+            HomeScreenLocalizations.of(context).providerNoOptions(providerName),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,

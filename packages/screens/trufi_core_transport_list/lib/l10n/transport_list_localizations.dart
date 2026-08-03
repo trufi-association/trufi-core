@@ -198,6 +198,90 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Loading route...'**
   String get loadingRoute;
+
+  /// Group header for routes whose agency is unknown
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get otherAgencies;
+
+  /// Snackbar message shown when sharing a route link
+  ///
+  /// In en, this message translates to:
+  /// **'Share: {uri}'**
+  String shareRouteMessage(String uri);
+
+  /// Fallback transport mode label when a route has no mode name
+  ///
+  /// In en, this message translates to:
+  /// **'Bus'**
+  String get defaultModeBus;
+
+  /// App bar title of the map settings screen
+  ///
+  /// In en, this message translates to:
+  /// **'Map Settings'**
+  String get mapSettingsTitle;
+
+  /// Section title for choosing the map type
+  ///
+  /// In en, this message translates to:
+  /// **'Map Type'**
+  String get mapTypeLabel;
+
+  /// Button label to apply map settings changes
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Changes'**
+  String get applyChanges;
+
+  /// Badge label for the first stop of a route
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get stopStart;
+
+  /// Badge label for the last stop of a route
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get stopEnd;
+
+  /// Explanation shown when a route has no stop data
+  ///
+  /// In en, this message translates to:
+  /// **'Stop information is not available for this route'**
+  String get stopInfoNotAvailable;
+
+  /// No description provided for @errorLoadingRoutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load routes'**
+  String get errorLoadingRoutes;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Subtitle of the operator QR dialog explaining what scanning does
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to open this operator\'s routes'**
+  String get qrShareSubtitle;
+
+  /// Button that copies the QR code image to the clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copy QR'**
+  String get copyQrImage;
+
+  /// Snackbar shown when copying the QR image to the clipboard fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t copy the QR'**
+  String get copyQrImageFailed;
 }
 
 class _TransportListLocalizationsDelegate

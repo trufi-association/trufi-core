@@ -1,0 +1,63 @@
+{
+  "@@locale": "en",
+  "online": "Online",
+  "@online": {
+    "description": "Label for the online maps segment in the online/offline toggle"
+  },
+  "offline": "Offline",
+  "@offline": {
+    "description": "Label for the offline maps segment in the online/offline toggle"
+  },
+  "mapSettings": "Map Settings",
+  "@mapSettings": {
+    "description": "Default title for the map type settings screen header"
+  },
+  "mapType": "Map Type",
+  "@mapType": {
+    "description": "Default section title above the map type list"
+  },
+  "chooseMapStyle": "Choose your preferred map style",
+  "@chooseMapStyle": {
+    "description": "Subtitle under the map type section title"
+  },
+  "changeMapType": "Change map type",
+  "@changeMapType": {
+    "description": "Default tooltip for the map type button"
+  },
+  "chooseOnMap": "Choose on Map",
+  "@chooseOnMap": {
+    "description": "Default title for the choose-on-map screen"
+  },
+  "confirmLocation": "Confirm Location",
+  "@confirmLocation": {
+    "description": "Default label for the confirm button on the choose-on-map screen"
+  },
+  "offlineMapName": "Offline Map",
+  "@offlineMapName": {
+    "description": "Default display name for the offline map engine"
+  },
+  "offlineMapDescription": "Fully offline map",
+  "@offlineMapDescription": {
+    "description": "Default description for the offline map engine"
+  },
+  "errorLoadingOfflineMap": "Error loading offline map",
+  "@errorLoadingOfflineMap": {
+    "description": "Error title shown when the offline map fails to load"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Label for the retry button after an offline map load failure"
+  },
+  "vectorMapDescription": "Vector map with modern styling and better performance",
+  "@vectorMapDescription": {
+    "description": "Default description for the MapLibre vector map engine"
+  },
+  "lightVectorMapDescription": "Light vector map",
+  "@lightVectorMapDescription": {
+    "description": "Description for the default light (Liberty) map style"
+  },
+  "darkVectorMapDescription": "Dark vector map",
+  "@darkVectorMapDescription": {
+    "description": "Description for the default dark map style"
+  }
+}

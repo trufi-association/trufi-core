@@ -84,5 +84,10 @@
         </array>
     </dict>
 </array>
+<!-- Mirror of Android's flutter_deeplinking_enabled=false: keep Flutter's
+     built-in deep linking off so DeepLinkService alone drives navigation
+     and the engine doesn't also push the raw URI into the router. -->
+<key>FlutterDeepLinkingEnabled</key>
+<false/>
 </dict>
 </plist>

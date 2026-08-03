@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../l10n/maps_localizations.dart';
 import '../../domain/controller/map_controller.dart';
 import '../../domain/entities/camera.dart';
 import '../../domain/entities/widget_marker.dart';
@@ -56,7 +57,9 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   @override
   String localizedDescription(BuildContext context) =>
-      descriptionBuilder?.call(context) ?? description;
+      descriptionBuilder?.call(context) ??
+      displayDescription ??
+      MapsLocalizations.of(context).vectorMapDescription;
 
   @override
   Widget? get previewWidget =>
