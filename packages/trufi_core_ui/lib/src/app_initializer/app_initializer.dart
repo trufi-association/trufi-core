@@ -161,7 +161,8 @@ class _AppInitializerState extends State<AppInitializer> {
     // This MaterialApp lives OUTSIDE the main _TrufiMaterialApp, so it must
     // register its own localizations and resolve the locale from the
     // LocaleManager provided above it for the init screen to be localized.
-    final locales = widget.supportedLocales ?? CoreLocalizations.supportedLocales;
+    final locales =
+        widget.supportedLocales ?? CoreLocalizations.supportedLocales;
     final fallbackLocale = locales.isEmpty ? const Locale('en') : locales.first;
 
     return MaterialApp(
@@ -176,10 +177,9 @@ class _AppInitializerState extends State<AppInitializer> {
       localizationsDelegates: [
         ...widget.extraLocalizationsDelegates,
         CoreLocalizations.delegate,
-        ...fallbackLocalizationsDelegates(
-          const [CoreLocalizations.delegate],
-          fallbackLocale: fallbackLocale,
-        ),
+        ...fallbackLocalizationsDelegates(const [
+          CoreLocalizations.delegate,
+        ], fallbackLocale: fallbackLocale),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

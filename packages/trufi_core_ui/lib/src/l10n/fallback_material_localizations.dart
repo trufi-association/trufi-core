@@ -71,8 +71,14 @@ class _FallbackLocalizationsDelegate<T> extends LocalizationsDelegate<T> {
   bool isSupported(Locale locale) => true;
 
   @override
-  Future<T> load(Locale locale) =>
-      inner.load(inner.isSupported(locale) ? locale : fallbackLocale);
+  Future<T> load(Locale locale) {
+    if (inner.isSupported(locale)) return inner.load(locale);
+    // Same guard as above: if the configured fallback isn't supported by
+    // this delegate either, use English (every trufi-core package ships it).
+    return inner.load(
+      inner.isSupported(fallbackLocale) ? fallbackLocale : const Locale('en'),
+    );
+  }
 
   @override
   bool shouldReload(_FallbackLocalizationsDelegate<T> old) =>
@@ -84,11 +90,19 @@ class _FallbackLocalizationsDelegate<T> extends LocalizationsDelegate<T> {
 
 List<LocalizationsDelegate<dynamic>> fallbackFrameworkLocalizationsDelegates({
   Locale fallbackLocale = const Locale('en'),
-}) => [
-  _FallbackMaterialLocalizationsDelegate(fallbackLocale),
-  _FallbackWidgetsLocalizationsDelegate(fallbackLocale),
-  _FallbackCupertinoLocalizationsDelegate(fallbackLocale),
-];
+}) {
+  // The fallback itself must be a language Flutter ships — an app whose
+  // default locale IS the city language (e.g. defaultLocale: qu) would
+  // otherwise crash inside the fallback that exists to prevent crashes.
+  final safe = GlobalMaterialLocalizations.delegate.isSupported(fallbackLocale)
+      ? fallbackLocale
+      : const Locale('en');
+  return [
+    _FallbackMaterialLocalizationsDelegate(safe),
+    _FallbackWidgetsLocalizationsDelegate(safe),
+    _FallbackCupertinoLocalizationsDelegate(safe),
+  ];
+}
 
 class _FallbackMaterialLocalizationsDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {

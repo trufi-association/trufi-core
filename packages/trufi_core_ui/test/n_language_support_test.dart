@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trufi_core_ui/src/l10n/core_localizations.dart';
 import 'package:trufi_core_ui/src/l10n/fallback_material_localizations.dart';
 
 /// Trufi ships in whatever languages a city translates it into — including
@@ -10,31 +11,30 @@ void main() {
   const quechua = Locale('qu');
 
   group('framework localizations for city languages', () {
-    testWidgets(
-      'a Quechua app builds a Scaffold instead of asserting',
-      (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            locale: quechua,
-            supportedLocales: const [quechua, Locale('es')],
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              ...fallbackFrameworkLocalizationsDelegates(),
-            ],
-            home: const Scaffold(body: Text('Allinllachu')),
-          ),
-        );
-        await tester.pumpAndSettle();
+    testWidgets('a Quechua app builds a Scaffold instead of asserting', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: quechua,
+          supportedLocales: const [quechua, Locale('es')],
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            ...fallbackFrameworkLocalizationsDelegates(),
+          ],
+          home: const Scaffold(body: Text('Allinllachu')),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        expect(tester.takeException(), isNull);
-        expect(find.text('Allinllachu'), findsOneWidget);
-        // Framework strings fall back, but they exist — that is the point.
-        final context = tester.element(find.byType(Scaffold));
-        expect(MaterialLocalizations.of(context), isNotNull);
-      },
-    );
+      expect(tester.takeException(), isNull);
+      expect(find.text('Allinllachu'), findsOneWidget);
+      // Framework strings fall back, but they exist — that is the point.
+      final context = tester.element(find.byType(Scaffold));
+      expect(MaterialLocalizations.of(context), isNotNull);
+    });
 
     testWidgets('Flutter-supported locales still get their own translations', (
       tester,
@@ -59,5 +59,72 @@ void main() {
       // which is registered last precisely so it never shadows a real one.
       expect(MaterialLocalizations.of(context).backButtonTooltip, 'Zurück');
     });
+  });
+
+  group('generic delegate fallback', () {
+    testWidgets(
+      'an untranslated locale resolves core strings via the fallback',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            locale: quechua,
+            supportedLocales: const [quechua, Locale('es')],
+            localizationsDelegates: [
+              CoreLocalizations.delegate,
+              fallbackLocalizationsDelegate(
+                CoreLocalizations.delegate,
+                fallbackLocale: const Locale('es'),
+              ),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              ...fallbackFrameworkLocalizationsDelegates(
+                fallbackLocale: const Locale('es'),
+              ),
+            ],
+            home: Builder(
+              builder: (context) =>
+                  Scaffold(body: Text(CoreLocalizations.of(context).appName)),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'a fallback locale nobody supports degrades to English, not a crash',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            locale: quechua,
+            supportedLocales: const [quechua],
+            localizationsDelegates: [
+              CoreLocalizations.delegate,
+              // The app's default locale IS the city language — the guard
+              // must fall through to English instead of recursing into an
+              // unsupported load.
+              fallbackLocalizationsDelegate(
+                CoreLocalizations.delegate,
+                fallbackLocale: quechua,
+              ),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              ...fallbackFrameworkLocalizationsDelegates(
+                fallbackLocale: quechua,
+              ),
+            ],
+            home: Builder(
+              builder: (context) =>
+                  Scaffold(body: Text(CoreLocalizations.of(context).appName)),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

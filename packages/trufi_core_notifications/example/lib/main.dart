@@ -24,6 +24,11 @@ class NotificationsExampleApp extends StatelessWidget {
         },
       ),
       child: MaterialApp(
+        // The notifications widgets resolve NotificationsLocalizations with a
+        // non-nullable lookup — hosts must register the delegate.
+        localizationsDelegates:
+            NotificationsLocalizations.localizationsDelegates,
+        supportedLocales: NotificationsLocalizations.supportedLocales,
         title: 'Notifications Example',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
