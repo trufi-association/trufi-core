@@ -44,6 +44,14 @@ class TrufiPlannerConfig {
   /// Walking speed in meters per second (default: 1.2 m/s).
   final double walkSpeed;
 
+  /// How many candidate stops to consider around the origin and the
+  /// destination when searching for routes (default: 60).
+  ///
+  /// In dense networks a small pool can hide direct lines that stop a
+  /// couple of blocks away (issue #926); raise it if your city has many
+  /// overlapping stops, lower it to trade coverage for speed.
+  final int maxStopCandidates;
+
   /// Maximum number of transfers allowed (default: 1).
   final int maxTransfers;
 
@@ -56,6 +64,7 @@ class TrufiPlannerConfig {
     this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
+    this.maxStopCandidates = 60,
   }) : serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
@@ -67,5 +76,6 @@ class TrufiPlannerConfig {
     this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
+    this.maxStopCandidates = 60,
   }) : gtfsAsset = null;
 }

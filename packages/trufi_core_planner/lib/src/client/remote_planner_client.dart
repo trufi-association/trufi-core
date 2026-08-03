@@ -60,8 +60,9 @@ class RemotePlannerClient implements PlannerRoutingClient {
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
-    double maxWalkDistance = 500,
+    double maxWalkDistance = 800,
     int maxResults = 5,
+    int maxStopCandidates = 60,
   }) async {
     final response = await _httpClient.post(
       Uri.parse('$_baseUrl/plan'),
@@ -70,6 +71,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
         'from': {'lat': origin.latitude, 'lon': origin.longitude},
         'to': {'lat': destination.latitude, 'lon': destination.longitude},
         'maxWalkDistance': maxWalkDistance,
+        'maxStopCandidates': maxStopCandidates,
       }),
     );
 

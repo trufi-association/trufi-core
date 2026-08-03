@@ -137,6 +137,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
       destination: to.position,
       maxWalkDistance: config.maxWalkingDistance,
       maxResults: numItineraries,
+      maxStopCandidates: config.maxStopCandidates,
     );
 
     sw.stop();
