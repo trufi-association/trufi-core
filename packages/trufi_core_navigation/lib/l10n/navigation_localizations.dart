@@ -264,6 +264,18 @@ abstract class NavigationLocalizations {
   /// In en, this message translates to:
   /// **'Destination'**
   String get navDestination;
+
+  /// Fallback name for a route without a name
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get navRoute;
+
+  /// How many stops remain before exiting the vehicle
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 stop remaining} other{{count} stops remaining}}'**
+  String navStopsRemaining(int count);
 }
 
 class _NavigationLocalizationsDelegate

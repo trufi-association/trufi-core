@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:trufi_core_maps/l10n/maps_localizations.dart';
+
+import '../../../l10n/maps_localizations.dart';
 import '../../configuration/map_engine/map_engine_manager.dart';
 import '../../configuration/map_engine/trufi_map_engine.dart';
 import '../../domain/entities/camera.dart';
@@ -20,8 +21,11 @@ class MapLocationResult {
 }
 
 class ChooseOnMapConfiguration {
-  final String title;
-  final String confirmButtonText;
+  /// Title shown in the header. If null, a localized default is used.
+  final String? title;
+
+  /// Label for the confirm button. If null, a localized default is used.
+  final String? confirmButtonText;
   final Widget? centerMarker;
   final bool showCoordinates;
   final double? initialLatitude;
@@ -30,8 +34,8 @@ class ChooseOnMapConfiguration {
   final bool showMapTypeButton;
 
   const ChooseOnMapConfiguration({
-    this.title = 'Choose on Map',
-    this.confirmButtonText = 'Confirm Location',
+    this.title,
+    this.confirmButtonText,
     this.centerMarker,
     this.showCoordinates = true,
     this.initialLatitude,
@@ -63,6 +67,13 @@ class ChooseOnMapConfiguration {
   }
 }
 
+/// Full-screen map picker that returns the coordinates under the crosshair.
+///
+/// When [ChooseOnMapConfiguration.title] or
+/// [ChooseOnMapConfiguration.confirmButtonText] are null they resolve through
+/// [MapsLocalizations]: the enclosing app must register
+/// [MapsLocalizations.delegate] (`TrufiApp` does this automatically) or the
+/// lookup throws at build time.
 class ChooseOnMapScreen extends StatefulWidget {
   final ChooseOnMapConfiguration configuration;
 
@@ -173,7 +184,8 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                             vertical: 12,
                           ),
                           child: Text(
-                            widget.configuration.title,
+                            widget.configuration.title ??
+                                MapsLocalizations.of(context).chooseOnMap,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: colorScheme.onSurface,
@@ -265,9 +277,8 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
                   },
                   icon: const Icon(Icons.check_rounded, size: 22),
                   label: Text(
-                    widget.configuration.confirmButtonText == 'Confirm Location'
-                        ? MapsLocalizations.of(context).confirmLocation
-                        : widget.configuration.confirmButtonText,
+                    widget.configuration.confirmButtonText ??
+                        MapsLocalizations.of(context).confirmLocation,
                   ),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),

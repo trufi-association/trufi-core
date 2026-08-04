@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core_maps/l10n/maps_localizations.dart';
+
+import '../../../l10n/maps_localizations.dart';
 import '../../configuration/map_engine/trufi_map_engine.dart';
 import 'map_type_option.dart';
 import 'map_type_settings_screen.dart';
@@ -58,6 +59,10 @@ import 'map_type_settings_screen.dart';
 ///   ),
 /// )
 /// ```
+///
+/// When [tooltip] is null it resolves through [MapsLocalizations]: the
+/// enclosing app must register [MapsLocalizations.delegate] (`TrufiApp` does
+/// this automatically) or the lookup throws at build time.
 class MapTypeButton extends StatelessWidget {
   /// Currently selected map index.
   final int currentMapIndex;
@@ -295,7 +300,7 @@ class _MapTypeButtonBase extends StatelessWidget {
       elevation: 4,
       borderRadius: BorderRadius.circular(borderRadius),
       child: Tooltip(
-        message: tooltip ?? (MapsLocalizations.of(context).changeMapType),
+        message: tooltip ?? MapsLocalizations.of(context).changeMapType,
         child: IconButton(
           iconSize: iconSize,
           icon: Icon(icon, color: effectiveIconColor),

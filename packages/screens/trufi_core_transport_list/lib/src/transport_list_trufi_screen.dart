@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart' show MapsLocalizations;
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import '../l10n/transport_list_localizations.dart';
@@ -11,6 +13,7 @@ import 'transport_detail_screen.dart';
 import 'transport_list_content.dart';
 import 'models/transport_route.dart';
 import 'transport_list_data_provider.dart';
+import 'widgets/operator_qr_dialog.dart';
 
 /// Transport List screen module for TrufiApp integration with OTP and Map support.
 ///
@@ -23,9 +26,17 @@ import 'transport_list_data_provider.dart';
 /// - `/routes/:id` - shows route detail for the given pattern ID (path parameter)
 class TransportListTrufiScreen extends TrufiScreen {
   final TransportListDataProvider Function(BuildContext context)?
-      dataProviderBuilder;
+  dataProviderBuilder;
 
-  TransportListTrufiScreen({this.dataProviderBuilder});
+  /// Base https URL used to build the shareable/printable operator QR
+  /// links (e.g. `https://app.trufi.app` → `https://app.trufi.app/routes?
+  /// operator=X`). Mirrors `HomeScreenConfig.shareBaseUrl`. When null,
+  /// links fall back to the app's `deepLinkScheme`
+  /// (`trufiapp://routes?operator=X`); with neither set, the QR
+  /// affordances are hidden.
+  final String? shareBaseUrl;
+
+  TransportListTrufiScreen({this.dataProviderBuilder, this.shareBaseUrl});
 
   @override
   String get id => 'transport_list';
@@ -36,8 +47,9 @@ class TransportListTrufiScreen extends TrufiScreen {
   @override
   Widget Function(BuildContext context) get builder =>
       (_) => _TransportListScreenWidget(
-            dataProviderBuilder: dataProviderBuilder,
-          );
+        dataProviderBuilder: dataProviderBuilder,
+        shareBaseUrl: shareBaseUrl,
+      );
 
   @override
   List<TrufiSubRoute> get subRoutes => [
@@ -73,6 +85,7 @@ class TransportListTrufiScreen extends TrufiScreen {
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
     ...TransportListLocalizations.localizationsDelegates,
+    MapsLocalizations.delegate,
   ];
 
   @override
@@ -97,9 +110,13 @@ class TransportListTrufiScreen extends TrufiScreen {
 
 class _TransportListScreenWidget extends StatefulWidget {
   final TransportListDataProvider Function(BuildContext context)?
-      dataProviderBuilder;
+  dataProviderBuilder;
+  final String? shareBaseUrl;
 
-  const _TransportListScreenWidget({this.dataProviderBuilder});
+  const _TransportListScreenWidget({
+    this.dataProviderBuilder,
+    this.shareBaseUrl,
+  });
 
   @override
   State<_TransportListScreenWidget> createState() =>
@@ -112,6 +129,11 @@ class _TransportListScreenWidgetState
   TransportListCache? _cache;
   bool _initialized = false;
 
+  /// Last `operator` query parameter applied from the URL. Tracked so the
+  /// URL only drives the filter when it actually changes — a user clearing
+  /// the filter in the UI isn't fought by an unchanged URL.
+  String? _appliedOperator;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -121,7 +143,90 @@ class _TransportListScreenWidgetState
       _initialized = true;
       _initializeDataProvider();
     }
+
+    _syncOperatorFromUrl();
   }
+
+  /// Applies the `operator` query parameter of `/routes?operator=...`
+  /// deep links (QR codes at stops/vehicles) as the agency filter.
+  void _syncOperatorFromUrl() {
+    Uri uri;
+    try {
+      uri = GoRouterState.of(context).uri;
+    } catch (_) {
+      // Not hosted under GoRouter (e.g. embedded usage) — nothing to sync.
+      return;
+    }
+
+    // Only sync while the list route itself is active; when a detail
+    // sub-route is on top the URL has no `operator` and syncing would
+    // wrongly clear the filter underneath it.
+    if (uri.path != '/routes') return;
+
+    final operator = uri.queryParameters['operator'];
+    if (operator == _appliedOperator) return;
+    _appliedOperator = operator;
+    _dataProvider?.setAgencyFilter(operator);
+  }
+
+  /// Clears the agency filter and drops the `operator` parameter from the
+  /// URL so the address bar/share state stays consistent.
+  void _clearAgencyFilter() {
+    _dataProvider?.setAgencyFilter(null);
+    try {
+      final router = GoRouter.of(context);
+      final uri = router.routeInformationProvider.value.uri;
+      if (uri.path == '/routes' &&
+          uri.queryParameters.containsKey('operator')) {
+        router.replace('/routes');
+      }
+    } catch (_) {
+      // Not hosted under GoRouter — the in-memory filter is already cleared.
+    }
+  }
+
+  /// Builds the link a printed QR encodes for [agencyName]: the https
+  /// share URL when configured, else the app's custom scheme. Null when
+  /// the app has neither (QR affordances hidden).
+  String? _operatorLink(String agencyName) {
+    final base = widget.shareBaseUrl;
+    if (base != null) {
+      final baseUri = Uri.parse(base);
+      return Uri(
+        scheme: baseUri.scheme,
+        host: baseUri.host,
+        port: baseUri.hasPort ? baseUri.port : null,
+        path: '/routes',
+        queryParameters: {'operator': agencyName},
+      ).toString();
+    }
+
+    String? scheme;
+    try {
+      scheme = Provider.of<AppConfiguration>(
+        context,
+        listen: false,
+      ).deepLinkScheme;
+    } catch (_) {
+      // Not hosted under TrufiApp (e.g. embedded usage).
+    }
+    if (scheme == null) return null;
+    return Uri(
+      scheme: scheme,
+      host: 'routes',
+      queryParameters: {'operator': agencyName},
+    ).toString();
+  }
+
+  void _showOperatorQr(String agencyName) {
+    final link = _operatorLink(agencyName);
+    if (link == null) return;
+    showOperatorQrDialog(context, operatorName: agencyName, link: link);
+  }
+
+  /// Whether QR links can be built at all — gates the QR buttons.
+  bool get _canShareOperatorQr =>
+      widget.shareBaseUrl != null || _operatorLink('') != null;
 
   void _initializeDataProvider() {
     if (widget.dataProviderBuilder != null) {
@@ -156,6 +261,8 @@ class _TransportListScreenWidgetState
     // This widget only shows the list - detail is handled by sub-route
     return TransportListContent(
       dataProvider: dataProvider,
+      onClearAgencyFilter: _clearAgencyFilter,
+      onShowOperatorQr: _canShareOperatorQr ? _showOperatorQr : null,
       onRouteTap: (route) {
         // Push to /routes/{id} so pop() returns here
         // URL updates automatically via GoRouter.optionURLReflectsImperativeAPIs

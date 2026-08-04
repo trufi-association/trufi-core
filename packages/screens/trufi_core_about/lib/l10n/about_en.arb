@@ -12,6 +12,10 @@
   "@aboutCollapseTitle": {
     "description": "Title for expandable section about Trufi"
   },
+  "aboutContact": "Contact",
+  "@aboutContact": {
+    "description": "Title for the contact section"
+  },
   "aboutContent": "Need to go somewhere and don't know which bus or route to take?\n{appName} makes it easy!\n\nTrufi Association is an international team of volunteers. We love public transportation, that's why we developed this application to make getting around easy. Our goal is to provide you with a practical tool that allows you to navigate with confidence.\n\nWe are committed to the continuous improvement of {appName} to offer you more and more accurate and useful information. We know that the transportation system in {city} undergoes changes due to different reasons, so it is possible that some routes are not completely up to date.\n\nTo make {appName} an effective tool, we rely on the collaboration of our users. If you are aware of changes in some routes or stops, we encourage you to share this information with us. Your contribution will not only help keep the app up to date, but will also benefit other users who rely on {appName}.\n\nThank you for choosing {appName} to move around {city}, we hope you enjoy your experience with us!",
   "@aboutContent": {
     "description": "Text displayed on the about page",
@@ -33,6 +37,14 @@
   "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.",
   "@aboutOpenSource": {
     "description": "A note about open source"
+  },
+  "aboutOpenSourceTitle": "Open Source",
+  "@aboutOpenSourceTitle": {
+    "description": "Title for the open source section"
+  },
+  "aboutSendFeedback": "Send us feedback",
+  "@aboutSendFeedback": {
+    "description": "Subtitle for the contact email link"
   },
   "menuAbout": "About us",
   "@menuAbout": {

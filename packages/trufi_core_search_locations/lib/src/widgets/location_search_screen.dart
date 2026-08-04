@@ -2,31 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
+import '../../l10n/search_locations_localizations.dart';
 import '../models/search_location.dart';
 import '../services/search_location_service.dart';
 
 /// Configuration for [LocationSearchScreen].
+///
+/// Text fields fall back to localized defaults when null.
 class LocationSearchScreenConfiguration {
   /// Hint text for origin search.
-  final String originHintText;
+  final String? originHintText;
 
   /// Hint text for destination search.
-  final String destinationHintText;
+  final String? destinationHintText;
 
   /// Text for "Your Location" option.
-  final String yourLocationText;
+  final String? yourLocationText;
 
   /// Text for "Choose on Map" option.
-  final String chooseOnMapText;
+  final String? chooseOnMapText;
 
   /// Title for "Your Places" section.
-  final String yourPlacesTitle;
+  final String? yourPlacesTitle;
 
   /// Title for "Search Results" section.
-  final String searchResultsTitle;
+  final String? searchResultsTitle;
 
   /// Text shown when no results are found.
-  final String noResultsText;
+  final String? noResultsText;
 
   /// Icon for "Your Location" option.
   final IconData yourLocationIcon;
@@ -38,13 +41,13 @@ class LocationSearchScreenConfiguration {
   final IconData Function(String id)? placeIconBuilder;
 
   const LocationSearchScreenConfiguration({
-    this.originHintText = 'Search origin...',
-    this.destinationHintText = 'Search destination...',
-    this.yourLocationText = 'Your Location',
-    this.chooseOnMapText = 'Choose on Map',
-    this.yourPlacesTitle = 'YOUR PLACES',
-    this.searchResultsTitle = 'SEARCH RESULTS',
-    this.noResultsText = 'No results found',
+    this.originHintText,
+    this.destinationHintText,
+    this.yourLocationText,
+    this.chooseOnMapText,
+    this.yourPlacesTitle,
+    this.searchResultsTitle,
+    this.noResultsText,
     this.yourLocationIcon = Icons.gps_fixed,
     this.chooseOnMapIcon = Icons.map,
     this.placeIconBuilder,
@@ -54,6 +57,10 @@ class LocationSearchScreenConfiguration {
 /// A search screen with Your Location, Choose on Map, Your Places, and search results.
 ///
 /// Returns a [SearchLocation] when a location is selected.
+///
+/// Text defaults resolve through [SearchLocationsLocalizations]: the
+/// enclosing app must register [SearchLocationsLocalizations.delegate]
+/// (`TrufiApp` does this automatically) or the lookup throws at build time.
 class LocationSearchScreen extends StatefulWidget {
   /// Whether searching for origin (true) or destination (false).
   final bool isOrigin;
@@ -222,6 +229,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final config = widget.configuration;
+    final l10n = SearchLocationsLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -235,8 +243,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                 controller: _searchController,
                 focusNode: _searchFocusNode,
                 hintText: widget.isOrigin
-                    ? config.originHintText
-                    : config.destinationHintText,
+                    ? (config.originHintText ?? l10n.searchOrigin)
+                    : (config.destinationHintText ?? l10n.searchDestination),
                 query: _query,
                 onChanged: (value) {
                   setState(() {
@@ -298,8 +306,10 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                                 }
                               }
                             : null,
-                        yourLocationText: config.yourLocationText,
-                        chooseOnMapText: config.chooseOnMapText,
+                        yourLocationText:
+                            config.yourLocationText ?? l10n.yourLocation,
+                        chooseOnMapText:
+                            config.chooseOnMapText ?? l10n.chooseOnMap,
                         yourLocationIcon: config.yourLocationIcon,
                         chooseOnMapIcon: config.chooseOnMapIcon,
                       ),
@@ -311,7 +321,9 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                   if (_query.isEmpty && _myPlaces.isNotEmpty) ...[
                     _buildAnimatedItem(
                       index: 2,
-                      child: _SectionTitle(title: config.yourPlacesTitle),
+                      child: _SectionTitle(
+                        title: config.yourPlacesTitle ?? l10n.yourPlaces,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _buildAnimatedItem(
@@ -330,7 +342,9 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
 
                   // Search Results
                   if (_query.isNotEmpty) ...[
-                    _SectionTitle(title: config.searchResultsTitle),
+                    _SectionTitle(
+                      title: config.searchResultsTitle ?? l10n.searchResults,
+                    ),
                     const SizedBox(height: 8),
                     if (_isSearching)
                       const Padding(
@@ -338,7 +352,9 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                         child: Center(child: CircularProgressIndicator()),
                       )
                     else if (_searchResults.isEmpty)
-                      _EmptySearchResults(text: config.noResultsText)
+                      _EmptySearchResults(
+                        text: config.noResultsText ?? l10n.noResultsFound,
+                      )
                     else
                       ...List.generate(_searchResults.length, (index) {
                         final location = _searchResults[index];

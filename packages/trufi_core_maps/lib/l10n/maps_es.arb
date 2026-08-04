@@ -1,8 +1,22 @@
 {
   "@@locale": "es",
-  "mapSettingsTitle": "Configuración del mapa",
-  "mapTypeSectionTitle": "Tipo de mapa",
-  "mapTypeDescription": "Elige tu estilo de mapa preferido",
+  "online": "En línea",
+  "offline": "Sin conexión",
+  "mapSettings": "Configuración del mapa",
+  "mapType": "Tipo de mapa",
+  "chooseMapStyle": "Elige tu estilo de mapa preferido",
+  "changeMapType": "Cambiar tipo de mapa",
+  "chooseOnMap": "Elegir en el mapa",
   "confirmLocation": "Confirmar ubicación",
-  "changeMapType": "Cambiar tipo de mapa"
+  "offlineMapName": "Mapa offline",
+  "offlineMapDescription": "Mapa completamente offline",
+  "errorLoadingOfflineMap": "Error al cargar el mapa offline",
+  "retry": "Reintentar",
+  "vectorMapDescription": "Mapa vectorial con estilo moderno y mejor rendimiento",
+  "lightVectorMapDescription": "Mapa vectorial claro",
+  "darkVectorMapDescription": "Mapa vectorial oscuro",
+  "mapStyleStandardDescription": "Mapa estándar",
+  "mapStyleLightDescription": "Mapa claro",
+  "mapStyleDarkDescription": "Mapa oscuro",
+  "mapStyleColorfulDescription": "Mapa colorido"
 }

@@ -23,7 +23,6 @@ import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 import 'package:trufi_core_ui/trufi_core_ui.dart';
-import 'package:trufi_core_maps/l10n/maps_localizations.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
@@ -36,24 +35,8 @@ const _countryName = 'Bolivia';
 const _emailContact = 'info@trufi-association.org';
 const _feedbackUrl = 'https://www.trufi-association.org/feedback/';
 const _facebookUrl = 'https://facebook.com/trufiapp';
-const _instagramUrl = 'https://www.instagram.com/trufi.app';
 const _xTwitterUrl = 'https://x.com/trufiapp';
-
-String _localized(
-  BuildContext context, {
-  required String es,
-  required String de,
-  required String en,
-}) {
-  switch (Localizations.localeOf(context).languageCode) {
-    case 'es':
-      return es;
-    case 'de':
-      return de;
-    default:
-      return en;
-  }
-}
+const _instagramUrl = 'https://instagram.com/trufiapp';
 
 // Routing engines (similar to map engines)
 final List<IRoutingProvider> _routingEngines = [
@@ -74,13 +57,10 @@ final List<IRoutingProvider> _routingEngines = [
   Otp28RoutingProvider(
     endpoint: 'https://otp281.trufi.app',
     displayName: 'OTP 2.8.1',
-    showWheelchairOption: false,
-    showBicycleOption: false,
   ),
   Otp15RoutingProvider(
     endpoint: 'https://otp150.trufi.app',
     displayName: 'OTP 1.5.0',
-    showWheelchairOption: false,
   ),
 ];
 
@@ -91,7 +71,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_osm_liberty',
       displayName: 'Offline Liberty',
-      displayDescription: 'Mapa offline estándar',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleStandardDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/osm-liberty/style.json',
@@ -117,7 +98,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_osm_bright',
       displayName: 'Offline Bright',
-      displayDescription: 'Mapa offline claro',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleLightDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/osm-bright/style.json',
@@ -143,7 +125,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_dark_matter',
       displayName: 'Offline Dark Matter',
-      displayDescription: 'Mapa offline oscuro',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleDarkDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/dark-matter/style.json',
@@ -172,7 +155,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_fiord_color',
       displayName: 'Offline Fiord Color',
-      displayDescription: 'Mapa offline colorido',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleColorfulDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/fiord-color/style.json',
@@ -204,45 +188,29 @@ final List<ITrufiMapEngine> _mapEngines = [
     engineId: 'osm_bright',
     styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
-    descriptionBuilder: (context) => _localized(
-      context,
-      es: 'Mapa claro',
-      de: 'Übersichtliche Karte',
-      en: 'Light map',
-    ),
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleLightDescription,
   ),
   MapLibreEngine(
     engineId: 'osm_liberty',
     styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
-    descriptionBuilder: (context) => _localized(
-      context,
-      es: 'Mapa estándar',
-      de: 'Standardkarte',
-      en: 'Standard map',
-    ),
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleStandardDescription,
   ),
   MapLibreEngine(
     engineId: 'dark_matter',
     styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
-    descriptionBuilder: (context) => _localized(
-      context,
-      es: 'Mapa oscuro',
-      de: 'Dunkle Karte',
-      en: 'Dark map',
-    ),
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleDarkDescription,
   ),
   MapLibreEngine(
     engineId: 'fiord_color',
     styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
     displayName: 'Fiord Color',
-    descriptionBuilder: (context) => _localized(
-      context,
-      es: 'Mapa colorido',
-      de: 'Bunte Karte',
-      en: 'Color map',
-    ),
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleColorfulDescription,
   ),
 ];
 // ========================================
@@ -252,8 +220,16 @@ void main() {
     AppConfiguration(
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
-      defaultLocale: const Locale('es'),
-      extraLocalizationsDelegates: [MapsLocalizations.delegate],
+      defaultLocale: Locale('es'),
+      localeConfig: const TrufiLocaleConfig(
+        supportedLocales: [
+          Locale('es'),
+          Locale('en'),
+          Locale('de'),
+          Locale('qu'),
+        ],
+        languageNames: {'qu': 'Runasimi'},
+      ),
       themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: [
         SocialMediaLink(
@@ -279,8 +255,10 @@ void main() {
                 OnboardingSheet(onComplete: onComplete),
           ),
           PrivacyConsentManager(
-            overlayBuilder: (onAccept, onDecline) =>
-                PrivacyConsentSheet(onAccept: onAccept, onDecline: onDecline),
+            overlayBuilder: (onAccept, onDecline) => PrivacyConsentSheet(
+              onAccept: onAccept,
+              onDecline: onDecline,
+            ),
           ),
         ],
       ),
@@ -329,43 +307,23 @@ void main() {
           config: FaresConfig(
             currency: 'Bs.',
             lastUpdated: DateTime(2024, 1, 15),
-            fares: [
+            fares: const [
               FareInfo(
                 title: 'Trufi',
-                titleBuilder: (context) =>
-                    _localized(context, es: 'Trufi', de: 'Trufi', en: 'Trufi'),
                 icon: Icons.directions_bus,
                 primary: FareCategory(
                   label: 'Regular',
-                  labelBuilder: (context) => _localized(
-                    context,
-                    es: 'Regular',
-                    de: 'Regulär',
-                    en: 'Regular',
-                  ),
                   price: '2.00',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
-                    labelBuilder: (context) => _localized(
-                      context,
-                      es: 'Estudiante',
-                      de: 'Student',
-                      en: 'Student',
-                    ),
                     price: '1.50',
                     icon: Icons.school_rounded,
                   ),
                   FareCategory(
                     label: 'Senior',
-                    labelBuilder: (context) => _localized(
-                      context,
-                      es: 'Adulto mayor',
-                      de: 'Senior',
-                      en: 'Senior',
-                    ),
                     price: '1.00',
                     icon: Icons.elderly_rounded,
                   ),
@@ -373,40 +331,20 @@ void main() {
               ),
               FareInfo(
                 title: 'Micro',
-                titleBuilder: (context) =>
-                    _localized(context, es: 'Micro', de: 'Micro', en: 'Micro'),
                 icon: Icons.airport_shuttle,
                 primary: FareCategory(
                   label: 'Regular',
-                  labelBuilder: (context) => _localized(
-                    context,
-                    es: 'Regular',
-                    de: 'Regulär',
-                    en: 'Regular',
-                  ),
                   price: '1.50',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
-                    labelBuilder: (context) => _localized(
-                      context,
-                      es: 'Estudiante',
-                      de: 'Student',
-                      en: 'Student',
-                    ),
                     price: '1.00',
                     icon: Icons.school_rounded,
                   ),
                   FareCategory(
                     label: 'Senior',
-                    labelBuilder: (context) => _localized(
-                      context,
-                      es: 'Adulto mayor',
-                      de: 'Senior',
-                      en: 'Senior',
-                    ),
                     price: '0.75',
                     icon: Icons.elderly_rounded,
                   ),
@@ -414,33 +352,15 @@ void main() {
               ),
               FareInfo(
                 title: 'Minibus',
-                titleBuilder: (context) => _localized(
-                  context,
-                  es: 'Minibús',
-                  de: 'Kleinbus',
-                  en: 'Minibus',
-                ),
                 icon: Icons.directions_bus_filled,
                 primary: FareCategory(
                   label: 'Regular',
-                  labelBuilder: (context) => _localized(
-                    context,
-                    es: 'Regular',
-                    de: 'Regulär',
-                    en: 'Regular',
-                  ),
                   price: '2.50',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
-                    labelBuilder: (context) => _localized(
-                      context,
-                      es: 'Estudiante',
-                      de: 'Student',
-                      en: 'Student',
-                    ),
                     price: '2.00',
                     icon: Icons.school_rounded,
                   ),

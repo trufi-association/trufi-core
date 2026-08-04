@@ -20,13 +20,12 @@
   "titleError": "Error",
   "unreadCount": "{count} sin leer",
   "markAllAsRead": "Marcar todo como leído",
-  "appInitStepStarting": "Iniciando",
-  "appInitStepInitializingOverlays":"Inicializando",
-  "appInitStepLoadingMaps":"Cargando mapas",
-  "appInitStepLoadingRoutes":"Cargando rutas",
-  "appInitStepPreparingScreens": "Preparando pantallas",
-  "appInitUnableToStart": "No se pudo iniciar la aplicación",
-  "appInitUnexpectedError": "Ocurrió un error inesperado",
-  "appInitStepLoading": "Cargando",
-  "appInitRetryButtonLabel": "Reintentar"
+  "initStepStarting": "Iniciando",
+  "initStepInitializing": "Inicializando",
+  "initStepLoadingMaps": "Cargando mapas",
+  "initStepLoadingRoutes": "Cargando rutas",
+  "initStepAlmostReady": "Casi listo",
+  "errorUnableToStart": "No se pudo iniciar",
+  "errorUnexpected": "Ocurrió un error inesperado",
+  "poweredByTrufi": "Powered by Trufi Association"
 }

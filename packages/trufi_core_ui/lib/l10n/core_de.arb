@@ -20,13 +20,12 @@
   "titleError": "Fehler",
   "unreadCount": "{count} ungelesen",
   "markAllAsRead": "Alle als gelesen markieren",
-  "appInitStepStarting": "Starten",
-  "appInitStepInitializingOverlays": "Overlays initialisieren",
-  "appInitStepLoadingMaps": "Karten laden",
-  "appInitStepLoadingRoutes": "Routen laden",
-  "appInitStepPreparingScreens": "Fast fertig",
-  "appInitUnableToStart": "Start nicht möglich",
-  "appInitUnexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
-  "appInitStepLoading": "Laden",
-  "appInitRetryButtonLabel": "Wiederholen"
+  "initStepStarting": "Wird gestartet",
+  "initStepInitializing": "Wird initialisiert",
+  "initStepLoadingMaps": "Karten werden geladen",
+  "initStepLoadingRoutes": "Routen werden geladen",
+  "initStepAlmostReady": "Fast fertig",
+  "errorUnableToStart": "Start nicht möglich",
+  "errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten",
+  "poweredByTrufi": "Powered by Trufi Association"
 }

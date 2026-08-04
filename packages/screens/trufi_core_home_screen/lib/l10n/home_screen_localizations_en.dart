@@ -443,11 +443,16 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
   String get liveVehiclesStateOff => 'Off';
 
   @override
-  String get yourPlacesTitle => 'YOUR PLACES';
+  String get placeOrigin => 'Origin';
 
   @override
-  String get searchResultsTitle => 'SEARCH RESULTS';
+  String get placeDestination => 'Destination';
 
   @override
-  String get noResultsText => 'No results found';
+  String providerNoOptions(String provider) {
+    return 'The \"$provider\" provider has no configurable options.';
+  }
+
+  @override
+  String get resolvingLocation => 'Finding place name…';
 }

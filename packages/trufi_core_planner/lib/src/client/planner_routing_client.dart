@@ -15,8 +15,9 @@ abstract class PlannerRoutingClient {
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
-    double maxWalkDistance = 500,
+    double maxWalkDistance = 800,
     int maxResults = 5,
+    int maxStopCandidates = 60,
   });
 
   /// Get all transit routes.

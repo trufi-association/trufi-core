@@ -4,6 +4,8 @@ import '../../managers/notification_manager.dart';
 import '../../models/notification.dart';
 import 'notification_tile.dart';
 
+import '../../../l10n/notifications_localizations.dart';
+
 /// A list view displaying notifications with pull-to-refresh and pagination
 class NotificationList extends StatelessWidget {
   /// Callback when a notification is tapped
@@ -58,14 +60,14 @@ class NotificationList extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'No notifications',
+                  NotificationsLocalizations.of(context).noNotifications,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'You\'re all caught up!',
+                  NotificationsLocalizations.of(context).allCaughtUp,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant.withAlpha(180),
                   ),
@@ -89,7 +91,9 @@ class NotificationList extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      '${manager.unreadCount} unread',
+                      NotificationsLocalizations.of(
+                        context,
+                      ).unreadCount(manager.unreadCount),
                       style: theme.textTheme.labelLarge?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -97,7 +101,9 @@ class NotificationList extends StatelessWidget {
                     const Spacer(),
                     TextButton(
                       onPressed: manager.markAllAsRead,
-                      child: const Text('Mark all as read'),
+                      child: Text(
+                        NotificationsLocalizations.of(context).markAllAsRead,
+                      ),
                     ),
                   ],
                 ),

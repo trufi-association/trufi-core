@@ -61,11 +61,77 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
   String get loadingRoute => 'Cargando ruta...';
 
   @override
-  String get mapSettingsTitle => 'Configuración de mapa';
+  String get otherAgencies => 'Otros';
 
   @override
-  String get mapTypeSectionTitle => 'Tipo de mapa';
+  String shareRouteMessage(String uri) {
+    return 'Compartir: $uri';
+  }
 
   @override
-  String get applyChangesButton => 'Aplicar cambios';
+  String get defaultModeBus => 'Bus';
+
+  @override
+  String get mapSettingsTitle => 'Configuración del mapa';
+
+  @override
+  String get mapTypeLabel => 'Tipo de mapa';
+
+  @override
+  String get applyChanges => 'Aplicar cambios';
+
+  @override
+  String get stopStart => 'Inicio';
+
+  @override
+  String get stopEnd => 'Fin';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'La información de paradas no está disponible para esta ruta';
+
+  @override
+  String get errorLoadingRoutes => 'No se pudieron cargar las rutas';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String get qrShareSubtitle => 'Escanea para abrir las rutas de este operador';
+
+  @override
+  String get copyQrImage => 'Copiar QR';
+
+  @override
+  String get copyQrImageFailed => 'No se pudo copiar el QR';
+
+  @override
+  String get modeTram => 'Tranvía';
+
+  @override
+  String get modeSubway => 'Metro';
+
+  @override
+  String get modeRail => 'Tren';
+
+  @override
+  String get modeBus => 'Bus';
+
+  @override
+  String get modeFerry => 'Ferry';
+
+  @override
+  String get modeCableTram => 'Tranvía de cable';
+
+  @override
+  String get modeAerialLift => 'Teleférico';
+
+  @override
+  String get modeFunicular => 'Funicular';
+
+  @override
+  String get modeTrolleybus => 'Trolebús';
+
+  @override
+  String get modeMonorail => 'Monorriel';
 }

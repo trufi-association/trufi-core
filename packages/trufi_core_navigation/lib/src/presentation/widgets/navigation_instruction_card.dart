@@ -78,7 +78,9 @@ class NavigationInstructionCard extends StatelessWidget {
                     children: [
                       // Primary text (stop name)
                       Text(
-                        instruction.primaryText,
+                        instruction.resolvedPrimaryText(
+                          NavigationLocalizations.of(context),
+                        ),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: colorScheme.onSurface,
@@ -87,10 +89,15 @@ class NavigationInstructionCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      if (instruction.secondaryText != null) ...[
+                      if (instruction.resolvedSecondaryText(
+                            NavigationLocalizations.of(context),
+                          ) !=
+                          null) ...[
                         const SizedBox(height: 4),
                         Text(
-                          instruction.secondaryText!,
+                          instruction.resolvedSecondaryText(
+                            NavigationLocalizations.of(context),
+                          )!,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -323,7 +330,9 @@ class NavigationInstructionCard extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              nextInstruction!.primaryText,
+              nextInstruction!.resolvedPrimaryText(
+                NavigationLocalizations.of(context),
+              ),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w500,

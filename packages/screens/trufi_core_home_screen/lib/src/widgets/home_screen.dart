@@ -67,6 +67,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  /// Per-field monotonic tokens so only the LATEST map-picked point for
+  /// EACH field applies its reverse-geocode result — two quick long-presses
+  /// on the same field no longer race (last-to-resolve used to win), while
+  /// an origin pick followed by a quick destination pick keeps both.
+  int _originResolveSeq = 0;
+  int _destinationResolveSeq = 0;
+
   TrufiMapController? _mapController;
   FitCameraUtil? _fitCameraUtil;
   bool _customLayersInitialized = false;
@@ -292,8 +299,7 @@ class _HomeScreenState extends State<HomeScreen>
     // which can return the route this widget was originally built under
     // even after the user has navigated elsewhere within a ShellRoute).
     final router = GoRouter.of(context);
-    final currentPath =
-        router.routeInformationProvider.value.uri.path;
+    final currentPath = router.routeInformationProvider.value.uri.path;
     if (currentPath != '/') return;
 
     final from = state.fromPlace;
@@ -396,12 +402,16 @@ class _HomeScreenState extends State<HomeScreen>
         }
       }
 
+      // Resolved before the awaits below so no BuildContext use crosses
+      // an async gap.
+      final l10n = HomeScreenLocalizations.of(context);
+
       // Parse origin
       final fromLat = double.tryParse(params['from_lat'] ?? '');
       final fromLng = double.tryParse(params['from_lng'] ?? '');
       if (fromLat != null && fromLng != null) {
         final fromPlace = TrufiLocation(
-          description: params['from_name'] ?? 'Origin',
+          description: params['from_name'] ?? l10n.placeOrigin,
           latitude: fromLat,
           longitude: fromLng,
         );
@@ -414,7 +424,7 @@ class _HomeScreenState extends State<HomeScreen>
       final toLng = double.tryParse(params['to_lng'] ?? '');
       if (toLat != null && toLng != null) {
         final toPlace = TrufiLocation(
-          description: params['to_name'] ?? 'Destination',
+          description: params['to_name'] ?? l10n.placeDestination,
           latitude: toLat,
           longitude: toLng,
         );
@@ -683,13 +693,9 @@ class _HomeScreenState extends State<HomeScreen>
             );
 
             if (result != null) {
-              return SearchLocation(
-                id: 'map_${DateTime.now().millisecondsSinceEpoch}',
-                displayName: l10n.selectedLocation,
-                address:
-                    '${result.latitude.toStringAsFixed(5)}, ${result.longitude.toStringAsFixed(5)}',
-                latitude: result.latitude,
-                longitude: result.longitude,
+              return await _resolvePickedLocation(
+                result.latitude,
+                result.longitude,
               );
             }
             return null;
@@ -787,10 +793,7 @@ class _HomeScreenState extends State<HomeScreen>
       markers.add(
         TrufiMarker(
           id: 'destination-preview',
-          position: LatLng(
-            state.toPlace!.latitude,
-            state.toPlace!.longitude,
-          ),
+          position: LatLng(state.toPlace!.latitude, state.toPlace!.longitude),
           widget: const _DestinationMarker(),
           size: const Size(32, 32),
           alignment: Alignment.topCenter,
@@ -1008,10 +1011,7 @@ class _HomeScreenState extends State<HomeScreen>
   /// Compute and apply camera position to fit the given points.
   void _fitCameraToPoints(List<LatLng> points) {
     if (_fitCameraUtil == null || _currentCamera == null) return;
-    final newCam = _fitCameraUtil!.cameraForPoints(
-      points,
-      _currentCamera!,
-    );
+    final newCam = _fitCameraUtil!.cameraForPoints(points, _currentCamera!);
     if (newCam != null) {
       setState(() {
         _cameraTarget = newCam;
@@ -1331,28 +1331,47 @@ class _HomeScreenState extends State<HomeScreen>
 
     final cubit = context.read<RoutePlannerCubit>();
 
-    if (result == 'origin') {
-      final location = TrufiLocation(
-        description: l10n.selectedLocation,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        address:
-            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
-      );
-      await cubit.setFromPlace(location);
+    if (result != 'origin' && result != 'destination') return;
+
+    final isOrigin = result == 'origin';
+    final seq = isOrigin ? ++_originResolveSeq : ++_destinationResolveSeq;
+    final messenger = ScaffoldMessenger.of(context);
+    // Reverse geocoding can take up to 5 s on a slow network — show what
+    // is happening instead of appearing frozen.
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        content: Row(
+          children: [
+            const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 12),
+            Text(l10n.resolvingLocation),
+          ],
+        ),
+      ),
+    );
+
+    final resolved = await _resolvePickedLocation(
+      position.latitude,
+      position.longitude,
+    );
+    messenger.hideCurrentSnackBar();
+    // A newer pick for the SAME field superseded this one — drop it.
+    final latest = isOrigin ? _originResolveSeq : _destinationResolveSeq;
+    if (!mounted || seq != latest) return;
+
+    if (isOrigin) {
+      await cubit.setFromPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.toPlace != null) {
         cubit.fetchPlan();
       }
-    } else if (result == 'destination') {
-      final location = TrufiLocation(
-        description: l10n.selectedLocation,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        address:
-            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
-      );
-      await cubit.setToPlace(location);
+    } else {
+      await cubit.setToPlace(_searchLocationToTrufiLocation(resolved));
       // Check if both places are now set and fetch
       if (cubit.state.fromPlace != null) {
         cubit.fetchPlan();
@@ -1396,30 +1415,36 @@ class _HomeScreenState extends State<HomeScreen>
 
     // My location layer (lowest level)
     if (_myLocationMarkers.isNotEmpty) {
-      layers.add(TrufiLayer(
-        id: 'my-location-layer',
-        markers: _myLocationMarkers,
-        layerLevel: 0,
-      ));
+      layers.add(
+        TrufiLayer(
+          id: 'my-location-layer',
+          markers: _myLocationMarkers,
+          layerLevel: 0,
+        ),
+      );
     }
 
     // Location markers layer (origin/destination preview before route)
     if (_locationMarkers.isNotEmpty) {
-      layers.add(TrufiLayer(
-        id: 'location-markers-layer',
-        markers: _locationMarkers,
-        layerLevel: 2,
-      ));
+      layers.add(
+        TrufiLayer(
+          id: 'location-markers-layer',
+          markers: _locationMarkers,
+          layerLevel: 2,
+        ),
+      );
     }
 
     // Route lines (polylines) sit below live/realtime layers so vehicles
     // render on top of them.
     if (_routeLines.isNotEmpty) {
-      layers.add(TrufiLayer(
-        id: 'route-lines-layer',
-        lines: _routeLines,
-        layerLevel: 1000,
-      ));
+      layers.add(
+        TrufiLayer(
+          id: 'route-lines-layer',
+          lines: _routeLines,
+          layerLevel: 1000,
+        ),
+      );
     }
 
     // POI layers
@@ -1451,11 +1476,13 @@ class _HomeScreenState extends State<HomeScreen>
     // Route markers (origin/destination/boarding/transit labels) stay on top
     // so they aren't hidden by live vehicle markers.
     if (_routeMarkers.isNotEmpty) {
-      layers.add(TrufiLayer(
-        id: 'route-markers-layer',
-        markers: _routeMarkers,
-        layerLevel: 2000,
-      ));
+      layers.add(
+        TrufiLayer(
+          id: 'route-markers-layer',
+          markers: _routeMarkers,
+          layerLevel: 2000,
+        ),
+      );
     }
 
     return layers;
@@ -1483,221 +1510,223 @@ class _HomeScreenState extends State<HomeScreen>
     return Provider<RealtimeVehiclesProvider?>.value(
       value: _realtimeVehiclesProvider,
       child: Scaffold(
-      body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
-        listener: (context, state) {
-          _updateLocationMarkers(state);
-          _updateRouteOnMap(state.selectedItinerary);
-          _updateFitCameraPoints(state);
-          _expandSheetIfNeeded(state);
-          // Update URL with current state (web only)
-          _updateUrlWithState(state);
-        },
-        builder: (context, state) {
-          final locationState = SearchLocationState(
-            origin: state.fromPlace != null
-                ? _trufiLocationToSearchLocation(state.fromPlace!)
-                : null,
-            destination: state.toPlace != null
-                ? _trufiLocationToSearchLocation(state.toPlace!)
-                : null,
-          );
+        body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
+          listener: (context, state) {
+            _updateLocationMarkers(state);
+            _updateRouteOnMap(state.selectedItinerary);
+            _updateFitCameraPoints(state);
+            _expandSheetIfNeeded(state);
+            // Update URL with current state (web only)
+            _updateUrlWithState(state);
+          },
+          builder: (context, state) {
+            final locationState = SearchLocationState(
+              origin: state.fromPlace != null
+                  ? _trufiLocationToSearchLocation(state.fromPlace!)
+                  : null,
+              destination: state.toPlace != null
+                  ? _trufiLocationToSearchLocation(state.toPlace!)
+                  : null,
+            );
 
-          final hasResults =
-              state.plan != null || state.isLoading || state.hasError;
+            final hasResults =
+                state.plan != null || state.isLoading || state.hasError;
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              // Responsive layout: use side panel for wide screens (>=600px)
-              final isWideScreen = constraints.maxWidth >= 600;
-              final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                // Responsive layout: use side panel for wide screens (>=600px)
+                final isWideScreen = constraints.maxWidth >= 600;
+                final sidePanelWidth = _getSidePanelWidth(constraints.maxWidth);
 
-              // Update viewport with actual map area size (excluding side panel on wide screens)
-              final mapWidth = isWideScreen
-                  ? constraints.maxWidth - sidePanelWidth
-                  : constraints.maxWidth;
-              _fitCameraUtil?.updateViewport(
-                Size(mapWidth, constraints.maxHeight),
-                MediaQuery.of(context).viewPadding,
-              );
+                // Update viewport with actual map area size (excluding side panel on wide screens)
+                final mapWidth = isWideScreen
+                    ? constraints.maxWidth - sidePanelWidth
+                    : constraints.maxWidth;
+                _fitCameraUtil?.updateViewport(
+                  Size(mapWidth, constraints.maxHeight),
+                  MediaQuery.of(context).viewPadding,
+                );
 
-              // Apply pending fit points once viewport is ready
-              if (!_viewportReady) {
-                _viewportReady = true;
-                if (_pendingFitPoints != null &&
-                    _pendingFitPoints!.isNotEmpty) {
-                  // Set initial padding based on screen type
-                  if (isWideScreen) {
-                    _fitCameraUtil?.updatePadding(
-                      const EdgeInsets.all(30),
-                    );
-                  } else {
-                    // Narrow screen: account for search bar and bottom sheet
-                    final sheetHeight = constraints.maxHeight * _sheetMidSize;
-                    _fitCameraUtil?.updatePadding(
-                      EdgeInsets.only(
-                        top: 120, // SearchLocationBar height
-                        bottom: sheetHeight,
-                        left: 30,
-                        right: 30,
-                      ),
-                    );
-                  }
-                  // Use post-frame callback to fit after currentCamera is set
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted && _pendingFitPoints != null) {
-                      _fitCameraToPoints(_pendingFitPoints!);
+                // Apply pending fit points once viewport is ready
+                if (!_viewportReady) {
+                  _viewportReady = true;
+                  if (_pendingFitPoints != null &&
+                      _pendingFitPoints!.isNotEmpty) {
+                    // Set initial padding based on screen type
+                    if (isWideScreen) {
+                      _fitCameraUtil?.updatePadding(const EdgeInsets.all(30));
+                    } else {
+                      // Narrow screen: account for search bar and bottom sheet
+                      final sheetHeight = constraints.maxHeight * _sheetMidSize;
+                      _fitCameraUtil?.updatePadding(
+                        EdgeInsets.only(
+                          top: 120, // SearchLocationBar height
+                          bottom: sheetHeight,
+                          left: 30,
+                          right: 30,
+                        ),
+                      );
                     }
+                    // Use post-frame callback to fit after currentCamera is set
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted && _pendingFitPoints != null) {
+                        _fitCameraToPoints(_pendingFitPoints!);
+                      }
+                    });
+                  }
+                }
+
+                // Ensure route is rendered when returning from another screen
+                // The BlocConsumer listener only fires on state changes, so if we
+                // navigate away and come back with the same state, we need to
+                // re-render the route manually.
+                final needsRouteRender =
+                    _needsRouteRefresh ||
+                    (state.selectedItinerary != null &&
+                        _routeMarkers.isEmpty &&
+                        _routeLines.isEmpty);
+
+                if (_needsRouteRefresh) {
+                  _needsRouteRefresh = false;
+                  // Reset URL tracking to force URL restoration
+                  _lastUrlFrom = null;
+                  _lastUrlTo = null;
+                  _lastUrlTimeMode = null;
+                  _lastUrlDateTime = null;
+                }
+
+                if (needsRouteRender) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!mounted) return;
+                    if (state.selectedItinerary != null) {
+                      // Clear location markers first (they duplicate with route markers)
+                      _updateLocationMarkers(state);
+                      _updateRouteOnMap(state.selectedItinerary);
+                      _updateFitCameraPoints(state);
+                    } else if (state.fromPlace != null ||
+                        state.toPlace != null) {
+                      _updateLocationMarkers(state);
+                    }
+                    // Restore URL with current state
+                    _updateUrlWithState(state);
                   });
                 }
-              }
 
-              // Ensure route is rendered when returning from another screen
-              // The BlocConsumer listener only fires on state changes, so if we
-              // navigate away and come back with the same state, we need to
-              // re-render the route manually.
-              final needsRouteRender =
-                  _needsRouteRefresh ||
-                  (state.selectedItinerary != null &&
-                      _routeMarkers.isEmpty &&
-                      _routeLines.isEmpty);
+                // Update camera padding for side panel layout (panel on LEFT)
+                // Note: The map is already positioned to the right of the side panel,
+                // so we don't need to include sidePanelWidth in the padding.
+                if (isWideScreen) {
+                  _fitCameraUtil?.updatePadding(const EdgeInsets.all(30));
+                }
 
-              if (_needsRouteRefresh) {
-                _needsRouteRefresh = false;
-                // Reset URL tracking to force URL restoration
-                _lastUrlFrom = null;
-                _lastUrlTo = null;
-                _lastUrlTimeMode = null;
-                _lastUrlDateTime = null;
-              }
-
-              if (needsRouteRender) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (!mounted) return;
-                  if (state.selectedItinerary != null) {
-                    // Clear location markers first (they duplicate with route markers)
-                    _updateLocationMarkers(state);
-                    _updateRouteOnMap(state.selectedItinerary);
-                    _updateFitCameraPoints(state);
-                  } else if (state.fromPlace != null || state.toPlace != null) {
-                    _updateLocationMarkers(state);
-                  }
-                  // Restore URL with current state
-                  _updateUrlWithState(state);
-                });
-              }
-
-              // Update camera padding for side panel layout (panel on LEFT)
-              // Note: The map is already positioned to the right of the side panel,
-              // so we don't need to include sidePanelWidth in the padding.
-              if (isWideScreen) {
-                _fitCameraUtil?.updatePadding(const EdgeInsets.all(30));
-              }
-
-              return Stack(
-                children: [
-                  // Map - adjusts for side panel on LEFT on wide screens
-                  Positioned(
-                    top: 0,
-                    left: isWideScreen ? sidePanelWidth : 0,
-                    bottom: 0,
-                    right: 0,
-                    child: _buildMap(mapEngineManager.currentEngine),
-                  ),
-
-                  // Wide screens: always show left panel with SearchBar
-                  if (isWideScreen)
-                    _buildSidePanel(
-                      state,
-                      theme,
-                      sidePanelWidth,
-                      locationState: locationState,
-                      l10n: l10n,
-                    ),
-
-                  // Narrow screens: SearchBar floats on top of map
-                  if (!isWideScreen)
+                return Stack(
+                  children: [
+                    // Map - adjusts for side panel on LEFT on wide screens
                     Positioned(
                       top: 0,
-                      left: 0,
+                      left: isWideScreen ? sidePanelWidth : 0,
+                      bottom: 0,
                       right: 0,
-                      child: SafeArea(
-                        bottom: false,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SearchLocationBar(
-                                state: locationState,
-                                configuration: SearchLocationBarConfiguration(
-                                  originHintText: l10n.searchOrigin,
-                                  destinationHintText: l10n.searchDestination,
-                                ),
-                                onSearch: _showSearchScreen,
-                                onOriginSelected: _onOriginSelected,
-                                onDestinationSelected: _onDestinationSelected,
-                                onSwap: _onSwapLocations,
-                                onReset: _onReset,
-                                onClearLocation: _onClearLocation,
-                                onRoutingSettings: _onRoutingSettings,
-                                onMenuPressed: widget.onMenuPressed,
-                              ),
-                              // Departure time chip (visible when
-                              // locations are set, and only when no
-                              // app-level `routingTimeOverride` is
-                              // configured — when set, every request
-                              // resolves against a fixed time of day
-                              // and the picker would mislead).
-                              if (context
-                                          .read<AppConfiguration?>()
-                                          ?.routingTimeOverride ==
-                                      null &&
-                                  (state.fromPlace != null ||
-                                      state.toPlace != null))
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: _DepartureTimeChip(
-                                    onTimeChanged: _fetchPlanIfReady,
+                      child: _buildMap(mapEngineManager.currentEngine),
+                    ),
+
+                    // Wide screens: always show left panel with SearchBar
+                    if (isWideScreen)
+                      _buildSidePanel(
+                        state,
+                        theme,
+                        sidePanelWidth,
+                        locationState: locationState,
+                        l10n: l10n,
+                      ),
+
+                    // Narrow screens: SearchBar floats on top of map
+                    if (!isWideScreen)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: SafeArea(
+                          bottom: false,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SearchLocationBar(
+                                  state: locationState,
+                                  configuration: SearchLocationBarConfiguration(
+                                    originHintText: l10n.searchOrigin,
+                                    destinationHintText: l10n.searchDestination,
                                   ),
+                                  onSearch: _showSearchScreen,
+                                  onOriginSelected: _onOriginSelected,
+                                  onDestinationSelected: _onDestinationSelected,
+                                  onSwap: _onSwapLocations,
+                                  onReset: _onReset,
+                                  onClearLocation: _onClearLocation,
+                                  onRoutingSettings: _onRoutingSettings,
+                                  onMenuPressed: widget.onMenuPressed,
                                 ),
-                            ],
+                                // Departure time chip (visible when
+                                // locations are set, and only when no
+                                // app-level `routingTimeOverride` is
+                                // configured — when set, every request
+                                // resolves against a fixed time of day
+                                // and the picker would mislead).
+                                if (context
+                                            .read<AppConfiguration?>()
+                                            ?.routingTimeOverride ==
+                                        null &&
+                                    (state.fromPlace != null ||
+                                        state.toPlace != null))
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: _DepartureTimeChip(
+                                      onTimeChanged: _fetchPlanIfReady,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
+
+                    // Floating action buttons (map controls) - always on right side of map
+                    _buildMapControls(
+                      context,
+                      mapEngineManager,
+                      hasResults,
+                      sidePanelOffset: 0, // No offset needed, panel is on left
+                      isWideScreen: isWideScreen,
                     ),
 
-                  // Floating action buttons (map controls) - always on right side of map
-                  _buildMapControls(
-                    context,
-                    mapEngineManager,
-                    hasResults,
-                    sidePanelOffset: 0, // No offset needed, panel is on left
-                    isWideScreen: isWideScreen,
-                  ),
+                    // Narrow screens: bottom sheet for results, fixed panel for errors
+                    // Hide when POI is selected (POI panel takes priority)
+                    if (!isWideScreen &&
+                        hasResults &&
+                        widget.config.poiLayersManager?.selectedPOI == null)
+                      (state.hasError ||
+                              (!state.isLoading &&
+                                  state.plan != null &&
+                                  !state.plan!.hasItineraries))
+                          ? _buildErrorPanel(state, theme)
+                          : _buildBottomSheet(state, theme, constraints),
 
-                  // Narrow screens: bottom sheet for results, fixed panel for errors
-                  // Hide when POI is selected (POI panel takes priority)
-                  if (!isWideScreen &&
-                      hasResults &&
-                      widget.config.poiLayersManager?.selectedPOI == null)
-                    (state.hasError || (!state.isLoading && state.plan != null && !state.plan!.hasItineraries))
-                        ? _buildErrorPanel(state, theme)
-                        : _buildBottomSheet(state, theme, constraints),
-
-                  // POI detail panel (narrow screens only) - shows at bottom
-                  if (!isWideScreen &&
-                      widget.config.poiLayersManager?.selectedPOI != null)
-                    _buildPOIDetailPanel(
-                      widget.config.poiLayersManager!.selectedPOI!,
-                      theme,
-                      isWideScreen: false,
-                    ),
-                ],
-              );
-            },
-          );
-        },
-      ),
+                    // POI detail panel (narrow screens only) - shows at bottom
+                    if (!isWideScreen &&
+                        widget.config.poiLayersManager?.selectedPOI != null)
+                      _buildPOIDetailPanel(
+                        widget.config.poiLayersManager!.selectedPOI!,
+                        theme,
+                        isWideScreen: false,
+                      ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -1824,7 +1853,7 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Finding routes...',
+                l10n.findingRoutes,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.primary,
                 ),
@@ -1905,6 +1934,9 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: l10n.shareRouteDuration,
                     itinerary: l10n.shareRouteItinerary,
                     openInApp: l10n.shareRouteOpenInApp,
+                    durationMinutes: l10n.durationMinutes,
+                    durationHoursMinutes: l10n.durationHoursMinutes,
+                    localeTag: Localizations.localeOf(context).toLanguageTag(),
                   ),
                 );
               },
@@ -1929,7 +1961,9 @@ class _HomeScreenState extends State<HomeScreen>
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              HomeScreenLocalizations.of(context).routesFound(itineraries.length),
+              HomeScreenLocalizations.of(
+                context,
+              ).routesFound(itineraries.length),
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -2288,6 +2322,9 @@ class _HomeScreenState extends State<HomeScreen>
                     duration: l10n.shareRouteDuration,
                     itinerary: l10n.shareRouteItinerary,
                     openInApp: l10n.shareRouteOpenInApp,
+                    durationMinutes: l10n.durationMinutes,
+                    durationHoursMinutes: l10n.durationHoursMinutes,
+                    localeTag: Localizations.localeOf(context).toLanguageTag(),
                   ),
                 );
               },
@@ -2362,7 +2399,9 @@ class _HomeScreenState extends State<HomeScreen>
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  isError ? Icons.error_outline_rounded : Icons.search_off_rounded,
+                  isError
+                      ? Icons.error_outline_rounded
+                      : Icons.search_off_rounded,
                   size: 28,
                   color: isError
                       ? theme.colorScheme.error
@@ -2406,7 +2445,10 @@ class _HomeScreenState extends State<HomeScreen>
     ThemeData theme,
     BoxConstraints constraints,
   ) {
-    _cachedSheetMinSize = (_sheetMinHeightPx / constraints.maxHeight).clamp(0.05, 0.25);
+    _cachedSheetMinSize = (_sheetMinHeightPx / constraints.maxHeight).clamp(
+      0.05,
+      0.25,
+    );
     return TrufiBottomSheet(
       controller: _sheetController,
       initialChildSize: _sheetMidSize,
@@ -2590,6 +2632,52 @@ class _HomeScreenState extends State<HomeScreen>
           onSetAsDestination: () => _setPoiAsDestination(poi),
         ),
       ),
+    );
+  }
+
+  /// Resolves an arbitrary point picked on the map into a [SearchLocation]
+  /// with a human-readable place name.
+  ///
+  /// Attempts reverse geocoding through [SearchLocationsCubit]; on timeout,
+  /// failure, an empty result, or when the cubit is not provided, it falls back
+  /// to a generic label keeping the raw coordinates only in [address]. This is
+  /// what lets map-picked origins/destinations show real place names instead of
+  /// bare coordinates. See #904.
+  Future<SearchLocation> _resolvePickedLocation(
+    double latitude,
+    double longitude,
+  ) async {
+    final l10n = HomeScreenLocalizations.of(context);
+    final coordinates =
+        '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}';
+
+    SearchLocation? reverse;
+    try {
+      reverse = await context
+          .read<SearchLocationsCubit>()
+          .reverseGeocode(latitude, longitude)
+          .timeout(const Duration(seconds: 5), onTimeout: () => null);
+    } catch (_) {
+      // SearchLocationsCubit not provided, or the lookup failed — fall back to
+      // the generic label below so route planning is never blocked.
+    }
+
+    if (reverse != null && reverse.displayName.isNotEmpty) {
+      return SearchLocation(
+        id: 'map_${latitude}_$longitude',
+        displayName: reverse.displayName,
+        address: reverse.address ?? coordinates,
+        latitude: latitude,
+        longitude: longitude,
+      );
+    }
+
+    return SearchLocation(
+      id: 'map_${latitude}_$longitude',
+      displayName: l10n.selectedLocation,
+      address: coordinates,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 
@@ -2798,8 +2886,9 @@ class _TransitStopMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onColor =
-        color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final onColor = color.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
     return Container(
       width: 20,
       height: 20,
@@ -2815,11 +2904,7 @@ class _TransitStopMarker extends StatelessWidget {
           ),
         ],
       ),
-      child: Icon(
-        Icons.directions_bus_rounded,
-        color: onColor,
-        size: 11,
-      ),
+      child: Icon(Icons.directions_bus_rounded, color: onColor, size: 11),
     );
   }
 }

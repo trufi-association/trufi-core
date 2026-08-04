@@ -118,6 +118,12 @@ abstract class AboutLocalizations {
   /// **'More About Trufi Association'**
   String get aboutCollapseTitle;
 
+  /// Title for the contact section
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get aboutContact;
+
   /// Text displayed on the about page
   ///
   /// In en, this message translates to:
@@ -135,6 +141,18 @@ abstract class AboutLocalizations {
   /// In en, this message translates to:
   /// **'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.'**
   String get aboutOpenSource;
+
+  /// Title for the open source section
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source'**
+  String get aboutOpenSourceTitle;
+
+  /// Subtitle for the contact email link
+  ///
+  /// In en, this message translates to:
+  /// **'Send us feedback'**
+  String get aboutSendFeedback;
 
   /// Menu item that shows the about page
   ///

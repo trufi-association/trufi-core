@@ -31,5 +31,8 @@
   "locationRequired": "La ubicación es requerida",
   "locationSelected": "Ubicación seleccionada",
   "tapToSelectLocation": "Toca para seleccionar en el mapa",
-  "change": "Cambiar"
+  "change": "Cambiar",
+  "errorLoadingPlaces": "Error al cargar lugares",
+  "retry": "Reintentar",
+  "history": "Historial"
 }

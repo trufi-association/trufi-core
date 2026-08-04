@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../l10n/navigation_localizations.dart';
+
 /// Type of navigation instruction.
 enum InstructionType {
   // Transit instructions
@@ -42,13 +44,50 @@ enum InstructionType {
   depart,
 }
 
+/// Localizable text key for instruction texts that are produced in layers
+/// without a [BuildContext] (e.g. the navigation cubit).
+///
+/// Resolved to a localized string at the widget layer via
+/// [NavigationInstruction.resolvedPrimaryText].
+enum InstructionTextKey {
+  /// "You have arrived" — shown when the destination is reached.
+  youHaveArrived,
+
+  /// "Final destination" — preview label for the last stop.
+  finalDestination,
+
+  /// "Exit at {stopName}" — uses [NavigationInstruction.stopName].
+  exitAtStop,
+
+  /// "{count} stops remaining" — uses
+  /// [NavigationInstruction.remainingStops].
+  stopsRemaining,
+}
+
 /// A navigation instruction to display to the user.
 class NavigationInstruction {
   /// The type of instruction.
   final InstructionType type;
 
   /// Primary text to display (e.g., "Turn left onto Main Street").
+  ///
+  /// Widgets should render [resolvedPrimaryText] instead of reading this
+  /// field directly, so that [primaryTextKey] based texts get localized.
   final String primaryText;
+
+  /// Localizable key for the primary text.
+  ///
+  /// When set, it takes precedence over [primaryText] in
+  /// [resolvedPrimaryText]. Used by layers without a [BuildContext].
+  final InstructionTextKey? primaryTextKey;
+
+  /// Localizable key for the secondary text, resolved in
+  /// [resolvedSecondaryText] the same way [primaryTextKey] is.
+  final InstructionTextKey? secondaryTextKey;
+
+  /// Stops left before the exit stop; feeds
+  /// [InstructionTextKey.stopsRemaining].
+  final int? remainingStops;
 
   /// Secondary text (e.g., "in 50m").
   final String? secondaryText;
@@ -79,7 +118,10 @@ class NavigationInstruction {
 
   const NavigationInstruction({
     required this.type,
-    required this.primaryText,
+    this.primaryText = '',
+    this.primaryTextKey,
+    this.secondaryTextKey,
+    this.remainingStops,
     this.secondaryText,
     this.stopName,
     this.distance,
@@ -90,6 +132,33 @@ class NavigationInstruction {
     this.routeShortName,
     this.modeIcon,
   });
+
+  /// The primary text to render, resolving [primaryTextKey] to a localized
+  /// string when set and falling back to [primaryText] otherwise.
+  String resolvedPrimaryText(NavigationLocalizations localizations) {
+    return _resolve(primaryTextKey, localizations) ?? primaryText;
+  }
+
+  /// The secondary text to render, resolving [secondaryTextKey] to a
+  /// localized string when set and falling back to [secondaryText].
+  String? resolvedSecondaryText(NavigationLocalizations localizations) {
+    return _resolve(secondaryTextKey, localizations) ?? secondaryText;
+  }
+
+  String? _resolve(
+    InstructionTextKey? key,
+    NavigationLocalizations localizations,
+  ) {
+    return switch (key) {
+      InstructionTextKey.youHaveArrived => localizations.navArrivedShort,
+      InstructionTextKey.finalDestination => localizations.navFinalDestination,
+      InstructionTextKey.exitAtStop => localizations.navExitAt(stopName ?? ''),
+      InstructionTextKey.stopsRemaining => localizations.navStopsRemaining(
+        remainingStops ?? 0,
+      ),
+      null => null,
+    };
+  }
 
   /// Get the appropriate icon for this instruction type.
   IconData get icon {
@@ -128,7 +197,10 @@ class NavigationInstruction {
   NavigationInstruction copyWith({
     InstructionType? type,
     String? primaryText,
+    InstructionTextKey? primaryTextKey,
     String? secondaryText,
+    InstructionTextKey? secondaryTextKey,
+    int? remainingStops,
     String? stopName,
     double? distance,
     Duration? duration,
@@ -141,7 +213,10 @@ class NavigationInstruction {
     return NavigationInstruction(
       type: type ?? this.type,
       primaryText: primaryText ?? this.primaryText,
+      primaryTextKey: primaryTextKey ?? this.primaryTextKey,
       secondaryText: secondaryText ?? this.secondaryText,
+      secondaryTextKey: secondaryTextKey ?? this.secondaryTextKey,
+      remainingStops: remainingStops ?? this.remainingStops,
       stopName: stopName ?? this.stopName,
       distance: distance ?? this.distance,
       duration: duration ?? this.duration,

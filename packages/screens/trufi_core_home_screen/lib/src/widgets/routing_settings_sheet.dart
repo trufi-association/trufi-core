@@ -170,7 +170,7 @@ class _NoOptionsMessage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'El proveedor "$providerName" no tiene opciones configurables.',
+            HomeScreenLocalizations.of(context).providerNoOptions(providerName),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
@@ -308,8 +308,8 @@ class _EngineCard extends StatelessWidget {
     final l10n = HomeScreenLocalizations.of(context);
 
     final isOffline = !engine.requiresInternet;
-    final name = engine.name;
-    final description = engine.descriptionFor(context);
+    final name = engine.localizedName(context);
+    final description = engine.localizedDescription(context);
 
     final limitations = <String>[];
     if (isOffline) {

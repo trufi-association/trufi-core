@@ -102,48 +102,43 @@
     "description": "Button to mark all notifications as read"
   },
 
-  "appInitStepStarting": "Starting",
-  "@appInitStepStarting": {
-    "description": "Init step label shown while the app is starting up"
+  "initStepStarting": "Starting",
+  "@initStepStarting": {
+    "description": "Init screen step: the app is starting"
   },
 
-  "appInitStepInitializingOverlays": "Initializing",
-  "@appInitStepInitializingOverlays": {
-    "description": "Init step label shown while overlays (onboarding, privacy consent, etc.) are being set up"
+  "initStepInitializing": "Initializing",
+  "@initStepInitializing": {
+    "description": "Init screen step: initializing app services"
   },
 
-  "appInitStepLoadingMaps": "Loading maps",
-  "@appInitStepLoadingMaps": {
-    "description": "Init step label shown while map data is loading"
+  "initStepLoadingMaps": "Loading maps",
+  "@initStepLoadingMaps": {
+    "description": "Init screen step: loading map engines"
   },
 
-  "appInitStepLoadingRoutes": "Loading routes",
-  "@appInitStepLoadingRoutes": {
-    "description": "Init step label shown while routing/transit data is loading"
+  "initStepLoadingRoutes": "Loading routes",
+  "@initStepLoadingRoutes": {
+    "description": "Init screen step: loading routing engines"
   },
 
-  "appInitStepPreparingScreens": "Almost ready",
-  "@appInitStepPreparingScreens": {
-    "description": "Init step label shown right before the app finishes loading"
+  "initStepAlmostReady": "Almost ready",
+  "@initStepAlmostReady": {
+    "description": "Init screen step: preparing screens"
   },
 
-  "appInitStepLoading": "Loading",
-  "@appInitStepLoading": {
-    "description": "Generic fallback label shown while the app is loading, when no specific step is set"
-  },
-
-  "appInitUnableToStart": "Unable to start",
-  "@appInitUnableToStart": {
+  "errorUnableToStart": "Unable to start",
+  "@errorUnableToStart": {
     "description": "Title shown when app initialization fails"
   },
 
-  "appInitUnexpectedError": "An unexpected error occurred",
-  "@appInitUnexpectedError": {
-    "description": "Fallback error message when no specific error is available"
+  "errorUnexpected": "An unexpected error occurred",
+  "@errorUnexpected": {
+    "description": "Fallback message when an error has no details"
   },
 
-  "appInitRetryButtonLabel": "Try again",
-  "@appInitRetryButtonLabel": {
-    "description": "Label for the button that retries app initialization after a failure"
+  "poweredByTrufi": "Powered by Trufi Association",
+  "@poweredByTrufi": {
+    "description": "Brand tagline in the drawer footer; keep identical in all languages"
   }
 }

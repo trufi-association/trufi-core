@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
+import '../../l10n/navigation_localizations.dart';
 import 'navigation_instruction.dart';
 
 /// Status of the navigation session.
@@ -32,6 +33,40 @@ enum NavigationSegmentType {
 
   /// Walking between stops or to destination.
   walking,
+}
+
+/// Machine-readable navigation error.
+///
+/// Carried in [NavigationState.errorType] by [NavigationCubit], which has no
+/// [BuildContext], and resolved to localized text at the widget layer via
+/// [NavigationErrorLocalization.localizedMessage].
+enum NavigationError {
+  /// Location tracking could not be started.
+  trackingStartFailed,
+
+  /// Location permission was denied.
+  permissionDenied,
+
+  /// Location permission was permanently denied.
+  permissionDeniedForever,
+
+  /// Location services are disabled on the device.
+  serviceDisabled,
+}
+
+/// Resolves a [NavigationError] to a localized, user-visible message.
+extension NavigationErrorLocalization on NavigationError {
+  /// The localized message for this error.
+  String localizedMessage(NavigationLocalizations localizations) {
+    return switch (this) {
+      NavigationError.trackingStartFailed =>
+        localizations.navCouldNotStartTracking,
+      NavigationError.permissionDenied => localizations.navPermissionDenied,
+      NavigationError.permissionDeniedForever =>
+        localizations.navPermissionPermanentlyDenied,
+      NavigationError.serviceDisabled => localizations.navLocationDisabled,
+    };
+  }
 }
 
 /// Represents a stop in navigation context.
@@ -102,6 +137,11 @@ class NavigationRoute extends Equatable {
   final List<NavigationLeg> legs;
   final String? modeName;
 
+  /// Total planned trip duration from the itinerary (the value shown in the
+  /// route results). Used to keep the navigation ETA consistent with the
+  /// planned route instead of re-estimating it. See #917.
+  final Duration duration;
+
   const NavigationRoute({
     required this.id,
     required this.code,
@@ -114,6 +154,7 @@ class NavigationRoute extends Equatable {
     required this.stops,
     this.legs = const [],
     this.modeName,
+    this.duration = Duration.zero,
   });
 
   String get displayName => shortName ?? name;
@@ -131,6 +172,7 @@ class NavigationRoute extends Equatable {
     stops,
     legs,
     modeName,
+    duration,
   ];
 }
 
@@ -172,11 +214,30 @@ class NavigationState extends Equatable {
   /// Estimated time to next stop.
   final Duration? etaToNextStop;
 
+  /// Live ETA computed from location updates, if any. Kept private so the
+  /// public [etaToDestination] stays consistent with the planned route.
+  final Duration? _measuredEtaToDestination;
+
   /// Estimated time to final destination.
-  final Duration? etaToDestination;
+  ///
+  /// Prefers the live estimate computed from location updates; before the
+  /// first GPS fix it falls back to the planned [NavigationRoute.duration]
+  /// (the value shown in the route results). Derived instead of stored so
+  /// the state never holds a duplicate of `route.duration`. See #917.
+  Duration? get etaToDestination =>
+      _measuredEtaToDestination ?? route?.duration;
 
   /// Error message if status is error.
+  ///
+  /// Prefer [errorType] for errors emitted by the cubit; this free-form
+  /// message remains for externally supplied error texts.
   final String? errorMessage;
+
+  /// Machine-readable error if status is error.
+  ///
+  /// Resolved to a localized message at the widget layer via
+  /// [NavigationErrorLocalization.localizedMessage].
+  final NavigationError? errorType;
 
   /// Whether user is off the route.
   final bool isOffRoute;
@@ -206,14 +267,15 @@ class NavigationState extends Equatable {
     this.currentLocation,
     this.distanceToNextStop,
     this.etaToNextStop,
-    this.etaToDestination,
+    Duration? etaToDestination,
     this.errorMessage,
+    this.errorType,
     this.isOffRoute = false,
     this.distanceFromRoute,
     this.isGpsWeak = false,
     this.isMapFollowingUser = true,
     this.isInBackground = false,
-  });
+  }) : _measuredEtaToDestination = etaToDestination;
 
   /// Whether navigation is active.
   bool get isNavigating => status == NavigationStatus.navigating;
@@ -266,6 +328,7 @@ class NavigationState extends Equatable {
     Duration? etaToNextStop,
     Duration? etaToDestination,
     String? errorMessage,
+    NavigationError? errorType,
     bool? isOffRoute,
     double? distanceFromRoute,
     bool? isGpsWeak,
@@ -285,8 +348,11 @@ class NavigationState extends Equatable {
       currentLocation: currentLocation ?? this.currentLocation,
       distanceToNextStop: distanceToNextStop ?? this.distanceToNextStop,
       etaToNextStop: etaToNextStop ?? this.etaToNextStop,
-      etaToDestination: etaToDestination ?? this.etaToDestination,
+      // Intentionally the private field: copying through the public getter
+      // would bake the route-duration fallback into storage and duplicate it.
+      etaToDestination: etaToDestination ?? _measuredEtaToDestination,
       errorMessage: errorMessage ?? this.errorMessage,
+      errorType: errorType ?? this.errorType,
       isOffRoute: isOffRoute ?? this.isOffRoute,
       distanceFromRoute: distanceFromRoute ?? this.distanceFromRoute,
       isGpsWeak: isGpsWeak ?? this.isGpsWeak,
@@ -320,8 +386,9 @@ class NavigationState extends Equatable {
     currentLocation,
     distanceToNextStop,
     etaToNextStop,
-    etaToDestination,
+    _measuredEtaToDestination,
     errorMessage,
+    errorType,
     isOffRoute,
     distanceFromRoute,
     isGpsWeak,

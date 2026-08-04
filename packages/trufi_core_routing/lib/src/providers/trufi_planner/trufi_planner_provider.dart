@@ -16,11 +16,11 @@ import '../../models/service_hours.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
 import '../../models/transport_mode.dart';
-import 'package:trufi_core_routing/l10n/routing_localizations.dart';
 import '../routing_provider.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 import 'trufi_planner_config.dart';
 import 'trufi_planner_data_source.dart';
+import '../../../l10n/routing_localizations.dart';
 
 /// Below this straight-line distance (meters), offer a walk-only itinerary
 /// alongside transit options. The tier-ordering in the home screen lifts it
@@ -71,16 +71,16 @@ class TrufiPlannerProvider extends IRoutingProvider {
   String get description =>
       config.description ??
       (config.isLocal
-          ? 'Works offline with GTFS data bundled in the app'
-          : 'Our own routing engine served from our backend');
+          ? 'Funciona offline con datos GTFS empacados en la app'
+          : 'Motor de rutas propio servido desde nuestro backend');
 
   @override
-  String descriptionFor(BuildContext context) {
+  String localizedDescription(BuildContext context) {
     if (config.description != null) return config.description!;
     final l10n = RoutingLocalizations.of(context);
     return config.isLocal
-        ? l10n.trufiPlannerDescriptionLocal
-        : l10n.trufiPlannerDescriptionRemote;
+        ? l10n.trufiPlannerLocalDescription
+        : l10n.trufiPlannerRemoteDescription;
   }
 
   @override
@@ -90,19 +90,8 @@ class TrufiPlannerProvider extends IRoutingProvider {
   bool get requiresInternet => config.isRemote;
 
   @override
-  Widget? buildPreferencesUI(BuildContext context) {
-    final l10n = RoutingLocalizations.of(context);
-    return _TrufiPlannerInfo(
-      isLocal: config.isLocal,
-      title: l10n.trufiPlannerInfoTitle,
-      lines: config.isLocal
-          ? [l10n.trufiPlannerInfoLocalLine1, l10n.trufiPlannerInfoLocalLine2]
-          : [
-              l10n.trufiPlannerInfoRemoteLine1,
-              l10n.trufiPlannerInfoRemoteLine2,
-            ],
-    );
-  }
+  Widget? buildPreferencesUI(BuildContext context) =>
+      _TrufiPlannerInfo(isLocal: config.isLocal);
 
   @override
   void resetPreferences() {}
@@ -156,8 +145,9 @@ class TrufiPlannerProvider extends IRoutingProvider {
     final paths = await _dataSource.client.findRoutes(
       origin: from.position,
       destination: to.position,
-      maxWalkDistance: 500.0,
+      maxWalkDistance: config.maxWalkingDistance,
       maxResults: numItineraries,
+      maxStopCandidates: config.maxStopCandidates,
     );
 
     sw.stop();
@@ -758,19 +748,19 @@ class TrufiPlannerProvider extends IRoutingProvider {
 /// configurable preferences.
 class _TrufiPlannerInfo extends StatelessWidget {
   final bool isLocal;
-  final String title;
-  final List<String> lines;
 
-  const _TrufiPlannerInfo({
-    required this.isLocal,
-    required this.title,
-    required this.lines,
-  });
+  const _TrufiPlannerInfo({required this.isLocal});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    final l10n = RoutingLocalizations.of(context);
+    final lines = [
+      l10n.trufiPlannerInfoIntro,
+      isLocal ? l10n.trufiPlannerInfoLocalBody : l10n.trufiPlannerInfoRemoteBody,
+    ];
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -790,7 +780,7 @@ class _TrufiPlannerInfo extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                title,
+                l10n.trufiPlannerInfoTitle,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

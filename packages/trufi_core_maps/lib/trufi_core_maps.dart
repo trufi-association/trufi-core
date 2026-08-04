@@ -97,3 +97,8 @@ export 'src/data/spatial/marker_index.dart';
 export 'src/data/utils/image_tool.dart';
 export 'src/data/utils/color_utils.dart';
 export 'src/data/utils/sorted_list.dart';
+
+// ============================================
+// LOCALIZATIONS
+// ============================================
+export 'l10n/maps_localizations.dart';

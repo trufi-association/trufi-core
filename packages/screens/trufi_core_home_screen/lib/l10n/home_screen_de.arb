@@ -117,14 +117,13 @@
   "limitationSlower": "Langsamere Antwort",
   "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte",
   "estimatedTimesDisclaimer": "Reisezeiten sind geschätzt und können je nach Verkehr variieren",
-
   "liveVehiclesTitle": "Live-Busse",
   "liveVehiclesSubtitle": "Zeige die Live-Position der Busse auf der Karte",
   "liveVehiclesEnable": "Aktivieren",
   "liveVehiclesStateOn": "Ein",
   "liveVehiclesStateOff": "Aus",
-  
-  "yourPlacesTitle": "DEINE ORTE",
-  "searchResultsTitle": "SUCHERGEBNISSE",
-  "noResultsText": "Keine Ergebnisse gefunden"
+  "placeOrigin": "Start",
+  "placeDestination": "Ziel",
+  "providerNoOptions": "Der Anbieter \"{provider}\" hat keine konfigurierbaren Optionen.",
+  "resolvingLocation": "Ortsname wird gesucht…"
 }

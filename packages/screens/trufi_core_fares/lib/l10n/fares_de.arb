@@ -25,5 +25,9 @@
   "faresMoreInfo": "Weitere Informationen",
   "@faresMoreInfo": {
     "description": "Button to open external fare information"
+  },
+  "faresTips": "Tipps",
+  "@faresTips": {
+    "description": "Label for the additional notes card on the fares screen"
   }
 }

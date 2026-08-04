@@ -8,6 +8,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'app_initializer/app_initializer.dart';
 import 'l10n/core_localizations.dart';
+import 'l10n/fallback_material_localizations.dart';
 import 'overlay/overlay_container.dart';
 import 'router/app_router.dart';
 import 'services/deep_link_service.dart';
@@ -77,6 +78,7 @@ class _TrufiAppState extends State<TrufiApp> {
           widget.config.defaultLocale ??
           widget.config.localeConfig.defaultLocale,
       supportedLocales: widget.config.localeConfig.supportedLocales,
+      languageNames: widget.config.localeConfig.languageNames,
     );
     _themeManager = ThemeManager(
       defaultThemeMode: widget.config.themeConfig.themeMode,
@@ -99,9 +101,26 @@ class _TrufiAppState extends State<TrufiApp> {
         onRouteReceived: (route) {
           _sharedRouteNotifier.setPendingRoute(route);
         },
+        onLocationReceived: _goToDeepLinkLocation,
       );
       _deepLinkService!.initialize();
     }
+  }
+
+  /// Navigates to an in-app location received via deep link
+  /// (e.g. `trufi://routes?operator=X` → `/routes?operator=X`), but only
+  /// when it targets a registered screen — unknown links stay ignored
+  /// instead of surfacing the router's error page.
+  void _goToDeepLinkLocation(String location) {
+    final path = Uri.parse(location).path;
+    final known = widget.config.screens.any(
+      (screen) => path == screen.path || path.startsWith('${screen.path}/'),
+    );
+    if (!known) {
+      debugPrint('TrufiApp: Ignoring deep link to unregistered path: $path');
+      return;
+    }
+    _router.router.go(location);
   }
 
   @override
@@ -143,6 +162,8 @@ class _TrufiAppState extends State<TrufiApp> {
         screenBuilder: widget.config.initScreenBuilder,
         theme: themeConfig.theme,
         minSplashDuration: widget.config.minSplashDuration,
+        supportedLocales: widget.config.localeConfig.supportedLocales,
+        extraLocalizationsDelegates: widget.config.extraLocalizationsDelegates,
         // Layer 3: Show the actual app once initialized
         child: _TrufiMaterialApp(
           config: widget.config,
@@ -170,6 +191,12 @@ class _TrufiMaterialApp extends StatelessWidget {
     final localeManager = LocaleManager.watch(context);
     final themeManager = ThemeManager.watch(context);
 
+    // Language used to fill the gaps for city languages that core (or the
+    // app itself) hasn't translated yet.
+    final fallbackLocale = config.localeConfig.supportedLocales.isEmpty
+        ? const Locale('en')
+        : config.localeConfig.defaultLocale;
+
     return MaterialApp.router(
       title: config.appName,
       debugShowCheckedModeBanner: false,
@@ -180,12 +207,26 @@ class _TrufiMaterialApp extends StatelessWidget {
       locale: localeManager.currentLocale,
       supportedLocales: config.localeConfig.supportedLocales,
       localizationsDelegates: [
+        // App-provided translations first (gen_extra_l10n output for the
+        // city's own languages), then core's, then a fallback layer so a
+        // partially translated language degrades to the default one instead
+        // of crashing on a null lookup.
+        ...config.extraLocalizationsDelegates,
         CoreLocalizations.delegate,
         ...screenDelegates,
-        ...config.extraLocalizationsDelegates,
+        ...fallbackLocalizationsDelegates([
+          CoreLocalizations.delegate,
+          ...screenDelegates,
+        ], fallbackLocale: fallbackLocale),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        // Last resort for city languages Flutter itself doesn't ship
+        // (Quechua, Aymara, …): without these the tree has no
+        // MaterialLocalizations and every Scaffold asserts.
+        ...fallbackFrameworkLocalizationsDelegates(
+          fallbackLocale: fallbackLocale,
+        ),
       ],
       builder: (context, child) {
         return OverlayContainer(child: child ?? const SizedBox.shrink());

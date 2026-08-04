@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
-import 'package:trufi_core_ui/src/l10n/core_localizations.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart'
     show PackageInfoPlatform;
 import 'package:url_launcher/url_launcher.dart';
+
+import '../l10n/core_localizations.dart';
 
 /// Application router using GoRouter with dynamic screen support
 class AppRouter {
@@ -182,7 +183,7 @@ class AppShell extends StatelessWidget {
                 // Placeholder para acciones adicionales si se necesitan
                 IconButton(
                   icon: const Icon(Icons.info_outline),
-                  tooltip: 'About',
+                  tooltip: CoreLocalizations.of(context).navAbout,
                   onPressed: () {
                     final aboutScreen = screens.firstWhere(
                       (s) => s.id == 'about',
@@ -576,7 +577,7 @@ class _DrawerFooter extends StatelessWidget {
           const SizedBox(height: 12),
           // Powered by text
           Text(
-            'Powered by Trufi Association',
+            CoreLocalizations.of(context).poweredByTrufi,
             style: theme.textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
               fontSize: 11,
@@ -624,22 +625,16 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = CoreLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          CoreLocalizations.of(context).titleError,
-        ),
-      ),
+      appBar: AppBar(title: Text(l10n.titleError)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            Text(
-              CoreLocalizations.of(context).errorPageNotFound,
-              style: TextStyle(fontSize: 24),
-            ),
+            Text(l10n.errorPageNotFound, style: TextStyle(fontSize: 24)),
             const SizedBox(height: 8),
             if (error != null)
               Text(
@@ -649,9 +644,7 @@ class ErrorScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.go('/'),
-              child: Text(
-                CoreLocalizations.of(context).actionGoHome,
-              ),
+              child: Text(l10n.actionGoHome),
             ),
           ],
         ),

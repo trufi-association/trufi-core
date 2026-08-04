@@ -1,0 +1,18 @@
+{
+  "@@locale": "es",
+  "notificationsTitle": "Notificaciones",
+  "markAllAsRead": "Marcar todo como leído",
+  "refresh": "Actualizar",
+  "notificationsDisabled": "Notificaciones desactivadas",
+  "enableInSystemSettings": "Activa las notificaciones en los ajustes del sistema",
+  "allowNotifications": "Permite las notificaciones para estar al día",
+  "openSettings": "Ajustes",
+  "enable": "Activar",
+  "noNotifications": "Sin notificaciones",
+  "allCaughtUp": "¡Estás al día!",
+  "justNow": "Ahora mismo",
+  "minutesAgo": "hace {minutes} min",
+  "hoursAgo": "hace {hours} h",
+  "daysAgo": "hace {days} días",
+  "unreadCount": "{count, plural, =1{1 sin leer} other{{count} sin leer}}"
+}

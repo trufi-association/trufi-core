@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trufi_core_maps/l10n/maps_localizations.dart';
+
+import '../../../l10n/maps_localizations.dart';
 import 'map_type_option.dart';
 import 'map_selection_widgets.dart';
 
 /// Full-screen settings screen for selecting map type and optional POI layers.
+///
+/// Text defaults resolve through [MapsLocalizations]: the enclosing app must
+/// register [MapsLocalizations.delegate] (`TrufiApp` does this automatically)
+/// or the lookup throws at build time.
 class MapTypeSettingsScreen extends StatefulWidget {
   /// Currently selected map index.
   final int currentMapIndex;
@@ -127,7 +132,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
               child: _MapSettingsHeader(
                 title:
                     widget.appBarTitle ??
-                    MapsLocalizations.of(context).mapSettingsTitle,
+                    MapsLocalizations.of(context).mapSettings,
                 onClose: () => Navigator.of(context).pop(),
               ),
             ),
@@ -143,7 +148,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
                     child: _MapTypeHeroSection(
                       title:
                           widget.sectionTitle ??
-                          MapsLocalizations.of(context).mapTypeSectionTitle,
+                          MapsLocalizations.of(context).mapType,
                     ),
                   ),
 
@@ -288,7 +293,7 @@ class _MapTypeHeroSection extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            MapsLocalizations.of(context).mapTypeDescription,
+            MapsLocalizations.of(context).chooseMapStyle,
             style: theme.textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

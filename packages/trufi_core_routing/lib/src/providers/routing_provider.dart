@@ -60,11 +60,18 @@ abstract class IRoutingProvider {
   /// Description of this provider.
   String get description;
 
-  /// Localized description of this provider, when a [BuildContext] is
-  /// available. Providers that support multiple languages should
-  /// override this; the default falls back to [description] so existing
-  /// implementations (that only return a fixed string) keep working.
-  String descriptionFor(BuildContext context) => description;
+  /// Localized display name; defaults to [name].
+  ///
+  /// Override when the name should follow the app language. Mirrors
+  /// `ITrufiMapEngine.localizedName`.
+  String localizedName(BuildContext context) => name;
+
+  /// Localized description; defaults to [description].
+  ///
+  /// Override when the description should follow the app language — UI
+  /// selectors (settings, onboarding, routing sheet) call this instead of
+  /// [description]. Mirrors `ITrufiMapEngine.localizedDescription`.
+  String localizedDescription(BuildContext context) => description;
 
   /// Whether this provider supports listing transit routes.
   bool get supportsTransitRoutes;
@@ -146,11 +153,15 @@ class RoutingProviderOption {
 /// Extension methods for IRoutingProvider.
 extension RoutingProviderExtension on IRoutingProvider {
   /// Converts this provider to a RoutingProviderOption for use in UI.
+  ///
+  /// Pass [context] so the option carries the localized name/description.
   RoutingProviderOption toOption([BuildContext? context]) {
     return RoutingProviderOption(
       id: id,
-      name: name,
-      description: context == null ? description : descriptionFor(context),
+      name: context != null ? localizedName(context) : name,
+      description: context != null
+          ? localizedDescription(context)
+          : description,
       requiresInternet: requiresInternet,
     );
   }
@@ -159,8 +170,8 @@ extension RoutingProviderExtension on IRoutingProvider {
 /// Extension to convert a list of providers to RoutingProviderOptions.
 extension RoutingProviderListExtension on List<IRoutingProvider> {
   /// Converts all providers to RoutingProviderOptions.
-  List<RoutingProviderOption> toOptions([BuildContext? context]) {
-    return map((e) => e.toOption(context)).toList();
+  List<RoutingProviderOption> toOptions() {
+    return map((e) => e.toOption()).toList();
   }
 
   /// Finds a provider by ID.

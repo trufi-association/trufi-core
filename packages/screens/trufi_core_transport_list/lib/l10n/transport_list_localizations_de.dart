@@ -61,11 +61,78 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get loadingRoute => 'Linie wird geladen...';
 
   @override
+  String get otherAgencies => 'Sonstige';
+
+  @override
+  String shareRouteMessage(String uri) {
+    return 'Teilen: $uri';
+  }
+
+  @override
+  String get defaultModeBus => 'Bus';
+
+  @override
   String get mapSettingsTitle => 'Karteneinstellungen';
 
   @override
-  String get mapTypeSectionTitle => 'Kartentyp';
+  String get mapTypeLabel => 'Kartentyp';
 
   @override
-  String get applyChangesButton => 'Änderungen anwenden';
+  String get applyChanges => 'Änderungen übernehmen';
+
+  @override
+  String get stopStart => 'Start';
+
+  @override
+  String get stopEnd => 'Ende';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'Für diese Linie sind keine Haltestelleninformationen verfügbar';
+
+  @override
+  String get errorLoadingRoutes => 'Die Linien konnten nicht geladen werden';
+
+  @override
+  String get retry => 'Erneut versuchen';
+
+  @override
+  String get qrShareSubtitle =>
+      'Scannen, um die Linien dieses Betreibers zu öffnen';
+
+  @override
+  String get copyQrImage => 'QR kopieren';
+
+  @override
+  String get copyQrImageFailed => 'QR konnte nicht kopiert werden';
+
+  @override
+  String get modeTram => 'Straßenbahn';
+
+  @override
+  String get modeSubway => 'U-Bahn';
+
+  @override
+  String get modeRail => 'Bahn';
+
+  @override
+  String get modeBus => 'Bus';
+
+  @override
+  String get modeFerry => 'Fähre';
+
+  @override
+  String get modeCableTram => 'Kabelstraßenbahn';
+
+  @override
+  String get modeAerialLift => 'Seilbahn';
+
+  @override
+  String get modeFunicular => 'Standseilbahn';
+
+  @override
+  String get modeTrolleybus => 'Oberleitungsbus';
+
+  @override
+  String get modeMonorail => 'Einschienenbahn';
 }

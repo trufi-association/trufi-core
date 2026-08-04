@@ -39,7 +39,99 @@
   "labelMode": "Mode",
   "noStopsAvailable": "No stops available",
   "loadingRoute": "Loading route...",
+  "otherAgencies": "Others",
+  "@otherAgencies": {
+    "description": "Group header for routes whose agency is unknown"
+  },
+  "shareRouteMessage": "Share: {uri}",
+  "@shareRouteMessage": {
+    "description": "Snackbar message shown when sharing a route link",
+    "placeholders": {
+      "uri": {
+        "type": "String"
+      }
+    }
+  },
+  "defaultModeBus": "Bus",
+  "@defaultModeBus": {
+    "description": "Fallback transport mode label when a route has no mode name"
+  },
   "mapSettingsTitle": "Map Settings",
-  "mapTypeSectionTitle": "Map Type",
-  "applyChangesButton": "Apply Changes"
+  "@mapSettingsTitle": {
+    "description": "App bar title of the map settings screen"
+  },
+  "mapTypeLabel": "Map Type",
+  "@mapTypeLabel": {
+    "description": "Section title for choosing the map type"
+  },
+  "applyChanges": "Apply Changes",
+  "@applyChanges": {
+    "description": "Button label to apply map settings changes"
+  },
+  "stopStart": "Start",
+  "@stopStart": {
+    "description": "Badge label for the first stop of a route"
+  },
+  "stopEnd": "End",
+  "@stopEnd": {
+    "description": "Badge label for the last stop of a route"
+  },
+  "stopInfoNotAvailable": "Stop information is not available for this route",
+  "@stopInfoNotAvailable": {
+    "description": "Explanation shown when a route has no stop data"
+  },
+  "errorLoadingRoutes": "Could not load routes",
+  "retry": "Retry",
+  "qrShareSubtitle": "Scan to open this operator's routes",
+  "@qrShareSubtitle": {
+    "description": "Subtitle of the operator QR dialog explaining what scanning does"
+  },
+  "copyQrImage": "Copy QR",
+  "@copyQrImage": {
+    "description": "Button that copies the QR code image to the clipboard"
+  },
+  "copyQrImageFailed": "Couldn't copy the QR",
+  "@copyQrImageFailed": {
+    "description": "Snackbar shown when copying the QR image to the clipboard fails"
+  },
+  "modeTram": "Tram",
+  "@modeTram": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeSubway": "Subway",
+  "@modeSubway": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeRail": "Rail",
+  "@modeRail": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeBus": "Bus",
+  "@modeBus": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeFerry": "Ferry",
+  "@modeFerry": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeCableTram": "Cable Tram",
+  "@modeCableTram": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeAerialLift": "Aerial Lift",
+  "@modeAerialLift": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeFunicular": "Funicular",
+  "@modeFunicular": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeTrolleybus": "Trolleybus",
+  "@modeTrolleybus": {
+    "description": "GTFS route type shown as the transport mode"
+  },
+  "modeMonorail": "Monorail",
+  "@modeMonorail": {
+    "description": "GTFS route type shown as the transport mode"
+  }
 }

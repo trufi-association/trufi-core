@@ -105,4 +105,13 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
 
   @override
   String get change => 'Ändern';
+
+  @override
+  String get errorLoadingPlaces => 'Fehler beim Laden der Orte';
+
+  @override
+  String get retry => 'Erneut versuchen';
+
+  @override
+  String get history => 'Verlauf';
 }

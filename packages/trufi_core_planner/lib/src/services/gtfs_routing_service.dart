@@ -178,16 +178,23 @@ class GtfsRoutingService {
     int maxTransfers = 1,
     int maxDirects = 5,
     int maxTransferPaths = 5,
+    int maxStopCandidates = 60,
   }) {
+    // Consider every stop within walking distance (bounded by
+    // [maxStopCandidates]), not just the nearest handful: in dense
+    // networks the boarding stop of a direct line is often slightly
+    // farther than the closest stops, and capping too low makes the
+    // planner blind to it — surfacing transfer-heavy routes instead
+    // (issue #926).
     final originStops = spatialIndex.findNearestStops(
       origin,
-      maxResults: 10,
+      maxResults: maxStopCandidates,
       maxDistance: maxWalkDistance,
     );
 
     final destinationStops = spatialIndex.findNearestStops(
       destination,
-      maxResults: 10,
+      maxResults: maxStopCandidates,
       maxDistance: maxWalkDistance,
     );
 
@@ -232,7 +239,8 @@ class GtfsRoutingService {
       } else {
         if (transfers.length < maxTransferPaths) transfers.add(p);
       }
-      if (directs.length >= maxDirects && transfers.length >= maxTransferPaths) {
+      if (directs.length >= maxDirects &&
+          transfers.length >= maxTransferPaths) {
         break;
       }
     }
@@ -251,8 +259,7 @@ class GtfsRoutingService {
     List<RoutingPath> paths,
   ) {
     for (final originNearby in originStops) {
-      final originPatterns =
-          routeIndex.getPatternsAtStop(originNearby.stop.id);
+      final originPatterns = routeIndex.getPatternsAtStop(originNearby.stop.id);
       for (final pattern in originPatterns) {
         final originIdx = pattern.indexOfStop(originNearby.stop.id);
         if (originIdx < 0) continue;
@@ -323,8 +330,10 @@ class GtfsRoutingService {
     // legitimate transfer points kilometres from the dest, while a short
     // trip should keep transfers tight.
     final destBbox = _bboxOfStops(destinationStops);
-    final straightLine =
-        _haversine(originStops.first.stop.position, destinationStops.first.stop.position);
+    final straightLine = _haversine(
+      originStops.first.stop.position,
+      destinationStops.first.stop.position,
+    );
     // "Transfer point shouldn't be further from dest than origin is" — rules
     // out detours ratio > 2× without a computed score. Hard floor of 3 km
     // keeps short trips from being over-pruned (close pairs may still need
@@ -342,8 +351,7 @@ class GtfsRoutingService {
     var enumerated = 0;
 
     for (final originNearby in originStops) {
-      final originPatterns =
-          routeIndex.getPatternsAtStop(originNearby.stop.id);
+      final originPatterns = routeIndex.getPatternsAtStop(originNearby.stop.id);
       for (final originPattern in originPatterns) {
         final originIdx = originPattern.indexOfStop(originNearby.stop.id);
         if (originIdx < 0) continue;
@@ -657,7 +665,7 @@ class GtfsRoutingService {
   /// Tight bounding box around a list of nearby stops, in degrees.
   /// Returns null if the list is empty.
   static ({double minLat, double minLon, double maxLat, double maxLon})?
-      _bboxOfStops(List<NearbyStop> stops) {
+  _bboxOfStops(List<NearbyStop> stops) {
     if (stops.isEmpty) return null;
     var minLat = double.infinity,
         minLon = double.infinity,
@@ -695,7 +703,8 @@ class GtfsRoutingService {
     final lat2 = b.latitude * pi / 180;
     final dLat = (b.latitude - a.latitude) * pi / 180;
     final dLon = (b.longitude - a.longitude) * pi / 180;
-    final h = sin(dLat / 2) * sin(dLat / 2) +
+    final h =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     return 2 * r * asin(sqrt(h));
   }

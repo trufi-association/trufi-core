@@ -5,13 +5,16 @@ import '../../models/notification.dart';
 import '../../models/notification_settings.dart';
 import '../widgets/notification_list.dart';
 
+import '../../../l10n/notifications_localizations.dart';
+
 /// Full-screen view for notifications
 class NotificationsScreen extends StatelessWidget {
   /// Callback when a notification is tapped
   final void Function(TrufiNotification notification)? onNotificationTap;
 
   /// Title for the app bar
-  final String title;
+  /// Screen title; defaults to the localized "Notifications".
+  final String? title;
 
   /// Whether to show the settings button
   final bool showSettings;
@@ -22,7 +25,7 @@ class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({
     super.key,
     this.onNotificationTap,
-    this.title = 'Notifications',
+    this.title,
     this.showSettings = false,
     this.onSettingsTap,
   });
@@ -33,7 +36,9 @@ class NotificationsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(
+          title ?? NotificationsLocalizations.of(context).notificationsTitle,
+        ),
         actions: [
           if (showSettings)
             IconButton(
@@ -54,23 +59,25 @@ class NotificationsScreen extends StatelessWidget {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'mark_all_read',
                   child: Row(
                     children: [
-                      Icon(Icons.done_all),
-                      SizedBox(width: 12),
-                      Text('Mark all as read'),
+                      const Icon(Icons.done_all),
+                      const SizedBox(width: 12),
+                      Text(
+                        NotificationsLocalizations.of(context).markAllAsRead,
+                      ),
                     ],
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'refresh',
                   child: Row(
                     children: [
-                      Icon(Icons.refresh),
-                      SizedBox(width: 12),
-                      Text('Refresh'),
+                      const Icon(Icons.refresh),
+                      const SizedBox(width: 12),
+                      Text(NotificationsLocalizations.of(context).refresh),
                     ],
                   ),
                 ),
@@ -126,7 +133,7 @@ class NotificationsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Notifications disabled',
+                  NotificationsLocalizations.of(context).notificationsDisabled,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onErrorContainer,
@@ -134,8 +141,12 @@ class NotificationsScreen extends StatelessWidget {
                 ),
                 Text(
                   isPermanent
-                      ? 'Enable notifications in system settings'
-                      : 'Allow notifications to stay updated',
+                      ? NotificationsLocalizations.of(
+                          context,
+                        ).enableInSystemSettings
+                      : NotificationsLocalizations.of(
+                          context,
+                        ).allowNotifications,
                   style: TextStyle(
                     fontSize: 12,
                     color: colorScheme.onErrorContainer.withAlpha(200),
@@ -148,7 +159,11 @@ class NotificationsScreen extends StatelessWidget {
             onPressed: () {
               // Platform-specific permission request handled by the app
             },
-            child: Text(isPermanent ? 'Settings' : 'Enable'),
+            child: Text(
+              isPermanent
+                  ? NotificationsLocalizations.of(context).openSettings
+                  : NotificationsLocalizations.of(context).enable,
+            ),
           ),
         ],
       ),

@@ -835,23 +835,29 @@ abstract class HomeScreenLocalizations {
   /// **'Off'**
   String get liveVehiclesStateOff;
 
-  /// Section title above the list of saved/favorite places in location search
+  /// Fallback name for an origin set without a label (e.g. deep links)
   ///
   /// In en, this message translates to:
-  /// **'YOUR PLACES'**
-  String get yourPlacesTitle;
+  /// **'Origin'**
+  String get placeOrigin;
 
-  /// Section title above search results in location search
+  /// Fallback name for a destination set without a label (e.g. deep links)
   ///
   /// In en, this message translates to:
-  /// **'SEARCH RESULTS'**
-  String get searchResultsTitle;
+  /// **'Destination'**
+  String get placeDestination;
 
-  /// Message shown when a location search returns no results
+  /// Shown when the selected routing provider exposes no settings
   ///
   /// In en, this message translates to:
-  /// **'No results found'**
-  String get noResultsText;
+  /// **'The \"{provider}\" provider has no configurable options.'**
+  String providerNoOptions(String provider);
+
+  /// Transient snackbar while reverse-geocoding a point picked on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Finding place name…'**
+  String get resolvingLocation;
 }
 
 class _HomeScreenLocalizationsDelegate

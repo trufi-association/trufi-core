@@ -9,17 +9,60 @@ class MapsLocalizationsDe extends MapsLocalizations {
   MapsLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get mapSettingsTitle => 'Karteneinstellungen';
+  String get online => 'Online';
 
   @override
-  String get mapTypeSectionTitle => 'Kartentyp';
+  String get offline => 'Offline';
 
   @override
-  String get mapTypeDescription => 'Wähle deinen bevorzugten Kartenstil';
+  String get mapSettings => 'Karteneinstellungen';
+
+  @override
+  String get mapType => 'Kartentyp';
+
+  @override
+  String get chooseMapStyle => 'Wähle deinen bevorzugten Kartenstil';
+
+  @override
+  String get changeMapType => 'Kartentyp ändern';
+
+  @override
+  String get chooseOnMap => 'Auf der Karte wählen';
 
   @override
   String get confirmLocation => 'Standort bestätigen';
 
   @override
-  String get changeMapType => 'Kartentyp ändern';
+  String get offlineMapName => 'Offline-Karte';
+
+  @override
+  String get offlineMapDescription => 'Vollständig offline nutzbare Karte';
+
+  @override
+  String get errorLoadingOfflineMap => 'Fehler beim Laden der Offline-Karte';
+
+  @override
+  String get retry => 'Erneut versuchen';
+
+  @override
+  String get vectorMapDescription =>
+      'Vektorkarte mit modernem Design und besserer Leistung';
+
+  @override
+  String get lightVectorMapDescription => 'Helle Vektorkarte';
+
+  @override
+  String get darkVectorMapDescription => 'Dunkle Vektorkarte';
+
+  @override
+  String get mapStyleStandardDescription => 'Standardkarte';
+
+  @override
+  String get mapStyleLightDescription => 'Helle Karte';
+
+  @override
+  String get mapStyleDarkDescription => 'Dunkle Karte';
+
+  @override
+  String get mapStyleColorfulDescription => 'Bunte Karte';
 }

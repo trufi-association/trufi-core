@@ -444,11 +444,16 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   String get liveVehiclesStateOff => 'Aus';
 
   @override
-  String get yourPlacesTitle => 'DEINE ORTE';
+  String get placeOrigin => 'Start';
 
   @override
-  String get searchResultsTitle => 'SUCHERGEBNISSE';
+  String get placeDestination => 'Ziel';
 
   @override
-  String get noResultsText => 'Keine Ergebnisse gefunden';
+  String providerNoOptions(String provider) {
+    return 'Der Anbieter \"$provider\" hat keine konfigurierbaren Optionen.';
+  }
+
+  @override
+  String get resolvingLocation => 'Ortsname wird gesucht…';
 }

@@ -294,6 +294,24 @@ abstract class SavedPlacesLocalizations {
   /// In en, this message translates to:
   /// **'Change'**
   String get change;
+
+  /// No description provided for @errorLoadingPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading places'**
+  String get errorLoadingPlaces;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Label for saved places coming from search history
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
 }
 
 class _SavedPlacesLocalizationsDelegate

@@ -100,35 +100,119 @@ abstract class MapsLocalizations {
     Locale('es'),
   ];
 
-  /// No description provided for @mapSettingsTitle.
+  /// Label for the online maps segment in the online/offline toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// Label for the offline maps segment in the online/offline toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// Default title for the map type settings screen header
   ///
   /// In en, this message translates to:
   /// **'Map Settings'**
-  String get mapSettingsTitle;
+  String get mapSettings;
 
-  /// No description provided for @mapTypeSectionTitle.
+  /// Default section title above the map type list
   ///
   /// In en, this message translates to:
   /// **'Map Type'**
-  String get mapTypeSectionTitle;
+  String get mapType;
 
-  /// No description provided for @mapTypeDescription.
+  /// Subtitle under the map type section title
   ///
   /// In en, this message translates to:
   /// **'Choose your preferred map style'**
-  String get mapTypeDescription;
+  String get chooseMapStyle;
 
-  /// No description provided for @confirmLocation.
+  /// Default tooltip for the map type button
+  ///
+  /// In en, this message translates to:
+  /// **'Change map type'**
+  String get changeMapType;
+
+  /// Default title for the choose-on-map screen
+  ///
+  /// In en, this message translates to:
+  /// **'Choose on Map'**
+  String get chooseOnMap;
+
+  /// Default label for the confirm button on the choose-on-map screen
   ///
   /// In en, this message translates to:
   /// **'Confirm Location'**
   String get confirmLocation;
 
-  /// No description provided for @changeMapType.
+  /// Default display name for the offline map engine
   ///
   /// In en, this message translates to:
-  /// **'Change map type'**
-  String get changeMapType;
+  /// **'Offline Map'**
+  String get offlineMapName;
+
+  /// Default description for the offline map engine
+  ///
+  /// In en, this message translates to:
+  /// **'Fully offline map'**
+  String get offlineMapDescription;
+
+  /// Error title shown when the offline map fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading offline map'**
+  String get errorLoadingOfflineMap;
+
+  /// Label for the retry button after an offline map load failure
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Default description for the MapLibre vector map engine
+  ///
+  /// In en, this message translates to:
+  /// **'Vector map with modern styling and better performance'**
+  String get vectorMapDescription;
+
+  /// Description for the default light (Liberty) map style
+  ///
+  /// In en, this message translates to:
+  /// **'Light vector map'**
+  String get lightVectorMapDescription;
+
+  /// Description for the default dark map style
+  ///
+  /// In en, this message translates to:
+  /// **'Dark vector map'**
+  String get darkVectorMapDescription;
+
+  /// Description for a map style in the map type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Standard map'**
+  String get mapStyleStandardDescription;
+
+  /// Description for a map style in the map type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Light map'**
+  String get mapStyleLightDescription;
+
+  /// Description for a map style in the map type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Dark map'**
+  String get mapStyleDarkDescription;
+
+  /// Description for a map style in the map type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Colorful map'**
+  String get mapStyleColorfulDescription;
 }
 
 class _MapsLocalizationsDelegate

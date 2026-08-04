@@ -608,7 +608,6 @@
   "@estimatedTimesDisclaimer": {
     "description": "Disclaimer shown above route results about estimated times"
   },
-
   "liveVehiclesTitle": "Live buses",
   "@liveVehiclesTitle": {
     "description": "Title of the live vehicles section in the map settings sheet"
@@ -629,16 +628,25 @@
   "@liveVehiclesStateOff": {
     "description": "Secondary label when the live vehicles toggle is disabled"
   },
-  "yourPlacesTitle": "YOUR PLACES",
-  "@yourPlacesTitle": {
-    "description": "Section title above the list of saved/favorite places in location search"
+  "placeOrigin": "Origin",
+  "@placeOrigin": {
+    "description": "Fallback name for an origin set without a label (e.g. deep links)"
   },
-  "searchResultsTitle": "SEARCH RESULTS",
-  "@searchResultsTitle": {
-    "description": "Section title above search results in location search"
+  "placeDestination": "Destination",
+  "@placeDestination": {
+    "description": "Fallback name for a destination set without a label (e.g. deep links)"
   },
-  "noResultsText": "No results found",
-  "@noResultsText": {
-    "description": "Message shown when a location search returns no results"
+  "providerNoOptions": "The \"{provider}\" provider has no configurable options.",
+  "@providerNoOptions": {
+    "description": "Shown when the selected routing provider exposes no settings",
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "resolvingLocation": "Finding place name…",
+  "@resolvingLocation": {
+    "description": "Transient snackbar while reverse-geocoding a point picked on the map"
   }
 }

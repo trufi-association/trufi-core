@@ -42,6 +42,13 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <!-- Deep links are handled by app_links via DeepLinkService.
+                 Flutter's built-in deep linking must be off or the engine
+                 also pushes the raw URI into the router, clobbering the
+                 in-app navigation with a fallback to home. -->
+            <meta-data
+              android:name="flutter_deeplinking_enabled"
+              android:value="false" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -59,12 +66,15 @@
               <category android:name="android.intent.category.BROWSABLE" />
               <data android:scheme="geo" />
             </intent-filter>
-            <!-- Custom deep link scheme for route sharing -->
+            <!-- Custom deep link scheme for route sharing and in-app
+                 navigation (e.g. trufiapp://routes?operator=X opens the
+                 routes list filtered by operator). -->
             <intent-filter>
               <action android:name="android.intent.action.VIEW" />
               <category android:name="android.intent.category.DEFAULT" />
               <category android:name="android.intent.category.BROWSABLE" />
               <data android:scheme="trufiapp" android:host="route" />
+              <data android:scheme="trufiapp" android:host="routes" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -72,6 +82,17 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Required by pasteboard: exposes the QR PNG to the clipboard
+             via a content URI when the user taps "Copy QR". -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

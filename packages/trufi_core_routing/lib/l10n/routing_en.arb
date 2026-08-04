@@ -82,32 +82,37 @@
   "@serviceTomorrow": {
     "description": "Used inside serviceClosedOpensDayAt when the next service is on the next calendar day."
   },
-  "trufiPlannerDescriptionLocal": "Works offline with GTFS data bundled in the app",
-  "@trufiPlannerDescriptionLocal": {
-    "description": "Description shown for the local (offline) Trufi Planner provider"
+  "trufiPlannerLocalDescription": "Runs offline with the GTFS data bundled in the app",
+  "@trufiPlannerLocalDescription": {
+    "description": "Description of the offline Trufi Planner engine in selectors"
   },
-  "trufiPlannerDescriptionRemote": "Our own routing engine served from our backend",
-  "@trufiPlannerDescriptionRemote": {
-    "description": "Description shown for the remote (online) Trufi Planner provider"
+  "trufiPlannerRemoteDescription": "Our own routing engine served from our backend",
+  "@trufiPlannerRemoteDescription": {
+    "description": "Description of the server-backed Trufi Planner engine in selectors"
   },
   "trufiPlannerInfoTitle": "About Trufi Planner",
   "@trufiPlannerInfoTitle": {
-    "description": "Title of the Trufi Planner info card in routing settings"
+    "description": "Title of the Trufi Planner info card in routing preferences"
   },
-  "trufiPlannerInfoLocalLine1": "Trufi Planner is our own routing engine (not OTP).",
-  "@trufiPlannerInfoLocalLine1": {
-    "description": "First line of info card, local/offline variant"
+  "trufiPlannerInfoIntro": "Trufi Planner is our own routing engine (not OTP).",
+  "@trufiPlannerInfoIntro": {
+    "description": "First line of the Trufi Planner info card"
   },
-  "trufiPlannerInfoLocalLine2": "This mobile version runs 100% offline, using GTFS data bundled with the app — that's why results may differ from online engines.",
-  "@trufiPlannerInfoLocalLine2": {
-    "description": "Second line of info card, local/offline variant"
+  "trufiPlannerInfoLocalBody": "On mobile it runs 100% offline, using the GTFS data bundled with the app — results may differ from online engines.",
+  "@trufiPlannerInfoLocalBody": {
+    "description": "Info card body for the offline variant"
   },
-  "trufiPlannerInfoRemoteLine1": "Trufi Planner is our own routing engine (not OTP).",
-  "@trufiPlannerInfoRemoteLine1": {
-    "description": "First line of info card, remote/web variant"
+  "trufiPlannerInfoRemoteBody": "This web version queries our server; results may differ from OTP because it uses a different algorithm and data.",
+  "@trufiPlannerInfoRemoteBody": {
+    "description": "Info card body for the server-backed variant"
   },
-  "trufiPlannerInfoRemoteLine2": "This web version queries our server; results may differ from OTP since it uses a different algorithm and data.",
-  "@trufiPlannerInfoRemoteLine2": {
-    "description": "Second line of info card, remote/web variant"
+  "otpOnlineDescription": "OpenTripPlanner {version} (Online)",
+  "@otpOnlineDescription": {
+    "description": "Default description for OpenTripPlanner engines; {version} is e.g. 2.8",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   }
 }

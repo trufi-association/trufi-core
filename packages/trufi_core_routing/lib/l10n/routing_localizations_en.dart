@@ -69,29 +69,30 @@ class RoutingLocalizationsEn extends RoutingLocalizations {
   String get serviceTomorrow => 'tomorrow';
 
   @override
-  String get trufiPlannerDescriptionLocal =>
-      'Works offline with GTFS data bundled in the app';
+  String get trufiPlannerLocalDescription =>
+      'Runs offline with the GTFS data bundled in the app';
 
   @override
-  String get trufiPlannerDescriptionRemote =>
+  String get trufiPlannerRemoteDescription =>
       'Our own routing engine served from our backend';
 
   @override
   String get trufiPlannerInfoTitle => 'About Trufi Planner';
 
   @override
-  String get trufiPlannerInfoLocalLine1 =>
+  String get trufiPlannerInfoIntro =>
       'Trufi Planner is our own routing engine (not OTP).';
 
   @override
-  String get trufiPlannerInfoLocalLine2 =>
-      'This mobile version runs 100% offline, using GTFS data bundled with the app — that\'s why results may differ from online engines.';
+  String get trufiPlannerInfoLocalBody =>
+      'On mobile it runs 100% offline, using the GTFS data bundled with the app — results may differ from online engines.';
 
   @override
-  String get trufiPlannerInfoRemoteLine1 =>
-      'Trufi Planner is our own routing engine (not OTP).';
+  String get trufiPlannerInfoRemoteBody =>
+      'This web version queries our server; results may differ from OTP because it uses a different algorithm and data.';
 
   @override
-  String get trufiPlannerInfoRemoteLine2 =>
-      'This web version queries our server; results may differ from OTP since it uses a different algorithm and data.';
+  String otpOnlineDescription(String version) {
+    return 'OpenTripPlanner $version (Online)';
+  }
 }

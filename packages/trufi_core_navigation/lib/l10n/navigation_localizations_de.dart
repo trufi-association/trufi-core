@@ -96,4 +96,18 @@ class NavigationLocalizationsDe extends NavigationLocalizations {
 
   @override
   String get navDestination => 'Ziel';
+
+  @override
+  String get navRoute => 'Route';
+
+  @override
+  String navStopsRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Noch $count Haltestellen',
+      one: 'Noch 1 Haltestelle',
+    );
+    return '$_temp0';
+  }
 }

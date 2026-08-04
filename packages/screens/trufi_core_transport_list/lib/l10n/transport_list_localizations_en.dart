@@ -67,11 +67,77 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   String get loadingRoute => 'Loading route...';
 
   @override
+  String get otherAgencies => 'Others';
+
+  @override
+  String shareRouteMessage(String uri) {
+    return 'Share: $uri';
+  }
+
+  @override
+  String get defaultModeBus => 'Bus';
+
+  @override
   String get mapSettingsTitle => 'Map Settings';
 
   @override
-  String get mapTypeSectionTitle => 'Map Type';
+  String get mapTypeLabel => 'Map Type';
 
   @override
-  String get applyChangesButton => 'Apply Changes';
+  String get applyChanges => 'Apply Changes';
+
+  @override
+  String get stopStart => 'Start';
+
+  @override
+  String get stopEnd => 'End';
+
+  @override
+  String get stopInfoNotAvailable =>
+      'Stop information is not available for this route';
+
+  @override
+  String get errorLoadingRoutes => 'Could not load routes';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get qrShareSubtitle => 'Scan to open this operator\'s routes';
+
+  @override
+  String get copyQrImage => 'Copy QR';
+
+  @override
+  String get copyQrImageFailed => 'Couldn\'t copy the QR';
+
+  @override
+  String get modeTram => 'Tram';
+
+  @override
+  String get modeSubway => 'Subway';
+
+  @override
+  String get modeRail => 'Rail';
+
+  @override
+  String get modeBus => 'Bus';
+
+  @override
+  String get modeFerry => 'Ferry';
+
+  @override
+  String get modeCableTram => 'Cable Tram';
+
+  @override
+  String get modeAerialLift => 'Aerial Lift';
+
+  @override
+  String get modeFunicular => 'Funicular';
+
+  @override
+  String get modeTrolleybus => 'Trolleybus';
+
+  @override
+  String get modeMonorail => 'Monorail';
 }

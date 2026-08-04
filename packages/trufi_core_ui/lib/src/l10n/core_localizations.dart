@@ -214,59 +214,53 @@ abstract class CoreLocalizations {
   /// **'Mark all as read'**
   String get markAllAsRead;
 
-  /// Init step label shown while the app is starting up
+  /// Init screen step: the app is starting
   ///
   /// In en, this message translates to:
   /// **'Starting'**
-  String get appInitStepStarting;
+  String get initStepStarting;
 
-  /// Init step label shown while overlays (onboarding, privacy consent, etc.) are being set up
+  /// Init screen step: initializing app services
   ///
   /// In en, this message translates to:
   /// **'Initializing'**
-  String get appInitStepInitializingOverlays;
+  String get initStepInitializing;
 
-  /// Init step label shown while map data is loading
+  /// Init screen step: loading map engines
   ///
   /// In en, this message translates to:
   /// **'Loading maps'**
-  String get appInitStepLoadingMaps;
+  String get initStepLoadingMaps;
 
-  /// Init step label shown while routing/transit data is loading
+  /// Init screen step: loading routing engines
   ///
   /// In en, this message translates to:
   /// **'Loading routes'**
-  String get appInitStepLoadingRoutes;
+  String get initStepLoadingRoutes;
 
-  /// Init step label shown right before the app finishes loading
+  /// Init screen step: preparing screens
   ///
   /// In en, this message translates to:
   /// **'Almost ready'**
-  String get appInitStepPreparingScreens;
-
-  /// Generic fallback label shown while the app is loading, when no specific step is set
-  ///
-  /// In en, this message translates to:
-  /// **'Loading'**
-  String get appInitStepLoading;
+  String get initStepAlmostReady;
 
   /// Title shown when app initialization fails
   ///
   /// In en, this message translates to:
   /// **'Unable to start'**
-  String get appInitUnableToStart;
+  String get errorUnableToStart;
 
-  /// Fallback error message when no specific error is available
+  /// Fallback message when an error has no details
   ///
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
-  String get appInitUnexpectedError;
+  String get errorUnexpected;
 
-  /// Label for the button that retries app initialization after a failure
+  /// Brand tagline in the drawer footer; keep identical in all languages
   ///
   /// In en, this message translates to:
-  /// **'Try again'**
-  String get appInitRetryButtonLabel;
+  /// **'Powered by Trufi Association'**
+  String get poweredByTrufi;
 }
 
 class _CoreLocalizationsDelegate

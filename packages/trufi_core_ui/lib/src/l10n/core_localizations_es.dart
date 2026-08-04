@@ -68,29 +68,26 @@ class CoreLocalizationsEs extends CoreLocalizations {
   String get markAllAsRead => 'Marcar todo como leído';
 
   @override
-  String get appInitStepStarting => 'Iniciando';
+  String get initStepStarting => 'Iniciando';
 
   @override
-  String get appInitStepInitializingOverlays => 'Inicializando';
+  String get initStepInitializing => 'Inicializando';
 
   @override
-  String get appInitStepLoadingMaps => 'Cargando mapas';
+  String get initStepLoadingMaps => 'Cargando mapas';
 
   @override
-  String get appInitStepLoadingRoutes => 'Cargando rutas';
+  String get initStepLoadingRoutes => 'Cargando rutas';
 
   @override
-  String get appInitStepPreparingScreens => 'Preparando pantallas';
+  String get initStepAlmostReady => 'Casi listo';
 
   @override
-  String get appInitStepLoading => 'Cargando';
+  String get errorUnableToStart => 'No se pudo iniciar';
 
   @override
-  String get appInitUnableToStart => 'No se pudo iniciar la aplicación';
+  String get errorUnexpected => 'Ocurrió un error inesperado';
 
   @override
-  String get appInitUnexpectedError => 'Ocurrió un error inesperado';
-
-  @override
-  String get appInitRetryButtonLabel => 'Reintentar';
+  String get poweredByTrufi => 'Powered by Trufi Association';
 }

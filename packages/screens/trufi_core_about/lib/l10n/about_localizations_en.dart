@@ -20,6 +20,9 @@ class AboutLocalizationsEn extends AboutLocalizations {
   String get aboutCollapseTitle => 'More About Trufi Association';
 
   @override
+  String get aboutContact => 'Contact';
+
+  @override
   String aboutContent(String appName, String city) {
     return 'Need to go somewhere and don\'t know which bus or route to take?\n$appName makes it easy!\n\nTrufi Association is an international team of volunteers. We love public transportation, that\'s why we developed this application to make getting around easy. Our goal is to provide you with a practical tool that allows you to navigate with confidence.\n\nWe are committed to the continuous improvement of $appName to offer you more and more accurate and useful information. We know that the transportation system in $city undergoes changes due to different reasons, so it is possible that some routes are not completely up to date.\n\nTo make $appName an effective tool, we rely on the collaboration of our users. If you are aware of changes in some routes or stops, we encourage you to share this information with us. Your contribution will not only help keep the app up to date, but will also benefit other users who rely on $appName.\n\nThank you for choosing $appName to move around $city, we hope you enjoy your experience with us!';
   }
@@ -30,6 +33,12 @@ class AboutLocalizationsEn extends AboutLocalizations {
   @override
   String get aboutOpenSource =>
       'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.';
+
+  @override
+  String get aboutOpenSourceTitle => 'Open Source';
+
+  @override
+  String get aboutSendFeedback => 'Send us feedback';
 
   @override
   String get menuAbout => 'About us';
