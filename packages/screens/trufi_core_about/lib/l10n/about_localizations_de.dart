@@ -49,7 +49,7 @@ class AboutLocalizationsDe extends AboutLocalizations {
   }
 
   @override
-  String get trufiWebsite => 'Website der Trufi Association';
+  String get trufiWebsite => 'Trufi Association Website';
 
   @override
   String version(String version) {
@@ -58,10 +58,4 @@ class AboutLocalizationsDe extends AboutLocalizations {
 
   @override
   String get volunteerTrufi => 'Freiwilligenarbeit für Trufi';
-
-  @override
-  String get contactUs => 'Kontakt';
-
-  @override
-  String get aboutContactUsSubtitle => 'Sende uns dein Feedback';
 }

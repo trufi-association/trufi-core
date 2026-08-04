@@ -29,5 +29,17 @@
   "faresTips": "Tips",
   "@faresTips": {
     "description": "Label for the additional notes card on the fares screen"
+  },
+  "fareCategoryRegular": "Regular",
+  "@fareCategoryRegular": {
+    "description": "Common fare category label apps can reuse via labelBuilder"
+  },
+  "fareCategoryStudent": "Student",
+  "@fareCategoryStudent": {
+    "description": "Common fare category label apps can reuse via labelBuilder"
+  },
+  "fareCategorySenior": "Senior",
+  "@fareCategorySenior": {
+    "description": "Common fare category label apps can reuse via labelBuilder"
   }
 }

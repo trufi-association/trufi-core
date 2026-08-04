@@ -36,7 +36,10 @@ class FareCategory {
     this.labelBuilder,
   });
 
-  String labelFor(BuildContext context) => labelBuilder?.call(context) ?? label;
+  /// Localized label when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  String localizedLabel(BuildContext context) =>
+      labelBuilder?.call(context) ?? label;
 }
 
 /// A fare grouping rendered as a single card on the fares screen.
@@ -77,7 +80,10 @@ class FareInfo {
     this.titleBuilder,
   });
 
-  String titleFor(BuildContext context) => titleBuilder?.call(context) ?? title;
+  /// Localized title when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  String localizedTitle(BuildContext context) =>
+      titleBuilder?.call(context) ?? title;
 }
 
 /// Top-level configuration for the fares screen.

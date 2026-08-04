@@ -183,18 +183,6 @@ abstract class AboutLocalizations {
   /// In en, this message translates to:
   /// **'Volunteer For Trufi'**
   String get volunteerTrufi;
-
-  /// No description provided for @contactUs.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact'**
-  String get contactUs;
-
-  /// No description provided for @aboutContactUsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send us feedback'**
-  String get aboutContactUsSubtitle;
 }
 
 class _AboutLocalizationsDelegate

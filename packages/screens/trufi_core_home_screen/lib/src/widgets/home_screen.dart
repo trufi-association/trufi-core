@@ -619,9 +619,6 @@ class _HomeScreenState extends State<HomeScreen>
             destinationHintText: l10n.searchDestination,
             yourLocationText: l10n.yourLocation,
             chooseOnMapText: l10n.chooseOnMap,
-            yourPlacesTitle: l10n.yourPlacesTitle,
-            searchResultsTitle: l10n.searchResultsTitle,
-            noResultsText: l10n.noResultsText,
           ),
           onYourLocation: () async {
             // Fast path: reuse a fresh location when the map is already tracking.

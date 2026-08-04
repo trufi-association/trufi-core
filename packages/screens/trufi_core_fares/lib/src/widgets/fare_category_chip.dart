@@ -43,7 +43,7 @@ class FareCategoryChip extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  category.labelFor(context),
+                  category.localizedLabel(context),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,

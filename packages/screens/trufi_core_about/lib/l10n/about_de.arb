@@ -11,9 +11,7 @@
   "aboutSendFeedback": "Sende uns Dein Feedback",
   "menuAbout": "Über Uns",
   "tagline": "Öffentliche Verkehrsmittel in {city}",
-  "trufiWebsite": "Website der Trufi Association",
+  "trufiWebsite": "Trufi Association Website",
   "version": "Version {version}",
-  "volunteerTrufi": "Freiwilligenarbeit für Trufi",
-  "contactUs": "Kontakt",
-  "aboutContactUsSubtitle": "Sende uns dein Feedback"
+  "volunteerTrufi": "Freiwilligenarbeit für Trufi"
 }
