@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+typedef LocalizedStringBuilder = String Function(BuildContext context);
+
 /// A single price entry within a fare group (e.g., "Adulto: 3.00 Bs").
 ///
 /// Apps provide already-localized labels. The package intentionally avoids
@@ -9,6 +11,9 @@ import 'package:flutter/material.dart';
 class FareCategory {
   /// Display label, already localized by the consumer.
   final String label;
+
+  /// Optional localized label builder used when a [BuildContext] exists.
+  final LocalizedStringBuilder? labelBuilder;
 
   /// Formatted price string without currency (e.g., `"3.00"`).
   final String price;
@@ -28,7 +33,13 @@ class FareCategory {
     this.icon,
     this.color,
     this.note,
+    this.labelBuilder,
   });
+
+  /// Localized label when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  String localizedLabel(BuildContext context) =>
+      labelBuilder?.call(context) ?? label;
 }
 
 /// A fare grouping rendered as a single card on the fares screen.
@@ -40,6 +51,9 @@ class FareCategory {
 class FareInfo {
   /// Group title shown in the card header.
   final String title;
+
+  /// Optional localized title builder used when a [BuildContext] exists.
+  final LocalizedStringBuilder? titleBuilder;
 
   /// Icon shown next to [title].
   final IconData icon;
@@ -63,7 +77,13 @@ class FareInfo {
     this.color,
     this.additional = const [],
     this.notes,
+    this.titleBuilder,
   });
+
+  /// Localized title when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  String localizedTitle(BuildContext context) =>
+      titleBuilder?.call(context) ?? title;
 }
 
 /// Top-level configuration for the fares screen.

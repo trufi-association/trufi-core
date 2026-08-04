@@ -50,11 +50,7 @@ class FaresHero extends StatelessWidget {
               color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              size: 36,
-              color: colorScheme.onPrimaryContainer,
-            ),
+            child: Icon(icon, size: 36, color: colorScheme.onPrimaryContainer),
           ),
           const SizedBox(height: 16),
           Text(

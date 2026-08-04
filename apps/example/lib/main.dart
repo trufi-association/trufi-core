@@ -307,23 +307,29 @@ void main() {
           config: FaresConfig(
             currency: 'Bs.',
             lastUpdated: DateTime(2024, 1, 15),
-            fares: const [
+            fares: [
               FareInfo(
                 title: 'Trufi',
                 icon: Icons.directions_bus,
                 primary: FareCategory(
                   label: 'Regular',
+                  labelBuilder: (context) =>
+                      FaresLocalizations.of(context).fareCategoryRegular,
                   price: '2.00',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategoryStudent,
                     price: '1.50',
                     icon: Icons.school_rounded,
                   ),
                   FareCategory(
                     label: 'Senior',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategorySenior,
                     price: '1.00',
                     icon: Icons.elderly_rounded,
                   ),
@@ -334,17 +340,23 @@ void main() {
                 icon: Icons.airport_shuttle,
                 primary: FareCategory(
                   label: 'Regular',
+                  labelBuilder: (context) =>
+                      FaresLocalizations.of(context).fareCategoryRegular,
                   price: '1.50',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategoryStudent,
                     price: '1.00',
                     icon: Icons.school_rounded,
                   ),
                   FareCategory(
                     label: 'Senior',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategorySenior,
                     price: '0.75',
                     icon: Icons.elderly_rounded,
                   ),
@@ -355,12 +367,16 @@ void main() {
                 icon: Icons.directions_bus_filled,
                 primary: FareCategory(
                   label: 'Regular',
+                  labelBuilder: (context) =>
+                      FaresLocalizations.of(context).fareCategoryRegular,
                   price: '2.50',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategoryStudent,
                     price: '2.00',
                     icon: Icons.school_rounded,
                   ),

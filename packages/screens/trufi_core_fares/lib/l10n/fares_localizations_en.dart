@@ -27,4 +27,13 @@ class FaresLocalizationsEn extends FaresLocalizations {
 
   @override
   String get faresTips => 'Tips';
+
+  @override
+  String get fareCategoryRegular => 'Regular';
+
+  @override
+  String get fareCategoryStudent => 'Student';
+
+  @override
+  String get fareCategorySenior => 'Senior';
 }

@@ -29,5 +29,8 @@
   "faresTips": "Consejos",
   "@faresTips": {
     "description": "Label for the additional notes card on the fares screen"
-  }
+  },
+  "fareCategoryRegular": "Regular",
+  "fareCategoryStudent": "Estudiante",
+  "fareCategorySenior": "Adulto mayor"
 }

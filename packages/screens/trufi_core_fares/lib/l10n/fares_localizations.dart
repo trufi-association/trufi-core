@@ -135,6 +135,24 @@ abstract class FaresLocalizations {
   /// In en, this message translates to:
   /// **'Tips'**
   String get faresTips;
+
+  /// Common fare category label apps can reuse via labelBuilder
+  ///
+  /// In en, this message translates to:
+  /// **'Regular'**
+  String get fareCategoryRegular;
+
+  /// Common fare category label apps can reuse via labelBuilder
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get fareCategoryStudent;
+
+  /// Common fare category label apps can reuse via labelBuilder
+  ///
+  /// In en, this message translates to:
+  /// **'Senior'**
+  String get fareCategorySenior;
 }
 
 class _FaresLocalizationsDelegate
