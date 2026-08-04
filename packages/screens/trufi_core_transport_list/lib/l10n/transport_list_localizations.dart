@@ -282,6 +282,66 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t copy the QR'**
   String get copyQrImageFailed;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Tram'**
+  String get modeTram;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Subway'**
+  String get modeSubway;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Rail'**
+  String get modeRail;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Bus'**
+  String get modeBus;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Ferry'**
+  String get modeFerry;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Cable Tram'**
+  String get modeCableTram;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Aerial Lift'**
+  String get modeAerialLift;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Funicular'**
+  String get modeFunicular;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Trolleybus'**
+  String get modeTrolleybus;
+
+  /// GTFS route type shown as the transport mode
+  ///
+  /// In en, this message translates to:
+  /// **'Monorail'**
+  String get modeMonorail;
 }
 
 class _TransportListLocalizationsDelegate

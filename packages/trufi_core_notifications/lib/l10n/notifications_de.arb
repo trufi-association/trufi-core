@@ -1,0 +1,18 @@
+{
+  "@@locale": "de",
+  "notificationsTitle": "Benachrichtigungen",
+  "markAllAsRead": "Alle als gelesen markieren",
+  "refresh": "Aktualisieren",
+  "notificationsDisabled": "Benachrichtigungen deaktiviert",
+  "enableInSystemSettings": "Aktiviere Benachrichtigungen in den Systemeinstellungen",
+  "allowNotifications": "Erlaube Benachrichtigungen, um auf dem Laufenden zu bleiben",
+  "openSettings": "Einstellungen",
+  "enable": "Aktivieren",
+  "noNotifications": "Keine Benachrichtigungen",
+  "allCaughtUp": "Du bist auf dem Laufenden!",
+  "justNow": "Gerade eben",
+  "minutesAgo": "vor {minutes} Min.",
+  "hoursAgo": "vor {hours} Std.",
+  "daysAgo": "vor {days} Tagen",
+  "unreadCount": "{count, plural, =1{1 ungelesen} other{{count} ungelesen}}"
+}

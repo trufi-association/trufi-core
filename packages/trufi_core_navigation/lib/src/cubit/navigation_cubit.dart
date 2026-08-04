@@ -431,7 +431,10 @@ class NavigationCubit extends Cubit<NavigationState> {
     if (remainingStops <= 0) {
       return NavigationInstruction(
         type: InstructionType.exitTransport,
+        // English fallback for context-less consumers; widgets render the
+        // localized navExitAt via primaryTextKey.
         primaryText: 'Exit at ${stops.last.name}',
+        primaryTextKey: InstructionTextKey.exitAtStop,
         stopName: stops.last.name,
         routeColor: route.backgroundColor != null
             ? Color(route.backgroundColor!)
@@ -446,7 +449,11 @@ class NavigationCubit extends Cubit<NavigationState> {
     return NavigationInstruction(
       type: InstructionType.rideTransport,
       primaryText: nextStop.name,
+      // English fallback; widgets render the localized plural-aware
+      // navStopsRemaining via secondaryTextKey.
       secondaryText: '$stopsText remaining',
+      secondaryTextKey: InstructionTextKey.stopsRemaining,
+      remainingStops: remainingStops,
       stopName: nextStop.name,
       routeColor: route.backgroundColor != null
           ? Color(route.backgroundColor!)

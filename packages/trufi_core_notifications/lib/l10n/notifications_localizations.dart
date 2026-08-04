@@ -5,25 +5,25 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'maps_localizations_de.dart';
-import 'maps_localizations_en.dart';
-import 'maps_localizations_es.dart';
+import 'notifications_localizations_de.dart';
+import 'notifications_localizations_en.dart';
+import 'notifications_localizations_es.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of MapsLocalizations
-/// returned by `MapsLocalizations.of(context)`.
+/// Callers can lookup localized strings with an instance of NotificationsLocalizations
+/// returned by `NotificationsLocalizations.of(context)`.
 ///
-/// Applications need to include `MapsLocalizations.delegate()` in their app's
+/// Applications need to include `NotificationsLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/maps_localizations.dart';
+/// import 'l10n/notifications_localizations.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: MapsLocalizations.localizationsDelegates,
-///   supportedLocales: MapsLocalizations.supportedLocales,
+///   localizationsDelegates: NotificationsLocalizations.localizationsDelegates,
+///   supportedLocales: NotificationsLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -60,20 +60,23 @@ import 'maps_localizations_es.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the MapsLocalizations.supportedLocales
+/// be consistent with the languages listed in the NotificationsLocalizations.supportedLocales
 /// property.
-abstract class MapsLocalizations {
-  MapsLocalizations(String locale)
+abstract class NotificationsLocalizations {
+  NotificationsLocalizations(String locale)
     : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static MapsLocalizations of(BuildContext context) {
-    return Localizations.of<MapsLocalizations>(context, MapsLocalizations)!;
+  static NotificationsLocalizations of(BuildContext context) {
+    return Localizations.of<NotificationsLocalizations>(
+      context,
+      NotificationsLocalizations,
+    )!;
   }
 
-  static const LocalizationsDelegate<MapsLocalizations> delegate =
-      _MapsLocalizationsDelegate();
+  static const LocalizationsDelegate<NotificationsLocalizations> delegate =
+      _NotificationsLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -100,129 +103,105 @@ abstract class MapsLocalizations {
     Locale('es'),
   ];
 
-  /// Label for the online maps segment in the online/offline toggle
+  /// Screen title
   ///
   /// In en, this message translates to:
-  /// **'Online'**
-  String get online;
+  /// **'Notifications'**
+  String get notificationsTitle;
 
-  /// Label for the offline maps segment in the online/offline toggle
+  /// Menu action
   ///
   /// In en, this message translates to:
-  /// **'Offline'**
-  String get offline;
+  /// **'Mark all as read'**
+  String get markAllAsRead;
 
-  /// Default title for the map type settings screen header
+  /// Menu action
   ///
   /// In en, this message translates to:
-  /// **'Map Settings'**
-  String get mapSettings;
+  /// **'Refresh'**
+  String get refresh;
 
-  /// Default section title above the map type list
+  /// Permission banner title
   ///
   /// In en, this message translates to:
-  /// **'Map Type'**
-  String get mapType;
+  /// **'Notifications disabled'**
+  String get notificationsDisabled;
 
-  /// Subtitle under the map type section title
+  /// Banner body when permission is permanently denied
   ///
   /// In en, this message translates to:
-  /// **'Choose your preferred map style'**
-  String get chooseMapStyle;
+  /// **'Enable notifications in system settings'**
+  String get enableInSystemSettings;
 
-  /// Default tooltip for the map type button
+  /// Banner body when permission can be requested
   ///
   /// In en, this message translates to:
-  /// **'Change map type'**
-  String get changeMapType;
+  /// **'Allow notifications to stay updated'**
+  String get allowNotifications;
 
-  /// Default title for the choose-on-map screen
+  /// Banner button opening system settings
   ///
   /// In en, this message translates to:
-  /// **'Choose on Map'**
-  String get chooseOnMap;
+  /// **'Settings'**
+  String get openSettings;
 
-  /// Default label for the confirm button on the choose-on-map screen
+  /// Banner button requesting permission
   ///
   /// In en, this message translates to:
-  /// **'Confirm Location'**
-  String get confirmLocation;
+  /// **'Enable'**
+  String get enable;
 
-  /// Default display name for the offline map engine
+  /// Empty state title
   ///
   /// In en, this message translates to:
-  /// **'Offline Map'**
-  String get offlineMapName;
+  /// **'No notifications'**
+  String get noNotifications;
 
-  /// Default description for the offline map engine
+  /// Empty state subtitle
   ///
   /// In en, this message translates to:
-  /// **'Fully offline map'**
-  String get offlineMapDescription;
+  /// **'You\'re all caught up!'**
+  String get allCaughtUp;
 
-  /// Error title shown when the offline map fails to load
+  /// Relative time under a minute
   ///
   /// In en, this message translates to:
-  /// **'Error loading offline map'**
-  String get errorLoadingOfflineMap;
+  /// **'Just now'**
+  String get justNow;
 
-  /// Label for the retry button after an offline map load failure
+  /// Relative time in minutes
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
+  /// **'{minutes}m ago'**
+  String minutesAgo(int minutes);
 
-  /// Default description for the MapLibre vector map engine
+  /// Relative time in hours
   ///
   /// In en, this message translates to:
-  /// **'Vector map with modern styling and better performance'**
-  String get vectorMapDescription;
+  /// **'{hours}h ago'**
+  String hoursAgo(int hours);
 
-  /// Description for the default light (Liberty) map style
+  /// Relative time in days
   ///
   /// In en, this message translates to:
-  /// **'Light vector map'**
-  String get lightVectorMapDescription;
+  /// **'{days}d ago'**
+  String daysAgo(int days);
 
-  /// Description for the default dark map style
+  /// How many notifications are unread
   ///
   /// In en, this message translates to:
-  /// **'Dark vector map'**
-  String get darkVectorMapDescription;
-
-  /// Description for a map style in the map type selector
-  ///
-  /// In en, this message translates to:
-  /// **'Standard map'**
-  String get mapStyleStandardDescription;
-
-  /// Description for a map style in the map type selector
-  ///
-  /// In en, this message translates to:
-  /// **'Light map'**
-  String get mapStyleLightDescription;
-
-  /// Description for a map style in the map type selector
-  ///
-  /// In en, this message translates to:
-  /// **'Dark map'**
-  String get mapStyleDarkDescription;
-
-  /// Description for a map style in the map type selector
-  ///
-  /// In en, this message translates to:
-  /// **'Colorful map'**
-  String get mapStyleColorfulDescription;
+  /// **'{count, plural, =1{1 unread} other{{count} unread}}'**
+  String unreadCount(int count);
 }
 
-class _MapsLocalizationsDelegate
-    extends LocalizationsDelegate<MapsLocalizations> {
-  const _MapsLocalizationsDelegate();
+class _NotificationsLocalizationsDelegate
+    extends LocalizationsDelegate<NotificationsLocalizations> {
+  const _NotificationsLocalizationsDelegate();
 
   @override
-  Future<MapsLocalizations> load(Locale locale) {
-    return SynchronousFuture<MapsLocalizations>(
-      lookupMapsLocalizations(locale),
+  Future<NotificationsLocalizations> load(Locale locale) {
+    return SynchronousFuture<NotificationsLocalizations>(
+      lookupNotificationsLocalizations(locale),
     );
   }
 
@@ -231,22 +210,22 @@ class _MapsLocalizationsDelegate
       <String>['de', 'en', 'es'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_MapsLocalizationsDelegate old) => false;
+  bool shouldReload(_NotificationsLocalizationsDelegate old) => false;
 }
 
-MapsLocalizations lookupMapsLocalizations(Locale locale) {
+NotificationsLocalizations lookupNotificationsLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'de':
-      return MapsLocalizationsDe();
+      return NotificationsLocalizationsDe();
     case 'en':
-      return MapsLocalizationsEn();
+      return NotificationsLocalizationsEn();
     case 'es':
-      return MapsLocalizationsEs();
+      return NotificationsLocalizationsEs();
   }
 
   throw FlutterError(
-    'MapsLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'NotificationsLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
     'that was used.',

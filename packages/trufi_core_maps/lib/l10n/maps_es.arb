@@ -14,5 +14,9 @@
   "retry": "Reintentar",
   "vectorMapDescription": "Mapa vectorial con estilo moderno y mejor rendimiento",
   "lightVectorMapDescription": "Mapa vectorial claro",
-  "darkVectorMapDescription": "Mapa vectorial oscuro"
+  "darkVectorMapDescription": "Mapa vectorial oscuro",
+  "mapStyleStandardDescription": "Mapa estándar",
+  "mapStyleLightDescription": "Mapa claro",
+  "mapStyleDarkDescription": "Mapa oscuro",
+  "mapStyleColorfulDescription": "Mapa colorido"
 }

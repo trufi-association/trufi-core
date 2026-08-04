@@ -261,7 +261,7 @@ class _OnboardingLanguageSection extends StatelessWidget {
             if (i > 0) const SizedBox(height: 8),
             _LanguageOption(
               languageCode: locales[i].languageCode,
-              languageName: LocaleManager.displayNameForCode(locales[i].languageCode),
+              languageName: localeManager.displayName(locales[i].languageCode),
               isSelected: localeManager.currentLocale.languageCode ==
                   locales[i].languageCode,
               onSelect: () {
@@ -458,8 +458,8 @@ class _OnboardingRoutingSection extends StatelessWidget {
               bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
             ),
             child: _EngineOption(
-              name: engine.name,
-              description: engine.description,
+              name: engine.localizedName(context),
+              description: engine.localizedDescription(context),
               icon: engine.requiresInternet
                   ? Icons.cloud_rounded
                   : Icons.offline_bolt_rounded,

@@ -124,7 +124,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       case SavedPlaceType.other:
         return localization.customPlaces;
       case SavedPlaceType.history:
-        return 'History';
+        return localization.history;
     }
   }
 
@@ -270,12 +270,12 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     );
   }
 
-  Widget _buildHeader(ThemeData theme, SavedPlacesLocalizations? localization) {
+  Widget _buildHeader(ThemeData theme, SavedPlacesLocalizations localization) {
     final title =
         widget.title ??
         (_isEditing
-            ? (localization?.editPlace ?? 'Edit Place')
-            : (localization?.addPlace ?? 'Add Place'));
+            ? (localization.editPlace)
+            : (localization.addPlace));
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 8, 16),
@@ -292,7 +292,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.close),
-            tooltip: localization?.cancel ?? 'Cancel',
+            tooltip: localization.cancel,
           ),
         ],
       ),
@@ -334,15 +334,15 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
   Widget _buildNameField(
     ThemeData theme,
-    SavedPlacesLocalizations? localization,
+    SavedPlacesLocalizations localization,
   ) {
     return TextFormField(
       controller: _nameController,
       focusNode: _nameFocusNode,
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
-        labelText: localization?.name ?? 'Name',
-        hintText: localization?.enterName ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Ingresa un nombre para este lugar' : 'Enter a name for this place'),
+        labelText: localization.name,
+        hintText: localization.enterName,
         filled: true,
         fillColor: theme.colorScheme.surfaceContainerHighest,
         border: OutlineInputBorder(
@@ -366,7 +366,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       onChanged: (_) => setState(() {}),
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return localization?.nameRequired ?? 'Name is required';
+          return localization.nameRequired;
         }
         return null;
       },
@@ -375,7 +375,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
   Widget _buildTypeSelection(
     ThemeData theme,
-    SavedPlacesLocalizations? localization,
+    SavedPlacesLocalizations localization,
   ) {
     final types = SavedPlaceType.values
         .where((t) => t != SavedPlaceType.history)
@@ -385,7 +385,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          localization?.type ?? 'Type',
+          localization.type,
           style: theme.textTheme.titleSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -411,7 +411,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
   Widget _buildLocationCard(
     ThemeData theme,
-    SavedPlacesLocalizations? localization,
+    SavedPlacesLocalizations localization,
   ) {
     final hasError = !_hasLocation;
 
@@ -419,7 +419,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          localization?.location ?? 'Location',
+          localization.location,
           style: theme.textTheme.titleSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -462,10 +462,8 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                       children: [
                         Text(
                           _hasLocation
-                              ? (localization?.locationSelected ??
-                                    'Location selected')
-                              : (localization?.noLocationSelected ??
-                                    (Localizations.localeOf(context).languageCode == 'es' ? 'Sin ubicación seleccionada' : 'No location selected')),
+                              ? (localization.locationSelected)
+                              : (localization.noLocationSelected),
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: hasError ? theme.colorScheme.error : null,
@@ -475,8 +473,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                         Text(
                           _hasLocation
                               ? '${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}'
-                              : (localization?.tapToSelectLocation ??
-                                    'Tap to select on map'),
+                              : (localization.tapToSelectLocation),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -500,7 +497,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Text(
-              localization?.locationRequired ?? 'Please select a location',
+              localization.locationRequired,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.error,
               ),
@@ -513,13 +510,13 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
   Widget _buildIconSelection(
     ThemeData theme,
-    SavedPlacesLocalizations? localization,
+    SavedPlacesLocalizations localization,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          localization?.selectIcon ?? 'Icon',
+          localization.selectIcon,
           style: theme.textTheme.titleSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -574,7 +571,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
   Widget _buildSaveButton(
     ThemeData theme,
-    SavedPlacesLocalizations? localization,
+    SavedPlacesLocalizations localization,
   ) {
     return SizedBox(
       width: double.infinity,
@@ -583,7 +580,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
         onPressed: _save,
         icon: const Icon(Icons.check),
         label: Text(
-          localization?.save ?? (Localizations.localeOf(context).languageCode == 'es' ? 'Guardar lugar' : 'Save Place'),
+          localization.save,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         style: FilledButton.styleFrom(

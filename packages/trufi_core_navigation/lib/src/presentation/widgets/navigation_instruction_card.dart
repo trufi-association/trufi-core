@@ -89,10 +89,15 @@ class NavigationInstructionCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      if (instruction.secondaryText != null) ...[
+                      if (instruction.resolvedSecondaryText(
+                            NavigationLocalizations.of(context),
+                          ) !=
+                          null) ...[
                         const SizedBox(height: 4),
                         Text(
-                          instruction.secondaryText!,
+                          instruction.resolvedSecondaryText(
+                            NavigationLocalizations.of(context),
+                          )!,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),

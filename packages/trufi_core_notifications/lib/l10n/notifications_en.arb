@@ -1,0 +1,83 @@
+{
+  "@@locale": "en",
+  "notificationsTitle": "Notifications",
+  "@notificationsTitle": {
+    "description": "Screen title"
+  },
+  "markAllAsRead": "Mark all as read",
+  "@markAllAsRead": {
+    "description": "Menu action"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Menu action"
+  },
+  "notificationsDisabled": "Notifications disabled",
+  "@notificationsDisabled": {
+    "description": "Permission banner title"
+  },
+  "enableInSystemSettings": "Enable notifications in system settings",
+  "@enableInSystemSettings": {
+    "description": "Banner body when permission is permanently denied"
+  },
+  "allowNotifications": "Allow notifications to stay updated",
+  "@allowNotifications": {
+    "description": "Banner body when permission can be requested"
+  },
+  "openSettings": "Settings",
+  "@openSettings": {
+    "description": "Banner button opening system settings"
+  },
+  "enable": "Enable",
+  "@enable": {
+    "description": "Banner button requesting permission"
+  },
+  "noNotifications": "No notifications",
+  "@noNotifications": {
+    "description": "Empty state title"
+  },
+  "allCaughtUp": "You're all caught up!",
+  "@allCaughtUp": {
+    "description": "Empty state subtitle"
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Relative time under a minute"
+  },
+  "minutesAgo": "{minutes}m ago",
+  "@minutesAgo": {
+    "description": "Relative time in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{hours}h ago",
+  "@hoursAgo": {
+    "description": "Relative time in hours",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{days}d ago",
+  "@daysAgo": {
+    "description": "Relative time in days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "unreadCount": "{count, plural, =1{1 unread} other{{count} unread}}",
+  "@unreadCount": {
+    "description": "How many notifications are unread",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

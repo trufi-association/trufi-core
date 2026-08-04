@@ -50,5 +50,15 @@
   "retry": "Erneut versuchen",
   "qrShareSubtitle": "Scannen, um die Linien dieses Betreibers zu öffnen",
   "copyQrImage": "QR kopieren",
-  "copyQrImageFailed": "QR konnte nicht kopiert werden"
+  "copyQrImageFailed": "QR konnte nicht kopiert werden",
+  "modeTram": "Straßenbahn",
+  "modeSubway": "U-Bahn",
+  "modeRail": "Bahn",
+  "modeBus": "Bus",
+  "modeFerry": "Fähre",
+  "modeCableTram": "Kabelstraßenbahn",
+  "modeAerialLift": "Seilbahn",
+  "modeFunicular": "Standseilbahn",
+  "modeTrolleybus": "Oberleitungsbus",
+  "modeMonorail": "Einschienenbahn"
 }

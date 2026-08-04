@@ -78,7 +78,7 @@ class _ServiceHoursIndicatorState extends State<ServiceHoursIndicator> {
   ({String label, bool active}) _status(
     DateTime now,
     RoutingLocalizations l10n,
-    String locale,
+    String? locale,
   ) {
     final sh = widget.serviceHours;
     final mins = now.hour * 60 + now.minute;
@@ -121,7 +121,9 @@ class _ServiceHoursIndicatorState extends State<ServiceHoursIndicator> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = RoutingLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
+    final locale = _dateFormatLocaleOrNull(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
     final status = _status(DateTime.now(), l10n, locale);
     final dotColor = status.active ? Colors.green : Colors.red;
 
@@ -191,7 +193,9 @@ class _ScheduleList extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = RoutingLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
+    final locale = _dateFormatLocaleOrNull(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
     final today = DateTime.now().weekday;
     final hours =
         '${_ServiceHoursIndicatorState._fmt(serviceHours.startTime)} — '
@@ -200,9 +204,9 @@ class _ScheduleList extends StatelessWidget {
     // in Spanish ("lunes") but the schedule reads better with title
     // case ("Lunes"), matching common UI conventions.
     String dayLong(int isoWeekday) {
-      final raw = DateFormat.EEEE(locale).format(
-        _ServiceHoursIndicatorState._sampleDateForWeekday(isoWeekday),
-      );
+      final raw = DateFormat.EEEE(
+        locale,
+      ).format(_ServiceHoursIndicatorState._sampleDateForWeekday(isoWeekday));
       if (raw.isEmpty) return raw;
       return raw[0].toUpperCase() + raw.substring(1);
     }
@@ -248,5 +252,19 @@ class _ScheduleList extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+/// Resolves [locale] to one `DateFormat` has symbols for, falling back to
+/// the default locale. City languages beyond `flutter_localizations`
+/// (Quechua, Aymara, …) have no date symbols loaded, and constructing a
+/// `DateFormat` for them throws — this keeps the schedule rendering with
+/// fallback day names instead of crashing the line detail.
+String? _dateFormatLocaleOrNull(String locale) {
+  try {
+    DateFormat.E(locale);
+    return locale;
+  } on ArgumentError {
+    return null;
   }
 }

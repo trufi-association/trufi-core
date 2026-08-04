@@ -1070,9 +1070,10 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                         : Icons.directions_bus_rounded,
                     customIcon: widget.route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
-                    value:
-                        widget.route.modeName ??
-                        TransportListLocalizations.of(context).defaultModeBus,
+                    value: _localizedModeName(
+                      widget.route.modeName,
+                      TransportListLocalizations.of(context),
+                    ),
                     color: _foregroundColor(routeColor),
                   ),
                 ),
@@ -1550,9 +1551,10 @@ class _SidePanelStopsContent extends StatelessWidget {
                         : Icons.directions_bus_rounded,
                     customIcon: route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
-                    value:
-                        route.modeName ??
-                        TransportListLocalizations.of(context).defaultModeBus,
+                    value: _localizedModeName(
+                      route.modeName,
+                      TransportListLocalizations.of(context),
+                    ),
                     color: routeColor,
                   ),
                 ),
@@ -2160,3 +2162,23 @@ class _RouteIdentity extends StatelessWidget {
 // `ServiceHoursIndicator` lives in widgets/service_hours_indicator.dart so
 // both the list tile and this detail screen can render the same
 // dot+label badge without duplicating the status logic.
+
+/// Maps a GTFS mode name (the English constants `GtfsRouteType.displayName`
+/// produces) to its localized label, passing unknown values through so
+/// backend-provided names still show.
+String _localizedModeName(String? modeName, TransportListLocalizations l10n) {
+  return switch (modeName) {
+    null => l10n.defaultModeBus,
+    'Tram' => l10n.modeTram,
+    'Subway' => l10n.modeSubway,
+    'Rail' => l10n.modeRail,
+    'Bus' => l10n.modeBus,
+    'Ferry' => l10n.modeFerry,
+    'Cable Tram' => l10n.modeCableTram,
+    'Aerial Lift' => l10n.modeAerialLift,
+    'Funicular' => l10n.modeFunicular,
+    'Trolleybus' => l10n.modeTrolleybus,
+    'Monorail' => l10n.modeMonorail,
+    _ => modeName,
+  };
+}

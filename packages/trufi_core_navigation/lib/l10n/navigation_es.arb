@@ -27,5 +27,6 @@
   "navOrigin": "Origen",
   "navTransfer": "Transbordo",
   "navDestination": "Destino",
-  "navRoute": "Ruta"
+  "navRoute": "Ruta",
+  "navStopsRemaining": "{count, plural, =1{Queda 1 parada} other{Quedan {count} paradas}}"
 }

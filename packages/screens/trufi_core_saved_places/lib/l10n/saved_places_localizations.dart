@@ -306,6 +306,12 @@ abstract class SavedPlacesLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// Label for saved places coming from search history
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
 }
 
 class _SavedPlacesLocalizationsDelegate

@@ -103,6 +103,10 @@ enum GtfsRouteType {
   }
 
   /// Human-readable name for this route type.
+  ///
+  /// English constants — this layer has no BuildContext. UI code must map
+  /// them to localized labels (see `_localizedModeName` in
+  /// trufi_core_transport_list) instead of rendering them directly.
   String get displayName {
     switch (this) {
       case GtfsRouteType.tram:

@@ -111,4 +111,7 @@ class SavedPlacesLocalizationsEn extends SavedPlacesLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get history => 'History';
 }

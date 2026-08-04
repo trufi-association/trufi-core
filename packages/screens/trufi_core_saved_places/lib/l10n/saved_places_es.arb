@@ -33,5 +33,6 @@
   "tapToSelectLocation": "Toca para seleccionar en el mapa",
   "change": "Cambiar",
   "errorLoadingPlaces": "Error al cargar lugares",
-  "retry": "Reintentar"
+  "retry": "Reintentar",
+  "history": "Historial"
 }

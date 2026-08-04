@@ -71,7 +71,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_osm_liberty',
       displayName: 'Offline Liberty',
-      displayDescription: 'Mapa offline estándar',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleStandardDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/osm-liberty/style.json',
@@ -97,7 +98,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_osm_bright',
       displayName: 'Offline Bright',
-      displayDescription: 'Mapa offline claro',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleLightDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/osm-bright/style.json',
@@ -123,7 +125,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_dark_matter',
       displayName: 'Offline Dark Matter',
-      displayDescription: 'Mapa offline oscuro',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleDarkDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/dark-matter/style.json',
@@ -152,7 +155,8 @@ final List<ITrufiMapEngine> _mapEngines = [
     OfflineMapLibreEngine(
       engineId: 'offline_fiord_color',
       displayName: 'Offline Fiord Color',
-      displayDescription: 'Mapa offline colorido',
+      descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleColorfulDescription,
       config: OfflineMapConfig(
         mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
         styleAsset: 'assets/offline/styles/fiord-color/style.json',
@@ -180,29 +184,33 @@ final List<ITrufiMapEngine> _mapEngines = [
     ),
   ],
   // Online maps
-  const MapLibreEngine(
+  MapLibreEngine(
     engineId: 'osm_bright',
     styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
     displayName: 'OSM Bright',
-    displayDescription: 'Mapa claro',
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleLightDescription,
   ),
-  const MapLibreEngine(
+  MapLibreEngine(
     engineId: 'osm_liberty',
     styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
     displayName: 'OSM Liberty',
-    displayDescription: 'Mapa estándar',
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleStandardDescription,
   ),
-  const MapLibreEngine(
+  MapLibreEngine(
     engineId: 'dark_matter',
     styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
     displayName: 'Dark Matter',
-    displayDescription: 'Mapa oscuro',
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleDarkDescription,
   ),
-  const MapLibreEngine(
+  MapLibreEngine(
     engineId: 'fiord_color',
     styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
     displayName: 'Fiord Color',
-    displayDescription: 'Mapa colorido',
+    descriptionBuilder: (context) =>
+          MapsLocalizations.of(context).mapStyleColorfulDescription,
   ),
 ];
 // ========================================
@@ -213,6 +221,15 @@ void main() {
       appName: _appName,
       deepLinkScheme: _deepLinkScheme,
       defaultLocale: Locale('es'),
+      localeConfig: const TrufiLocaleConfig(
+        supportedLocales: [
+          Locale('es'),
+          Locale('en'),
+          Locale('de'),
+          Locale('qu'),
+        ],
+        languageNames: {'qu': 'Runasimi'},
+      ),
       themeConfig: const TrufiThemeConfig(),
       socialMediaLinks: [
         SocialMediaLink(

@@ -59,5 +59,21 @@
   "darkVectorMapDescription": "Dark vector map",
   "@darkVectorMapDescription": {
     "description": "Description for the default dark map style"
+  },
+  "mapStyleStandardDescription": "Standard map",
+  "@mapStyleStandardDescription": {
+    "description": "Description for a map style in the map type selector"
+  },
+  "mapStyleLightDescription": "Light map",
+  "@mapStyleLightDescription": {
+    "description": "Description for a map style in the map type selector"
+  },
+  "mapStyleDarkDescription": "Dark map",
+  "@mapStyleDarkDescription": {
+    "description": "Description for a map style in the map type selector"
+  },
+  "mapStyleColorfulDescription": "Colorful map",
+  "@mapStyleColorfulDescription": {
+    "description": "Description for a map style in the map type selector"
   }
 }

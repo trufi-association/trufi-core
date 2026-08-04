@@ -27,5 +27,6 @@
   "navOrigin": "Startpunkt",
   "navTransfer": "Umstieg",
   "navDestination": "Ziel",
-  "navRoute": "Route"
+  "navRoute": "Route",
+  "navStopsRemaining": "{count, plural, =1{Noch 1 Haltestelle} other{Noch {count} Haltestellen}}"
 }

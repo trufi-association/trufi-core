@@ -14,6 +14,15 @@ class ShareRouteStrings {
   final String Function(String summary) itinerary;
   final String openInApp;
 
+  /// "{minutes} min" — localized short duration.
+  final String Function(int minutes) durationMinutes;
+
+  /// "{hours}h {minutes}min" — localized long duration.
+  final String Function(int hours, int minutes) durationHoursMinutes;
+
+  /// BCP-47 tag used for locale-aware date formatting in the shared text.
+  final String? localeTag;
+
   const ShareRouteStrings({
     required this.title,
     required this.origin,
@@ -23,6 +32,9 @@ class ShareRouteStrings {
     required this.duration,
     required this.itinerary,
     required this.openInApp,
+    required this.durationMinutes,
+    required this.durationHoursMinutes,
+    this.localeTag,
   });
 }
 
@@ -66,7 +78,7 @@ class ShareRouteService {
   }) {
     final buffer = StringBuffer();
     final timeFormat = DateFormat('HH:mm');
-    final dateFormat = DateFormat('dd/MM/yyyy');
+    final dateFormat = _localeDateFormat(strings.localeTag);
 
     // Header
     buffer.writeln('🚌 ${strings.title(appName)}');
@@ -85,7 +97,7 @@ class ShareRouteService {
       '🕐 ${strings.times(timeFormat.format(itinerary.startTime), timeFormat.format(itinerary.endTime))}',
     );
     buffer.writeln(
-      '⏱️ ${strings.duration(_formatDuration(itinerary.duration))}',
+      '⏱️ ${strings.duration(_formatDuration(itinerary.duration, strings))}',
     );
     buffer.writeln();
 
@@ -237,14 +249,25 @@ class ShareRouteService {
     }
   }
 
-  /// Formats duration as human-readable string
-  static String _formatDuration(Duration duration) {
+  /// Formats duration through the app's localized duration strings.
+  static String _formatDuration(Duration duration, ShareRouteStrings strings) {
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
 
     if (hours > 0) {
-      return '${hours}h ${minutes}min';
+      return strings.durationHoursMinutes(hours, minutes);
     }
-    return '$minutes min';
+    return strings.durationMinutes(minutes);
+  }
+
+  /// Locale-aware day/month/year order, tolerating locales intl has no
+  /// symbols for (city languages) by falling back to the default pattern.
+  static DateFormat _localeDateFormat(String? localeTag) {
+    if (localeTag == null) return DateFormat.yMd();
+    try {
+      return DateFormat.yMd(localeTag);
+    } on ArgumentError {
+      return DateFormat.yMd();
+    }
   }
 }

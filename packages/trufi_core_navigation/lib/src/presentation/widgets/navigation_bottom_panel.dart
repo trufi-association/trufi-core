@@ -54,7 +54,9 @@ class NavigationBottomPanel extends StatelessWidget {
                   _showExitConfirmation(context);
                 },
                 icon: const Icon(Icons.close_rounded, size: 18),
-                label: Text(NavigationLocalizations.of(context).navExitNavigation),
+                label: Text(
+                  NavigationLocalizations.of(context).navExitNavigation,
+                ),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: colorScheme.error,
@@ -267,7 +269,9 @@ class NavigationErrorPanel extends StatelessWidget {
                   Expanded(
                     child: FilledButton.tonal(
                       onPressed: onOpenSettings,
-                      child: Text(NavigationLocalizations.of(context).navSettings),
+                      child: Text(
+                        NavigationLocalizations.of(context).navSettings,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),

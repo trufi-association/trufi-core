@@ -53,4 +53,16 @@ class MapsLocalizationsDe extends MapsLocalizations {
 
   @override
   String get darkVectorMapDescription => 'Dunkle Vektorkarte';
+
+  @override
+  String get mapStyleStandardDescription => 'Standardkarte';
+
+  @override
+  String get mapStyleLightDescription => 'Helle Karte';
+
+  @override
+  String get mapStyleDarkDescription => 'Dunkle Karte';
+
+  @override
+  String get mapStyleColorfulDescription => 'Bunte Karte';
 }

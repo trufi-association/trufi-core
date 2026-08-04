@@ -243,7 +243,7 @@ class _LanguageSettingsCard extends StatelessWidget {
             if (i > 0) const SizedBox(height: 8),
             _LanguageOption(
               languageCode: locales[i].languageCode,
-              languageName: LocaleManager.displayNameForCode(locales[i].languageCode),
+              languageName: localeManager.displayName(locales[i].languageCode),
               isSelected: localeManager.currentLocale.languageCode ==
                   locales[i].languageCode,
               onSelect: () {
@@ -443,8 +443,8 @@ class _RoutingSettingsCard extends StatelessWidget {
               bottom: index < routingEngineManager.engines.length - 1 ? 8 : 0,
             ),
             child: _EngineOptionTile(
-              name: engine.name,
-              description: engine.description,
+              name: engine.localizedName(context),
+              description: engine.localizedDescription(context),
               icon: isOffline
                   ? Icons.offline_bolt_rounded
                   : Icons.cloud_rounded,
