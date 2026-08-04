@@ -367,12 +367,16 @@ void main() {
                 icon: Icons.directions_bus_filled,
                 primary: FareCategory(
                   label: 'Regular',
+                  labelBuilder: (context) =>
+                      FaresLocalizations.of(context).fareCategoryRegular,
                   price: '2.50',
                   icon: Icons.person_rounded,
                 ),
                 additional: [
                   FareCategory(
                     label: 'Student',
+                    labelBuilder: (context) =>
+                        FaresLocalizations.of(context).fareCategoryStudent,
                     price: '2.00',
                     icon: Icons.school_rounded,
                   ),
