@@ -220,6 +220,12 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   // Camera
   // ──────────────────────────────────────────────
 
+  /// Camera set before the style finished loading; replayed on style load.
+  /// Without this, a controlled camera that arrives while the style is still
+  /// loading (common with offline styles: local data loads faster than the
+  /// style) only updates [_currentCamera] and the native map never moves.
+  bool _pendingCameraApply = false;
+
   void _moveCameraTo(TrufiCameraPosition position) {
     _currentCamera = position;
     if (_mapReady && _mapCtl != null) {
@@ -227,6 +233,8 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       _mapCtl!.moveCamera(
         CameraUpdate.newCameraPosition(_toCameraPosition(position)),
       );
+    } else {
+      _pendingCameraApply = true;
     }
   }
 
@@ -643,6 +651,13 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       },
       onStyleLoadedCallback: () async {
         _mapReady = true;
+        if (_pendingCameraApply && _mapCtl != null) {
+          _pendingCameraApply = false;
+          _suppressCameraCallback = true;
+          _mapCtl!.moveCamera(
+            CameraUpdate.newCameraPosition(_toCameraPosition(_currentCamera)),
+          );
+        }
         _initializedSources.clear();
         _initializedLayerLevels.clear();
         _imageLoaders.clear();

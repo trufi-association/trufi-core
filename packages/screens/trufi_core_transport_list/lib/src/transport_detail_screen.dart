@@ -1882,6 +1882,11 @@ class _RouteMapViewState extends State<_RouteMapView> {
   }
 
   void _onCameraChanged(TrufiCameraPosition cam) {
+    // Track the user's camera: this widget passes a controlled `camera` down,
+    // and leaving it stale makes every rebuild (e.g. the out-of-focus flip
+    // below) snap the map back to the old fit — pans and double-tap zooms
+    // appear to "not work" because they are instantly undone.
+    _camera = cam;
     final nowOutOfFocus = _fitCamera.isOutOfFocus(cam);
     if (nowOutOfFocus != _outOfFocus) {
       setState(() {
