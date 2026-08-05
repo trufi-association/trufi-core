@@ -86,6 +86,7 @@ class LocaleManager extends ChangeNotifier {
       case 'fr': return 'Français';
       case 'pt': return 'Português';
       case 'it': return 'Italiano';
+      case 'ar': return 'العربية';
       default: return code.toUpperCase();
     }
   }
