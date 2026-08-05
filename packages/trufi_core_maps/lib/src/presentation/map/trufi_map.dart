@@ -651,12 +651,31 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       },
       onStyleLoadedCallback: () async {
         _mapReady = true;
-        if (_pendingCameraApply && _mapCtl != null) {
+        if (_pendingCameraApply) {
+          // Clear unconditionally so a stale camera is never replayed on a
+          // later style load.
           _pendingCameraApply = false;
-          _suppressCameraCallback = true;
-          _mapCtl!.moveCamera(
-            CameraUpdate.newCameraPosition(_toCameraPosition(_currentCamera)),
-          );
+          final ctl = _mapCtl;
+          if (ctl != null) {
+            // Skip the replay (and the callback suppression) when the map is
+            // already at the target — e.g. the user panned to it while the
+            // style was loading. A no-movement moveCamera may emit no
+            // camera-idle on some platforms, which would leave
+            // _suppressCameraCallback armed and swallow the next genuine
+            // gesture's callback.
+            final target = _toCameraPosition(_currentCamera);
+            final native = ctl.cameraPosition;
+            final alreadyThere = native != null &&
+                (native.target.latitude - target.target.latitude).abs() <
+                    1e-9 &&
+                (native.target.longitude - target.target.longitude).abs() <
+                    1e-9 &&
+                (native.zoom - target.zoom).abs() < 1e-9;
+            if (!alreadyThere) {
+              _suppressCameraCallback = true;
+              ctl.moveCamera(CameraUpdate.newCameraPosition(target));
+            }
+          }
         }
         _initializedSources.clear();
         _initializedLayerLevels.clear();
