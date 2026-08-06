@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math' show Point;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart'
+    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:maplibre_gl/maplibre_gl.dart' hide LatLngBounds;
@@ -140,6 +141,14 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   @override
   void initState() {
     super.initState();
+    // Render the native map with hybrid composition. Despite its docs, the
+    // plugin's actual default is Virtual Display, whose resize-after-dispose
+    // race kills the app with an NPE in VirtualDisplayController when map
+    // views are created and destroyed repeatedly — e.g. picking locations
+    // on the map or from search over and over (#948/#949).
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      MapLibreMap.useHybridComposition = true;
+    }
     _currentCamera = widget.camera ?? widget.initialCamera;
     widget.controller?.attach(this);
   }
