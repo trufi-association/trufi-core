@@ -670,7 +670,9 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
                     1e-9 &&
                 (native.target.longitude - target.target.longitude).abs() <
                     1e-9 &&
-                (native.zoom - target.zoom).abs() < 1e-9;
+                (native.zoom - target.zoom).abs() < 1e-9 &&
+                (native.bearing - target.bearing).abs() < 1e-9 &&
+                (native.tilt - target.tilt).abs() < 1e-9;
             if (!alreadyThere) {
               _suppressCameraCallback = true;
               ctl.moveCamera(CameraUpdate.newCameraPosition(target));
