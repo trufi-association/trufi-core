@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/language_endonyms.dart';
+
 /// Manages the current locale for the app with persistence
 class LocaleManager extends ChangeNotifier {
   static const _storageKey = 'trufi_locale';
@@ -79,19 +81,7 @@ class LocaleManager extends ChangeNotifier {
   /// adding their own should pass [languageNames] so the picker shows the
   /// endonym instead of the raw code.
   static String displayNameForCode(String code) =>
-      _endonyms[code] ?? code.toUpperCase();
-
-  /// Endonyms for the language codes shipped by core and current city apps.
-  /// Data, not control flow: extend the map when a city adds a language.
-  static const Map<String, String> _endonyms = {
-    'en': 'English',
-    'es': 'Español',
-    'de': 'Deutsch',
-    'fr': 'Français',
-    'pt': 'Português',
-    'it': 'Italiano',
-    'ar': 'العربية',
-  };
+      languageEndonyms[code] ?? code.toUpperCase();
 
   static LocaleManager read(BuildContext context) =>
       context.read<LocaleManager>();
