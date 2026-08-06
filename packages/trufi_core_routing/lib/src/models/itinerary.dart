@@ -39,7 +39,7 @@ class Itinerary extends Equatable {
   // blue: the first slot lands on the first bus of nearly every itinerary
   // in cities whose GTFS carries no route_color, and a blue line reads
   // exactly like the my-location dot (#930).
-  static const _defaultTransitColors = ['673AB7', 'E91E63', '4CAF50', 'FF9800'];
+  static const _defaultTransitColors = ['7E57C2', 'E91E63', '4CAF50', 'FF9800'];
 
   /// Creates an [Itinerary] from JSON.
   factory Itinerary.fromJson(
@@ -69,8 +69,13 @@ class Itinerary extends Equatable {
   static List<Leg> _assignDefaultColors(List<Leg> legs) {
     int transitIndex = 0;
     return legs.map((leg) {
-      if (leg.transitLeg &&
-          (leg.route?.color == null || leg.route!.color!.isEmpty)) {
+      // GTFS defines FFFFFF as the route_color default, i.e. "no color" —
+      // normalizing it here keeps every screen (map line, itinerary chip,
+      // detail timeline) consistent instead of each one special-casing it.
+      final color = leg.route?.color;
+      final hasColor =
+          color != null && color.isNotEmpty && color.toUpperCase() != 'FFFFFF';
+      if (leg.transitLeg && !hasColor) {
         final defaultColor =
             _defaultTransitColors[transitIndex % _defaultTransitColors.length];
         transitIndex++;

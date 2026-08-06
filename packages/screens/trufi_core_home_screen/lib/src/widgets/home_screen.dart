@@ -2751,12 +2751,9 @@ TrufiLocation _searchLocationToTrufiLocation(SearchLocation location) {
   );
 }
 
-Color _parseColor(String hexColor, {Color fallback = const Color(0xFF1976D2)}) {
+Color _parseColor(String hexColor, {required Color fallback}) {
   try {
     final hex = hexColor.replaceFirst('#', '');
-    // GTFS treats an absent route_color as white (FFFFFF) — that's "no
-    // color", not a paintable line color, so fall back too.
-    if (hex.toUpperCase() == 'FFFFFF') return fallback;
     return Color(int.parse('FF$hex', radix: 16));
   } catch (_) {
     return fallback;
