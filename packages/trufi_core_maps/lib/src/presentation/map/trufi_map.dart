@@ -39,6 +39,28 @@ import '../utils/trufi_camera_fit.dart';
 ///   ],
 /// )
 /// ```
+/// Whether two native camera positions are effectively the same place.
+///
+/// Used to skip no-op camera moves (and, crucially, their callback
+/// suppression: a no-movement `moveCamera` may emit no camera-idle on some
+/// platforms, leaving the suppression armed and swallowing the next genuine
+/// gesture's callback). Bearing compares by minimal angular difference, so
+/// 270° and -90° match — the web renderer reports bearing in (-180, 180]
+/// while native uses [0, 360).
+bool camerasEffectivelyEqual(CameraPosition a, CameraPosition b) {
+  double angularDiff(double x, double y) {
+    final d = (x - y).abs() % 360.0;
+    return d > 180.0 ? 360.0 - d : d;
+  }
+
+  const eps = 1e-9;
+  return (a.target.latitude - b.target.latitude).abs() < eps &&
+      (a.target.longitude - b.target.longitude).abs() < eps &&
+      (a.zoom - b.zoom).abs() < eps &&
+      angularDiff(a.bearing, b.bearing) < eps &&
+      (a.tilt - b.tilt).abs() < eps;
+}
+
 class TrufiMap extends StatefulWidget {
   const TrufiMap({
     super.key,
@@ -229,10 +251,18 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   void _moveCameraTo(TrufiCameraPosition position) {
     _currentCamera = position;
     if (_mapReady && _mapCtl != null) {
+      final target = _toCameraPosition(position);
+      final native = _mapCtl!.cameraPosition;
+      if (native != null && camerasEffectivelyEqual(native, target)) {
+        // Already there: don't arm the callback suppression for a no-op
+        // move — a no-movement moveCamera may emit no camera-idle on some
+        // platforms, which would swallow the next genuine gesture's
+        // callback (e.g. TrufiMapController.moveCamera with the current
+        // position).
+        return;
+      }
       _suppressCameraCallback = true;
-      _mapCtl!.moveCamera(
-        CameraUpdate.newCameraPosition(_toCameraPosition(position)),
-      );
+      _mapCtl!.moveCamera(CameraUpdate.newCameraPosition(target));
     } else {
       _pendingCameraApply = true;
     }
@@ -665,14 +695,8 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
             // gesture's callback.
             final target = _toCameraPosition(_currentCamera);
             final native = ctl.cameraPosition;
-            final alreadyThere = native != null &&
-                (native.target.latitude - target.target.latitude).abs() <
-                    1e-9 &&
-                (native.target.longitude - target.target.longitude).abs() <
-                    1e-9 &&
-                (native.zoom - target.zoom).abs() < 1e-9 &&
-                (native.bearing - target.bearing).abs() < 1e-9 &&
-                (native.tilt - target.tilt).abs() < 1e-9;
+            final alreadyThere =
+                native != null && camerasEffectivelyEqual(native, target);
             if (!alreadyThere) {
               _suppressCameraCallback = true;
               ctl.moveCamera(CameraUpdate.newCameraPosition(target));
