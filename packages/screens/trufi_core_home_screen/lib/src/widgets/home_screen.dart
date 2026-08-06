@@ -826,8 +826,13 @@ class _HomeScreenState extends State<HomeScreen>
       final bool useDots;
 
       if (leg.transitLeg) {
-        // Transit legs use route color
-        color = _parseColor(leg.routeColor);
+        // Transit legs use the GTFS route color; without one, fall back to
+        // the app's brand color instead of a blue that reads exactly like
+        // the my-location dot (#930).
+        color = _parseColor(
+          leg.routeColor,
+          fallback: Theme.of(context).colorScheme.primary,
+        );
         lineWidth = 6;
         useDots = false;
       } else if (leg.transportMode == routing.TransportMode.bicycle) {
@@ -2746,12 +2751,15 @@ TrufiLocation _searchLocationToTrufiLocation(SearchLocation location) {
   );
 }
 
-Color _parseColor(String hexColor) {
+Color _parseColor(String hexColor, {Color fallback = const Color(0xFF1976D2)}) {
   try {
     final hex = hexColor.replaceFirst('#', '');
+    // GTFS treats an absent route_color as white (FFFFFF) — that's "no
+    // color", not a paintable line color, so fall back too.
+    if (hex.toUpperCase() == 'FFFFFF') return fallback;
     return Color(int.parse('FF$hex', radix: 16));
   } catch (_) {
-    return const Color(0xFF1976D2);
+    return fallback;
   }
 }
 
