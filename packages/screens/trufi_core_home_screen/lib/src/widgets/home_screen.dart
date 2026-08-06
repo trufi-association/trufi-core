@@ -1047,12 +1047,22 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  /// Moves the camera and records the destination in [_currentCamera].
+  /// Programmatic moves suppress the map's onCameraChanged callback, so
+  /// without this the recorded viewport goes stale and an engine switch
+  /// right after (e.g. my-location → change map style) snaps back to the
+  /// previous view (#902).
+  void _moveCameraTracked(TrufiCameraPosition position) {
+    _currentCamera = position;
+    _mapController?.moveCamera(position);
+  }
+
   Future<void> _onMyLocationPressed() async {
     // If already tracking, just center the map on current location
     if (_locationService.isTracking) {
       final location = _locationService.currentLocation;
       if (location != null) {
-        _mapController?.moveCamera(
+        _moveCameraTracked(
           TrufiCameraPosition(
             target: LatLng(location.latitude, location.longitude),
             zoom: 16,
@@ -1080,7 +1090,7 @@ class _HomeScreenState extends State<HomeScreen>
         // immediate feedback while the accurate fix is still being acquired.
         final lastKnown = await _locationService.getLastKnownLocation();
         if (lastKnown != null && mounted) {
-          _mapController?.moveCamera(
+          _moveCameraTracked(
             TrufiCameraPosition(
               target: LatLng(lastKnown.latitude, lastKnown.longitude),
               zoom: 16,
@@ -1095,7 +1105,7 @@ class _HomeScreenState extends State<HomeScreen>
         if (started && mounted) {
           final location = _locationService.currentLocation;
           if (location != null) {
-            _mapController?.moveCamera(
+            _moveCameraTracked(
               TrufiCameraPosition(
                 target: LatLng(location.latitude, location.longitude),
                 zoom: 16,
