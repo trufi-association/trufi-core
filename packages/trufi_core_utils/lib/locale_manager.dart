@@ -78,18 +78,20 @@ class LocaleManager extends ChangeNotifier {
   /// Covers the languages trufi-core ships plus a few common ones; apps
   /// adding their own should pass [languageNames] so the picker shows the
   /// endonym instead of the raw code.
-  static String displayNameForCode(String code) {
-    switch (code) {
-      case 'en': return 'English';
-      case 'es': return 'Español';
-      case 'de': return 'Deutsch';
-      case 'fr': return 'Français';
-      case 'pt': return 'Português';
-      case 'it': return 'Italiano';
-      case 'ar': return 'العربية';
-      default: return code.toUpperCase();
-    }
-  }
+  static String displayNameForCode(String code) =>
+      _endonyms[code] ?? code.toUpperCase();
+
+  /// Endonyms for the language codes shipped by core and current city apps.
+  /// Data, not control flow: extend the map when a city adds a language.
+  static const Map<String, String> _endonyms = {
+    'en': 'English',
+    'es': 'Español',
+    'de': 'Deutsch',
+    'fr': 'Français',
+    'pt': 'Português',
+    'it': 'Italiano',
+    'ar': 'العربية',
+  };
 
   static LocaleManager read(BuildContext context) =>
       context.read<LocaleManager>();
