@@ -35,8 +35,11 @@ class Itinerary extends Equatable {
     return legs.fold<int>(0, (sum, leg) => sum + leg.distance.ceil());
   }
 
-  // Default colors for transit legs without route color
-  static const _defaultTransitColors = ['1976D2', 'E91E63', '4CAF50', 'FF9800'];
+  // Default colors for transit legs without route color. Deliberately no
+  // blue: the first slot lands on the first bus of nearly every itinerary
+  // in cities whose GTFS carries no route_color, and a blue line reads
+  // exactly like the my-location dot (#930).
+  static const _defaultTransitColors = ['673AB7', 'E91E63', '4CAF50', 'FF9800'];
 
   /// Creates an [Itinerary] from JSON.
   factory Itinerary.fromJson(
