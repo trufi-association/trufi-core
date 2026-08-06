@@ -1488,7 +1488,10 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
       controller: _mapController,
-      initialCamera: _initialCamera!,
+      // A new engine builds a fresh map widget, so start it at the last
+      // reported viewport — otherwise switching map style resets the
+      // camera to the default city view (#902).
+      initialCamera: _currentCamera ?? _initialCamera!,
       camera: _cameraTarget,
       onCameraChanged: _onCameraChanged,
       onMapClick: _onMapClick,
