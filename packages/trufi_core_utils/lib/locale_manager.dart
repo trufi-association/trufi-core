@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/language_endonyms.dart';
+
 /// Manages the current locale for the app with persistence
 class LocaleManager extends ChangeNotifier {
   static const _storageKey = 'trufi_locale';
@@ -78,17 +80,8 @@ class LocaleManager extends ChangeNotifier {
   /// Covers the languages trufi-core ships plus a few common ones; apps
   /// adding their own should pass [languageNames] so the picker shows the
   /// endonym instead of the raw code.
-  static String displayNameForCode(String code) {
-    switch (code) {
-      case 'en': return 'English';
-      case 'es': return 'Español';
-      case 'de': return 'Deutsch';
-      case 'fr': return 'Français';
-      case 'pt': return 'Português';
-      case 'it': return 'Italiano';
-      default: return code.toUpperCase();
-    }
-  }
+  static String displayNameForCode(String code) =>
+      languageEndonyms[code] ?? code.toUpperCase();
 
   static LocaleManager read(BuildContext context) =>
       context.read<LocaleManager>();
