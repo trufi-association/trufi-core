@@ -233,7 +233,7 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                         // Most likely a host app missing the FileProvider
                         // setup (see package README) — fail visibly, not
                         // with an unhandled PlatformException.
-                        debugPrint('OperatorQrSheet: copy image failed: \$e');
+                        debugPrint('OperatorQrSheet: copy image failed: $e');
                         messenger.showSnackBar(
                           SnackBar(content: Text(l10n.copyQrImageFailed)),
                         );
