@@ -259,12 +259,16 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                   child: FilledButton.icon(
                     onPressed: () {
                       HapticFeedback.mediumImpact();
-                      // Share as a URI so messengers linkify it — sharing
-                      // an http(s) link as plain text leaves the receiver
-                      // with an untappable string (#953).
+                      // What makes the shared link tappable is that it is
+                      // https: messengers linkify web URLs, not custom
+                      // schemes (#953). Passing it as a URI additionally
+                      // lets iOS treat it as a link rather than text;
+                      // on Android both branches build the same intent.
                       final uri = Uri.tryParse(widget.link);
                       SharePlus.instance.share(
-                        uri != null && uri.hasScheme && uri.scheme.startsWith('http')
+                        uri != null &&
+                                uri.hasScheme &&
+                                uri.scheme.startsWith('http')
                             ? ShareParams(uri: uri)
                             : ShareParams(text: widget.link),
                       );

@@ -23,16 +23,43 @@ import 'widgets/operator_qr_dialog.dart';
 /// Routes:
 /// - `/routes` - shows the list of transit routes
 /// - `/routes/:id` - shows route detail for the given pattern ID (path parameter)
+/// Builds the link an operator QR encodes for [agencyName], or null when
+/// [shareBaseUrl] cannot produce a scannable one.
+///
+/// A QR is read by a camera app, which resolves http(s) and nothing else:
+/// a custom scheme like `trufiapp://` (or a base with no scheme at all)
+/// yields a code that opens nothing, which is worse than no code —
+/// operators print these and glue them inside vehicles (#953).
+@visibleForTesting
+String? operatorQrLink(String? shareBaseUrl, String agencyName) {
+  if (shareBaseUrl == null) return null;
+  final base = Uri.tryParse(shareBaseUrl);
+  if (base == null ||
+      (base.scheme != 'http' && base.scheme != 'https') ||
+      base.host.isEmpty) {
+    return null;
+  }
+  return Uri(
+    scheme: base.scheme,
+    host: base.host,
+    port: base.hasPort ? base.port : null,
+    path: '/routes',
+    queryParameters: {'operator': agencyName},
+  ).toString();
+}
+
 class TransportListTrufiScreen extends TrufiScreen {
   final TransportListDataProvider Function(BuildContext context)?
   dataProviderBuilder;
 
   /// Base https URL used to build the shareable/printable operator QR
   /// links (e.g. `https://app.trufi.app` → `https://app.trufi.app/routes?
-  /// operator=X`). Mirrors `HomeScreenConfig.shareBaseUrl`. When null,
-  /// links fall back to the app's `deepLinkScheme`
-  /// (`trufiapp://routes?operator=X`); with neither set, the QR
-  /// affordances are hidden.
+  /// Base https URL the operator QR encodes (`<base>/routes?operator=X`).
+  /// Mirrors `HomeScreenConfig.shareBaseUrl`. A QR is read by a camera,
+  /// which cannot resolve a custom scheme, so this is the only source of
+  /// a scannable link: when it is null (or not http/https) the QR
+  /// affordances are hidden instead of emitting a code that opens
+  /// nothing.
   final String? shareBaseUrl;
 
   TransportListTrufiScreen({this.dataProviderBuilder, this.shareBaseUrl});
@@ -184,29 +211,8 @@ class _TransportListScreenWidgetState
     }
   }
 
-  /// Builds the link a printed QR encodes for [agencyName].
-  ///
-  /// Only the https share URL qualifies: a QR is scanned by a camera app,
-  /// which cannot resolve a custom scheme like `trufiapp://` — operators
-  /// were printing codes that opened nothing (#953). An https app link
-  /// opens the app when installed and the website otherwise, which is
-  /// what a printed code needs. Without [shareBaseUrl] there is no
-  /// scannable link, so the QR affordances stay hidden.
-  String? _operatorLink(String agencyName) {
-    final base = widget.shareBaseUrl;
-    if (base != null) {
-      final baseUri = Uri.parse(base);
-      return Uri(
-        scheme: baseUri.scheme,
-        host: baseUri.host,
-        port: baseUri.hasPort ? baseUri.port : null,
-        path: '/routes',
-        queryParameters: {'operator': agencyName},
-      ).toString();
-    }
-
-    return null;
-  }
+  String? _operatorLink(String agencyName) =>
+      operatorQrLink(widget.shareBaseUrl, agencyName);
 
   void _showOperatorQr(String agencyName) {
     final link = _operatorLink(agencyName);
@@ -215,7 +221,7 @@ class _TransportListScreenWidgetState
   }
 
   /// Whether scannable QR links can be built at all — gates the buttons.
-  bool get _canShareOperatorQr => widget.shareBaseUrl != null;
+  bool get _canShareOperatorQr => _operatorLink('') != null;
 
   void _initializeDataProvider() {
     if (widget.dataProviderBuilder != null) {
