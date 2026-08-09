@@ -50,7 +50,10 @@ final List<IRoutingProvider> _routingEngines = [
   if (kIsWeb)
     TrufiPlannerProvider(
       config: const TrufiPlannerConfig.remote(
-        serverUrl: 'https://planner.trufi.app',
+        // The planner API lives behind the gateway's /api prefix; without
+        // it every request lands on the web app and comes back as HTML
+        // ("FormatException: Unexpected token '<'").
+        serverUrl: 'https://planner.trufi.app/api',
       ),
     ),
   // Online routing via OTP (dev servers)
