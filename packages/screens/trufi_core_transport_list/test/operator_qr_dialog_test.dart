@@ -21,7 +21,7 @@ void main() {
                   context,
                   operatorName: 'Sindicato Pucara Grande',
                   link:
-                      'trufiapp://routes?operator=Sindicato%20Pucara%20Grande',
+                      'https://planner.trufi.app/routes?operator=Sindicato%20Pucara%20Grande',
                 ),
                 child: const Text('open'),
               ),
@@ -38,7 +38,7 @@ void main() {
     expect(find.text('Sindicato Pucara Grande'), findsOneWidget);
     expect(find.byType(QrImageView), findsOneWidget);
     expect(
-      find.text('trufiapp://routes?operator=Sindicato%20Pucara%20Grande'),
+      find.text('https://planner.trufi.app/routes?operator=Sindicato%20Pucara%20Grande'),
       findsOneWidget,
     );
   });

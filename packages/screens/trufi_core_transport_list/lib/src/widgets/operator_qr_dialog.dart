@@ -233,7 +233,7 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                         // Most likely a host app missing the FileProvider
                         // setup (see package README) — fail visibly, not
                         // with an unhandled PlatformException.
-                        debugPrint('OperatorQrSheet: copy image failed: \$e');
+                        debugPrint('OperatorQrSheet: copy image failed: $e');
                         messenger.showSnackBar(
                           SnackBar(content: Text(l10n.copyQrImageFailed)),
                         );
@@ -259,7 +259,19 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                   child: FilledButton.icon(
                     onPressed: () {
                       HapticFeedback.mediumImpact();
-                      SharePlus.instance.share(ShareParams(text: widget.link));
+                      // What makes the shared link tappable is that it is
+                      // https: messengers linkify web URLs, not custom
+                      // schemes (#953). Passing it as a URI additionally
+                      // lets iOS treat it as a link rather than text;
+                      // on Android both branches build the same intent.
+                      final uri = Uri.tryParse(widget.link);
+                      SharePlus.instance.share(
+                        uri != null &&
+                                uri.hasScheme &&
+                                uri.scheme.startsWith('http')
+                            ? ShareParams(uri: uri)
+                            : ShareParams(text: widget.link),
+                      );
                     },
                     icon: const Icon(Icons.share_rounded),
                     label: Text(materialLocalizations.shareButtonLabel),
