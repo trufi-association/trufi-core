@@ -233,7 +233,7 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                         // Most likely a host app missing the FileProvider
                         // setup (see package README) — fail visibly, not
                         // with an unhandled PlatformException.
-                        debugPrint('OperatorQrSheet: copy image failed: \$e');
+                        debugPrint('OperatorQrSheet: copy image failed: $e');
                         messenger.showSnackBar(
                           SnackBar(content: Text(l10n.copyQrImageFailed)),
                         );
@@ -259,7 +259,15 @@ class _OperatorQrSheetState extends State<_OperatorQrSheet> {
                   child: FilledButton.icon(
                     onPressed: () {
                       HapticFeedback.mediumImpact();
-                      SharePlus.instance.share(ShareParams(text: widget.link));
+                      // Share as a URI so messengers linkify it — sharing
+                      // an http(s) link as plain text leaves the receiver
+                      // with an untappable string (#953).
+                      final uri = Uri.tryParse(widget.link);
+                      SharePlus.instance.share(
+                        uri != null && uri.hasScheme && uri.scheme.startsWith('http')
+                            ? ShareParams(uri: uri)
+                            : ShareParams(text: widget.link),
+                      );
                     },
                     icon: const Icon(Icons.share_rounded),
                     label: Text(materialLocalizations.shareButtonLabel),

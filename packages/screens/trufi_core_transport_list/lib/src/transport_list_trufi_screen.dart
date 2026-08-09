@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart' show MapsLocalizations;
@@ -185,9 +184,14 @@ class _TransportListScreenWidgetState
     }
   }
 
-  /// Builds the link a printed QR encodes for [agencyName]: the https
-  /// share URL when configured, else the app's custom scheme. Null when
-  /// the app has neither (QR affordances hidden).
+  /// Builds the link a printed QR encodes for [agencyName].
+  ///
+  /// Only the https share URL qualifies: a QR is scanned by a camera app,
+  /// which cannot resolve a custom scheme like `trufiapp://` — operators
+  /// were printing codes that opened nothing (#953). An https app link
+  /// opens the app when installed and the website otherwise, which is
+  /// what a printed code needs. Without [shareBaseUrl] there is no
+  /// scannable link, so the QR affordances stay hidden.
   String? _operatorLink(String agencyName) {
     final base = widget.shareBaseUrl;
     if (base != null) {
@@ -201,21 +205,7 @@ class _TransportListScreenWidgetState
       ).toString();
     }
 
-    String? scheme;
-    try {
-      scheme = Provider.of<AppConfiguration>(
-        context,
-        listen: false,
-      ).deepLinkScheme;
-    } catch (_) {
-      // Not hosted under TrufiApp (e.g. embedded usage).
-    }
-    if (scheme == null) return null;
-    return Uri(
-      scheme: scheme,
-      host: 'routes',
-      queryParameters: {'operator': agencyName},
-    ).toString();
+    return null;
   }
 
   void _showOperatorQr(String agencyName) {
@@ -224,9 +214,8 @@ class _TransportListScreenWidgetState
     showOperatorQrDialog(context, operatorName: agencyName, link: link);
   }
 
-  /// Whether QR links can be built at all — gates the QR buttons.
-  bool get _canShareOperatorQr =>
-      widget.shareBaseUrl != null || _operatorLink('') != null;
+  /// Whether scannable QR links can be built at all — gates the buttons.
+  bool get _canShareOperatorQr => widget.shareBaseUrl != null;
 
   void _initializeDataProvider() {
     if (widget.dataProviderBuilder != null) {
