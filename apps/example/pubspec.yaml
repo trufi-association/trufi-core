@@ -45,6 +45,10 @@ flutter:
   # POI Layers assets
   assets:
     - assets/pois/
+    # Offline street/junction search data (regenerate with
+    # tools/search-bolivia-cochabamba; a central-Cochabamba sample is
+    # committed so the demo works out of the box).
+    - assets/search/
     # Offline maps assets
     - assets/offline/
     - assets/offline/styles/osm-bright/

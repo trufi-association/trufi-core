@@ -49,6 +49,8 @@ export 'src/widgets/location_search_screen.dart';
 // Services
 export 'src/services/search_location_service.dart';
 export 'src/services/photon_search_service.dart';
+export 'src/services/offline_search_data_service.dart';
+export 'src/services/composite_search_location_service.dart';
 export 'src/services/nominatim_search_service.dart';
 
 // Saved Places - Repository

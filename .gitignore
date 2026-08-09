@@ -36,3 +36,10 @@ build/
 **/ios/Flutter/flutter_export_environment.plist
 **/ios/Flutter/ephemeral/
 **/macos/Flutter/ephemeral/
+
+# Node tooling under apps/*/tools (deps and generated data are not committed)
+apps/*/tools/*/node_modules/
+apps/*/tools/*/out/*.json
+# but the small committed sample the example ships is not generated data
+!apps/example/assets/search/search.json
+apps/*/tools/*/package-lock.json
