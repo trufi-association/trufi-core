@@ -46,5 +46,14 @@
   "history": "History",
   "@history": {
     "description": "Label for saved places coming from search history"
+  },
+  "placeAlreadySaved": "\"{placeName}\" is already saved at that location",
+  "@placeAlreadySaved": {
+    "description": "Shown when saving a place that duplicates an existing one (same name and location).",
+    "placeholders": {
+      "placeName": {
+        "type": "String"
+      }
+    }
   }
 }

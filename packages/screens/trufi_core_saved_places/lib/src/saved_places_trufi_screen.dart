@@ -137,9 +137,20 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       defaultLongitude: defaultCenter.longitude,
     );
 
-    if (place != null) {
+    if (place != null && context.mounted) {
+      if (cubit.isDuplicatePlace(place)) {
+        _showDuplicateWarning(context, place);
+        return;
+      }
       cubit.savePlace(place);
     }
+  }
+
+  void _showDuplicateWarning(BuildContext context, SavedPlace place) {
+    final localization = SavedPlacesLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(localization.placeAlreadySaved(place.name))),
+    );
   }
 
   void _showEditPlaceDialog(BuildContext context, SavedPlace place) async {
@@ -159,7 +170,11 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       defaultLongitude: defaultCenter.longitude,
     );
 
-    if (updatedPlace != null) {
+    if (updatedPlace != null && context.mounted) {
+      if (cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
+        _showDuplicateWarning(context, updatedPlace);
+        return;
+      }
       cubit.updatePlace(updatedPlace);
     }
   }

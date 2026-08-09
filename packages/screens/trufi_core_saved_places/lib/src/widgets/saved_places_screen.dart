@@ -133,7 +133,11 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       defaultLongitude: defaultLongitude,
     );
 
-    if (place != null) {
+    if (place != null && context.mounted) {
+      if (cubit.isDuplicatePlace(place)) {
+        _showDuplicateWarning(context, place);
+        return;
+      }
       cubit.savePlace(place);
     }
   }
@@ -149,9 +153,20 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       defaultLongitude: defaultLongitude,
     );
 
-    if (updatedPlace != null) {
+    if (updatedPlace != null && context.mounted) {
+      if (cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
+        _showDuplicateWarning(context, updatedPlace);
+        return;
+      }
       cubit.updatePlace(updatedPlace);
     }
+  }
+
+  void _showDuplicateWarning(BuildContext context, SavedPlace place) {
+    final localization = SavedPlacesLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(localization.placeAlreadySaved(place.name))),
+    );
   }
 
   void _showDeleteConfirmation(BuildContext context, SavedPlace place) {
