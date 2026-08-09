@@ -274,13 +274,13 @@ abstract class SettingsLocalizations {
   /// Routing settings section
   ///
   /// In en, this message translates to:
-  /// **'Routing'**
+  /// **'Route search'**
   String get settingsRouting;
 
   /// Routing engine selection instruction
   ///
   /// In en, this message translates to:
-  /// **'Select your preferred routing engine:'**
+  /// **'Choose the service used to calculate your routes.'**
   String get settingsSelectRoutingEngine;
 
   /// Privacy settings section
@@ -348,6 +348,18 @@ abstract class SettingsLocalizations {
   /// In en, this message translates to:
   /// **'No walking route on map'**
   String get limitationNoWalkingRoute;
+
+  /// Badge on a routing option that works offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Works without a connection'**
+  String get settingsWorksOffline;
+
+  /// Badge on a routing option that requires internet.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs an internet connection'**
+  String get settingsNeedsInternet;
 }
 
 class _SettingsLocalizationsDelegate

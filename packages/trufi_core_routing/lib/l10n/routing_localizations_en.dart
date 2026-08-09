@@ -70,11 +70,11 @@ class RoutingLocalizationsEn extends RoutingLocalizations {
 
   @override
   String get trufiPlannerLocalDescription =>
-      'Runs offline with the GTFS data bundled in the app';
+      'Finds routes using the data saved on your device.';
 
   @override
   String get trufiPlannerRemoteDescription =>
-      'Our own routing engine served from our backend';
+      'Finds routes through our own service. Needs a connection.';
 
   @override
   String get trufiPlannerInfoTitle => 'About Trufi Planner';
@@ -92,7 +92,6 @@ class RoutingLocalizationsEn extends RoutingLocalizations {
       'This web version queries our server; results may differ from OTP because it uses a different algorithm and data.';
 
   @override
-  String otpOnlineDescription(String version) {
-    return 'OpenTripPlanner $version (Online)';
-  }
+  String get otpOnlineDescription =>
+      'Finds routes through an online service. May have more up-to-date information.';
 }

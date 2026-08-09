@@ -1,176 +1,141 @@
 {
   "@@locale": "en",
-
   "onboardingTitle": "Welcome!",
   "@onboardingTitle": {
     "description": "Onboarding screen title"
   },
-
   "onboardingSubtitle": "Let's set up your preferences",
   "@onboardingSubtitle": {
     "description": "Onboarding screen subtitle"
   },
-
   "onboardingLanguageTitle": "Choose your language",
   "@onboardingLanguageTitle": {
     "description": "Language selection title in onboarding"
   },
-
   "onboardingThemeTitle": "Choose your theme",
   "@onboardingThemeTitle": {
     "description": "Theme selection title in onboarding"
   },
-
   "onboardingThemeLight": "Light",
   "@onboardingThemeLight": {
     "description": "Light theme option"
   },
-
   "onboardingThemeDark": "Dark",
   "@onboardingThemeDark": {
     "description": "Dark theme option"
   },
-
   "onboardingThemeSystem": "System",
   "@onboardingThemeSystem": {
     "description": "System theme option"
   },
-
   "onboardingMapTitle": "Choose your map style",
   "@onboardingMapTitle": {
     "description": "Map selection title in onboarding"
   },
-
   "onboardingRoutingTitle": "Choose your routing engine",
   "@onboardingRoutingTitle": {
     "description": "Routing engine selection title in onboarding"
   },
-
   "onboardingComplete": "Get Started",
   "@onboardingComplete": {
     "description": "Button to complete onboarding"
   },
-
   "privacyConsentTitle": "Help Improve the App",
   "@privacyConsentTitle": {
     "description": "Privacy consent dialog title"
   },
-
   "privacyConsentSubtitle": "Help us improve the app by sharing anonymous usage data",
   "@privacyConsentSubtitle": {
     "description": "Privacy consent dialog subtitle"
   },
-
   "privacyConsentInfoTitle": "What we collect",
   "@privacyConsentInfoTitle": {
     "description": "Title for the information section"
   },
-
   "privacyConsentInfoLogs": "Error logs to help us fix bugs and crashes",
   "@privacyConsentInfoLogs": {
     "description": "Description of log collection"
   },
-
   "privacyConsentInfoRoutes": "Route searches to improve transit data quality",
   "@privacyConsentInfoRoutes": {
     "description": "Description of route data collection"
   },
-
   "privacyConsentInfoAnonymous": "All data is completely anonymous",
   "@privacyConsentInfoAnonymous": {
     "description": "Privacy assurance message"
   },
-
   "privacyConsentAccept": "Accept & Continue",
   "@privacyConsentAccept": {
     "description": "Button to accept privacy consent"
   },
-
   "privacyConsentDecline": "No Thanks",
   "@privacyConsentDecline": {
     "description": "Button to decline privacy consent"
   },
-
   "settingsTitle": "Settings",
   "@settingsTitle": {
     "description": "Settings screen title"
   },
-
   "settingsLanguage": "Language",
   "@settingsLanguage": {
     "description": "Language setting"
   },
-
   "settingsSelectLanguage": "Select your preferred language:",
   "@settingsSelectLanguage": {
     "description": "Language selection instruction"
   },
-
   "settingsTheme": "Theme",
   "@settingsTheme": {
     "description": "Theme setting"
   },
-
   "settingsSelectTheme": "Select your preferred theme:",
   "@settingsSelectTheme": {
     "description": "Theme selection instruction"
   },
-
   "settingsThemeLight": "Light Mode",
   "@settingsThemeLight": {
     "description": "Light theme option"
   },
-
   "settingsThemeDark": "Dark Mode",
   "@settingsThemeDark": {
     "description": "Dark theme option"
   },
-
   "settingsThemeSystem": "System Default",
   "@settingsThemeSystem": {
     "description": "System theme option"
   },
-
   "settingsMap": "Map",
   "@settingsMap": {
     "description": "Map settings section"
   },
-
   "settingsSelectMapType": "Select your preferred map type:",
   "@settingsSelectMapType": {
     "description": "Map type selection instruction"
   },
-
-  "settingsRouting": "Routing",
+  "settingsRouting": "Route search",
   "@settingsRouting": {
     "description": "Routing settings section"
   },
-
-  "settingsSelectRoutingEngine": "Select your preferred routing engine:",
+  "settingsSelectRoutingEngine": "Choose the service used to calculate your routes.",
   "@settingsSelectRoutingEngine": {
     "description": "Routing engine selection instruction"
   },
-
   "settingsPrivacy": "Privacy",
   "@settingsPrivacy": {
     "description": "Privacy settings section"
   },
-
   "settingsPrivacySubtitle": "Help improve the app",
   "@settingsPrivacySubtitle": {
     "description": "Privacy settings subtitle"
   },
-
   "settingsPrivacyShareData": "Share anonymous usage data",
   "@settingsPrivacyShareData": {
     "description": "Toggle label for sharing anonymous data"
   },
-
   "settingsPrivacyShareDataDescription": "Help us fix bugs and improve transit data",
   "@settingsPrivacyShareDataDescription": {
     "description": "Description of what data sharing does"
   },
-
   "engineOnlineName": "Online",
   "@engineOnlineName": {
     "description": "Name for online routing engine"
@@ -198,5 +163,13 @@
   "limitationNoWalkingRoute": "No walking route on map",
   "@limitationNoWalkingRoute": {
     "description": "Limitation tag for engines that don't show walking routes on map"
+  },
+  "settingsWorksOffline": "Works without a connection",
+  "settingsNeedsInternet": "Needs an internet connection",
+  "@settingsWorksOffline": {
+    "description": "Badge on a routing option that works offline."
+  },
+  "@settingsNeedsInternet": {
+    "description": "Badge on a routing option that requires internet."
   }
 }

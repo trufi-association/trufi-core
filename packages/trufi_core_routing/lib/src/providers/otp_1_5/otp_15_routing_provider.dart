@@ -76,7 +76,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
   String get id => 'otp_1_5';
 
   @override
-  String get name => displayName ?? 'OTP 1.5';
+  String get name => displayName ?? 'OpenTripPlanner (OTP)';
 
   @override
   String get description =>
@@ -85,7 +85,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
   @override
   String localizedDescription(BuildContext context) =>
       displayDescription ??
-      RoutingLocalizations.of(context).otpOnlineDescription('1.5');
+      RoutingLocalizations.of(context).otpOnlineDescription;
 
   @override
   bool get supportsTransitRoutes => true;

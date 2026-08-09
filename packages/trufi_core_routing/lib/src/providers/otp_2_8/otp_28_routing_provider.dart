@@ -99,7 +99,9 @@ class Otp28RoutingProvider extends IRoutingProvider {
   String get id => 'otp_2_8';
 
   @override
-  String get name => displayName ?? 'OTP 2.8';
+  // Users pick a service, not a version: the engine version is an
+  // implementation detail that meant nothing to them (#921).
+  String get name => displayName ?? 'OpenTripPlanner (OTP)';
 
   @override
   String get description =>
@@ -108,7 +110,7 @@ class Otp28RoutingProvider extends IRoutingProvider {
   @override
   String localizedDescription(BuildContext context) =>
       displayDescription ??
-      RoutingLocalizations.of(context).otpOnlineDescription('2.8');
+      RoutingLocalizations.of(context).otpOnlineDescription;
 
   @override
   bool get supportsTransitRoutes => true;

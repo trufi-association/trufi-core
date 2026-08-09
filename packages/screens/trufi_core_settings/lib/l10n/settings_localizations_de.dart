@@ -97,11 +97,11 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get settingsSelectMapType => 'Wählen Sie Ihren bevorzugten Kartentyp:';
 
   @override
-  String get settingsRouting => 'Routenplanung';
+  String get settingsRouting => 'Routensuche';
 
   @override
   String get settingsSelectRoutingEngine =>
-      'Wählen Sie Ihre bevorzugte Routenplanung:';
+      'Wähle den Dienst, mit dem deine Routen berechnet werden.';
 
   @override
   String get settingsPrivacy => 'Datenschutz';
@@ -138,4 +138,10 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
 
   @override
   String get limitationNoWalkingRoute => 'Keine Fußweg-Route auf Karte';
+
+  @override
+  String get settingsWorksOffline => 'Funktioniert ohne Verbindung';
+
+  @override
+  String get settingsNeedsInternet => 'Benötigt eine Internetverbindung';
 }

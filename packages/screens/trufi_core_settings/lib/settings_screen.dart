@@ -445,6 +445,15 @@ class _RoutingSettingsCard extends StatelessWidget {
             child: _EngineOptionTile(
               name: engine.localizedName(context),
               description: engine.localizedDescription(context),
+              // The connectivity requirement is what users actually
+              // choose on, so it gets its own line instead of being
+              // buried in the description (#921).
+              badge: isOffline
+                  ? settingsL10n.settingsWorksOffline
+                  : settingsL10n.settingsNeedsInternet,
+              badgeIcon: isOffline
+                  ? Icons.wifi_off_rounded
+                  : Icons.public_rounded,
               icon: isOffline
                   ? Icons.offline_bolt_rounded
                   : Icons.cloud_rounded,
@@ -746,12 +755,19 @@ class _EngineOptionTile extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
+  /// Optional one-line qualifier under the description (e.g. whether the
+  /// option needs a connection). Map engines don't set it.
+  final String? badge;
+  final IconData? badgeIcon;
+
   const _EngineOptionTile({
     required this.name,
     required this.description,
     required this.icon,
     required this.isSelected,
     required this.onTap,
+    this.badge,
+    this.badgeIcon,
   });
 
   @override
@@ -819,6 +835,34 @@ class _EngineOptionTile extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.fade,
                     ),
+                    if (badge != null) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            badgeIcon ?? Icons.info_outline_rounded,
+                            size: 14,
+                            color: isSelected
+                                ? colorScheme.primary
+                                : colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              badge!,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: isSelected
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -56,22 +56,30 @@
   "@serviceActiveClosesAt": {
     "description": "Service-hours indicator label when the route is currently running. {time} is the closing time, e.g. '22:00'.",
     "placeholders": {
-      "time": { "type": "String" }
+      "time": {
+        "type": "String"
+      }
     }
   },
   "serviceClosedOpensAt": "Closed · opens at {time}",
   "@serviceClosedOpensAt": {
     "description": "Service-hours indicator label when the route runs today but the current time is before its start. {time} is the opening time.",
     "placeholders": {
-      "time": { "type": "String" }
+      "time": {
+        "type": "String"
+      }
     }
   },
   "serviceClosedOpensDayAt": "Closed · opens {day} at {time}",
   "@serviceClosedOpensDayAt": {
     "description": "Service-hours indicator label when the next service is on a different weekday. {day} is the localized day name (e.g. 'tomorrow', 'Mon'), {time} is the opening time.",
     "placeholders": {
-      "day": { "type": "String" },
-      "time": { "type": "String" }
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
   "serviceClosed": "Closed",
@@ -82,11 +90,11 @@
   "@serviceTomorrow": {
     "description": "Used inside serviceClosedOpensDayAt when the next service is on the next calendar day."
   },
-  "trufiPlannerLocalDescription": "Runs offline with the GTFS data bundled in the app",
+  "trufiPlannerLocalDescription": "Finds routes using the data saved on your device.",
   "@trufiPlannerLocalDescription": {
     "description": "Description of the offline Trufi Planner engine in selectors"
   },
-  "trufiPlannerRemoteDescription": "Our own routing engine served from our backend",
+  "trufiPlannerRemoteDescription": "Finds routes through our own service. Needs a connection.",
   "@trufiPlannerRemoteDescription": {
     "description": "Description of the server-backed Trufi Planner engine in selectors"
   },
@@ -106,13 +114,8 @@
   "@trufiPlannerInfoRemoteBody": {
     "description": "Info card body for the server-backed variant"
   },
-  "otpOnlineDescription": "OpenTripPlanner {version} (Online)",
+  "otpOnlineDescription": "Finds routes through an online service. May have more up-to-date information.",
   "@otpOnlineDescription": {
-    "description": "Default description for OpenTripPlanner engines; {version} is e.g. 2.8",
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
+    "description": "Description shown for OpenTripPlanner engines in the routing settings."
   }
 }
