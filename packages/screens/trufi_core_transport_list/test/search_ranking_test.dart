@@ -95,5 +95,48 @@ void main() {
       expect(provider.state.filteredRoutes.length, _routes.length);
       expect(provider.state.filteredRoutes.first.shortName, '1');
     });
+
+    test('a route without short name still matches via its other fields', () {
+      final withNullShort = _FakeProvider([
+        ..._routes,
+        const TransportRoute(
+          id: '6',
+          code: 'X',
+          name: 'Sin corto',
+          longName: 'Ruta Recoleta Norte',
+        ),
+      ]);
+      withNullShort.filter('recoleta');
+      final names = withNullShort.state.filteredRoutes
+          .map((r) => r.id)
+          .toList();
+      // Bus "R" (longName Recoleta) and the null-shortName route both
+      // match; both rank 3, original order preserved.
+      expect(names, ['3', '6']);
+    });
+
+    test('a query with an inner space keeps matching like before', () {
+      provider.filter('ruta am');
+      expect(provider.state.filteredRoutes.map((r) => r.id).toList(), ['2']);
+    });
+
+    test('ties keep original order even on large lists (unstable-sort guard)', () {
+      // Dart's List.sort is insertion sort (de-facto stable) below ~32
+      // elements, so only a large fixture can catch the decoration being
+      // removed. All 120 routes match "z" via longName → all rank 3.
+      final large = _FakeProvider([
+        for (var i = 0; i < 120; i++)
+          TransportRoute(
+            id: '$i',
+            code: 'C$i',
+            name: 'Ruta $i',
+            shortName: '$i',
+            longName: 'Zona $i',
+          ),
+      ]);
+      large.filter('z');
+      final ids = large.state.filteredRoutes.map((r) => r.id).toList();
+      expect(ids, [for (var i = 0; i < 120; i++) '$i']);
+    });
   });
 }

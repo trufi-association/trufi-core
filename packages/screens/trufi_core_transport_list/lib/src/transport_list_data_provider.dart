@@ -154,12 +154,14 @@ abstract class TransportListDataProvider extends ChangeNotifier {
         return 3;
       }
 
-      final decorated = matches.asMap().entries.toList()
-        ..sort((a, b) {
-          final byRank = rank(a.value).compareTo(rank(b.value));
-          return byRank != 0 ? byRank : a.key.compareTo(b.key);
+      final decorated = [
+        for (var i = 0; i < matches.length; i++)
+          (rank: rank(matches[i]), index: i, route: matches[i]),
+      ]..sort((a, b) {
+          final byRank = a.rank.compareTo(b.rank);
+          return byRank != 0 ? byRank : a.index.compareTo(b.index);
         });
-      result = decorated.map((e) => e.value);
+      result = decorated.map((e) => e.route);
     }
 
     _state = _state.copyWith(filteredRoutes: result.toList());
