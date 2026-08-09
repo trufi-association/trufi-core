@@ -154,7 +154,13 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     );
 
     if (updatedPlace != null && context.mounted) {
-      if (cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
+      // An edit that keeps the same name and coordinates can't create a
+      // new duplicate — skip the check so places that were duplicated
+      // before this guard existed stay editable (icon, type, ...).
+      final identityChanged =
+          !SavedPlacesCubit.hasSameIdentity(updatedPlace, place);
+      if (identityChanged &&
+          cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
         _showDuplicateWarning(context, updatedPlace);
         return;
       }

@@ -35,5 +35,5 @@
   "errorLoadingPlaces": "Fehler beim Laden der Orte",
   "retry": "Erneut versuchen",
   "history": "Verlauf",
-  "placeAlreadySaved": "„{placeName}\" ist an diesem Ort bereits gespeichert"
+  "placeAlreadySaved": "„{placeName}“ ist an diesem Ort bereits gespeichert"
 }

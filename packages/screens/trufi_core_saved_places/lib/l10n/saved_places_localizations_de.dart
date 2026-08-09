@@ -117,6 +117,6 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
 
   @override
   String placeAlreadySaved(String placeName) {
-    return '„$placeName\" ist an diesem Ort bereits gespeichert';
+    return '„$placeName“ ist an diesem Ort bereits gespeichert';
   }
 }

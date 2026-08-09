@@ -110,5 +110,27 @@ void main() {
         isTrue,
       );
     });
+
+    test('epsilon: 1e-7 apart is still a duplicate, 1e-5 is not', () {
+      expect(
+        cubit.isDuplicatePlace(_place(id: '2', lat: -17.39884 + 1e-7)),
+        isTrue,
+      );
+      expect(
+        cubit.isDuplicatePlace(_place(id: '2', lat: -17.39884 + 1e-5)),
+        isFalse,
+      );
+    });
+
+    test('hasSameIdentity: unchanged edit keeps identity (pre-fix dupes stay editable)', () {
+      final original = _place(id: '1');
+      final editedIconOnly = original.copyWith(iconName: 'star');
+      expect(
+        SavedPlacesCubit.hasSameIdentity(editedIconOnly, original),
+        isTrue,
+      );
+      final renamed = original.copyWith(name: 'Otro nombre');
+      expect(SavedPlacesCubit.hasSameIdentity(renamed, original), isFalse);
+    });
   });
 }
