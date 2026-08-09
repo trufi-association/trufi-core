@@ -101,6 +101,26 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
     }
   }
 
+  /// Whether two places share the same identity: same name (trimmed,
+  /// case-insensitive) at the same coordinates (sub-meter epsilon).
+  static bool hasSameIdentity(SavedPlace a, SavedPlace b) =>
+      a.name.trim().toLowerCase() == b.name.trim().toLowerCase() &&
+      (a.latitude - b.latitude).abs() < 1e-6 &&
+      (a.longitude - b.longitude).abs() < 1e-6;
+
+  /// Whether an equivalent place is already saved — see [hasSameIdentity].
+  /// Pass [excludeId] when editing so a place doesn't collide with
+  /// itself (#898).
+  bool isDuplicatePlace(SavedPlace place, {String? excludeId}) {
+    bool same(SavedPlace other) =>
+        other.id != excludeId && hasSameIdentity(other, place);
+    return [
+      if (state.home != null) state.home!,
+      if (state.work != null) state.work!,
+      ...state.otherPlaces,
+    ].any(same);
+  }
+
   /// Adds a place to other places.
   Future<void> addOtherPlace(SavedPlace place) async {
     final otherPlace = place.copyWith(type: SavedPlaceType.other);

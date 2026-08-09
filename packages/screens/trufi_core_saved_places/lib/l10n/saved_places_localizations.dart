@@ -312,6 +312,12 @@ abstract class SavedPlacesLocalizations {
   /// In en, this message translates to:
   /// **'History'**
   String get history;
+
+  /// Shown when saving a place that duplicates an existing one (same name and location).
+  ///
+  /// In en, this message translates to:
+  /// **'\"{placeName}\" is already saved at that location'**
+  String placeAlreadySaved(String placeName);
 }
 
 class _SavedPlacesLocalizationsDelegate

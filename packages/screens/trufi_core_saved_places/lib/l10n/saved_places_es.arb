@@ -34,5 +34,6 @@
   "change": "Cambiar",
   "errorLoadingPlaces": "Error al cargar lugares",
   "retry": "Reintentar",
-  "history": "Historial"
+  "history": "Historial",
+  "placeAlreadySaved": "\"{placeName}\" ya está guardado en esa ubicación"
 }
