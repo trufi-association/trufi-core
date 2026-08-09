@@ -32,7 +32,17 @@ class TrufiMapController {
   void attach(TrufiMapDelegate delegate) => _delegate = delegate;
 
   /// Called by [TrufiMap] to unbind its state. Do not call directly.
-  void detach() => _delegate = null;
+  ///
+  /// Guarded on purpose: when the map engine changes, Flutter builds the
+  /// new map (which attaches) *before* disposing the old one (which
+  /// detaches). An unconditional detach therefore left the controller
+  /// bound to nothing for the rest of the screen's life — silently
+  /// killing every controller-driven action after a style switch
+  /// (camera moves, marker picking). Only the delegate currently bound
+  /// may unbind itself.
+  void detach(TrufiMapDelegate delegate) {
+    if (identical(_delegate, delegate)) _delegate = null;
+  }
 
   /// Current camera position, or null if the map is not yet ready.
   TrufiCameraPosition? get cameraPosition => _delegate?.cameraPosition;
