@@ -76,7 +76,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
   String get id => 'otp_1_5';
 
   @override
-  String get name => displayName ?? 'OpenTripPlanner (OTP)';
+  String get name => displayName ?? 'OTP 1.5';
 
   @override
   String get description =>

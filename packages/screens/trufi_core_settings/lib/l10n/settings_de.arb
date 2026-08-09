@@ -41,6 +41,6 @@
   "limitationRequiresInternet": "Erfordert Internet",
   "limitationSlower": "Langsamere Antwort",
   "limitationNoWalkingRoute": "Keine Fußweg-Route auf Karte",
-  "settingsWorksOffline": "Funktioniert ohne Verbindung",
-  "settingsNeedsInternet": "Benötigt eine Internetverbindung"
+  "settingsWorksOffline": "Ohne Verbindung",
+  "settingsNeedsInternet": "Braucht Internet"
 }

@@ -140,8 +140,8 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get limitationNoWalkingRoute => 'Keine Fußweg-Route auf Karte';
 
   @override
-  String get settingsWorksOffline => 'Funktioniert ohne Verbindung';
+  String get settingsWorksOffline => 'Ohne Verbindung';
 
   @override
-  String get settingsNeedsInternet => 'Benötigt eine Internetverbindung';
+  String get settingsNeedsInternet => 'Braucht Internet';
 }
