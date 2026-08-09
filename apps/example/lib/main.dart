@@ -59,9 +59,11 @@ final List<IRoutingProvider> _routingEngines = [
   // Online routing via OTP (dev servers)
   Otp28RoutingProvider(
     endpoint: 'https://otp281.trufi.app',
+    displayName: 'OTP 2.8.1',
   ),
   Otp15RoutingProvider(
     endpoint: 'https://otp150.trufi.app',
+    displayName: 'OTP 1.5.0',
   ),
 ];
 
@@ -275,11 +277,11 @@ void main() {
         ),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
-            // Both sources, on purpose: the offline data owns streets
-            // and the corners between them ("Ayacucho y Heroínas"),
-            // which no geocoder can answer; Photon owns places and
-            // addresses and stays fresher. If either one fails — no
-            // network, missing asset — the other still answers (#745).
+            // Both sources on purpose: the offline data owns streets and
+            // the corners between them ("Ayacucho y Heroínas"), which no
+            // geocoder can answer; Photon owns places and addresses and
+            // stays fresher. If either fails — no network, missing asset
+            // — the other still answers (#745).
             searchLocationService: CompositeSearchLocationService(
               services: [
                 OfflineSearchDataService(),

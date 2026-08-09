@@ -27,14 +27,19 @@ const BBOX = '-17.709721,-66.440262,-17.261759,-65.577835';
 const PBF_FILE = process.env.PBF_FILE || path.join(__dirname, 'cochabamba.osm.pbf');
 const OUT_FILE = path.join(__dirname, 'out', 'search.json');
 
-const input = SOURCE === 'pbf'
-  ? pbfInput({ inPath: PBF_FILE })
-  : overpassInput({ bbox: BBOX });
-
+// Check before building the input: pbfInput may open the file eagerly,
+// and then the friendly message never gets printed.
 if (SOURCE === 'pbf' && !fs.existsSync(PBF_FILE)) {
   console.error(`Missing ${PBF_FILE} — point PBF_FILE at an extract or use SOURCE=overpass.`);
   process.exit(1);
 }
+
+// out/ is gitignored, so a fresh clone doesn't have it.
+fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
+
+const input = SOURCE === 'pbf'
+  ? pbfInput({ inPath: PBF_FILE })
+  : overpassInput({ bbox: BBOX });
 
 console.log(`Generating search data from ${SOURCE}…`);
 

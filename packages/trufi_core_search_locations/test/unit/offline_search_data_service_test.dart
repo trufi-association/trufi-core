@@ -38,6 +38,10 @@ const _searchJson = {
   ],
 };
 
+final _assets = <String, Map<String, dynamic>>{};
+
+void _mockAsset(String key, Map<String, dynamic> json) => _assets[key] = json;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -47,8 +51,11 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', (message) async {
       final key = utf8.decode(message!.buffer.asUint8List());
-      if (key != 'assets/search/search.json') return null;
-      final bytes = utf8.encoder.convert(jsonEncode(_searchJson));
+      final json = key == 'assets/search/search.json'
+          ? _searchJson
+          : _assets[key];
+      if (json == null) return null; // missing asset → rootBundle throws
+      final bytes = utf8.encoder.convert(jsonEncode(json));
       return bytes.buffer.asByteData();
     });
     service = OfflineSearchDataService();
@@ -112,9 +119,12 @@ void main() {
     });
   });
 
-  test('POIs from the same file are searchable', () async {
+  test('places are left to the online service', () async {
+    // POIs live in the same file but are deliberately not returned: the
+    // online geocoder ranks them better and stays fresher, and mixing
+    // them in pushed its results off the screen.
     final results = await service.search('calatayud');
-    expect(results.any((r) => r.displayName == 'Mercado Calatayud'), isTrue);
+    expect(results, isEmpty);
   });
 
   test('reverse geocoding is left to the online service', () async {
@@ -123,5 +133,50 @@ void main() {
 
   test('an empty query returns nothing', () async {
     expect(await service.search('   '), isEmpty);
+  });
+
+  test('alternative names are searchable too', () async {
+    final results = await service.search('junin');
+    expect(results.any((r) => r.displayName == 'Calle Junín'), isTrue);
+  });
+
+  group('when the data is unusable', () {
+    test('a missing asset fails as a SearchLocationException', () async {
+      // Not a raw FlutterError: SearchLocationsCubit only catches this
+      // type, and anything else leaves the spinner running forever.
+      final missing = OfflineSearchDataService(
+        assetPath: 'assets/search/does-not-exist.json',
+      );
+      await expectLater(
+        missing.search('ayacucho'),
+        throwsA(isA<SearchLocationException>()),
+      );
+      // And it retries rather than caching the failure.
+      await expectLater(
+        missing.search('ayacucho'),
+        throwsA(isA<SearchLocationException>()),
+      );
+    });
+
+    test('a malformed junction row does not sink the whole dataset', () async {
+      final broken = Map<String, dynamic>.from(_searchJson);
+      broken['streetJunctions'] = {
+        's1': [
+          ['s2', null], // malformed
+          ['s2', [-66.1587, -17.3927]], // good
+        ],
+      };
+      _mockAsset('assets/search/broken.json', broken);
+      final service = OfflineSearchDataService(
+        assetPath: 'assets/search/broken.json',
+      );
+      final results = await service.search('ayacucho y heroinas');
+      expect(results.any((r) => r.id.startsWith('junction:')), isTrue);
+      expect(
+        (await service.search('ayacucho')).isNotEmpty,
+        isTrue,
+        reason: 'streets must survive a bad junction row',
+      );
+    });
   });
 }

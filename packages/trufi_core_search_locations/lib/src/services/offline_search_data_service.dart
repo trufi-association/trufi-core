@@ -6,8 +6,12 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/search_location.dart';
 import 'search_location_service.dart';
 
-/// Offline search over a city's `search.json`: streets, the junctions
-/// between them, and POIs.
+/// Offline search over a city's `search.json`: streets and the junctions
+/// between them.
+///
+/// Places, businesses and addresses are deliberately left to the online
+/// service — it ranks them better and stays fresher. Returning them from
+/// here too only pushed its results off the screen.
 ///
 /// This is what makes *"Ayacucho y Heroínas"* findable. In cities without
 /// street numbers people give directions as intersections, and no online
@@ -18,8 +22,7 @@ import 'search_location_service.dart';
 ///
 /// ```json
 /// { "streets": { "<ref>": [name, alternativeNames, coordinates, region] },
-///   "streetJunctions": { "<ref>": [[otherStreetRef, [lon, lat]], …] },
-///   "pois": [[name, alternativeNames, localizedNames, coordinates, address, type]] }
+///   "streetJunctions": { "<ref>": [[otherStreetRef, [lon, lat]], …] } }
 /// ```
 ///
 /// Meant to be combined with an online service rather than to replace it
@@ -54,10 +57,22 @@ class OfflineSearchDataService implements SearchLocationService {
       _data = d;
       _loading = null;
       return d;
+    }).catchError((Object error, StackTrace stack) {
+      // Don't cache the failure: a later call should try again rather
+      // than fail forever because the first attempt raced a cold start.
+      _loading = null;
+      throw SearchLocationException(
+        'Could not load offline search data from $assetPath',
+        originalError: error,
+      );
     });
   }
 
   Future<_SearchData> _load() async {
+    // rootBundle throws a FlutterError when the asset is missing; callers
+    // (and SearchLocationsCubit) only handle SearchLocationException, so
+    // the wrapper above is what keeps a missing asset from surfacing as
+    // an unhandled async error and a spinner that never stops.
     final raw = await rootBundle.loadString(assetPath);
     return _SearchData.fromJson(jsonDecode(raw) as Map<String, dynamic>);
   }
@@ -77,7 +92,6 @@ class OfflineSearchDataService implements SearchLocationService {
     }
 
     results.addAll(data.findStreets(q, limitPerCategory));
-    results.addAll(data.findPois(q, limitPerCategory));
     return results;
   }
 
@@ -145,18 +159,15 @@ class _Street {
     required this.alternativeNames,
     required this.latitude,
     required this.longitude,
-  }) : normalized = _normalize(name);
+  }) : normalized = [name, ...alternativeNames].map(_normalize).join(' | ');
 }
 
 class _SearchData {
   final Map<String, _Street> streets;
   final Map<String, List<(String ref, double lat, double lon)>> junctions;
-  final List<(String name, double lat, double lon, String? address)> pois;
-
   _SearchData({
     required this.streets,
     required this.junctions,
-    required this.pois,
   });
 
   factory _SearchData.fromJson(Map<String, dynamic> json) {
@@ -185,10 +196,15 @@ class _SearchData {
       (ref, value) {
         final list = <(String, double, double)>[];
         for (final entry in (value as List<dynamic>)) {
-          final row = entry as List<dynamic>;
-          final coords = row[1] as List<dynamic>;
+          // One malformed row must not cost the whole city its data.
+          if (entry is! List || entry.length < 2) continue;
+          final other = entry[0];
+          final coords = entry[1];
+          if (other is! String || coords is! List || coords.length < 2) {
+            continue;
+          }
           list.add((
-            row[0] as String,
+            other,
             (coords[1] as num).toDouble(),
             (coords[0] as num).toDouble(),
           ));
@@ -197,20 +213,7 @@ class _SearchData {
       },
     );
 
-    final pois = <(String, double, double, String?)>[];
-    for (final entry in (json['pois'] as List<dynamic>? ?? const [])) {
-      final row = entry as List<dynamic>;
-      final coords = row.length > 3 ? row[3] as List<dynamic>? : null;
-      if (coords == null || coords.length < 2) continue;
-      pois.add((
-        row[0] as String? ?? '',
-        (coords[1] as num).toDouble(),
-        (coords[0] as num).toDouble(),
-        row.length > 4 ? row[4] as String? : null,
-      ));
-    }
-
-    return _SearchData(streets: streets, junctions: junctions, pois: pois);
+    return _SearchData(streets: streets, junctions: junctions);
   }
 
   Iterable<_Street> _matchingStreets(String normalizedQuery) => streets.values
@@ -268,24 +271,6 @@ class _SearchData {
             longitude: junction.$3,
           ),
     ];
-  }
-
-  List<SearchLocation> findPois(String q, int limit) {
-    final results = <SearchLocation>[];
-    for (var i = 0; i < pois.length && results.length < limit; i++) {
-      final poi = pois[i];
-      if (!_normalize(poi.$1).contains(q)) continue;
-      results.add(
-        SearchLocation(
-          id: 'poi:$i',
-          displayName: poi.$1,
-          address: poi.$4,
-          latitude: poi.$2,
-          longitude: poi.$3,
-        ),
-      );
-    }
-    return results;
   }
 
   /// Exact match first, then prefix, then anything containing the query.
