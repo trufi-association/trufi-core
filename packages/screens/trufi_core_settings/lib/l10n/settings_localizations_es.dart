@@ -97,11 +97,11 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get settingsSelectMapType => 'Selecciona tu tipo de mapa preferido:';
 
   @override
-  String get settingsRouting => 'Enrutamiento';
+  String get settingsRouting => 'Búsqueda de rutas';
 
   @override
   String get settingsSelectRoutingEngine =>
-      'Selecciona tu motor de enrutamiento preferido:';
+      'Elige el servicio que se utilizará para calcular tus rutas.';
 
   @override
   String get settingsPrivacy => 'Privacidad';
@@ -138,4 +138,10 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
 
   @override
   String get limitationNoWalkingRoute => 'Sin ruta de caminata en mapa';
+
+  @override
+  String get settingsWorksOffline => 'Funciona sin conexión';
+
+  @override
+  String get settingsNeedsInternet => 'Requiere conexión a internet';
 }

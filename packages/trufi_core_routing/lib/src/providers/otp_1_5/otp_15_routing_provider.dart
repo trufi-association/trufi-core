@@ -85,7 +85,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
   @override
   String localizedDescription(BuildContext context) =>
       displayDescription ??
-      RoutingLocalizations.of(context).otpOnlineDescription('1.5');
+      RoutingLocalizations.of(context).otpOnlineDescription;
 
   @override
   bool get supportsTransitRoutes => true;

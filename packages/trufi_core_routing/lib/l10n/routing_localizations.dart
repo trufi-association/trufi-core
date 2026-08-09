@@ -214,13 +214,13 @@ abstract class RoutingLocalizations {
   /// Description of the offline Trufi Planner engine in selectors
   ///
   /// In en, this message translates to:
-  /// **'Runs offline with the GTFS data bundled in the app'**
+  /// **'Finds routes using the data saved on your device.'**
   String get trufiPlannerLocalDescription;
 
   /// Description of the server-backed Trufi Planner engine in selectors
   ///
   /// In en, this message translates to:
-  /// **'Our own routing engine served from our backend'**
+  /// **'Finds routes through our own service. Needs a connection.'**
   String get trufiPlannerRemoteDescription;
 
   /// Title of the Trufi Planner info card in routing preferences
@@ -247,11 +247,11 @@ abstract class RoutingLocalizations {
   /// **'This web version queries our server; results may differ from OTP because it uses a different algorithm and data.'**
   String get trufiPlannerInfoRemoteBody;
 
-  /// Default description for OpenTripPlanner engines; {version} is e.g. 2.8
+  /// Description shown for OpenTripPlanner engines in the routing settings.
   ///
   /// In en, this message translates to:
-  /// **'OpenTripPlanner {version} (Online)'**
-  String otpOnlineDescription(String version);
+  /// **'Finds routes through an online service. May have more up-to-date information.'**
+  String get otpOnlineDescription;
 }
 
 class _RoutingLocalizationsDelegate

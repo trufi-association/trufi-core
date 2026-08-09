@@ -71,8 +71,8 @@ class TrufiPlannerProvider extends IRoutingProvider {
   String get description =>
       config.description ??
       (config.isLocal
-          ? 'Funciona offline con datos GTFS empacados en la app'
-          : 'Motor de rutas propio servido desde nuestro backend');
+          ? 'Finds routes using the data saved on your device.'
+          : 'Finds routes through our own service. Needs a connection.');
 
   @override
   String localizedDescription(BuildContext context) {
