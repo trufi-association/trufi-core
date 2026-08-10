@@ -208,8 +208,10 @@ class _HomeScreenState extends State<HomeScreen>
     // (alerts, instruction street names) come back in the rider's
     // language (#945). Locale is an inherited dependency, so this fires
     // again whenever the user switches languages.
+    // OTP's GraphQL `locale` argument is a two-letter ISO 639-1 code —
+    // send `languageCode`, not the full tag ('es', never 'es-BO').
     context.read<RoutePlannerCubit>().updateLocale(
-          Localizations.localeOf(context).toLanguageTag(),
+          Localizations.localeOf(context).languageCode,
         );
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();

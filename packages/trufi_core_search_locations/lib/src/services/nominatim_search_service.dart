@@ -22,7 +22,6 @@ class NominatimSearchService
   /// User-Agent header (required by Nominatim usage policy).
   final String userAgent;
 
-  /// Language for results (e.g., 'en', 'de', 'es').
   /// Language for result texts. Mutable: the search screen keeps it in
   /// sync with the app's locale (see [LanguageAwareSearch]).
   String? language;

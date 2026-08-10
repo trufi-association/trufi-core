@@ -21,6 +21,16 @@ class PhotonSearchService
   /// sync with the app's locale (see [LanguageAwareSearch]).
   String? language;
 
+  /// Languages this Photon deployment accepts in its `lang` parameter.
+  /// Public Photon rejects anything else with **HTTP 400** ("language es
+  /// is not supported, supported languages are: default, en, de, fr"),
+  /// which would kill every search for riders using an unsupported app
+  /// language — Spanish being the default of the flagship app. Languages
+  /// outside this set are simply not forwarded (Photon then answers in
+  /// its default), which is the pre-#969 behavior. Deployments re-imported
+  /// with more languages can widen the set.
+  final Set<String> supportedLanguages;
+
   /// Latitude for location bias (results closer to this point are prioritized).
   final double? biasLatitude;
 
@@ -49,11 +59,15 @@ class PhotonSearchService
     this.boundingBox,
     http.Client? client,
     DeviceIdService? deviceIdService,
+    this.supportedLanguages = const {'en', 'de', 'fr'},
   }) : _client = client ?? http.Client(),
        _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   @override
-  set searchLanguage(String? languageCode) => language = languageCode;
+  set searchLanguage(String? languageCode) =>
+      language = supportedLanguages.contains(languageCode)
+          ? languageCode
+          : null;
 
   Future<Map<String, String>?> _buildHeaders() async {
     try {
