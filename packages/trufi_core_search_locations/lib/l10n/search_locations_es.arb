@@ -9,6 +9,5 @@
   "yourPlaces": "TUS LUGARES",
   "searchResults": "RESULTADOS DE BÚSQUEDA",
   "noResultsFound": "No se encontraron resultados",
-  "cornersOf": "Esquinas de {street}",
-  "seeCorners": "Ver esquinas"
+  "searchCornersHint": "Buscar esquinas..."
 }

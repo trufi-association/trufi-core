@@ -115,11 +115,16 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   List<SearchLocation> _loadedPlaces = [];
   bool _isLoadingYourLocation = false;
 
-  // Street → corners drill-down (#745): while non-null, the results
-  // section shows the corners of this street instead of the search hits.
+  // Street → corners drill-down (#745): while non-null, the whole body
+  // becomes a dedicated sub-screen — "← <street>" as the title, a filter
+  // field that searches only within the corners, and nothing else (no
+  // quick actions, no saved places).
   SearchLocation? _drillDownParent;
   List<SearchLocation> _drillDownResults = [];
   bool _isDrillingDown = false;
+  final TextEditingController _cornerFilterController =
+      TextEditingController();
+  String _cornerFilter = '';
 
   @override
   void initState() {
@@ -196,10 +201,12 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   Future<void> _enterDrillDown(SearchLocation street) async {
     final service = _drillDownService;
     if (service == null) return;
+    _cornerFilterController.clear();
     setState(() {
       _drillDownParent = street;
       _drillDownResults = [];
       _isDrillingDown = true;
+      _cornerFilter = '';
     });
     try {
       final corners = await service.drillDown(street);
@@ -222,11 +229,39 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
 
   void _exitDrillDown() {
     if (_drillDownParent == null) return;
+    _cornerFilterController.clear();
     setState(() {
       _drillDownParent = null;
       _drillDownResults = [];
       _isDrillingDown = false;
+      _cornerFilter = '';
     });
+  }
+
+  /// Corners matching the corner filter, accent- and case-insensitively.
+  /// The filter matches the cross street (the trimmed label), not the full
+  /// corner name: inside "Avenida Ayacucho" every corner contains
+  /// "ayacucho", so matching the full name would make the filter useless.
+  List<SearchLocation> get _filteredCorners {
+    final needle = _fold(_cornerFilter);
+    if (needle.isEmpty) return _drillDownResults;
+    return _drillDownResults
+        .where((c) => _fold(_cornerLabel(c)).contains(needle))
+        .toList();
+  }
+
+  /// Lowercases and strips accents, so "heroinas" finds "Heroínas".
+  static String _fold(String value) {
+    const from = 'áàäâãéèëêíìïîóòöôõúùüûñç';
+    const to = 'aaaaaeeeeiiiiooooouuuunc';
+    final lower = value.toLowerCase().trim();
+    final buffer = StringBuffer();
+    for (final rune in lower.runes) {
+      final char = String.fromCharCode(rune);
+      final index = from.indexOf(char);
+      buffer.write(index >= 0 ? to[index] : char);
+    }
+    return buffer.toString();
   }
 
   /// Label for a corner inside the corners list. The header already names
@@ -307,6 +342,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   void dispose() {
     _debounce?.cancel();
     _searchController.dispose();
+    _cornerFilterController.dispose();
     _searchFocusNode.dispose();
     _staggerController.dispose();
     super.dispose();
@@ -318,6 +354,84 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     final colorScheme = theme.colorScheme;
     final config = widget.configuration;
     final l10n = SearchLocationsLocalizations.of(context);
+
+    // The corners view is a sub-screen, not a section: "← <street>" as
+    // the title, a filter that searches only within the corners, and
+    // nothing else. The system back button leaves the corners first.
+    if (_drillDownParent != null) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _exitDrillDown();
+        },
+        child: Scaffold(
+          backgroundColor: colorScheme.surface,
+          body: SafeArea(
+            child: Column(
+              children: [
+                _DrillDownHeader(
+                  title: _drillDownParent!.displayName,
+                  onBack: () {
+                    HapticFeedback.selectionClick();
+                    _exitDrillDown();
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: TextField(
+                    controller: _cornerFilterController,
+                    onChanged: (value) =>
+                        setState(() => _cornerFilter = value),
+                    decoration: InputDecoration(
+                      hintText: l10n.searchCornersHint,
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      filled: true,
+                      fillColor: colorScheme.surfaceContainerLow,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                      isDense: true,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _isDrillingDown
+                      ? const Center(child: CircularProgressIndicator())
+                      : _filteredCorners.isEmpty
+                          ? _EmptySearchResults(
+                              text: config.noResultsText ??
+                                  l10n.noResultsFound,
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              itemCount: _filteredCorners.length,
+                              itemBuilder: (context, index) {
+                                final corner = _filteredCorners[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: _ModernLocationTile(
+                                    location: corner,
+                                    displayNameOverride: _cornerLabel(corner),
+                                    icon: Icons.fork_right_rounded,
+                                    iconColor: colorScheme.primary,
+                                    onTap: () {
+                                      HapticFeedback.selectionClick();
+                                      Navigator.pop(context, corner);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -432,45 +546,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     ),
                   ],
 
-                  // Corners of a street (drill-down, #745)
-                  if (_query.isNotEmpty && _drillDownParent != null) ...[
-                    _DrillDownHeader(
-                      title: l10n.cornersOf(_drillDownParent!.displayName),
-                      onBack: () {
-                        HapticFeedback.selectionClick();
-                        _exitDrillDown();
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    if (_isDrillingDown)
-                      const Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      )
-                    else if (_drillDownResults.isEmpty)
-                      _EmptySearchResults(
-                        text: config.noResultsText ?? l10n.noResultsFound,
-                      )
-                    else
-                      ...List.generate(_drillDownResults.length, (index) {
-                        final corner = _drillDownResults[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: _ModernLocationTile(
-                            location: corner,
-                            displayNameOverride: _cornerLabel(corner),
-                            icon: Icons.fork_right_rounded,
-                            iconColor: colorScheme.primary,
-                            onTap: () {
-                              HapticFeedback.selectionClick();
-                              Navigator.pop(context, corner);
-                            },
-                          ),
-                        );
-                      }),
-                  ]
                   // Search Results
-                  else if (_query.isNotEmpty) ...[
+                  if (_query.isNotEmpty) ...[
                     _SectionTitle(
                       title: config.searchResultsTitle ?? l10n.searchResults,
                     ),
@@ -493,24 +570,27 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                           padding: const EdgeInsets.only(bottom: 8),
                           child: _ModernLocationTile(
                             location: location,
-                            icon: Icons.place_rounded,
+                            icon: canDrill
+                                ? Icons.fork_right_rounded
+                                : Icons.place_rounded,
                             iconColor: colorScheme.primary,
+                            // A street with known corners is not a point —
+                            // picking it directly answers nothing. Tapping
+                            // it anywhere opens its corners list instead
+                            // (Sam's review on #964); everything else pops
+                            // as the selection.
                             onTap: () {
                               HapticFeedback.selectionClick();
-                              Navigator.pop(context, location);
+                              if (canDrill) {
+                                _enterDrillDown(location);
+                              } else {
+                                Navigator.pop(context, location);
+                              }
                             },
-                            // A street can be refined into one of its
-                            // corners; the tile itself still picks the
-                            // whole street — both are valid answers.
                             trailing: canDrill
-                                ? IconButton(
-                                    icon: const Icon(Icons.fork_right_rounded),
-                                    color: colorScheme.primary,
-                                    tooltip: l10n.seeCorners,
-                                    onPressed: () {
-                                      HapticFeedback.selectionClick();
-                                      _enterDrillDown(location);
-                                    },
+                                ? Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: colorScheme.onSurfaceVariant,
                                   )
                                 : null,
                           ),
@@ -986,7 +1066,9 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-/// Header of the corners list: back to the search results + street name.
+/// Title bar of the corners sub-screen: back to the results + the street
+/// name as the title (the rows below start at "&", so the street's own
+/// name lives only here).
 class _DrillDownHeader extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
@@ -998,27 +1080,42 @@ class _DrillDownHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Row(
-      children: [
-        IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, size: 20),
-          color: colorScheme.onSurfaceVariant,
-          visualDensity: VisualDensity.compact,
-          onPressed: onBack,
-        ),
-        Expanded(
-          child: Text(
-            title,
-            style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurfaceVariant,
-              letterSpacing: 0.5,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          Material(
+            color: colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: onBack,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  color: colorScheme.onSurface,
+                  size: 22,
+                ),
+              ),
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

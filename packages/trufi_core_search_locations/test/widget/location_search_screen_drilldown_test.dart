@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
-/// The street → corners flow on the search screen (#745): a street result
-/// whose service knows its corners gets a trailing button; tapping it
-/// swaps the results for the corners list, with a back affordance, and
-/// picking a corner returns it to the caller.
+/// The street → corners flow on the search screen (#745, reshaped by Sam's
+/// review): tapping a street whose service knows its corners opens a
+/// dedicated corners sub-screen — "← `<street>`" as the title, a filter that
+/// searches only within the corners, and nothing else. Picking a corner
+/// returns it to the caller with its full name.
 class _DrillDownService
     with SearchLocationDrillDown
     implements SearchLocationService {
@@ -21,11 +22,17 @@ class _DrillDownService
     latitude: -17.3882,
     longitude: -66.1557,
   );
-  static const corner = SearchLocation(
+  static const cornerHeroinas = SearchLocation(
     id: 'junction:s1:s2',
     displayName: 'Avenida Ayacucho & Avenida Heroínas',
     latitude: -17.3927,
     longitude: -66.1587,
+  );
+  static const cornerAroma = SearchLocation(
+    id: 'junction:s1:s3',
+    displayName: 'Avenida Ayacucho & Avenida Aroma',
+    latitude: -17.3907,
+    longitude: -66.1571,
   );
 
   @override
@@ -37,7 +44,7 @@ class _DrillDownService
 
   @override
   Future<List<SearchLocation>> drillDown(SearchLocation location) async =>
-      [corner];
+      [cornerAroma, cornerHeroinas];
 
   @override
   Future<SearchLocation?> reverse(double latitude, double longitude) async =>
@@ -48,8 +55,10 @@ class _DrillDownService
 }
 
 void main() {
-  Future<SearchLocation?> pumpAndSearch(WidgetTester tester) async {
-    SearchLocation? picked;
+  SearchLocation? picked;
+
+  Future<void> pumpAndSearch(WidgetTester tester) async {
+    picked = null;
     await tester.pumpWidget(
       MaterialApp(
         localizationsDelegates:
@@ -64,6 +73,8 @@ void main() {
                   builder: (_) => LocationSearchScreen(
                     isOrigin: true,
                     searchService: _DrillDownService(),
+                    onYourLocation: () async => null,
+                    onChooseOnMap: () async => null,
                   ),
                 ),
               );
@@ -80,74 +91,58 @@ void main() {
     // Debounce (300 ms) + the async search.
     await tester.pump(const Duration(milliseconds: 350));
     await tester.pumpAndSettle();
-    return picked;
   }
 
-  testWidgets('a drillable street shows the corners button; a plain '
+  Future<void> openCorners(WidgetTester tester) async {
+    await pumpAndSearch(tester);
+    await tester.tap(find.text('Avenida Ayacucho'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('a drillable street shows the corners affordance; a plain '
       'result does not', (tester) async {
     await pumpAndSearch(tester);
 
     expect(find.text('Avenida Ayacucho'), findsOneWidget);
     expect(find.text('Plaza Colón'), findsOneWidget);
+    // The fork icon marks the drillable street; the plain result keeps
+    // the generic place pin. (Chevrons also appear on the quick-action
+    // rows, so they are not asserted by count.)
     expect(find.byIcon(Icons.fork_right_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.place_rounded), findsOneWidget);
   });
 
-  testWidgets('tapping the corners button lists the corners and back '
-      'returns to the results', (tester) async {
-    await pumpAndSearch(tester);
-
-    await tester.tap(find.byIcon(Icons.fork_right_rounded));
-    await tester.pumpAndSettle();
-
-    // Corners list replaces the results. Rows start at "&" — the header
-    // already names the street, and repeating it truncated the cross
-    // street's name.
-    expect(find.text('& Avenida Heroínas'), findsOneWidget);
-    expect(find.text('Avenida Ayacucho & Avenida Heroínas'), findsNothing);
-    expect(find.text('Plaza Colón'), findsNothing);
-    expect(find.textContaining('Avenida Ayacucho'), findsOneWidget); // header
-
-    // Back returns to the plain results without re-searching.
-    await tester.tap(find.byIcon(Icons.arrow_back_rounded).last);
-    await tester.pumpAndSettle();
-    expect(find.text('Plaza Colón'), findsOneWidget);
-    expect(find.text('& Avenida Heroínas'), findsNothing);
-  });
-
-  testWidgets('picking a corner pops it as the selected location',
+  testWidgets('tapping the street itself opens the corners sub-screen '
+      '(a street is not a point — picking it directly answers nothing)',
       (tester) async {
-    SearchLocation? picked;
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates:
-            SearchLocationsLocalizations.localizationsDelegates,
-        supportedLocales: SearchLocationsLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => ElevatedButton(
-            onPressed: () async {
-              picked = await Navigator.push<SearchLocation>(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => LocationSearchScreen(
-                    isOrigin: true,
-                    searchService: _DrillDownService(),
-                  ),
-                ),
-              );
-            },
-            child: const Text('open'),
-          ),
-        ),
-      ),
-    );
-    await tester.tap(find.text('open'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField).first, 'ayacucho');
-    await tester.pump(const Duration(milliseconds: 350));
+    await openCorners(tester);
+
+    // Nothing popped: we are inside the corners sub-screen.
+    expect(picked, isNull);
+    // Title bar carries the street name; rows start at "&".
+    expect(find.text('Avenida Ayacucho'), findsOneWidget); // the title
+    expect(find.text('& Avenida Aroma'), findsOneWidget);
+    expect(find.text('& Avenida Heroínas'), findsOneWidget);
+    // Only corners here: no search results, no quick actions.
+    expect(find.text('Plaza Colón'), findsNothing);
+    expect(find.text('Your Location'), findsNothing);
+    expect(find.text('Choose on Map'), findsNothing);
+  });
+
+  testWidgets('the corner filter searches only within the corners, '
+      'accent-insensitively', (tester) async {
+    await openCorners(tester);
+
+    await tester.enterText(find.byType(TextField).first, 'heroinas');
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.fork_right_rounded));
-    await tester.pumpAndSettle();
+    expect(find.text('& Avenida Heroínas'), findsOneWidget);
+    expect(find.text('& Avenida Aroma'), findsNothing);
+  });
+
+  testWidgets('picking a corner pops it with its full name', (tester) async {
+    await openCorners(tester);
+
     await tester.tap(find.text('& Avenida Heroínas'));
     await tester.pumpAndSettle();
 
@@ -157,18 +152,27 @@ void main() {
     expect(picked?.displayName, 'Avenida Ayacucho & Avenida Heroínas');
   });
 
-  testWidgets('editing the query exits the corners list', (tester) async {
-    await pumpAndSearch(tester);
+  testWidgets('the back button returns to the results', (tester) async {
+    await openCorners(tester);
 
-    await tester.tap(find.byIcon(Icons.fork_right_rounded));
-    await tester.pumpAndSettle();
-    expect(find.text('& Avenida Heroínas'), findsOneWidget);
-
-    await tester.enterText(find.byType(TextField).first, 'ayacuch');
-    await tester.pump(const Duration(milliseconds: 350));
+    await tester.tap(find.byIcon(Icons.arrow_back_rounded).last);
     await tester.pumpAndSettle();
 
-    expect(find.text('& Avenida Heroínas'), findsNothing);
     expect(find.text('Plaza Colón'), findsOneWidget);
+    expect(find.text('& Avenida Heroínas'), findsNothing);
+  });
+
+  testWidgets('the system back leaves the corners first, not the screen',
+      (tester) async {
+    await openCorners(tester);
+
+    final NavigatorState navigator = tester.state(find.byType(Navigator));
+    navigator.maybePop();
+    await tester.pumpAndSettle();
+
+    // Still on the search screen, back at the results.
+    expect(picked, isNull);
+    expect(find.text('Plaza Colón'), findsOneWidget);
+    expect(find.text('& Avenida Heroínas'), findsNothing);
   });
 }

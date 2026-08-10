@@ -36,17 +36,8 @@
   "@noResultsFound": {
     "description": "Message shown when a search returns no results"
   },
-  "cornersOf": "Corners of {street}",
-  "@cornersOf": {
-    "description": "Section title while picking one corner of a street in the drill-down flow. {street} is the street name.",
-    "placeholders": {
-      "street": {
-        "type": "String"
-      }
-    }
-  },
-  "seeCorners": "See corners",
-  "@seeCorners": {
-    "description": "Tooltip/semantics of the trailing button on a street result that opens its corners list"
+  "searchCornersHint": "Search corners...",
+  "@searchCornersHint": {
+    "description": "Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners"
   }
 }

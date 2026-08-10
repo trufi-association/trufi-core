@@ -36,10 +36,5 @@ class SearchLocationsLocalizationsEn extends SearchLocationsLocalizations {
   String get noResultsFound => 'No results found';
 
   @override
-  String cornersOf(String street) {
-    return 'Corners of $street';
-  }
-
-  @override
-  String get seeCorners => 'See corners';
+  String get searchCornersHint => 'Search corners...';
 }

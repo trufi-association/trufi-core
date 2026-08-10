@@ -157,17 +157,11 @@ abstract class SearchLocationsLocalizations {
   /// **'No results found'**
   String get noResultsFound;
 
-  /// Section title while picking one corner of a street in the drill-down flow. {street} is the street name.
+  /// Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners
   ///
   /// In en, this message translates to:
-  /// **'Corners of {street}'**
-  String cornersOf(String street);
-
-  /// Tooltip/semantics of the trailing button on a street result that opens its corners list
-  ///
-  /// In en, this message translates to:
-  /// **'See corners'**
-  String get seeCorners;
+  /// **'Search corners...'**
+  String get searchCornersHint;
 }
 
 class _SearchLocationsLocalizationsDelegate
