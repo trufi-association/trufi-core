@@ -59,6 +59,16 @@ melos:
       packageFilters:
         dirExists: test
 
+    ci:test:
+      # Same as `test` but skips @Tags('integration') suites, which hit
+      # real OTP / Photon / Nominatim servers and can't run on CI. This is
+      # what the CI workflow runs so a green check actually means the unit
+      # and widget tests passed (issue #756).
+      exec: flutter test --exclude-tags integration
+      description: Run non-integration tests for all packages (used by CI)
+      packageFilters:
+        dirExists: test
+
     build:
       name: Generate Build files
       run: dart run build_runner build --delete-conflicting-outputs

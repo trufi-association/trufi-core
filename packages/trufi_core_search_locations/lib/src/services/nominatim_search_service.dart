@@ -66,9 +66,14 @@ class NominatimSearchService implements SearchLocationService {
 
   Future<Map<String, String>> _buildHeaders() async {
     final headers = <String, String>{'User-Agent': userAgent};
-    final deviceId = await _deviceIdService.getDeviceId();
-    if (deviceId.isNotEmpty) {
-      headers['X-Device-Id'] = deviceId;
+    try {
+      final deviceId = await _deviceIdService.getDeviceId();
+      if (deviceId.isNotEmpty) {
+        headers['X-Device-Id'] = deviceId;
+      }
+    } catch (_) {
+      // The device id is telemetry: failing to read it (no platform
+      // bindings, storage error) must not take the search down.
     }
     return headers;
   }

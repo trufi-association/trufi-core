@@ -54,9 +54,14 @@ class _OtpHttpClient extends http.BaseClient {
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final deviceId = await _deviceIdService.getDeviceId();
-    if (deviceId.isNotEmpty) {
-      request.headers['X-Device-Id'] = deviceId;
+    try {
+      final deviceId = await _deviceIdService.getDeviceId();
+      if (deviceId.isNotEmpty) {
+        request.headers['X-Device-Id'] = deviceId;
+      }
+    } catch (_) {
+      // The device id is telemetry: if it can't be read (no platform
+      // bindings, storage error) the request must still go out.
     }
     return _inner.send(request).timeout(_timeout);
   }

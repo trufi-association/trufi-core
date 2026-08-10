@@ -50,9 +50,15 @@ class PhotonSearchService implements SearchLocationService {
        _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
 
   Future<Map<String, String>?> _buildHeaders() async {
-    final deviceId = await _deviceIdService.getDeviceId();
-    if (deviceId.isEmpty) return null;
-    return {'X-Device-Id': deviceId};
+    try {
+      final deviceId = await _deviceIdService.getDeviceId();
+      if (deviceId.isEmpty) return null;
+      return {'X-Device-Id': deviceId};
+    } catch (_) {
+      // The device id is telemetry: failing to read it (no platform
+      // bindings, storage error) must not take the search down.
+      return null;
+    }
   }
 
   @override
