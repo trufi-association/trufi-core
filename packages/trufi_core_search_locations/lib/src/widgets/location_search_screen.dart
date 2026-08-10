@@ -326,6 +326,10 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                 },
                 onClear: () {
                   _searchController.clear();
+                  // Clearing is a full reset: also drop any corners view
+                  // (and orphan its in-flight load) so no stale drill-down
+                  // state survives into the next search.
+                  _exitDrillDown();
                   setState(() {
                     _query = '';
                     _searchResults = [];
