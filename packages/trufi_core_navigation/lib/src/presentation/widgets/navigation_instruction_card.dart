@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../../l10n/navigation_localizations.dart';
 import '../../models/navigation_instruction.dart';
@@ -354,11 +354,11 @@ class NavigationInstructionCard extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     if (meters < 1000) {
       return l10n.navDistanceMeters(
-        NumberFormat('#,##0', locale).format(meters.round()),
+        safeNumberFormat('#,##0', locale).format(meters.round()),
       );
     }
     return l10n.navDistanceKilometers(
-      NumberFormat('#,##0.0', locale).format(meters / 1000),
+      safeNumberFormat('#,##0.0', locale).format(meters / 1000),
     );
   }
 
