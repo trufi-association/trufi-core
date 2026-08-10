@@ -190,6 +190,12 @@ abstract class CoreLocalizations {
   /// **'Page not found'**
   String get errorPageNotFound;
 
+  /// Shown on the default home route when the app was configured with no screens
+  ///
+  /// In en, this message translates to:
+  /// **'No screens registered'**
+  String get errorNoScreensRegistered;
+
   /// Go to home page button
   ///
   /// In en, this message translates to:

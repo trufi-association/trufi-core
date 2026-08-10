@@ -39,6 +39,9 @@ class MapsLocalizationsDe extends MapsLocalizations {
   String get offlineMapDescription => 'Vollständig offline nutzbare Karte';
 
   @override
+  String get vectorMapName => 'Vektorkarte (MapLibre)';
+
+  @override
   String get errorLoadingOfflineMap => 'Fehler beim Laden der Offline-Karte';
 
   @override

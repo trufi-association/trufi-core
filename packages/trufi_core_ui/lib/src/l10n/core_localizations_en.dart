@@ -54,6 +54,9 @@ class CoreLocalizationsEn extends CoreLocalizations {
   String get errorPageNotFound => 'Page not found';
 
   @override
+  String get errorNoScreensRegistered => 'No screens registered';
+
+  @override
   String get actionGoHome => 'Go Home';
 
   @override

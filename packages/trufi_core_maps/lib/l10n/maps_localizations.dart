@@ -160,6 +160,12 @@ abstract class MapsLocalizations {
   /// **'Fully offline map'**
   String get offlineMapDescription;
 
+  /// Default display name for the MapLibre vector map engine
+  ///
+  /// In en, this message translates to:
+  /// **'Vector (MapLibre)'**
+  String get vectorMapName;
+
   /// Error title shown when the offline map fails to load
   ///
   /// In en, this message translates to:

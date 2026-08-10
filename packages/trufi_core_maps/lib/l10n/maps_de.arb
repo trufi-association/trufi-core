@@ -10,6 +10,7 @@
   "confirmLocation": "Standort bestätigen",
   "offlineMapName": "Offline-Karte",
   "offlineMapDescription": "Vollständig offline nutzbare Karte",
+  "vectorMapName": "Vektorkarte (MapLibre)",
   "errorLoadingOfflineMap": "Fehler beim Laden der Offline-Karte",
   "retry": "Erneut versuchen",
   "vectorMapDescription": "Vektorkarte mit modernem Design und besserer Leistung",

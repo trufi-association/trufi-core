@@ -75,6 +75,10 @@
   "@errorPageNotFound": {
     "description": "Error message for 404 pages"
   },
+  "errorNoScreensRegistered": "No screens registered",
+  "@errorNoScreensRegistered": {
+    "description": "Shown on the default home route when the app was configured with no screens"
+  },
 
   "actionGoHome": "Go Home",
   "@actionGoHome": {
