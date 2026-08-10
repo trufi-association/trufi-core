@@ -34,4 +34,12 @@ class SearchLocationsLocalizationsEs extends SearchLocationsLocalizations {
 
   @override
   String get noResultsFound => 'No se encontraron resultados';
+
+  @override
+  String cornersOf(String street) {
+    return 'Esquinas de $street';
+  }
+
+  @override
+  String get seeCorners => 'Ver esquinas';
 }

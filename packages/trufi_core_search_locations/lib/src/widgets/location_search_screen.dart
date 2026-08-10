@@ -115,6 +115,12 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   List<SearchLocation> _loadedPlaces = [];
   bool _isLoadingYourLocation = false;
 
+  // Street → corners drill-down (#745): while non-null, the results
+  // section shows the corners of this street instead of the search hits.
+  SearchLocation? _drillDownParent;
+  List<SearchLocation> _drillDownResults = [];
+  bool _isDrillingDown = false;
+
   @override
   void initState() {
     super.initState();
@@ -168,12 +174,58 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   /// data loaded, 19 scans of the city's streets.
   void _onQueryChanged(String query) {
     _debounce?.cancel();
+    // Editing the query means the user moved on from the corners list.
+    _exitDrillDown();
     if (query.trim().isEmpty) {
       _performSearch(query);
       return;
     }
     _debounce = Timer(const Duration(milliseconds: 300), () {
       _performSearch(query);
+    });
+  }
+
+  /// The drill-down service behind [widget.searchService], if any.
+  SearchLocationDrillDown? get _drillDownService {
+    final service = widget.searchService;
+    return service is SearchLocationDrillDown
+        ? service as SearchLocationDrillDown
+        : null;
+  }
+
+  Future<void> _enterDrillDown(SearchLocation street) async {
+    final service = _drillDownService;
+    if (service == null) return;
+    setState(() {
+      _drillDownParent = street;
+      _drillDownResults = [];
+      _isDrillingDown = true;
+    });
+    try {
+      final corners = await service.drillDown(street);
+      // The user may have kept typing while the corners loaded.
+      if (mounted && identical(_drillDownParent, street)) {
+        setState(() {
+          _drillDownResults = corners;
+          _isDrillingDown = false;
+        });
+      }
+    } catch (_) {
+      if (mounted && identical(_drillDownParent, street)) {
+        setState(() {
+          _drillDownResults = [];
+          _isDrillingDown = false;
+        });
+      }
+    }
+  }
+
+  void _exitDrillDown() {
+    if (_drillDownParent == null) return;
+    setState(() {
+      _drillDownParent = null;
+      _drillDownResults = [];
+      _isDrillingDown = false;
     });
   }
 
@@ -360,8 +412,44 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     ),
                   ],
 
+                  // Corners of a street (drill-down, #745)
+                  if (_query.isNotEmpty && _drillDownParent != null) ...[
+                    _DrillDownHeader(
+                      title: l10n.cornersOf(_drillDownParent!.displayName),
+                      onBack: () {
+                        HapticFeedback.selectionClick();
+                        _exitDrillDown();
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    if (_isDrillingDown)
+                      const Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else if (_drillDownResults.isEmpty)
+                      _EmptySearchResults(
+                        text: config.noResultsText ?? l10n.noResultsFound,
+                      )
+                    else
+                      ...List.generate(_drillDownResults.length, (index) {
+                        final corner = _drillDownResults[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: _ModernLocationTile(
+                            location: corner,
+                            icon: Icons.fork_right_rounded,
+                            iconColor: colorScheme.primary,
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              Navigator.pop(context, corner);
+                            },
+                          ),
+                        );
+                      }),
+                  ]
                   // Search Results
-                  if (_query.isNotEmpty) ...[
+                  else if (_query.isNotEmpty) ...[
                     _SectionTitle(
                       title: config.searchResultsTitle ?? l10n.searchResults,
                     ),
@@ -378,6 +466,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     else
                       ...List.generate(_searchResults.length, (index) {
                         final location = _searchResults[index];
+                        final canDrill =
+                            _drillDownService?.canDrillDown(location) ?? false;
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: _ModernLocationTile(
@@ -388,6 +478,20 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                               HapticFeedback.selectionClick();
                               Navigator.pop(context, location);
                             },
+                            // A street can be refined into one of its
+                            // corners; the tile itself still picks the
+                            // whole street — both are valid answers.
+                            trailing: canDrill
+                                ? IconButton(
+                                    icon: const Icon(Icons.fork_right_rounded),
+                                    color: colorScheme.primary,
+                                    tooltip: l10n.seeCorners,
+                                    onPressed: () {
+                                      HapticFeedback.selectionClick();
+                                      _enterDrillDown(location);
+                                    },
+                                  )
+                                : null,
                           ),
                         );
                       }),
@@ -861,6 +965,43 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
+/// Header of the corners list: back to the search results + street name.
+class _DrillDownHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback onBack;
+
+  const _DrillDownHeader({required this.title, required this.onBack});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, size: 20),
+          color: colorScheme.onSurfaceVariant,
+          visualDensity: VisualDensity.compact,
+          onPressed: onBack,
+        ),
+        Expanded(
+          child: Text(
+            title,
+            style: theme.textTheme.labelMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurfaceVariant,
+              letterSpacing: 0.5,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// Modern location tile
 class _ModernLocationTile extends StatelessWidget {
   final SearchLocation location;
@@ -868,11 +1009,15 @@ class _ModernLocationTile extends StatelessWidget {
   final Color iconColor;
   final VoidCallback onTap;
 
+  /// Optional widget at the row's end (e.g. the street → corners button).
+  final Widget? trailing;
+
   const _ModernLocationTile({
     required this.location,
     required this.icon,
     required this.iconColor,
     required this.onTap,
+    this.trailing,
   });
 
   @override
@@ -928,6 +1073,7 @@ class _ModernLocationTile extends StatelessWidget {
                   ],
                 ),
               ),
+              ?trailing,
             ],
           ),
         ),

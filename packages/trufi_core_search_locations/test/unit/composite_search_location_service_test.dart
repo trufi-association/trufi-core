@@ -116,4 +116,65 @@ void main() {
       expect(a.disposed && b.disposed, isTrue);
     });
   });
+  group('drill-down forwarding (#745)', () {
+    final street = _loc('street:s1', 'Avenida Ayacucho');
+    final corner = _loc('junction:s1:s2', 'Ayacucho & Heroínas');
+
+    test('delegates to the child that knows the location', () async {
+      final offline = _FakeDrillDownService(
+        [street],
+        corners: {
+          'street:s1': [corner],
+        },
+      );
+      final online = _FakeService(const []);
+      final composite = CompositeSearchLocationService(
+        services: [online, offline], // the capable child is not the first
+      );
+
+      expect(composite.canDrillDown(street), isTrue);
+      expect(await composite.drillDown(street), [corner]);
+      expect(offline.drillDownCalls, 1);
+    });
+
+    test('a result no child can expand reports not drillable', () async {
+      final offline = _FakeDrillDownService(
+        [street],
+        corners: {
+          'street:s1': [corner],
+        },
+      );
+      final other = _loc('photon:9', 'Plaza Colón');
+      final composite = CompositeSearchLocationService(services: [offline]);
+
+      expect(composite.canDrillDown(other), isFalse);
+      expect(await composite.drillDown(other), isEmpty);
+      expect(offline.drillDownCalls, 0);
+    });
+
+    test('plain services are simply skipped', () {
+      final composite = CompositeSearchLocationService(
+        services: [_FakeService(const [])],
+      );
+      expect(composite.canDrillDown(street), isFalse);
+    });
+  });
+}
+
+class _FakeDrillDownService extends _FakeService with SearchLocationDrillDown {
+  _FakeDrillDownService(super.results, {required this.corners});
+
+  /// Corners returned for any street id present in this map.
+  final Map<String, List<SearchLocation>> corners;
+  int drillDownCalls = 0;
+
+  @override
+  bool canDrillDown(SearchLocation location) =>
+      corners.containsKey(location.id);
+
+  @override
+  Future<List<SearchLocation>> drillDown(SearchLocation location) async {
+    drillDownCalls++;
+    return corners[location.id] ?? const [];
+  }
 }

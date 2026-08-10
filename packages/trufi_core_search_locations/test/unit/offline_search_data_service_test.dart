@@ -179,4 +179,46 @@ void main() {
       );
     });
   });
+
+  group('drill-down capability (#745)', () {
+    test('a street with corners is drillable once data is loaded', () async {
+      // canDrillDown is synchronous: it only answers truthfully after a
+      // search loaded the data — which is the only way the screen can be
+      // holding a street result in the first place.
+      final results = await service.search('ayacucho');
+      final street = results.firstWhere((r) => r.id == 'street:s1');
+      expect(service.canDrillDown(street), isTrue);
+
+      final corners = await service.drillDown(street);
+      expect(corners.length, 2);
+      expect(corners.map((c) => c.id), everyElement(startsWith('junction:')));
+    });
+
+    test('a street without corners is not drillable', () async {
+      final results = await service.search('junin');
+      final street = results.firstWhere((r) => r.id == 'street:s3');
+      expect(service.canDrillDown(street), isFalse);
+    });
+
+    test('junction results themselves are not drillable', () async {
+      final results = await service.search('ayacucho y heroinas');
+      final junction = results.firstWhere((r) => r.id.startsWith('junction:'));
+      expect(service.canDrillDown(junction), isFalse);
+    });
+
+    test('before any search the answer is simply false, not an error', () {
+      final fresh = OfflineSearchDataService();
+      expect(
+        fresh.canDrillDown(
+          const SearchLocation(
+            id: 'street:s1',
+            displayName: 'Avenida Ayacucho',
+            latitude: -17.39,
+            longitude: -66.15,
+          ),
+        ),
+        isFalse,
+      );
+    });
+  });
 }

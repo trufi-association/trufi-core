@@ -19,7 +19,9 @@ import 'search_location_service.dart';
 ///   junctions should lead), deduplicated by coordinates so the same
 ///   place found twice appears once;
 /// - [reverse] returns the first non-null answer, in order.
-class CompositeSearchLocationService implements SearchLocationService {
+class CompositeSearchLocationService
+    with SearchLocationDrillDown
+    implements SearchLocationService {
   final List<SearchLocationService> services;
 
   /// How long to wait for each service before dropping its results.
@@ -66,6 +68,30 @@ class CompositeSearchLocationService implements SearchLocationService {
         if (result != null) return result;
       } catch (_) {
         // Try the next one.
+      }
+    }
+    return null;
+  }
+
+  /// Forwards the street → corners flow (#745) to whichever child
+  /// service knows the location's inner points; results keep working
+  /// unchanged when no child does.
+  @override
+  bool canDrillDown(SearchLocation location) =>
+      _drillDownServiceFor(location) != null;
+
+  @override
+  Future<List<SearchLocation>> drillDown(SearchLocation location) {
+    final service = _drillDownServiceFor(location);
+    if (service == null) return Future.value(const <SearchLocation>[]);
+    return service.drillDown(location);
+  }
+
+  SearchLocationDrillDown? _drillDownServiceFor(SearchLocation location) {
+    for (final service in services) {
+      if (service is SearchLocationDrillDown) {
+        final candidate = service as SearchLocationDrillDown;
+        if (candidate.canDrillDown(location)) return candidate;
       }
     }
     return null;

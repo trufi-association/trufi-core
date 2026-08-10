@@ -28,7 +28,9 @@ import 'search_location_service.dart';
 /// Meant to be combined with an online service rather than to replace it
 /// (see [CompositeSearchLocationService]): this one owns streets and
 /// junctions, the online one owns everything else and stays fresher.
-class OfflineSearchDataService implements SearchLocationService {
+class OfflineSearchDataService
+    with SearchLocationDrillDown
+    implements SearchLocationService {
   /// Asset path of the generated `search.json`.
   final String assetPath;
 
@@ -100,6 +102,23 @@ class OfflineSearchDataService implements SearchLocationService {
   Future<List<SearchLocation>> junctionsOf(String streetRef) async {
     final data = await _ensureLoaded();
     return data.junctionsOf(streetRef);
+  }
+
+  /// A street result can be expanded into its corners when this dataset
+  /// knows at least one junction for it. Synchronous on purpose: street
+  /// results only exist after the data loaded, so `_data` is already in
+  /// memory by the time the search screen asks.
+  @override
+  bool canDrillDown(SearchLocation location) {
+    const prefix = 'street:';
+    if (!location.id.startsWith(prefix)) return false;
+    final ref = location.id.substring(prefix.length);
+    return _data?.hasJunctions(ref) ?? false;
+  }
+
+  @override
+  Future<List<SearchLocation>> drillDown(SearchLocation location) {
+    return junctionsOf(location.id.substring('street:'.length));
   }
 
   @override
@@ -256,6 +275,10 @@ class _SearchData {
     }
     return results;
   }
+
+  /// Whether [streetRef] has at least one well-formed junction.
+  bool hasJunctions(String streetRef) =>
+      (junctions[streetRef] ?? const []).isNotEmpty;
 
   /// Every junction of one street, for the drill-down flow.
   List<SearchLocation> junctionsOf(String streetRef) {
