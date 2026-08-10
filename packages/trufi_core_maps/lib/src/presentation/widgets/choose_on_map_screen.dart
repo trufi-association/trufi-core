@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../l10n/maps_localizations.dart';
 import '../../configuration/map_engine/map_engine_manager.dart';
 import '../../configuration/map_engine/trufi_map_engine.dart';
+import '../../domain/controller/map_controller.dart';
 import '../../domain/entities/camera.dart';
 import 'map_type_settings_screen.dart';
 
@@ -90,6 +91,8 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
   late double _currentLatitude;
   late double _currentLongitude;
   late TrufiCameraPosition _initialCamera;
+  final TrufiMapController _mapController = TrufiMapController();
+  late double _currentZoom;
   bool _initialized = false;
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
@@ -101,6 +104,7 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       _currentLongitude =
           config.initialLongitude ?? mapEngineManager.defaultCenter.longitude;
       final zoom = config.initialZoom ?? mapEngineManager.defaultZoom;
+      _currentZoom = zoom;
 
       _initialCamera = TrufiCameraPosition(
         target: LatLng(_currentLatitude, _currentLongitude),
@@ -113,6 +117,24 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
     setState(() {
       _currentLatitude = position.target.latitude;
       _currentLongitude = position.target.longitude;
+      _currentZoom = position.zoom;
+    });
+  }
+
+  /// Tapping the map picks that point: the marker is fixed at the centre
+  /// of the screen, so we bring the tapped location to it. Without this
+  /// the only way to choose a place is to drag the map around, which
+  /// reads as "the map ignores my clicks" (#819).
+  void _onMapClick(LatLng position) {
+    // If the map isn't bound (nothing to move), don't claim the point:
+    // the marker would stay put while the coordinates said otherwise.
+    if (_mapController.cameraPosition == null) return;
+    _mapController.moveCamera(
+      TrufiCameraPosition(target: position, zoom: _currentZoom),
+    );
+    setState(() {
+      _currentLatitude = position.latitude;
+      _currentLongitude = position.longitude;
     });
   }
 
@@ -128,8 +150,10 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
       body: Stack(
         children: [
           mapEngineManager.currentEngine.buildMap(
+            controller: _mapController,
             initialCamera: _initialCamera,
             onCameraChanged: _onCameraChanged,
+            onMapClick: _onMapClick,
           ),
           Center(
             child: IgnorePointer(
