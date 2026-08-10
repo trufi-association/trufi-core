@@ -23,7 +23,7 @@ class _DrillDownService
   );
   static const corner = SearchLocation(
     id: 'junction:s1:s2',
-    displayName: 'Ayacucho & Heroínas',
+    displayName: 'Avenida Ayacucho & Avenida Heroínas',
     latitude: -17.3927,
     longitude: -66.1587,
   );
@@ -99,8 +99,11 @@ void main() {
     await tester.tap(find.byIcon(Icons.fork_right_rounded));
     await tester.pumpAndSettle();
 
-    // Corners list replaces the results.
-    expect(find.text('Ayacucho & Heroínas'), findsOneWidget);
+    // Corners list replaces the results. Rows start at "&" — the header
+    // already names the street, and repeating it truncated the cross
+    // street's name.
+    expect(find.text('& Avenida Heroínas'), findsOneWidget);
+    expect(find.text('Avenida Ayacucho & Avenida Heroínas'), findsNothing);
     expect(find.text('Plaza Colón'), findsNothing);
     expect(find.textContaining('Avenida Ayacucho'), findsOneWidget); // header
 
@@ -108,7 +111,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.arrow_back_rounded).last);
     await tester.pumpAndSettle();
     expect(find.text('Plaza Colón'), findsOneWidget);
-    expect(find.text('Ayacucho & Heroínas'), findsNothing);
+    expect(find.text('& Avenida Heroínas'), findsNothing);
   });
 
   testWidgets('picking a corner pops it as the selected location',
@@ -145,10 +148,13 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.fork_right_rounded));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Ayacucho & Heroínas'));
+    await tester.tap(find.text('& Avenida Heroínas'));
     await tester.pumpAndSettle();
 
     expect(picked?.id, 'junction:s1:s2');
+    // The trimmed label is display-only: the picked location keeps the
+    // full corner name for the origin/destination field.
+    expect(picked?.displayName, 'Avenida Ayacucho & Avenida Heroínas');
   });
 
   testWidgets('editing the query exits the corners list', (tester) async {
@@ -156,13 +162,13 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.fork_right_rounded));
     await tester.pumpAndSettle();
-    expect(find.text('Ayacucho & Heroínas'), findsOneWidget);
+    expect(find.text('& Avenida Heroínas'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField).first, 'ayacuch');
     await tester.pump(const Duration(milliseconds: 350));
     await tester.pumpAndSettle();
 
-    expect(find.text('Ayacucho & Heroínas'), findsNothing);
+    expect(find.text('& Avenida Heroínas'), findsNothing);
     expect(find.text('Plaza Colón'), findsOneWidget);
   });
 }

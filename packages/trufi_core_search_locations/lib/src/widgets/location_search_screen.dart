@@ -229,6 +229,22 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     });
   }
 
+  /// Label for a corner inside the corners list. The header already names
+  /// the street, so repeating it on every row ("Avenida Ayacucho & Avenida
+  /// Aroma", "Avenida Ayacucho & Avenida Her…") is redundant and truncates
+  /// the one name that matters — the cross street. Rows start at "&"
+  /// instead. The popped [SearchLocation] keeps the full name, so the
+  /// origin/destination field still reads "Avenida Ayacucho & Avenida
+  /// Aroma".
+  String _cornerLabel(SearchLocation corner) {
+    final parent = _drillDownParent;
+    if (parent == null) return corner.displayName;
+    final prefix = '${parent.displayName} & ';
+    return corner.displayName.startsWith(prefix)
+        ? '& ${corner.displayName.substring(prefix.length)}'
+        : corner.displayName;
+  }
+
   Future<void> _performSearch(String query) async {
     if (query.trim().isEmpty) {
       setState(() {
@@ -442,6 +458,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                           padding: const EdgeInsets.only(bottom: 8),
                           child: _ModernLocationTile(
                             location: corner,
+                            displayNameOverride: _cornerLabel(corner),
                             icon: Icons.fork_right_rounded,
                             iconColor: colorScheme.primary,
                             onTap: () {
@@ -1016,12 +1033,18 @@ class _ModernLocationTile extends StatelessWidget {
   /// Optional widget at the row's end (e.g. the street → corners button).
   final Widget? trailing;
 
+  /// Display-only label replacing [SearchLocation.displayName] (e.g. a
+  /// corner shown as "& Avenida Aroma" inside its street's corners list).
+  /// The location itself — and whatever gets popped on tap — is untouched.
+  final String? displayNameOverride;
+
   const _ModernLocationTile({
     required this.location,
     required this.icon,
     required this.iconColor,
     required this.onTap,
     this.trailing,
+    this.displayNameOverride,
   });
 
   @override
@@ -1054,7 +1077,7 @@ class _ModernLocationTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      location.displayName,
+                      displayNameOverride ?? location.displayName,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: colorScheme.onSurface,
