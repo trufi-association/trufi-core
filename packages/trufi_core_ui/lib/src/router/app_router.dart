@@ -75,8 +75,12 @@ class AppRouter {
       );
     }).toList();
 
-    // Add the /route deep link handler to the routes list
+    // Add the /route deep link handler to the routes list. The fallback
+    // home is keyed on the screen-derived routes: the deep-link handler
+    // below is always present, so `allRoutes` itself is never empty and
+    // '/' would otherwise 404 in a screen-less app.
     final allRoutes = [
+      if (routes.isEmpty) _defaultHomeRoute(),
       ...routes,
       // Special route for web deep linking (shared routes)
       GoRoute(
@@ -118,7 +122,7 @@ class AppRouter {
               child: child,
             );
           },
-          routes: allRoutes.isEmpty ? [_defaultHomeRoute()] : allRoutes,
+          routes: allRoutes,
         ),
       ],
       errorBuilder: (context, state) => ErrorScreen(error: state.error),
@@ -165,14 +169,20 @@ class AppShell extends StatelessWidget {
     this.logo,
   });
 
+  /// First screen matching [test], the first screen otherwise, or null
+  /// when the app has no screens at all (the fallback-home case).
+  TrufiScreen? _findScreen(bool Function(TrufiScreen) test) {
+    for (final s in screens) {
+      if (test(s)) return s;
+    }
+    return screens.isEmpty ? null : screens.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     // Verificar si la pantalla actual tiene su propio AppBar
-    final currentScreen = screens.firstWhere(
-      (s) => s.path == currentPath,
-      orElse: () => screens.first,
-    );
-    final hasOwnAppBar = currentScreen.hasOwnAppBar;
+    final currentScreen = _findScreen((s) => s.path == currentPath);
+    final hasOwnAppBar = currentScreen?.hasOwnAppBar ?? false;
 
     return Scaffold(
       appBar: hasOwnAppBar
@@ -186,11 +196,10 @@ class AppShell extends StatelessWidget {
                   icon: const Icon(Icons.info_outline),
                   tooltip: CoreLocalizations.of(context).navAbout,
                   onPressed: () {
-                    final aboutScreen = screens.firstWhere(
-                      (s) => s.id == 'about',
-                      orElse: () => screens.first,
-                    );
-                    _navigateToSection(context, aboutScreen.path);
+                    final aboutScreen = _findScreen((s) => s.id == 'about');
+                    if (aboutScreen != null) {
+                      _navigateToSection(context, aboutScreen.path);
+                    }
                   },
                 ),
               ],
