@@ -48,8 +48,11 @@ abstract class TrufiScreen {
   /// Localization delegates for this screen
   List<LocalizationsDelegate> get localizationsDelegates;
 
-  /// Supported locales for this screen
-  List<Locale> get supportedLocales => [];
+  // NOTE(#945): the old `supportedLocales` getter was dead API — every
+  // screen overrode it and nothing ever read it. The app's language set is
+  // the city's decision (`TrufiLocaleConfig.supportedLocales`), not an
+  // aggregation of what each screen ships, so the getter was removed
+  // rather than wired up.
 
   /// Menu item configuration (null if not shown in menu)
   ScreenMenuItem? get menuItem => null;

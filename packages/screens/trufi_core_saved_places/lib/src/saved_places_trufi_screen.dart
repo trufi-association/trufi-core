@@ -57,10 +57,6 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales =>
-      SavedPlacesLocalizations.supportedLocales;
-
-  @override
   List<SingleChildWidget> get providers => [
     BlocProvider<SavedPlacesCubit>(
       create: (_) => SavedPlacesCubit(repository: _repository)..initialize(),

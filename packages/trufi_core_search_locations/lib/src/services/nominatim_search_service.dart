@@ -14,7 +14,8 @@ import 'search_location_service.dart';
 ///
 /// Note: The public Nominatim API has usage limits. For production use,
 /// consider hosting your own instance or using a commercial provider.
-class NominatimSearchService implements SearchLocationService {
+class NominatimSearchService
+    with LanguageAwareSearch implements SearchLocationService {
   /// Base URL for the Nominatim API.
   final String baseUrl;
 
@@ -22,7 +23,9 @@ class NominatimSearchService implements SearchLocationService {
   final String userAgent;
 
   /// Language for results (e.g., 'en', 'de', 'es').
-  final String? language;
+  /// Language for result texts. Mutable: the search screen keeps it in
+  /// sync with the app's locale (see [LanguageAwareSearch]).
+  String? language;
 
   /// Maximum number of results to return.
   final int limit;
@@ -63,6 +66,9 @@ class NominatimSearchService implements SearchLocationService {
     DeviceIdService? deviceIdService,
   }) : _client = client ?? http.Client(),
        _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
+
+  @override
+  set searchLanguage(String? languageCode) => language = languageCode;
 
   Future<Map<String, String>> _buildHeaders() async {
     final headers = <String, String>{'User-Agent': userAgent};

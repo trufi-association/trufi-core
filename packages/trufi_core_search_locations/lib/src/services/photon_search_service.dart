@@ -11,12 +11,15 @@ import 'search_location_service.dart';
 ///
 /// Photon is a free, open-source geocoding API powered by OpenStreetMap data.
 /// https://photon.komoot.io/
-class PhotonSearchService implements SearchLocationService {
+class PhotonSearchService
+    with LanguageAwareSearch implements SearchLocationService {
   /// Base URL for the Photon API.
   final String baseUrl;
 
   /// Language for results (e.g., 'en', 'de', 'es').
-  final String? language;
+  /// Language for result texts. Mutable: the search screen keeps it in
+  /// sync with the app's locale (see [LanguageAwareSearch]).
+  String? language;
 
   /// Latitude for location bias (results closer to this point are prioritized).
   final double? biasLatitude;
@@ -48,6 +51,9 @@ class PhotonSearchService implements SearchLocationService {
     DeviceIdService? deviceIdService,
   }) : _client = client ?? http.Client(),
        _deviceIdService = deviceIdService ?? SharedPreferencesDeviceIdService();
+
+  @override
+  set searchLanguage(String? languageCode) => language = languageCode;
 
   Future<Map<String, String>?> _buildHeaders() async {
     try {

@@ -140,6 +140,18 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Keep the geocoder answering in the rider's language (#945). Locale
+    // is an inherited dependency, so a language switch re-fires this.
+    final service = widget.searchService;
+    if (service is LanguageAwareSearch) {
+      (service as LanguageAwareSearch).searchLanguage =
+          Localizations.localeOf(context).languageCode;
+    }
+  }
+
   Future<void> _loadPlaces() async {
     if (widget.myPlacesProvider != null) {
       final places = await widget.myPlacesProvider!.getMyPlaces();

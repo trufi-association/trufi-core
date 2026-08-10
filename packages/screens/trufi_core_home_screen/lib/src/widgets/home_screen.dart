@@ -204,6 +204,13 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Keep the plan cubit's language current so server-produced texts
+    // (alerts, instruction street names) come back in the rider's
+    // language (#945). Locale is an inherited dependency, so this fires
+    // again whenever the user switches languages.
+    context.read<RoutePlannerCubit>().updateLocale(
+          Localizations.localeOf(context).toLanguageTag(),
+        );
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();
     // Parse URL parameters on first load (web only)

@@ -111,9 +111,6 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales => HomeScreenLocalizations.supportedLocales;
-
-  @override
   List<SingleChildWidget> get providers => [
     BlocProvider<RoutePlannerCubit>(
       create: (context) => RoutePlannerCubit(

@@ -21,6 +21,16 @@ abstract class SearchLocationService {
   void dispose();
 }
 
+/// Optional capability for search services that can localize their result
+/// texts (#945). [LocationSearchScreen] keeps the language in sync with the
+/// app's locale on every dependency change, so switching the app language
+/// switches the geocoder's answers too;
+/// [CompositeSearchLocationService] forwards to every capable child.
+abstract mixin class LanguageAwareSearch {
+  /// Language for result texts, as a lowercase code (e.g. 'es', 'qu').
+  set searchLanguage(String? languageCode);
+}
+
 /// Optional capability for services whose results can be expanded into
 /// finer-grained locations — the street → corners flow (#745).
 ///

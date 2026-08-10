@@ -35,9 +35,6 @@ class FaresTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales => FaresLocalizations.supportedLocales;
-
-  @override
   ScreenMenuItem? get menuItem =>
       const ScreenMenuItem(icon: Icons.payments_outlined, order: 150);
 

@@ -33,6 +33,16 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   /// resolved against today at this time.
   final TimeOfDay? _routingTimeOverride;
 
+  /// BCP-47 tag of the app's current language, forwarded to the routing
+  /// provider so server-produced texts (alerts, street names in
+  /// instructions) come back in the rider's language instead of the
+  /// server's default (#945). Kept fresh by the home screen on every
+  /// dependency change — a Cubit has no BuildContext of its own.
+  String? _locale;
+
+  /// Updates the language forwarded with every plan request.
+  void updateLocale(String? languageTag) => _locale = languageTag;
+
   /// Optional GTFS-backed lookup used to enrich [routing.Leg.serviceHours]
   /// after the provider has parsed a plan. OTP REST/GraphQL doesn't
   /// expose calendar+frequencies in a directly usable shape, so this
@@ -236,6 +246,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
         _requestService.fetchPlan(
           from: state.fromPlace!,
           to: state.toPlace!,
+          locale: _locale,
           dateTime: effectiveDateTime,
           arriveBy: arriveBy,
         ),
