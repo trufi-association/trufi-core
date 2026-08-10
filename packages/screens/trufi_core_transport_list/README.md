@@ -12,7 +12,10 @@ base (e.g. `https://planner.trufi.app`). The QR encodes
 
 A QR is read by a camera app, which resolves http(s) and nothing else — a
 custom scheme such as `trufiapp://` produces a code that opens nothing, so
-without a usable https base the QR affordances stay hidden by design.
+without a usable https base the QR affordances stay hidden by design. (A
+custom-scheme link shared through other channels also only opens the app if
+the host manifest declares a matching intent filter, e.g.
+`android:host="routes"`.)
 
 For the scanned link to open the **app** (rather than the website) the host
 app must register it as an App Link / Universal Link: an intent filter for
@@ -26,7 +29,9 @@ link still works: it falls back to the web app.
 ### Copying the QR image
 
 "Copy QR" hands a rendered PNG to the clipboard through the `pasteboard`
-plugin, which needs a `FileProvider` in the **host app's** manifest:
+plugin, which needs a `FileProvider` in the **host app's** manifest —
+without it copying fails at runtime with a `PlatformException`, surfaced in
+the dialog as "Couldn't copy the QR":
 
 ```xml
 <provider
