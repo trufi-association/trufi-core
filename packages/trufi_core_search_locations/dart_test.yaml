@@ -1,0 +1,13 @@
+# Test configuration for trufi_core_search_locations.
+tags:
+  integration:
+    # Integration tests hit real Photon / Nominatim servers over the
+    # network. Run with:   flutter test --tags integration
+    # Skip with:           flutter test --exclude-tags integration
+    timeout: 60s
+
+# Default test timeout
+timeout: 30s
+
+platforms:
+  - vm

@@ -646,20 +646,28 @@ class GtfsRoutingService {
     return dLat * dLat + dLon * dLon;
   }
 
+  /// How much worse a walked meter is than a ridden one. Without this,
+  /// "ride line 1 partway and walk the rest" ties with a direct line that
+  /// goes door to door (same total meters), and insertion order decides
+  /// the winner — the #859 fixture caught exactly that. 2.0 matches the
+  /// industry default (OpenTripPlanner's `walkReluctance`).
+  static const double _walkReluctance = 2.0;
+
   /// Calculate routing score (lower is better).
   ///
-  /// Pure total-distance: `walkDistance + transitDistance` (meters). Time
-  /// is intentionally ignored — schedule-driven transfer waits would skew
-  /// rankings and make "fastest by 1 minute" beat genuinely shorter trips.
-  /// The strict-direct-vs-transfer split (see [findRoutes]) keeps transfers
-  /// out of results when any direct exists, so the per-transfer friction
-  /// term that the old formula carried is no longer needed here.
+  /// Distance-based: `walkDistance * reluctance + transitDistance`
+  /// (meters). Time is intentionally ignored — schedule-driven transfer
+  /// waits would skew rankings and make "fastest by 1 minute" beat
+  /// genuinely shorter trips. The strict-direct-vs-transfer split (see
+  /// [findRoutes]) keeps transfers out of results when any direct exists,
+  /// so the per-transfer friction term that the old formula carried is no
+  /// longer needed here.
   double _calculateScore({
     required double walkDistance,
     required int transfers,
     required double transitDistance,
   }) {
-    return walkDistance + transitDistance;
+    return walkDistance * _walkReluctance + transitDistance;
   }
 
   /// Tight bounding box around a list of nearby stops, in degrees.

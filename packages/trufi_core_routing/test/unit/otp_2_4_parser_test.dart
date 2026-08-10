@@ -213,8 +213,15 @@ void main() {
 
       final plan = Otp24ResponseParser.parsePlan(jsonWithoutRoute);
 
-      expect(plan.itineraries!.first.legs.first.route, isNull);
-      expect(plan.itineraries!.first.legs.first.agency, isNull);
+      // A transit leg with no `route` must not crash the parse. The parser
+      // itself carries no agency; the Itinerary then assigns a synthetic
+      // display Route with a default colour (so the map line / chip isn't
+      // blank — see Itinerary._assignDefaultColors, #930), which is display
+      // metadata only, not real GTFS route data.
+      final leg = plan.itineraries!.first.legs.first;
+      expect(leg.agency, isNull);
+      expect(leg.route?.shortName, isNull); // no real route name came in
+      expect(leg.route?.color, isNotNull); // default colour was assigned
     });
   });
 }

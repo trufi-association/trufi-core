@@ -429,22 +429,30 @@ class Otp15RoutingProvider extends IRoutingProvider {
   }
 
   Future<void> _applyDeviceId(Map<String, String> headers) async {
-    final deviceId = await _deviceIdService.getDeviceId();
-    if (deviceId.isNotEmpty) {
-      headers['X-Device-Id'] = deviceId;
+    try {
+      final deviceId = await _deviceIdService.getDeviceId();
+      if (deviceId.isNotEmpty) {
+        headers['X-Device-Id'] = deviceId;
+      }
+    } catch (_) {
+      // The device id is telemetry: if it can't be read (no platform
+      // bindings, storage error) the route request must still go out.
     }
   }
 
   // --- Endpoint helpers ---
 
   String get _restEndpoint {
-    if (endpoint.contains('/plan')) {
-      return endpoint;
-    }
-    final base = endpoint.endsWith('/')
+    // Trim a trailing slash first, so a configured endpoint that already
+    // points at `/plan` doesn't produce `…/plan/` (a double-slash path
+    // once the query is appended).
+    final trimmed = endpoint.endsWith('/')
         ? endpoint.substring(0, endpoint.length - 1)
         : endpoint;
-    return '$base/otp/routers/default/plan';
+    if (trimmed.contains('/plan')) {
+      return trimmed;
+    }
+    return '$trimmed/otp/routers/default/plan';
   }
 
   late final String _indexEndpoint = _buildIndexEndpoint();

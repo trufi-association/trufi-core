@@ -31,6 +31,12 @@ jobs:
         uses: bluefireteam/melos-action@v3
       - name: Run Flutter Analyze
         run: melos ci:analyze
+      - name: Run Tests
+        # Unit + widget tests across every package. Integration suites
+        # (@Tags('integration')) hit real servers and are excluded here.
+        # Until now the check only analyzed — a green check ran no tests
+        # (issue #756).
+        run: melos ci:test
       - name: Translation Check
         run: |
           melos run l10n --no-select
