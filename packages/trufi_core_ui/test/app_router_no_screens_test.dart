@@ -10,14 +10,14 @@ import 'package:trufi_core_ui/src/router/app_router.dart';
 /// fallback has to key on the screen-derived routes, and its text must be
 /// localized (#945).
 void main() {
-  Widget appWithNoScreens(Locale locale) {
+  Widget appWithNoScreens(Locale locale, {AppRouter? appRouter}) {
     return ChangeNotifierProvider(
       create: (_) => SharedRouteNotifier(),
       child: MaterialApp.router(
         locale: locale,
         supportedLocales: CoreLocalizations.supportedLocales,
         localizationsDelegates: CoreLocalizations.localizationsDelegates,
-        routerConfig: AppRouter(screens: const []).router,
+        routerConfig: (appRouter ?? AppRouter(screens: const [])).router,
       ),
     );
   }
@@ -37,5 +37,20 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('No screens registered'), findsOneWidget);
+  });
+
+  testWidgets('the /route deep link still redirects onto the fallback home', (
+    tester,
+  ) async {
+    final appRouter = AppRouter(screens: const []);
+    await tester.pumpWidget(
+      appWithNoScreens(const Locale('es'), appRouter: appRouter),
+    );
+    await tester.pumpAndSettle();
+
+    appRouter.router.go('/route');
+    await tester.pumpAndSettle();
+
+    expect(find.text('No hay pantallas registradas'), findsOneWidget);
   });
 }
