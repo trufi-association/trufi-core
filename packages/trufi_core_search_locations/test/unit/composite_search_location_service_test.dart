@@ -159,6 +159,21 @@ void main() {
       expect(composite.canDrillDown(street), isFalse);
     });
   });
+
+  group('language forwarding (#945)', () {
+    test('forwards the language to every capable child and skips the rest',
+        () {
+      final aware = _FakeLanguageAwareService();
+      final plain = _FakeService(const []);
+      final composite = CompositeSearchLocationService(
+        services: [plain, aware],
+      );
+
+      composite.searchLanguage = 'qu';
+
+      expect(aware.received, 'qu');
+    });
+  });
 }
 
 class _FakeDrillDownService extends _FakeService with SearchLocationDrillDown {
@@ -177,4 +192,13 @@ class _FakeDrillDownService extends _FakeService with SearchLocationDrillDown {
     drillDownCalls++;
     return corners[location.id] ?? const [];
   }
+}
+
+class _FakeLanguageAwareService extends _FakeService with LanguageAwareSearch {
+  _FakeLanguageAwareService() : super(const []);
+
+  String? received;
+
+  @override
+  set searchLanguage(String? languageCode) => received = languageCode;
 }

@@ -38,9 +38,6 @@ class FeedbackTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales => FeedbackLocalizations.supportedLocales;
-
-  @override
   ScreenMenuItem? get menuItem =>
       const ScreenMenuItem(icon: Icons.feedback_outlined, order: 800);
 

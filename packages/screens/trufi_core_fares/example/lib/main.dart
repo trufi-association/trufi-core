@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: screen.supportedLocales,
+      supportedLocales: FaresLocalizations.supportedLocales,
     );
   }
 }

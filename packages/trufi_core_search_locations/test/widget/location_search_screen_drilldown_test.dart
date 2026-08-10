@@ -8,8 +8,13 @@ import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 /// searches only within the corners, and nothing else. Picking a corner
 /// returns it to the caller with its full name.
 class _DrillDownService
-    with SearchLocationDrillDown
+    with SearchLocationDrillDown, LanguageAwareSearch
     implements SearchLocationService {
+  String? languageReceived;
+
+  @override
+  set searchLanguage(String? languageCode) => languageReceived = languageCode;
+
   static const street = SearchLocation(
     id: 'street:s1',
     displayName: 'Avenida Ayacucho',
@@ -174,5 +179,22 @@ void main() {
     expect(picked, isNull);
     expect(find.text('Plaza Colón'), findsOneWidget);
     expect(find.text('& Avenida Heroínas'), findsNothing);
+  });
+
+  testWidgets('the screen keeps the geocoder language in sync with the '
+      'app locale (#945)', (tester) async {
+    final service = _DrillDownService();
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates:
+            SearchLocationsLocalizations.localizationsDelegates,
+        supportedLocales: SearchLocationsLocalizations.supportedLocales,
+        home: LocationSearchScreen(isOrigin: true, searchService: service),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(service.languageReceived, 'es');
   });
 }

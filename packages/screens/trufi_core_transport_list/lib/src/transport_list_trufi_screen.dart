@@ -115,10 +115,6 @@ class TransportListTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales =>
-      TransportListLocalizations.supportedLocales;
-
-  @override
   List<SingleChildWidget> get providers => [];
 
   @override

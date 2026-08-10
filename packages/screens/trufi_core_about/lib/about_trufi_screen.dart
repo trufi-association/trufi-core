@@ -59,9 +59,6 @@ class AboutTrufiScreen extends TrufiScreen {
   ];
 
   @override
-  List<Locale> get supportedLocales => AboutLocalizations.supportedLocales;
-
-  @override
   ScreenMenuItem? get menuItem => const ScreenMenuItem(
     icon: Icons.info_outline,
     order: 900,

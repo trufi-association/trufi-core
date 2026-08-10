@@ -20,7 +20,7 @@ import 'search_location_service.dart';
 ///   place found twice appears once;
 /// - [reverse] returns the first non-null answer, in order.
 class CompositeSearchLocationService
-    with SearchLocationDrillDown
+    with SearchLocationDrillDown, LanguageAwareSearch
     implements SearchLocationService {
   final List<SearchLocationService> services;
 
@@ -95,6 +95,17 @@ class CompositeSearchLocationService
       }
     }
     return null;
+  }
+
+  /// Forwards the app language to every child that can localize its
+  /// results (#945); language-unaware children are left alone.
+  @override
+  set searchLanguage(String? languageCode) {
+    for (final service in services) {
+      if (service is LanguageAwareSearch) {
+        (service as LanguageAwareSearch).searchLanguage = languageCode;
+      }
+    }
   }
 
   @override

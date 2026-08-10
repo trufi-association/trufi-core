@@ -410,4 +410,30 @@ void main() {
       });
     });
   });
+
+  group('language whitelist (#969 fresh review)', () {
+    // Public Photon rejects unsupported `lang` values with HTTP 400
+    // ("language es is not supported"), which would kill every search
+    // for Spanish riders — the flagship app's default language.
+    test('an unsupported app language is not forwarded to Photon', () {
+      final service = PhotonSearchService(baseUrl: 'https://photon.test');
+      service.searchLanguage = 'es';
+      expect(service.language, isNull);
+    });
+
+    test('a supported language is forwarded', () {
+      final service = PhotonSearchService(baseUrl: 'https://photon.test');
+      service.searchLanguage = 'de';
+      expect(service.language, 'de');
+    });
+
+    test('a widened deployment can accept more languages', () {
+      final service = PhotonSearchService(
+        baseUrl: 'https://photon.test',
+        supportedLanguages: {'en', 'es'},
+      );
+      service.searchLanguage = 'es';
+      expect(service.language, 'es');
+    });
+  });
 }
