@@ -226,11 +226,46 @@ class Otp28RoutingProvider extends IRoutingProvider {
         _prefs.transportModes.single == RoutingMode.walk;
 
     return plan.copyWith(
-      itineraries: filterLongWalks(
-        plan.itineraries,
-        walkOnlyRequested: walkOnlyRequested,
+      itineraries: sortByGeneralizedCost(
+        filterLongWalks(
+          plan.itineraries,
+          walkOnlyRequested: walkOnlyRequested,
+        ),
       ),
     );
+  }
+
+  /// Orders itineraries by OTP's own generalized cost instead of the
+  /// arrival-time order the plan API returns them in.
+  ///
+  /// The arrival order routinely puts a transfer above a direct ride
+  /// (#849, #847): measured against the Cochabamba production graph,
+  /// Sacaba → UMSS returned a same-line transfer (233 "Nro. rojo" →
+  /// 233 "Bandera verde", 34 min, cost 3552) *above* a direct 241
+  /// (33 min, cost 2587) just because it arrived first. The router
+  /// already priced the transfer as worse — its cost includes the
+  /// configured transferPenalty and boardCost — so showing the list in
+  /// cost order surfaces the itinerary the router itself considers best.
+  ///
+  /// The sort is explicitly stable (index tiebreak): Dart's [List.sort]
+  /// is only de-facto stable below ~32 elements, and equal-cost
+  /// itineraries must keep OTP's arrival order. Itineraries without a
+  /// cost (older servers) keep their position relative to each other
+  /// and sink below priced ones, so mixed responses degrade gracefully.
+  @visibleForTesting
+  static List<Itinerary>? sortByGeneralizedCost(List<Itinerary>? itineraries) {
+    if (itineraries == null || itineraries.length < 2) return itineraries;
+    final indexed = itineraries.asMap().entries.toList()
+      ..sort((a, b) {
+        final costA = a.value.generalizedCost;
+        final costB = b.value.generalizedCost;
+        if (costA == null && costB == null) return a.key.compareTo(b.key);
+        if (costA == null) return 1;
+        if (costB == null) return -1;
+        final byCost = costA.compareTo(costB);
+        return byCost != 0 ? byCost : a.key.compareTo(b.key);
+      });
+    return [for (final entry in indexed) entry.value];
   }
 
   /// Drops walk-only itineraries longer than 1 km — in a transit search
