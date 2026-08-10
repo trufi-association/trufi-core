@@ -10,6 +10,7 @@
   "confirmLocation": "Confirmar ubicación",
   "offlineMapName": "Mapa offline",
   "offlineMapDescription": "Mapa completamente offline",
+  "vectorMapName": "Mapa vectorial (MapLibre)",
   "errorLoadingOfflineMap": "Error al cargar el mapa offline",
   "retry": "Reintentar",
   "vectorMapDescription": "Mapa vectorial con estilo moderno y mejor rendimiento",

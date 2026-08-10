@@ -53,7 +53,9 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   @override
   String localizedName(BuildContext context) =>
-      nameBuilder?.call(context) ?? name;
+      nameBuilder?.call(context) ??
+      displayName ??
+      MapsLocalizations.of(context).vectorMapName;
 
   @override
   String localizedDescription(BuildContext context) =>
