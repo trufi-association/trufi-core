@@ -21,7 +21,13 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_svg: ^2.2.3
   latlong2: ^0.9.1
-  maplibre_gl: ^0.26.1
+  # 0.26.2 minimum: 0.26.1 still crashes on iOS with SIGABRT
+  # (std::domain_error from mbgl::LatLng) when a camera op reaches a map
+  # whose native frame is zero-sized — a route-detail screen fitting the
+  # camera right after creating its map hits it. Fixed upstream in 0.26.2
+  # (maplibre/flutter-maplibre-gl#819, PR #841); crashed a real-device
+  # App Review submission on 0.25.0 (Trujillo, 2026-08-09).
+  maplibre_gl: ^0.26.2
   shared_preferences: ^2.5.4
   path_provider: ^2.1.5
   url_launcher: ^6.3.2
