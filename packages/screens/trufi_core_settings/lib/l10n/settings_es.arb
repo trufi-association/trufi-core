@@ -1,6 +1,5 @@
 {
   "@@locale": "es",
-
   "onboardingTitle": "¡Bienvenido!",
   "onboardingSubtitle": "Vamos a configurar tus preferencias",
   "onboardingLanguageTitle": "Elige tu idioma",
@@ -11,7 +10,6 @@
   "onboardingMapTitle": "Elige tu estilo de mapa",
   "onboardingRoutingTitle": "Elige tu motor de enrutamiento",
   "onboardingComplete": "Comenzar",
-
   "privacyConsentTitle": "Ayuda a mejorar la app",
   "privacyConsentSubtitle": "Ayúdanos a mejorar la app compartiendo datos de uso anónimos",
   "privacyConsentInfoTitle": "Qué recopilamos",
@@ -20,7 +18,6 @@
   "privacyConsentInfoAnonymous": "Todos los datos son completamente anónimos",
   "privacyConsentAccept": "Aceptar y continuar",
   "privacyConsentDecline": "No, gracias",
-
   "settingsTitle": "Configuración",
   "settingsLanguage": "Idioma",
   "settingsSelectLanguage": "Selecciona tu idioma preferido:",
@@ -31,20 +28,19 @@
   "settingsThemeSystem": "Predeterminado del Sistema",
   "settingsMap": "Mapa",
   "settingsSelectMapType": "Selecciona tu tipo de mapa preferido:",
-
-  "settingsRouting": "Enrutamiento",
-  "settingsSelectRoutingEngine": "Selecciona tu motor de enrutamiento preferido:",
-
+  "settingsRouting": "Búsqueda de rutas",
+  "settingsSelectRoutingEngine": "Elige el servicio que se utilizará para calcular tus rutas.",
   "settingsPrivacy": "Privacidad",
   "settingsPrivacySubtitle": "Ayuda a mejorar la app",
   "settingsPrivacyShareData": "Compartir datos de uso anónimos",
   "settingsPrivacyShareDataDescription": "Ayúdanos a corregir errores y mejorar los datos de transporte",
-
   "engineOnlineName": "En línea",
   "engineOnlineDescription": "OpenTripPlanner 2.8. Rutas en tiempo real con indicaciones detalladas de caminata.",
   "engineOfflineName": "Sin conexión",
   "engineOfflineDescription": "Enrutamiento basado en GTFS. Funciona sin internet.",
   "limitationRequiresInternet": "Requiere internet",
   "limitationSlower": "Respuesta más lenta",
-  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa"
+  "limitationNoWalkingRoute": "Sin ruta de caminata en mapa",
+  "settingsWorksOffline": "Funciona sin conexión",
+  "settingsNeedsInternet": "Requiere conexión a internet"
 }

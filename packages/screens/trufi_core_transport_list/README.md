@@ -1,19 +1,37 @@
 # trufi_core_transport_list
 
-Transport list screen for Trufi apps — displays routes, route details, and
-per-operator shareable QR codes.
+Routes list, route detail, and the operator QR sheet.
 
-## Host-app setup for the operator QR dialog
+## Host-app requirements
 
-### Android: FileProvider (required for "Copy QR")
+### Operator QR codes
 
-The "Copy QR" button copies the QR **image** via the `pasteboard` plugin.
-On Android the plugin writes the PNG to `context.cacheDir` and exposes it
-through a `FileProvider` with authority `${applicationId}.provider` — which
-**the host app must declare**, or copying fails at runtime with a
-`PlatformException` (surfaced in the dialog as "Couldn't copy the QR").
+Pass `shareBaseUrl` to `TransportListTrufiScreen` with the app's **https**
+base (e.g. `https://planner.trufi.app`). The QR encodes
+`<base>/routes?operator=<agency>`.
 
-Add to `android/app/src/main/AndroidManifest.xml` inside `<application>`:
+A QR is read by a camera app, which resolves http(s) and nothing else — a
+custom scheme such as `trufiapp://` produces a code that opens nothing, so
+without a usable https base the QR affordances stay hidden by design. (A
+custom-scheme link shared through other channels also only opens the app if
+the host manifest declares a matching intent filter, e.g.
+`android:host="routes"`.)
+
+For the scanned link to open the **app** (rather than the website) the host
+app must register it as an App Link / Universal Link: an intent filter for
+that host with `android:autoVerify="true"`, plus a matching
+`assetlinks.json` (Android) and `apple-app-site-association` (iOS) served
+from the domain. On Android the verification uses the **signing key the
+store re-signs with**, so App Links only resolve on store-installed builds
+— a locally built APK opens the browser instead. Without any of this the
+link still works: it falls back to the web app.
+
+### Copying the QR image
+
+"Copy QR" hands a rendered PNG to the clipboard through the `pasteboard`
+plugin, which needs a `FileProvider` in the **host app's** manifest —
+without it copying fails at runtime with a `PlatformException`, surfaced in
+the dialog as "Couldn't copy the QR":
 
 ```xml
 <provider
@@ -27,23 +45,15 @@ Add to `android/app/src/main/AndroidManifest.xml` inside `<application>`:
 </provider>
 ```
 
-And create `android/app/src/main/res/xml/provider_paths.xml`:
+with `android/app/src/main/res/xml/provider_paths.xml`:
 
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
     <cache-path name="cache" path="." />
-    <external-path name="external_files" path="." />
 </paths>
 ```
 
-Note: the pasteboard README only shows `external-path`, but the plugin
-writes to the cache directory — **`cache-path` is the entry that matters**.
-
-### Shareable links: prefer an https `shareBaseUrl`
-
-Pass `TransportListTrufiScreen(shareBaseUrl: 'https://your.domain')` so QR
-codes and shared links use `https://your.domain/routes?operator=X`. Camera
-apps open https QR codes and messengers linkify them; the custom-scheme
-fallback (`yourscheme://routes?...`) does neither, and additionally requires
-a matching intent-filter (`android:host="routes"`) in the host manifest.
+`cache-path` is the root that matters — the plugin writes the PNG to the
+app's internal cache. (The plugin's own README documents only
+`external-path`, which leaves copying failing with *"Failed to find
+configured root that contains /data/data/&lt;pkg&gt;/cache/…"*.)

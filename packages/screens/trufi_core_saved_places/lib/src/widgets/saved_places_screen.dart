@@ -133,7 +133,11 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       defaultLongitude: defaultLongitude,
     );
 
-    if (place != null) {
+    if (place != null && context.mounted) {
+      if (cubit.isDuplicatePlace(place)) {
+        _showDuplicateWarning(context, place);
+        return;
+      }
       cubit.savePlace(place);
     }
   }
@@ -149,9 +153,26 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       defaultLongitude: defaultLongitude,
     );
 
-    if (updatedPlace != null) {
+    if (updatedPlace != null && context.mounted) {
+      // An edit that keeps the same name and coordinates can't create a
+      // new duplicate — skip the check so places that were duplicated
+      // before this guard existed stay editable (icon, type, ...).
+      final identityChanged =
+          !SavedPlacesCubit.hasSameIdentity(updatedPlace, place);
+      if (identityChanged &&
+          cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
+        _showDuplicateWarning(context, updatedPlace);
+        return;
+      }
       cubit.updatePlace(updatedPlace);
     }
+  }
+
+  void _showDuplicateWarning(BuildContext context, SavedPlace place) {
+    final localization = SavedPlacesLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(localization.placeAlreadySaved(place.name))),
+    );
   }
 
   void _showDeleteConfirmation(BuildContext context, SavedPlace place) {

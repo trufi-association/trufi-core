@@ -134,7 +134,7 @@ class _FlutterMapWidgetState extends State<_FlutterMapWidget>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.detach();
+      oldWidget.controller?.detach(this);
       widget.controller?.attach(this);
     }
 
@@ -149,7 +149,7 @@ class _FlutterMapWidgetState extends State<_FlutterMapWidget>
 
   @override
   void dispose() {
-    widget.controller?.detach();
+    widget.controller?.detach(this);
     _mapCtl.dispose();
     super.dispose();
   }

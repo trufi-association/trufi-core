@@ -114,4 +114,9 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
 
   @override
   String get history => 'Historial';
+
+  @override
+  String placeAlreadySaved(String placeName) {
+    return '\"$placeName\" ya está guardado en esa ubicación';
+  }
 }

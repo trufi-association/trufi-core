@@ -50,7 +50,10 @@ final List<IRoutingProvider> _routingEngines = [
   if (kIsWeb)
     TrufiPlannerProvider(
       config: const TrufiPlannerConfig.remote(
-        serverUrl: 'https://planner.trufi.app',
+        // The planner API lives behind the gateway's /api prefix; without
+        // it every request lands on the web app and comes back as HTML
+        // ("FormatException: Unexpected token '<'").
+        serverUrl: 'https://planner.trufi.app/api',
       ),
     ),
   // Online routing via OTP (dev servers)
@@ -274,10 +277,20 @@ void main() {
         ),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
-            searchLocationService: PhotonSearchService(
-              baseUrl: _photonUrl,
-              biasLatitude: _defaultCenter.latitude,
-              biasLongitude: _defaultCenter.longitude,
+            // Both sources on purpose: the offline data owns streets and
+            // the corners between them ("Ayacucho y Heroínas"), which no
+            // geocoder can answer; Photon owns places and addresses and
+            // stays fresher. If either fails — no network, missing asset
+            // — the other still answers (#745).
+            searchLocationService: CompositeSearchLocationService(
+              services: [
+                OfflineSearchDataService(),
+                PhotonSearchService(
+                  baseUrl: _photonUrl,
+                  biasLatitude: _defaultCenter.latitude,
+                  biasLongitude: _defaultCenter.longitude,
+                ),
+              ],
             ),
           ),
         ),

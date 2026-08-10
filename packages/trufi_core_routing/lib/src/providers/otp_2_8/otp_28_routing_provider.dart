@@ -108,7 +108,7 @@ class Otp28RoutingProvider extends IRoutingProvider {
   @override
   String localizedDescription(BuildContext context) =>
       displayDescription ??
-      RoutingLocalizations.of(context).otpOnlineDescription('2.8');
+      RoutingLocalizations.of(context).otpOnlineDescription;
 
   @override
   bool get supportsTransitRoutes => true;

@@ -134,12 +134,34 @@ abstract class TransportListDataProvider extends ChangeNotifier {
 
     if (_query.isNotEmpty) {
       final lowerQuery = _query.toLowerCase();
-      result = result.where((route) {
+      final matches = result.where((route) {
         final searchText =
             '${route.shortName ?? ''} ${route.longName ?? ''} ${route.headsign ?? ''} ${route.agencyName ?? ''}'
                 .toLowerCase();
         return searchText.contains(lowerQuery);
-      });
+      }).toList();
+
+      // Rank by match quality so short queries stay useful: the route whose
+      // short name IS the query (bus "R") must beat the hundreds of routes
+      // that merely contain the letter somewhere (#844). Ties keep the
+      // original list order (sort is decorated with the index — List.sort
+      // is not stable).
+      int rank(TransportRoute route) {
+        final short = (route.shortName ?? '').trim().toLowerCase();
+        if (short == lowerQuery) return 0;
+        if (short.startsWith(lowerQuery)) return 1;
+        if (short.contains(lowerQuery)) return 2;
+        return 3;
+      }
+
+      final decorated = [
+        for (var i = 0; i < matches.length; i++)
+          (rank: rank(matches[i]), index: i, route: matches[i]),
+      ]..sort((a, b) {
+          final byRank = a.rank.compareTo(b.rank);
+          return byRank != 0 ? byRank : a.index.compareTo(b.index);
+        });
+      result = decorated.map((e) => e.route);
     }
 
     _state = _state.copyWith(filteredRoutes: result.toList());

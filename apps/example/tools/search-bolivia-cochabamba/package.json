@@ -1,0 +1,12 @@
+{
+  "name": "search-bolivia-cochabamba",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example offline search data (POIs, streets and street junctions) built on top of osm-search-data-export.",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "osm-search-data-export": "1.1.1"
+  }
+}

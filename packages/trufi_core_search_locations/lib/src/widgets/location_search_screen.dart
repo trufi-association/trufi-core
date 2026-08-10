@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
@@ -158,6 +160,23 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     );
   }
 
+  Timer? _debounce;
+
+  /// Searches shortly after typing stops instead of on every keystroke.
+  /// A query like "ayacucho y heroinas" is 19 characters: without this
+  /// each one ran a full search — 19 network requests and, with offline
+  /// data loaded, 19 scans of the city's streets.
+  void _onQueryChanged(String query) {
+    _debounce?.cancel();
+    if (query.trim().isEmpty) {
+      _performSearch(query);
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      _performSearch(query);
+    });
+  }
+
   Future<void> _performSearch(String query) async {
     if (query.trim().isEmpty) {
       setState(() {
@@ -218,6 +237,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _searchController.dispose();
     _searchFocusNode.dispose();
     _staggerController.dispose();
@@ -250,7 +270,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                   setState(() {
                     _query = value;
                   });
-                  _performSearch(value);
+                  _onQueryChanged(value);
                 },
                 onClear: () {
                   _searchController.clear();

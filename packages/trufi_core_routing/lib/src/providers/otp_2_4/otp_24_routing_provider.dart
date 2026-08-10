@@ -76,7 +76,7 @@ class Otp24RoutingProvider extends IRoutingProvider {
   @override
   String localizedDescription(BuildContext context) =>
       displayDescription ??
-      RoutingLocalizations.of(context).otpOnlineDescription('2.4');
+      RoutingLocalizations.of(context).otpOnlineDescription;
 
   @override
   bool get supportsTransitRoutes => true;
