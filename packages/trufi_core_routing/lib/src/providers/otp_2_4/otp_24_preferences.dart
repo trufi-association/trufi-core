@@ -480,13 +480,13 @@ class _DistanceChip extends StatelessWidget {
         ? RoutingLocalizations.of(context).prefsNoLimit
         : distance! >= 1000
         ? RoutingLocalizations.of(context).distanceKilometers(
-            NumberFormat(
+            _safeNumberFormat(
               '#,##0.0',
               Localizations.localeOf(context).toString(),
             ).format(distance! / 1000),
           )
         : RoutingLocalizations.of(context).distanceMeters(
-            NumberFormat(
+            _safeNumberFormat(
               '#,##0',
               Localizations.localeOf(context).toString(),
             ).format(distance!.toInt()),
@@ -676,5 +676,16 @@ class _SettingsCard extends StatelessWidget {
       ),
       child: child,
     );
+  }
+}
+
+/// [NumberFormat] that never throws on a locale intl has no number
+/// symbols for (Quechua, Aymara, …) — falls back to the default locale
+/// instead of red-screening the slider label (#945 fresh review).
+NumberFormat _safeNumberFormat(String pattern, String locale) {
+  try {
+    return NumberFormat(pattern, locale);
+  } catch (_) {
+    return NumberFormat(pattern);
   }
 }

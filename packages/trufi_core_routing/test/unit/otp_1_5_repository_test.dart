@@ -249,5 +249,39 @@ void main() {
 
       providerWithSlash.dispose();
     });
+
+    test('a hostname starting with "plan" still gets the REST path appended '
+        '(fresh-review finding: contains(\'/plan\') matched the host)',
+        () async {
+      final provider = Otp15RoutingProvider(
+        endpoint: 'https://plan.example.com',
+        httpClient: mockHttpClient,
+      );
+
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      await provider.fetchPlan(
+        from: TestConfig.originLocation,
+        to: TestConfig.destinationLocation,
+        dateTime: DateTime(2025, 12, 1, 12, 0),
+      );
+
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
+
+      expect(captured.host, 'plan.example.com');
+      expect(captured.path, equals('/otp/routers/default/plan'));
+
+      provider.dispose();
+    });
+
   });
 }

@@ -7,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
-import 'package:intl/intl.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
@@ -784,11 +784,11 @@ class _RouteDistanceCalculator {
     final locale = Localizations.localeOf(context).toString();
     if (km < 1) {
       return l10n.distanceMeters(
-        NumberFormat('#,##0', locale).format((km * 1000).round()),
+        safeNumberFormat('#,##0', locale).format((km * 1000).round()),
       );
     }
     return l10n.distanceKilometers(
-      NumberFormat('#,##0.0', locale).format(km),
+      safeNumberFormat('#,##0.0', locale).format(km),
     );
   }
 }

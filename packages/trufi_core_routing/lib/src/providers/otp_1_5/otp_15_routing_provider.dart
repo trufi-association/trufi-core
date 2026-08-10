@@ -449,7 +449,14 @@ class Otp15RoutingProvider extends IRoutingProvider {
     final trimmed = endpoint.endsWith('/')
         ? endpoint.substring(0, endpoint.length - 1)
         : endpoint;
-    if (trimmed.contains('/plan')) {
+    // Decide on the URL *path*, not the raw string: a host like
+    // `plan.example.com` contains '/plan' as a substring (the '//' of the
+    // scheme plus the host) and used to be returned verbatim, breaking
+    // routing for any deployment whose hostname starts with "plan"
+    // (fresh-review finding on #966; _buildIndexEndpoint already used the
+    // path-based check).
+    final path = Uri.tryParse(trimmed)?.path ?? '';
+    if (path == '/plan' || path.endsWith('/plan') || path.contains('/plan/')) {
       return trimmed;
     }
     return '$trimmed/otp/routers/default/plan';
