@@ -117,5 +117,23 @@
   "otpOnlineDescription": "Finds routes through an online service. May have more up-to-date information.",
   "@otpOnlineDescription": {
     "description": "Description shown for OpenTripPlanner engines in the routing settings."
+  },
+  "distanceKilometers": "{value} km",
+  "@distanceKilometers": {
+    "description": "Distance in kilometers; {value} is already formatted with the locale's decimal separator.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceMeters": "{value} m",
+  "@distanceMeters": {
+    "description": "Distance in meters; {value} is a whole number formatted for the locale.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }

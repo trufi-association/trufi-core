@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import 'transport_mode_ui.dart';
@@ -19,12 +18,6 @@ extension LegUI on Leg {
   String get headSign {
     return route?.shortName ?? (route?.longName ?? (shortName ?? ''));
   }
-
-  /// Start time formatted as HH:mm.
-  String get startTimeString => DateFormat('HH:mm').format(startTime);
-
-  /// End time formatted as HH:mm.
-  String get endTimeString => DateFormat('HH:mm').format(endTime);
 }
 
 /// Utility functions for working with legs.

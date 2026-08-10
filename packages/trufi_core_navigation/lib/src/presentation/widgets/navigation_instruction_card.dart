@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../l10n/navigation_localizations.dart';
 import '../../models/navigation_instruction.dart';
@@ -113,7 +114,7 @@ class NavigationInstructionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        _formatDistance(distanceToNextStop!),
+                        _formatDistance(context, distanceToNextStop!),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: colorScheme.primary,
@@ -121,7 +122,7 @@ class NavigationInstructionCard extends StatelessWidget {
                       ),
                       if (etaToDestination != null)
                         Text(
-                          '~${_formatDuration(etaToDestination!)}',
+                          '~${_formatDuration(context, etaToDestination!)}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -346,20 +347,30 @@ class NavigationInstructionCard extends StatelessWidget {
     );
   }
 
-  String _formatDistance(double meters) {
+  /// Locale-aware distance/duration strings (#945): units and decimal
+  /// separator come from the ARBs and NumberFormat, not string literals.
+  String _formatDistance(BuildContext context, double meters) {
+    final l10n = NavigationLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
     if (meters < 1000) {
-      return '${meters.round()} m';
+      return l10n.navDistanceMeters(
+        NumberFormat('#,##0', locale).format(meters.round()),
+      );
     }
-    return '${(meters / 1000).toStringAsFixed(1)} km';
+    return l10n.navDistanceKilometers(
+      NumberFormat('#,##0.0', locale).format(meters / 1000),
+    );
   }
 
-  String _formatDuration(Duration duration) {
+  String _formatDuration(BuildContext context, Duration duration) {
+    final l10n = NavigationLocalizations.of(context);
     if (duration.inMinutes < 60) {
-      return '${duration.inMinutes} min';
+      return l10n.navDurationMinutes(duration.inMinutes);
     }
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes % 60;
-    return '${hours}h ${minutes}m';
+    return l10n.navDurationHoursMinutes(
+      duration.inHours,
+      duration.inMinutes % 60,
+    );
   }
 
   Widget _buildItinerarySummary(BuildContext context) {
@@ -396,7 +407,7 @@ class NavigationInstructionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    _formatDuration(totalDuration!),
+                    _formatDuration(context, totalDuration!),
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

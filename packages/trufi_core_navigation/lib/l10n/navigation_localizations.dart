@@ -276,6 +276,30 @@ abstract class NavigationLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 stop remaining} other{{count} stops remaining}}'**
   String navStopsRemaining(int count);
+
+  /// Distance to the next stop in meters; {value} is locale-formatted.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} m'**
+  String navDistanceMeters(String value);
+
+  /// Distance in kilometers; {value} is locale-formatted with one decimal.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} km'**
+  String navDistanceKilometers(String value);
+
+  /// Duration under an hour.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String navDurationMinutes(int minutes);
+
+  /// Duration of an hour or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String navDurationHoursMinutes(int hours, int minutes);
 }
 
 class _NavigationLocalizationsDelegate

@@ -60,5 +60,7 @@
   "modeAerialLift": "Seilbahn",
   "modeFunicular": "Standseilbahn",
   "modeTrolleybus": "Oberleitungsbus",
-  "modeMonorail": "Einschienenbahn"
+  "modeMonorail": "Einschienenbahn",
+  "distanceKilometers": "{value} km",
+  "distanceMeters": "{value} m"
 }

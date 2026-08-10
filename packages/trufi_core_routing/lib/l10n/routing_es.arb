@@ -24,5 +24,7 @@
   "trufiPlannerInfoIntro": "Trufi Planner es nuestro motor de rutas propio (no OTP).",
   "trufiPlannerInfoLocalBody": "En esta versión móvil corre 100% offline, usando los datos GTFS empacados con la app — por eso los resultados pueden diferir de motores online.",
   "trufiPlannerInfoRemoteBody": "Esta versión web consulta nuestro servidor; los resultados pueden diferir de OTP por usar un algoritmo y datos distintos.",
-  "otpOnlineDescription": "Busca rutas mediante un servicio en línea. Puede tener información más actualizada."
+  "otpOnlineDescription": "Busca rutas mediante un servicio en línea. Puede tener información más actualizada.",
+  "distanceKilometers": "{value} km",
+  "distanceMeters": "{value} m"
 }

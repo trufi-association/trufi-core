@@ -342,6 +342,18 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Monorail'**
   String get modeMonorail;
+
+  /// Distance in kilometers; {value} is already formatted with the locale's decimal separator.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} km'**
+  String distanceKilometers(String value);
+
+  /// Distance in meters; {value} is a whole number formatted for the locale.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} m'**
+  String distanceMeters(String value);
 }
 
 class _TransportListLocalizationsDelegate

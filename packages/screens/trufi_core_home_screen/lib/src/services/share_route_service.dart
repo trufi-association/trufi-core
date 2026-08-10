@@ -77,7 +77,11 @@ class ShareRouteService {
     String? webBaseUrl,
   }) {
     final buffer = StringBuffer();
-    final timeFormat = DateFormat('HH:mm');
+    // The 'j' skeleton resolves to the locale's preferred clock — 24h
+    // where that's the convention, 12h with the right day-period marker
+    // elsewhere (#945). Shared text has no MediaQuery to consult, so the
+    // locale's own preference is the best available signal.
+    final timeFormat = _localeTimeFormat(strings.localeTag);
     final dateFormat = _localeDateFormat(strings.localeTag);
 
     // Header
@@ -262,6 +266,17 @@ class ShareRouteService {
 
   /// Locale-aware day/month/year order, tolerating locales intl has no
   /// symbols for (city languages) by falling back to the default pattern.
+  static DateFormat _localeTimeFormat(String? localeTag) {
+    if (localeTag == null) return DateFormat.jm();
+    try {
+      return DateFormat.jm(localeTag);
+    } catch (_) {
+      // Locale data not initialized for this tag — same fallback the
+      // date formatter below uses.
+      return DateFormat.jm();
+    }
+  }
+
   static DateFormat _localeDateFormat(String? localeTag) {
     if (localeTag == null) return DateFormat.yMd();
     try {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 import '../../../l10n/routing_localizations.dart';
 
@@ -485,8 +486,18 @@ class _DistanceChip extends StatelessWidget {
     final label = distance == null
         ? RoutingLocalizations.of(context).prefsNoLimit
         : distance! >= 1000
-        ? '${(distance! / 1000).toStringAsFixed(1)} km'
-        : '${distance!.toInt()} m';
+        ? RoutingLocalizations.of(context).distanceKilometers(
+            NumberFormat(
+              '#,##0.0',
+              Localizations.localeOf(context).toString(),
+            ).format(distance! / 1000),
+          )
+        : RoutingLocalizations.of(context).distanceMeters(
+            NumberFormat(
+              '#,##0',
+              Localizations.localeOf(context).toString(),
+            ).format(distance!.toInt()),
+          );
 
     return Material(
       color: isSelected

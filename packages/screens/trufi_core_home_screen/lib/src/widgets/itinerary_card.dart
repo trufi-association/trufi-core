@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 
@@ -120,7 +120,7 @@ class ItineraryCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  DateFormat('HH:mm').format(itinerary.startTime),
+                  formatClockTime(context, itinerary.startTime),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -134,7 +134,7 @@ class ItineraryCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat('HH:mm').format(itinerary.endTime),
+                  formatClockTime(context, itinerary.endTime),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),

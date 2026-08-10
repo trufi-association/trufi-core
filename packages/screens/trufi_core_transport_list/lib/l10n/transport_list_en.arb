@@ -133,5 +133,23 @@
   "modeMonorail": "Monorail",
   "@modeMonorail": {
     "description": "GTFS route type shown as the transport mode"
+  },
+  "distanceKilometers": "{value} km",
+  "@distanceKilometers": {
+    "description": "Distance in kilometers; {value} is already formatted with the locale's decimal separator.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceMeters": "{value} m",
+  "@distanceMeters": {
+    "description": "Distance in meters; {value} is a whole number formatted for the locale.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }
