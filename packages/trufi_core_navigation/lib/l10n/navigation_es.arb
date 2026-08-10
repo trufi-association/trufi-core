@@ -28,5 +28,9 @@
   "navTransfer": "Transbordo",
   "navDestination": "Destino",
   "navRoute": "Ruta",
-  "navStopsRemaining": "{count, plural, =1{Queda 1 parada} other{Quedan {count} paradas}}"
+  "navStopsRemaining": "{count, plural, =1{Queda 1 parada} other{Quedan {count} paradas}}",
+  "navDistanceMeters": "{value} m",
+  "navDistanceKilometers": "{value} km",
+  "navDurationMinutes": "{minutes} min",
+  "navDurationHoursMinutes": "{hours}h {minutes}m"
 }

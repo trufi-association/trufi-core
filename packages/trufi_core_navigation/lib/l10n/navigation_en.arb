@@ -1,72 +1,171 @@
 {
   "@@locale": "en",
   "navExitNavigation": "Exit Navigation",
-  "@navExitNavigation": { "description": "Button and title for exiting navigation" },
+  "@navExitNavigation": {
+    "description": "Button and title for exiting navigation"
+  },
   "navExitConfirmTitle": "Exit Navigation?",
-  "@navExitConfirmTitle": { "description": "Title of exit navigation confirmation dialog" },
+  "@navExitConfirmTitle": {
+    "description": "Title of exit navigation confirmation dialog"
+  },
   "navExitConfirmMessage": "Are you sure you want to stop navigating this route?",
-  "@navExitConfirmMessage": { "description": "Message in exit navigation confirmation dialog" },
+  "@navExitConfirmMessage": {
+    "description": "Message in exit navigation confirmation dialog"
+  },
   "navCancel": "Cancel",
-  "@navCancel": { "description": "Cancel button label" },
+  "@navCancel": {
+    "description": "Cancel button label"
+  },
   "navExit": "Exit",
-  "@navExit": { "description": "Exit button label" },
+  "@navExit": {
+    "description": "Exit button label"
+  },
   "navClose": "Close",
-  "@navClose": { "description": "Close button label" },
+  "@navClose": {
+    "description": "Close button label"
+  },
   "navRetry": "Retry",
-  "@navRetry": { "description": "Retry button label" },
+  "@navRetry": {
+    "description": "Retry button label"
+  },
   "navSettings": "Settings",
-  "@navSettings": { "description": "Settings button label" },
+  "@navSettings": {
+    "description": "Settings button label"
+  },
   "navArrived": "You have arrived!",
-  "@navArrived": { "description": "Message when user arrives at destination" },
+  "@navArrived": {
+    "description": "Message when user arrives at destination"
+  },
   "navOffRoute": "You appear to be off the route",
-  "@navOffRoute": { "description": "Warning when user is off the planned route" },
+  "@navOffRoute": {
+    "description": "Warning when user is off the planned route"
+  },
   "navWeakGps": "GPS signal is weak",
-  "@navWeakGps": { "description": "Warning when GPS signal is weak" },
+  "@navWeakGps": {
+    "description": "Warning when GPS signal is weak"
+  },
   "navNext": "Next: ",
-  "@navNext": { "description": "Prefix for next instruction" },
+  "@navNext": {
+    "description": "Prefix for next instruction"
+  },
   "navError": "An error occurred",
-  "@navError": { "description": "Generic error message" },
+  "@navError": {
+    "description": "Generic error message"
+  },
   "navStarting": "Starting navigation...",
-  "@navStarting": { "description": "Message while navigation is starting" },
+  "@navStarting": {
+    "description": "Message while navigation is starting"
+  },
   "navGettingLocation": "Getting your location",
-  "@navGettingLocation": { "description": "Message while obtaining user location" },
+  "@navGettingLocation": {
+    "description": "Message while obtaining user location"
+  },
   "navCouldNotStartTracking": "Could not start location tracking",
-  "@navCouldNotStartTracking": { "description": "Error when location tracking fails to start" },
+  "@navCouldNotStartTracking": {
+    "description": "Error when location tracking fails to start"
+  },
   "navArrivedShort": "You have arrived",
-  "@navArrivedShort": { "description": "Short arrival notification" },
+  "@navArrivedShort": {
+    "description": "Short arrival notification"
+  },
   "navOneStop": "1 stop",
-  "@navOneStop": { "description": "Label for one remaining stop" },
+  "@navOneStop": {
+    "description": "Label for one remaining stop"
+  },
   "navStops": "{count} stops",
   "@navStops": {
     "description": "Label for multiple remaining stops",
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "navExitAt": "Exit at {stopName}",
   "@navExitAt": {
     "description": "Instruction to exit at a specific stop",
-    "placeholders": { "stopName": { "type": "String" } }
+    "placeholders": {
+      "stopName": {
+        "type": "String"
+      }
+    }
   },
   "navFinalDestination": "Final destination",
-  "@navFinalDestination": { "description": "Label for the final destination" },
+  "@navFinalDestination": {
+    "description": "Label for the final destination"
+  },
   "navPermissionDenied": "Location permission denied",
-  "@navPermissionDenied": { "description": "Error when location permission is denied" },
+  "@navPermissionDenied": {
+    "description": "Error when location permission is denied"
+  },
   "navPermissionPermanentlyDenied": "Location permission permanently denied. Please enable in settings.",
-  "@navPermissionPermanentlyDenied": { "description": "Error when location permission is permanently denied" },
+  "@navPermissionPermanentlyDenied": {
+    "description": "Error when location permission is permanently denied"
+  },
   "navLocationDisabled": "Location services are disabled. Please enable them.",
-  "@navLocationDisabled": { "description": "Error when location services are disabled" },
+  "@navLocationDisabled": {
+    "description": "Error when location services are disabled"
+  },
   "navOrigin": "Origin",
-  "@navOrigin": { "description": "Label for the route origin point" },
+  "@navOrigin": {
+    "description": "Label for the route origin point"
+  },
   "navTransfer": "Transfer",
-  "@navTransfer": { "description": "Label for a transfer point between routes" },
+  "@navTransfer": {
+    "description": "Label for a transfer point between routes"
+  },
   "navDestination": "Destination",
-  "@navDestination": { "description": "Label for the route destination point" },
+  "@navDestination": {
+    "description": "Label for the route destination point"
+  },
   "navRoute": "Route",
-  "@navRoute": { "description": "Fallback name for a route without a name" },
+  "@navRoute": {
+    "description": "Fallback name for a route without a name"
+  },
   "navStopsRemaining": "{count, plural, =1{1 stop remaining} other{{count} stops remaining}}",
   "@navStopsRemaining": {
     "description": "How many stops remain before exiting the vehicle",
     "placeholders": {
       "count": {
+        "type": "int"
+      }
+    }
+  },
+  "navDistanceMeters": "{value} m",
+  "@navDistanceMeters": {
+    "description": "Distance to the next stop in meters; {value} is locale-formatted.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "navDistanceKilometers": "{value} km",
+  "@navDistanceKilometers": {
+    "description": "Distance in kilometers; {value} is locale-formatted with one decimal.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "navDurationMinutes": "{minutes} min",
+  "@navDurationMinutes": {
+    "description": "Duration under an hour.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "navDurationHoursMinutes": "{hours}h {minutes}m",
+  "@navDurationHoursMinutes": {
+    "description": "Duration of an hour or more.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
         "type": "int"
       }
     }

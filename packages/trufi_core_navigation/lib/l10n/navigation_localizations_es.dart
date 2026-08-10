@@ -110,4 +110,24 @@ class NavigationLocalizationsEs extends NavigationLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String navDistanceMeters(String value) {
+    return '$value m';
+  }
+
+  @override
+  String navDistanceKilometers(String value) {
+    return '$value km';
+  }
+
+  @override
+  String navDurationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String navDurationHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
 }

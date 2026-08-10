@@ -134,4 +134,14 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get modeMonorail => 'Monorriel';
+
+  @override
+  String distanceKilometers(String value) {
+    return '$value km';
+  }
+
+  @override
+  String distanceMeters(String value) {
+    return '$value m';
+  }
 }

@@ -18,19 +18,9 @@ class GtfsFrequency {
   /// Headway as Duration.
   Duration get headway => Duration(seconds: headwaySecs);
 
-  /// Human-readable frequency string (e.g., "every 10 min").
-  String get displayFrequency {
-    final minutes = headwaySecs ~/ 60;
-    if (minutes < 60) {
-      return 'every $minutes min';
-    }
-    final hours = minutes ~/ 60;
-    final remainingMinutes = minutes % 60;
-    if (remainingMinutes == 0) {
-      return 'every $hours hr';
-    }
-    return 'every $hours hr $remainingMinutes min';
-  }
+  // NOTE(#945): the old `displayFrequency` getter ("every 10 min") was an
+  // English-only trap for UI code. Use the raw [headway] and format in the
+  // widget layer with the screen package's localizations.
 
   /// Start time as formatted string (HH:MM).
   String get startTimeFormatted => _formatTime(startTime);

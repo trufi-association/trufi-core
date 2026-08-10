@@ -12,3 +12,4 @@ export './src/location_service.dart';
 
 // Device
 export './src/device/shared_preferences_device_id_service.dart';
+export 'src/time_format.dart';

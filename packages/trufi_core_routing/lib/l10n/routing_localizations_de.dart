@@ -94,4 +94,14 @@ class RoutingLocalizationsDe extends RoutingLocalizations {
   @override
   String get otpOnlineDescription =>
       'Findet Routen über einen Online-Dienst. Kann aktuellere Informationen haben.';
+
+  @override
+  String distanceKilometers(String value) {
+    return '$value km';
+  }
+
+  @override
+  String distanceMeters(String value) {
+    return '$value m';
+  }
 }

@@ -1,16 +1,9 @@
-import 'package:intl/intl.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import 'leg_ui.dart';
 
 /// UI extensions for [Itinerary] from trufi_core_routing package.
 extension ItineraryUI on Itinerary {
-  /// Start time formatted as HH:mm.
-  String get startTimeHHmm => DateFormat('HH:mm').format(startTime);
-
-  /// End time formatted as HH:mm.
-  String get endTimeHHmm => DateFormat('HH:mm').format(endTime);
-
   /// Compress consecutive walk/bike legs into single legs.
   List<Leg> get compressLegs {
     final compressedLegs = <Leg>[];

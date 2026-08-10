@@ -60,5 +60,7 @@
   "modeAerialLift": "Teleférico",
   "modeFunicular": "Funicular",
   "modeTrolleybus": "Trolebús",
-  "modeMonorail": "Monorriel"
+  "modeMonorail": "Monorriel",
+  "distanceKilometers": "{value} km",
+  "distanceMeters": "{value} m"
 }

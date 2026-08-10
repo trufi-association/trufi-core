@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
+import 'package:intl/intl.dart';
 
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
@@ -775,12 +776,20 @@ class _RouteDistanceCalculator {
 
   static double _toRadians(double degrees) => degrees * math.pi / 180;
 
-  /// Formats distance for display.
-  static String format(double km) {
+  /// Formats distance for display, honoring the locale's decimal
+  /// separator and unit strings (#945): "15,8 km" for Spanish, "15.8 km"
+  /// for English — and whatever a city's extra languages define.
+  static String format(BuildContext context, double km) {
+    final l10n = TransportListLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
     if (km < 1) {
-      return '${(km * 1000).round()} m';
+      return l10n.distanceMeters(
+        NumberFormat('#,##0', locale).format((km * 1000).round()),
+      );
     }
-    return '${km.toStringAsFixed(1)} km';
+    return l10n.distanceKilometers(
+      NumberFormat('#,##0.0', locale).format(km),
+    );
   }
 }
 
@@ -1039,7 +1048,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                   child: _StatItem(
                     icon: Icons.straighten_rounded,
                     label: TransportListLocalizations.of(context).labelDistance,
-                    value: _RouteDistanceCalculator.format(distance),
+                    value: _RouteDistanceCalculator.format(context, distance),
                     color: _foregroundColor(routeColor),
                   ),
                 ),
@@ -1520,7 +1529,7 @@ class _SidePanelStopsContent extends StatelessWidget {
                   child: _StatItem(
                     icon: Icons.straighten_rounded,
                     label: TransportListLocalizations.of(context).labelDistance,
-                    value: _RouteDistanceCalculator.format(distance),
+                    value: _RouteDistanceCalculator.format(context, distance),
                     color: routeColor,
                   ),
                 ),

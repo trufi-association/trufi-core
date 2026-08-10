@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
@@ -630,7 +629,6 @@ class _AlternativeTimeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = HomeScreenLocalizations.of(context);
-    final timeFormat = intl.DateFormat('HH:mm');
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
@@ -670,7 +668,7 @@ class _AlternativeTimeCard extends StatelessWidget {
                 if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
                     null) ...[
                   Text(
-                    l10n.departsAt(timeFormat.format(itinerary.startTime)),
+                    l10n.departsAt(formatClockTime(context, itinerary.startTime)),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -683,7 +681,7 @@ class _AlternativeTimeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    timeFormat.format(itinerary.endTime),
+                    formatClockTime(context, itinerary.endTime),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
