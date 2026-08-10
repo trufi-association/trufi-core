@@ -34,4 +34,7 @@ class SearchLocationsLocalizationsDe extends SearchLocationsLocalizations {
 
   @override
   String get noResultsFound => 'Keine Ergebnisse gefunden';
+
+  @override
+  String get searchCornersHint => 'Kreuzungen suchen...';
 }

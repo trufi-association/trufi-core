@@ -35,5 +35,9 @@
   "noResultsFound": "No results found",
   "@noResultsFound": {
     "description": "Message shown when a search returns no results"
+  },
+  "searchCornersHint": "Search corners...",
+  "@searchCornersHint": {
+    "description": "Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners"
   }
 }

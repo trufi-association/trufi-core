@@ -34,4 +34,7 @@ class SearchLocationsLocalizationsEn extends SearchLocationsLocalizations {
 
   @override
   String get noResultsFound => 'No results found';
+
+  @override
+  String get searchCornersHint => 'Search corners...';
 }

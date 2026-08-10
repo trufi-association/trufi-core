@@ -156,6 +156,12 @@ abstract class SearchLocationsLocalizations {
   /// In en, this message translates to:
   /// **'No results found'**
   String get noResultsFound;
+
+  /// Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners
+  ///
+  /// In en, this message translates to:
+  /// **'Search corners...'**
+  String get searchCornersHint;
 }
 
 class _SearchLocationsLocalizationsDelegate

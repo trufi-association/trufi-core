@@ -115,6 +115,17 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   List<SearchLocation> _loadedPlaces = [];
   bool _isLoadingYourLocation = false;
 
+  // Street → corners drill-down (#745): while non-null, the whole body
+  // becomes a dedicated sub-screen — "← <street>" as the title, a filter
+  // field that searches only within the corners, and nothing else (no
+  // quick actions, no saved places).
+  SearchLocation? _drillDownParent;
+  List<SearchLocation> _drillDownResults = [];
+  bool _isDrillingDown = false;
+  final TextEditingController _cornerFilterController =
+      TextEditingController();
+  String _cornerFilter = '';
+
   @override
   void initState() {
     super.initState();
@@ -168,6 +179,8 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   /// data loaded, 19 scans of the city's streets.
   void _onQueryChanged(String query) {
     _debounce?.cancel();
+    // Editing the query means the user moved on from the corners list.
+    _exitDrillDown();
     if (query.trim().isEmpty) {
       _performSearch(query);
       return;
@@ -175,6 +188,96 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     _debounce = Timer(const Duration(milliseconds: 300), () {
       _performSearch(query);
     });
+  }
+
+  /// The drill-down service behind [widget.searchService], if any.
+  SearchLocationDrillDown? get _drillDownService {
+    final service = widget.searchService;
+    return service is SearchLocationDrillDown
+        ? service as SearchLocationDrillDown
+        : null;
+  }
+
+  Future<void> _enterDrillDown(SearchLocation street) async {
+    final service = _drillDownService;
+    if (service == null) return;
+    _cornerFilterController.clear();
+    setState(() {
+      _drillDownParent = street;
+      _drillDownResults = [];
+      _isDrillingDown = true;
+      _cornerFilter = '';
+    });
+    try {
+      final corners = await service.drillDown(street);
+      // The user may have kept typing while the corners loaded.
+      if (mounted && identical(_drillDownParent, street)) {
+        setState(() {
+          _drillDownResults = corners;
+          _isDrillingDown = false;
+        });
+      }
+    } catch (_) {
+      if (mounted && identical(_drillDownParent, street)) {
+        setState(() {
+          _drillDownResults = [];
+          _isDrillingDown = false;
+        });
+      }
+    }
+  }
+
+  void _exitDrillDown() {
+    if (_drillDownParent == null) return;
+    _cornerFilterController.clear();
+    setState(() {
+      _drillDownParent = null;
+      _drillDownResults = [];
+      _isDrillingDown = false;
+      _cornerFilter = '';
+    });
+  }
+
+  /// Corners matching the corner filter, accent- and case-insensitively.
+  /// The filter matches the cross street (the trimmed label), not the full
+  /// corner name: inside "Avenida Ayacucho" every corner contains
+  /// "ayacucho", so matching the full name would make the filter useless.
+  List<SearchLocation> get _filteredCorners {
+    final needle = _fold(_cornerFilter);
+    if (needle.isEmpty) return _drillDownResults;
+    return _drillDownResults
+        .where((c) => _fold(_cornerLabel(c)).contains(needle))
+        .toList();
+  }
+
+  /// Lowercases and strips accents, so "heroinas" finds "Heroínas".
+  static String _fold(String value) {
+    const from = 'áàäâãéèëêíìïîóòöôõúùüûñç';
+    const to = 'aaaaaeeeeiiiiooooouuuunc';
+    final lower = value.toLowerCase().trim();
+    final buffer = StringBuffer();
+    for (final rune in lower.runes) {
+      final char = String.fromCharCode(rune);
+      final index = from.indexOf(char);
+      buffer.write(index >= 0 ? to[index] : char);
+    }
+    return buffer.toString();
+  }
+
+  /// Label for a corner inside the corners list. The header already names
+  /// the street, so repeating it on every row ("Avenida Ayacucho & Avenida
+  /// Aroma", "Avenida Ayacucho & Avenida Her…") is redundant and truncates
+  /// the one name that matters — the cross street. Rows start at "&"
+  /// instead. The popped [SearchLocation] keeps the full name, so the
+  /// origin/destination field still reads "Avenida Ayacucho & Avenida
+  /// Aroma".
+  String _cornerLabel(SearchLocation corner) {
+    final parent = _drillDownParent;
+    if (parent == null) return corner.displayName;
+    final prefix = '${parent.displayName} & ';
+    return corner.displayName.startsWith(prefix)
+        ? '& ${corner.displayName.substring(prefix.length)}'
+        : corner.displayName;
   }
 
   Future<void> _performSearch(String query) async {
@@ -239,6 +342,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   void dispose() {
     _debounce?.cancel();
     _searchController.dispose();
+    _cornerFilterController.dispose();
     _searchFocusNode.dispose();
     _staggerController.dispose();
     super.dispose();
@@ -250,6 +354,84 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     final colorScheme = theme.colorScheme;
     final config = widget.configuration;
     final l10n = SearchLocationsLocalizations.of(context);
+
+    // The corners view is a sub-screen, not a section: "← <street>" as
+    // the title, a filter that searches only within the corners, and
+    // nothing else. The system back button leaves the corners first.
+    if (_drillDownParent != null) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _exitDrillDown();
+        },
+        child: Scaffold(
+          backgroundColor: colorScheme.surface,
+          body: SafeArea(
+            child: Column(
+              children: [
+                _DrillDownHeader(
+                  title: _drillDownParent!.displayName,
+                  onBack: () {
+                    HapticFeedback.selectionClick();
+                    _exitDrillDown();
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  child: TextField(
+                    controller: _cornerFilterController,
+                    onChanged: (value) =>
+                        setState(() => _cornerFilter = value),
+                    decoration: InputDecoration(
+                      hintText: l10n.searchCornersHint,
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      filled: true,
+                      fillColor: colorScheme.surfaceContainerLow,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                      isDense: true,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _isDrillingDown
+                      ? const Center(child: CircularProgressIndicator())
+                      : _filteredCorners.isEmpty
+                          ? _EmptySearchResults(
+                              text: config.noResultsText ??
+                                  l10n.noResultsFound,
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              itemCount: _filteredCorners.length,
+                              itemBuilder: (context, index) {
+                                final corner = _filteredCorners[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: _ModernLocationTile(
+                                    location: corner,
+                                    displayNameOverride: _cornerLabel(corner),
+                                    icon: Icons.fork_right_rounded,
+                                    iconColor: colorScheme.primary,
+                                    onTap: () {
+                                      HapticFeedback.selectionClick();
+                                      Navigator.pop(context, corner);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -274,6 +456,10 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                 },
                 onClear: () {
                   _searchController.clear();
+                  // Clearing is a full reset: also drop any corners view
+                  // (and orphan its in-flight load) so no stale drill-down
+                  // state survives into the next search.
+                  _exitDrillDown();
                   setState(() {
                     _query = '';
                     _searchResults = [];
@@ -378,16 +564,35 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     else
                       ...List.generate(_searchResults.length, (index) {
                         final location = _searchResults[index];
+                        final canDrill =
+                            _drillDownService?.canDrillDown(location) ?? false;
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: _ModernLocationTile(
                             location: location,
-                            icon: Icons.place_rounded,
+                            icon: canDrill
+                                ? Icons.fork_right_rounded
+                                : Icons.place_rounded,
                             iconColor: colorScheme.primary,
+                            // A street with known corners is not a point —
+                            // picking it directly answers nothing. Tapping
+                            // it anywhere opens its corners list instead
+                            // (Sam's review on #964); everything else pops
+                            // as the selection.
                             onTap: () {
                               HapticFeedback.selectionClick();
-                              Navigator.pop(context, location);
+                              if (canDrill) {
+                                _enterDrillDown(location);
+                              } else {
+                                Navigator.pop(context, location);
+                              }
                             },
+                            trailing: canDrill
+                                ? Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: colorScheme.onSurfaceVariant,
+                                  )
+                                : null,
                           ),
                         );
                       }),
@@ -861,6 +1066,60 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
+/// Title bar of the corners sub-screen: back to the results + the street
+/// name as the title (the rows below start at "&", so the street's own
+/// name lives only here).
+class _DrillDownHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback onBack;
+
+  const _DrillDownHeader({required this.title, required this.onBack});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          Material(
+            color: colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              onTap: onBack,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  color: colorScheme.onSurface,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onSurface,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Modern location tile
 class _ModernLocationTile extends StatelessWidget {
   final SearchLocation location;
@@ -868,11 +1127,21 @@ class _ModernLocationTile extends StatelessWidget {
   final Color iconColor;
   final VoidCallback onTap;
 
+  /// Optional widget at the row's end (e.g. the street → corners button).
+  final Widget? trailing;
+
+  /// Display-only label replacing [SearchLocation.displayName] (e.g. a
+  /// corner shown as "& Avenida Aroma" inside its street's corners list).
+  /// The location itself — and whatever gets popped on tap — is untouched.
+  final String? displayNameOverride;
+
   const _ModernLocationTile({
     required this.location,
     required this.icon,
     required this.iconColor,
     required this.onTap,
+    this.trailing,
+    this.displayNameOverride,
   });
 
   @override
@@ -905,7 +1174,7 @@ class _ModernLocationTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      location.displayName,
+                      displayNameOverride ?? location.displayName,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: colorScheme.onSurface,
@@ -928,6 +1197,7 @@ class _ModernLocationTile extends StatelessWidget {
                   ],
                 ),
               ),
+              ?trailing,
             ],
           ),
         ),

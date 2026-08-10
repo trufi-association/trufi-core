@@ -8,5 +8,6 @@
   "chooseOnMap": "Auf der Karte wählen",
   "yourPlaces": "DEINE ORTE",
   "searchResults": "SUCHERGEBNISSE",
-  "noResultsFound": "Keine Ergebnisse gefunden"
+  "noResultsFound": "Keine Ergebnisse gefunden",
+  "searchCornersHint": "Kreuzungen suchen..."
 }

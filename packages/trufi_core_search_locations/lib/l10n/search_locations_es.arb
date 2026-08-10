@@ -8,5 +8,6 @@
   "chooseOnMap": "Elegir en el mapa",
   "yourPlaces": "TUS LUGARES",
   "searchResults": "RESULTADOS DE BÚSQUEDA",
-  "noResultsFound": "No se encontraron resultados"
+  "noResultsFound": "No se encontraron resultados",
+  "searchCornersHint": "Buscar esquinas..."
 }
