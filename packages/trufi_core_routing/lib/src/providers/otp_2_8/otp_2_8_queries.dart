@@ -58,6 +58,7 @@ query plan(
       startTime
       endTime
       duration
+      generalizedCost
       walkTime
       walkDistance
       waitingTime
@@ -214,6 +215,7 @@ query plan(
       startTime
       endTime
       duration
+      generalizedCost
       walkTime
       walkDistance
       legs {

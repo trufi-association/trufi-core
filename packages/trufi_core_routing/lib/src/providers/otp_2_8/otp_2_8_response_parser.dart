@@ -69,6 +69,7 @@ class Otp28ResponseParser {
       arrivedAtDestinationWithRentedBicycle:
           json['arrivedAtDestinationWithRentedBicycle'] as bool? ?? false,
       emissionsPerPerson: emissions?.toDouble(),
+      generalizedCost: json.getInt('generalizedCost'),
     );
   }
 

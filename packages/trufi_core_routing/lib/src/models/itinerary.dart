@@ -17,6 +17,7 @@ class Itinerary extends Equatable {
     this.transfers,
     this.arrivedAtDestinationWithRentedBicycle = false,
     this.emissionsPerPerson,
+    this.generalizedCost,
   }) : legs = _assignDefaultColors(legs),
        distance = _calculateDistance(legs);
 
@@ -29,6 +30,13 @@ class Itinerary extends Equatable {
   final int? transfers;
   final bool arrivedAtDestinationWithRentedBicycle;
   final double? emissionsPerPerson;
+
+  /// OTP's generalized cost for this itinerary (seconds-equivalent):
+  /// duration plus every configured penalty — transfers, boarding, walk
+  /// reluctance. Lower is better *by the router's own judgment*, which
+  /// is exactly what its arrival-time-ordered list does not convey.
+  final int? generalizedCost;
+
   final int distance;
 
   static int _calculateDistance(List<Leg> legs) {
@@ -63,6 +71,7 @@ class Itinerary extends Equatable {
       arrivedAtDestinationWithRentedBicycle:
           json['arrivedAtDestinationWithRentedBicycle'] as bool? ?? false,
       emissionsPerPerson: emissionsData?.getDouble('emissionsPerPersonCo2'),
+      generalizedCost: json.getInt('generalizedCost'),
     );
   }
 
@@ -103,6 +112,7 @@ class Itinerary extends Equatable {
       'arrivedAtDestinationWithRentedBicycle':
           arrivedAtDestinationWithRentedBicycle,
       'emissionsPerPerson': {'emissionsPerPersonCo2': emissionsPerPerson},
+      'generalizedCost': generalizedCost,
     };
   }
 
@@ -117,6 +127,7 @@ class Itinerary extends Equatable {
     int? transfers,
     bool? arrivedAtDestinationWithRentedBicycle,
     double? emissionsPerPerson,
+    int? generalizedCost,
   }) {
     return Itinerary(
       legs: legs ?? this.legs,
@@ -130,6 +141,7 @@ class Itinerary extends Equatable {
           arrivedAtDestinationWithRentedBicycle ??
           this.arrivedAtDestinationWithRentedBicycle,
       emissionsPerPerson: emissionsPerPerson ?? this.emissionsPerPerson,
+      generalizedCost: generalizedCost ?? this.generalizedCost,
     );
   }
 
@@ -168,6 +180,7 @@ class Itinerary extends Equatable {
     transfers,
     arrivedAtDestinationWithRentedBicycle,
     emissionsPerPerson,
+    generalizedCost,
     distance,
     legs,
   ];
