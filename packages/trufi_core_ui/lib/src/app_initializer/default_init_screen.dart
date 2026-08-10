@@ -85,11 +85,21 @@ class _DefaultInitScreenState extends State<DefaultInitScreen>
     return _steps.indexOf(widget.currentStep!);
   }
 
-  /// Resolves [CoreLocalizations], falling back to English when this screen
-  /// is mounted without the CoreLocalizations delegate registered.
-  CoreLocalizations get _l10n =>
-      Localizations.of<CoreLocalizations>(context, CoreLocalizations) ??
-      lookupCoreLocalizations(const Locale('en'));
+  /// Resolves [CoreLocalizations], falling back to the ambient locale — or
+  /// English when that locale is unsupported — when this screen is mounted
+  /// without the CoreLocalizations delegate registered.
+  CoreLocalizations get _l10n {
+    final scoped = Localizations.of<CoreLocalizations>(
+      context,
+      CoreLocalizations,
+    );
+    if (scoped != null) return scoped;
+    final locale = Localizations.maybeLocaleOf(context);
+    if (locale != null && CoreLocalizations.delegate.isSupported(locale)) {
+      return lookupCoreLocalizations(locale);
+    }
+    return lookupCoreLocalizations(const Locale('en'));
+  }
 
   String _stepToDisplayText(AppInitStep step) {
     if (widget.stepTextBuilder != null) {
