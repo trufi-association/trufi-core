@@ -16,6 +16,7 @@
   "errorInitialization": "Error al inicializar la aplicación",
   "actionRetry": "Reintentar",
   "errorPageNotFound": "Página no encontrada",
+  "errorNoScreensRegistered": "No hay pantallas registradas",
   "actionGoHome": "Ir al inicio",
   "titleError": "Error",
   "unreadCount": "{count} sin leer",

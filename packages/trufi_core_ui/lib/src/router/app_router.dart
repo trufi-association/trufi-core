@@ -130,8 +130,9 @@ class AppRouter {
     return GoRoute(
       path: '/',
       name: 'home',
-      builder: (context, state) =>
-          const Center(child: Text('No screens registered')),
+      builder: (context, state) => Center(
+        child: Text(CoreLocalizations.of(context).errorNoScreensRegistered),
+      ),
     );
   }
 
