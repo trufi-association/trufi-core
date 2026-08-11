@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:trufi_core_utils/packge_info_platform.dart';
 
 import '../../../l10n/maps_localizations.dart';
 import '../../domain/controller/map_controller.dart';
@@ -100,6 +101,18 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     return targetPath;
   }
 
+  /// Identifier of the app build the extraction belongs to, or null when
+  /// package info is unavailable (e.g. plain unit tests, a transient
+  /// platform-channel failure). Null means "can't tell" — the caller keeps
+  /// whatever extraction exists rather than flapping between wipes.
+  Future<String?> _appBuildStamp() async {
+    try {
+      return await PackageInfoPlatform.fullVersion();
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Future<void> initialize() async {
     if (_initialized && _cachedStylePath != null) return;
@@ -111,6 +124,24 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
     final cacheDir = await getApplicationCacheDirectory();
     final offlineDir = Directory('${cacheDir.path}/offline_maps/$id');
+
+    // The extraction is tied to the app build. [_copyAsset] skips files
+    // that already exist, so without this stamp an app update shipping
+    // new offline assets (tiles, style, glyphs) would keep serving the
+    // old extraction forever — only clearing app data refreshed it
+    // (#973). On mismatch — update or downgrade — wipe and re-extract.
+    final marker = File('${offlineDir.path}/.extracted-for');
+    final buildStamp = await _appBuildStamp();
+    if (await offlineDir.exists()) {
+      final extractedFor = await marker.exists()
+          ? await marker.readAsString()
+          : null;
+      // A null stamp means the build is unknowable right now: keep the
+      // existing extraction instead of wiping on guesswork.
+      if (buildStamp != null && extractedFor != buildStamp) {
+        await offlineDir.delete(recursive: true);
+      }
+    }
     await offlineDir.create(recursive: true);
 
     final mbtilesPath = await _copyAsset(
@@ -213,6 +244,12 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
     final stylePath = '${offlineDir.path}/style.json';
     await File(stylePath).writeAsString(json.encode(style));
+
+    // Stamp last: a crash mid-extraction leaves no marker, so the next
+    // boot wipes the partial copy and starts over.
+    if (buildStamp != null) {
+      await marker.writeAsString(buildStamp);
+    }
 
     _cachedStylePath = stylePath;
     _initialized = true;

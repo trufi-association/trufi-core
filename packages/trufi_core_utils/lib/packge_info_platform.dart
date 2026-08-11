@@ -21,4 +21,12 @@ class PackageInfoPlatform {
     final info = await PackageInfo.fromPlatform();
     return info.appName;
   }
+
+  /// `version+buildNumber` (e.g. `5.2.0+81`) — changes on every release,
+  /// including build-only bumps, so it can stamp on-disk caches that must
+  /// be refreshed when the app updates.
+  static Future<String> fullVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    return '${info.version}+${info.buildNumber}';
+  }
 }
