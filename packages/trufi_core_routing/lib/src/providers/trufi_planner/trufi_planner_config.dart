@@ -51,8 +51,10 @@ class TrufiPlannerConfig {
   /// meters regardless of [maxWalkingDistance] — with 60 candidates a
   /// downtown query only saw stops within ~400 m, hiding boarding points
   /// of valid direct and transfer options (issues #926, #974). Measured on
-  /// the heaviest real feed (Cochabamba, 657 patterns): 150 costs +0.6 ms
-  /// average per query and *improves* the worst case. Raise it further if
+  /// the heaviest real feed (Cochabamba, 657 patterns): 150 costs a few ms
+  /// average per query; the worst case depends on the query mix and can
+  /// roughly double (~20 → ~50 ms on desktop for the densest pairs — the
+  /// direct phase scales superlinearly with the pool). Raise it further if
   /// your city has extremely dense overlapping stops, lower it to trade
   /// coverage for speed.
   final int maxStopCandidates;
