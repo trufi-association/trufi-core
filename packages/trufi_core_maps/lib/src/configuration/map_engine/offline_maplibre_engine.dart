@@ -101,14 +101,15 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     return targetPath;
   }
 
-  /// Identifier of the app build the extraction belongs to. Falls back to
-  /// a constant when package info is unavailable (e.g. plain unit tests),
-  /// which degrades to the old extract-once behavior.
-  Future<String> _appBuildStamp() async {
+  /// Identifier of the app build the extraction belongs to, or null when
+  /// package info is unavailable (e.g. plain unit tests, a transient
+  /// platform-channel failure). Null means "can't tell" — the caller keeps
+  /// whatever extraction exists rather than flapping between wipes.
+  Future<String?> _appBuildStamp() async {
     try {
       return await PackageInfoPlatform.fullVersion();
     } catch (_) {
-      return 'unknown';
+      return null;
     }
   }
 
@@ -135,7 +136,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
       final extractedFor = await marker.exists()
           ? await marker.readAsString()
           : null;
-      if (extractedFor != buildStamp) {
+      // A null stamp means the build is unknowable right now: keep the
+      // existing extraction instead of wiping on guesswork.
+      if (buildStamp != null && extractedFor != buildStamp) {
         await offlineDir.delete(recursive: true);
       }
     }
@@ -244,7 +247,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
     // Stamp last: a crash mid-extraction leaves no marker, so the next
     // boot wipes the partial copy and starts over.
-    await marker.writeAsString(buildStamp);
+    if (buildStamp != null) {
+      await marker.writeAsString(buildStamp);
+    }
 
     _cachedStylePath = stylePath;
     _initialized = true;
