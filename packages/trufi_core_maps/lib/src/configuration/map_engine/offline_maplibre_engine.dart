@@ -101,6 +101,100 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     return targetPath;
   }
 
+  /// Per-asset content hash, memoized for the process lifetime so several
+  /// engines sharing assets (e.g. four styles over one mbtiles) hash each
+  /// bundle asset at most once per run. Missing assets hash to a fixed
+  /// token, so "asset removed" also reads as a content change.
+  static final Map<String, Future<String>> _bundleHashMemo = {};
+
+  /// Tests simulate app updates by swapping mocked assets within one
+  /// process; production never needs this (a new build is a new process).
+  @visibleForTesting
+  static void resetBundleHashCacheForTesting() => _bundleHashMemo.clear();
+
+  static Future<String> _bundleAssetHash(String assetPath) {
+    return _bundleHashMemo.putIfAbsent(assetPath, () async {
+      try {
+        final data = await rootBundle.load(assetPath);
+        return _fnv1a(data.buffer.asUint8List());
+      } catch (_) {
+        return 'missing';
+      }
+    });
+  }
+
+  /// FNV-1a, masked to 63 bits so the hex form is stable on the VM.
+  /// Non-cryptographic on purpose: the question is "did the bundled file
+  /// change between app builds", not adversarial integrity.
+  static String _fnv1a(Uint8List bytes) {
+    var h = 0xcbf29ce484222325 & 0x7fffffffffffffff;
+    for (final b in bytes) {
+      h ^= b;
+      h = (h * 0x100000001b3) & 0x7fffffffffffffff;
+    }
+    return h.toRadixString(16);
+  }
+
+  /// Fingerprint of every bundled asset this engine extracts. Computed
+  /// only when the app build changed (or on first install) — never on a
+  /// routine boot.
+  Future<String> _bundleFingerprint() async {
+    final parts = <String>[];
+    parts.add('tiles:${await _bundleAssetHash(config.mbtilesAsset)}');
+    parts.add('style:${await _bundleAssetHash(config.styleAsset)}');
+    for (final spriteFile in _spriteFiles) {
+      parts.add(
+        '$spriteFile:'
+        '${await _bundleAssetHash('${config.spritesAssetDir}$spriteFile')}',
+      );
+    }
+    for (final assetFontName in config.fontMapping.keys) {
+      for (final range in config.fontRanges) {
+        final path = '${config.fontsAssetDir}$assetFontName/$range.pbf';
+        parts.add('$assetFontName/$range:${await _bundleAssetHash(path)}');
+      }
+    }
+    return _fnv1a(Uint8List.fromList(parts.join('|').codeUnits));
+  }
+
+  static const _spriteFiles = [
+    'sprite.json',
+    'sprite.png',
+    'sprite@2x.json',
+    'sprite@2x.png',
+  ];
+
+  /// The mbtiles is extracted once per *asset*, not once per engine:
+  /// several visual styles typically share one tile set, and duplicating
+  /// a tens-of-MB file per style quadrupled both the cache footprint and
+  /// the post-update re-extraction (Cochabamba: 4 styles × 25.8 MB).
+  /// The copy carries a sibling `.hash` so a changed bundle refreshes it.
+  Future<String> _ensureSharedTiles(
+    Directory mapsRoot, {
+    required bool verifyContent,
+  }) async {
+    final key = config.mbtilesAsset.replaceAll(RegExp('[^A-Za-z0-9._-]'), '_');
+    final tilesFile = File('${mapsRoot.path}/_shared/$key');
+    final hashFile = File('${tilesFile.path}.hash');
+
+    if (await tilesFile.exists() && await hashFile.exists()) {
+      if (!verifyContent) {
+        // Routine boot: the engine marker already vouches for the bundle
+        // content — do not read megabytes just to re-prove it.
+        return tilesFile.path;
+      }
+      final bundleHash = await _bundleAssetHash(config.mbtilesAsset);
+      if (await hashFile.readAsString() == bundleHash) {
+        return tilesFile.path;
+      }
+    }
+    await tilesFile.parent.create(recursive: true);
+    final data = await rootBundle.load(config.mbtilesAsset);
+    await tilesFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
+    await hashFile.writeAsString(await _bundleAssetHash(config.mbtilesAsset));
+    return tilesFile.path;
+  }
+
   /// Identifier of the app build the extraction belongs to, or null when
   /// package info is unavailable (e.g. plain unit tests, a transient
   /// platform-channel failure). Null means "can't tell" — the caller keeps
@@ -123,31 +217,67 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     if (_initialized && _cachedStylePath != null) return _cachedStylePath!;
 
     final cacheDir = await getApplicationCacheDirectory();
-    final offlineDir = Directory('${cacheDir.path}/offline_maps/$id');
+    final mapsRoot = Directory('${cacheDir.path}/offline_maps');
+    final offlineDir = Directory('${mapsRoot.path}/$id');
 
-    // The extraction is tied to the app build. [_copyAsset] skips files
-    // that already exist, so without this stamp an app update shipping
-    // new offline assets (tiles, style, glyphs) would keep serving the
-    // old extraction forever — only clearing app data refreshed it
-    // (#973). On mismatch — update or downgrade — wipe and re-extract.
+    // The extraction is invalidated by CONTENT, gated by the app build:
+    //
+    // - Routine boot (build matches the marker): reuse everything, no
+    //   hashing, no I/O beyond one marker read.
+    // - First boot after an update/downgrade (build differs): fingerprint
+    //   the bundled assets (a few seconds of reads, no writes). Most
+    //   updates don't touch map assets — identical fingerprint keeps the
+    //   extraction and only restamps the marker. Only a real asset change
+    //   pays the wipe + re-extraction (#973).
+    // - No/legacy marker: extract from scratch.
+    //
+    // Marker format: line 1 = build stamp, line 2 = bundle fingerprint.
     final marker = File('${offlineDir.path}/.extracted-for');
     final buildStamp = await _appBuildStamp();
-    if (await offlineDir.exists()) {
-      final extractedFor = await marker.exists()
-          ? await marker.readAsString()
-          : null;
-      // A null stamp means the build is unknowable right now: keep the
-      // existing extraction instead of wiping on guesswork.
-      if (buildStamp != null && extractedFor != buildStamp) {
-        await offlineDir.delete(recursive: true);
+
+    String? markerBuild;
+    String? markerFingerprint;
+    if (await marker.exists()) {
+      final lines = (await marker.readAsString()).split('\n');
+      markerBuild = lines.isNotEmpty ? lines[0] : null;
+      if (lines.length > 1) markerFingerprint = lines[1];
+    }
+
+    var reuseExtraction = false;
+    String? fingerprint;
+    if (markerBuild != null && buildStamp != null) {
+      if (markerBuild == buildStamp) {
+        reuseExtraction = true;
+      } else {
+        fingerprint = await _bundleFingerprint();
+        if (markerFingerprint == fingerprint) {
+          // Update that didn't touch the map assets: keep everything,
+          // just record the new build so the next boot is cheap again.
+          await marker.writeAsString('$buildStamp\n$fingerprint');
+          reuseExtraction = true;
+        }
       }
+    } else if (await offlineDir.exists() && buildStamp == null) {
+      // Build unknowable right now: keep the existing extraction instead
+      // of wiping on guesswork.
+      reuseExtraction = true;
+    }
+
+    if (!reuseExtraction && await offlineDir.exists()) {
+      await offlineDir.delete(recursive: true);
     }
     await offlineDir.create(recursive: true);
 
-    final mbtilesPath = await _copyAsset(
-      config.mbtilesAsset,
-      '${offlineDir.path}/tiles.mbtiles',
+    final mbtilesPath = await _ensureSharedTiles(
+      mapsRoot,
+      verifyContent: !reuseExtraction,
     );
+    // Pre-dedup extractions left a per-engine copy of the tile set —
+    // reclaim the space once.
+    final legacyTiles = File('${offlineDir.path}/tiles.mbtiles');
+    if (await legacyTiles.exists()) {
+      await legacyTiles.delete();
+    }
 
     final spritesDir = '${offlineDir.path}/sprites';
     await Directory(spritesDir).create(recursive: true);
@@ -246,9 +376,12 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     await File(stylePath).writeAsString(json.encode(style));
 
     // Stamp last: a crash mid-extraction leaves no marker, so the next
-    // boot wipes the partial copy and starts over.
-    if (buildStamp != null) {
-      await marker.writeAsString(buildStamp);
+    // boot wipes the partial copy and starts over. Routine boots and
+    // fingerprint-matched updates never reach a state that needs
+    // restamping here.
+    if (!reuseExtraction && buildStamp != null) {
+      fingerprint ??= await _bundleFingerprint();
+      await marker.writeAsString('$buildStamp\n$fingerprint');
     }
 
     _cachedStylePath = stylePath;
