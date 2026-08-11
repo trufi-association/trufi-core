@@ -17,7 +17,7 @@ abstract class PlannerRoutingClient {
     required LatLng destination,
     double maxWalkDistance = 800,
     int maxResults = 5,
-    int maxStopCandidates = 60,
+    int maxStopCandidates = 150,
   });
 
   /// Get all transit routes.

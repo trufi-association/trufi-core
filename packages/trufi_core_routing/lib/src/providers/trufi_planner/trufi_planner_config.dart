@@ -45,11 +45,16 @@ class TrufiPlannerConfig {
   final double walkSpeed;
 
   /// How many candidate stops to consider around the origin and the
-  /// destination when searching for routes (default: 60).
+  /// destination when searching for routes (default: 150).
   ///
-  /// In dense networks a small pool can hide direct lines that stop a
-  /// couple of blocks away (issue #926); raise it if your city has many
-  /// overlapping stops, lower it to trade coverage for speed.
+  /// In dense networks a small pool truncates the search to a few hundred
+  /// meters regardless of [maxWalkingDistance] — with 60 candidates a
+  /// downtown query only saw stops within ~400 m, hiding boarding points
+  /// of valid direct and transfer options (issues #926, #974). Measured on
+  /// the heaviest real feed (Cochabamba, 657 patterns): 150 costs +0.6 ms
+  /// average per query and *improves* the worst case. Raise it further if
+  /// your city has extremely dense overlapping stops, lower it to trade
+  /// coverage for speed.
   final int maxStopCandidates;
 
   /// Maximum number of transfers allowed (default: 1).
@@ -64,7 +69,7 @@ class TrufiPlannerConfig {
     this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
-    this.maxStopCandidates = 60,
+    this.maxStopCandidates = 150,
   }) : serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
@@ -76,6 +81,6 @@ class TrufiPlannerConfig {
     this.maxWalkingDistance = 800,
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
-    this.maxStopCandidates = 60,
+    this.maxStopCandidates = 150,
   }) : gtfsAsset = null;
 }

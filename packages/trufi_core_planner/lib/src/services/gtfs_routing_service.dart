@@ -178,7 +178,7 @@ class GtfsRoutingService {
     int maxTransfers = 1,
     int maxDirects = 5,
     int maxTransferPaths = 5,
-    int maxStopCandidates = 60,
+    int maxStopCandidates = 150,
   }) {
     // Consider every stop within walking distance (bounded by
     // [maxStopCandidates]), not just the nearest handful: in dense
