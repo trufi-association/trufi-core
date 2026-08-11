@@ -81,8 +81,18 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  File sharedTiles() =>
-      File('${tempDir.path}/offline_maps/_shared/assets_test.mbtiles');
+  // The shared key carries a raw-path hash suffix (collision hardening),
+  // so tests discover the file instead of hardcoding the name.
+  File sharedTiles() {
+    final dir = Directory('${tempDir.path}/offline_maps/_shared');
+    if (!dir.existsSync()) return File('${dir.path}/absent');
+    return dir
+            .listSync()
+            .whereType<File>()
+            .where((f) => !f.path.endsWith('.hash'))
+            .firstOrNull ??
+        File('${dir.path}/absent');
+  }
   File markerFile([String id = 'test_engine']) =>
       File('${tempDir.path}/offline_maps/$id/.extracted-for');
   File engineTiles([String id = 'test_engine']) =>

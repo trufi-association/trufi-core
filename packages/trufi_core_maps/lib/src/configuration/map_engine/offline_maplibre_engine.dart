@@ -126,7 +126,7 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   /// FNV-1a, masked to 63 bits so the hex form is stable on the VM.
   /// Non-cryptographic on purpose: the question is "did the bundled file
   /// change between app builds", not adversarial integrity.
-  static String _fnv1a(Uint8List bytes) {
+  static String _fnv1a(List<int> bytes) {
     var h = 0xcbf29ce484222325 & 0x7fffffffffffffff;
     for (final b in bytes) {
       h ^= b;
@@ -154,7 +154,7 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
         parts.add('$assetFontName/$range:${await _bundleAssetHash(path)}');
       }
     }
-    return _fnv1a(Uint8List.fromList(parts.join('|').codeUnits));
+    return _fnv1a(utf8.encode(parts.join('|')));
   }
 
   static const _spriteFiles = [
@@ -173,7 +173,14 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     Directory mapsRoot, {
     required bool verifyContent,
   }) async {
-    final key = config.mbtilesAsset.replaceAll(RegExp('[^A-Za-z0-9._-]'), '_');
+    // The readable part can collide after sanitization ('a b' vs 'a_b'),
+    // and a silent collision would render another asset's tiles — the
+    // raw-path hash suffix makes the key injective.
+    final readable = config.mbtilesAsset.replaceAll(
+      RegExp('[^A-Za-z0-9._-]'),
+      '_',
+    );
+    final key = '$readable-${_fnv1a(utf8.encode(config.mbtilesAsset))}';
     final tilesFile = File('${mapsRoot.path}/_shared/$key');
     final hashFile = File('${tilesFile.path}.hash');
 
@@ -222,8 +229,9 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
     // The extraction is invalidated by CONTENT, gated by the app build:
     //
-    // - Routine boot (build matches the marker): reuse everything, no
-    //   hashing, no I/O beyond one marker read.
+    // - Routine boot (build matches the marker): reuse everything — no
+    //   hashing; only the marker read plus the pre-existing per-boot work
+    //   (style rewrite, copy-if-missing self-healing).
     // - First boot after an update/downgrade (build differs): fingerprint
     //   the bundled assets (a few seconds of reads, no writes). Most
     //   updates don't touch map assets — identical fingerprint keeps the
