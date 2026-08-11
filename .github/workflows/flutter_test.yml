@@ -37,6 +37,13 @@ jobs:
         # Until now the check only analyzed — a green check ran no tests
         # (issue #756).
         run: melos ci:test
+      - name: Web compile check
+        # dart2js compiles ALL reachable code, with stricter rules than
+        # the VM (e.g. 64-bit integer literals don't exist in JS). Tests
+        # and analyze both run on the VM, so a change can be green here
+        # yet break `flutter build web` for every downstream app — which
+        # is exactly what happened with v5.22.1's fingerprint hash.
+        run: cd apps/example && flutter build web --release
       - name: Translation Check
         run: |
           melos run l10n --no-select

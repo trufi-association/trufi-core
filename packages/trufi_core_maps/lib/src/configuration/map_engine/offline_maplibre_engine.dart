@@ -124,16 +124,30 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
     });
   }
 
-  /// FNV-1a, masked to 63 bits so the hex form is stable on the VM.
+  /// 32-bit multiply modulo 2^32 with no intermediate above 2^53, so the
+  /// result is identical on the VM and under dart2js. The engine never
+  /// RUNS on web, but web builds must COMPILE every reachable line —
+  /// 64-bit integer literals broke `flutter build web` for every app
+  /// importing this package.
+  static int _mul32(int a, int b) {
+    final hi = (((a >>> 16) & 0xffff) * b) & 0xffff;
+    final lo = (a & 0xffff) * b;
+    return ((hi << 16) + lo) & 0xffffffff;
+  }
+
+  /// Two independent 32-bit FNV-1a streams concatenated: 64 bits of
+  /// change-detection using only JS-representable arithmetic.
   /// Non-cryptographic on purpose: the question is "did the bundled file
   /// change between app builds", not adversarial integrity.
   static String _fnv1a(List<int> bytes) {
-    var h = 0xcbf29ce484222325 & 0x7fffffffffffffff;
+    var h1 = 0x811c9dc5;
+    var h2 = 0xcbf29ce4;
     for (final b in bytes) {
-      h ^= b;
-      h = (h * 0x100000001b3) & 0x7fffffffffffffff;
+      h1 = _mul32(h1 ^ b, 0x01000193);
+      h2 = _mul32(h2 ^ b ^ 0x5f, 0x01000193);
     }
-    return h.toRadixString(16);
+    return h1.toRadixString(16).padLeft(8, '0') +
+        h2.toRadixString(16).padLeft(8, '0');
   }
 
   /// Fingerprint of every bundled asset this engine extracts. Computed
