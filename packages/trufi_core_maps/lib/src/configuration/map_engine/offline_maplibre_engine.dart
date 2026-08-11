@@ -103,30 +103,23 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
 
   /// Per-asset content hash, memoized for the process lifetime so several
   /// engines sharing assets (e.g. four styles over one mbtiles) hash each
-  /// bundle asset at most once per run. Missing assets hash to a fixed
-  /// token, so "asset removed" also reads as a content change.
-  static final Map<String, Future<String>> _bundleHashMemo = {};
+  /// bundle asset at most once per run. Null means the asset is not in
+  /// the bundle — absence is part of the fingerprint, so adding or
+  /// removing an asset between builds reads as a content change.
+  static final Map<String, Future<String?>> _bundleHashMemo = {};
 
   /// Tests simulate app updates by swapping mocked assets within one
   /// process; production never needs this (a new build is a new process).
   @visibleForTesting
   static void resetBundleHashCacheForTesting() => _bundleHashMemo.clear();
 
-  /// In-band token for "this asset is not in the bundle". Safe by
-  /// construction: real hashes are lowercase hex, and this token contains
-  /// non-hex letters, so it can never collide with one. It is data, not
-  /// control flow — the only consumer concatenates it into the
-  /// fingerprint, where absence must be representable so that adding or
-  /// removing an asset between builds changes the fingerprint.
-  static const _missingAssetToken = 'missing';
-
-  static Future<String> _bundleAssetHash(String assetPath) {
+  static Future<String?> _bundleAssetHash(String assetPath) {
     return _bundleHashMemo.putIfAbsent(assetPath, () async {
       try {
         final data = await rootBundle.load(assetPath);
         return _fnv1a(data.buffer.asUint8List());
       } catch (_) {
-        return _missingAssetToken;
+        return null;
       }
     });
   }
@@ -147,19 +140,23 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   /// only when the app build changed (or on first install) — never on a
   /// routine boot.
   Future<String> _bundleFingerprint() async {
+    // Absence must stay representable in the fingerprint text ('-' is not
+    // a hex digit, so it cannot collide with a real hash).
+    Future<String> part(String name, String assetPath) async =>
+        '$name:${await _bundleAssetHash(assetPath) ?? '-'}';
+
     final parts = <String>[];
-    parts.add('tiles:${await _bundleAssetHash(config.mbtilesAsset)}');
-    parts.add('style:${await _bundleAssetHash(config.styleAsset)}');
+    parts.add(await part('tiles', config.mbtilesAsset));
+    parts.add(await part('style', config.styleAsset));
     for (final spriteFile in _spriteFiles) {
       parts.add(
-        '$spriteFile:'
-        '${await _bundleAssetHash('${config.spritesAssetDir}$spriteFile')}',
+        await part(spriteFile, '${config.spritesAssetDir}$spriteFile'),
       );
     }
     for (final assetFontName in config.fontMapping.keys) {
       for (final range in config.fontRanges) {
         final path = '${config.fontsAssetDir}$assetFontName/$range.pbf';
-        parts.add('$assetFontName/$range:${await _bundleAssetHash(path)}');
+        parts.add(await part('$assetFontName/$range', path));
       }
     }
     return _fnv1a(utf8.encode(parts.join('|')));
@@ -199,14 +196,17 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
         return tilesFile.path;
       }
       final bundleHash = await _bundleAssetHash(config.mbtilesAsset);
-      if (await hashFile.readAsString() == bundleHash) {
+      if (bundleHash != null && await hashFile.readAsString() == bundleHash) {
         return tilesFile.path;
       }
     }
     await tilesFile.parent.create(recursive: true);
     final data = await rootBundle.load(config.mbtilesAsset);
-    await tilesFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
-    await hashFile.writeAsString(await _bundleAssetHash(config.mbtilesAsset));
+    final bytes = data.buffer.asUint8List();
+    await tilesFile.writeAsBytes(bytes, flush: true);
+    // Hash the bytes just written — single read, and immune to a stale
+    // memoized failure.
+    await hashFile.writeAsString(_fnv1a(bytes));
     return tilesFile.path;
   }
 
