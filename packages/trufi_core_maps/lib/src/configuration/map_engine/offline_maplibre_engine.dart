@@ -112,13 +112,21 @@ class OfflineMapLibreEngine implements ITrufiMapEngine {
   @visibleForTesting
   static void resetBundleHashCacheForTesting() => _bundleHashMemo.clear();
 
+  /// In-band token for "this asset is not in the bundle". Safe by
+  /// construction: real hashes are lowercase hex, and this token contains
+  /// non-hex letters, so it can never collide with one. It is data, not
+  /// control flow — the only consumer concatenates it into the
+  /// fingerprint, where absence must be representable so that adding or
+  /// removing an asset between builds changes the fingerprint.
+  static const _missingAssetToken = 'missing';
+
   static Future<String> _bundleAssetHash(String assetPath) {
     return _bundleHashMemo.putIfAbsent(assetPath, () async {
       try {
         final data = await rootBundle.load(assetPath);
         return _fnv1a(data.buffer.asUint8List());
       } catch (_) {
-        return 'missing';
+        return _missingAssetToken;
       }
     });
   }
