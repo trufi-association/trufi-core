@@ -104,12 +104,29 @@ class _KdTree {
     final dist = _haversineDistance(lat, lon, node.stop.lat, node.stop.lon);
 
     if (dist <= maxDistance) {
+      // Invariant: once full, `results` is sorted by distance so
+      // `results.last` is the true worst — both the eviction and the
+      // pruning bound below depend on it. The previous code accumulated
+      // unsorted and evicted `.last` blindly, so the pool could keep an
+      // arbitrary subset instead of the k nearest (#977).
       if (results.length < maxResults) {
         results.add(_NearestResult(stop: node.stop, distance: dist));
+        if (results.length == maxResults) {
+          results.sort((a, b) => a.distance.compareTo(b.distance));
+        }
       } else if (dist < results.last.distance) {
         results.removeLast();
-        results.add(_NearestResult(stop: node.stop, distance: dist));
-        results.sort((a, b) => a.distance.compareTo(b.distance));
+        var lo = 0;
+        var hi = results.length;
+        while (lo < hi) {
+          final mid = (lo + hi) >> 1;
+          if (results[mid].distance <= dist) {
+            lo = mid + 1;
+          } else {
+            hi = mid;
+          }
+        }
+        results.insert(lo, _NearestResult(stop: node.stop, distance: dist));
       }
     }
 
