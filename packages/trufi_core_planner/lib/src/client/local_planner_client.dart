@@ -72,7 +72,7 @@ class LocalPlannerClient implements PlannerRoutingClient {
     required LatLng destination,
     double maxWalkDistance = 800,
     int maxResults = 5,
-    int maxStopCandidates = 60,
+    int maxStopCandidates = 150,
   }) async {
     if (_routingService == null) return [];
     return _routingService!.findRoutes(
