@@ -287,7 +287,14 @@ void main() {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => RoutingEngineManager(engines: _routingEngines),
+          // 15 (not the default 5) because two of the example's engines
+          // return unfiltered near-duplicates (OTP 1.5, local planner):
+          // itinerary grouping (#737) needs the raw material, and the
+          // visible list stays short because duplicates collapse.
+          create: (_) => RoutingEngineManager(
+            engines: _routingEngines,
+            maxItineraries: 15,
+          ),
         ),
         BlocProvider(
           create: (_) => SearchLocationsCubit(

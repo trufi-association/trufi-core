@@ -208,6 +208,8 @@ class _ItineraryListState extends State<ItineraryList> {
   ) {
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
+    final timesHidden =
+        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -218,8 +220,25 @@ class _ItineraryListState extends State<ItineraryList> {
         if (index == 0) return _EstimatedTimesBanner(l10n: l10n);
         final groupIndex = index - 1;
         final group = groups[groupIndex];
-        final isExpanded = _expandedGroups.contains(group.signature);
-        final isSelected = group.alternatives.contains(state.selectedItinerary);
+        // Under a pinned routing time (routingTimeOverride) clock times
+        // are synthetic and hidden, so same-route "other departures"
+        // would render as indistinguishable rows — offer no expansion
+        // unless the alternatives differ by route.
+        final expandable =
+            group.hasAlternatives &&
+            (!timesHidden || group.hasRouteAlternatives);
+        final containsSelection = group.alternatives.contains(
+          state.selectedItinerary,
+        );
+        final selectionIsRepresentative =
+            state.selectedItinerary == group.representative;
+        // A selected non-representative alternative forces its group
+        // open: collapsing it would leave the list with no highlighted
+        // row while the map draws that alternative.
+        final isExpanded =
+            expandable &&
+            (_expandedGroups.contains(group.signature) ||
+                (containsSelection && !selectionIsRepresentative));
 
         return TweenAnimationBuilder<double>(
           key: ValueKey('group-$groupIndex'),
@@ -234,15 +253,15 @@ class _ItineraryListState extends State<ItineraryList> {
           },
           child: Column(
             children: [
-              // Main card for representative itinerary
+              // Main card for representative itinerary. Highlighted when
+              // its representative is selected — or when any member is
+              // selected but the group can't expand to show that row.
               ItineraryCard(
                 itinerary: group.representative,
                 isSelected:
-                    isSelected &&
-                    state.selectedItinerary == group.representative,
-                alternativeCount: group.hasAlternatives
-                    ? group.additionalCount
-                    : null,
+                    containsSelection &&
+                    (selectionIsRepresentative || !expandable),
+                alternativeCount: expandable ? group.additionalCount : null,
                 slotRoutes: group.slotRoutes,
                 hasRouteAlternatives: group.hasRouteAlternatives,
                 isExpanded: isExpanded,
@@ -254,7 +273,7 @@ class _ItineraryListState extends State<ItineraryList> {
                     _showDetails(group.representative);
                   }
                 },
-                onExpandTap: group.hasAlternatives
+                onExpandTap: expandable
                     ? () => _toggleGroupExpanded(group.signature)
                     : null,
                 onDetailsTap: null,
@@ -269,7 +288,7 @@ class _ItineraryListState extends State<ItineraryList> {
                     : null,
               ),
               // Expanded alternatives
-              if (isExpanded && group.hasAlternatives)
+              if (isExpanded)
                 _buildAlternatives(context, group, state, cubit, l10n, theme),
             ],
           ),
@@ -647,6 +666,13 @@ class _AlternativeTimeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = HomeScreenLocalizations.of(context);
+    // Hide absolute clock times when the app pins the routing time to a
+    // fixed value — startTime/endTime are then synthetic and would
+    // mislead the user. With times hidden the route summary is the only
+    // thing that can identify the row, so it shows regardless of
+    // [showRoutes].
+    final timesHidden =
+        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
@@ -680,7 +706,8 @@ class _AlternativeTimeCard extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
-                if (showRoutes && _routeSummary.isNotEmpty) ...[
+                if ((showRoutes || timesHidden) &&
+                    _routeSummary.isNotEmpty) ...[
                   Flexible(
                     child: Text(
                       _routeSummary,
@@ -692,15 +719,17 @@ class _AlternativeTimeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                 ],
-                // Hide absolute clock times when the app pins the
-                // routing time to a fixed value — startTime/endTime
-                // are then synthetic and would mislead the user.
-                if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
-                    null) ...[
-                  Text(
-                    l10n.departsAt(formatClockTime(context, itinerary.startTime)),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
+                if (!timesHidden) ...[
+                  Flexible(
+                    child: Text(
+                      l10n.departsAt(
+                        formatClockTime(context, itinerary.startTime),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -710,10 +739,14 @@ class _AlternativeTimeCard extends StatelessWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    formatClockTime(context, itinerary.endTime),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                  Flexible(
+                    child: Text(
+                      formatClockTime(context, itinerary.endTime),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ],

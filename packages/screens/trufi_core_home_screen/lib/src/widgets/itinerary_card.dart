@@ -266,15 +266,18 @@ class ItineraryCard extends StatelessWidget {
             theme: theme,
           ),
         const Spacer(),
-        // Alternative departures/options badge/button
+        // Alternative departures/options badge/button. Flexible so the
+        // footer never overflows on narrow screens — the label ellipsizes.
         if (alternativeCount != null && alternativeCount! > 0)
-          _AlternativesBadge(
-            count: alternativeCount!,
-            isExpanded: isExpanded,
-            onTap: onExpandTap,
-            theme: theme,
-            l10n: l10n,
-            hasRouteAlternatives: hasRouteAlternatives,
+          Flexible(
+            child: _AlternativesBadge(
+              count: alternativeCount!,
+              isExpanded: isExpanded,
+              onTap: onExpandTap,
+              theme: theme,
+              l10n: l10n,
+              hasRouteAlternatives: hasRouteAlternatives,
+            ),
           ),
         // Details button
         if (onDetailsTap != null)
@@ -384,7 +387,11 @@ class _LegChip extends StatelessWidget {
               ),
             ),
           ],
-          if (realtime != null) ...[
+          // No live badge on multi-route chips: it only reflects the
+          // representative leg's route, which misleads either way on a
+          // chip that reads "106 / 120".
+          if (realtime != null &&
+              (slotRoutes == null || slotRoutes!.length < 2)) ...[
             const SizedBox(width: 6),
             LiveBusBadge.whenLive(
               provider: realtime,
@@ -540,13 +547,17 @@ class _AlternativesBadge extends StatelessWidget {
                 color: theme.colorScheme.onSecondaryContainer,
               ),
               const SizedBox(width: 4),
-              Text(
-                hasRouteAlternatives
-                    ? l10n.moreOptions(count)
-                    : l10n.moreDepartures(count),
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSecondaryContainer,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  hasRouteAlternatives
+                      ? l10n.moreOptions(count)
+                      : l10n.moreDepartures(count),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               const SizedBox(width: 2),

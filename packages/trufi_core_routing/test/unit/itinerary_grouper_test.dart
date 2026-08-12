@@ -242,6 +242,50 @@ void main() {
       expect(groups[0].signature, isNot(groups[1].signature));
     });
 
+    test('unnamed routes never flip a group to "+N options"', () {
+      // A feed with no route names: legs match by proximity, but the
+      // group must NOT count each nameless leg as a distinct route.
+      Leg nameless({required Place from, required Place to}) => Leg(
+        mode: 'BUS',
+        startTime: DateTime(2026, 8, 12, 8),
+        endTime: DateTime(2026, 8, 12, 8, 30),
+        duration: const Duration(minutes: 30),
+        distance: 5000,
+        transitLeg: true,
+        fromPlace: from,
+        toPlace: to,
+      );
+
+      final groups = groupItineraries([
+        _itinerary([nameless(from: o1, to: d1)]),
+        _itinerary([nameless(from: o1, to: d1)], startMinute: 5),
+      ]);
+
+      expect(groups, hasLength(1));
+      expect(groups.single.hasRouteAlternatives, isFalse);
+      expect(groups.single.slotRoutes.single, hasLength(1));
+    });
+
+    test('walk-only and bike-only are different options, not departures',
+        () {
+      Leg bike() => Leg(
+        mode: 'BICYCLE',
+        startTime: DateTime(2026, 8, 12, 8),
+        endTime: DateTime(2026, 8, 12, 8, 20),
+        duration: const Duration(minutes: 20),
+        distance: 4000,
+        transitLeg: false,
+      );
+
+      final groups = groupItineraries([
+        _itinerary([_walk()]),
+        _itinerary([bike()], startMinute: 1),
+      ]);
+
+      expect(groups, hasLength(2));
+      expect(groups[0].signature, isNot(groups[1].signature));
+    });
+
     test('legs without stops group only on the exact same route', () {
       // Defensive: a provider that fills neither stopId nor coordinates.
       Leg bare(String route) => Leg(

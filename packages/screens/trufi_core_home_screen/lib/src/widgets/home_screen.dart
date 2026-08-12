@@ -2038,9 +2038,11 @@ class _HomeScreenState extends State<HomeScreen>
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              HomeScreenLocalizations.of(
-                context,
-              ).routesFound(itineraries.length),
+              // Grouped rows are what the user sees — counting raw
+              // itineraries would announce more rows than the list shows.
+              HomeScreenLocalizations.of(context).routesFound(
+                state.plan?.groupedItineraries?.length ?? itineraries.length,
+              ),
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -2303,7 +2305,9 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildSidePanelHeader(RoutePlannerState state, ThemeData theme) {
     final l10n = HomeScreenLocalizations.of(context);
     final itineraries = state.plan?.itineraries;
-    final routeCount = itineraries?.length ?? 0;
+    // Grouped rows are what the side panel lists — see routesFound above.
+    final routeCount =
+        state.plan?.groupedItineraries?.length ?? itineraries?.length ?? 0;
 
     // Find selected itinerary index for sharing
     final selectedIndex = state.selectedItinerary != null && itineraries != null

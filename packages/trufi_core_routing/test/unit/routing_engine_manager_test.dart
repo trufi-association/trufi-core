@@ -50,10 +50,10 @@ void main() {
   });
 
   group('RoutingEngineManager fetchPlan', () {
-    test('defaults to 15 itineraries to feed grouping (#737)', () async {
-      // The historical default of 5 predates itinerary grouping: with
-      // near-duplicates collapsing into rows, a larger pool feeds the
-      // groups while the visible list stays short.
+    test('keeps the historical default of 5 itineraries', () async {
+      // Deliberately unchanged by #737: raising the pool only pays off on
+      // providers without server-side duplicate filtering, so apps opt in
+      // per deploy instead of every OTP2 app paying a ~3x payload.
       final provider = _RecordingProvider();
       final manager = RoutingEngineManager(engines: [provider]);
 
@@ -69,7 +69,7 @@ void main() {
         dateTime: DateTime(2026, 1, 1, 12),
       );
 
-      expect(provider.capturedNumItineraries, 15);
+      expect(provider.capturedNumItineraries, 5);
     });
 
     test('forwards an explicit numItineraries unchanged', () async {

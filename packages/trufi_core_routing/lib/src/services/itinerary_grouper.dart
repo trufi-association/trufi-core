@@ -6,6 +6,7 @@ import '../models/itinerary.dart';
 import '../models/itinerary_group.dart';
 import '../models/leg.dart';
 import '../models/route.dart';
+import '../models/transport_mode.dart';
 
 /// Groups near-duplicate itineraries the way Google Maps does (#737).
 ///
@@ -81,9 +82,19 @@ List<ItineraryGroup> groupItineraries(
   final seenSignatures = <String>{};
   return orderedGroups.map((memberIndices) {
     final representative = itineraries[memberIndices.first];
+    // Ranked order breaks startTime ties so the result is deterministic
+    // (Dart's sort is not stable).
     final others =
-        memberIndices.skip(1).map((i) => itineraries[i]).toList()
-          ..sort((a, b) => a.startTime.compareTo(b.startTime));
+        memberIndices.skip(1).toList()
+          ..sort((a, b) {
+            final byTime = itineraries[a].startTime.compareTo(
+              itineraries[b].startTime,
+            );
+            return byTime != 0 ? byTime : a.compareTo(b);
+          });
+    final othersItineraries = others
+        .map((i) => itineraries[i])
+        .toList(growable: false);
 
     final slotRoutes = _collectSlotRoutes(
       memberIndices.map((i) => profiles[i]).toList(growable: false),
@@ -99,7 +110,7 @@ List<ItineraryGroup> groupItineraries(
 
     return ItineraryGroup(
       representative: representative,
-      alternatives: [representative, ...others],
+      alternatives: [representative, ...othersItineraries],
       signature: signature,
       slotRoutes: slotRoutes,
     );
@@ -117,11 +128,14 @@ List<List<Route>> _collectSlotRoutes(List<_TransitProfile> members) {
       final leg = member.slots[slot];
       // Dedup by what the chip will show: GTFS feeds commonly model one
       // line as several route_ids (direction/service variants) sharing a
-      // short name — "106 / 106" would be nonsense to a rider.
+      // short name — "106 / 106" would be nonsense to a rider. Legs with
+      // no display name at all collapse into a single entry too: counting
+      // them as distinct would flip the group to "+N options" (and its
+      // alt-route badge) on feeds that simply lack route names.
       final key = leg.displayName.isNotEmpty
           ? leg.displayName
           : (_routeKey(leg) ?? '');
-      if (key.isEmpty || seen.add(key)) {
+      if (seen.add(key)) {
         final route = leg.route ?? Route(shortName: leg.shortName);
         routes.add(route);
       }
@@ -131,7 +145,11 @@ List<List<Route>> _collectSlotRoutes(List<_TransitProfile> members) {
 }
 
 String _signature(_TransitProfile representative, List<List<Route>> slotRoutes) {
-  if (representative.slots.isEmpty) return 'walk';
+  if (representative.slots.isEmpty) {
+    final modes = representative.nonTransitModes.map((m) => m.name).toList()
+      ..sort();
+    return modes.isEmpty ? 'walk' : modes.join('+');
+  }
   return List.generate(representative.slots.length, (i) {
     final leg = representative.slots[i];
     final routes = slotRoutes[i]
@@ -163,12 +181,22 @@ const _distance = Distance();
 /// An itinerary reduced to its transit legs (walk legs carry no identity
 /// for grouping — they only connect the slots).
 class _TransitProfile {
-  _TransitProfile(this.slots);
+  _TransitProfile(this.slots, this.nonTransitModes);
 
-  factory _TransitProfile.of(Itinerary itinerary) =>
-      _TransitProfile(itinerary.legs.where((l) => l.transitLeg).toList());
+  factory _TransitProfile.of(Itinerary itinerary) => _TransitProfile(
+    itinerary.legs.where((l) => l.transitLeg).toList(),
+    itinerary.legs
+        .where((l) => !l.transitLeg)
+        .map((l) => l.transportMode)
+        .toSet(),
+  );
 
   final List<Leg> slots;
+
+  /// Modes of the non-transit legs. Only consulted for zero-slot
+  /// itineraries: "walk there" and "bike there" are different options,
+  /// not two departures of the same one.
+  final Set<TransportMode> nonTransitModes;
 
   bool matches(
     _TransitProfile other, {
@@ -176,7 +204,10 @@ class _TransitProfile {
     required double differentRouteToleranceMeters,
   }) {
     if (slots.length != other.slots.length) return false;
-    // Zero transit slots = walk-only: one option regardless of path.
+    if (slots.isEmpty) {
+      return nonTransitModes.length == other.nonTransitModes.length &&
+          nonTransitModes.containsAll(other.nonTransitModes);
+    }
     for (var i = 0; i < slots.length; i++) {
       if (!_slotMatches(
         slots[i],
