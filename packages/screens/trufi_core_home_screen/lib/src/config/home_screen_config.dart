@@ -46,6 +46,14 @@ class HomeScreenConfig {
   /// [IRoutingProvider.realtimeVehiclesProvider] — no config needed here.
   final Widget? extraMapLayerSettings;
 
+  /// Initial state of the live-vehicles map layer on a fresh install.
+  ///
+  /// Defaults to `false` (the user opts in from the map settings sheet).
+  /// Deploys whose realtime feed is a headline feature (e.g. an operator
+  /// pilot) can start with the layer on; once the user touches the toggle,
+  /// their choice is persisted and this value no longer applies.
+  final bool liveVehiclesInitiallyEnabled;
+
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
     this.searchService,
@@ -56,5 +64,6 @@ class HomeScreenConfig {
     this.customMapLayers,
     this.poiLayersManager,
     this.extraMapLayerSettings,
+    this.liveVehiclesInitiallyEnabled = false,
   });
 }

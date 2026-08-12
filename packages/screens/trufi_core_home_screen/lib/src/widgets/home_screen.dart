@@ -20,6 +20,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 import '../config/home_screen_config.dart';
+import 'live_vehicle_info_panel.dart';
 import 'live_vehicles_settings_section.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
@@ -128,6 +129,10 @@ class _HomeScreenState extends State<HomeScreen>
     _locationService.addListener(_onLocationUpdate);
     // Listen to POI selection changes
     widget.config.poiLayersManager?.addListener(_onPOISelectionChanged);
+    // Deploy-chosen initial state, set BEFORE the listener is attached so it
+    // is not persisted as a user choice; a saved user preference (restored
+    // below) still wins over it.
+    _liveVehiclesEnabled.value = widget.config.liveVehiclesInitiallyEnabled;
     _liveVehiclesEnabled.addListener(_onLiveVehiclesEnabledChanged);
     _restoreLiveVehiclesToggle();
   }
@@ -143,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen>
         _liveVehiclesEnabled.value = saved;
       }
     } catch (_) {
-      // Best-effort: if storage fails, just use the default (off).
+      // Best-effort: if storage fails, keep the deploy-configured default.
     }
   }
 
@@ -1213,6 +1218,13 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onMapClick(LatLng position) {
+    // Vehicles are checked first on purpose: a tap near a bus most likely
+    // means "what is this bus?", and marker picking sorts by distance (not
+    // z-order), so ordering here is what sets the priority.
+    if (_trySelectVehicleAt(position)) {
+      widget.config.poiLayersManager?.clearSelection();
+      return;
+    }
     // Try to select a POI at the tap position
     final poiManager = widget.config.poiLayersManager;
     if (poiManager != null && _mapController != null) {
@@ -1227,6 +1239,40 @@ class _HomeScreenState extends State<HomeScreen>
     }
     // Clear POI selection if tapping elsewhere
     widget.config.poiLayersManager?.clearSelection();
+  }
+
+  /// Opens the info panel when the tap lands on a live vehicle marker.
+  /// Returns true when a vehicle was hit.
+  bool _trySelectVehicleAt(LatLng position) {
+    if (_mapController == null ||
+        !_liveVehiclesEnabled.value ||
+        _liveVehicles.isEmpty) {
+      return false;
+    }
+    // No result limit here: with one, nearby non-vehicle markers (POI
+    // clusters, route/stop labels stacked exactly where buses stop) could
+    // crowd the vehicle out of the picked list even though the user is
+    // clearly tapping the bus.
+    final markers = _mapController!.pickMarkersAt(position, hitboxPx: 40.0);
+    for (final marker in markers) {
+      if (!marker.id.startsWith('vehicle-')) continue;
+      final vehicleId = marker.id.substring('vehicle-'.length);
+      final vehicle = _liveVehicles
+          .where((v) => v.vehicleId == vehicleId)
+          .firstOrNull;
+      if (vehicle == null) continue;
+      _showVehicleInfoPanel(vehicle);
+      return true;
+    }
+    return false;
+  }
+
+  void _showVehicleInfoPanel(VehiclePosition vehicle) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => LiveVehicleInfoPanel(vehicle: vehicle),
+    );
   }
 
   void _onMapLongPress(LatLng position) async {

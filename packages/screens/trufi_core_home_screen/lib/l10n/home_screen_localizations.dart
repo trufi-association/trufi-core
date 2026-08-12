@@ -835,6 +835,42 @@ abstract class HomeScreenLocalizations {
   /// **'Off'**
   String get liveVehiclesStateOff;
 
+  /// Fallback title of the tapped-vehicle info panel when the route is unknown
+  ///
+  /// In en, this message translates to:
+  /// **'Live bus'**
+  String get liveVehicleTitle;
+
+  /// Title of the tapped-vehicle info panel
+  ///
+  /// In en, this message translates to:
+  /// **'Route {route}'**
+  String liveVehicleRouteTitle(String route);
+
+  /// Small badge marking the vehicle info as realtime
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE'**
+  String get liveVehicleLiveBadge;
+
+  /// Speed row in the vehicle info panel
+  ///
+  /// In en, this message translates to:
+  /// **'{speed} km/h'**
+  String liveVehicleSpeed(int speed);
+
+  /// Freshness row when the last report is under two minutes old
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {seconds} s ago'**
+  String liveVehicleUpdatedSeconds(int seconds);
+
+  /// Freshness row when the last report is minutes old
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {minutes} min ago'**
+  String liveVehicleUpdatedMinutes(int minutes);
+
   /// Fallback name for an origin set without a label (e.g. deep links)
   ///
   /// In en, this message translates to:
