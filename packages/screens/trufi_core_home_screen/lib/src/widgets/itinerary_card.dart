@@ -16,24 +16,11 @@ class ItineraryCard extends StatelessWidget {
   final VoidCallback? onDetailsTap;
   final VoidCallback? onStartNavigation;
 
-  /// Number of additional departure times available (null = no alternatives)
-  final int? alternativeCount;
-
-  /// Whether the alternatives list is expanded
-  final bool isExpanded;
-
-  /// Callback to expand/collapse alternatives
-  final VoidCallback? onExpandTap;
-
   /// The distinct routes serving each transit slot across the itinerary's
   /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
-  /// than one route the chip joins them Google Maps style ("106 / 120").
+  /// than one route the chip paints one segment per option, each in its
+  /// own route color. The group's options are explored in the detail view.
   final List<List<routing.Route>>? slotRoutes;
-
-  /// True when the group merges different-route options (not just
-  /// departure times) — switches the footer badge copy from "+N more
-  /// departures" to "+N more options".
-  final bool hasRouteAlternatives;
 
   const ItineraryCard({
     super.key,
@@ -42,11 +29,7 @@ class ItineraryCard extends StatelessWidget {
     required this.onTap,
     this.onDetailsTap,
     this.onStartNavigation,
-    this.alternativeCount,
-    this.isExpanded = false,
-    this.onExpandTap,
     this.slotRoutes,
-    this.hasRouteAlternatives = false,
   });
 
   @override
@@ -272,26 +255,7 @@ class ItineraryCard extends StatelessWidget {
             label: '${transferCount - 1}',
             theme: theme,
           ),
-        // Alternative departures/options badge/button. Expanded+Align (not
-        // Spacer+Flexible, which splits the free space and truncates the
-        // label with room to spare) keeps it flush right and lets it use
-        // the whole remaining width before ellipsizing.
-        if (alternativeCount != null && alternativeCount! > 0)
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: _AlternativesBadge(
-                count: alternativeCount!,
-                isExpanded: isExpanded,
-                onTap: onExpandTap,
-                theme: theme,
-                l10n: l10n,
-                hasRouteAlternatives: hasRouteAlternatives,
-              ),
-            ),
-          )
-        else
-          const Spacer(),
+        const Spacer(),
         // Details button
         if (onDetailsTap != null)
           TextButton.icon(
@@ -371,13 +335,36 @@ class _LegChip extends StatelessWidget {
       );
     }
 
-    // Transit leg
+    // Transit leg. With interchangeable routes in the slot (#737), every
+    // option paints its own segment in its OWN route color, separated by
+    // a drawn bar — never a "/" inside one flat-colored chip.
+    final options = (slotRoutes != null && slotRoutes!.length > 1)
+        ? slotRoutes!
+        : null;
     final color = _getRouteColor(leg);
-    final textColor = color.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
-    final routeName = _routeLabel();
+    final textColor = _contrastOn(color);
+    final routeName = leg.shortName ?? leg.route?.shortName ?? '';
     final realtime = context.watch<RealtimeVehiclesProvider?>();
+
+    if (options != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (i, route) in options.indexed) ...[
+              if (i > 0)
+                Container(width: 1.5, height: 24, color: Colors.white),
+              _routeSegment(
+                route,
+                withIcon: i == 0,
+                mode: leg.transportMode,
+              ),
+            ],
+          ],
+        ),
+      );
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -400,11 +387,7 @@ class _LegChip extends StatelessWidget {
               ),
             ),
           ],
-          // No live badge on multi-route chips: it only reflects the
-          // representative leg's route, which misleads either way on a
-          // chip that reads "106 / 120".
-          if (realtime != null &&
-              (slotRoutes == null || slotRoutes!.length < 2)) ...[
+          if (realtime != null) ...[
             const SizedBox(width: 6),
             LiveBusBadge.whenLive(
               provider: realtime,
@@ -418,22 +401,48 @@ class _LegChip extends StatelessWidget {
     );
   }
 
-  /// The chip label: the leg's route name, joined with the group's
-  /// interchangeable routes for this slot — "106 / 120", and beyond two
-  /// options "106 / 120 +n" (the expansion lists the rest).
-  String _routeLabel() {
-    final own = leg.shortName ?? leg.route?.shortName ?? '';
-    final routes = slotRoutes;
-    if (routes == null || routes.length < 2) return own;
-    final names = routes
-        .map((r) => r.shortName ?? '')
-        .where((n) => n.isNotEmpty)
-        .toList();
-    if (names.length < 2) return own;
-    const cap = 2;
-    final visible = names.take(cap).join(' / ');
-    final hidden = names.length - cap;
-    return hidden > 0 ? '$visible +$hidden' : visible;
+  /// One colored segment of a multi-route chip: the option's own route
+  /// color with its name (the mode icon only leads the first segment).
+  Widget _routeSegment(
+    routing.Route route, {
+    required bool withIcon,
+    required routing.TransportMode mode,
+  }) {
+    final color = _routeOwnColor(route, mode);
+    final textColor = _contrastOn(color);
+    final name = route.shortName ?? '';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      color: color,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (withIcon) ...[
+            Icon(_getModeIcon(mode), size: 16, color: textColor),
+            if (name.isNotEmpty) const SizedBox(width: 4),
+          ],
+          if (name.isNotEmpty)
+            Text(
+              name,
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  static Color _contrastOn(Color background) =>
+      background.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
+
+  Color _routeOwnColor(routing.Route route, routing.TransportMode mode) {
+    final colorStr = route.color ?? '';
+    final parsed = int.tryParse('FF$colorStr', radix: 16);
+    if (parsed != null) return Color(parsed);
+    return _getModeColor(mode);
   }
 
   Color _getRouteColor(routing.Leg leg) {
@@ -511,83 +520,3 @@ class _InfoChip extends StatelessWidget {
   }
 }
 
-/// Badge showing number of alternative departure times or route options
-class _AlternativesBadge extends StatelessWidget {
-  final int count;
-  final bool isExpanded;
-  final VoidCallback? onTap;
-  final ThemeData theme;
-  final HomeScreenLocalizations l10n;
-
-  /// Alternatives that differ in route, not just departure time — shown
-  /// as "+N more options" with a route icon instead of the clock.
-  final bool hasRouteAlternatives;
-
-  const _AlternativesBadge({
-    required this.count,
-    required this.isExpanded,
-    this.onTap,
-    required this.theme,
-    required this.l10n,
-    this.hasRouteAlternatives = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap != null
-            ? () {
-                HapticFeedback.selectionClick();
-                onTap!();
-              }
-            : null,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                hasRouteAlternatives
-                    ? Icons.alt_route_rounded
-                    : Icons.schedule_rounded,
-                size: 14,
-                color: theme.colorScheme.onSecondaryContainer,
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  hasRouteAlternatives
-                      ? l10n.moreOptions(count)
-                      : l10n.moreDepartures(count),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSecondaryContainer,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 2),
-              AnimatedRotation(
-                turns: isExpanded ? 0.5 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  Icons.expand_more_rounded,
-                  size: 16,
-                  color: theme.colorScheme.onSecondaryContainer,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
@@ -57,19 +56,6 @@ class ItineraryList extends StatefulWidget {
 class _ItineraryListState extends State<ItineraryList> {
   routing.Itinerary? _detailItinerary;
   bool _hasAutoShownDetail = false;
-  // Track which groups are expanded
-  final Set<String> _expandedGroups = {};
-
-  void _toggleGroupExpanded(String signature) {
-    HapticFeedback.selectionClick();
-    setState(() {
-      if (_expandedGroups.contains(signature)) {
-        _expandedGroups.remove(signature);
-      } else {
-        _expandedGroups.add(signature);
-      }
-    });
-  }
 
   void _showDetails(routing.Itinerary itinerary) {
     HapticFeedback.selectionClick();
@@ -93,10 +79,9 @@ class _ItineraryListState extends State<ItineraryList> {
       listener: (context, state) {
         // Clear stale local state when a new search starts or plan changes
         if (state.isLoading || state.plan == null) {
-          if (_detailItinerary != null || _expandedGroups.isNotEmpty) {
+          if (_detailItinerary != null) {
             setState(() {
               _detailItinerary = null;
-              _expandedGroups.clear();
             });
             widget.onDetailStateChanged?.call(false);
           }
@@ -159,7 +144,6 @@ class _ItineraryListState extends State<ItineraryList> {
             if (mounted && _detailItinerary != null) {
               setState(() {
                 _detailItinerary = null;
-                _expandedGroups.clear();
               });
               widget.onDetailStateChanged?.call(false);
             }
@@ -219,9 +203,6 @@ class _ItineraryListState extends State<ItineraryList> {
     RoutePlannerCubit cubit,
   ) {
     final l10n = HomeScreenLocalizations.of(context);
-    final theme = Theme.of(context);
-    final timesHidden =
-        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -232,25 +213,15 @@ class _ItineraryListState extends State<ItineraryList> {
         if (index == 0) return _EstimatedTimesBanner(l10n: l10n);
         final groupIndex = index - 1;
         final group = groups[groupIndex];
-        // Under a pinned routing time (routingTimeOverride) clock times
-        // are synthetic and hidden, so same-route "other departures"
-        // would render as indistinguishable rows — offer no expansion
-        // unless the alternatives differ by route.
-        final expandable =
-            group.hasAlternatives &&
-            (!timesHidden || group.hasRouteAlternatives);
         final containsSelection = group.alternatives.contains(
           state.selectedItinerary,
         );
-        final selectionIsRepresentative =
-            state.selectedItinerary == group.representative;
-        // A selected non-representative alternative forces its group
-        // open: collapsing it would leave the list with no highlighted
-        // row while the map draws that alternative.
-        final isExpanded =
-            expandable &&
-            (_expandedGroups.contains(group.signature) ||
-                (containsSelection && !selectionIsRepresentative));
+        // The card wears the group's currently chosen option (#737): after
+        // picking an alternative in the detail switcher, its times/legs are
+        // what the row shows — and what Go navigates.
+        final face = containsSelection
+            ? state.selectedItinerary!
+            : group.representative;
 
         return TweenAnimationBuilder<double>(
           key: ValueKey('group-$groupIndex'),
@@ -265,114 +236,33 @@ class _ItineraryListState extends State<ItineraryList> {
           },
           child: Column(
             children: [
-              // Main card for representative itinerary. Highlighted when
-              // its representative is selected — or when any member is
-              // selected but the group can't expand to show that row.
               ItineraryCard(
-                itinerary: group.representative,
-                isSelected:
-                    containsSelection &&
-                    (selectionIsRepresentative || !expandable),
-                alternativeCount: expandable ? group.additionalCount : null,
+                itinerary: face,
+                isSelected: containsSelection,
                 slotRoutes: group.slotRoutes,
-                hasRouteAlternatives: group.hasRouteAlternatives,
-                isExpanded: isExpanded,
                 onTap: () {
-                  cubit.selectItinerary(group.representative);
+                  cubit.selectItinerary(face);
                   if (widget.onItineraryDetails != null) {
-                    widget.onItineraryDetails!(group.representative);
+                    widget.onItineraryDetails!(face);
                   } else {
-                    _showDetails(group.representative);
+                    _showDetails(face);
                   }
                 },
-                onExpandTap: expandable
-                    ? () {
-                        // Collapsing a group held open by its selected
-                        // alternative: just toggling the Set would be
-                        // overridden by the force-open on the next build
-                        // (a dead chevron) and desync the Set. Move the
-                        // selection to the representative so the group
-                        // really closes.
-                        if (containsSelection && !selectionIsRepresentative) {
-                          HapticFeedback.selectionClick();
-                          cubit.selectItinerary(group.representative);
-                          setState(
-                            () => _expandedGroups.remove(group.signature),
-                          );
-                        } else {
-                          _toggleGroupExpanded(group.signature);
-                        }
-                      }
-                    : null,
                 onDetailsTap: null,
                 onStartNavigation:
                     widget.onStartNavigation != null &&
                         widget.locationService != null
                     ? () => widget.onStartNavigation!(
                         context,
-                        group.representative,
+                        face,
                         widget.locationService!,
                       )
                     : null,
               ),
-              // Expanded alternatives
-              if (isExpanded)
-                _buildAlternatives(context, group, state, cubit, l10n, theme),
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _buildAlternatives(
-    BuildContext context,
-    routing.ItineraryGroup group,
-    RoutePlannerState state,
-    RoutePlannerCubit cubit,
-    HomeScreenLocalizations l10n,
-    ThemeData theme,
-  ) {
-    // Skip the first one (representative)
-    final alternatives = group.alternatives.skip(1).toList();
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 12, bottom: 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Text(
-              group.hasRouteAlternatives
-                  ? l10n.otherOptions
-                  : l10n.otherDepartures,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ...alternatives.map((itinerary) {
-            final isSelected = itinerary == state.selectedItinerary;
-            return _AlternativeTimeCard(
-              itinerary: itinerary,
-              isSelected: isSelected,
-              // With interchangeable routes in the group, each row must
-              // say which buses it actually rides.
-              showRoutes: group.hasRouteAlternatives,
-              onTap: () {
-                cubit.selectItinerary(itinerary);
-                if (widget.onItineraryDetails != null) {
-                  widget.onItineraryDetails!(itinerary);
-                } else {
-                  _showDetails(itinerary);
-                }
-              },
-            );
-          }),
-        ],
-      ),
     );
   }
 
@@ -662,156 +552,6 @@ class _ShimmerCardState extends State<_ShimmerCard>
           alpha: 0.5,
         ),
         borderRadius: BorderRadius.circular(radius),
-      ),
-    );
-  }
-}
-
-/// Compact card for alternative departure times or route options
-class _AlternativeTimeCard extends StatelessWidget {
-  final routing.Itinerary itinerary;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  /// When the group merges different-route options, each row states its
-  /// own ride ("123 → 120") — times alone can't tell them apart.
-  final bool showRoutes;
-
-  const _AlternativeTimeCard({
-    required this.itinerary,
-    required this.isSelected,
-    required this.onTap,
-    this.showRoutes = false,
-  });
-
-  String get _routeSummary => itinerary.legs
-      .where((leg) => leg.transitLeg)
-      .map((leg) => leg.displayName)
-      .where((name) => name.isNotEmpty)
-      .join(' → ');
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = HomeScreenLocalizations.of(context);
-    // Hide absolute clock times when the app pins the routing time to a
-    // fixed value — startTime/endTime are then synthetic and would
-    // mislead the user. With times hidden the route summary is the only
-    // thing that can identify the row, so it shows regardless of
-    // [showRoutes].
-    final timesHidden =
-        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Material(
-        color: isSelected
-            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
-            : theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.selectionClick();
-            onTap();
-          },
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.dividerColor.withValues(alpha: 0.3),
-                width: isSelected ? 1.5 : 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  showRoutes ? Icons.alt_route_rounded : Icons.schedule_rounded,
-                  size: 18,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                if (!timesHidden && showRoutes && _routeSummary.isNotEmpty) ...[
-                  Flexible(
-                    child: Text(
-                      _routeSummary,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                // The times own ALL remaining width (a Spacer would split
-                // the free space with them and truncate the departure time
-                // on ordinary phone widths); FittedBox scales down instead
-                // of ellipsizing when it is genuinely tight.
-                if (!timesHidden)
-                  Expanded(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            l10n.departsAt(
-                              formatClockTime(context, itinerary.startTime),
-                            ),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 14,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            formatClockTime(context, itinerary.endTime),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                else
-                  // With clock times hidden the ride summary is the row's
-                  // only identity — give it the full width.
-                  Expanded(
-                    child: Text(
-                      _routeSummary,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                const SizedBox(width: 8),
-                if (isSelected)
-                  Icon(
-                    Icons.check_circle_rounded,
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  )
-                else
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    size: 18,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

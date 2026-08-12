@@ -173,6 +173,14 @@ String? _routeKey(Leg leg) {
   return null;
 }
 
+/// The rider-facing identity of a bus: its display name, falling back to
+/// the route id for unnamed feeds.
+String? _mainBusKey(Leg leg) {
+  final name = leg.displayName;
+  if (name.isNotEmpty) return name;
+  return _routeKey(leg);
+}
+
 const _distance = Distance();
 
 /// An itinerary reduced to its transit legs (walk legs carry no identity
@@ -221,23 +229,28 @@ class _TransitProfile {
   }) {
     if (a.transportMode != b.transportMode) return false;
 
-    final keyA = _routeKey(a);
-    final keyB = _routeKey(b);
-    // A different main route is a different decision — never merged, no
-    // matter how close the stops are. Unknown routes fail closed.
+    // The main bus is identified by what the RIDER sees — the route name.
+    // GTFS feeds commonly model one line as several route_ids (direction/
+    // service variants): to the rider the 110 is the 110, and comparing by
+    // route_id split those into separate rows (caught live on Cochabamba's
+    // OTP 1.5). The stop-proximity check below guards same-named-but-
+    // different lines. Unknown routes fail closed.
+    final keyA = _mainBusKey(a);
+    final keyB = _mainBusKey(b);
     if (keyA == null || keyA != keyB) return false;
 
+    // Only the BOARDING identifies the main bus: where you get off it
+    // belongs to the connection you chose (riding the P five blocks
+    // farther to catch the 120 instead of the 106 is still "take the P" —
+    // caught live: 529 m between alightings split the canonical group).
     final fromA = a.fromPlace?.latLng;
-    final toA = a.toPlace?.latLng;
     final fromB = b.fromPlace?.latLng;
-    final toB = b.toPlace?.latLng;
-    if (fromA == null || toA == null || fromB == null || toB == null) {
+    if (fromA == null || fromB == null) {
       // Without endpoints the same route is the best evidence available.
       return true;
     }
 
     // Boarding a couple stops earlier/later is still the same bus.
-    return _distance.as(LengthUnit.Meter, fromA, fromB) <= toleranceMeters &&
-        _distance.as(LengthUnit.Meter, toA, toB) <= toleranceMeters;
+    return _distance.as(LengthUnit.Meter, fromA, fromB) <= toleranceMeters;
   }
 }

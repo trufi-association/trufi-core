@@ -721,30 +721,6 @@ abstract class HomeScreenLocalizations {
   /// **'Finding routes...'**
   String get findingRoutes;
 
-  /// Badge showing number of additional departure times
-  ///
-  /// In en, this message translates to:
-  /// **'+{count} more'**
-  String moreDepartures(int count);
-
-  /// Badge showing number of interchangeable route options in an itinerary group
-  ///
-  /// In en, this message translates to:
-  /// **'+{count} options'**
-  String moreOptions(int count);
-
-  /// Header for interchangeable route options section
-  ///
-  /// In en, this message translates to:
-  /// **'Other options'**
-  String get otherOptions;
-
-  /// Header for alternative departure times section
-  ///
-  /// In en, this message translates to:
-  /// **'Other departures'**
-  String get otherDepartures;
-
   /// Label showing departure time
   ///
   /// In en, this message translates to:

@@ -3,9 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
-/// The grouped card (#737): a slot served by interchangeable routes joins
-/// them Google Maps style ("106 / 120") and the footer badge switches from
-/// "+N more" (departures) to "+N options".
+/// The grouped card (#737): a slot served by interchangeable routes paints
+/// ONE SEGMENT PER OPTION, each in its own route color — no "/" text, no
+/// "+n" cap (the summary row scrolls horizontally; the options are
+/// explored in the detail view).
 void main() {
   routing.Leg bus(String route) => routing.Leg(
     mode: 'BUS',
@@ -33,82 +34,71 @@ void main() {
     home: Scaffold(body: child),
   );
 
-  ItineraryCard card({
-    List<List<routing.Route>>? slotRoutes,
-    bool hasRouteAlternatives = false,
-    int? alternativeCount,
-  }) => ItineraryCard(
+  ItineraryCard card({List<List<routing.Route>>? slotRoutes}) => ItineraryCard(
     itinerary: itinerary,
     isSelected: false,
     onTap: () {},
-    alternativeCount: alternativeCount,
     slotRoutes: slotRoutes,
-    hasRouteAlternatives: hasRouteAlternatives,
   );
 
-  testWidgets('multi-route slot renders joined names "106 / 120"', (
-    tester,
-  ) async {
+  routing.Route colored(String name, String color) =>
+      routing.Route(shortName: name, color: color);
+
+  testWidgets('a multi-route slot paints one segment per option, each in '
+      'its own route color', (tester) async {
     await tester.pumpWidget(
       host(
         card(
           slotRoutes: [
-            [routing.Route(shortName: '123')],
-            [routing.Route(shortName: '106'), routing.Route(shortName: '120')],
+            [colored('123', '7E57C2')],
+            [colored('106', 'E91E63'), colored('120', '4CAF50')],
           ],
-          hasRouteAlternatives: true,
-          alternativeCount: 2,
-        ),
-      ),
-    );
-
-    expect(find.text('123'), findsOneWidget);
-    expect(find.text('106 / 120'), findsOneWidget);
-    expect(find.text('+2 options'), findsOneWidget,
-        reason: 'route alternatives use the options badge, not departures');
-  });
-
-  testWidgets('same-route group keeps plain names and departures badge', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      host(
-        card(
-          slotRoutes: [
-            [routing.Route(shortName: '123')],
-            [routing.Route(shortName: '106')],
-          ],
-          alternativeCount: 2,
         ),
       ),
     );
 
     expect(find.text('123'), findsOneWidget);
     expect(find.text('106'), findsOneWidget);
-    expect(find.text('+2 more'), findsOneWidget);
+    expect(find.text('120'), findsOneWidget);
+
+    Color bgOf(String name) {
+      final container = tester.widget<Container>(
+        find.ancestor(
+          of: find.text(name),
+          matching: find.byType(Container),
+        ).first,
+      );
+      return container.color!;
+    }
+
+    expect(bgOf('106'), const Color(0xFFE91E63),
+        reason: 'each option wears its OWN route color');
+    expect(bgOf('120'), const Color(0xFF4CAF50));
   });
 
-  testWidgets('beyond two options the chip collapses into "106 / 120 +n"', (
+  testWidgets('all options render — no "+n" collapse; the row scrolls', (
     tester,
   ) async {
     await tester.pumpWidget(
       host(
         card(
           slotRoutes: [
-            [routing.Route(shortName: '123')],
+            [colored('123', '7E57C2')],
             [
-              routing.Route(shortName: '106'),
-              routing.Route(shortName: '120'),
-              routing.Route(shortName: '250'),
-              routing.Route(shortName: 'Z12'),
+              colored('106', 'E91E63'),
+              colored('120', '4CAF50'),
+              colored('250', 'FF9800'),
+              colored('Z12', '7E57C2'),
             ],
           ],
-          hasRouteAlternatives: true,
         ),
       ),
     );
 
-    expect(find.text('106 / 120 +2'), findsOneWidget);
+    for (final name in ['106', '120', '250', 'Z12']) {
+      expect(find.text(name), findsOneWidget);
+    }
+    expect(find.textContaining('+'), findsNothing);
   });
 
   testWidgets('without a group the card renders exactly as before', (

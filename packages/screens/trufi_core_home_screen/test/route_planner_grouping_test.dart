@@ -211,7 +211,7 @@ void main() {
     });
   });
 
-  group('grouped list under routingTimeOverride', () {
+  group('grouped list and detail options (#737 v3)', () {
     Widget host(RoutePlannerCubit cubit, {TimeOfDay? routingTimeOverride}) =>
         Provider<AppConfiguration?>.value(
           value: AppConfiguration(
@@ -232,132 +232,113 @@ void main() {
           ),
         );
 
-    testWidgets(
-      'same-route group offers NO expansion when times are hidden — the '
-      'rows would be indistinguishable (blank but for a clock icon)',
-      (tester) async {
-        final cubit = await _cubitWithPlan(_sameRoutePair());
-        await tester.pumpWidget(
-          host(cubit, routingTimeOverride: const TimeOfDay(hour: 12, minute: 0)),
-        );
-        await tester.pumpAndSettle();
+    Finder option(int index) => find.byKey(ValueKey('itinerary-option-$index'));
 
-        expect(find.textContaining('+1'), findsNothing);
-        await cubit.close();
-      },
-    );
-
-    testWidgets('same-route group keeps its departures badge with visible '
-        'times', (tester) async {
-      final cubit = await _cubitWithPlan(_sameRoutePair());
+    testWidgets('the list shows no expansion affordance — options live in '
+        'the detail', (tester) async {
+      final cubit = await _cubitWithPlan(_rawItineraries());
       await tester.pumpWidget(host(cubit));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('+1'), findsOneWidget);
+      expect(find.textContaining('+'), findsNothing);
+      // The multi-route slot paints each option as its own segment.
+      expect(find.text('106'), findsOneWidget);
+      expect(find.text('120'), findsOneWidget);
       await cubit.close();
     });
 
-    testWidgets(
-      'route-options group still expands with times hidden, and each row '
-      'states its ride',
-      (tester) async {
-        final cubit = await _cubitWithPlan(_rawItineraries());
-        await tester.pumpWidget(
-          host(cubit, routingTimeOverride: const TimeOfDay(hour: 12, minute: 0)),
-        );
-        await tester.pumpAndSettle();
+    testWidgets('the detail offers the group options and switching selects '
+        'them', (tester) async {
+      final cubit = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
 
-        final badge = find.textContaining('+1');
-        expect(badge, findsOneWidget);
-        await tester.tap(badge);
-        await tester.pumpAndSettle();
+      // Open the grouped card's detail (tap its main-bus segment).
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
 
-        expect(find.text('123 → 120'), findsOneWidget,
-            reason: 'with clock times hidden the route summary is the only '
-                'thing identifying the row');
-        await cubit.close();
-      },
-    );
+      expect(option(0), findsOneWidget);
+      expect(option(1), findsOneWidget);
 
-    testWidgets('expanded time rows never overflow on a 320dp phone', (
+      await tester.tap(option(1));
+      await tester.pumpAndSettle();
+
+      expect(
+        cubit.state.selectedItinerary,
+        same(cubit.state.plan!.itineraries![1]),
+        reason: 'switching an option selects it (map + navigation follow)',
+      );
+      // The switcher stays available to flip back.
+      expect(option(0), findsOneWidget);
+      await cubit.close();
+    });
+
+    testWidgets('back from the detail, the group card wears the chosen '
+        'option', (tester) async {
+      final cubit = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+      await tester.tap(option(1));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+      await tester.pumpAndSettle();
+
+      // itineraries[1] departs at 8:04 — the card now shows ITS times.
+      expect(find.textContaining('8:04'), findsWidgets);
+      await cubit.close();
+    });
+
+    testWidgets('under routingTimeOverride, same-route departures are '
+        'indistinguishable — the detail hides the switcher', (tester) async {
+      final cubit = await _cubitWithPlan(_sameRoutePair());
+      await tester.pumpWidget(
+        host(cubit, routingTimeOverride: const TimeOfDay(hour: 12, minute: 0)),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+
+      expect(option(0), findsNothing);
+      await cubit.close();
+    });
+
+    testWidgets('under routingTimeOverride, route options still switch — '
+        'labeled by ride, no clock times', (tester) async {
+      final cubit = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(
+        host(cubit, routingTimeOverride: const TimeOfDay(hour: 12, minute: 0)),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+
+      expect(option(0), findsOneWidget);
+      expect(option(1), findsOneWidget);
+      await cubit.close();
+    });
+
+    testWidgets('list and open detail never overflow on a 320dp phone', (
       tester,
     ) async {
-      // Regression guard: a Spacer sharing free space with Flexible time
-      // texts truncated the departure time on ordinary widths (found by
-      // the second review pass). Also covers the card header, which
-      // overflowed on 12-hour locales at any ordinary width until this
-      // branch wrapped its times in a FittedBox.
       tester.view.physicalSize = const Size(320, 640);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final cubit = await _cubitWithPlan(_sameRoutePair());
+      final cubit = await _cubitWithPlan(_rawItineraries());
       await tester.pumpWidget(host(cubit));
       await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('+1'));
+      await tester.tap(find.text('123').first);
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull,
           reason: 'a RenderFlex overflow throws in widget tests');
       await cubit.close();
     });
-
-    testWidgets(
-      'the detail view can switch between the group\'s options',
-      (tester) async {
-        final cubit = await _cubitWithPlan(_rawItineraries());
-        await tester.pumpWidget(host(cubit));
-        await tester.pumpAndSettle();
-
-        // Open the grouped card's detail (representative: 123 → 106).
-        await tester.tap(find.text('106 / 120'));
-        await tester.pumpAndSettle();
-
-        // Both options are offered as chips, labeled by their ride.
-        expect(find.textContaining('123 → 106'), findsOneWidget);
-        expect(find.textContaining('123 → 120'), findsOneWidget);
-
-        await tester.tap(find.textContaining('123 → 120'));
-        await tester.pumpAndSettle();
-
-        expect(
-          cubit.state.selectedItinerary,
-          same(cubit.state.plan!.itineraries![1]),
-          reason: 'switching an option selects it (map + navigation follow)',
-        );
-        // The switcher stays available to flip back.
-        expect(find.textContaining('123 → 106'), findsOneWidget);
-        await cubit.close();
-      },
-    );
-
-    testWidgets(
-      'collapsing a group held open by its selected alternative moves the '
-      'selection back to the representative and really closes it',
-      (tester) async {
-        final cubit = await _cubitWithPlan(_rawItineraries());
-        // Select the non-representative alternative (state-level, as the
-        // detail flow would): its group must force-open.
-        final alternative = cubit.state.plan!.itineraries![1];
-        await cubit.selectItinerary(alternative);
-
-        await tester.pumpWidget(host(cubit));
-        await tester.pumpAndSettle();
-        expect(find.text('Other options'), findsOneWidget,
-            reason: 'a selected alternative forces its group open');
-
-        await tester.tap(find.textContaining('+1'));
-        await tester.pumpAndSettle();
-
-        expect(find.text('Other options'), findsNothing,
-            reason: 'the collapse tap must not be a dead chevron');
-        expect(
-          cubit.state.selectedItinerary,
-          cubit.state.plan!.groupedItineraries!.first.representative,
-        );
-        await cubit.close();
-      },
-    );
   });
 }

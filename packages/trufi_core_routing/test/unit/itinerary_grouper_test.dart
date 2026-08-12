@@ -147,6 +147,29 @@ void main() {
       expect(groups.single.hasRouteAlternatives, isFalse);
     });
 
+    test('where you get OFF the main bus belongs to the connection — far '
+        'alightings still share the main bus', () {
+      // Caught live: riding the P five blocks farther to catch the 120
+      // (alightings 529 m apart) split the canonical P → 106/120 group.
+      final tFar = _stop('stop_t2far', _destSameRouteFar);
+      final groups = groupItineraries([
+        _itinerary([
+          _bus('P', from: o1, to: t),
+          _bus('106', from: t, to: d1),
+        ]),
+        _itinerary([
+          _bus('P', from: o1, to: tFar),
+          _bus('120', from: tFar, to: d2),
+        ], startMinute: 1),
+      ]);
+
+      expect(groups, hasLength(1));
+      expect(
+        groups.single.slotRoutes[1].map((r) => r.shortName),
+        ['106', '120'],
+      );
+    });
+
     test('connections are options with no constraint of their own — same '
         'main bus groups even when the second legs end far apart', () {
       final dFar = _stop('stop_d3', _destSameRouteFar);
@@ -166,6 +189,34 @@ void main() {
         groups.single.slotRoutes[1].map((r) => r.shortName),
         ['106', '290'],
       );
+    });
+
+    test('route_id variants of the same named line are the same main bus', () {
+      // Caught live on Cochabamba's OTP 1.5: one line ("110") modeled as
+      // several GTFS route_ids (direction/service variants). To the rider
+      // the 110 is the 110 — comparing by route_id split its departures
+      // into separate rows.
+      Leg variant(String routeId, {required Place from, required Place to}) =>
+          Leg(
+            mode: 'BUS',
+            startTime: DateTime(2026, 8, 12, 8),
+            endTime: DateTime(2026, 8, 12, 8, 30),
+            duration: const Duration(minutes: 30),
+            distance: 5000,
+            transitLeg: true,
+            route: Route(gtfsId: routeId, shortName: '110'),
+            shortName: '110',
+            fromPlace: from,
+            toPlace: to,
+          );
+
+      final groups = groupItineraries([
+        _itinerary([variant('110-ida', from: o1, to: t)]),
+        _itinerary([variant('110-b', from: o1, to: t)], startMinute: 1),
+      ]);
+
+      expect(groups, hasLength(1),
+          reason: 'same rider-facing name + same stops = same main bus');
     });
 
     test('feed prefixes do not break matching across providers', () {

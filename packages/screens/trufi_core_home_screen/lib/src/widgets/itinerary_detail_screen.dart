@@ -139,9 +139,9 @@ class ItineraryDetailContent extends StatelessWidget {
     }
 
     return [
-      const SizedBox(height: 4),
+      const SizedBox(height: 6),
       SizedBox(
-        height: 40,
+        height: 48,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -150,28 +150,109 @@ class ItineraryDetailContent extends StatelessWidget {
           itemBuilder: (context, index) {
             final option = options[index];
             final selected = option == itinerary;
-            return ChoiceChip(
-              label: Text(labels[index]),
-              selected: selected,
-              onSelected: selected
+            return InkWell(
+              key: ValueKey('itinerary-option-$index'),
+              borderRadius: BorderRadius.circular(12),
+              onTap: selected
                   ? null
-                  : (_) {
+                  : () {
                       HapticFeedback.selectionClick();
                       onSelectAlternative!(option);
                     },
-              labelStyle: theme.textTheme.labelMedium?.copyWith(
-                color: selected
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: selected
+                      ? colorScheme.primaryContainer.withValues(alpha: 0.4)
+                      : colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: selected
+                        ? colorScheme.primary
+                        : theme.dividerColor.withValues(alpha: 0.4),
+                    width: selected ? 1.5 : 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (selected) ...[
+                      Icon(
+                        Icons.check_circle_rounded,
+                        size: 16,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    ..._optionRouteBadges(option, colorScheme),
+                    if (!timesHidden) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        formatClockTime(context, option.startTime),
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: selected
+                              ? colorScheme.onPrimaryContainer
+                              : colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
-              selectedColor: colorScheme.primaryContainer,
-              visualDensity: VisualDensity.compact,
             );
           },
         ),
       ),
     ];
+  }
+
+  /// The option's rides as mini badges, each painted in its own route
+  /// color — same visual language as the itinerary card's chips.
+  List<Widget> _optionRouteBadges(
+    routing.Itinerary option,
+    ColorScheme colorScheme,
+  ) {
+    final transitLegs = option.legs.where((leg) => leg.transitLeg).toList();
+    final badges = <Widget>[];
+    for (final (i, leg) in transitLegs.indexed) {
+      if (i > 0) {
+        badges.add(
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 14,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        );
+      }
+      final parsed = int.tryParse('FF${leg.routeColor}', radix: 16);
+      final color = parsed != null ? Color(parsed) : colorScheme.primary;
+      final textColor = color.computeLuminance() > 0.5
+          ? Colors.black87
+          : Colors.white;
+      badges.add(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            leg.displayName,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 11,
+            ),
+          ),
+        ),
+      );
+    }
+    return badges;
   }
 
   Widget _buildHeader(
@@ -241,30 +322,43 @@ class ItineraryDetailContent extends StatelessWidget {
               // Time range — hidden when the app pins routing time to
               // a fixed value, since startTime/endTime would be
               // synthetic ("today @ 12:xx") and confuse the user.
+              // FittedBox: 12-hour locales overflow this row on ordinary
+              // phone widths — scale down instead (same as the card).
               if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
-                  null) ...[
-                Text(
-                  formatClockTime(context, itinerary.startTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  null)
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          formatClockTime(context, itinerary.startTime),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          formatClockTime(context, itinerary.endTime),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 16,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                Text(
-                  formatClockTime(context, itinerary.endTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-              const Spacer(),
+                )
+              else
+                const Spacer(),
               // Go button
               if (onStartNavigation != null)
                 FilledButton.icon(
