@@ -67,6 +67,11 @@ void main() {
     test('hasDataForRoute powers the LIVE badge across prefixes', () {
       expect(provider.hasDataForRoute('1132'), isTrue);
       expect(provider.hasDataForRoute('1:1132'), isTrue);
+      // The fixture only carries '1:1185' — this is the assert that FAILS
+      // under strict equality (review finding: without it, hasDataForRoute
+      // could regress and the suite would stay green because the other
+      // queries find literal matches in the mixed fixture).
+      expect(provider.hasDataForRoute('1185'), isTrue);
       expect(provider.hasDataForRoute('1481'), isFalse);
     });
 
