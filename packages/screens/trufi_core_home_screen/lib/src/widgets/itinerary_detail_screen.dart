@@ -150,58 +150,62 @@ class ItineraryDetailContent extends StatelessWidget {
           itemBuilder: (context, index) {
             final option = options[index];
             final selected = option == itinerary;
-            return InkWell(
-              key: ValueKey('itinerary-option-$index'),
-              borderRadius: BorderRadius.circular(12),
-              onTap: selected
-                  ? null
-                  : () {
-                      HapticFeedback.selectionClick();
-                      onSelectAlternative!(option);
-                    },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: selected
-                      ? colorScheme.primaryContainer.withValues(alpha: 0.4)
-                      : colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: selected
-                        ? colorScheme.primary
-                        : theme.dividerColor.withValues(alpha: 0.4),
-                    width: selected ? 1.5 : 1,
+            return Semantics(
+              button: true,
+              selected: selected,
+              child: InkWell(
+                key: ValueKey('itinerary-option-$index'),
+                borderRadius: BorderRadius.circular(12),
+                onTap: selected
+                    ? null
+                    : () {
+                        HapticFeedback.selectionClick();
+                        onSelectAlternative!(option);
+                      },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (selected) ...[
-                      Icon(
-                        Icons.check_circle_rounded,
-                        size: 16,
-                        color: colorScheme.primary,
-                      ),
-                      const SizedBox(width: 6),
-                    ],
-                    ..._optionRouteBadges(option, colorScheme),
-                    if (!timesHidden) ...[
-                      const SizedBox(width: 8),
-                      Text(
-                        formatClockTime(context, option.startTime),
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: selected
-                              ? colorScheme.onPrimaryContainer
-                              : colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? colorScheme.primaryContainer.withValues(alpha: 0.4)
+                        : colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selected
+                          ? colorScheme.primary
+                          : theme.dividerColor.withValues(alpha: 0.4),
+                      width: selected ? 1.5 : 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (selected) ...[
+                        Icon(
+                          Icons.check_circle_rounded,
+                          size: 16,
+                          color: colorScheme.primary,
                         ),
-                      ),
+                        const SizedBox(width: 6),
+                      ],
+                      ..._optionRouteBadges(option, colorScheme),
+                      if (!timesHidden) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          formatClockTime(context, option.startTime),
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: selected
+                                ? colorScheme.onPrimaryContainer
+                                : colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             );
@@ -229,7 +233,11 @@ class ItineraryDetailContent extends StatelessWidget {
           ),
         );
       }
-      final parsed = int.tryParse('FF${leg.routeColor}', radix: 16);
+      // Empty guard: 'FF' alone parses to a transparent blue and would
+      // make the fallback unreachable.
+      final parsed = leg.routeColor.isNotEmpty
+          ? int.tryParse('FF${leg.routeColor}', radix: 16)
+          : null;
       final color = parsed != null ? Color(parsed) : colorScheme.primary;
       final textColor = color.computeLuminance() > 0.5
           ? Colors.black87

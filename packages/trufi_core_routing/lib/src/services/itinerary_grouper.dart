@@ -17,16 +17,18 @@ import '../models/transport_mode.dart';
 /// interchangeable connections belong on a single row ("A → B / C").
 ///
 /// Two itineraries belong to the same group when they have the same number
-/// of transit legs and the **same first (main) leg**: same route
-/// (feed-prefix-agnostic, [stripGtfsFeedPrefix] — OTP emits `1:route_123`
-/// while the local planner emits raw GTFS ids, the exact mismatch behind
-/// PR #982) boarding and alighting within a walking tolerance (staying on
-/// the same bus a couple more stops is still the same option). The legs
-/// after the main one are the group's interchangeable options — no further
-/// constraint on them: they board where the main leg drops you and end near
-/// the destination by construction. Itineraries with a different main route
-/// never merge, even from the same stop (product rule, Sam 2026-08-12:
-/// "agrupar las redundantes, o sea que tienen el mismo bus principal").
+/// of transit legs and the **same main bus**: the first transit leg carries
+/// the same rider-facing route name (GTFS models one line as several
+/// route_ids — to the rider the 110 is the 110; unnamed feeds fall back to
+/// the feed-prefix-agnostic route id, [stripGtfsFeedPrefix], the mismatch
+/// behind PR #982) boarding within a walking tolerance. Only the BOARDING
+/// identifies the main bus — where you get off it belongs to the connection
+/// you chose, and the legs after the main one are the group's
+/// interchangeable options with no constraint of their own: they board
+/// where the main bus drops you and end near the destination by
+/// construction. Itineraries with a different main route never merge, even
+/// from the same stop (product rule, Sam 2026-08-12: "agrupar las
+/// redundantes, o sea que tienen el mismo bus principal").
 ///
 /// Grouping only changes presentation, never ranking (#965): groups keep the
 /// incoming order of their best member, and `groups.first.representative` is
@@ -99,8 +101,8 @@ List<ItineraryGroup> groupItineraries(
 
     var signature = _signature(profiles[memberIndices.first], slotRoutes);
     // Same structure can repeat when stops sit beyond tolerance but share
-    // rounded coordinates — disambiguate so the UI's expansion Set (keyed
-    // by signature) never toggles two groups at once.
+    // rounded coordinates — disambiguate so any consumer keying on the
+    // signature can tell the groups apart.
     while (!seenSignatures.add(signature)) {
       signature = '$signature+';
     }
@@ -125,10 +127,9 @@ List<List<Route>> _collectSlotRoutes(List<_TransitProfile> members) {
       final leg = member.slots[slot];
       // Dedup by what the chip will show: GTFS feeds commonly model one
       // line as several route_ids (direction/service variants) sharing a
-      // short name — "106 / 106" would be nonsense to a rider. Legs with
-      // no display name at all collapse into a single entry too: counting
-      // them as distinct would flip the group to "+N options" (and its
-      // alt-route badge) on feeds that simply lack route names.
+      // short name — two segments both reading "106" would be nonsense to
+      // a rider. Legs with no display name at all collapse into a single
+      // entry too, so nameless feeds never fake route alternatives.
       final key = leg.displayName.isNotEmpty
           ? leg.displayName
           : (_routeKey(leg) ?? '');

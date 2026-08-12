@@ -208,7 +208,7 @@ class ItineraryCard extends StatelessWidget {
   }
 
   /// One chip per leg, feeding each transit chip the distinct routes its
-  /// group offers for that slot ("106 / 120"). Walk/bike legs pass through.
+  /// group offers for that slot. Walk/bike legs pass through.
   List<Widget> _chipsWithSlotRoutes(List<routing.Leg> legs) {
     var transitSlot = 0;
     return legs.map((leg) {
@@ -298,7 +298,8 @@ class _LegChip extends StatelessWidget {
   final routing.Leg leg;
 
   /// Distinct routes the itinerary's group offers for this slot; when it
-  /// carries more than one, the label joins them ("106 / 120").
+  /// carries more than one, the chip paints one segment per option, each
+  /// in its own route color.
   final List<routing.Route>? slotRoutes;
 
   const _LegChip({required this.leg, this.slotRoutes});
@@ -341,10 +342,6 @@ class _LegChip extends StatelessWidget {
     final options = (slotRoutes != null && slotRoutes!.length > 1)
         ? slotRoutes!
         : null;
-    final color = _getRouteColor(leg);
-    final textColor = _contrastOn(color);
-    final routeName = leg.shortName ?? leg.route?.shortName ?? '';
-    final realtime = context.watch<RealtimeVehiclesProvider?>();
 
     if (options != null) {
       return ClipRRect(
@@ -354,7 +351,15 @@ class _LegChip extends StatelessWidget {
           children: [
             for (final (i, route) in options.indexed) ...[
               if (i > 0)
-                Container(width: 1.5, height: 24, color: Colors.white),
+                // Divider contrast derives from the segment it sits on —
+                // a fixed white bar disappears between two light routes.
+                Container(
+                  width: 1.5,
+                  height: 24,
+                  color: _contrastOn(
+                    _routeOwnColor(options[i - 1], leg.transportMode),
+                  ).withValues(alpha: 0.7),
+                ),
               _routeSegment(
                 route,
                 withIcon: i == 0,
@@ -365,6 +370,11 @@ class _LegChip extends StatelessWidget {
         ),
       );
     }
+
+    final color = _getRouteColor(leg);
+    final textColor = _contrastOn(color);
+    final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+    final realtime = context.watch<RealtimeVehiclesProvider?>();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -440,7 +450,11 @@ class _LegChip extends StatelessWidget {
 
   Color _routeOwnColor(routing.Route route, routing.TransportMode mode) {
     final colorStr = route.color ?? '';
-    final parsed = int.tryParse('FF$colorStr', radix: 16);
+    // Empty guard: 'FF' alone parses to a transparent blue and would make
+    // the mode-color fallback unreachable.
+    final parsed = colorStr.isNotEmpty
+        ? int.tryParse('FF$colorStr', radix: 16)
+        : null;
     if (parsed != null) return Color(parsed);
     return _getModeColor(mode);
   }
