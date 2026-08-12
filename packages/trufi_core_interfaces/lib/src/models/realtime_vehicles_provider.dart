@@ -22,16 +22,46 @@ abstract class RealtimeVehiclesProvider {
   void stop();
 }
 
+/// Strips the OTP feed prefix (`<feedId>:<id>`) from a GTFS id.
+///
+/// Different sources disagree on the prefix: OTP's GraphQL emits `1:1132`
+/// while a bundled-GTFS planner emits plain `1132` for the same route, so
+/// any realtime-vs-itinerary route matching must be feed-agnostic or a
+/// hybrid deploy (local routing + OTP vehicles, like the Lima pilot)
+/// silently matches nothing. Within one deploy all feeds belong to one
+/// city, so bare-id collisions across feeds are not a practical concern.
+String stripGtfsFeedPrefix(String gtfsId) {
+  final colon = gtfsId.indexOf(':');
+  return colon >= 0 ? gtfsId.substring(colon + 1) : gtfsId;
+}
+
 /// Convenience queries computed on top of [RealtimeVehiclesProvider.latest].
+/// All route matching is feed-prefix agnostic — see [stripGtfsFeedPrefix].
 extension RealtimeVehiclesProviderQueries on RealtimeVehiclesProvider {
-  List<VehiclePosition> vehiclesForRoute(String routeGtfsId) => latest
-      .where((v) => v.routeId == routeGtfsId)
-      .toList(growable: false);
+  List<VehiclePosition> vehiclesForRoute(String routeGtfsId) {
+    final want = stripGtfsFeedPrefix(routeGtfsId);
+    return latest
+        .where(
+          (v) => v.routeId != null && stripGtfsFeedPrefix(v.routeId!) == want,
+        )
+        .toList(growable: false);
+  }
 
-  List<VehiclePosition> vehiclesForRoutes(Set<String> routeGtfsIds) => latest
-      .where((v) => v.routeId != null && routeGtfsIds.contains(v.routeId))
-      .toList(growable: false);
+  List<VehiclePosition> vehiclesForRoutes(Set<String> routeGtfsIds) {
+    final want = routeGtfsIds.map(stripGtfsFeedPrefix).toSet();
+    return latest
+        .where(
+          (v) =>
+              v.routeId != null &&
+              want.contains(stripGtfsFeedPrefix(v.routeId!)),
+        )
+        .toList(growable: false);
+  }
 
-  bool hasDataForRoute(String routeGtfsId) =>
-      latest.any((v) => v.routeId == routeGtfsId);
+  bool hasDataForRoute(String routeGtfsId) {
+    final want = stripGtfsFeedPrefix(routeGtfsId);
+    return latest.any(
+      (v) => v.routeId != null && stripGtfsFeedPrefix(v.routeId!) == want,
+    );
+  }
 }

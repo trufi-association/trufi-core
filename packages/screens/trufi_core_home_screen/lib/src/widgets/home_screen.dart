@@ -1526,13 +1526,20 @@ class _HomeScreenState extends State<HomeScreen>
     if (_realtimeVehiclesProvider != null &&
         _liveVehiclesEnabled.value &&
         _liveVehicles.isNotEmpty) {
-      final toShow = _selectedTransitRouteIds.isEmpty
+      // Feed-agnostic matching: itinerary legs may come from a bundled-GTFS
+      // planner (`1132`) while vehicles come from OTP (`1:1132`) — strict
+      // equality here made every bus vanish the moment a search was active
+      // in hybrid deploys (Lima pilot regression, caught by Sam).
+      final selected = _selectedTransitRouteIds
+          .map(stripGtfsFeedPrefix)
+          .toSet();
+      final toShow = selected.isEmpty
           ? _liveVehicles
           : _liveVehicles
                 .where(
                   (v) =>
                       v.routeId != null &&
-                      _selectedTransitRouteIds.contains(v.routeId),
+                      selected.contains(stripGtfsFeedPrefix(v.routeId!)),
                 )
                 .toList(growable: false);
       if (toShow.isNotEmpty) {

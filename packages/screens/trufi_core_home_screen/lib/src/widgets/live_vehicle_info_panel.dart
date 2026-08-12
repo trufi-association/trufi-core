@@ -25,11 +25,8 @@ class LiveVehicleInfoPanel extends StatelessWidget {
 
   /// GTFS ids arrive as `<feedId>:<id>` (e.g. `1:1132`); the feed prefix
   /// means nothing to a rider.
-  static String displayRoute(String? routeId) {
-    if (routeId == null || routeId.isEmpty) return '';
-    final colon = routeId.indexOf(':');
-    return colon >= 0 ? routeId.substring(colon + 1) : routeId;
-  }
+  static String displayRoute(String? routeId) =>
+      routeId == null ? '' : stripGtfsFeedPrefix(routeId);
 
   @override
   Widget build(BuildContext context) {
