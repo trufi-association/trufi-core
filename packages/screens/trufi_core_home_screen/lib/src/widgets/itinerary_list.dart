@@ -274,7 +274,23 @@ class _ItineraryListState extends State<ItineraryList> {
                   }
                 },
                 onExpandTap: expandable
-                    ? () => _toggleGroupExpanded(group.signature)
+                    ? () {
+                        // Collapsing a group held open by its selected
+                        // alternative: just toggling the Set would be
+                        // overridden by the force-open on the next build
+                        // (a dead chevron) and desync the Set. Move the
+                        // selection to the representative so the group
+                        // really closes.
+                        if (containsSelection && !selectionIsRepresentative) {
+                          HapticFeedback.selectionClick();
+                          cubit.selectItinerary(group.representative);
+                          setState(
+                            () => _expandedGroups.remove(group.signature),
+                          );
+                        } else {
+                          _toggleGroupExpanded(group.signature);
+                        }
+                      }
                     : null,
                 onDetailsTap: null,
                 onStartNavigation:
@@ -706,8 +722,7 @@ class _AlternativeTimeCard extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
-                if ((showRoutes || timesHidden) &&
-                    _routeSummary.isNotEmpty) ...[
+                if (!timesHidden && showRoutes && _routeSummary.isNotEmpty) ...[
                   Flexible(
                     child: Text(
                       _routeSummary,
@@ -719,38 +734,56 @@ class _AlternativeTimeCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                 ],
-                if (!timesHidden) ...[
-                  Flexible(
-                    child: Text(
-                      l10n.departsAt(
-                        formatClockTime(context, itinerary.startTime),
+                // The times own ALL remaining width (a Spacer would split
+                // the free space with them and truncate the departure time
+                // on ordinary phone widths); FittedBox scales down instead
+                // of ellipsizing when it is genuinely tight.
+                if (!timesHidden)
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            l10n.departsAt(
+                              formatClockTime(context, itinerary.startTime),
+                            ),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 14,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            formatClockTime(context, itinerary.endTime),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLines: 1,
+                    ),
+                  )
+                else
+                  // With clock times hidden the ride summary is the row's
+                  // only identity — give it the full width.
+                  Expanded(
+                    child: Text(
+                      _routeSummary,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 14,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      formatClockTime(context, itinerary.endTime),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                ],
-                const Spacer(),
+                const SizedBox(width: 8),
                 if (isSelected)
                   Icon(
                     Icons.check_circle_rounded,

@@ -258,5 +258,57 @@ void main() {
         await cubit.close();
       },
     );
+
+    testWidgets('expanded time rows never overflow on a 320dp phone', (
+      tester,
+    ) async {
+      // Regression guard: a Spacer sharing free space with Flexible time
+      // texts truncated the departure time on ordinary widths (found by
+      // the second review pass). Also covers the card header, which
+      // overflowed on 12-hour locales at any ordinary width until this
+      // branch wrapped its times in a FittedBox.
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final cubit = await _cubitWithPlan(_sameRoutePair());
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
+      await tester.tap(find.textContaining('+1'));
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull,
+          reason: 'a RenderFlex overflow throws in widget tests');
+      await cubit.close();
+    });
+
+    testWidgets(
+      'collapsing a group held open by its selected alternative moves the '
+      'selection back to the representative and really closes it',
+      (tester) async {
+        final cubit = await _cubitWithPlan(_rawItineraries());
+        // Select the non-representative alternative (state-level, as the
+        // detail flow would): its group must force-open.
+        final alternative = cubit.state.plan!.itineraries![1];
+        await cubit.selectItinerary(alternative);
+
+        await tester.pumpWidget(host(cubit));
+        await tester.pumpAndSettle();
+        expect(find.text('Other options'), findsOneWidget,
+            reason: 'a selected alternative forces its group open');
+
+        await tester.tap(find.textContaining('+1'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Other options'), findsNothing,
+            reason: 'the collapse tap must not be a dead chevron');
+        expect(
+          cubit.state.selectedItinerary,
+          cubit.state.plan!.groupedItineraries!.first.representative,
+        );
+        await cubit.close();
+      },
+    );
   });
 }

@@ -129,29 +129,36 @@ class ItineraryCard extends StatelessWidget {
         // are not the user's real wall-clock and would mislead.
         if (context.watch<AppConfiguration?>()?.routingTimeOverride == null)
           Expanded(
-            child: Row(
-              children: [
-                Text(
-                  formatClockTime(context, itinerary.startTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+            // FittedBox: 12-hour locales ("8:00 AM → 9:00 AM") made this
+            // row overflow on ordinary phone widths — scale down instead.
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formatClockTime(context, itinerary.startTime),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 16,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                Text(
-                  formatClockTime(context, itinerary.endTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  Text(
+                    formatClockTime(context, itinerary.endTime),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         else
@@ -265,20 +272,26 @@ class ItineraryCard extends StatelessWidget {
             label: '${transferCount - 1}',
             theme: theme,
           ),
-        const Spacer(),
-        // Alternative departures/options badge/button. Flexible so the
-        // footer never overflows on narrow screens — the label ellipsizes.
+        // Alternative departures/options badge/button. Expanded+Align (not
+        // Spacer+Flexible, which splits the free space and truncates the
+        // label with room to spare) keeps it flush right and lets it use
+        // the whole remaining width before ellipsizing.
         if (alternativeCount != null && alternativeCount! > 0)
-          Flexible(
-            child: _AlternativesBadge(
-              count: alternativeCount!,
-              isExpanded: isExpanded,
-              onTap: onExpandTap,
-              theme: theme,
-              l10n: l10n,
-              hasRouteAlternatives: hasRouteAlternatives,
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: _AlternativesBadge(
+                count: alternativeCount!,
+                isExpanded: isExpanded,
+                onTap: onExpandTap,
+                theme: theme,
+                l10n: l10n,
+                hasRouteAlternatives: hasRouteAlternatives,
+              ),
             ),
-          ),
+          )
+        else
+          const Spacer(),
         // Details button
         if (onDetailsTap != null)
           TextButton.icon(
