@@ -8,23 +8,25 @@ import '../models/leg.dart';
 import '../models/route.dart';
 import '../models/transport_mode.dart';
 
-/// Groups near-duplicate itineraries the way Google Maps does (#737).
+/// Groups redundant itineraries the way Google Maps does (#737).
 ///
-/// Transfer searches return many combinations that are really one decision:
-/// take route A, then reach the destination with B, C or D — the shared leg
-/// is identical and only the other slot differs (or the mirrored case). Each
-/// combination rendered as its own row makes the list read as "many variants"
-/// when the interchangeable options belong on a single row ("A → B / C").
+/// The redundancy that matters to a rider is **the same main bus**: transfer
+/// searches return many combinations that are really one decision — board
+/// route A, then reach the destination with B, C or D. Each combination
+/// rendered as its own row makes the list read as "many variants" when the
+/// interchangeable connections belong on a single row ("A → B / C").
 ///
-/// Two itineraries belong to the same group when they have the same sequence
-/// of transit slots and each slot covers the same segment: boarding and
-/// alighting points within a walking tolerance. The tolerance is wider when
-/// the slot is served by the same route on both sides (staying on the same
-/// bus a couple more stops is still the same option) and narrower across
-/// different routes (they must truly share the transfer point). Routes are
-/// compared feed-prefix-agnostically ([stripGtfsFeedPrefix]) because the
-/// providers disagree on the prefix: OTP emits `1:route_123` while the local
-/// planner emits raw GTFS ids (the exact mismatch behind PR #982).
+/// Two itineraries belong to the same group when they have the same number
+/// of transit legs and the **same first (main) leg**: same route
+/// (feed-prefix-agnostic, [stripGtfsFeedPrefix] — OTP emits `1:route_123`
+/// while the local planner emits raw GTFS ids, the exact mismatch behind
+/// PR #982) boarding and alighting within a walking tolerance (staying on
+/// the same bus a couple more stops is still the same option). The legs
+/// after the main one are the group's interchangeable options — no further
+/// constraint on them: they board where the main leg drops you and end near
+/// the destination by construction. Itineraries with a different main route
+/// never merge, even from the same stop (product rule, Sam 2026-08-12:
+/// "agrupar las redundantes, o sea que tienen el mismo bus principal").
 ///
 /// Grouping only changes presentation, never ranking (#965): groups keep the
 /// incoming order of their best member, and `groups.first.representative` is
@@ -33,10 +35,6 @@ import '../models/transport_mode.dart';
 List<ItineraryGroup> groupItineraries(
   List<Itinerary> itineraries, {
   double sameRouteToleranceMeters = 500,
-  // Calibrated against real OTP 1.5 plans over the Cochabamba GTFS: 300 m
-  // merges the corridor cases (P+106 / P+120 / 138+120 sharing every stop
-  // area) while boarding points a block apart (~304 m) stay separate.
-  double differentRouteToleranceMeters = 300,
 }) {
   if (itineraries.isEmpty) return const [];
 
@@ -64,7 +62,6 @@ List<ItineraryGroup> groupItineraries(
       if (profiles[a].matches(
         profiles[b],
         sameRouteToleranceMeters: sameRouteToleranceMeters,
-        differentRouteToleranceMeters: differentRouteToleranceMeters,
       )) {
         parent[find(b)] = find(a);
       }
@@ -201,52 +198,46 @@ class _TransitProfile {
   bool matches(
     _TransitProfile other, {
     required double sameRouteToleranceMeters,
-    required double differentRouteToleranceMeters,
   }) {
     if (slots.length != other.slots.length) return false;
     if (slots.isEmpty) {
       return nonTransitModes.length == other.nonTransitModes.length &&
           nonTransitModes.containsAll(other.nonTransitModes);
     }
-    for (var i = 0; i < slots.length; i++) {
-      if (!_slotMatches(
-        slots[i],
-        other.slots[i],
-        sameRouteToleranceMeters: sameRouteToleranceMeters,
-        differentRouteToleranceMeters: differentRouteToleranceMeters,
-      )) {
-        return false;
-      }
-    }
-    return true;
+    // Same main bus = same group. The connections after it are the group's
+    // interchangeable options — no constraint on them: they board where the
+    // main leg drops you and end near the destination by construction.
+    return _mainLegMatches(
+      slots.first,
+      other.slots.first,
+      toleranceMeters: sameRouteToleranceMeters,
+    );
   }
 
-  static bool _slotMatches(
+  static bool _mainLegMatches(
     Leg a,
     Leg b, {
-    required double sameRouteToleranceMeters,
-    required double differentRouteToleranceMeters,
+    required double toleranceMeters,
   }) {
     if (a.transportMode != b.transportMode) return false;
 
     final keyA = _routeKey(a);
     final keyB = _routeKey(b);
-    final sameRoute = keyA != null && keyA == keyB;
+    // A different main route is a different decision — never merged, no
+    // matter how close the stops are. Unknown routes fail closed.
+    if (keyA == null || keyA != keyB) return false;
 
     final fromA = a.fromPlace?.latLng;
     final toA = a.toPlace?.latLng;
     final fromB = b.fromPlace?.latLng;
     final toB = b.toPlace?.latLng;
     if (fromA == null || toA == null || fromB == null || toB == null) {
-      // Without both endpoints the segment can't be compared — only the
-      // exact same route is safe to call the same option.
-      return sameRoute;
+      // Without endpoints the same route is the best evidence available.
+      return true;
     }
 
-    final tolerance = sameRoute
-        ? sameRouteToleranceMeters
-        : differentRouteToleranceMeters;
-    return _distance.as(LengthUnit.Meter, fromA, fromB) <= tolerance &&
-        _distance.as(LengthUnit.Meter, toA, toB) <= tolerance;
+    // Boarding a couple stops earlier/later is still the same bus.
+    return _distance.as(LengthUnit.Meter, fromA, fromB) <= toleranceMeters &&
+        _distance.as(LengthUnit.Meter, toA, toB) <= toleranceMeters;
   }
 }

@@ -100,20 +100,34 @@ void main() {
       );
     });
 
-    test('far-apart boarding points stay separate rows', () {
-      // Real case: routes 18 and 8 both reach the same second leg but board
-      // ~1.3 km apart — different journeys, Google keeps them apart too.
-      final o2 = _stop('stop_o2', _originFar);
-      final viaO1 = _itinerary([
+    test('different main buses never merge, even sharing the second leg', () {
+      // Real case: routes 18 and 8 converge into the same second leg. The
+      // main bus is a different decision — separate rows (product rule:
+      // group only what shares the main bus).
+      final viaRoute18 = _itinerary([
         _bus('18', from: o1, to: t),
         _bus('120', from: t, to: d1),
       ]);
-      final viaO2 = _itinerary([
-        _bus('8', from: o2, to: t),
+      final viaRoute8 = _itinerary([
+        _bus('8', from: o1, to: t),
         _bus('120', from: t, to: d1),
       ]);
 
-      expect(groupItineraries([viaO1, viaO2]), hasLength(2));
+      expect(groupItineraries([viaRoute18, viaRoute8]), hasLength(2));
+    });
+
+    test('same main bus boarding too far apart stays separate', () {
+      final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
+      final near = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+      final far = _itinerary([
+        _bus('18', from: o2, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+
+      expect(groupItineraries([near, far]), hasLength(2));
     });
 
     test('same route alighting a few stops later still groups (wider '
@@ -133,7 +147,8 @@ void main() {
       expect(groups.single.hasRouteAlternatives, isFalse);
     });
 
-    test('different routes at ~450 m do NOT share a transfer point', () {
+    test('connections are options with no constraint of their own — same '
+        'main bus groups even when the second legs end far apart', () {
       final dFar = _stop('stop_d3', _destSameRouteFar);
       final one = _itinerary([
         _bus('123', from: o1, to: t),
@@ -144,7 +159,13 @@ void main() {
         _bus('290', from: t, to: dFar),
       ]);
 
-      expect(groupItineraries([one, other]), hasLength(2));
+      final groups = groupItineraries([one, other]);
+      expect(groups, hasLength(1));
+      expect(groups.single.hasRouteAlternatives, isTrue);
+      expect(
+        groups.single.slotRoutes[1].map((r) => r.shortName),
+        ['106', '290'],
+      );
     });
 
     test('feed prefixes do not break matching across providers', () {
@@ -242,9 +263,10 @@ void main() {
       expect(groups[0].signature, isNot(groups[1].signature));
     });
 
-    test('unnamed routes never flip a group to "+N options"', () {
-      // A feed with no route names: legs match by proximity, but the
-      // group must NOT count each nameless leg as a distinct route.
+    test('unidentifiable main buses fail closed: no grouping', () {
+      // A feed with no route names/ids: "same main bus" cannot be
+      // established, so nothing merges (better N honest rows than a group
+      // that mixes different buses).
       Leg nameless({required Place from, required Place to}) => Leg(
         mode: 'BUS',
         startTime: DateTime(2026, 8, 12, 8),
@@ -261,9 +283,7 @@ void main() {
         _itinerary([nameless(from: o1, to: d1)], startMinute: 5),
       ]);
 
-      expect(groups, hasLength(1));
-      expect(groups.single.hasRouteAlternatives, isFalse);
-      expect(groups.single.slotRoutes.single, hasLength(1));
+      expect(groups, hasLength(2));
     });
 
     test('walk-only and bike-only are different options, not departures',

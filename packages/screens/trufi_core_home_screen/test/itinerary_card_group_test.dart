@@ -88,7 +88,8 @@ void main() {
     expect(find.text('+2 more'), findsOneWidget);
   });
 
-  testWidgets('more than 3 options collapse into "+N"', (tester) async {
+  testWidgets('beyond two options the chip collapses into "106 / 120 +n" '
+      'and the expansion lists the rest', (tester) async {
     await tester.pumpWidget(
       host(
         card(
@@ -106,7 +107,7 @@ void main() {
       ),
     );
 
-    expect(find.text('106 / 120 / 250 +1'), findsOneWidget);
+    expect(find.text('106 / 120 +2'), findsOneWidget);
   });
 
   testWidgets('without a group the card renders exactly as before', (

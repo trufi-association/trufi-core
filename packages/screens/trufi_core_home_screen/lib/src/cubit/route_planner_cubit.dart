@@ -86,16 +86,19 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     );
   }
 
-  /// Returns [plan] with [routing.Plan.groupedItineraries] filled (#737):
-  /// near-duplicate transfer itineraries collapse into one row with
-  /// interchangeable options. Grouping is presentation-only (never changes
-  /// the ranked list) and is not serialized, so it must also run when
-  /// restoring a saved plan.
+  /// Returns [plan] with the product shaping for the itinerary list (#737):
+  /// itineraries riding more than two vehicles are dropped
+  /// ([routing.filterMaxTransitLegs], fail-open), and the survivors are
+  /// grouped by main bus into [routing.Plan.groupedItineraries]. Both are
+  /// presentation-only (never re-rank) and not serialized, so this must
+  /// also run when restoring a saved plan.
   routing.Plan _groupPlanItineraries(routing.Plan plan) {
     final itineraries = plan.itineraries;
     if (itineraries == null || itineraries.isEmpty) return plan;
+    final capped = routing.filterMaxTransitLegs(itineraries);
     return plan.copyWith(
-      groupedItineraries: routing.groupItineraries(itineraries),
+      itineraries: capped,
+      groupedItineraries: routing.groupItineraries(capped),
     );
   }
 

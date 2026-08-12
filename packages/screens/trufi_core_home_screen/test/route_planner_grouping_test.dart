@@ -164,6 +164,26 @@ void main() {
       );
     });
 
+    test('rides with more than two vehicles are dropped (product rule)',
+        () async {
+      final threeBuses = _itinerary([
+        _bus('18', from: _o, to: _t),
+        _bus('120', from: _t, to: _d1),
+        _bus('50', from: _d1, to: _d2),
+      ]);
+      final cubit = await _cubitWithPlan([..._rawItineraries(), threeBuses]);
+
+      expect(cubit.state.plan!.itineraries, hasLength(3),
+          reason: 'the 18→120→50 chain must not survive the cap');
+      expect(
+        cubit.state.plan!.itineraries!.any(
+          (it) => it.legs.where((l) => l.transitLeg).length > 2,
+        ),
+        isFalse,
+      );
+      await cubit.close();
+    });
+
     test('after restoring a saved plan (groups are not serialized)',
         () async {
       final repository = _FakeRepository();
@@ -282,6 +302,35 @@ void main() {
           reason: 'a RenderFlex overflow throws in widget tests');
       await cubit.close();
     });
+
+    testWidgets(
+      'the detail view can switch between the group\'s options',
+      (tester) async {
+        final cubit = await _cubitWithPlan(_rawItineraries());
+        await tester.pumpWidget(host(cubit));
+        await tester.pumpAndSettle();
+
+        // Open the grouped card's detail (representative: 123 → 106).
+        await tester.tap(find.text('106 / 120'));
+        await tester.pumpAndSettle();
+
+        // Both options are offered as chips, labeled by their ride.
+        expect(find.textContaining('123 → 106'), findsOneWidget);
+        expect(find.textContaining('123 → 120'), findsOneWidget);
+
+        await tester.tap(find.textContaining('123 → 120'));
+        await tester.pumpAndSettle();
+
+        expect(
+          cubit.state.selectedItinerary,
+          same(cubit.state.plan!.itineraries![1]),
+          reason: 'switching an option selects it (map + navigation follow)',
+        );
+        // The switcher stays available to flip back.
+        expect(find.textContaining('123 → 106'), findsOneWidget);
+        await cubit.close();
+      },
+    );
 
     testWidgets(
       'collapsing a group held open by its selected alternative moves the '

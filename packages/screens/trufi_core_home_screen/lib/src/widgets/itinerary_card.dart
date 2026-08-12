@@ -419,7 +419,8 @@ class _LegChip extends StatelessWidget {
   }
 
   /// The chip label: the leg's route name, joined with the group's
-  /// interchangeable routes for this slot ("106 / 120", capped at 3).
+  /// interchangeable routes for this slot — "106 / 120", and beyond two
+  /// options "106 / 120 +n" (the expansion lists the rest).
   String _routeLabel() {
     final own = leg.shortName ?? leg.route?.shortName ?? '';
     final routes = slotRoutes;
@@ -429,7 +430,7 @@ class _LegChip extends StatelessWidget {
         .where((n) => n.isNotEmpty)
         .toList();
     if (names.length < 2) return own;
-    const cap = 3;
+    const cap = 2;
     final visible = names.take(cap).join(' / ');
     final hidden = names.length - cap;
     return hidden > 0 ? '$visible +$hidden' : visible;

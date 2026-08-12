@@ -184,11 +184,23 @@ class _ItineraryListState extends State<ItineraryList> {
   }
 
   Widget _buildDetailView(BuildContext context, routing.Itinerary itinerary) {
+    final cubit = context.read<RoutePlannerCubit>();
+    // The itinerary's group (#737): its members feed the detail's option
+    // switcher so the rider can flip between interchangeable connections.
+    final group = cubit.state.plan?.groupedItineraries
+        ?.where((g) => g.alternatives.contains(itinerary))
+        .firstOrNull;
+
     return ItineraryDetailContent(
       itinerary: itinerary,
       shrinkWrap: widget.shrinkWrap,
       onBack: _hideDetails,
       onRouteTap: widget.onRouteTap,
+      alternatives: group?.alternatives,
+      onSelectAlternative: (alternative) {
+        cubit.selectItinerary(alternative);
+        _showDetails(alternative);
+      },
       onStartNavigation:
           widget.onStartNavigation != null && widget.locationService != null
           ? () => widget.onStartNavigation!(

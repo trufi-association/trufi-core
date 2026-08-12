@@ -32,6 +32,14 @@ class ItineraryDetailContent extends StatelessWidget {
   /// Use this when the content is inside a parent scrollable.
   final bool shrinkWrap;
 
+  /// The itinerary's group members (#737), [itinerary] included. When there
+  /// is more than one, the header shows a switcher so the rider can flip
+  /// between the interchangeable options without leaving the detail.
+  final List<routing.Itinerary>? alternatives;
+
+  /// Called when the rider picks another option in the switcher.
+  final void Function(routing.Itinerary alternative)? onSelectAlternative;
+
   const ItineraryDetailContent({
     super.key,
     required this.itinerary,
@@ -39,6 +47,8 @@ class ItineraryDetailContent extends StatelessWidget {
     this.onStartNavigation,
     this.onRouteTap,
     this.shrinkWrap = false,
+    this.alternatives,
+    this.onSelectAlternative,
   });
 
   @override
@@ -53,6 +63,8 @@ class ItineraryDetailContent extends StatelessWidget {
       children: [
         // Header
         _buildHeader(context, theme, colorScheme, l10n),
+        // Interchangeable options of the itinerary's group (#737)
+        ..._buildAlternativeSwitcher(context, theme, colorScheme),
         const SizedBox(height: 8),
         // Subtle separator
         Container(
@@ -88,6 +100,78 @@ class ItineraryDetailContent extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: content,
     );
+  }
+
+  /// Horizontal chips to flip between the group's interchangeable options
+  /// (#737) without leaving the detail. Hidden when there is nothing to
+  /// switch to, or when the options would be indistinguishable (identical
+  /// ride summaries while clock times are pinned/hidden).
+  List<Widget> _buildAlternativeSwitcher(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
+    final options = alternatives;
+    if (options == null || options.length < 2 || onSelectAlternative == null) {
+      return const [];
+    }
+    final timesHidden =
+        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
+
+    String rideSummary(routing.Itinerary it) => it.legs
+        .where((leg) => leg.transitLeg)
+        .map((leg) => leg.displayName)
+        .where((name) => name.isNotEmpty)
+        .join(' → ');
+
+    String label(routing.Itinerary it) {
+      final summary = rideSummary(it);
+      if (timesHidden) return summary;
+      final time = formatClockTime(context, it.startTime);
+      return summary.isEmpty ? time : '$summary · $time';
+    }
+
+    final labels = options.map(label).toList(growable: false);
+    // Indistinguishable chips would be worse than none.
+    if (labels.any((l) => l.isEmpty) ||
+        labels.toSet().length != labels.length) {
+      return const [];
+    }
+
+    return [
+      const SizedBox(height: 4),
+      SizedBox(
+        height: 40,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          itemCount: options.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            final option = options[index];
+            final selected = option == itinerary;
+            return ChoiceChip(
+              label: Text(labels[index]),
+              selected: selected,
+              onSelected: selected
+                  ? null
+                  : (_) {
+                      HapticFeedback.selectionClick();
+                      onSelectAlternative!(option);
+                    },
+              labelStyle: theme.textTheme.labelMedium?.copyWith(
+                color: selected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              ),
+              selectedColor: colorScheme.primaryContainer,
+              visualDensity: VisualDensity.compact,
+            );
+          },
+        ),
+      ),
+    ];
   }
 
   Widget _buildHeader(
