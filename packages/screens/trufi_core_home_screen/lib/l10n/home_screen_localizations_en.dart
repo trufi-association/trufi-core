@@ -443,6 +443,32 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
   String get liveVehiclesStateOff => 'Off';
 
   @override
+  String get liveVehicleTitle => 'Live bus';
+
+  @override
+  String liveVehicleRouteTitle(String route) {
+    return 'Route $route';
+  }
+
+  @override
+  String get liveVehicleLiveBadge => 'LIVE';
+
+  @override
+  String liveVehicleSpeed(int speed) {
+    return '$speed km/h';
+  }
+
+  @override
+  String liveVehicleUpdatedSeconds(int seconds) {
+    return 'Updated $seconds s ago';
+  }
+
+  @override
+  String liveVehicleUpdatedMinutes(int minutes) {
+    return 'Updated $minutes min ago';
+  }
+
+  @override
   String get placeOrigin => 'Origin';
 
   @override

@@ -628,6 +628,18 @@
   "@liveVehiclesStateOff": {
     "description": "Secondary label when the live vehicles toggle is disabled"
   },
+  "liveVehicleTitle": "Live bus",
+  "@liveVehicleTitle": {"description": "Fallback title of the tapped-vehicle info panel when the route is unknown"},
+  "liveVehicleRouteTitle": "Route {route}",
+  "@liveVehicleRouteTitle": {"description": "Title of the tapped-vehicle info panel", "placeholders": {"route": {"type": "String", "example": "1132"}}},
+  "liveVehicleLiveBadge": "LIVE",
+  "@liveVehicleLiveBadge": {"description": "Small badge marking the vehicle info as realtime"},
+  "liveVehicleSpeed": "{speed} km/h",
+  "@liveVehicleSpeed": {"description": "Speed row in the vehicle info panel", "placeholders": {"speed": {"type": "int", "example": "23"}}},
+  "liveVehicleUpdatedSeconds": "Updated {seconds} s ago",
+  "@liveVehicleUpdatedSeconds": {"description": "Freshness row when the last report is under two minutes old", "placeholders": {"seconds": {"type": "int", "example": "12"}}},
+  "liveVehicleUpdatedMinutes": "Updated {minutes} min ago",
+  "@liveVehicleUpdatedMinutes": {"description": "Freshness row when the last report is minutes old", "placeholders": {"minutes": {"type": "int", "example": "3"}}},
   "placeOrigin": "Origin",
   "@placeOrigin": {
     "description": "Fallback name for an origin set without a label (e.g. deep links)"
