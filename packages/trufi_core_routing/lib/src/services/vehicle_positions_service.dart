@@ -22,6 +22,8 @@ const _query = '''
         lon
         heading
         speed
+        lastUpdate
+        lastUpdated
         trip { gtfsId }
       }
     }
@@ -157,8 +159,31 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       routeId: routeId,
       routeColor: routeColor,
       tripId: trip?['gtfsId'] as String?,
-      timestamp: DateTime.now(),
+      timestamp: parseVehicleTimestamp(json),
     );
+  }
+
+  /// When the vehicle actually reported, per the GTFS-RT feed — NOT when we
+  /// polled. `lastUpdate` is OTP's ISO-8601 timestamp; `lastUpdated` is the
+  /// deprecated epoch-seconds twin kept as a fallback for older servers.
+  /// Falls back to the poll time only when the feed carries neither, so
+  /// downstream freshness UI degrades to "fresh" instead of lying with a
+  /// per-vehicle age that was never real (found by review on #981).
+  @visibleForTesting
+  static DateTime parseVehicleTimestamp(Map<String, dynamic> json) {
+    final iso = json['lastUpdate'] as String?;
+    if (iso != null) {
+      final parsed = DateTime.tryParse(iso);
+      if (parsed != null) return parsed;
+    }
+    final epoch = json['lastUpdated'] as num?;
+    if (epoch != null && epoch > 0) {
+      return DateTime.fromMillisecondsSinceEpoch(
+        (epoch * 1000).round(),
+        isUtc: true,
+      );
+    }
+    return DateTime.now();
   }
 
   String get _graphqlEndpoint {

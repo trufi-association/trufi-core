@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen>
         _liveVehiclesEnabled.value = saved;
       }
     } catch (_) {
-      // Best-effort: if storage fails, just use the default (off).
+      // Best-effort: if storage fails, keep the deploy-configured default.
     }
   }
 
@@ -1218,7 +1218,9 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onMapClick(LatLng position) {
-    // Live vehicles render on top of every other layer, so they win the tap.
+    // Vehicles are checked first on purpose: a tap near a bus most likely
+    // means "what is this bus?", and marker picking sorts by distance (not
+    // z-order), so ordering here is what sets the priority.
     if (_trySelectVehicleAt(position)) {
       widget.config.poiLayersManager?.clearSelection();
       return;
@@ -1247,11 +1249,11 @@ class _HomeScreenState extends State<HomeScreen>
         _liveVehicles.isEmpty) {
       return false;
     }
-    final markers = _mapController!.pickMarkersAt(
-      position,
-      hitboxPx: 40.0,
-      globalLimit: 3,
-    );
+    // No result limit here: with one, nearby non-vehicle markers (POI
+    // clusters, route/stop labels stacked exactly where buses stop) could
+    // crowd the vehicle out of the picked list even though the user is
+    // clearly tapping the bus.
+    final markers = _mapController!.pickMarkersAt(position, hitboxPx: 40.0);
     for (final marker in markers) {
       if (!marker.id.startsWith('vehicle-')) continue;
       final vehicleId = marker.id.substring('vehicle-'.length);

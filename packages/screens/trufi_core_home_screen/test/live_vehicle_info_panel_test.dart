@@ -43,6 +43,22 @@ void main() {
       expect(find.text('LIVE'), findsOneWidget);
     });
 
+    testWidgets('a slightly-future timestamp (clock drift) clamps to 0 s', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        host(
+          LiveVehicleInfoPanel(
+            vehicle: vehicle,
+            // Panel clock 20 s BEHIND the vehicle's report time.
+            now: DateTime(2026, 8, 11, 11, 59, 40),
+          ),
+        ),
+      );
+      expect(find.text('Updated 0 s ago'), findsOneWidget,
+          reason: 'negative ages must never render ("hace -20 s")');
+    });
+
     testWidgets('minutes-old reports switch to the minutes string', (
       tester,
     ) async {
