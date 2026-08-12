@@ -1,33 +1,49 @@
 import 'package:equatable/equatable.dart';
 
 import 'itinerary.dart';
+import 'route.dart';
 
-/// A group of itineraries that share the same route pattern.
+/// A group of itineraries that cover the same journey.
 ///
-/// Itineraries in the same group use the same buses, stops, and transfers
-/// but may differ in departure/arrival times.
+/// Itineraries in the same group ride the same segments (same boarding and
+/// alighting areas per transit slot) but may differ in departure times or in
+/// which route serves a slot — interchangeable options ("106 / 120") that
+/// Google Maps renders as a single row.
 class ItineraryGroup extends Equatable {
   /// Creates an itinerary group.
   ///
-  /// [representative] is the main itinerary shown in the list (usually the earliest).
-  /// [alternatives] includes all itineraries in the group, including the representative.
+  /// [representative] is the main itinerary shown in the list (the group's
+  /// best-ranked member).
+  /// [alternatives] includes all itineraries in the group; the first entry is
+  /// always the representative, the rest are sorted by start time.
   /// [signature] is the shared route pattern signature.
   const ItineraryGroup({
     required this.representative,
     required this.alternatives,
     required this.signature,
+    this.slotRoutes = const [],
   });
 
-  /// The representative itinerary (usually earliest or fastest).
+  /// The representative itinerary (the group's best-ranked member).
   /// This is the one displayed in the main list.
   final Itinerary representative;
 
   /// All itineraries in this group (including representative).
-  /// Sorted by start time.
+  /// The representative comes first; the rest are sorted by start time.
   final List<Itinerary> alternatives;
 
   /// The shared route pattern signature.
   final String signature;
+
+  /// The distinct routes serving each transit slot across the group, in
+  /// ranked-member order — what the UI joins as "106 / 120". Empty for
+  /// walk-only groups (and for groups built without slot analysis).
+  final List<List<Route>> slotRoutes;
+
+  /// True when at least one slot is served by more than one route — the
+  /// group merges different-route options, not just departure times.
+  bool get hasRouteAlternatives =>
+      slotRoutes.any((routes) => routes.length > 1);
 
   /// Returns the number of alternatives (including the representative).
   int get alternativeCount => alternatives.length;
@@ -57,14 +73,21 @@ class ItineraryGroup extends Equatable {
     Itinerary? representative,
     List<Itinerary>? alternatives,
     String? signature,
+    List<List<Route>>? slotRoutes,
   }) {
     return ItineraryGroup(
       representative: representative ?? this.representative,
       alternatives: alternatives ?? this.alternatives,
       signature: signature ?? this.signature,
+      slotRoutes: slotRoutes ?? this.slotRoutes,
     );
   }
 
   @override
-  List<Object?> get props => [representative, alternatives, signature];
+  List<Object?> get props => [
+    representative,
+    alternatives,
+    signature,
+    slotRoutes,
+  ];
 }

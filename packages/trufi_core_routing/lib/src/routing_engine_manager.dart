@@ -46,8 +46,11 @@ class RoutingEngineManager extends ChangeNotifier {
   /// Maximum number of itineraries requested per plan when [fetchPlan] is
   /// called without an explicit `numItineraries`.
   ///
-  /// Defaults to 5 (the historical behavior). Apps that want more results
-  /// override it at construction time instead of patching trufi-core:
+  /// Defaults to 15. The historical default of 5 predates itinerary
+  /// grouping (#737): now that near-duplicate transfer combinations
+  /// collapse into single rows, a larger pool feeds the groups while the
+  /// visible list stays short. Apps can still override it at construction
+  /// time instead of patching trufi-core:
   ///
   /// ```dart
   /// RoutingEngineManager(engines: [...], maxItineraries: 20)
@@ -57,7 +60,7 @@ class RoutingEngineManager extends ChangeNotifier {
   RoutingEngineManager({
     required List<IRoutingProvider> engines,
     int defaultIndex = 0,
-    this.maxItineraries = 5,
+    this.maxItineraries = 15,
   }) : assert(engines.isNotEmpty, 'At least one engine is required'),
        assert(
          defaultIndex >= 0 && defaultIndex < engines.length,

@@ -64,6 +64,7 @@ export 'src/providers/otp_2_8/otp_2_8_response_parser.dart';
 // `VehiclePositionsService` is a deprecated typedef for
 // `OtpVehiclePositionsProvider` — both are exported for compatibility.
 export 'src/services/vehicle_positions_service.dart';
+export 'src/services/itinerary_grouper.dart';
 
 // ============================================
 // Widgets
