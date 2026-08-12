@@ -207,6 +207,19 @@ void main() {
       expect(groupItineraries([direct, withTransfer]), hasLength(2));
     });
 
+    test('even with the SAME main bus, direct and transfer never merge — '
+        'they are different products', () {
+      // Guards the slot-count check on its own: the previous test already
+      // fails via the route key, this one only via the leg count.
+      final direct = _itinerary([_bus('123', from: o1, to: t)]);
+      final withConnection = _itinerary([
+        _bus('123', from: o1, to: t),
+        _bus('106', from: t, to: d1),
+      ]);
+
+      expect(groupItineraries([direct, withConnection]), hasLength(2));
+    });
+
     test('ranking is preserved: groups keep the order of their best member '
         'and the first representative is the first itinerary', () {
       final best = _itinerary([

@@ -42,7 +42,7 @@ routing.Itinerary _itinerary(List<routing.Leg> legs, {int startMinute = 0}) =>
     );
 
 /// origin / transfer / destination-area stops (real Cochabamba coords;
-/// d2 sits ~165 m from d1 — inside the different-route tolerance).
+/// the connections after the shared main bus are free-form options).
 final _o = _stop('o', -17.4650, -66.1400);
 final _t = _stop('t', -17.3950, -66.1570);
 final _d1 = _stop('d1', -17.3550, -66.1900);

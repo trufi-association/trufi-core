@@ -86,12 +86,14 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     );
   }
 
-  /// Returns [plan] with the product shaping for the itinerary list (#737):
-  /// itineraries riding more than two vehicles are dropped
-  /// ([routing.filterMaxTransitLegs], fail-open), and the survivors are
-  /// grouped by main bus into [routing.Plan.groupedItineraries]. Both are
-  /// presentation-only (never re-rank) and not serialized, so this must
-  /// also run when restoring a saved plan.
+  /// Returns [plan] shaped for the itinerary list (#737). Rides with more
+  /// than two vehicles are dropped ([routing.filterMaxTransitLegs],
+  /// fail-open) — note that this rewrites `plan.itineraries`, and the
+  /// FILTERED list is what gets persisted and what share/deep-link indices
+  /// point at. The survivors are then grouped by main bus into
+  /// [routing.Plan.groupedItineraries], which never re-ranks and is NOT
+  /// serialized — which is why this must also run when restoring a saved
+  /// plan.
   routing.Plan _groupPlanItineraries(routing.Plan plan) {
     final itineraries = plan.itineraries;
     if (itineraries == null || itineraries.isEmpty) return plan;
@@ -109,13 +111,24 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     final fromPlace = await _repository.getFromPlace();
     final toPlace = await _repository.getToPlace();
     final plan = await _repository.getPlan();
-    final selectedItinerary = await _repository.getSelectedItinerary();
+    var selectedItinerary = await _repository.getSelectedItinerary();
+
+    final shapedPlan = plan != null ? _groupPlanItineraries(plan) : null;
+    // A plan saved by an older version may carry a selection the vehicle
+    // cap has since dropped — the map would draw a ride the list no
+    // longer shows. Fall back to the best remaining row.
+    final itineraries = shapedPlan?.itineraries;
+    if (itineraries != null &&
+        selectedItinerary != null &&
+        !itineraries.contains(selectedItinerary)) {
+      selectedItinerary = itineraries.isNotEmpty ? itineraries.first : null;
+    }
 
     emit(
       state.copyWith(
         fromPlace: fromPlace,
         toPlace: toPlace,
-        plan: plan != null ? _groupPlanItineraries(plan) : null,
+        plan: shapedPlan,
         selectedItinerary: selectedItinerary,
       ),
     );

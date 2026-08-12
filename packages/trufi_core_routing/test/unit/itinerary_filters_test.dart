@@ -43,6 +43,16 @@ void main() {
       expect(filterMaxTransitLegs([threeBuses]), [threeBuses]);
     });
 
+    test('fail-open is transit-aware: a surviving walk must not suppress '
+        'the rescue', () {
+      // Dropping every TRANSIT option would leave a lone "walk 4 km" row
+      // as the only result — worse than showing the chains.
+      expect(
+        filterMaxTransitLegs([walkOnly, threeBuses]),
+        [walkOnly, threeBuses],
+      );
+    });
+
     test('cap is configurable', () {
       expect(
         filterMaxTransitLegs([twoBuses, threeBuses], maxTransitLegs: 3),

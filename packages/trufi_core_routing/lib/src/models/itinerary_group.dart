@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 import 'itinerary.dart';
 import 'route.dart';
 
-/// A group of itineraries that cover the same journey.
+/// A group of itineraries that ride the same main bus.
 ///
-/// Itineraries in the same group ride the same segments (same boarding and
-/// alighting areas per transit slot) but may differ in departure times or in
-/// which route serves a slot — interchangeable options ("106 / 120") that
-/// Google Maps renders as a single row.
+/// Members board the same first (main) transit leg — same route, same
+/// boarding area — and differ in departure times and/or in the connections
+/// after it, which carry no constraint of their own: interchangeable
+/// options ("106 / 120") that Google Maps renders as a single row.
 class ItineraryGroup extends Equatable {
   /// Creates an itinerary group.
   ///

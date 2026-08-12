@@ -9,10 +9,10 @@ import 'package:trufi_core_routing/trufi_core_routing.dart';
 /// instance and trimmed to 5 itineraries):
 ///
 /// 0. `123 → 106`   ┐
-/// 1. `123 → 106`   ├ identical first leg, interchangeable second (#737)
+/// 1. `123 → 106`   ├ same main bus, interchangeable connections (#737)
 /// 2. `123 → 120`   ┘
-/// 3. `18 → 120`    ┐ same second leg, but boarding points ~304 m apart —
-/// 4. `8 → 120`     ┘ genuinely different journeys, must stay separate
+/// 3. `18 → 120`    ┐ same second leg but a DIFFERENT main bus — a
+/// 4. `8 → 120`     ┘ different decision, must stay separate
 void main() {
   late Plan plan;
 
@@ -47,7 +47,7 @@ void main() {
       reason: 'interchangeable second legs join as "106 / 120"',
     );
 
-    // The mirrored case boards a block apart: two singleton groups.
+    // Different main buses (18 and 8): two singleton groups.
     expect(groups[1].alternatives, hasLength(1));
     expect(groups[2].alternatives, hasLength(1));
     expect(groups[1].signature, isNot(groups[2].signature));

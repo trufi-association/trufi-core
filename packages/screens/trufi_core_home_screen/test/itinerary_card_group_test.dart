@@ -88,8 +88,9 @@ void main() {
     expect(find.text('+2 more'), findsOneWidget);
   });
 
-  testWidgets('beyond two options the chip collapses into "106 / 120 +n" '
-      'and the expansion lists the rest', (tester) async {
+  testWidgets('beyond two options the chip collapses into "106 / 120 +n"', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       host(
         card(
