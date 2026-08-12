@@ -26,6 +26,20 @@ import 'package:trufi_core_ui/trufi_core_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart' show OverlayManager;
 
 // ============ CONFIGURATION ============
+// OTP endpoints are overridable so the example runs without any Trufi
+// server: bring up local OTP instances over the bundled GTFS (see
+// tools/local-otp/README.md) and pass
+//   flutter run --dart-define=OTP28_ENDPOINT=http://10.0.2.2:8802 \
+//               --dart-define=OTP15_ENDPOINT=http://10.0.2.2:8801
+// (10.0.2.2 = host loopback from the Android emulator).
+const _otp28Endpoint = String.fromEnvironment(
+  'OTP28_ENDPOINT',
+  defaultValue: 'https://otp281.trufi.app',
+);
+const _otp15Endpoint = String.fromEnvironment(
+  'OTP15_ENDPOINT',
+  defaultValue: 'https://otp150.trufi.app',
+);
 const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
@@ -56,13 +70,13 @@ final List<IRoutingProvider> _routingEngines = [
         serverUrl: 'https://planner.trufi.app/api',
       ),
     ),
-  // Online routing via OTP (dev servers)
+  // Online routing via OTP (dev servers by default, local via dart-define)
   Otp28RoutingProvider(
-    endpoint: 'https://otp281.trufi.app',
+    endpoint: _otp28Endpoint,
     displayName: 'OTP 2.8.1',
   ),
   Otp15RoutingProvider(
-    endpoint: 'https://otp150.trufi.app',
+    endpoint: _otp15Endpoint,
     displayName: 'OTP 1.5.0',
   ),
 ];
