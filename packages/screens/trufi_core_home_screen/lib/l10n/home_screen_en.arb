@@ -550,6 +550,20 @@
       }
     }
   },
+  "moreOptions": "+{count} options",
+  "@moreOptions": {
+    "description": "Badge showing number of interchangeable route options in an itinerary group",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "otherOptions": "Other options",
+  "@otherOptions": {
+    "description": "Header for interchangeable route options section"
+  },
   "otherDepartures": "Other departures",
   "@otherDepartures": {
     "description": "Header for alternative departure times section"

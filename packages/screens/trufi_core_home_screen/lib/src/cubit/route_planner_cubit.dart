@@ -86,6 +86,19 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     );
   }
 
+  /// Returns [plan] with [routing.Plan.groupedItineraries] filled (#737):
+  /// near-duplicate transfer itineraries collapse into one row with
+  /// interchangeable options. Grouping is presentation-only (never changes
+  /// the ranked list) and is not serialized, so it must also run when
+  /// restoring a saved plan.
+  routing.Plan _groupPlanItineraries(routing.Plan plan) {
+    final itineraries = plan.itineraries;
+    if (itineraries == null || itineraries.isEmpty) return plan;
+    return plan.copyWith(
+      groupedItineraries: routing.groupItineraries(itineraries),
+    );
+  }
+
   /// Initialize and load saved state.
   Future<void> initialize() async {
     await _repository.initialize();
@@ -99,7 +112,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       state.copyWith(
         fromPlace: fromPlace,
         toPlace: toPlace,
-        plan: plan,
+        plan: plan != null ? _groupPlanItineraries(plan) : null,
         selectedItinerary: selectedItinerary,
       ),
     );
@@ -266,7 +279,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
 
       // Enrich legs with operating hours from the bundled GTFS so OTP
       // 1.5/2.8 plans show the indicator just like the local planner.
-      final plan = _enrichServiceHours(rawPlan);
+      final plan = _groupPlanItineraries(_enrichServiceHours(rawPlan));
 
       final index = selectedItineraryIndex ?? 0;
       final selectedItinerary =

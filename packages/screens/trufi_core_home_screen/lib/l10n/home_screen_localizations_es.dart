@@ -383,6 +383,14 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   }
 
   @override
+  String moreOptions(int count) {
+    return '+$count opciones';
+  }
+
+  @override
+  String get otherOptions => 'Otras opciones';
+
+  @override
   String get otherDepartures => 'Otras salidas';
 
   @override

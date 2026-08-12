@@ -104,6 +104,8 @@
   "buttonSettings": "Einstellungen",
   "findingRoutes": "Routen werden gesucht...",
   "moreDepartures": "+{count} weitere",
+  "moreOptions": "+{count} Optionen",
+  "otherOptions": "Weitere Optionen",
   "otherDepartures": "Weitere Abfahrten",
   "departsAt": "Abfahrt {time}",
   "routingProvider": "Routing-Anbieter",

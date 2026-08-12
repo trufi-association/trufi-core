@@ -25,6 +25,16 @@ class ItineraryCard extends StatelessWidget {
   /// Callback to expand/collapse alternatives
   final VoidCallback? onExpandTap;
 
+  /// The distinct routes serving each transit slot across the itinerary's
+  /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
+  /// than one route the chip joins them Google Maps style ("106 / 120").
+  final List<List<routing.Route>>? slotRoutes;
+
+  /// True when the group merges different-route options (not just
+  /// departure times) — switches the footer badge copy from "+N more
+  /// departures" to "+N more options".
+  final bool hasRouteAlternatives;
+
   const ItineraryCard({
     super.key,
     required this.itinerary,
@@ -35,6 +45,8 @@ class ItineraryCard extends StatelessWidget {
     this.alternativeCount,
     this.isExpanded = false,
     this.onExpandTap,
+    this.slotRoutes,
+    this.hasRouteAlternatives = false,
   });
 
   @override
@@ -187,8 +199,8 @@ class ItineraryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            for (int i = 0; i < legs.length; i++) ...[
-              _LegChip(leg: legs[i]),
+            for (final (i, chip) in _chipsWithSlotRoutes(legs).indexed) ...[
+              chip,
               if (i < legs.length - 1)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -203,6 +215,19 @@ class ItineraryCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// One chip per leg, feeding each transit chip the distinct routes its
+  /// group offers for that slot ("106 / 120"). Walk/bike legs pass through.
+  List<Widget> _chipsWithSlotRoutes(List<routing.Leg> legs) {
+    var transitSlot = 0;
+    return legs.map((leg) {
+      final slots = slotRoutes;
+      final routes = leg.transitLeg && slots != null && transitSlot < slots.length
+          ? slots[transitSlot++]
+          : null;
+      return _LegChip(leg: leg, slotRoutes: routes);
+    }).toList(growable: false);
   }
 
   Widget _buildFooterRow(ThemeData theme, HomeScreenLocalizations l10n) {
@@ -241,7 +266,7 @@ class ItineraryCard extends StatelessWidget {
             theme: theme,
           ),
         const Spacer(),
-        // Alternative departures badge/button
+        // Alternative departures/options badge/button
         if (alternativeCount != null && alternativeCount! > 0)
           _AlternativesBadge(
             count: alternativeCount!,
@@ -249,6 +274,7 @@ class ItineraryCard extends StatelessWidget {
             onTap: onExpandTap,
             theme: theme,
             l10n: l10n,
+            hasRouteAlternatives: hasRouteAlternatives,
           ),
         // Details button
         if (onDetailsTap != null)
@@ -291,7 +317,11 @@ class ItineraryCard extends StatelessWidget {
 class _LegChip extends StatelessWidget {
   final routing.Leg leg;
 
-  const _LegChip({required this.leg});
+  /// Distinct routes the itinerary's group offers for this slot; when it
+  /// carries more than one, the label joins them ("106 / 120").
+  final List<routing.Route>? slotRoutes;
+
+  const _LegChip({required this.leg, this.slotRoutes});
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +360,7 @@ class _LegChip extends StatelessWidget {
     final textColor = color.computeLuminance() > 0.5
         ? Colors.black87
         : Colors.white;
-    final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+    final routeName = _routeLabel();
     final realtime = context.watch<RealtimeVehiclesProvider?>();
 
     return Container(
@@ -366,6 +396,23 @@ class _LegChip extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// The chip label: the leg's route name, joined with the group's
+  /// interchangeable routes for this slot ("106 / 120", capped at 3).
+  String _routeLabel() {
+    final own = leg.shortName ?? leg.route?.shortName ?? '';
+    final routes = slotRoutes;
+    if (routes == null || routes.length < 2) return own;
+    final names = routes
+        .map((r) => r.shortName ?? '')
+        .where((n) => n.isNotEmpty)
+        .toList();
+    if (names.length < 2) return own;
+    const cap = 3;
+    final visible = names.take(cap).join(' / ');
+    final hidden = names.length - cap;
+    return hidden > 0 ? '$visible +$hidden' : visible;
   }
 
   Color _getRouteColor(routing.Leg leg) {
@@ -443,7 +490,7 @@ class _InfoChip extends StatelessWidget {
   }
 }
 
-/// Badge showing number of alternative departure times
+/// Badge showing number of alternative departure times or route options
 class _AlternativesBadge extends StatelessWidget {
   final int count;
   final bool isExpanded;
@@ -451,12 +498,17 @@ class _AlternativesBadge extends StatelessWidget {
   final ThemeData theme;
   final HomeScreenLocalizations l10n;
 
+  /// Alternatives that differ in route, not just departure time — shown
+  /// as "+N more options" with a route icon instead of the clock.
+  final bool hasRouteAlternatives;
+
   const _AlternativesBadge({
     required this.count,
     required this.isExpanded,
     this.onTap,
     required this.theme,
     required this.l10n,
+    this.hasRouteAlternatives = false,
   });
 
   @override
@@ -481,13 +533,17 @@ class _AlternativesBadge extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.schedule_rounded,
+                hasRouteAlternatives
+                    ? Icons.alt_route_rounded
+                    : Icons.schedule_rounded,
                 size: 14,
                 color: theme.colorScheme.onSecondaryContainer,
               ),
               const SizedBox(width: 4),
               Text(
-                l10n.moreDepartures(count),
+                hasRouteAlternatives
+                    ? l10n.moreOptions(count)
+                    : l10n.moreDepartures(count),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: theme.colorScheme.onSecondaryContainer,
                   fontWeight: FontWeight.w600,

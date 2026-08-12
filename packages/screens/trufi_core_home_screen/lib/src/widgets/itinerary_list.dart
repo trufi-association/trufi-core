@@ -243,6 +243,8 @@ class _ItineraryListState extends State<ItineraryList> {
                 alternativeCount: group.hasAlternatives
                     ? group.additionalCount
                     : null,
+                slotRoutes: group.slotRoutes,
+                hasRouteAlternatives: group.hasRouteAlternatives,
                 isExpanded: isExpanded,
                 onTap: () {
                   cubit.selectItinerary(group.representative);
@@ -295,7 +297,9 @@ class _ItineraryListState extends State<ItineraryList> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: Text(
-              l10n.otherDepartures,
+              group.hasRouteAlternatives
+                  ? l10n.otherOptions
+                  : l10n.otherDepartures,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
@@ -307,6 +311,9 @@ class _ItineraryListState extends State<ItineraryList> {
             return _AlternativeTimeCard(
               itinerary: itinerary,
               isSelected: isSelected,
+              // With interchangeable routes in the group, each row must
+              // say which buses it actually rides.
+              showRoutes: group.hasRouteAlternatives,
               onTap: () {
                 cubit.selectItinerary(itinerary);
                 if (widget.onItineraryDetails != null) {
@@ -613,17 +620,28 @@ class _ShimmerCardState extends State<_ShimmerCard>
   }
 }
 
-/// Compact card for alternative departure times
+/// Compact card for alternative departure times or route options
 class _AlternativeTimeCard extends StatelessWidget {
   final routing.Itinerary itinerary;
   final bool isSelected;
   final VoidCallback onTap;
 
+  /// When the group merges different-route options, each row states its
+  /// own ride ("123 → 120") — times alone can't tell them apart.
+  final bool showRoutes;
+
   const _AlternativeTimeCard({
     required this.itinerary,
     required this.isSelected,
     required this.onTap,
+    this.showRoutes = false,
   });
+
+  String get _routeSummary => itinerary.legs
+      .where((leg) => leg.transitLeg)
+      .map((leg) => leg.displayName)
+      .where((name) => name.isNotEmpty)
+      .join(' → ');
 
   @override
   Widget build(BuildContext context) {
@@ -657,11 +675,23 @@ class _AlternativeTimeCard extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.schedule_rounded,
+                  showRoutes ? Icons.alt_route_rounded : Icons.schedule_rounded,
                   size: 18,
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
+                if (showRoutes && _routeSummary.isNotEmpty) ...[
+                  Flexible(
+                    child: Text(
+                      _routeSummary,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
                 // Hide absolute clock times when the app pins the
                 // routing time to a fixed value — startTime/endTime
                 // are then synthetic and would mislead the user.
