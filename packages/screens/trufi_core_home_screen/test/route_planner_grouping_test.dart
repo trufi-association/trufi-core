@@ -403,6 +403,88 @@ void main() {
       await cubit.close();
     });
 
+    testWidgets('pills show type+name only; the time joins when names '
+        'cannot distinguish the options', (tester) async {
+      // Distinct connection names: no time in the pills (Sam 2026-08-13:
+      // the time belongs to the header, which updates on switch).
+      final distinct = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(host(distinct));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(of: option(0), matching: find.textContaining(':')),
+        findsNothing,
+        reason: 'unique names need no time',
+      );
+      await distinct.close();
+
+      // Same-named variants: every pill carries its departure time.
+      final mixed = await _cubitWithPlan([
+        _itinerary([
+          _bus('123', from: _o, to: _t),
+          _bus('106', from: _t, to: _d1),
+        ]),
+        _itinerary([
+          _bus('123', from: _o, to: _t),
+          _bus('106', from: _t, to: _d1),
+        ], startMinute: 10),
+        _itinerary([
+          _bus('123', from: _o, to: _t),
+          _bus('120', from: _t, to: _d2),
+        ], startMinute: 4),
+      ]);
+      await tester.pumpWidget(host(mixed));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+      for (final i in [0, 1, 2]) {
+        expect(
+          find.descendant(of: option(i), matching: find.textContaining(':')),
+          findsOneWidget,
+          reason: 'duplicated names need the time as tiebreaker (pill $i)',
+        );
+      }
+      await mixed.close();
+    });
+
+    testWidgets('unselected pill text picks the higher-contrast color for '
+        'its blended fill', (tester) async {
+      // Round-8 finding: a 0.5-luminance threshold kept white text at
+      // ~2.3:1 over dark saturated fills blended into the light strip.
+      final cubit = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+
+      // Option 1 (unselected). Its route color is the default-assigned
+      // E91E63 family — blended at 45% into the light strip the correct
+      // pick is near-black, not white.
+      final text = tester.widget<Text>(
+        find.descendant(of: option(1), matching: find.byType(Text)).first,
+      );
+      final textLum = text.style!.color!.computeLuminance();
+      final pillContainer = tester.widget<AnimatedContainer>(
+        find
+            .descendant(
+              of: option(1),
+              matching: find.byType(AnimatedContainer),
+            )
+            .first,
+      );
+      final fill = (pillContainer.decoration as BoxDecoration).color!;
+      final fillLum = fill.computeLuminance();
+      double ratio(double a, double b) =>
+          (a > b ? a + 0.05 : b + 0.05) / (a > b ? b + 0.05 : a + 0.05);
+      final chosen = ratio(textLum, fillLum);
+      final alternative = ratio(textLum > 0.5 ? 0.0 : 1.0, fillLum);
+      expect(chosen >= alternative, isTrue,
+          reason: 'text color must be the better-contrast choice '
+              '(chosen $chosen vs alternative $alternative)');
+      await cubit.close();
+    });
+
     testWidgets('list and open detail never overflow on a 320dp phone', (
       tester,
     ) async {

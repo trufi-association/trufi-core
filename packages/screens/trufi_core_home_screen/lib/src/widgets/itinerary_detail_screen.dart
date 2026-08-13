@@ -301,15 +301,19 @@ class ItineraryDetailContent extends StatelessWidget {
     // Unselected pills blend into the strip, so text contrast must follow
     // the EFFECTIVE fill, not the base route color — deriving it from the
     // base washed white text to ~2:1 on light theme.
+    // The strip paints surfaceContainerHighest at 50% over the surface —
+    // blend against that REAL backdrop, and pick the text color by
+    // computed contrast: a 0.5-luminance threshold kept white text at
+    // ~2.3:1 on saturated colors in light theme (the WCAG crossover for
+    // white-vs-black sits near 0.18, not 0.5).
+    final backdrop = Color.alphaBlend(
+      colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      colorScheme.surface,
+    );
     final fill = selected
         ? color
-        : Color.alphaBlend(
-            color.withValues(alpha: 0.45),
-            colorScheme.surfaceContainerHighest,
-          );
-    final textColor = fill.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
+        : Color.alphaBlend(color.withValues(alpha: 0.45), backdrop);
+    final textColor = _bestContrastOn(fill);
     final name = variantLeg?.displayName ?? '';
     final time = showTime ? formatClockTime(context, option.startTime) : null;
 
@@ -388,6 +392,16 @@ class ItineraryDetailContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// White or near-black, whichever actually contrasts more with [fill]
+  /// (WCAG ratio) — luminance thresholds picked the wrong side for the
+  /// whole 0.18–0.5 band.
+  static Color _bestContrastOn(Color fill) {
+    final l = fill.computeLuminance();
+    final whiteRatio = 1.05 / (l + 0.05);
+    final blackRatio = (l + 0.05) / 0.05;
+    return whiteRatio >= blackRatio ? Colors.white : Colors.black87;
   }
 
   IconData _modeIcon(routing.TransportMode mode) {
