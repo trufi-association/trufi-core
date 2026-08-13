@@ -62,18 +62,23 @@ void main() {
     expect(find.text('120'), findsOneWidget);
 
     Color bgOf(String name) {
-      final container = tester.widget<Container>(
+      // Each segment paints its fill on its own Material (the nearest
+      // Material ancestor of the segment's label).
+      final material = tester.widget<Material>(
         find.ancestor(
           of: find.text(name),
-          matching: find.byType(Container),
+          matching: find.byType(Material),
         ).first,
       );
-      return container.color!;
+      return material.color!;
     }
 
     expect(bgOf('106'), const Color(0xFFE91E63),
-        reason: 'each option wears its OWN route color');
-    expect(bgOf('120'), const Color(0xFF4CAF50));
+        reason: "the CHOSEN option's segment rides its route color, "
+            'saturated — the card wears the 106');
+    expect(bgOf('120'), isNot(const Color(0xFF4CAF50)),
+        reason: 'unchosen segments sit dimmed (blended into the strip), '
+            'same reading as the detail switcher');
   });
 
   testWidgets('all options render — no "+n" collapse; the row scrolls', (

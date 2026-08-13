@@ -465,26 +465,13 @@ void main() {
         find.descendant(of: option(1), matching: find.byType(Text)).first,
       );
       final textLum = text.style!.color!.computeLuminance();
-      final pillContainer = tester.widget<AnimatedContainer>(
-        find
-            .descendant(
-              of: option(1),
-              matching: find.byType(AnimatedContainer),
-            )
-            .first,
+      // The segment's Material (the key's nearest Material ancestor)
+      // carries the EFFECTIVE fill — production blends dimmed colors into
+      // the strip backdrop before painting, so it is already opaque.
+      final segmentMaterial = tester.widget<Material>(
+        find.ancestor(of: option(1), matching: find.byType(Material)).first,
       );
-      // The decoration color is translucent (45%) — the oracle must judge
-      // contrast against the EFFECTIVE fill over the strip's backdrop,
-      // exactly like production does (computeLuminance ignores alpha).
-      final scheme = Theme.of(tester.element(option(1))).colorScheme;
-      final backdrop = Color.alphaBlend(
-        scheme.surfaceContainerHighest.withValues(alpha: 0.5),
-        scheme.surface,
-      );
-      final fill = Color.alphaBlend(
-        (pillContainer.decoration as BoxDecoration).color!,
-        backdrop,
-      );
+      final fill = segmentMaterial.color!;
       final fillLum = fill.computeLuminance();
       double ratio(double a, double b) =>
           (a > b ? a + 0.05 : b + 0.05) / (a > b ? b + 0.05 : a + 0.05);

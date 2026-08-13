@@ -7,6 +7,7 @@ import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
+import 'segmented_route_chip.dart';
 
 /// Returns a darkened version of [color] if it's too light for text on white.
 Color _legibleColor(Color color) {
@@ -186,23 +187,50 @@ class ItineraryDetailContent extends StatelessWidget {
     }
 
     void addPills() {
-      for (final (index, option) in options.indexed) {
-        if (index > 0) children.add(const SizedBox(width: 8));
-        children.add(
-          _optionPill(
-            context,
-            option,
-            index: index,
-            selected: option == itinerary,
-            showTime: needsTime && !timesHidden,
-            colorScheme: colorScheme,
-            variantLeg: variantSlot != null
-                ? transitLegs(option)[variantSlot]
-                : null,
-            fallbackLeg: referenceLegs.firstOrNull,
-          ),
-        );
-      }
+      final backdrop = Color.alphaBlend(
+        colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        colorScheme.surface,
+      );
+      children.add(
+        SegmentedRouteChip(
+          borderRadius: 10,
+          dimBackdrop: backdrop,
+          segments: [
+            for (final (index, option) in options.indexed)
+              RouteSegmentSpec(
+                key: ValueKey('itinerary-option-$index'),
+                label: variantSlot != null
+                    ? transitLegs(option)[variantSlot].displayName
+                    : '',
+                trailing: needsTime && !timesHidden
+                    ? formatClockTime(context, option.startTime)
+                    : null,
+                icon: variantSlot != null
+                    ? _modeIcon(transitLegs(option)[variantSlot].transportMode)
+                    : null,
+                color: variantSlot != null
+                    ? _routeColor(
+                        transitLegs(option)[variantSlot].routeColor,
+                        colorScheme,
+                      )
+                    : (referenceLegs.isNotEmpty
+                          ? _routeColor(
+                              referenceLegs.first.routeColor,
+                              colorScheme,
+                            )
+                          : colorScheme.primary),
+                selected: option == itinerary,
+                dimmed: option != itinerary,
+                onTap: option == itinerary
+                    ? null
+                    : () {
+                        HapticFeedback.selectionClick();
+                        onSelectAlternative!(option);
+                      },
+              ),
+          ],
+        ),
+      );
     }
 
     for (var i = 0; i < slotCount; i++) {
@@ -279,125 +307,6 @@ class ItineraryDetailContent extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  /// One selectable option: the varying route's chip in its OWN color with
-  /// the departure inside. Selection is a ring plus full saturation — the
-  /// ring space is reserved in both states so pills never resize.
-  Widget _optionPill(
-    BuildContext context,
-    routing.Itinerary option, {
-    required int index,
-    required bool selected,
-    required bool showTime,
-    required ColorScheme colorScheme,
-    required routing.Leg? variantLeg,
-    required routing.Leg? fallbackLeg,
-  }) {
-    final colorLeg = variantLeg ?? fallbackLeg;
-    final color = colorLeg != null
-        ? _routeColor(colorLeg.routeColor, colorScheme)
-        : colorScheme.primary;
-    // Unselected pills blend into the strip, so text contrast must follow
-    // the EFFECTIVE fill, not the base route color — deriving it from the
-    // base washed white text to ~2:1 on light theme.
-    // The strip paints surfaceContainerHighest at 50% over the surface —
-    // blend against that REAL backdrop, and pick the text color by
-    // computed contrast: a 0.5-luminance threshold kept white text at
-    // ~2.3:1 on saturated colors in light theme (the WCAG crossover for
-    // white-vs-black sits near 0.18, not 0.5).
-    final backdrop = Color.alphaBlend(
-      colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-      colorScheme.surface,
-    );
-    final fill = selected
-        ? color
-        : Color.alphaBlend(color.withValues(alpha: 0.45), backdrop);
-    final textColor = _bestContrastOn(fill);
-    final name = variantLeg?.displayName ?? '';
-    final time = showTime ? formatClockTime(context, option.startTime) : null;
-
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: InkWell(
-        key: ValueKey('itinerary-option-$index'),
-        borderRadius: BorderRadius.circular(10),
-        onTap: selected
-            ? null
-            : () {
-                HapticFeedback.selectionClick();
-                onSelectAlternative!(option);
-              },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            // Selection is color alone (Sam 2026-08-13: no ring — the
-            // saturated pill IS the selection, the rest sit dimmed). Only
-            // the FILL dims: the text keeps full opacity, in a
-            // departures-only group the time is the whole decision.
-            color: selected ? color : color.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.4),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : const [],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // The bus type leads the pill (Sam 2026-08-13: "mostrar el
-              // tipo de bus y el nombre").
-              if (variantLeg != null) ...[
-                Icon(
-                  _modeIcon(variantLeg.transportMode),
-                  size: 14,
-                  color: textColor,
-                ),
-                if (name.isNotEmpty) const SizedBox(width: 4),
-              ],
-              if (name.isNotEmpty)
-                Text(
-                  name,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-              if (name.isNotEmpty && time != null) const SizedBox(width: 6),
-              if (time != null)
-                Text(
-                  time,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: textColor.withValues(alpha: 0.9),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// White or near-black, whichever actually contrasts more with [fill]
-  /// (WCAG ratio) — luminance thresholds picked the wrong side for the
-  /// whole 0.18–0.5 band.
-  static Color _bestContrastOn(Color fill) {
-    final l = fill.computeLuminance();
-    final whiteRatio = 1.05 / (l + 0.05);
-    final blackRatio = (l + 0.05) / 0.05;
-    return whiteRatio >= blackRatio ? Colors.white : Colors.black87;
   }
 
   IconData _modeIcon(routing.TransportMode mode) {

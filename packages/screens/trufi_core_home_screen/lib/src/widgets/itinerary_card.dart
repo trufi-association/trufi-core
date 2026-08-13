@@ -7,6 +7,7 @@ import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
+import 'segmented_route_chip.dart';
 
 /// Card displaying a single itinerary option with modern design.
 class ItineraryCard extends StatelessWidget {
@@ -211,13 +212,16 @@ class ItineraryCard extends StatelessWidget {
   /// group offers for that slot. Walk/bike legs pass through.
   List<Widget> _chipsWithSlotRoutes(List<routing.Leg> legs) {
     var transitSlot = 0;
-    return legs.map((leg) {
-      final slots = slotRoutes;
-      final routes = leg.transitLeg && slots != null && transitSlot < slots.length
-          ? slots[transitSlot++]
-          : null;
-      return _LegChip(leg: leg, slotRoutes: routes);
-    }).toList(growable: false);
+    return legs
+        .map((leg) {
+          final slots = slotRoutes;
+          final routes =
+              leg.transitLeg && slots != null && transitSlot < slots.length
+              ? slots[transitSlot++]
+              : null;
+          return _LegChip(leg: leg, slotRoutes: routes);
+        })
+        .toList(growable: false);
   }
 
   Widget _buildFooterRow(ThemeData theme, HomeScreenLocalizations l10n) {
@@ -344,32 +348,29 @@ class _LegChip extends StatelessWidget {
         : null;
 
     if (options != null) {
-      // Slanted seams ("/", Sam 2026-08-12: "la separación con /, no algo
-      // vertical") — each segment is a parallelogram; consecutive edges
-      // run parallel, so the sliver of background between them draws the
-      // diagonal divider.
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final (i, route) in options.indexed) ...[
-              ClipPath(
-                clipper: _SlantEdgeClipper(
-                  slantLeading: i > 0,
-                  slantTrailing: i < options.length - 1,
-                ),
-                child: _routeSegment(
-                  route,
-                  withIcon: i == 0,
-                  mode: leg.transportMode,
-                  slantLeading: i > 0,
-                  slantTrailing: i < options.length - 1,
-                ),
-              ),
-            ],
-          ],
+      // Slanted "/" seams (Sam 2026-08-12: "la separación con /, no algo
+      // vertical") — one shared chip, one segment per option in its own
+      // color. Same widget the detail's switcher uses.
+      // Same reading as the detail's switcher: the CHOSEN option's segment
+      // rides saturated, the rest sit dimmed — the leg belongs to the
+      // itinerary the card wears, so its name marks the choice.
+      return SegmentedRouteChip(
+        dimBackdrop: Color.alphaBlend(
+          Theme.of(context)
+              .colorScheme
+              .surfaceContainerHighest
+              .withValues(alpha: 0.5),
+          Theme.of(context).colorScheme.surface,
         ),
+        segments: [
+          for (final (i, route) in options.indexed)
+            RouteSegmentSpec(
+              label: route.shortName ?? '',
+              color: _routeOwnColor(route, leg.transportMode),
+              icon: i == 0 ? _getModeIcon(leg.transportMode) : null,
+              dimmed: (route.shortName ?? '') != leg.displayName,
+            ),
+        ],
       );
     }
 
@@ -408,48 +409,6 @@ class _LegChip extends StatelessWidget {
               size: 10,
             ),
           ],
-        ],
-      ),
-    );
-  }
-
-  /// One colored segment of a multi-route chip: the option's own route
-  /// color with its name (the mode icon only leads the first segment).
-  /// Slanted edges get extra padding so the text clears the diagonal cut.
-  Widget _routeSegment(
-    routing.Route route, {
-    required bool withIcon,
-    required routing.TransportMode mode,
-    bool slantLeading = false,
-    bool slantTrailing = false,
-  }) {
-    final color = _routeOwnColor(route, mode);
-    final textColor = _contrastOn(color);
-    final name = route.shortName ?? '';
-    return Container(
-      padding: EdgeInsets.only(
-        left: slantLeading ? 8 + _SlantEdgeClipper.slant : 8,
-        right: slantTrailing ? 8 + _SlantEdgeClipper.slant : 8,
-        top: 4,
-        bottom: 4,
-      ),
-      color: color,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (withIcon) ...[
-            Icon(_getModeIcon(mode), size: 16, color: textColor),
-            if (name.isNotEmpty) const SizedBox(width: 4),
-          ],
-          if (name.isNotEmpty)
-            Text(
-              name,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
         ],
       ),
     );
@@ -514,42 +473,6 @@ class _LegChip extends StatelessWidget {
   }
 }
 
-/// Clips a chip segment into a parallelogram: the leading/trailing edges
-/// run at the same diagonal, so two adjacent segments separated by a thin
-/// gap read as a "/" seam.
-class _SlantEdgeClipper extends CustomClipper<Path> {
-  const _SlantEdgeClipper({
-    required this.slantLeading,
-    required this.slantTrailing,
-  });
-
-  /// Horizontal run of the diagonal edge, in logical pixels. Adjacent
-  /// edges run parallel, so the visible background sliver between flush
-  /// segments is exactly `slant` wide — the seam's thickness and its
-  /// steepness are coupled (a thinner seam at a steeper angle would need
-  /// a custom painter). 5 keeps a readable "/" without falling apart
-  /// into separate tags (the first cut shipped 6+2 and did).
-  static const double slant = 5;
-
-  final bool slantLeading;
-  final bool slantTrailing;
-
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..moveTo(slantLeading ? slant : 0, 0)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width - (slantTrailing ? slant : 0), size.height)
-      ..lineTo(0, size.height)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(_SlantEdgeClipper oldClipper) =>
-      oldClipper.slantLeading != slantLeading ||
-      oldClipper.slantTrailing != slantTrailing;
-}
-
 /// Small info chip for footer
 class _InfoChip extends StatelessWidget {
   final IconData icon;
@@ -579,4 +502,3 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
-
