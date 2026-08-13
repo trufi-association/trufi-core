@@ -102,10 +102,13 @@ class ItineraryDetailContent extends StatelessWidget {
     );
   }
 
-  /// Horizontal chips to flip between the group's interchangeable options
-  /// (#737) without leaving the detail. Hidden when there is nothing to
-  /// switch to, or when the options would be indistinguishable (identical
-  /// ride summaries while clock times are pinned/hidden).
+  /// The group's options (#737): the main bus — common to every option by
+  /// construction — shows ONCE above, and the variants (the connections
+  /// after it, or just the departure times for a direct bus) are the
+  /// selectable pills below. Selection is a border highlight only: pills
+  /// never change size. Hidden when there is nothing to switch to, or when
+  /// the options would be indistinguishable (identical variants while
+  /// clock times are pinned/hidden).
   List<Widget> _buildAlternativeSwitcher(
     BuildContext context,
     ThemeData theme,
@@ -118,30 +121,43 @@ class ItineraryDetailContent extends StatelessWidget {
     final timesHidden =
         context.watch<AppConfiguration?>()?.routingTimeOverride != null;
 
-    String rideSummary(routing.Itinerary it) => it.legs
-        .where((leg) => leg.transitLeg)
-        .map((leg) => leg.displayName)
-        .where((name) => name.isNotEmpty)
-        .join(' → ');
+    List<routing.Leg> variantLegs(routing.Itinerary it) =>
+        it.legs.where((leg) => leg.transitLeg).skip(1).toList();
 
     String label(routing.Itinerary it) {
-      final summary = rideSummary(it);
+      final summary = variantLegs(it)
+          .map((leg) => leg.displayName)
+          .where((name) => name.isNotEmpty)
+          .join(' → ');
       if (timesHidden) return summary;
       final time = formatClockTime(context, it.startTime);
       return summary.isEmpty ? time : '$summary · $time';
     }
 
     final labels = options.map(label).toList(growable: false);
-    // Indistinguishable chips would be worse than none.
+    // Indistinguishable pills would be worse than none.
     if (labels.any((l) => l.isEmpty) ||
         labels.toSet().length != labels.length) {
       return const [];
     }
 
+    final mainLeg = itinerary.legs.where((leg) => leg.transitLeg).firstOrNull;
+
     return [
       const SizedBox(height: 6),
+      // The main bus, once — every option below boards it.
+      if (mainLeg != null)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: [
+              _routeBadge(mainLeg.routeColor, mainLeg.displayName, colorScheme),
+            ],
+          ),
+        ),
+      const SizedBox(height: 6),
       SizedBox(
-        height: 48,
+        height: 44,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -165,35 +181,35 @@ class ItineraryDetailContent extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
+                    horizontal: 12,
                     vertical: 6,
                   ),
+                  // Constant size in both states: only the border color
+                  // and fill mark the selection.
                   decoration: BoxDecoration(
                     color: selected
-                        ? colorScheme.primaryContainer.withValues(alpha: 0.4)
+                        ? colorScheme.primaryContainer.withValues(alpha: 0.35)
                         : colorScheme.surfaceContainerLow,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: selected
                           ? colorScheme.primary
                           : theme.dividerColor.withValues(alpha: 0.4),
-                      width: selected ? 1.5 : 1,
+                      width: 1.5,
                     ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (selected) ...[
-                        Icon(
-                          Icons.check_circle_rounded,
-                          size: 16,
-                          color: colorScheme.primary,
+                      for (final leg in variantLegs(option)) ...[
+                        _routeBadge(
+                          leg.routeColor,
+                          leg.displayName,
+                          colorScheme,
                         ),
                         const SizedBox(width: 6),
                       ],
-                      ..._optionRouteBadges(option, colorScheme),
-                      if (!timesHidden) ...[
-                        const SizedBox(width: 8),
+                      if (!timesHidden)
                         Text(
                           formatClockTime(context, option.startTime),
                           style: theme.textTheme.labelMedium?.copyWith(
@@ -203,7 +219,6 @@ class ItineraryDetailContent extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ],
                     ],
                   ),
                 ),
@@ -215,52 +230,33 @@ class ItineraryDetailContent extends StatelessWidget {
     ];
   }
 
-  /// The option's rides as mini badges, each painted in its own route
-  /// color — same visual language as the itinerary card's chips.
-  List<Widget> _optionRouteBadges(
-    routing.Itinerary option,
-    ColorScheme colorScheme,
-  ) {
-    final transitLegs = option.legs.where((leg) => leg.transitLeg).toList();
-    final badges = <Widget>[];
-    for (final (i, leg) in transitLegs.indexed) {
-      if (i > 0) {
-        badges.add(
-          Icon(
-            Icons.chevron_right_rounded,
-            size: 14,
-            color: colorScheme.onSurfaceVariant,
-          ),
-        );
-      }
-      // Empty guard: 'FF' alone parses to a transparent blue and would
-      // make the fallback unreachable.
-      final parsed = leg.routeColor.isNotEmpty
-          ? int.tryParse('FF${leg.routeColor}', radix: 16)
-          : null;
-      final color = parsed != null ? Color(parsed) : colorScheme.primary;
-      final textColor = color.computeLuminance() > 0.5
-          ? Colors.black87
-          : Colors.white;
-      badges.add(
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            leg.displayName,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 11,
-            ),
-          ),
+  /// A route badge in the option's own color — the same visual language as
+  /// the card's chips.
+  Widget _routeBadge(String colorStr, String name, ColorScheme colorScheme) {
+    // Empty guard: 'FF' alone parses to a transparent blue and would make
+    // the fallback unreachable.
+    final parsed = colorStr.isNotEmpty
+        ? int.tryParse('FF$colorStr', radix: 16)
+        : null;
+    final color = parsed != null ? Color(parsed) : colorScheme.primary;
+    final textColor = color.computeLuminance() > 0.5
+        ? Colors.black87
+        : Colors.white;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        name,
+        style: TextStyle(
+          color: textColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 11,
         ),
-      );
-    }
-    return badges;
+      ),
+    );
   }
 
   Widget _buildHeader(
