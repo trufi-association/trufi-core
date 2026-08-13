@@ -277,9 +277,7 @@ class ItineraryDetailContent extends StatelessWidget {
     required bool withIcon,
   }) {
     final color = _routeColor(leg.routeColor, colorScheme);
-    final textColor = color.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
+    final textColor = SegmentedRouteChip.bestContrastOn(color);
     final name = leg.displayName;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

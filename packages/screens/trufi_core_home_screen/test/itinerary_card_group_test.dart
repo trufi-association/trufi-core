@@ -4,9 +4,10 @@ import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
 /// The grouped card (#737): a slot served by interchangeable routes paints
-/// ONE SEGMENT PER OPTION, each in its own route color — no "/" text, no
-/// "+n" cap (the summary row scrolls horizontally; the options are
-/// explored in the detail view).
+/// ONE SEGMENT PER OPTION — the ridden one saturated in its own route
+/// color, the rest dimmed into the strip backdrop (same reading as the
+/// detail switcher) — no "/" text, no "+n" cap (the summary row scrolls
+/// horizontally; the options are explored in the detail view).
 void main() {
   routing.Leg bus(String route) => routing.Leg(
     mode: 'BUS',
@@ -65,20 +66,39 @@ void main() {
       // Each segment paints its fill on its own Material (the nearest
       // Material ancestor of the segment's label).
       final material = tester.widget<Material>(
-        find.ancestor(
-          of: find.text(name),
-          matching: find.byType(Material),
-        ).first,
+        find
+            .ancestor(of: find.text(name), matching: find.byType(Material))
+            .first,
       );
       return material.color!;
     }
 
-    expect(bgOf('106'), const Color(0xFFE91E63),
-        reason: "the CHOSEN option's segment rides its route color, "
-            'saturated — the card wears the 106');
-    expect(bgOf('120'), isNot(const Color(0xFF4CAF50)),
-        reason: 'unchosen segments sit dimmed (blended into the strip), '
-            'same reading as the detail switcher');
+    expect(
+      bgOf('106'),
+      const Color(0xFFE91E63),
+      reason:
+          "the CHOSEN option's segment rides its route color, "
+          'saturated — the card wears the 106',
+    );
+
+    // The dimmed fill is deterministic: the route color at 45% over the
+    // strip backdrop (surfaceContainerHighest at 50% over surface) — an
+    // exact oracle, so a wrong blend, backdrop or alpha fails loudly.
+    final theme = Theme.of(tester.element(find.byType(ItineraryCard)));
+    final backdrop = Color.alphaBlend(
+      theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      theme.colorScheme.surface,
+    );
+    expect(
+      bgOf('120'),
+      Color.alphaBlend(
+        const Color(0xFF4CAF50).withValues(alpha: 0.45),
+        backdrop,
+      ),
+      reason:
+          'unchosen segments sit dimmed (blended into the strip), '
+          'same reading as the detail switcher',
+    );
   });
 
   testWidgets('all options render — no "+n" collapse; the row scrolls', (

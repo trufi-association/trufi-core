@@ -36,8 +36,10 @@ class ItineraryGroup extends Equatable {
   final String signature;
 
   /// The distinct routes serving each transit slot across the group, in
-  /// ranked-member order — what the UI joins as "106 / 120". Empty for
-  /// walk-only groups (and for groups built without slot analysis).
+  /// the same member order as [alternatives] (representative first, then
+  /// departure order) so the card and the detail switcher list the options
+  /// identically — what the UI joins as "106 / 120". Empty for walk-only
+  /// groups (and for groups built without slot analysis).
   final List<List<Route>> slotRoutes;
 
   /// True when at least one slot is served by more than one route — the

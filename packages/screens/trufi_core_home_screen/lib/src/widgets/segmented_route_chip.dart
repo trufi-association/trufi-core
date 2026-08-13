@@ -44,6 +44,12 @@ class RouteSegmentSpec {
 /// which decouples the seam's thickness from its angle — clipping alone
 /// couples them (parallel edges in a flush row leave a background sliver
 /// exactly `slant` wide).
+///
+/// Layout contract: the chip wants unbounded horizontal room (both strips
+/// mount it inside a horizontal [SingleChildScrollView]) — segments never
+/// shrink, so a tight width overflows the segments' internal rows and
+/// clips whatever doesn't fit. Seams always run "/" (LTR); the app ships
+/// LTR locales only.
 class SegmentedRouteChip extends StatelessWidget {
   const SegmentedRouteChip({
     super.key,
@@ -269,6 +275,67 @@ class _RenderOverlapRow extends RenderBox
     // The last child contributes its full width.
     final totalWidth = childCount == 0 ? 0.0 : x + _overlap;
     size = constraints.constrain(Size(totalWidth, maxHeight));
+  }
+
+  // Intrinsics and dry layout mirror performLayout (sum of widths minus one
+  // overlap per seam; tallest child) — without them the chip reports 0×0 to
+  // IntrinsicHeight/Width, Table and baseline layouts and silently vanishes.
+
+  double _accumulateWidths(double Function(RenderBox child) widthOf) {
+    var total = 0.0;
+    var count = 0;
+    var child = firstChild;
+    while (child != null) {
+      total += widthOf(child);
+      count++;
+      child = (child.parentData! as _OverlapRowParentData).nextSibling;
+    }
+    return count == 0 ? 0.0 : math.max(0, total - _overlap * (count - 1));
+  }
+
+  double _tallestChild(double Function(RenderBox child) heightOf) {
+    var tallest = 0.0;
+    var child = firstChild;
+    while (child != null) {
+      tallest = math.max(tallest, heightOf(child));
+      child = (child.parentData! as _OverlapRowParentData).nextSibling;
+    }
+    return tallest;
+  }
+
+  @override
+  double computeMinIntrinsicWidth(double height) =>
+      _accumulateWidths((child) => child.getMinIntrinsicWidth(height));
+
+  @override
+  double computeMaxIntrinsicWidth(double height) =>
+      _accumulateWidths((child) => child.getMaxIntrinsicWidth(height));
+
+  @override
+  double computeMinIntrinsicHeight(double width) =>
+      _tallestChild((child) => child.getMinIntrinsicHeight(width));
+
+  @override
+  double computeMaxIntrinsicHeight(double width) =>
+      _tallestChild((child) => child.getMaxIntrinsicHeight(width));
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    final childConstraints = constraints.loosen();
+    var totalWidth = 0.0;
+    var maxHeight = 0.0;
+    var count = 0;
+    var child = firstChild;
+    while (child != null) {
+      final childSize = child.getDryLayout(childConstraints);
+      totalWidth += childSize.width;
+      maxHeight = math.max(maxHeight, childSize.height);
+      count++;
+      child = (child.parentData! as _OverlapRowParentData).nextSibling;
+    }
+    if (count > 0)
+      totalWidth = math.max(0, totalWidth - _overlap * (count - 1));
+    return constraints.constrain(Size(totalWidth, maxHeight));
   }
 
   @override

@@ -78,15 +78,12 @@ void main() {
         _bus('106', from: t, to: d1),
         _walk(),
       ]);
-      final aThenC = _itinerary(
-        [
-          _walk(),
-          _bus('123', from: o1, to: t),
-          _bus('120', from: tNear, to: d2),
-          _walk(),
-        ],
-        startMinute: 4,
-      );
+      final aThenC = _itinerary([
+        _walk(),
+        _bus('123', from: o1, to: t),
+        _bus('120', from: tNear, to: d2),
+        _walk(),
+      ], startMinute: 4);
 
       final groups = groupItineraries([aThenB, aThenC]);
 
@@ -94,9 +91,43 @@ void main() {
       expect(groups.single.representative, same(aThenB));
       expect(groups.single.alternatives, [aThenB, aThenC]);
       expect(groups.single.hasRouteAlternatives, isTrue);
+      expect(groups.single.slotRoutes[1].map((r) => r.shortName), [
+        '106',
+        '120',
+      ]);
+    });
+
+    test('slotRoutes lists the options in the alternatives order — '
+        'representative first, then departures — so the card and the '
+        'detail switcher read identically', () {
+      // Ranked order says 120 before 138, but the 138 departs earlier:
+      // alternatives sorts the others by startTime, and slotRoutes must
+      // follow it or the two screens list the same options differently.
+      final rep = _itinerary([
+        _bus('123', from: o1, to: t),
+        _bus('106', from: t, to: d1),
+      ]);
+      final laterDeparture = _itinerary([
+        _bus('123', from: o1, to: t),
+        _bus('120', from: tNear, to: d2),
+      ], startMinute: 10);
+      final earlierDeparture = _itinerary([
+        _bus('123', from: o1, to: t),
+        _bus('138', from: t, to: d1),
+      ], startMinute: 5);
+
+      final groups = groupItineraries([rep, laterDeparture, earlierDeparture]);
+
+      expect(groups, hasLength(1));
+      expect(groups.single.alternatives, [
+        rep,
+        earlierDeparture,
+        laterDeparture,
+      ]);
       expect(
         groups.single.slotRoutes[1].map((r) => r.shortName),
-        ['106', '120'],
+        ['106', '138', '120'],
+        reason: 'same order as alternatives, not the ranked member order',
       );
     });
 
@@ -145,20 +176,22 @@ void main() {
       expect(groups[1].alternatives, hasLength(1));
     });
 
-    test('boarding too far apart with different connections stays separate',
-        () {
-      final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
-      final near = _itinerary([
-        _bus('18', from: o1, to: t),
-        _bus('120', from: t, to: d1),
-      ]);
-      final far = _itinerary([
-        _bus('18', from: o2, to: t),
-        _bus('106', from: t, to: d1),
-      ]);
+    test(
+      'boarding too far apart with different connections stays separate',
+      () {
+        final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
+        final near = _itinerary([
+          _bus('18', from: o1, to: t),
+          _bus('120', from: t, to: d1),
+        ]);
+        final far = _itinerary([
+          _bus('18', from: o2, to: t),
+          _bus('106', from: t, to: d1),
+        ]);
 
-      expect(groupItineraries([near, far]), hasLength(2));
-    });
+        expect(groupItineraries([near, far]), hasLength(2));
+      },
+    );
 
     test('same main bus boarding too far apart stays separate — the mirror '
         'rule must not sneak it back through the shared connection', () {
@@ -283,10 +316,7 @@ void main() {
 
       final groups = groupItineraries([one, other]);
       expect(groups, hasLength(1));
-      expect(
-        groups.single.slotRoutes[0].map((r) => r.shortName),
-        ['18', '8'],
-      );
+      expect(groups.single.slotRoutes[0].map((r) => r.shortName), ['18', '8']);
     });
 
     test('same route alighting a few stops later still groups (wider '
@@ -312,10 +342,7 @@ void main() {
       // (alightings 529 m apart) split the canonical P → 106/120 group.
       final tFar = _stop('stop_t2far', _destSameRouteFar);
       final groups = groupItineraries([
-        _itinerary([
-          _bus('P', from: o1, to: t),
-          _bus('106', from: t, to: d1),
-        ]),
+        _itinerary([_bus('P', from: o1, to: t), _bus('106', from: t, to: d1)]),
         _itinerary([
           _bus('P', from: o1, to: tFar),
           _bus('120', from: tFar, to: d2),
@@ -323,10 +350,10 @@ void main() {
       ]);
 
       expect(groups, hasLength(1));
-      expect(
-        groups.single.slotRoutes[1].map((r) => r.shortName),
-        ['106', '120'],
-      );
+      expect(groups.single.slotRoutes[1].map((r) => r.shortName), [
+        '106',
+        '120',
+      ]);
     });
 
     test('connections are options with no constraint of their own — same '
@@ -344,10 +371,10 @@ void main() {
       final groups = groupItineraries([one, other]);
       expect(groups, hasLength(1));
       expect(groups.single.hasRouteAlternatives, isTrue);
-      expect(
-        groups.single.slotRoutes[1].map((r) => r.shortName),
-        ['106', '290'],
-      );
+      expect(groups.single.slotRoutes[1].map((r) => r.shortName), [
+        '106',
+        '290',
+      ]);
     });
 
     test('route_id variants of the same named line are the same main bus', () {
@@ -374,8 +401,11 @@ void main() {
         _itinerary([variant('110-b', from: o1, to: t)], startMinute: 1),
       ]);
 
-      expect(groups, hasLength(1),
-          reason: 'same rider-facing name + same stops = same main bus');
+      expect(
+        groups,
+        hasLength(1),
+        reason: 'same rider-facing name + same stops = same main bus',
+      );
     });
 
     test('feed prefixes do not break matching across providers', () {
@@ -439,10 +469,7 @@ void main() {
       final second = _itinerary([_bus('17', from: o1, to: d1)]);
       // Duplicate of `best` ranked last, departing earlier.
       final laterDuplicate = _itinerary(
-        [
-          _bus('123', from: o1, to: t),
-          _bus('120', from: tNear, to: d2),
-        ],
+        [_bus('123', from: o1, to: t), _bus('120', from: tNear, to: d2)],
         // Earlier departure than `best`: must NOT displace it as
         // representative.
         startMinute: 0,
@@ -456,8 +483,7 @@ void main() {
       expect(groups[1].representative, same(second));
     });
 
-    test('alternatives beyond the representative are sorted by start time',
-        () {
+    test('alternatives beyond the representative are sorted by start time', () {
       final rep = _itinerary([
         _bus('123', from: o1, to: t),
         _bus('106', from: t, to: d1),
@@ -509,8 +535,7 @@ void main() {
       expect(groups, hasLength(2));
     });
 
-    test('walk-only and bike-only are different options, not departures',
-        () {
+    test('walk-only and bike-only are different options, not departures', () {
       Leg bike() => Leg(
         mode: 'BICYCLE',
         startTime: DateTime(2026, 8, 12, 8),

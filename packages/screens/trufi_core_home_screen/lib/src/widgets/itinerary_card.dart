@@ -19,8 +19,9 @@ class ItineraryCard extends StatelessWidget {
 
   /// The distinct routes serving each transit slot across the itinerary's
   /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
-  /// than one route the chip paints one segment per option, each in its
-  /// own route color. The group's options are explored in the detail view.
+  /// than one route the chip paints one segment per option — the one this
+  /// itinerary rides saturated in its own route color, the rest dimmed.
+  /// The group's options are explored in the detail view.
   final List<List<routing.Route>>? slotRoutes;
 
   const ItineraryCard({
@@ -302,8 +303,8 @@ class _LegChip extends StatelessWidget {
   final routing.Leg leg;
 
   /// Distinct routes the itinerary's group offers for this slot; when it
-  /// carries more than one, the chip paints one segment per option, each
-  /// in its own route color.
+  /// carries more than one, the chip paints one segment per option — the
+  /// ridden one saturated, the rest dimmed into the strip backdrop.
   final List<routing.Route>? slotRoutes;
 
   const _LegChip({required this.leg, this.slotRoutes});
@@ -341,8 +342,8 @@ class _LegChip extends StatelessWidget {
     }
 
     // Transit leg. With interchangeable routes in the slot (#737), every
-    // option paints its own segment in its OWN route color, meeting on a
-    // slanted "/" seam.
+    // option paints its own segment, meeting on a slanted "/" seam — the
+    // ridden one saturated, the rest dimmed.
     final options = (slotRoutes != null && slotRoutes!.length > 1)
         ? slotRoutes!
         : null;
@@ -356,10 +357,9 @@ class _LegChip extends StatelessWidget {
       // itinerary the card wears, so its name marks the choice.
       return SegmentedRouteChip(
         dimBackdrop: Color.alphaBlend(
-          Theme.of(context)
-              .colorScheme
-              .surfaceContainerHighest
-              .withValues(alpha: 0.5),
+          Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
           Theme.of(context).colorScheme.surface,
         ),
         segments: [
@@ -369,13 +369,14 @@ class _LegChip extends StatelessWidget {
               color: _routeOwnColor(route, leg.transportMode),
               icon: i == 0 ? _getModeIcon(leg.transportMode) : null,
               dimmed: (route.shortName ?? '') != leg.displayName,
+              selected: (route.shortName ?? '') == leg.displayName,
             ),
         ],
       );
     }
 
     final color = _getRouteColor(leg);
-    final textColor = _contrastOn(color);
+    final textColor = SegmentedRouteChip.bestContrastOn(color);
     final routeName = leg.shortName ?? leg.route?.shortName ?? '';
     final realtime = context.watch<RealtimeVehiclesProvider?>();
 
@@ -413,9 +414,6 @@ class _LegChip extends StatelessWidget {
       ),
     );
   }
-
-  static Color _contrastOn(Color background) =>
-      background.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
 
   Color _routeOwnColor(routing.Route route, routing.TransportMode mode) {
     final colorStr = route.color ?? '';

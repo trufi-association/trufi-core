@@ -131,45 +131,54 @@ List<ItineraryGroup> groupItineraries(
     ..sort((a, b) => a.first.compareTo(b.first));
 
   final seenSignatures = <String>{};
-  return orderedGroups.map((memberIndices) {
-    final representative = itineraries[memberIndices.first];
-    // Ranked order breaks startTime ties so the result is deterministic
-    // (Dart's sort is not stable).
-    final others =
-        memberIndices.skip(1).toList()
+  return orderedGroups
+      .map((memberIndices) {
+        final representative = itineraries[memberIndices.first];
+        // Ranked order breaks startTime ties so the result is deterministic
+        // (Dart's sort is not stable).
+        final others = memberIndices.skip(1).toList()
           ..sort((a, b) {
             final byTime = itineraries[a].startTime.compareTo(
               itineraries[b].startTime,
             );
             return byTime != 0 ? byTime : a.compareTo(b);
           });
-    final othersItineraries = others
-        .map((i) => itineraries[i])
-        .toList(growable: false);
+        final othersItineraries = others
+            .map((i) => itineraries[i])
+            .toList(growable: false);
 
-    final slotRoutes = _collectSlotRoutes(
-      memberIndices.map((i) => profiles[i]).toList(growable: false),
-    );
+        // Same member order as [ItineraryGroup.alternatives]: the card's
+        // segments and the detail's switcher must list the options in the same
+        // sequence, or the same group reads differently on the two screens.
+        final slotRoutes = _collectSlotRoutes(
+          [
+            memberIndices.first,
+            ...others,
+          ].map((i) => profiles[i]).toList(growable: false),
+        );
 
-    var signature = _signature(profiles[memberIndices.first], slotRoutes);
-    // Same structure can repeat when stops sit beyond tolerance but share
-    // rounded coordinates — disambiguate so any consumer keying on the
-    // signature can tell the groups apart.
-    while (!seenSignatures.add(signature)) {
-      signature = '$signature+';
-    }
+        var signature = _signature(profiles[memberIndices.first], slotRoutes);
+        // Same structure can repeat when stops sit beyond tolerance but share
+        // rounded coordinates — disambiguate so any consumer keying on the
+        // signature can tell the groups apart.
+        while (!seenSignatures.add(signature)) {
+          signature = '$signature+';
+        }
 
-    return ItineraryGroup(
-      representative: representative,
-      alternatives: [representative, ...othersItineraries],
-      signature: signature,
-      slotRoutes: slotRoutes,
-    );
-  }).toList(growable: false);
+        return ItineraryGroup(
+          representative: representative,
+          alternatives: [representative, ...othersItineraries],
+          signature: signature,
+          slotRoutes: slotRoutes,
+        );
+      })
+      .toList(growable: false);
 }
 
 /// The distinct routes serving each transit slot across the group's members,
-/// in member (ranked) order — what the card renders as "106 / 120".
+/// in the order the UI lists the options (representative first, then
+/// departure order — [ItineraryGroup.alternatives]) — what the card renders
+/// as "106 / 120".
 List<List<Route>> _collectSlotRoutes(List<_TransitProfile> members) {
   if (members.first.slots.isEmpty) return const [];
   return List.generate(members.first.slots.length, (slot) {
@@ -194,7 +203,10 @@ List<List<Route>> _collectSlotRoutes(List<_TransitProfile> members) {
   }, growable: false);
 }
 
-String _signature(_TransitProfile representative, List<List<Route>> slotRoutes) {
+String _signature(
+  _TransitProfile representative,
+  List<List<Route>> slotRoutes,
+) {
   if (representative.slots.isEmpty) {
     final modes = representative.nonTransitModes.map((m) => m.name).toList()
       ..sort();
@@ -311,19 +323,14 @@ class _TransitProfile {
       final toB = b.toPlace?.latLng;
       if (toA != null &&
           toB != null &&
-          _distance.as(LengthUnit.Meter, toA, toB) >
-              sameRouteToleranceMeters) {
+          _distance.as(LengthUnit.Meter, toA, toB) > sameRouteToleranceMeters) {
         return false;
       }
     }
     return true;
   }
 
-  static bool _mainLegMatches(
-    Leg a,
-    Leg b, {
-    required double toleranceMeters,
-  }) {
+  static bool _mainLegMatches(Leg a, Leg b, {required double toleranceMeters}) {
     if (a.transportMode != b.transportMode) return false;
 
     // The main bus is identified by what the RIDER sees — the route name.
