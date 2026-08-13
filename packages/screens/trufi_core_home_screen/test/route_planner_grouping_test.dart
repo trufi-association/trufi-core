@@ -322,6 +322,87 @@ void main() {
       await cubit.close();
     });
 
+    testWidgets('the common main bus renders once — never inside the pills',
+        (tester) async {
+      final cubit = await _cubitWithPlan(_rawItineraries());
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('123').first);
+      await tester.pumpAndSettle();
+
+      for (final i in [0, 1]) {
+        expect(
+          find.descendant(of: option(i), matching: find.text('123')),
+          findsNothing,
+          reason: 'the shared main bus must not repeat in every pill',
+        );
+      }
+      expect(
+        find.descendant(of: option(0), matching: find.text('106')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: option(1), matching: find.text('120')),
+        findsOneWidget,
+      );
+      await cubit.close();
+    });
+
+    testWidgets('a mirror group (shared final connection) keeps the common '
+        'bus out of the pills too', (tester) async {
+      final mirrorPair = [
+        _itinerary([
+          _bus('18', from: _o, to: _t),
+          _bus('120', from: _t, to: _d1),
+        ]),
+        _itinerary([
+          _bus('8', from: _o, to: _t),
+          _bus('120', from: _t, to: _d1),
+        ], startMinute: 3),
+      ];
+      final cubit = await _cubitWithPlan(mirrorPair);
+      expect(cubit.state.plan!.groupedItineraries, hasLength(1),
+          reason: '"tienen en común el 120" — the mirror rule groups them');
+
+      await tester.pumpWidget(host(cubit));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('18').first);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(of: option(0), matching: find.text('120')),
+        findsNothing,
+        reason: 'the shared 120 renders once as the common chip',
+      );
+      expect(
+        find.descendant(of: option(0), matching: find.text('18')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: option(1), matching: find.text('8')),
+        findsOneWidget,
+      );
+      await cubit.close();
+    });
+
+    testWidgets('a departures-only group under pinned time hides the '
+        'switcher via the empty-label branch', (tester) async {
+      final directPair = [
+        _itinerary([_bus('17', from: _o, to: _d1)]),
+        _itinerary([_bus('17', from: _o, to: _d1)], startMinute: 10),
+      ];
+      final cubit = await _cubitWithPlan(directPair);
+      await tester.pumpWidget(
+        host(cubit, routingTimeOverride: const TimeOfDay(hour: 12, minute: 0)),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('17').first);
+      await tester.pumpAndSettle();
+
+      expect(option(0), findsNothing);
+      await cubit.close();
+    });
+
     testWidgets('list and open detail never overflow on a 320dp phone', (
       tester,
     ) async {

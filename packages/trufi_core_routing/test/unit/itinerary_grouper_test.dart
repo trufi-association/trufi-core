@@ -100,10 +100,10 @@ void main() {
       );
     });
 
-    test('different main buses never merge, even sharing the second leg', () {
-      // Real case: routes 18 and 8 converge into the same second leg. The
-      // main bus is a different decision — separate rows (product rule:
-      // group only what shares the main bus).
+    test('the mirror rule: itineraries left alone merge on a shared final '
+        'connection ("tienen en común el 120")', () {
+      // Real case Sam spotted live: J→120, 138→120, 110→120... — different
+      // main buses all reaching the destination on the same 120.
       final viaRoute18 = _itinerary([
         _bus('18', from: o1, to: t),
         _bus('120', from: t, to: d1),
@@ -113,10 +113,40 @@ void main() {
         _bus('120', from: t, to: d1),
       ]);
 
-      expect(groupItineraries([viaRoute18, viaRoute8]), hasLength(2));
+      final groups = groupItineraries([viaRoute18, viaRoute8]);
+      expect(groups, hasLength(1));
+      expect(
+        groups.single.slotRoutes[0].map((r) => r.shortName),
+        ['18', '8'],
+        reason: 'the main buses become the interchangeable options',
+      );
+      expect(groups.single.slotRoutes[1].map((r) => r.shortName), ['120']);
     });
 
-    test('same main bus boarding too far apart stays separate', () {
+    test('main-bus groups keep priority over the mirror rule', () {
+      final pGroup1 = _itinerary([
+        _bus('P', from: o1, to: t),
+        _bus('106', from: t, to: d1),
+      ]);
+      final pGroup2 = _itinerary([
+        _bus('P', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ], startMinute: 2);
+      // Shares the 120 with pGroup2, but that one already belongs to the
+      // P group — the mirror pass only merges leftovers.
+      final viaJ = _itinerary([
+        _bus('J', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ], startMinute: 4);
+
+      final groups = groupItineraries([pGroup1, pGroup2, viaJ]);
+      expect(groups, hasLength(2));
+      expect(groups.first.alternatives, hasLength(2));
+      expect(groups[1].alternatives, hasLength(1));
+    });
+
+    test('boarding too far apart with different connections stays separate',
+        () {
       final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
       final near = _itinerary([
         _bus('18', from: o1, to: t),
@@ -124,7 +154,7 @@ void main() {
       ]);
       final far = _itinerary([
         _bus('18', from: o2, to: t),
-        _bus('120', from: t, to: d1),
+        _bus('106', from: t, to: d1),
       ]);
 
       expect(groupItineraries([near, far]), hasLength(2));

@@ -344,26 +344,29 @@ class _LegChip extends StatelessWidget {
         : null;
 
     if (options != null) {
+      // Slanted seams ("/", Sam 2026-08-12: "la separación con /, no algo
+      // vertical") — each segment is a parallelogram; consecutive edges
+      // run parallel, so the sliver of background between them draws the
+      // diagonal divider.
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final (i, route) in options.indexed) ...[
-              if (i > 0)
-                // Divider contrast derives from the segment it sits on —
-                // a fixed white bar disappears between two light routes.
-                Container(
-                  width: 1.5,
-                  height: 24,
-                  color: _contrastOn(
-                    _routeOwnColor(options[i - 1], leg.transportMode),
-                  ).withValues(alpha: 0.7),
+              if (i > 0) const SizedBox(width: 2),
+              ClipPath(
+                clipper: _SlantEdgeClipper(
+                  slantLeading: i > 0,
+                  slantTrailing: i < options.length - 1,
                 ),
-              _routeSegment(
-                route,
-                withIcon: i == 0,
-                mode: leg.transportMode,
+                child: _routeSegment(
+                  route,
+                  withIcon: i == 0,
+                  mode: leg.transportMode,
+                  slantLeading: i > 0,
+                  slantTrailing: i < options.length - 1,
+                ),
               ),
             ],
           ],
@@ -413,16 +416,24 @@ class _LegChip extends StatelessWidget {
 
   /// One colored segment of a multi-route chip: the option's own route
   /// color with its name (the mode icon only leads the first segment).
+  /// Slanted edges get extra padding so the text clears the diagonal cut.
   Widget _routeSegment(
     routing.Route route, {
     required bool withIcon,
     required routing.TransportMode mode,
+    bool slantLeading = false,
+    bool slantTrailing = false,
   }) {
     final color = _routeOwnColor(route, mode);
     final textColor = _contrastOn(color);
     final name = route.shortName ?? '';
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.only(
+        left: slantLeading ? 8 + _SlantEdgeClipper.slant : 8,
+        right: slantTrailing ? 8 + _SlantEdgeClipper.slant : 8,
+        top: 4,
+        bottom: 4,
+      ),
       color: color,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -502,6 +513,37 @@ class _LegChip extends StatelessWidget {
         return Icons.directions_rounded;
     }
   }
+}
+
+/// Clips a chip segment into a parallelogram: the leading/trailing edges
+/// run at the same diagonal, so two adjacent segments separated by a thin
+/// gap read as a "/" seam.
+class _SlantEdgeClipper extends CustomClipper<Path> {
+  const _SlantEdgeClipper({
+    required this.slantLeading,
+    required this.slantTrailing,
+  });
+
+  /// Horizontal run of the diagonal edge, in logical pixels.
+  static const double slant = 6;
+
+  final bool slantLeading;
+  final bool slantTrailing;
+
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..moveTo(slantLeading ? slant : 0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width - (slantTrailing ? slant : 0), size.height)
+      ..lineTo(0, size.height)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(_SlantEdgeClipper oldClipper) =>
+      oldClipper.slantLeading != slantLeading ||
+      oldClipper.slantTrailing != slantTrailing;
 }
 
 /// Small info chip for footer

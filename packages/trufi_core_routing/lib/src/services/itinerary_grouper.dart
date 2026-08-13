@@ -70,6 +70,35 @@ List<ItineraryGroup> groupItineraries(
     }
   }
 
+  // Mirror pass (Sam 2026-08-12, seeing the live list: "también se pueden
+  // agrupar por el segundo en transbordo — tienen en común el 120"):
+  // itineraries STILL alone after the main-bus pass merge when they share
+  // the same final connection — same rider-facing name, alighting within
+  // tolerance (the mirror of the main rule: what identifies the last bus
+  // is where it drops you). Main-bus groups keep priority and are never
+  // chained into a mirror group.
+  final aloneAfterMainPass = <int>{};
+  final sizeByRoot = <int, int>{};
+  for (var i = 0; i < profiles.length; i++) {
+    sizeByRoot.update(find(i), (n) => n + 1, ifAbsent: () => 1);
+  }
+  for (var i = 0; i < profiles.length; i++) {
+    if (sizeByRoot[find(i)] == 1 && profiles[i].slots.length > 1) {
+      aloneAfterMainPass.add(i);
+    }
+  }
+  for (final a in aloneAfterMainPass) {
+    for (final b in aloneAfterMainPass) {
+      if (b <= a || find(a) == find(b)) continue;
+      if (profiles[a].mirrorMatches(
+        profiles[b],
+        sameRouteToleranceMeters: sameRouteToleranceMeters,
+      )) {
+        parent[find(b)] = find(a);
+      }
+    }
+  }
+
   // Collect members per root, keeping the incoming (ranked) order.
   final membersByRoot = <int, List<int>>{};
   for (var i = 0; i < itineraries.length; i++) {
@@ -221,6 +250,31 @@ class _TransitProfile {
       other.slots.first,
       toleranceMeters: sameRouteToleranceMeters,
     );
+  }
+
+  /// The mirror of [matches]: same number of legs and the same FINAL
+  /// connection — same rider-facing name, alighting within tolerance.
+  /// What identifies the last bus is where it drops you; where you caught
+  /// it belongs to the option (the main bus you rode first).
+  bool mirrorMatches(
+    _TransitProfile other, {
+    required double sameRouteToleranceMeters,
+  }) {
+    if (slots.length != other.slots.length || slots.length < 2) return false;
+
+    final a = slots.last;
+    final b = other.slots.last;
+    if (a.transportMode != b.transportMode) return false;
+
+    final keyA = _mainBusKey(a);
+    final keyB = _mainBusKey(b);
+    if (keyA == null || keyA != keyB) return false;
+
+    final toA = a.toPlace?.latLng;
+    final toB = b.toPlace?.latLng;
+    if (toA == null || toB == null) return true;
+    return _distance.as(LengthUnit.Meter, toA, toB) <=
+        sameRouteToleranceMeters;
   }
 
   static bool _mainLegMatches(
