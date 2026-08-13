@@ -193,6 +193,82 @@ void main() {
       expect(groupItineraries([one, other]), hasLength(2));
     });
 
+    test('union-find transitivity cannot bridge same-named mains through '
+        'a third bus (each mirror group holds every main name ONCE)', () {
+      // Round-7 counterexample: the pairwise guard blocked 18–18, but an
+      // 8 sharing the 120 merged with BOTH and chained them together.
+      final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
+      final eighteenNear = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+      final eighteenFar = _itinerary([
+        _bus('18', from: o2, to: t),
+        _bus('120', from: t, to: d1),
+      ], startMinute: 2);
+      final bridge = _itinerary([
+        _bus('8', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ], startMinute: 4);
+
+      final groups = groupItineraries([eighteenNear, eighteenFar, bridge]);
+
+      expect(groups, hasLength(2));
+      expect(
+        groups.first.slotRoutes[0].map((r) => r.shortName),
+        ['18', '8'],
+        reason: 'the ranked 18 takes the 8; the far 18 stays its own row',
+      );
+      expect(groups[1].alternatives, hasLength(1));
+    });
+
+    test('unidentifiable main buses never enter the mirror pass', () {
+      // Two nameless first legs sharing the 120 could be the SAME line
+      // the main pass kept apart — fail closed.
+      Leg nameless(Place from, Place to) => Leg(
+        mode: 'BUS',
+        startTime: DateTime(2026, 8, 12, 8),
+        endTime: DateTime(2026, 8, 12, 8, 30),
+        duration: const Duration(minutes: 30),
+        distance: 5000,
+        transitLeg: true,
+        fromPlace: from,
+        toPlace: to,
+      );
+      final o2 = _stop('stop_o2', _originFar);
+      final groups = groupItineraries([
+        _itinerary([nameless(o1, t), _bus('120', from: t, to: d1)]),
+        _itinerary([nameless(o2, t), _bus('120', from: t, to: d1)]),
+      ]);
+
+      expect(groups, hasLength(2));
+    });
+
+    test('with longer rides every slot after the main bus must match for '
+        'the mirror rule', () {
+      // The app caps rides at two vehicles, but the grouper is public
+      // API: a differing MIDDLE connection must block the merge.
+      final viaX = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('X', from: t, to: tNear),
+        _bus('120', from: tNear, to: d1),
+      ]);
+      final viaY = _itinerary([
+        _bus('8', from: o1, to: t),
+        _bus('Y', from: t, to: tNear),
+        _bus('120', from: tNear, to: d1),
+      ]);
+
+      expect(groupItineraries([viaX, viaY]), hasLength(2));
+
+      final viaSameMiddle = _itinerary([
+        _bus('8', from: o1, to: t),
+        _bus('X', from: t, to: tNear),
+        _bus('120', from: tNear, to: d1),
+      ]);
+      expect(groupItineraries([viaX, viaSameMiddle]), hasLength(1));
+    });
+
     test('the mirror rule ignores where the connection was CAUGHT: far '
         'boardings with a shared drop-off still merge', () {
       final t2 = _stop('stop_t2far', _originFar); // ~1.3 km from t

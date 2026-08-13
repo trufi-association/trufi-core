@@ -77,25 +77,48 @@ List<ItineraryGroup> groupItineraries(
   // tolerance (the mirror of the main rule: what identifies the last bus
   // is where it drops you). Main-bus groups keep priority and are never
   // chained into a mirror group.
-  final aloneAfterMainPass = <int>{};
   final sizeByRoot = <int, int>{};
   for (var i = 0; i < profiles.length; i++) {
     sizeByRoot.update(find(i), (n) => n + 1, ifAbsent: () => 1);
   }
-  for (var i = 0; i < profiles.length; i++) {
-    if (sizeByRoot[find(i)] == 1 && profiles[i].slots.length > 1) {
-      aloneAfterMainPass.add(i);
-    }
-  }
-  for (final a in aloneAfterMainPass) {
-    for (final b in aloneAfterMainPass) {
-      if (b <= a || find(a) == find(b)) continue;
-      if (profiles[a].mirrorMatches(
+  String? mainKeyOf(int i) =>
+      profiles[i].slots.isEmpty ? null : _mainBusKey(profiles[i].slots.first);
+  // Unidentifiable main buses stay out of the mirror pass entirely:
+  // two unknown buses sharing a connection could be the SAME line kept
+  // apart by the main pass — fail closed, like everywhere else.
+  final candidates = <int>[
+    for (var i = 0; i < profiles.length; i++)
+      if (sizeByRoot[find(i)] == 1 &&
+          profiles[i].slots.length > 1 &&
+          mainKeyOf(i) != null)
+        i,
+  ];
+  // Each mirror group may hold every main-bus name at most ONCE: two
+  // singletons sharing a name exist only because the main pass kept them
+  // apart (boarding beyond tolerance — a pinned product rule), and the
+  // pairwise guard alone is bridgeable by union-find transitivity (a
+  // third bus sharing the connection would chain them back together).
+  final mainKeysByRoot = <int, Set<String>>{
+    for (final i in candidates) i: {mainKeyOf(i)!},
+  };
+  for (final a in candidates) {
+    for (final b in candidates) {
+      if (b <= a) continue;
+      final rootA = find(a);
+      final rootB = find(b);
+      if (rootA == rootB) continue;
+      if (!profiles[a].mirrorMatches(
         profiles[b],
         sameRouteToleranceMeters: sameRouteToleranceMeters,
       )) {
-        parent[find(b)] = find(a);
+        continue;
       }
+      final keysA = mainKeysByRoot[rootA]!;
+      final keysB = mainKeysByRoot[rootB]!;
+      if (keysA.any(keysB.contains)) continue;
+      parent[rootB] = rootA;
+      keysA.addAll(keysB);
+      mainKeysByRoot.remove(rootB);
     }
   }
 

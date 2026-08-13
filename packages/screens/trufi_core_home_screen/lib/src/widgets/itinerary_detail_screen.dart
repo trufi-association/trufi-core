@@ -143,16 +143,28 @@ class ItineraryDetailContent extends StatelessWidget {
       }
     }
 
-    String label(routing.Itinerary it) {
-      final variant = variantSlot != null
-          ? transitLegs(it)[variantSlot].displayName
-          : '';
-      if (timesHidden) return variant;
+    // Pills show the bus type and name; the departure time belongs to the
+    // header, which updates on switch (Sam 2026-08-13). The time joins the
+    // label only when names alone can't tell the options apart — a
+    // departures-only group, or two options riding a same-named variant.
+    final variantNames = [
+      for (final option in options)
+        variantSlot != null ? transitLegs(option)[variantSlot].displayName : '',
+    ];
+    final needsTime =
+        variantNames.toSet().length != variantNames.length ||
+        variantNames.any((name) => name.isEmpty);
+
+    String label(routing.Itinerary it, String name) {
+      if (!needsTime) return name;
+      if (timesHidden) return name;
       final time = formatClockTime(context, it.startTime);
-      return variant.isEmpty ? time : '$variant · $time';
+      return name.isEmpty ? time : '$name · $time';
     }
 
-    final labels = options.map(label).toList(growable: false);
+    final labels = [
+      for (final (i, option) in options.indexed) label(option, variantNames[i]),
+    ];
     // Indistinguishable pills would be worse than none.
     if (labels.any((l) => l.isEmpty) ||
         labels.toSet().length != labels.length) {
@@ -182,7 +194,7 @@ class ItineraryDetailContent extends StatelessWidget {
             option,
             index: index,
             selected: option == itinerary,
-            timesHidden: timesHidden,
+            showTime: needsTime && !timesHidden,
             colorScheme: colorScheme,
             variantLeg: variantSlot != null
                 ? transitLegs(option)[variantSlot]
@@ -277,7 +289,7 @@ class ItineraryDetailContent extends StatelessWidget {
     routing.Itinerary option, {
     required int index,
     required bool selected,
-    required bool timesHidden,
+    required bool showTime,
     required ColorScheme colorScheme,
     required routing.Leg? variantLeg,
     required routing.Leg? fallbackLeg,
@@ -286,13 +298,20 @@ class ItineraryDetailContent extends StatelessWidget {
     final color = colorLeg != null
         ? _routeColor(colorLeg.routeColor, colorScheme)
         : colorScheme.primary;
-    final textColor = color.computeLuminance() > 0.5
+    // Unselected pills blend into the strip, so text contrast must follow
+    // the EFFECTIVE fill, not the base route color — deriving it from the
+    // base washed white text to ~2:1 on light theme.
+    final fill = selected
+        ? color
+        : Color.alphaBlend(
+            color.withValues(alpha: 0.45),
+            colorScheme.surfaceContainerHighest,
+          );
+    final textColor = fill.computeLuminance() > 0.5
         ? Colors.black87
         : Colors.white;
     final name = variantLeg?.displayName ?? '';
-    final time = timesHidden
-        ? null
-        : formatClockTime(context, option.startTime);
+    final time = showTime ? formatClockTime(context, option.startTime) : null;
 
     return Semantics(
       button: true,
@@ -333,6 +352,16 @@ class ItineraryDetailContent extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // The bus type leads the pill (Sam 2026-08-13: "mostrar el
+              // tipo de bus y el nombre").
+              if (variantLeg != null) ...[
+                Icon(
+                  _modeIcon(variantLeg.transportMode),
+                  size: 14,
+                  color: textColor,
+                ),
+                if (name.isNotEmpty) const SizedBox(width: 4),
+              ],
               if (name.isNotEmpty)
                 Text(
                   name,
@@ -359,6 +388,21 @@ class ItineraryDetailContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _modeIcon(routing.TransportMode mode) {
+    switch (mode) {
+      case routing.TransportMode.rail:
+        return Icons.train_rounded;
+      case routing.TransportMode.subway:
+        return Icons.subway_rounded;
+      case routing.TransportMode.tram:
+        return Icons.tram_rounded;
+      case routing.TransportMode.ferry:
+        return Icons.directions_boat_rounded;
+      default:
+        return Icons.directions_bus_rounded;
+    }
   }
 
   Color _routeColor(String colorStr, ColorScheme colorScheme) {
