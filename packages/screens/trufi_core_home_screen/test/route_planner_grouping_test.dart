@@ -144,48 +144,54 @@ Future<RoutePlannerCubit> _cubitWithPlan(
 
 void main() {
   group('cubit fills groupedItineraries (#737)', () {
-    test('after fetchPlan, and selection is the first representative',
-        () async {
-      final cubit = await _cubitWithPlan(_rawItineraries());
+    test(
+      'after fetchPlan, and selection is the first representative',
+      () async {
+        final cubit = await _cubitWithPlan(_rawItineraries());
 
-      final groups = cubit.state.plan?.groupedItineraries;
-      expect(groups, isNotNull, reason: 'the producer wiring must run');
-      expect(groups, hasLength(2));
-      expect(groups!.first.alternatives, hasLength(2));
-      expect(groups.first.hasRouteAlternatives, isTrue);
-      expect(
-        cubit.state.selectedItinerary,
-        same(cubit.state.plan!.itineraries!.first),
-      );
-      expect(
-        groups.first.representative,
-        same(cubit.state.plan!.itineraries!.first),
-        reason: 'ranking is preserved: first card == first itinerary',
-      );
-    });
+        final groups = cubit.state.plan?.groupedItineraries;
+        expect(groups, isNotNull, reason: 'the producer wiring must run');
+        expect(groups, hasLength(2));
+        expect(groups!.first.alternatives, hasLength(2));
+        expect(groups.first.hasRouteAlternatives, isTrue);
+        expect(
+          cubit.state.selectedItinerary,
+          same(cubit.state.plan!.itineraries!.first),
+        );
+        expect(
+          groups.first.representative,
+          same(cubit.state.plan!.itineraries!.first),
+          reason: 'ranking is preserved: first card == first itinerary',
+        );
+      },
+    );
 
-    test('rides with more than two vehicles are dropped (product rule)',
-        () async {
-      final threeBuses = _itinerary([
-        _bus('18', from: _o, to: _t),
-        _bus('120', from: _t, to: _d1),
-        _bus('50', from: _d1, to: _d2),
-      ]);
-      final cubit = await _cubitWithPlan([..._rawItineraries(), threeBuses]);
+    test(
+      'rides with more than two vehicles are dropped (product rule)',
+      () async {
+        final threeBuses = _itinerary([
+          _bus('18', from: _o, to: _t),
+          _bus('120', from: _t, to: _d1),
+          _bus('50', from: _d1, to: _d2),
+        ]);
+        final cubit = await _cubitWithPlan([..._rawItineraries(), threeBuses]);
 
-      expect(cubit.state.plan!.itineraries, hasLength(3),
-          reason: 'the 18→120→50 chain must not survive the cap');
-      expect(
-        cubit.state.plan!.itineraries!.any(
-          (it) => it.legs.where((l) => l.transitLeg).length > 2,
-        ),
-        isFalse,
-      );
-      await cubit.close();
-    });
+        expect(
+          cubit.state.plan!.itineraries,
+          hasLength(3),
+          reason: 'the 18→120→50 chain must not survive the cap',
+        );
+        expect(
+          cubit.state.plan!.itineraries!.any(
+            (it) => it.legs.where((l) => l.transitLeg).length > 2,
+          ),
+          isFalse,
+        );
+        await cubit.close();
+      },
+    );
 
-    test('after restoring a saved plan (groups are not serialized)',
-        () async {
+    test('after restoring a saved plan (groups are not serialized)', () async {
       final repository = _FakeRepository();
       final first = await _cubitWithPlan(
         _rawItineraries(),
@@ -212,25 +218,23 @@ void main() {
   });
 
   group('grouped list and detail options (#737 v3)', () {
-    Widget host(RoutePlannerCubit cubit, {TimeOfDay? routingTimeOverride}) =>
-        Provider<AppConfiguration?>.value(
-          value: AppConfiguration(
-            appName: 'Test',
-            screens: const [],
-            routingTimeOverride: routingTimeOverride,
-          ),
-          child: MaterialApp(
-            localizationsDelegates:
-                HomeScreenLocalizations.localizationsDelegates,
-            supportedLocales: HomeScreenLocalizations.supportedLocales,
-            home: Scaffold(
-              body: BlocProvider.value(
-                value: cubit,
-                child: const ItineraryList(),
-              ),
-            ),
-          ),
-        );
+    Widget host(
+      RoutePlannerCubit cubit, {
+      TimeOfDay? routingTimeOverride,
+    }) => Provider<AppConfiguration?>.value(
+      value: AppConfiguration(
+        appName: 'Test',
+        screens: const [],
+        routingTimeOverride: routingTimeOverride,
+      ),
+      child: MaterialApp(
+        localizationsDelegates: HomeScreenLocalizations.localizationsDelegates,
+        supportedLocales: HomeScreenLocalizations.supportedLocales,
+        home: Scaffold(
+          body: BlocProvider.value(value: cubit, child: const ItineraryList()),
+        ),
+      ),
+    );
 
     Finder option(int index) => find.byKey(ValueKey('itinerary-option-$index'));
 
@@ -322,8 +326,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('the common main bus renders once — never inside the pills',
-        (tester) async {
+    testWidgets('the common main bus renders once — never inside the pills', (
+      tester,
+    ) async {
       final cubit = await _cubitWithPlan(_rawItineraries());
       await tester.pumpWidget(host(cubit));
       await tester.pumpAndSettle();
@@ -361,8 +366,11 @@ void main() {
         ], startMinute: 3),
       ];
       final cubit = await _cubitWithPlan(mirrorPair);
-      expect(cubit.state.plan!.groupedItineraries, hasLength(1),
-          reason: '"tienen en común el 120" — the mirror rule groups them');
+      expect(
+        cubit.state.plan!.groupedItineraries,
+        hasLength(1),
+        reason: '"tienen en común el 120" — the mirror rule groups them',
+      );
 
       await tester.pumpWidget(host(cubit));
       await tester.pumpAndSettle();
@@ -475,11 +483,22 @@ void main() {
       final fillLum = fill.computeLuminance();
       double ratio(double a, double b) =>
           (a > b ? a + 0.05 : b + 0.05) / (a > b ? b + 0.05 : a + 0.05);
-      final chosen = ratio(textLum, fillLum);
-      final alternative = ratio(textLum > 0.5 ? 0.0 : 1.0, fillLum);
-      expect(chosen >= alternative, isTrue,
-          reason: 'text color must be the better-contrast choice '
-              '(chosen $chosen vs alternative $alternative)');
+      // Candidate inks as RENDERED: white is opaque; black87 is
+      // translucent, so its effective luminance comes from blending it
+      // into the fill — same math production uses to pick.
+      final blackInkLum = Color.alphaBlend(
+        Colors.black87,
+        fill,
+      ).computeLuminance();
+      final chosen = ratio(textLum > 0.5 ? textLum : blackInkLum, fillLum);
+      final alternative = ratio(textLum > 0.5 ? blackInkLum : 1.0, fillLum);
+      expect(
+        chosen >= alternative,
+        isTrue,
+        reason:
+            'text color must be the better-contrast choice '
+            '(chosen $chosen vs alternative $alternative)',
+      );
       await cubit.close();
     });
 
@@ -497,8 +516,11 @@ void main() {
       await tester.tap(find.text('123').first);
       await tester.pumpAndSettle();
 
-      expect(tester.takeException(), isNull,
-          reason: 'a RenderFlex overflow throws in widget tests');
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'a RenderFlex overflow throws in widget tests',
+      );
       await cubit.close();
     });
   });

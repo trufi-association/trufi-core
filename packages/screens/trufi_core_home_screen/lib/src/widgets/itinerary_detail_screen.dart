@@ -943,9 +943,7 @@ class _LegItemState extends State<_LegItem> {
         ? leg.headsign
         : null;
 
-    final badgeTextColor = widget.lineColor.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
+    final badgeTextColor = SegmentedRouteChip.bestContrastOn(widget.lineColor);
 
     // The whole identity (badge + name + variant + chevron) is a
     // single tap target that opens the route detail screen. The

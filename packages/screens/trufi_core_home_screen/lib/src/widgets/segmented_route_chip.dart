@@ -76,11 +76,14 @@ class SegmentedRouteChip extends StatelessWidget {
 
   /// White or near-black, whichever contrasts more (WCAG ratio) with
   /// [fill] — luminance thresholds pick the wrong side in the 0.18–0.5
-  /// band.
+  /// band. The dark candidate is measured as RENDERED: black87 is
+  /// translucent, so its effective ink is black87 blended into the fill
+  /// (a pure-black ratio overrates it in the ~0.18–0.20 band).
   static Color bestContrastOn(Color fill) {
     final l = fill.computeLuminance();
     final whiteRatio = 1.05 / (l + 0.05);
-    final blackRatio = (l + 0.05) / 0.05;
+    final blackInk = Color.alphaBlend(Colors.black87, fill);
+    final blackRatio = (l + 0.05) / (blackInk.computeLuminance() + 0.05);
     return whiteRatio >= blackRatio ? Colors.white : Colors.black87;
   }
 
@@ -277,20 +280,24 @@ class _RenderOverlapRow extends RenderBox
     size = constraints.constrain(Size(totalWidth, maxHeight));
   }
 
-  // Intrinsics and dry layout mirror performLayout (sum of widths minus one
-  // overlap per seam; tallest child) — without them the chip reports 0×0 to
-  // IntrinsicHeight/Width, Table and baseline layouts and silently vanishes.
+  // Intrinsics and dry layout mirror performLayout — without them the chip
+  // reports 0×0 to IntrinsicHeight/Width and Table and silently vanishes.
+  // The width accumulation REPEATS performLayout's operation order
+  // (x += w - overlap per child, one overlap back at the end) instead of
+  // the algebraically equal sum-minus-(n-1)-overlaps: the two differ in
+  // floating point and debugCheckIntrinsicSizes compares dry and real
+  // layout bit-exactly.
 
   double _accumulateWidths(double Function(RenderBox child) widthOf) {
-    var total = 0.0;
+    var x = 0.0;
     var count = 0;
     var child = firstChild;
     while (child != null) {
-      total += widthOf(child);
+      x += widthOf(child) - _overlap;
       count++;
       child = (child.parentData! as _OverlapRowParentData).nextSibling;
     }
-    return count == 0 ? 0.0 : math.max(0, total - _overlap * (count - 1));
+    return count == 0 ? 0.0 : math.max(0, x + _overlap);
   }
 
   double _tallestChild(double Function(RenderBox child) heightOf) {
@@ -322,21 +329,24 @@ class _RenderOverlapRow extends RenderBox
   @override
   Size computeDryLayout(BoxConstraints constraints) {
     final childConstraints = constraints.loosen();
-    var totalWidth = 0.0;
     var maxHeight = 0.0;
+    var x = 0.0;
     var count = 0;
     var child = firstChild;
     while (child != null) {
       final childSize = child.getDryLayout(childConstraints);
-      totalWidth += childSize.width;
       maxHeight = math.max(maxHeight, childSize.height);
+      x += childSize.width - _overlap;
       count++;
       child = (child.parentData! as _OverlapRowParentData).nextSibling;
     }
-    if (count > 0)
-      totalWidth = math.max(0, totalWidth - _overlap * (count - 1));
+    final totalWidth = count == 0 ? 0.0 : x + _overlap;
     return constraints.constrain(Size(totalWidth, maxHeight));
   }
+
+  @override
+  double? computeDistanceToActualBaseline(TextBaseline baseline) =>
+      defaultComputeDistanceToFirstActualBaseline(baseline);
 
   @override
   void paint(PaintingContext context, Offset offset) =>

@@ -369,7 +369,11 @@ class _LegChip extends StatelessWidget {
               color: _routeOwnColor(route, leg.transportMode),
               icon: i == 0 ? _getModeIcon(leg.transportMode) : null,
               dimmed: (route.shortName ?? '') != leg.displayName,
-              selected: (route.shortName ?? '') == leg.displayName,
+              // Unnamed feeds can't tell the ridden option apart ('' == ''
+              // matches EVERY slot): no name, no selected announcement.
+              selected:
+                  (route.shortName ?? '').isNotEmpty &&
+                  route.shortName == leg.displayName,
             ),
         ],
       );
