@@ -333,16 +333,12 @@ class ItineraryDetailContent extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            // Only the FILL dims on unselected pills: the text keeps
-            // full opacity — in a departures-only group the time is the
-            // whole decision, and washing it out with the fill hurt
-            // dark-theme contrast.
+            // Selection is color alone (Sam 2026-08-13: no ring — the
+            // saturated pill IS the selection, the rest sit dimmed). Only
+            // the FILL dims: the text keeps full opacity, in a
+            // departures-only group the time is the whole decision.
             color: selected ? color : color.withValues(alpha: 0.45),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: selected ? colorScheme.primary : Colors.transparent,
-              width: 2,
-            ),
             boxShadow: selected
                 ? [
                     BoxShadow(

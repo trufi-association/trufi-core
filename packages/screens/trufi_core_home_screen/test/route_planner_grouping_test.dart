@@ -473,7 +473,18 @@ void main() {
             )
             .first,
       );
-      final fill = (pillContainer.decoration as BoxDecoration).color!;
+      // The decoration color is translucent (45%) — the oracle must judge
+      // contrast against the EFFECTIVE fill over the strip's backdrop,
+      // exactly like production does (computeLuminance ignores alpha).
+      final scheme = Theme.of(tester.element(option(1))).colorScheme;
+      final backdrop = Color.alphaBlend(
+        scheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        scheme.surface,
+      );
+      final fill = Color.alphaBlend(
+        (pillContainer.decoration as BoxDecoration).color!,
+        backdrop,
+      );
       final fillLum = fill.computeLuminance();
       double ratio(double a, double b) =>
           (a > b ? a + 0.05 : b + 0.05) / (a > b ? b + 0.05 : a + 0.05);
