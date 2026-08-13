@@ -104,6 +104,34 @@ void main() {
     );
   });
 
+  testWidgets('the ridden segment announces selected to screen readers — '
+      'the only remaining marker now that nothing visual is exclusive '
+      'to it beyond fill strength', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await tester.pumpWidget(
+      host(
+        card(
+          slotRoutes: [
+            [colored('123', '7E57C2')],
+            [colored('106', 'E91E63'), colored('120', '4CAF50')],
+          ],
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSemantics(find.text('106')),
+      isSemantics(isSelected: true),
+      reason: 'the ridden option must announce selected',
+    );
+    expect(
+      tester.getSemantics(find.text('120')),
+      isSemantics(isSelected: false),
+      reason: 'unchosen options must not',
+    );
+    semantics.dispose();
+  });
+
   testWidgets('all options render — no "+n" collapse; the row scrolls', (
     tester,
   ) async {
