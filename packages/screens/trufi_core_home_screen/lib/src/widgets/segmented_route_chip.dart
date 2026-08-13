@@ -115,8 +115,9 @@ class SegmentedRouteChip extends StatelessWidget {
     required Color backdrop,
   }) {
     // Every segment wears its route color; unselected ones are only
-    // slightly muted (keeping their identity), and the selected one is
-    // marked by an inset ring instead of by dimming the others out.
+    // slightly muted (keeping their identity), so the selected one reads
+    // from its full-strength fill alone (Sam 2026-08-13: no border, the
+    // saturation difference is the highlight — same rule everywhere).
     final fill = segment.dimmed
         ? Color.alphaBlend(segment.color.withValues(alpha: 0.82), backdrop)
         : segment.color;
@@ -128,24 +129,12 @@ class SegmentedRouteChip extends StatelessWidget {
         slantTrailing: slantTrailing,
         slant: slant,
       ),
-      child: CustomPaint(
-        foregroundPainter: segment.selected
-            ? _SlantRingPainter(
-                slantLeading: slantLeading,
-                slantTrailing: slantTrailing,
-                slant: slant,
-                color: textColor,
-                strokeWidth: 1.8,
-                inset: 2.6,
-              )
-            : null,
-        child: _segmentBody(
-          segment,
-          fill: fill,
-          textColor: textColor,
-          slantLeading: slantLeading,
-          slantTrailing: slantTrailing,
-        ),
+      child: _segmentBody(
+        segment,
+        fill: fill,
+        textColor: textColor,
+        slantLeading: slantLeading,
+        slantTrailing: slantTrailing,
       ),
     );
   }
@@ -209,72 +198,6 @@ class SegmentedRouteChip extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Paints an inset outline parallel to the segment's parallelogram — the
-/// selected option's highlight (the fills all keep their route colors, so
-/// dimming can't mark the choice). Stroke color follows the same contrast
-/// policy as the segment's text.
-class _SlantRingPainter extends CustomPainter {
-  const _SlantRingPainter({
-    required this.slantLeading,
-    required this.slantTrailing,
-    required this.slant,
-    required this.color,
-    required this.strokeWidth,
-    required this.inset,
-  });
-
-  final bool slantLeading;
-  final bool slantTrailing;
-  final double slant;
-  final Color color;
-  final double strokeWidth;
-  final double inset;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final h = size.height;
-    if (h <= 0 || size.width <= 0) return;
-    final leadingSlant = slantLeading ? slant : 0.0;
-    final trailingSlant = slantTrailing ? slant : 0.0;
-    // Horizontal inset that keeps a slanted edge parallel at distance
-    // [inset]: the edge is longer than the height by sec(angle).
-    double edgeShift(double edgeSlant) =>
-        inset * math.sqrt(edgeSlant * edgeSlant + h * h) / h;
-    final dxL = edgeShift(leadingSlant);
-    final dxR = edgeShift(trailingSlant);
-    final top = inset;
-    final bottom = h - inset;
-    // Left edge runs (0,h)→(leadingSlant,0); right edge (w,0)→(w−trailingSlant,h).
-    double leftX(double y) => leadingSlant * (1 - y / h);
-    double rightX(double y) => size.width - trailingSlant * (y / h);
-
-    final path = Path()
-      ..moveTo(leftX(top) + dxL, top)
-      ..lineTo(rightX(top) - dxR, top)
-      ..lineTo(rightX(bottom) - dxR, bottom)
-      ..lineTo(leftX(bottom) + dxL, bottom)
-      ..close();
-
-    canvas.drawPath(
-      path,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeJoin = StrokeJoin.round
-        ..color = color,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_SlantRingPainter oldDelegate) =>
-      oldDelegate.slantLeading != slantLeading ||
-      oldDelegate.slantTrailing != slantTrailing ||
-      oldDelegate.slant != slant ||
-      oldDelegate.color != color ||
-      oldDelegate.strokeWidth != strokeWidth ||
-      oldDelegate.inset != inset;
 }
 
 /// Clips a segment into a parallelogram whose slanted edges run "/" —

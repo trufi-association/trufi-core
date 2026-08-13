@@ -20,8 +20,9 @@ class ItineraryCard extends StatelessWidget {
   /// The distinct routes serving each transit slot across the itinerary's
   /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
   /// than one route the chip paints one segment per option, every one in
-  /// its route color; the one this itinerary rides wears the selection
-  /// ring. The group's options are explored in the detail view.
+  /// its route color; the one this itinerary rides shows at full
+  /// strength, the rest slightly muted. The group's options are explored
+  /// in the detail view.
   final List<List<routing.Route>>? slotRoutes;
 
   const ItineraryCard({
@@ -304,7 +305,7 @@ class _LegChip extends StatelessWidget {
 
   /// Distinct routes the itinerary's group offers for this slot; when it
   /// carries more than one, the chip paints one segment per option, all
-  /// in their route colors; the ridden one wears the selection ring.
+  /// in their route colors; the ridden one shows at full strength.
   final List<routing.Route>? slotRoutes;
 
   const _LegChip({required this.leg, this.slotRoutes});
@@ -343,7 +344,7 @@ class _LegChip extends StatelessWidget {
 
     // Transit leg. With interchangeable routes in the slot (#737), every
     // option paints its own segment, meeting on a slanted "/" seam, each
-    // keeping its route color; the ridden one wears the ring.
+    // keeping its route color; the ridden one shows at full strength.
     final options = (slotRoutes != null && slotRoutes!.length > 1)
         ? slotRoutes!
         : null;
@@ -353,9 +354,9 @@ class _LegChip extends StatelessWidget {
       // vertical") — one shared chip, one segment per option in its own
       // color. Same widget the detail's switcher uses.
       // Same reading as the detail's switcher: every option keeps its
-      // color (Sam 2026-08-13) and the CHOSEN one wears the inset ring —
-      // the leg belongs to the itinerary the card wears, so its name
-      // marks the choice.
+      // color and only the CHOSEN one rides it at full strength (Sam
+      // 2026-08-13: no border) — the leg belongs to the itinerary the
+      // card wears, so its name marks the choice.
       return SegmentedRouteChip(
         dimBackdrop: Color.alphaBlend(
           Theme.of(
