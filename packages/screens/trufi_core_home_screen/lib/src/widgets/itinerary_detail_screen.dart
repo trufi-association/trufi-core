@@ -103,7 +103,7 @@ class ItineraryDetailContent extends StatelessWidget {
   }
 
   /// The group's options (#737), drawn in journey order with the app's own
-  /// visual language (pattern shared by Google Maps' "or <line>" and
+  /// visual language (pattern shared by Google Maps' "or `line`" and
   /// Transit/Citymapper's saturated badges): the slots every option has in
   /// common render once as static chips, and the slot that varies renders
   /// as full-color selectable pills — route color with the departure time
@@ -306,55 +306,55 @@ class ItineraryDetailContent extends StatelessWidget {
                 HapticFeedback.selectionClick();
                 onSelectAlternative!(option);
               },
-        child: AnimatedOpacity(
+        child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          opacity: selected ? 1.0 : 0.45,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: selected ? colorScheme.primary : Colors.transparent,
-                width: 2,
-              ),
-              boxShadow: selected
-                  ? [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.4),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : const [],
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            // Only the FILL dims on unselected pills: the text keeps
+            // full opacity — in a departures-only group the time is the
+            // whole decision, and washing it out with the fill hurt
+            // dark-theme contrast.
+            color: selected ? color : color.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: selected ? colorScheme.primary : Colors.transparent,
+              width: 2,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (name.isNotEmpty)
-                  Text(
-                    name,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.4),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
                     ),
+                  ]
+                : const [],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (name.isNotEmpty)
+                Text(
+                  name,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
                   ),
-                if (name.isNotEmpty && time != null) const SizedBox(width: 6),
-                if (time != null)
-                  Text(
-                    time,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: textColor.withValues(alpha: 0.9),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
+                ),
+              if (name.isNotEmpty && time != null) const SizedBox(width: 6),
+              if (time != null)
+                Text(
+                  time,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: textColor.withValues(alpha: 0.9),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),

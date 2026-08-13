@@ -262,19 +262,38 @@ class _TransitProfile {
   }) {
     if (slots.length != other.slots.length || slots.length < 2) return false;
 
-    final a = slots.last;
-    final b = other.slots.last;
-    if (a.transportMode != b.transportMode) return false;
+    // Same-named main buses are the MAIN pass's jurisdiction: if it kept
+    // them apart (boarding beyond tolerance = different lines/directions,
+    // a pinned product rule) the mirror pass must not sneak them back
+    // together through the shared connection.
+    final mainA = _mainBusKey(slots.first);
+    if (mainA != null && mainA == _mainBusKey(other.slots.first)) {
+      return false;
+    }
 
-    final keyA = _mainBusKey(a);
-    final keyB = _mainBusKey(b);
-    if (keyA == null || keyA != keyB) return false;
+    // Every slot after the main bus must be the same connection: same
+    // rider-facing name, alighting within tolerance (what identifies a
+    // connection is where it drops you; where you caught it belongs to
+    // the option — the main bus you rode first).
+    for (var i = 1; i < slots.length; i++) {
+      final a = slots[i];
+      final b = other.slots[i];
+      if (a.transportMode != b.transportMode) return false;
 
-    final toA = a.toPlace?.latLng;
-    final toB = b.toPlace?.latLng;
-    if (toA == null || toB == null) return true;
-    return _distance.as(LengthUnit.Meter, toA, toB) <=
-        sameRouteToleranceMeters;
+      final keyA = _mainBusKey(a);
+      final keyB = _mainBusKey(b);
+      if (keyA == null || keyA != keyB) return false;
+
+      final toA = a.toPlace?.latLng;
+      final toB = b.toPlace?.latLng;
+      if (toA != null &&
+          toB != null &&
+          _distance.as(LengthUnit.Meter, toA, toB) >
+              sameRouteToleranceMeters) {
+        return false;
+      }
+    }
+    return true;
   }
 
   static bool _mainLegMatches(

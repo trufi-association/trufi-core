@@ -337,8 +337,8 @@ class _LegChip extends StatelessWidget {
     }
 
     // Transit leg. With interchangeable routes in the slot (#737), every
-    // option paints its own segment in its OWN route color, separated by
-    // a drawn bar — never a "/" inside one flat-colored chip.
+    // option paints its own segment in its OWN route color, meeting on a
+    // slanted "/" seam.
     final options = (slotRoutes != null && slotRoutes!.length > 1)
         ? slotRoutes!
         : null;
@@ -354,7 +354,6 @@ class _LegChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final (i, route) in options.indexed) ...[
-              if (i > 0) const SizedBox(width: 2),
               ClipPath(
                 clipper: _SlantEdgeClipper(
                   slantLeading: i > 0,
@@ -524,8 +523,13 @@ class _SlantEdgeClipper extends CustomClipper<Path> {
     required this.slantTrailing,
   });
 
-  /// Horizontal run of the diagonal edge, in logical pixels.
-  static const double slant = 6;
+  /// Horizontal run of the diagonal edge, in logical pixels. Adjacent
+  /// edges run parallel, so the visible background sliver between flush
+  /// segments is exactly `slant` wide — the seam's thickness and its
+  /// steepness are coupled (a thinner seam at a steeper angle would need
+  /// a custom painter). 5 keeps a readable "/" without falling apart
+  /// into separate tags (the first cut shipped 6+2 and did).
+  static const double slant = 5;
 
   final bool slantLeading;
   final bool slantTrailing;

@@ -160,6 +160,59 @@ void main() {
       expect(groupItineraries([near, far]), hasLength(2));
     });
 
+    test('same main bus boarding too far apart stays separate — the mirror '
+        'rule must not sneak it back through the shared connection', () {
+      // Pinned product rule: same name boarding >500 m apart = different
+      // lines/directions. Both riding the same 120 afterwards changes
+      // nothing — that pair is the main pass\'s jurisdiction.
+      final o2 = _stop('stop_o2', _originFar); // ~1.3 km from o1
+      final near = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+      final far = _itinerary([
+        _bus('18', from: o2, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+
+      expect(groupItineraries([near, far]), hasLength(2));
+    });
+
+    test('the mirror rule compares where the connection DROPS you: same '
+        'name alighting far apart never merges', () {
+      final dFar = _stop('stop_dfar', _originFar); // several km from d1
+      final one = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+      final other = _itinerary([
+        _bus('8', from: o1, to: t),
+        _bus('120', from: t, to: dFar),
+      ]);
+
+      expect(groupItineraries([one, other]), hasLength(2));
+    });
+
+    test('the mirror rule ignores where the connection was CAUGHT: far '
+        'boardings with a shared drop-off still merge', () {
+      final t2 = _stop('stop_t2far', _originFar); // ~1.3 km from t
+      final one = _itinerary([
+        _bus('18', from: o1, to: t),
+        _bus('120', from: t, to: d1),
+      ]);
+      final other = _itinerary([
+        _bus('8', from: o1, to: t2),
+        _bus('120', from: t2, to: d1),
+      ]);
+
+      final groups = groupItineraries([one, other]);
+      expect(groups, hasLength(1));
+      expect(
+        groups.single.slotRoutes[0].map((r) => r.shortName),
+        ['18', '8'],
+      );
+    });
+
     test('same route alighting a few stops later still groups (wider '
         'tolerance for the same bus)', () {
       final dFar = _stop('stop_d3', _destSameRouteFar);
