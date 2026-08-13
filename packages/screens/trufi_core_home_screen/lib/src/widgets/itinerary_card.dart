@@ -19,9 +19,9 @@ class ItineraryCard extends StatelessWidget {
 
   /// The distinct routes serving each transit slot across the itinerary's
   /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
-  /// than one route the chip paints one segment per option — the one this
-  /// itinerary rides saturated in its own route color, the rest dimmed.
-  /// The group's options are explored in the detail view.
+  /// than one route the chip paints one segment per option, every one in
+  /// its route color; the one this itinerary rides wears the selection
+  /// ring. The group's options are explored in the detail view.
   final List<List<routing.Route>>? slotRoutes;
 
   const ItineraryCard({
@@ -303,8 +303,8 @@ class _LegChip extends StatelessWidget {
   final routing.Leg leg;
 
   /// Distinct routes the itinerary's group offers for this slot; when it
-  /// carries more than one, the chip paints one segment per option — the
-  /// ridden one saturated, the rest dimmed into the strip backdrop.
+  /// carries more than one, the chip paints one segment per option, all
+  /// in their route colors; the ridden one wears the selection ring.
   final List<routing.Route>? slotRoutes;
 
   const _LegChip({required this.leg, this.slotRoutes});
@@ -342,8 +342,8 @@ class _LegChip extends StatelessWidget {
     }
 
     // Transit leg. With interchangeable routes in the slot (#737), every
-    // option paints its own segment, meeting on a slanted "/" seam — the
-    // ridden one saturated, the rest dimmed.
+    // option paints its own segment, meeting on a slanted "/" seam, each
+    // keeping its route color; the ridden one wears the ring.
     final options = (slotRoutes != null && slotRoutes!.length > 1)
         ? slotRoutes!
         : null;
@@ -352,9 +352,10 @@ class _LegChip extends StatelessWidget {
       // Slanted "/" seams (Sam 2026-08-12: "la separación con /, no algo
       // vertical") — one shared chip, one segment per option in its own
       // color. Same widget the detail's switcher uses.
-      // Same reading as the detail's switcher: the CHOSEN option's segment
-      // rides saturated, the rest sit dimmed — the leg belongs to the
-      // itinerary the card wears, so its name marks the choice.
+      // Same reading as the detail's switcher: every option keeps its
+      // color (Sam 2026-08-13) and the CHOSEN one wears the inset ring —
+      // the leg belongs to the itinerary the card wears, so its name
+      // marks the choice.
       return SegmentedRouteChip(
         dimBackdrop: Color.alphaBlend(
           Theme.of(

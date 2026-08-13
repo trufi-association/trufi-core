@@ -107,9 +107,10 @@ class ItineraryDetailContent extends StatelessWidget {
   /// visual language (pattern shared by Google Maps' "or `line`" and
   /// Transit/Citymapper's saturated badges): the slots every option has in
   /// common render once as static chips, and the slot that varies renders
-  /// as full-color selectable pills — route color with the departure time
-  /// inside, a ring on the selected one, the rest dimmed. Both pill states
-  /// share size. Hidden when there is nothing to switch to or the options
+  /// as full-color selectable pills — every option keeps its route color
+  /// and the selected one wears an inset ring; the time joins a label only
+  /// as tiebreaker. Both pill states share size. Hidden when there is
+  /// nothing to switch to or the options
   /// would be indistinguishable (identical variants while clock times are
   /// pinned/hidden).
   List<Widget> _buildAlternativeSwitcher(

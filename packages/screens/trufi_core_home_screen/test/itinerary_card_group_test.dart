@@ -81,9 +81,11 @@ void main() {
           'saturated — the card wears the 106',
     );
 
-    // The dimmed fill is deterministic: the route color at 45% over the
+    // The muted fill is deterministic: the route color at 82% over the
     // strip backdrop (surfaceContainerHighest at 50% over surface) — an
     // exact oracle, so a wrong blend, backdrop or alpha fails loudly.
+    // 82%, not a wash-out: unchosen options KEEP their colors (Sam
+    // 2026-08-13); the choice is marked by the ring, not by dimming.
     final theme = Theme.of(tester.element(find.byType(ItineraryCard)));
     final backdrop = Color.alphaBlend(
       theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
@@ -92,13 +94,30 @@ void main() {
     expect(
       bgOf('120'),
       Color.alphaBlend(
-        const Color(0xFF4CAF50).withValues(alpha: 0.45),
+        const Color(0xFF4CAF50).withValues(alpha: 0.82),
         backdrop,
       ),
       reason:
-          'unchosen segments sit dimmed (blended into the strip), '
-          'same reading as the detail switcher',
+          'unchosen segments keep their route color, only slightly '
+          'muted — same reading as the detail switcher',
     );
+
+    // The ridden option is the only segment wearing the inset ring — read
+    // from the segment's OWN CustomPaint (the nearest ancestor; outer
+    // ancestors may paint their own foregrounds).
+    CustomPainter? ringOf(String name) => tester
+        .widget<CustomPaint>(
+          find
+              .ancestor(of: find.text(name), matching: find.byType(CustomPaint))
+              .first,
+        )
+        .foregroundPainter;
+    expect(
+      ringOf('106'),
+      isNotNull,
+      reason: 'the chosen segment wears the selection ring',
+    );
+    expect(ringOf('120'), isNull, reason: 'unchosen segments carry no ring');
   });
 
   testWidgets('all options render — no "+n" collapse; the row scrolls', (

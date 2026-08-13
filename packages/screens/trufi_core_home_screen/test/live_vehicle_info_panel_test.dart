@@ -34,11 +34,17 @@ void main() {
         ),
       );
 
-      expect(find.text('Route 1132'), findsOneWidget,
-          reason: 'feed prefix (1:) must be stripped for riders');
+      expect(
+        find.text('Route 1132'),
+        findsOneWidget,
+        reason: 'feed prefix (1:) must be stripped for riders',
+      );
       expect(find.text('ANH-817'), findsOneWidget);
-      expect(find.text('36 km/h'), findsOneWidget,
-          reason: '10 m/s from the GTFS-RT wire is 36 km/h');
+      expect(
+        find.text('36 km/h'),
+        findsOneWidget,
+        reason: '10 m/s from the GTFS-RT wire is 36 km/h',
+      );
       expect(find.text('Updated 45 s ago'), findsOneWidget);
       expect(find.text('LIVE'), findsOneWidget);
     });
@@ -55,8 +61,11 @@ void main() {
           ),
         ),
       );
-      expect(find.text('Updated 0 s ago'), findsOneWidget,
-          reason: 'negative ages must never render ("hace -20 s")');
+      expect(
+        find.text('Updated 0 s ago'),
+        findsOneWidget,
+        reason: 'negative ages must never render ("hace -20 s")',
+      );
     });
 
     testWidgets('minutes-old reports switch to the minutes string', (
@@ -80,8 +89,11 @@ void main() {
       );
       await tester.pumpWidget(host(LiveVehicleInfoPanel(vehicle: bare)));
 
-      expect(find.text('Live bus'), findsOneWidget,
-          reason: 'fallback title when the route is unknown');
+      expect(
+        find.text('Live bus'),
+        findsOneWidget,
+        reason: 'fallback title when the route is unknown',
+      );
       expect(find.textContaining('km/h'), findsNothing);
       expect(find.textContaining('Updated'), findsNothing);
     });
@@ -96,8 +108,9 @@ void main() {
   test('live vehicles layer starts disabled unless the deploy opts in', () {
     expect(const HomeScreenConfig().liveVehiclesInitiallyEnabled, isFalse);
     expect(
-      const HomeScreenConfig(liveVehiclesInitiallyEnabled: true)
-          .liveVehiclesInitiallyEnabled,
+      const HomeScreenConfig(
+        liveVehiclesInitiallyEnabled: true,
+      ).liveVehiclesInitiallyEnabled,
       isTrue,
     );
   });

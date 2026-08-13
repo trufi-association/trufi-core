@@ -216,8 +216,8 @@ class _HomeScreenState extends State<HomeScreen>
     // OTP's GraphQL `locale` argument is a two-letter ISO 639-1 code —
     // send `languageCode`, not the full tag ('es', never 'es-BO').
     context.read<RoutePlannerCubit>().updateLocale(
-          Localizations.localeOf(context).languageCode,
-        );
+      Localizations.localeOf(context).languageCode,
+    );
     // Listen to shared route notifier for deep links
     _setupSharedRouteListener();
     // Parse URL parameters on first load (web only)

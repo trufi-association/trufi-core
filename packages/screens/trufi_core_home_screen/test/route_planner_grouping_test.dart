@@ -456,49 +456,43 @@ void main() {
       await mixed.close();
     });
 
-    testWidgets('unselected pill text picks the higher-contrast color for '
-        'its blended fill', (tester) async {
-      // Round-8 finding: a 0.5-luminance threshold kept white text at
-      // ~2.3:1 over dark saturated fills blended into the light strip.
+    testWidgets('pill text is white-on-color whenever white stays readable, '
+        'near-black only on too-light fills', (tester) async {
+      // v6 policy (Sam 2026-08-13): the badges speak white-on-color like
+      // the map's route badges — white whenever it clears WCAG large-text
+      // AA (3:1) on the EFFECTIVE fill, black87 only under that floor.
       final cubit = await _cubitWithPlan(_rawItineraries());
       await tester.pumpWidget(host(cubit));
       await tester.pumpAndSettle();
       await tester.tap(find.text('123').first);
       await tester.pumpAndSettle();
 
-      // Option 1 (unselected). Its route color is the default-assigned
-      // E91E63 family — blended at 45% into the light strip the correct
-      // pick is near-black, not white.
+      // Option 1 (unselected): its EFFECTIVE fill is the route color
+      // slightly muted into the strip backdrop, read from the segment's
+      // own Material (already opaque).
       final text = tester.widget<Text>(
         find.descendant(of: option(1), matching: find.byType(Text)).first,
       );
-      final textLum = text.style!.color!.computeLuminance();
-      // The segment's Material (the key's nearest Material ancestor)
-      // carries the EFFECTIVE fill — production blends dimmed colors into
-      // the strip backdrop before painting, so it is already opaque.
+      final isWhite = text.style!.color == Colors.white;
       final segmentMaterial = tester.widget<Material>(
         find.ancestor(of: option(1), matching: find.byType(Material)).first,
       );
-      final fill = segmentMaterial.color!;
-      final fillLum = fill.computeLuminance();
-      double ratio(double a, double b) =>
-          (a > b ? a + 0.05 : b + 0.05) / (a > b ? b + 0.05 : a + 0.05);
-      // Candidate inks as RENDERED: white is opaque; black87 is
-      // translucent, so its effective luminance comes from blending it
-      // into the fill — same math production uses to pick.
-      final blackInkLum = Color.alphaBlend(
-        Colors.black87,
-        fill,
-      ).computeLuminance();
-      final chosen = ratio(textLum > 0.5 ? textLum : blackInkLum, fillLum);
-      final alternative = ratio(textLum > 0.5 ? blackInkLum : 1.0, fillLum);
+      final fillLum = segmentMaterial.color!.computeLuminance();
+      final whiteRatio = 1.05 / (fillLum + 0.05);
       expect(
-        chosen >= alternative,
-        isTrue,
+        isWhite,
+        whiteRatio >= 3.0,
         reason:
-            'text color must be the better-contrast choice '
-            '(chosen $chosen vs alternative $alternative)',
+            'white iff it clears 3:1 on the effective fill '
+            '(white ratio $whiteRatio, fill luminance $fillLum)',
       );
+      if (!isWhite) {
+        expect(
+          text.style!.color,
+          Colors.black87,
+          reason: 'the only fallback ink is near-black',
+        );
+      }
       await cubit.close();
     });
 

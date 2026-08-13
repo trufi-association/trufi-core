@@ -27,7 +27,9 @@ class RouteSegmentSpec {
   /// Small trailing text (a departure time acting as tiebreaker).
   final String? trailing;
 
-  /// Dimmed fill — an unselected option. The text keeps full opacity.
+  /// An unselected option: keeps its route color, only slightly muted
+  /// into the backdrop (Sam 2026-08-13: "que se mantengan los colores").
+  /// The text keeps full opacity.
   final bool dimmed;
 
   final VoidCallback? onTap;
@@ -74,17 +76,15 @@ class SegmentedRouteChip extends StatelessWidget {
   /// for the effective fill and for its text contrast.
   final Color? dimBackdrop;
 
-  /// White or near-black, whichever contrasts more (WCAG ratio) with
-  /// [fill] — luminance thresholds pick the wrong side in the 0.18–0.5
-  /// band. The dark candidate is measured as RENDERED: black87 is
-  /// translucent, so its effective ink is black87 blended into the fill
-  /// (a pure-black ratio overrates it in the ~0.18–0.20 band).
+  /// The ink for text sitting on [fill]. The app's badge language is
+  /// white-on-color (the map's route badges, Sam 2026-08-13: nothing black
+  /// on the unselected options) — so white wins whenever it clears WCAG
+  /// large-text AA (3:1), and near-black takes over only on fills too
+  /// light for white to stay readable.
   static Color bestContrastOn(Color fill) {
     final l = fill.computeLuminance();
     final whiteRatio = 1.05 / (l + 0.05);
-    final blackInk = Color.alphaBlend(Colors.black87, fill);
-    final blackRatio = (l + 0.05) / (blackInk.computeLuminance() + 0.05);
-    return whiteRatio >= blackRatio ? Colors.white : Colors.black87;
+    return whiteRatio >= 3.0 ? Colors.white : Colors.black87;
   }
 
   @override
@@ -114,8 +114,11 @@ class SegmentedRouteChip extends StatelessWidget {
     required bool slantTrailing,
     required Color backdrop,
   }) {
+    // Every segment wears its route color; unselected ones are only
+    // slightly muted (keeping their identity), and the selected one is
+    // marked by an inset ring instead of by dimming the others out.
     final fill = segment.dimmed
-        ? Color.alphaBlend(segment.color.withValues(alpha: 0.45), backdrop)
+        ? Color.alphaBlend(segment.color.withValues(alpha: 0.82), backdrop)
         : segment.color;
     final textColor = bestContrastOn(fill);
 
@@ -125,59 +128,153 @@ class SegmentedRouteChip extends StatelessWidget {
         slantTrailing: slantTrailing,
         slant: slant,
       ),
-      child: Semantics(
-        button: segment.onTap != null,
-        selected: segment.selected,
-        child: Material(
-          color: fill,
-          child: InkWell(
-            key: segment.key,
-            onTap: segment.onTap,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 8 + (slantLeading ? slant : 0),
-                right: 8 + (slantTrailing ? slant : 0),
-                top: 5,
-                bottom: 5,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (segment.icon != null) ...[
-                    Icon(segment.icon, size: 15, color: textColor),
-                    if (segment.label.isNotEmpty) const SizedBox(width: 4),
-                  ],
-                  if (segment.label.isNotEmpty)
-                    Text(
-                      segment.label,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  if (segment.trailing != null) ...[
-                    if (segment.label.isNotEmpty || segment.icon != null)
-                      const SizedBox(width: 5),
-                    Text(
-                      segment.trailing!,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: textColor.withValues(alpha: 0.92),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
+      child: CustomPaint(
+        foregroundPainter: segment.selected
+            ? _SlantRingPainter(
+                slantLeading: slantLeading,
+                slantTrailing: slantTrailing,
+                slant: slant,
+                color: textColor,
+                strokeWidth: 1.8,
+                inset: 2.6,
+              )
+            : null,
+        child: _segmentBody(
+          segment,
+          fill: fill,
+          textColor: textColor,
+          slantLeading: slantLeading,
+          slantTrailing: slantTrailing,
+        ),
+      ),
+    );
+  }
+
+  Widget _segmentBody(
+    RouteSegmentSpec segment, {
+    required Color fill,
+    required Color textColor,
+    required bool slantLeading,
+    required bool slantTrailing,
+  }) {
+    return Semantics(
+      button: segment.onTap != null,
+      selected: segment.selected,
+      child: Material(
+        color: fill,
+        child: InkWell(
+          key: segment.key,
+          onTap: segment.onTap,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 8 + (slantLeading ? slant : 0),
+              right: 8 + (slantTrailing ? slant : 0),
+              top: 5,
+              bottom: 5,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (segment.icon != null) ...[
+                  Icon(segment.icon, size: 15, color: textColor),
+                  if (segment.label.isNotEmpty) const SizedBox(width: 4),
                 ],
-              ),
+                if (segment.label.isNotEmpty)
+                  Text(
+                    segment.label,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                if (segment.trailing != null) ...[
+                  if (segment.label.isNotEmpty || segment.icon != null)
+                    const SizedBox(width: 5),
+                  Text(
+                    segment.trailing!,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: textColor.withValues(alpha: 0.92),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ),
       ),
     );
   }
+}
+
+/// Paints an inset outline parallel to the segment's parallelogram — the
+/// selected option's highlight (the fills all keep their route colors, so
+/// dimming can't mark the choice). Stroke color follows the same contrast
+/// policy as the segment's text.
+class _SlantRingPainter extends CustomPainter {
+  const _SlantRingPainter({
+    required this.slantLeading,
+    required this.slantTrailing,
+    required this.slant,
+    required this.color,
+    required this.strokeWidth,
+    required this.inset,
+  });
+
+  final bool slantLeading;
+  final bool slantTrailing;
+  final double slant;
+  final Color color;
+  final double strokeWidth;
+  final double inset;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final h = size.height;
+    if (h <= 0 || size.width <= 0) return;
+    final leadingSlant = slantLeading ? slant : 0.0;
+    final trailingSlant = slantTrailing ? slant : 0.0;
+    // Horizontal inset that keeps a slanted edge parallel at distance
+    // [inset]: the edge is longer than the height by sec(angle).
+    double edgeShift(double edgeSlant) =>
+        inset * math.sqrt(edgeSlant * edgeSlant + h * h) / h;
+    final dxL = edgeShift(leadingSlant);
+    final dxR = edgeShift(trailingSlant);
+    final top = inset;
+    final bottom = h - inset;
+    // Left edge runs (0,h)→(leadingSlant,0); right edge (w,0)→(w−trailingSlant,h).
+    double leftX(double y) => leadingSlant * (1 - y / h);
+    double rightX(double y) => size.width - trailingSlant * (y / h);
+
+    final path = Path()
+      ..moveTo(leftX(top) + dxL, top)
+      ..lineTo(rightX(top) - dxR, top)
+      ..lineTo(rightX(bottom) - dxR, bottom)
+      ..lineTo(leftX(bottom) + dxL, bottom)
+      ..close();
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeJoin = StrokeJoin.round
+        ..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_SlantRingPainter oldDelegate) =>
+      oldDelegate.slantLeading != slantLeading ||
+      oldDelegate.slantTrailing != slantTrailing ||
+      oldDelegate.slant != slant ||
+      oldDelegate.color != color ||
+      oldDelegate.strokeWidth != strokeWidth ||
+      oldDelegate.inset != inset;
 }
 
 /// Clips a segment into a parallelogram whose slanted edges run "/" —
