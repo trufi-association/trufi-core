@@ -122,10 +122,7 @@ class LiveVehicleInfoPanel extends StatelessWidget {
                 ),
               ],
             ),
-            if (details.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              ...details,
-            ],
+            if (details.isNotEmpty) ...[const SizedBox(height: 16), ...details],
           ],
         ),
       ),

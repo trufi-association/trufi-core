@@ -7,6 +7,7 @@ import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
+import 'segmented_route_chip.dart';
 
 /// Returns a darkened version of [color] if it's too light for text on white.
 Color _legibleColor(Color color) {
@@ -32,6 +33,14 @@ class ItineraryDetailContent extends StatelessWidget {
   /// Use this when the content is inside a parent scrollable.
   final bool shrinkWrap;
 
+  /// The itinerary's group members (#737), [itinerary] included. When there
+  /// is more than one, the header shows a switcher so the rider can flip
+  /// between the interchangeable options without leaving the detail.
+  final List<routing.Itinerary>? alternatives;
+
+  /// Called when the rider picks another option in the switcher.
+  final void Function(routing.Itinerary alternative)? onSelectAlternative;
+
   const ItineraryDetailContent({
     super.key,
     required this.itinerary,
@@ -39,6 +48,8 @@ class ItineraryDetailContent extends StatelessWidget {
     this.onStartNavigation,
     this.onRouteTap,
     this.shrinkWrap = false,
+    this.alternatives,
+    this.onSelectAlternative,
   });
 
   @override
@@ -53,6 +64,8 @@ class ItineraryDetailContent extends StatelessWidget {
       children: [
         // Header
         _buildHeader(context, theme, colorScheme, l10n),
+        // Interchangeable options of the itinerary's group (#737)
+        ..._buildAlternativeSwitcher(context, theme, colorScheme),
         const SizedBox(height: 8),
         // Subtle separator
         Container(
@@ -88,6 +101,235 @@ class ItineraryDetailContent extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: content,
     );
+  }
+
+  /// The group's options (#737), drawn in journey order with the app's own
+  /// visual language (pattern shared by Google Maps' "or `line`" and
+  /// Transit/Citymapper's saturated badges): the slots every option has in
+  /// common render once as static chips, and the slot that varies renders
+  /// as full-color selectable pills — every option keeps its route color,
+  /// the selected one at full strength, the rest slightly muted; the time
+  /// joins a label only as tiebreaker. Both pill states share size.
+  /// Hidden when there is nothing to switch to or the options
+  /// would be indistinguishable (identical variants while clock times are
+  /// pinned/hidden).
+  List<Widget> _buildAlternativeSwitcher(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
+    final options = alternatives;
+    if (options == null || options.length < 2 || onSelectAlternative == null) {
+      return const [];
+    }
+    final timesHidden =
+        context.watch<AppConfiguration?>()?.routingTimeOverride != null;
+
+    List<routing.Leg> transitLegs(routing.Itinerary it) =>
+        it.legs.where((leg) => leg.transitLeg).toList(growable: false);
+
+    final referenceLegs = transitLegs(options.first);
+    final slotCount = referenceLegs.length;
+
+    // The slot whose route differs between options; null when every slot
+    // matches (a departures-only group).
+    int? variantSlot;
+    for (var i = 0; i < slotCount; i++) {
+      final name = referenceLegs[i].displayName;
+      final differs = options.any(
+        (option) => transitLegs(option)[i].displayName != name,
+      );
+      if (differs) {
+        variantSlot = i;
+        break;
+      }
+    }
+
+    // Pills show the bus type and name; the departure time belongs to the
+    // header, which updates on switch (Sam 2026-08-13). The time joins the
+    // label only when names alone can't tell the options apart — a
+    // departures-only group, or two options riding a same-named variant.
+    final variantNames = [
+      for (final option in options)
+        variantSlot != null ? transitLegs(option)[variantSlot].displayName : '',
+    ];
+    final needsTime =
+        variantNames.toSet().length != variantNames.length ||
+        variantNames.any((name) => name.isEmpty);
+
+    String label(routing.Itinerary it, String name) {
+      if (!needsTime) return name;
+      if (timesHidden) return name;
+      final time = formatClockTime(context, it.startTime);
+      return name.isEmpty ? time : '$name · $time';
+    }
+
+    final labels = [
+      for (final (i, option) in options.indexed) label(option, variantNames[i]),
+    ];
+    // Indistinguishable pills would be worse than none.
+    if (labels.any((l) => l.isEmpty) ||
+        labels.toSet().length != labels.length) {
+      return const [];
+    }
+
+    final children = <Widget>[];
+    void addSeparator() {
+      children.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Icon(
+            Icons.chevron_right_rounded,
+            size: 18,
+            color: Colors.grey[400],
+          ),
+        ),
+      );
+    }
+
+    void addPills() {
+      final backdrop = Color.alphaBlend(
+        colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        colorScheme.surface,
+      );
+      children.add(
+        SegmentedRouteChip(
+          borderRadius: 10,
+          dimBackdrop: backdrop,
+          segments: [
+            for (final (index, option) in options.indexed)
+              RouteSegmentSpec(
+                key: ValueKey('itinerary-option-$index'),
+                label: variantSlot != null
+                    ? transitLegs(option)[variantSlot].displayName
+                    : '',
+                trailing: needsTime && !timesHidden
+                    ? formatClockTime(context, option.startTime)
+                    : null,
+                icon: variantSlot != null
+                    ? _modeIcon(transitLegs(option)[variantSlot].transportMode)
+                    : null,
+                color: variantSlot != null
+                    ? _routeColor(
+                        transitLegs(option)[variantSlot].routeColor,
+                        colorScheme,
+                      )
+                    : (referenceLegs.isNotEmpty
+                          ? _routeColor(
+                              referenceLegs.first.routeColor,
+                              colorScheme,
+                            )
+                          : colorScheme.primary),
+                selected: option == itinerary,
+                dimmed: option != itinerary,
+                onTap: option == itinerary
+                    ? null
+                    : () {
+                        HapticFeedback.selectionClick();
+                        onSelectAlternative!(option);
+                      },
+              ),
+          ],
+        ),
+      );
+    }
+
+    for (var i = 0; i < slotCount; i++) {
+      if (i > 0) addSeparator();
+      if (i == variantSlot) {
+        addPills();
+      } else {
+        // Stable across switches: the chip comes from the first option,
+        // not the displayed itinerary, so its color never flickers.
+        children.add(
+          _commonChip(referenceLegs[i], withIcon: i == 0, colorScheme),
+        );
+      }
+    }
+    if (variantSlot == null) {
+      // Departures-only group: the times are the options.
+      if (slotCount > 0) addSeparator();
+      addPills();
+    }
+
+    return [
+      const SizedBox(height: 8),
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        height: 46,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(children: children),
+        ),
+      ),
+    ];
+  }
+
+  /// A slot every option shares, in the card chips' language: solid route
+  /// color, rounded, bold name (icon only on the journey's first chip).
+  Widget _commonChip(
+    routing.Leg leg,
+    ColorScheme colorScheme, {
+    required bool withIcon,
+  }) {
+    final color = _routeColor(leg.routeColor, colorScheme);
+    final textColor = SegmentedRouteChip.bestContrastOn(color);
+    final name = leg.displayName;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (withIcon) ...[
+            Icon(Icons.directions_bus_rounded, size: 16, color: textColor),
+            if (name.isNotEmpty) const SizedBox(width: 4),
+          ],
+          if (name.isNotEmpty)
+            Text(
+              name,
+              maxLines: 1,
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  IconData _modeIcon(routing.TransportMode mode) {
+    switch (mode) {
+      case routing.TransportMode.rail:
+        return Icons.train_rounded;
+      case routing.TransportMode.subway:
+        return Icons.subway_rounded;
+      case routing.TransportMode.tram:
+        return Icons.tram_rounded;
+      case routing.TransportMode.ferry:
+        return Icons.directions_boat_rounded;
+      default:
+        return Icons.directions_bus_rounded;
+    }
+  }
+
+  Color _routeColor(String colorStr, ColorScheme colorScheme) {
+    // Empty guard: 'FF' alone parses to a transparent blue and would make
+    // the fallback unreachable.
+    final parsed = colorStr.isNotEmpty
+        ? int.tryParse('FF$colorStr', radix: 16)
+        : null;
+    return parsed != null ? Color(parsed) : colorScheme.primary;
   }
 
   Widget _buildHeader(
@@ -157,30 +399,43 @@ class ItineraryDetailContent extends StatelessWidget {
               // Time range — hidden when the app pins routing time to
               // a fixed value, since startTime/endTime would be
               // synthetic ("today @ 12:xx") and confuse the user.
+              // FittedBox: 12-hour locales overflow this row on ordinary
+              // phone widths — scale down instead (same as the card).
               if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
-                  null) ...[
-                Text(
-                  formatClockTime(context, itinerary.startTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  null)
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          formatClockTime(context, itinerary.startTime),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          formatClockTime(context, itinerary.endTime),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 16,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                Text(
-                  formatClockTime(context, itinerary.endTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-              const Spacer(),
+                )
+              else
+                const Spacer(),
               // Go button
               if (onStartNavigation != null)
                 FilledButton.icon(
@@ -689,9 +944,7 @@ class _LegItemState extends State<_LegItem> {
         ? leg.headsign
         : null;
 
-    final badgeTextColor = widget.lineColor.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
+    final badgeTextColor = SegmentedRouteChip.bestContrastOn(widget.lineColor);
 
     // The whole identity (badge + name + variant + chevron) is a
     // single tap target that opens the route detail screen. The

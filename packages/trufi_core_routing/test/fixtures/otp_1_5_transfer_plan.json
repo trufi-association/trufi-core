@@ -1,0 +1,1446 @@
+{
+ "plan": {
+  "date": 1786562761000,
+  "from": {
+   "name": "Origin",
+   "lon": -66.14,
+   "lat": -17.465,
+   "orig": "",
+   "vertexType": "NORMAL"
+  },
+  "to": {
+   "name": "Destination",
+   "lon": -66.19,
+   "lat": -17.355,
+   "orig": "",
+   "vertexType": "NORMAL"
+  },
+  "itineraries": [
+   {
+    "duration": 2931,
+    "startTime": 1786562875000,
+    "endTime": 1786565806000,
+    "walkTime": 1306,
+    "transitTime": 1615,
+    "waitingTime": 10,
+    "walkDistance": 1730.02128405253,
+    "walkLimitExceeded": false,
+    "elevationLost": 0.0,
+    "elevationGained": 0.0,
+    "transfers": 1,
+    "fare": {
+     "fare": {
+      "regular": {
+       "currency": {
+        "symbol": "$",
+        "currency": "USD",
+        "defaultFractionDigits": 2,
+        "currencyCode": "USD"
+       },
+       "cents": 0
+      }
+     },
+     "details": {
+      "regular": [
+       {
+        "fareId": "cochabamba:278",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:47"
+        ]
+       },
+       {
+        "fareId": "cochabamba:16",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:11"
+        ]
+       }
+      ]
+     }
+    },
+    "legs": [
+     {
+      "startTime": 1786562875000,
+      "endTime": 1786564027000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 1528.8088342524343,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Origin",
+       "lon": -66.14,
+       "lat": -17.465,
+       "departure": 1786562875000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "to": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xiriBnetrK{_@grA",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1152.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 1528.8088342524343,
+        "relativeDirection": "DEPART",
+        "streetName": "Innominada => Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+        "absoluteDirection": "EAST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.13607560000001,
+        "lat": -17.466047800000002,
+        "elevation": []
+       }
+      ]
+     },
+     {
+      "startTime": 1786564027000,
+      "endTime": 1786565235000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 11520.585359521987,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "123",
+      "agencyName": "Sindicato mixto de transportistas 21 de julio",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:47",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Calle Wawaki",
+      "agencyId": "11",
+      "tripId": "cochabamba:9431000",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565245000,
+       "stopIndex": 36,
+       "stopSequence": 36,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "|hqiBfrqrK{@p@q@`@w@`@eAf@g@Tw@`@[NGBWLKDu@\\IDSJo@V{JxEuAt@q@b@_@V_@TuBbB}BhBuDzCs@b@qAz@GFSPo@h@_@Zo@h@EDw@t@s@p@g@f@SRkCfCIJe@f@g@j@c@j@}ApBmAbBqAtBQXaAfB]l@KXKRUZIJSVKNKRKXKV_@`AWr@k@tAuBpEa@z@Sb@{CvGuBrE[j@o@fAq@|@GFe@h@aFpFILOHIFGBYPIDIHWVKL[d@k@`AOPMNQNIFw@l@s@`@aAf@EByAn@eCjAGBqAn@]N[LOFSFWJIDKDSHo@f@s@j@s@f@yCpBmD`Ce@Z}BzAiAv@uA|@iBpAuA~@g@Z}AdAoA|@u@b@g@ZOHa@RIBkAf@[Ls@Pc@JMDIDa@N_@RYPOJMLONeBnBoApAs@n@s@j@m@\\gAd@_AX{@RyB\\gAPmAFE?yA@yAAiAE_@AAA_AImAMYCmBWKC[I]QQKMIQSACAACCEEGACAG?E?E@C@C@CBW?O@YAk@I]My@YmAe@ECo@W}@_@o@Y_CiAi@Um@UUGOCKAM?SAG?Y?c@BW@UDGAE@GBEBEDADCFGRINMLOJyEjDe@\\a@Ra@P[Je@Pa@Jo@LYDm@Ji@@kBAoKKkCAg@EsACyHGsCEaBA}DEcDEsAAK?oFEK?cA?OBI?W@O?MAM?O@O?M?O?K?KCoDEkCEcDC_DEU?]?O?K?w@JgALsEh@sEf@iEb@G@I@kALI@gBPE@I@}Dd@G@E?mD`@I@Q@K@_Ed@I@aEd@E?C@I?uDd@QBM@uD`@OBHz@KH_@XmD|BOJYRgGbEQLEBEBSNk@^y@h@}AbAIFIFu@f@_@V_C~AKFMFW@Y?M?KDMHKPIRGNGJKJMHKBE@gARE@M?K?IAOCIEECEAKAK?IBIFCFEHABGFKDMDoJhBeATKBWDOBe@JeCf@yB`@QBE@E@{AZ_BZSDaARyIbB{AX_@HMBSD",
+       "length": 354
+      },
+      "routeShortName": "123",
+      "routeLongName": "Trufi 123: Mineros San Juan \u2192 Calle Wawaki",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1208.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565245000,
+      "endTime": 1786565652000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 3810.024555141367,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "106",
+      "agencyName": "L\u00ednea 106",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:11",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Plaza Principal El Paso",
+      "agencyId": "6",
+      "tripId": "cochabamba:6714096",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565245000,
+       "stopIndex": 19,
+       "stopSequence": 19,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:1849462902",
+       "lon": -66.1886175,
+       "lat": -17.353737300000002,
+       "arrival": 1786565652000,
+       "departure": 1786565652000,
+       "stopIndex": 30,
+       "stopSequence": 30,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "z``iBhkyrKMBC@u@NSDiATC@WDcEv@SDwAXUD}Dv@M@M?IAKCICQ?Q@QDMFKHEHCJ?FETKRMNCDcCtDgBlC]j@CBc@r@OTS\\_@r@EJINi@dAIVCHEJERALAP?N?DDdABfA?@@TD`@F\\Px@DJH`@D\\B\\@^?TAXEZEXQdAI\\AHG\\ARAd@A@?h@ALQrG?NCr@MpFCNEPIb@s@dD[~ACLEVENiAvFQz@ELAHGTAFCLIZITKRc@`AS^Wd@o@z@kA~Ac@h@a@d@]^k@f@g@^MHKHe@Vk@\\mAn@SJUJcFlBoCbAQH_@TSNOLoEnCYRy@d@wAx@]VMLSXWZuApBABeAzAuAnBiAzA{@lAEFORIJGJGHqAfBq@|@",
+       "length": 140
+      },
+      "routeShortName": "106",
+      "routeLongName": "Trufi 106: Ayacucho \u2192 Plaza Principal El Paso",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 407.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565652000,
+      "endTime": 1786565806000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 201.2124498000958,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:1849462902",
+       "lon": -66.1886175,
+       "lat": -17.353737300000002,
+       "arrival": 1786565652000,
+       "departure": 1786565652000,
+       "stopIndex": 30,
+       "stopSequence": 30,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Destination",
+       "lon": -66.19,
+       "lat": -17.355,
+       "arrival": 1786565806000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "legGeometry": {
+       "points": "zk|hBzm~rK|D`I",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 154.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 201.2124498000958,
+        "relativeDirection": "DEPART",
+        "streetName": "Avenida Sim\u00f3n L\u00f3pez => Calle Hugo Almaraz",
+        "absoluteDirection": "SOUTHWEST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.1886175,
+        "lat": -17.353737300000002,
+        "elevation": []
+       }
+      ]
+     }
+    ],
+    "tooSloped": false
+   },
+   {
+    "duration": 2989,
+    "startTime": 1786562875000,
+    "endTime": 1786565864000,
+    "walkTime": 1355,
+    "transitTime": 1603,
+    "waitingTime": 31,
+    "walkDistance": 1795.261025291527,
+    "walkLimitExceeded": false,
+    "elevationLost": 0.0,
+    "elevationGained": 0.0,
+    "transfers": 1,
+    "fare": {
+     "fare": {
+      "regular": {
+       "currency": {
+        "symbol": "$",
+        "currency": "USD",
+        "defaultFractionDigits": 2,
+        "currencyCode": "USD"
+       },
+       "cents": 0
+      }
+     },
+     "details": {
+      "regular": [
+       {
+        "fareId": "cochabamba:278",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:47"
+        ]
+       },
+       {
+        "fareId": "cochabamba:170",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:107"
+        ]
+       }
+      ]
+     }
+    },
+    "legs": [
+     {
+      "startTime": 1786562875000,
+      "endTime": 1786564027000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 1528.8088342524343,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Origin",
+       "lon": -66.14,
+       "lat": -17.465,
+       "departure": 1786562875000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "to": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xiriBnetrK{_@grA",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1152.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 1528.8088342524343,
+        "relativeDirection": "DEPART",
+        "streetName": "Innominada => Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+        "absoluteDirection": "EAST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.13607560000001,
+        "lat": -17.466047800000002,
+        "elevation": []
+       }
+      ]
+     },
+     {
+      "startTime": 1786564027000,
+      "endTime": 1786565235000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 11520.585359521987,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "123",
+      "agencyName": "Sindicato mixto de transportistas 21 de julio",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:47",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Tirani",
+      "agencyId": "11",
+      "tripId": "cochabamba:16806919",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565266000,
+       "stopIndex": 36,
+       "stopSequence": 36,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "|hqiBfrqrK{@p@q@`@w@`@eAf@g@Tw@`@[NGBWLKDu@\\IDSJo@V{JxEuAt@q@b@_@V_@TuBbB}BhBuDzCs@b@qAz@GFSPo@h@_@Zo@h@EDw@t@s@p@g@f@SRkCfCIJe@f@g@j@c@j@}ApBmAbBqAtBQXaAfB]l@KXKRUZIJSVKNKRKXKV_@`AWr@k@tAuBpEa@z@Sb@{CvGuBrE[j@o@fAq@|@GFe@h@aFpFILOHIFGBYPIDIHWVKL[d@k@`AOPMNQNIFw@l@s@`@aAf@EByAn@eCjAGBqAn@]N[LOFSFWJIDKDSHo@f@s@j@s@f@yCpBmD`Ce@Z}BzAiAv@uA|@iBpAuA~@g@Z}AdAoA|@u@b@g@ZOHa@RIBkAf@[Ls@Pc@JMDIDa@N_@RYPOJMLONeBnBoApAs@n@s@j@m@\\gAd@_AX{@RyB\\gAPmAFE?yA@yAAiAE_@AAA_AImAMYCmBWKC[I]QQKMIQSACAACCEEGACAG?E?E@C@C@CBW?O@YAk@I]My@YmAe@ECo@W}@_@o@Y_CiAi@Um@UUGOCKAM?SAG?Y?c@BW@UDGAE@GBEBEDADCFGRINMLOJyEjDe@\\a@Ra@P[Je@Pa@Jo@LYDm@Ji@@kBAoKKkCAg@EsACyHGsCEaBA}DEcDEsAAK?oFEK?cA?OBI?W@O?MAM?O@O?M?O?K?KCoDEkCEcDC_DEU?]?O?K?w@JgALsEh@sEf@iEb@G@I@kALI@gBPE@I@}Dd@G@E?mD`@I@Q@K@_Ed@I@aEd@E?C@I?uDd@QBM@uD`@OBHz@KH_@XmD|BOJYRgGbEQLEBEBSNk@^y@h@}AbAIFIFu@f@_@V_C~AKFMFW@Y?M?KDMHKPIRGNGJKJMHKBE@gARE@M?K?IAOCIEECEAKAK?IBIFCFEHABGFKDMDoJhBeATKBWDOBe@JeCf@yB`@QBE@E@{AZ_BZSDaARyIbB{AX_@HMBSD",
+       "length": 354
+      },
+      "routeShortName": "123",
+      "routeLongName": "Trufi 123: Mineros San Juan \u2192 Calle Wawaki",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1208.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565266000,
+      "endTime": 1786565661000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 3688.4151886416994,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "106",
+      "agencyName": "Asociaci\u00f3n de transporte integrado de servicio p\u00fablico Apote",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:107",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Calle Pablo Jaimes",
+      "agencyId": "50",
+      "tripId": "cochabamba:11096956",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565266000,
+       "stopIndex": 17,
+       "stopSequence": 17,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:11707600541",
+       "lon": -66.18773370000001,
+       "lat": -17.3544333,
+       "arrival": 1786565661000,
+       "departure": 1786565661000,
+       "stopIndex": 28,
+       "stopSequence": 28,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "z``iBhkyrKMBC@u@NSDiATC@WDcEv@SDwAXUD}Dv@M@M?IAKCICQ?Q@QDMFKHEHCJ?FETKRMNCDcCtDgBlC]j@CBc@r@OTS\\_@r@EJINi@dAIVCHEJERALAP?N?DDdABfA?@@TD`@F\\Px@DJH`@D\\B\\@^?TAXEZEXQdAI\\AHG\\ARAd@A@?h@ALQrG?NCr@MpFCNEPIb@s@dD[~ACLEVENiAvFQz@ELAHGTAFCLIZITKRc@`AS^Wd@o@z@kA~Ac@h@a@d@]^k@f@g@^MHKHe@Vk@\\mAn@SJUJcFlBoCbAQH_@TSNOLoEnCYRy@d@wAx@]VMLSXWZuApBABeAzAuAnBiAzA{@lAEFORIJGJ",
+       "length": 137
+      },
+      "routeShortName": "106",
+      "routeLongName": "Trufi 106: Avenida Circuito Bolivia \u2192 Calle Pablo Jaimes",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 395.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565661000,
+      "endTime": 1786565864000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 266.45219103909255,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:11707600541",
+       "lon": -66.18773370000001,
+       "lat": -17.3544333,
+       "arrival": 1786565661000,
+       "departure": 1786565661000,
+       "stopIndex": 28,
+       "stopSequence": 28,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Destination",
+       "lon": -66.19,
+       "lat": -17.355,
+       "arrival": 1786565864000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "legGeometry": {
+       "points": "fp|hBjh~rKp@pN",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 203.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 266.45219103909255,
+        "relativeDirection": "DEPART",
+        "streetName": "Avenida Sim\u00f3n L\u00f3pez => Calle Hugo Almaraz",
+        "absoluteDirection": "WEST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.18773370000001,
+        "lat": -17.3544333,
+        "elevation": []
+       }
+      ]
+     }
+    ],
+    "tooSloped": false
+   },
+   {
+    "duration": 3025,
+    "startTime": 1786562875000,
+    "endTime": 1786565900000,
+    "walkTime": 1310,
+    "transitTime": 1630,
+    "waitingTime": 85,
+    "walkDistance": 1736.0004216501325,
+    "walkLimitExceeded": false,
+    "elevationLost": 0.0,
+    "elevationGained": 0.0,
+    "transfers": 1,
+    "fare": {
+     "fare": {
+      "regular": {
+       "currency": {
+        "symbol": "$",
+        "currency": "USD",
+        "defaultFractionDigits": 2,
+        "currencyCode": "USD"
+       },
+       "cents": 0
+      }
+     },
+     "details": {
+      "regular": [
+       {
+        "fareId": "cochabamba:278",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:47"
+        ]
+       },
+       {
+        "fareId": "cochabamba:272",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:89"
+        ]
+       }
+      ]
+     }
+    },
+    "legs": [
+     {
+      "startTime": 1786562875000,
+      "endTime": 1786564027000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 1528.8088342524343,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Origin",
+       "lon": -66.14,
+       "lat": -17.465,
+       "departure": 1786562875000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "to": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xiriBnetrK{_@grA",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1152.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 1528.8088342524343,
+        "relativeDirection": "DEPART",
+        "streetName": "Innominada => Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+        "absoluteDirection": "EAST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.13607560000001,
+        "lat": -17.466047800000002,
+        "elevation": []
+       }
+      ]
+     },
+     {
+      "startTime": 1786564027000,
+      "endTime": 1786565235000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 11520.585359521987,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "123",
+      "agencyName": "Sindicato mixto de transportistas 21 de julio",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:47",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Ticti Norte",
+      "agencyId": "11",
+      "tripId": "cochabamba:16806920",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:6326519624",
+       "lon": -66.1227595,
+       "lat": -17.4607864,
+       "arrival": 1786564027000,
+       "departure": 1786564027000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565320000,
+       "stopIndex": 36,
+       "stopSequence": 36,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "|hqiBfrqrK{@p@q@`@w@`@eAf@g@Tw@`@[NGBWLKDu@\\IDSJo@V{JxEuAt@q@b@_@V_@TuBbB}BhBuDzCs@b@qAz@GFSPo@h@_@Zo@h@EDw@t@s@p@g@f@SRkCfCIJe@f@g@j@c@j@}ApBmAbBqAtBQXaAfB]l@KXKRUZIJSVKNKRKXKV_@`AWr@k@tAuBpEa@z@Sb@{CvGuBrE[j@o@fAq@|@GFe@h@aFpFILOHIFGBYPIDIHWVKL[d@k@`AOPMNQNIFw@l@s@`@aAf@EByAn@eCjAGBqAn@]N[LOFSFWJIDKDSHo@f@s@j@s@f@yCpBmD`Ce@Z}BzAiAv@uA|@iBpAuA~@g@Z}AdAoA|@u@b@g@ZOHa@RIBkAf@[Ls@Pc@JMDIDa@N_@RYPOJMLONeBnBoApAs@n@s@j@m@\\gAd@_AX{@RyB\\gAPmAFE?yA@yAAiAE_@AAA_AImAMYCmBWKC[I]QQKMIQSACAACCEEGACAG?E?E@C@C@CBW?O@YAk@I]My@YmAe@ECo@W}@_@o@Y_CiAi@Um@UUGOCKAM?SAG?Y?c@BW@UDGAE@GBEBEDADCFGRINMLOJyEjDe@\\a@Ra@P[Je@Pa@Jo@LYDm@Ji@@kBAoKKkCAg@EsACyHGsCEaBA}DEcDEsAAK?oFEK?cA?OBI?W@O?MAM?O@O?M?O?K?KCoDEkCEcDC_DEU?]?O?K?w@JgALsEh@sEf@iEb@G@I@kALI@gBPE@I@}Dd@G@E?mD`@I@Q@K@_Ed@I@aEd@E?C@I?uDd@QBM@uD`@OBHz@KH_@XmD|BOJYRgGbEQLEBEBSNk@^y@h@}AbAIFIFu@f@_@V_C~AKFMFW@Y?M?KDMHKPIRGNGJKJMHKBE@gARE@M?K?IAOCIEECEAKAK?IBIFCFEHABGFKDMDoJhBeATKBWDOBe@JeCf@yB`@QBE@E@{AZ_BZSDaARyIbB{AX_@HMBSD",
+       "length": 354
+      },
+      "routeShortName": "123",
+      "routeLongName": "Trufi 123: Mineros San Juan \u2192 Calle Wawaki",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1208.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565320000,
+      "endTime": 1786565742000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 3958.29247212936,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "120",
+      "agencyName": "Sindicato mixto de transportistas Tiquipaya",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:89",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Molinos",
+      "agencyId": "44",
+      "tripId": "cochabamba:16804729",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Avenida Am\u00e9rica y Avenida Libertador Sim\u00f3n Bol\u00edvar",
+       "stopId": "cochabamba:391739983",
+       "lon": -66.1626071,
+       "lat": -17.3724567,
+       "arrival": 1786565235000,
+       "departure": 1786565320000,
+       "stopIndex": 17,
+       "stopSequence": 17,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:3283363691",
+       "lon": -66.1897009,
+       "lat": -17.352895500000002,
+       "arrival": 1786565742000,
+       "departure": 1786565742000,
+       "stopIndex": 28,
+       "stopSequence": 28,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "z``iBhkyrKMBC@u@NSDiATC@WDcEv@SDwAXUD}Dv@M@M?IAKCICQ?Q@QDMFKHEHCJ?FETKRMNCDcCtDgBlC]j@CBc@r@OTS\\_@r@EJINi@dAIVCHEJERALAP?N?DDdABfA?@@TD`@F\\Px@DJH`@D\\B\\@^?TAXEZEXQdAI\\AHG\\ARAd@A@?h@ALQrG?NCr@MpFCNEPIb@s@dD[~ACLEVENiAvFQz@ELAHGTAFCLIZITKRc@`AS^Wd@o@z@kA~Ac@h@a@d@]^k@f@g@^MHKHe@Vk@\\mAn@SJUJcFlBoCbAQH_@TSNOLoEnCYRy@d@wAx@]VMLSXWZuApBABeAzAuAnBiAzA{@lAEFORIJGJGHqAfBq@|@W^KNcChD",
+       "length": 143
+      },
+      "routeShortName": "120",
+      "routeLongName": "Trufi 120: Univalle \u2192 Cerro San Miguel",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 422.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565742000,
+      "endTime": 1786565900000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 207.19158739769816,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:3283363691",
+       "lon": -66.1897009,
+       "lat": -17.352895500000002,
+       "arrival": 1786565742000,
+       "departure": 1786565742000,
+       "stopIndex": 28,
+       "stopSequence": 28,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Destination",
+       "lon": -66.19,
+       "lat": -17.355,
+       "arrival": 1786565900000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "legGeometry": {
+       "points": "rf|hBtt~rKdJfB",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 158.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 207.19158739769816,
+        "relativeDirection": "DEPART",
+        "streetName": "Avenida Sim\u00f3n L\u00f3pez => Calle Hugo Almaraz",
+        "absoluteDirection": "SOUTH",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.1897009,
+        "lat": -17.352895500000002,
+        "elevation": []
+       }
+      ]
+     }
+    ],
+    "tooSloped": false
+   },
+   {
+    "duration": 3163,
+    "startTime": 1786563038000,
+    "endTime": 1786566201000,
+    "walkTime": 1305,
+    "transitTime": 1736,
+    "waitingTime": 122,
+    "walkDistance": 1728.489854372829,
+    "walkLimitExceeded": false,
+    "elevationLost": 0.0,
+    "elevationGained": 0.0,
+    "transfers": 1,
+    "fare": {
+     "fare": {
+      "regular": {
+       "currency": {
+        "symbol": "$",
+        "currency": "USD",
+        "defaultFractionDigits": 2,
+        "currencyCode": "USD"
+       },
+       "cents": 0
+      }
+     },
+     "details": {
+      "regular": [
+       {
+        "fareId": "cochabamba:159",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:101"
+        ]
+       },
+       {
+        "fareId": "cochabamba:272",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:89"
+        ]
+       }
+      ]
+     }
+    },
+    "legs": [
+     {
+      "startTime": 1786563038000,
+      "endTime": 1786564176000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 1509.7750531452366,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Origin",
+       "lon": -66.14,
+       "lat": -17.465,
+       "departure": 1786563038000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "to": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:3534069519",
+       "lon": -66.12366,
+       "lat": -17.459407900000002,
+       "arrival": 1786564176000,
+       "departure": 1786564176000,
+       "stopIndex": 4,
+       "stopSequence": 4,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xiriBnetrKoh@slA",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1138.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 1509.7750531452366,
+        "relativeDirection": "DEPART",
+        "streetName": "Innominada => Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+        "absoluteDirection": "NORTHEAST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.13607560000001,
+        "lat": -17.466047800000002,
+        "elevation": []
+       }
+      ]
+     },
+     {
+      "startTime": 1786564176000,
+      "endTime": 1786565010000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 7935.178215963702,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "18",
+      "agencyName": "Sindicato mixto de transporte Santa Veracruz",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:101",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Avenida Benjo Cruz",
+      "agencyId": "34",
+      "tripId": "cochabamba:10744108",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:3534069519",
+       "lon": -66.12366,
+       "lat": -17.459407900000002,
+       "arrival": 1786564176000,
+       "departure": 1786564176000,
+       "stopIndex": 4,
+       "stopSequence": 4,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Rep\u00fablica y Calle Mariano Antezana",
+       "stopId": "cochabamba:2768898991",
+       "lon": -66.1508146,
+       "lat": -17.400286400000002,
+       "arrival": 1786565010000,
+       "departure": 1786565132000,
+       "stopIndex": 18,
+       "stopSequence": 18,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "h`qiBzwqrKw@`@[NGBWLKDu@\\IDSJo@V{JxEuAt@q@b@_@V_@TuBbB}BhBuDzCs@b@qAz@GFSPo@h@_@Zo@h@EDw@t@s@p@g@f@SRkCfCIJe@f@g@j@c@j@}ApBmAbBqAtBQXaAfB]l@KXKRUZIJSVKNKRKXKV_@`AWr@k@tAuBpEa@z@Sb@{CvGuBrE[j@o@fAq@|@GFe@h@aFpFILOHIFGBYPIDIHWVKL[d@k@`AOPMNQNIFw@l@s@`@aAf@EByAn@eCjAGBqAn@]N[LOFSFWJIDKDSHo@f@s@j@s@f@yCpBmD`Ce@Z}BzAiAv@uA|@iBpAuA~@g@Z}AdAoA|@u@b@g@ZOHa@RIBkAf@[Ls@Pc@JMDIDa@N_@RYPOJMLONeBnBoApAs@n@s@j@m@\\gAd@_AX{@RyB\\gAPmAFE?yA@yAAiAE_@AAA_AImAMYCmBWKC[I]QQKMIQSACAACCEEGACAG?E?E@C@C@CBW?O@YAk@I]My@YmAe@ECo@W}@_@o@Y_CiAi@Um@UUGOCKAM?SAG?Y?c@BW@UDGAE@a@?{@CyDSQAmH_@[C{BOoBM_AG}AEcBGwKk@uBCeAE}CCqOJA?A?C?A?A@{@Jq@Hu@Da@ByAC_@?sCEe@?[A[Da@JSFeA`@GB[D]?]AUEWGUIOGSMSMUU",
+       "length": 236
+      },
+      "routeShortName": "18",
+      "routeLongName": "MiniBus 18: Avenida Uncia \u2192 Avenida Benjo Cruz",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 834.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565132000,
+      "endTime": 1786566034000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 8374.229101519632,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "120",
+      "agencyName": "Sindicato mixto de transportistas Tiquipaya",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:89",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Apote",
+      "agencyId": "44",
+      "tripId": "cochabamba:11148108",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Avenida Rep\u00fablica y Calle Mariano Antezana",
+       "stopId": "cochabamba:2768898991",
+       "lon": -66.1508146,
+       "lat": -17.400286400000002,
+       "arrival": 1786565010000,
+       "departure": 1786565132000,
+       "stopIndex": 1,
+       "stopSequence": 1,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:2317755762",
+       "lon": -66.18830410000001,
+       "lat": -17.353989000000002,
+       "arrival": 1786566034000,
+       "departure": 1786566034000,
+       "stopIndex": 22,
+       "stopSequence": 22,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xneiBrawrKOSOWIQGWGUAQCU?m@AeBCcBAiBIQiBTa@De@FiBRQBK@_D^I@KBeALa@D}@JSBy@JI@cALwBVK@KBy@HcALy@HI?O?uDd@I@M@uDd@I@K@{ANqANKBQ@M@yBVwAPK@QJi@FuBVMBO@gBV{ALIBe@D]DKBiC\\K@I@sDd@Q@w@JM@E@i@FqDb@E?KBO@oDb@SBYBCKCMEKGMKKKKMGMESCQAS@QBOFMFKJILGJABERALAF@N@PBLFRJPLNNJB@LFL@N@J?N?NEFVb@bBRz@@FBHBHdAlEBFBJ@HRz@j@~BBJyB|ACBa@XkAz@K@aAp@G@IBK?O@sC\\OBiALOBQ?K?S?]?WB{CCyDCO??JGpBAREpBCx@ADErBAPAN?JKpCAZ?D@H@LTlADVOBe@JeCf@yB`@QBE@E@{AZ_BZSDaARyIbB{AX_@HMBSDMBC@u@NSDiATC@WDcEv@SDwAXUD}Dv@M@M?IAKCICQ?Q@QDMFKHEHCJ?FETKRMNCDcCtDgBlC]j@CBc@r@OTS\\_@r@EJINi@dAIVCHEJERALAP?N?DDdABfA?@@TD`@F\\Px@DJH`@D\\B\\@^?TAXEZEXQdAI\\AHG\\ARAd@A@?h@ALQrG?NCr@MpFCNEPIb@s@dD[~ACLEVENiAvFQz@ELAHGTAFCLIZITKRc@`AS^Wd@o@z@kA~Ac@h@a@d@]^k@f@g@^MHKHe@Vk@\\mAn@SJUJcFlBoCbAQH_@TSNOLoEnCYRy@d@wAx@]VMLSXWZuApBABeAzAuAnBiAzA{@lAEFORIJGJGHqAfB",
+       "length": 319
+      },
+      "routeShortName": "120",
+      "routeLongName": "Trufi 120: Univalle \u2192 Cerro San Miguel",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 902.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786566034000,
+      "endTime": 1786566201000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 218.7148012275926,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:2317755762",
+       "lon": -66.18830410000001,
+       "lat": -17.353989000000002,
+       "arrival": 1786566034000,
+       "departure": 1786566034000,
+       "stopIndex": 22,
+       "stopSequence": 22,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Destination",
+       "lon": -66.19,
+       "lat": -17.355,
+       "arrival": 1786566201000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "legGeometry": {
+       "points": "lm|hB|k~rKjC~J",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 167.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 218.7148012275926,
+        "relativeDirection": "DEPART",
+        "streetName": "Avenida Sim\u00f3n L\u00f3pez => Calle Hugo Almaraz",
+        "absoluteDirection": "WEST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.18830410000001,
+        "lat": -17.353989000000002,
+        "elevation": []
+       }
+      ]
+     }
+    ],
+    "tooSloped": false
+   },
+   {
+    "duration": 3306,
+    "startTime": 1786562895000,
+    "endTime": 1786566201000,
+    "walkTime": 1353,
+    "transitTime": 1768,
+    "waitingTime": 185,
+    "walkDistance": 1792.6593225072838,
+    "walkLimitExceeded": false,
+    "elevationLost": 0.0,
+    "elevationGained": 0.0,
+    "transfers": 1,
+    "fare": {
+     "fare": {
+      "regular": {
+       "currency": {
+        "symbol": "$",
+        "currency": "USD",
+        "defaultFractionDigits": 2,
+        "currencyCode": "USD"
+       },
+       "cents": 0
+      }
+     },
+     "details": {
+      "regular": [
+       {
+        "fareId": "cochabamba:104",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:71"
+        ]
+       },
+       {
+        "fareId": "cochabamba:272",
+        "price": {
+         "currency": {
+          "symbol": "$",
+          "currency": "USD",
+          "defaultFractionDigits": 2,
+          "currencyCode": "USD"
+         },
+         "cents": 0
+        },
+        "routes": [
+         "cochabamba:89"
+        ]
+       }
+      ]
+     }
+    },
+    "legs": [
+     {
+      "startTime": 1786562895000,
+      "endTime": 1786564081000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 1573.9445212796913,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Origin",
+       "lon": -66.14,
+       "lat": -17.465,
+       "departure": 1786562895000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "to": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:10008015629",
+       "lon": -66.1219791,
+       "lat": -17.461627,
+       "arrival": 1786564081000,
+       "departure": 1786564081000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xiriBnetrKsZcwA",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 1186.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 1573.9445212796913,
+        "relativeDirection": "DEPART",
+        "streetName": "Innominada => Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+        "absoluteDirection": "EAST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.13607560000001,
+        "lat": -17.466047800000002,
+        "elevation": []
+       }
+      ]
+     },
+     {
+      "startTime": 1786564081000,
+      "endTime": 1786564947000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 8240.975828525567,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "8",
+      "agencyName": "Sindicato mixto de transporte p\u00fablico 6 de mayo",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:71",
+      "interlineWithPreviousLeg": false,
+      "headsign": "El Abra",
+      "agencyId": "8",
+      "tripId": "cochabamba:10688684",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Doble V\u00eda Avenida Petrolera - Angostura - Paracaya",
+       "stopId": "cochabamba:10008015629",
+       "lon": -66.1219791,
+       "lat": -17.461627,
+       "arrival": 1786564081000,
+       "departure": 1786564081000,
+       "stopIndex": 7,
+       "stopSequence": 7,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Rep\u00fablica y Calle Mariano Antezana",
+       "stopId": "cochabamba:2768898991",
+       "lon": -66.1508146,
+       "lat": -17.400286400000002,
+       "arrival": 1786564947000,
+       "departure": 1786565132000,
+       "stopIndex": 19,
+       "stopSequence": 19,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "dnqiBjmqrK]\\oAfAKJm@h@{@p@q@`@w@`@eAf@g@Tw@`@[NGBWLKDu@\\IDSJo@V{JxEuAt@q@b@_@V_@TuBbB}BhBuDzCs@b@qAz@GFSPo@h@_@Zo@h@EDw@t@s@p@g@f@SRkCfCIJe@f@g@j@c@j@}ApBmAbBqAtBQXaAfB]l@KXKRUZIJSVKNKRKXKV_@`AWr@k@tAuBpEa@z@Sb@{CvGuBrE[j@o@fAq@|@GFe@h@aFpFILOHIFGBYPIDIHWVKL[d@k@`AOPMNQNIFw@l@s@`@aAf@EByAn@eCjAGBqAn@]N[LOFSFWJIDKDSHo@f@s@j@s@f@yCpBmD`Ce@Z}BzAiAv@uA|@iBpAuA~@g@Z}AdAoA|@u@b@g@ZOHa@RIBkAf@[Ls@Pc@JMDIDa@N_@RYPOJMLONeBnBoApAs@n@s@j@m@\\gAd@_AX{@RyB\\gAPmAFE?yA@yAAiAE_@AAA_AImAMYCmBWKC[I]QQKMIQSACAACCEEGACAG?E?E@C@C@CBW?O@YAk@I]My@YmAe@ECo@W}@_@o@Y_CiAi@Um@UUGOCKAM?SAG?Y?c@BW@UDGAE@a@?{@CyDSQAmH_@[C{BOoBM_AG}AEcBGwKk@uBCeAE}CCqOJA?A?C?A?A@{@Jq@Hu@Da@ByAC_@?sCEe@?[A[Da@JSFeA`@GB[D]?]AUEWGUIOGSMSMUU",
+       "length": 245
+      },
+      "routeShortName": "8",
+      "routeLongName": "MiniBus 8: El Abra \u2192 Lomas de Santa B\u00e1rbara",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 866.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786565132000,
+      "endTime": 1786566034000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 8374.229101519632,
+      "pathway": false,
+      "mode": "BUS",
+      "route": "120",
+      "agencyName": "Sindicato mixto de transportistas Tiquipaya",
+      "agencyUrl": "https://www.cochabamba.bo/",
+      "agencyTimeZoneOffset": -14400000,
+      "routeType": 3,
+      "routeId": "cochabamba:89",
+      "interlineWithPreviousLeg": false,
+      "headsign": "Salomon Romero",
+      "agencyId": "44",
+      "tripId": "cochabamba:16774848",
+      "serviceDate": "20260812",
+      "from": {
+       "name": "Avenida Rep\u00fablica y Calle Mariano Antezana",
+       "stopId": "cochabamba:2768898991",
+       "lon": -66.1508146,
+       "lat": -17.400286400000002,
+       "arrival": 1786564947000,
+       "departure": 1786565132000,
+       "stopIndex": 1,
+       "stopSequence": 1,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:2317755762",
+       "lon": -66.18830410000001,
+       "lat": -17.353989000000002,
+       "arrival": 1786566034000,
+       "departure": 1786566034000,
+       "stopIndex": 22,
+       "stopSequence": 22,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "legGeometry": {
+       "points": "xneiBrawrKOSOWIQGWGUAQCU?m@AeBCcBAiBIQiBTa@De@FiBRQBK@_D^I@KBeALa@D}@JSBy@JI@cALwBVK@KBy@HcALy@HI?O?uDd@I@M@uDd@I@K@{ANqANKBQ@M@yBVwAPK@QJi@FuBVMBO@gBV{ALIBe@D]DKBiC\\K@I@sDd@Q@w@JM@E@i@FqDb@E?KBO@oDb@SBYBCKCMEKGMKKKKMGMESCQAS@QBOFMFKJILGJABERALAF@N@PBLFRJPLNNJB@LFL@N@J?N?NEFVb@bBRz@@FBHBHdAlEBFBJ@HRz@j@~BBJyB|ACBa@XkAz@K@aAp@G@IBK?O@sC\\OBiALOBQ?K?S?]?WB{CCyDCO??JGpBAREpBCx@ADErBAPAN?JKpCAZ?D@H@LTlADVOBe@JeCf@yB`@QBE@E@{AZ_BZSDaARyIbB{AX_@HMBSDMBC@u@NSDiATC@WDcEv@SDwAXUD}Dv@M@M?IAKCICQ?Q@QDMFKHEHCJ?FETKRMNCDcCtDgBlC]j@CBc@r@OTS\\_@r@EJINi@dAIVCHEJERALAP?N?DDdABfA?@@TD`@F\\Px@DJH`@D\\B\\@^?TAXEZEXQdAI\\AHG\\ARAd@A@?h@ALQrG?NCr@MpFCNEPIb@s@dD[~ACLEVENiAvFQz@ELAHGTAFCLIZITKRc@`AS^Wd@o@z@kA~Ac@h@a@d@]^k@f@g@^MHKHe@Vk@\\mAn@SJUJcFlBoCbAQH_@TSNOLoEnCYRy@d@wAx@]VMLSXWZuApBABeAzAuAnBiAzA{@lAEFORIJGJGHqAfB",
+       "length": 319
+      },
+      "routeShortName": "120",
+      "routeLongName": "Trufi 120: Univalle \u2192 Cerro San Miguel",
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 902.0,
+      "transitLeg": true,
+      "steps": []
+     },
+     {
+      "startTime": 1786566034000,
+      "endTime": 1786566201000,
+      "departureDelay": 0,
+      "arrivalDelay": 0,
+      "realTime": false,
+      "distance": 218.7148012275926,
+      "pathway": false,
+      "mode": "WALK",
+      "route": "",
+      "agencyTimeZoneOffset": -14400000,
+      "interlineWithPreviousLeg": false,
+      "from": {
+       "name": "Avenida Sim\u00f3n L\u00f3pez",
+       "stopId": "cochabamba:2317755762",
+       "lon": -66.18830410000001,
+       "lat": -17.353989000000002,
+       "arrival": 1786566034000,
+       "departure": 1786566034000,
+       "stopIndex": 22,
+       "stopSequence": 22,
+       "vertexType": "TRANSIT",
+       "boardAlightType": "DEFAULT"
+      },
+      "to": {
+       "name": "Destination",
+       "lon": -66.19,
+       "lat": -17.355,
+       "arrival": 1786566201000,
+       "orig": "",
+       "vertexType": "NORMAL"
+      },
+      "legGeometry": {
+       "points": "lm|hB|k~rKjC~J",
+       "length": 2
+      },
+      "rentedBike": false,
+      "flexDrtAdvanceBookMin": 0.0,
+      "duration": 167.0,
+      "transitLeg": false,
+      "steps": [
+       {
+        "distance": 218.7148012275926,
+        "relativeDirection": "DEPART",
+        "streetName": "Avenida Sim\u00f3n L\u00f3pez => Calle Hugo Almaraz",
+        "absoluteDirection": "WEST",
+        "stayOn": false,
+        "area": false,
+        "bogusName": false,
+        "lon": -66.18830410000001,
+        "lat": -17.353989000000002,
+        "elevation": []
+       }
+      ]
+     }
+    ],
+    "tooSloped": false
+   }
+  ]
+ }
+}

@@ -7,6 +7,7 @@ import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
+import 'segmented_route_chip.dart';
 
 /// Card displaying a single itinerary option with modern design.
 class ItineraryCard extends StatelessWidget {
@@ -16,14 +17,13 @@ class ItineraryCard extends StatelessWidget {
   final VoidCallback? onDetailsTap;
   final VoidCallback? onStartNavigation;
 
-  /// Number of additional departure times available (null = no alternatives)
-  final int? alternativeCount;
-
-  /// Whether the alternatives list is expanded
-  final bool isExpanded;
-
-  /// Callback to expand/collapse alternatives
-  final VoidCallback? onExpandTap;
+  /// The distinct routes serving each transit slot across the itinerary's
+  /// group ([routing.ItineraryGroup.slotRoutes]). When a slot carries more
+  /// than one route the chip paints one segment per option, every one in
+  /// its route color; the one this itinerary rides shows at full
+  /// strength, the rest slightly muted. The group's options are explored
+  /// in the detail view.
+  final List<List<routing.Route>>? slotRoutes;
 
   const ItineraryCard({
     super.key,
@@ -32,9 +32,7 @@ class ItineraryCard extends StatelessWidget {
     required this.onTap,
     this.onDetailsTap,
     this.onStartNavigation,
-    this.alternativeCount,
-    this.isExpanded = false,
-    this.onExpandTap,
+    this.slotRoutes,
   });
 
   @override
@@ -117,29 +115,36 @@ class ItineraryCard extends StatelessWidget {
         // are not the user's real wall-clock and would mislead.
         if (context.watch<AppConfiguration?>()?.routingTimeOverride == null)
           Expanded(
-            child: Row(
-              children: [
-                Text(
-                  formatClockTime(context, itinerary.startTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+            // FittedBox: 12-hour locales ("8:00 AM → 9:00 AM") made this
+            // row overflow on ordinary phone widths — scale down instead.
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formatClockTime(context, itinerary.startTime),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 16,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                Text(
-                  formatClockTime(context, itinerary.endTime),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  Text(
+                    formatClockTime(context, itinerary.endTime),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         else
@@ -187,8 +192,8 @@ class ItineraryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            for (int i = 0; i < legs.length; i++) ...[
-              _LegChip(leg: legs[i]),
+            for (final (i, chip) in _chipsWithSlotRoutes(legs).indexed) ...[
+              chip,
               if (i < legs.length - 1)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -203,6 +208,22 @@ class ItineraryCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// One chip per leg, feeding each transit chip the distinct routes its
+  /// group offers for that slot. Walk/bike legs pass through.
+  List<Widget> _chipsWithSlotRoutes(List<routing.Leg> legs) {
+    var transitSlot = 0;
+    return legs
+        .map((leg) {
+          final slots = slotRoutes;
+          final routes =
+              leg.transitLeg && slots != null && transitSlot < slots.length
+              ? slots[transitSlot++]
+              : null;
+          return _LegChip(leg: leg, slotRoutes: routes);
+        })
+        .toList(growable: false);
   }
 
   Widget _buildFooterRow(ThemeData theme, HomeScreenLocalizations l10n) {
@@ -241,15 +262,6 @@ class ItineraryCard extends StatelessWidget {
             theme: theme,
           ),
         const Spacer(),
-        // Alternative departures badge/button
-        if (alternativeCount != null && alternativeCount! > 0)
-          _AlternativesBadge(
-            count: alternativeCount!,
-            isExpanded: isExpanded,
-            onTap: onExpandTap,
-            theme: theme,
-            l10n: l10n,
-          ),
         // Details button
         if (onDetailsTap != null)
           TextButton.icon(
@@ -291,7 +303,12 @@ class ItineraryCard extends StatelessWidget {
 class _LegChip extends StatelessWidget {
   final routing.Leg leg;
 
-  const _LegChip({required this.leg});
+  /// Distinct routes the itinerary's group offers for this slot; when it
+  /// carries more than one, the chip paints one segment per option, all
+  /// in their route colors; the ridden one shows at full strength.
+  final List<routing.Route>? slotRoutes;
+
+  const _LegChip({required this.leg, this.slotRoutes});
 
   @override
   Widget build(BuildContext context) {
@@ -325,11 +342,47 @@ class _LegChip extends StatelessWidget {
       );
     }
 
-    // Transit leg
+    // Transit leg. With interchangeable routes in the slot (#737), every
+    // option paints its own segment, meeting on a slanted "/" seam, each
+    // keeping its route color; the ridden one shows at full strength.
+    final options = (slotRoutes != null && slotRoutes!.length > 1)
+        ? slotRoutes!
+        : null;
+
+    if (options != null) {
+      // Slanted "/" seams (Sam 2026-08-12: "la separación con /, no algo
+      // vertical") — one shared chip, one segment per option in its own
+      // color. Same widget the detail's switcher uses.
+      // Same reading as the detail's switcher: every option keeps its
+      // color and only the CHOSEN one rides it at full strength (Sam
+      // 2026-08-13: no border) — the leg belongs to the itinerary the
+      // card wears, so its name marks the choice.
+      return SegmentedRouteChip(
+        dimBackdrop: Color.alphaBlend(
+          Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+          Theme.of(context).colorScheme.surface,
+        ),
+        segments: [
+          for (final (i, route) in options.indexed)
+            RouteSegmentSpec(
+              label: route.shortName ?? '',
+              color: _routeOwnColor(route, leg.transportMode),
+              icon: i == 0 ? _getModeIcon(leg.transportMode) : null,
+              dimmed: (route.shortName ?? '') != leg.displayName,
+              // Unnamed feeds can't tell the ridden option apart ('' == ''
+              // matches EVERY slot): no name, no selected announcement.
+              selected:
+                  (route.shortName ?? '').isNotEmpty &&
+                  route.shortName == leg.displayName,
+            ),
+        ],
+      );
+    }
+
     final color = _getRouteColor(leg);
-    final textColor = color.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
+    final textColor = SegmentedRouteChip.bestContrastOn(color);
     final routeName = leg.shortName ?? leg.route?.shortName ?? '';
     final realtime = context.watch<RealtimeVehiclesProvider?>();
 
@@ -366,6 +419,17 @@ class _LegChip extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _routeOwnColor(routing.Route route, routing.TransportMode mode) {
+    final colorStr = route.color ?? '';
+    // Empty guard: 'FF' alone parses to a transparent blue and would make
+    // the mode-color fallback unreachable.
+    final parsed = colorStr.isNotEmpty
+        ? int.tryParse('FF$colorStr', radix: 16)
+        : null;
+    if (parsed != null) return Color(parsed);
+    return _getModeColor(mode);
   }
 
   Color _getRouteColor(routing.Leg leg) {
@@ -439,74 +503,6 @@ class _InfoChip extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Badge showing number of alternative departure times
-class _AlternativesBadge extends StatelessWidget {
-  final int count;
-  final bool isExpanded;
-  final VoidCallback? onTap;
-  final ThemeData theme;
-  final HomeScreenLocalizations l10n;
-
-  const _AlternativesBadge({
-    required this.count,
-    required this.isExpanded,
-    this.onTap,
-    required this.theme,
-    required this.l10n,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap != null
-            ? () {
-                HapticFeedback.selectionClick();
-                onTap!();
-              }
-            : null,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.schedule_rounded,
-                size: 14,
-                color: theme.colorScheme.onSecondaryContainer,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                l10n.moreDepartures(count),
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSecondaryContainer,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 2),
-              AnimatedRotation(
-                turns: isExpanded ? 0.5 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  Icons.expand_more_rounded,
-                  size: 16,
-                  color: theme.colorScheme.onSecondaryContainer,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

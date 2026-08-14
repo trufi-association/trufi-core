@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
@@ -57,19 +56,6 @@ class ItineraryList extends StatefulWidget {
 class _ItineraryListState extends State<ItineraryList> {
   routing.Itinerary? _detailItinerary;
   bool _hasAutoShownDetail = false;
-  // Track which groups are expanded
-  final Set<String> _expandedGroups = {};
-
-  void _toggleGroupExpanded(String signature) {
-    HapticFeedback.selectionClick();
-    setState(() {
-      if (_expandedGroups.contains(signature)) {
-        _expandedGroups.remove(signature);
-      } else {
-        _expandedGroups.add(signature);
-      }
-    });
-  }
 
   void _showDetails(routing.Itinerary itinerary) {
     HapticFeedback.selectionClick();
@@ -93,10 +79,9 @@ class _ItineraryListState extends State<ItineraryList> {
       listener: (context, state) {
         // Clear stale local state when a new search starts or plan changes
         if (state.isLoading || state.plan == null) {
-          if (_detailItinerary != null || _expandedGroups.isNotEmpty) {
+          if (_detailItinerary != null) {
             setState(() {
               _detailItinerary = null;
-              _expandedGroups.clear();
             });
             widget.onDetailStateChanged?.call(false);
           }
@@ -159,7 +144,6 @@ class _ItineraryListState extends State<ItineraryList> {
             if (mounted && _detailItinerary != null) {
               setState(() {
                 _detailItinerary = null;
-                _expandedGroups.clear();
               });
               widget.onDetailStateChanged?.call(false);
             }
@@ -184,11 +168,23 @@ class _ItineraryListState extends State<ItineraryList> {
   }
 
   Widget _buildDetailView(BuildContext context, routing.Itinerary itinerary) {
+    final cubit = context.read<RoutePlannerCubit>();
+    // The itinerary's group (#737): its members feed the detail's option
+    // switcher so the rider can flip between interchangeable connections.
+    final group = cubit.state.plan?.groupedItineraries
+        ?.where((g) => g.alternatives.contains(itinerary))
+        .firstOrNull;
+
     return ItineraryDetailContent(
       itinerary: itinerary,
       shrinkWrap: widget.shrinkWrap,
       onBack: _hideDetails,
       onRouteTap: widget.onRouteTap,
+      alternatives: group?.alternatives,
+      onSelectAlternative: (alternative) {
+        cubit.selectItinerary(alternative);
+        _showDetails(alternative);
+      },
       onStartNavigation:
           widget.onStartNavigation != null && widget.locationService != null
           ? () => widget.onStartNavigation!(
@@ -207,7 +203,6 @@ class _ItineraryListState extends State<ItineraryList> {
     RoutePlannerCubit cubit,
   ) {
     final l10n = HomeScreenLocalizations.of(context);
-    final theme = Theme.of(context);
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -218,8 +213,15 @@ class _ItineraryListState extends State<ItineraryList> {
         if (index == 0) return _EstimatedTimesBanner(l10n: l10n);
         final groupIndex = index - 1;
         final group = groups[groupIndex];
-        final isExpanded = _expandedGroups.contains(group.signature);
-        final isSelected = group.alternatives.contains(state.selectedItinerary);
+        final containsSelection = group.alternatives.contains(
+          state.selectedItinerary,
+        );
+        // The card wears the group's currently chosen option (#737): after
+        // picking an alternative in the detail switcher, its times/legs are
+        // what the row shows — and what Go navigates.
+        final face = containsSelection
+            ? state.selectedItinerary!
+            : group.representative;
 
         return TweenAnimationBuilder<double>(
           key: ValueKey('group-$groupIndex'),
@@ -234,91 +236,33 @@ class _ItineraryListState extends State<ItineraryList> {
           },
           child: Column(
             children: [
-              // Main card for representative itinerary
               ItineraryCard(
-                itinerary: group.representative,
-                isSelected:
-                    isSelected &&
-                    state.selectedItinerary == group.representative,
-                alternativeCount: group.hasAlternatives
-                    ? group.additionalCount
-                    : null,
-                isExpanded: isExpanded,
+                itinerary: face,
+                isSelected: containsSelection,
+                slotRoutes: group.slotRoutes,
                 onTap: () {
-                  cubit.selectItinerary(group.representative);
+                  cubit.selectItinerary(face);
                   if (widget.onItineraryDetails != null) {
-                    widget.onItineraryDetails!(group.representative);
+                    widget.onItineraryDetails!(face);
                   } else {
-                    _showDetails(group.representative);
+                    _showDetails(face);
                   }
                 },
-                onExpandTap: group.hasAlternatives
-                    ? () => _toggleGroupExpanded(group.signature)
-                    : null,
                 onDetailsTap: null,
                 onStartNavigation:
                     widget.onStartNavigation != null &&
                         widget.locationService != null
                     ? () => widget.onStartNavigation!(
                         context,
-                        group.representative,
+                        face,
                         widget.locationService!,
                       )
                     : null,
               ),
-              // Expanded alternatives
-              if (isExpanded && group.hasAlternatives)
-                _buildAlternatives(context, group, state, cubit, l10n, theme),
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _buildAlternatives(
-    BuildContext context,
-    routing.ItineraryGroup group,
-    RoutePlannerState state,
-    RoutePlannerCubit cubit,
-    HomeScreenLocalizations l10n,
-    ThemeData theme,
-  ) {
-    // Skip the first one (representative)
-    final alternatives = group.alternatives.skip(1).toList();
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 12, bottom: 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Text(
-              l10n.otherDepartures,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ...alternatives.map((itinerary) {
-            final isSelected = itinerary == state.selectedItinerary;
-            return _AlternativeTimeCard(
-              itinerary: itinerary,
-              isSelected: isSelected,
-              onTap: () {
-                cubit.selectItinerary(itinerary);
-                if (widget.onItineraryDetails != null) {
-                  widget.onItineraryDetails!(itinerary);
-                } else {
-                  _showDetails(itinerary);
-                }
-              },
-            );
-          }),
-        ],
-      ),
     );
   }
 
@@ -608,102 +552,6 @@ class _ShimmerCardState extends State<_ShimmerCard>
           alpha: 0.5,
         ),
         borderRadius: BorderRadius.circular(radius),
-      ),
-    );
-  }
-}
-
-/// Compact card for alternative departure times
-class _AlternativeTimeCard extends StatelessWidget {
-  final routing.Itinerary itinerary;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _AlternativeTimeCard({
-    required this.itinerary,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = HomeScreenLocalizations.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Material(
-        color: isSelected
-            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
-            : theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.selectionClick();
-            onTap();
-          },
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.dividerColor.withValues(alpha: 0.3),
-                width: isSelected ? 1.5 : 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.schedule_rounded,
-                  size: 18,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                // Hide absolute clock times when the app pins the
-                // routing time to a fixed value — startTime/endTime
-                // are then synthetic and would mislead the user.
-                if (context.watch<AppConfiguration?>()?.routingTimeOverride ==
-                    null) ...[
-                  Text(
-                    l10n.departsAt(formatClockTime(context, itinerary.startTime)),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 14,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    formatClockTime(context, itinerary.endTime),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-                const Spacer(),
-                if (isSelected)
-                  Icon(
-                    Icons.check_circle_rounded,
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  )
-                else
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    size: 18,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

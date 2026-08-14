@@ -46,11 +46,17 @@ class RoutingEngineManager extends ChangeNotifier {
   /// Maximum number of itineraries requested per plan when [fetchPlan] is
   /// called without an explicit `numItineraries`.
   ///
-  /// Defaults to 5 (the historical behavior). Apps that want more results
-  /// override it at construction time instead of patching trufi-core:
+  /// Defaults to 5 (the historical behavior). Deploys whose provider
+  /// returns unfiltered near-duplicates (OTP 1.5/2.4, the local Trufi
+  /// planner) should raise it (~15) so itinerary grouping (#737) has raw
+  /// material to collapse — the visible list stays short because the
+  /// duplicates merge into rows. OTP 2.x deploys should NOT raise it
+  /// blindly: OTP2's server-side filter chain (`groupSimilarityKeepOne`)
+  /// already drops near-duplicates, so a bigger pool there mostly means
+  /// more distinct rows and a ~3x payload, not better grouping.
   ///
   /// ```dart
-  /// RoutingEngineManager(engines: [...], maxItineraries: 20)
+  /// RoutingEngineManager(engines: [...], maxItineraries: 15)
   /// ```
   final int maxItineraries;
 

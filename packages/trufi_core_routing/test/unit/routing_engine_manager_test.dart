@@ -51,6 +51,9 @@ void main() {
 
   group('RoutingEngineManager fetchPlan', () {
     test('keeps the historical default of 5 itineraries', () async {
+      // Deliberately unchanged by #737: raising the pool only pays off on
+      // providers without server-side duplicate filtering, so apps opt in
+      // per deploy instead of every OTP2 app paying a ~3x payload.
       final provider = _RecordingProvider();
       final manager = RoutingEngineManager(engines: [provider]);
 
