@@ -157,6 +157,53 @@ void main() {
       expect(results.single.id, 'street:1');
     });
 
+    test('a pin arriving an earlier round must not swallow the drillable row',
+        () async {
+      // Fresh-review finding on #984: with interleaving, "first arrival
+      // wins" would let photon's round-0 pin eat the drillable offline
+      // street that only shows up in round 2 — losing the corner
+      // drill-down. The richer row must keep the slot.
+      final offline = _FakeDrillDownService(
+        [
+          _loc('street:1', 'Calle América Oeste', lat: -17.3901),
+          _loc('street:2', 'Avenida América Este', lat: -17.3902),
+          _loc('street:3', 'Calle América', lat: -17.3903),
+        ],
+        corners: {
+          'street:3': [_loc('junction:1', 'América & Libertador')],
+        },
+      );
+      final online = _FakeService([
+        _loc('photon:1', 'Calle América', lat: -17.3904),
+      ]);
+
+      final composite = CompositeSearchLocationService(
+        services: [offline, online],
+      );
+      final results = await composite.search('america');
+
+      expect(results.map((r) => r.id), [
+        'street:1',
+        'street:3', // replaced photon:1 in place, drill-down preserved
+        'street:2',
+      ]);
+      final america = results.firstWhere((r) => r.displayName == 'Calle América');
+      expect(composite.canDrillDown(america), isTrue);
+    });
+
+    test('same name ~450 m apart stays as two results (radius edge)', () async {
+      // Pins the merge radius near its intended ~220 m: a regression that
+      // widens it to a few blocks more would collapse these two.
+      final a = _FakeService([_loc('a', 'Farmacia Bolivia', lat: -17.3900)]);
+      final b = _FakeService([_loc('b', 'Farmacia Bolivia', lat: -17.3940)]);
+
+      final results = await CompositeSearchLocationService(
+        services: [a, b],
+      ).search('farmacia');
+
+      expect(results.length, 2);
+    });
+
     test('reverse uses the first service that answers', () async {
       final offline = _FakeService(const []); // returns null by design
       final online = _FakeService(const [])

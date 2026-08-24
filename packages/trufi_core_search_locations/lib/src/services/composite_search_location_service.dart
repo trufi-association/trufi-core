@@ -23,9 +23,11 @@ import 'search_location_service.dart';
 ///   the order of [services] (put the offline one first if junctions
 ///   should lead);
 /// - duplicates are merged: same id, or same display name within
-///   [nearDuplicateEpsilon] — geocoders return the same POI or street
-///   several times a few blocks apart, and those near-copies used to eat
-///   the result budget (#984);
+///   `max(`[nearDuplicateEpsilon]`, `[dedupeEpsilon]`)` per axis —
+///   geocoders return the same POI or street several times a few blocks
+///   apart, and those near-copies used to eat the result budget (#984).
+///   The earliest arrival keeps the slot, except that a drillable row
+///   (an offline street with corners) always wins over a plain pin;
 /// - [reverse] returns the first non-null answer, in order.
 class CompositeSearchLocationService
     with SearchLocationDrillDown, LanguageAwareSearch
@@ -35,8 +37,10 @@ class CompositeSearchLocationService
   /// How long to wait for each service before dropping its results.
   final Duration timeout;
 
-  /// Coordinates closer than this (in degrees, ~1e-5 ≈ 1 m) are treated as
-  /// the same place when merging.
+  /// Legacy floor for the near-duplicate radius: the effective radius is
+  /// `max(nearDuplicateEpsilon, dedupeEpsilon)` per axis, so with the
+  /// defaults this field is inert. Passing `nearDuplicateEpsilon: 0`
+  /// restores the old exact-spot-only merging (~1e-5 ≈ 1 m).
   final double dedupeEpsilon;
 
   /// Results with the same display name closer than this (in degrees,
@@ -64,14 +68,22 @@ class CompositeSearchLocationService
     final perService = await Future.wait(futures);
     final merged = <SearchLocation>[];
     var round = 0;
-    var addedAny = true;
-    while (addedAny) {
-      addedAny = false;
+    var anyRemaining = true;
+    while (anyRemaining) {
+      anyRemaining = false;
       for (final results in perService) {
         if (round >= results.length) continue;
-        addedAny = true;
+        anyRemaining = true;
         final result = results[round];
-        if (!_alreadyPresent(merged, result)) merged.add(result);
+        final dup = _indexOfDuplicate(merged, result);
+        if (dup < 0) {
+          merged.add(result);
+        } else if (canDrillDown(result) && !canDrillDown(merged[dup])) {
+          // Keep the richer row: a drillable street (with its corners)
+          // must not be swallowed by a plain pin for the same place that
+          // happened to arrive in an earlier round.
+          merged[dup] = result;
+        }
       }
       round++;
     }
@@ -135,9 +147,11 @@ class CompositeSearchLocationService
     }
   }
 
-  bool _alreadyPresent(List<SearchLocation> merged, SearchLocation candidate) {
-    for (final existing in merged) {
-      if (existing.id == candidate.id) return true;
+  /// Index in [merged] of an entry this candidate duplicates, or -1.
+  int _indexOfDuplicate(List<SearchLocation> merged, SearchLocation candidate) {
+    for (var i = 0; i < merged.length; i++) {
+      final existing = merged[i];
+      if (existing.id == candidate.id) return i;
       final sameName =
           existing.displayName.trim().toLowerCase() ==
           candidate.displayName.trim().toLowerCase();
@@ -148,8 +162,8 @@ class CompositeSearchLocationService
       final nearby =
           (existing.latitude - candidate.latitude).abs() < epsilon &&
           (existing.longitude - candidate.longitude).abs() < epsilon;
-      if (nearby) return true;
+      if (nearby) return i;
     }
-    return false;
+    return -1;
   }
 }
