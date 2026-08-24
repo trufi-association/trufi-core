@@ -15,9 +15,19 @@ import 'search_location_service.dart';
 /// - services are queried **concurrently**; a service that fails or times
 ///   out is skipped, so losing the network degrades to offline results
 ///   instead of an error screen;
-/// - results keep the order of [services] (put the offline one first if
-///   junctions should lead), deduplicated by coordinates so the same
-///   place found twice appears once;
+/// - results are **interleaved** round-robin across [services] (first
+///   result of each, then second of each, …) so no source can push the
+///   others below the fold — with streets offline and places online, the
+///   old source-by-source concatenation buried every place under up to
+///   ten street rows on a phone screen (#984). Ties inside a round keep
+///   the order of [services] (put the offline one first if junctions
+///   should lead);
+/// - duplicates are merged: same id, or same display name within
+///   `max(`[nearDuplicateEpsilon]`, `[dedupeEpsilon]`)` per axis —
+///   geocoders return the same POI or street several times a few blocks
+///   apart, and those near-copies used to eat the result budget (#984).
+///   The earliest arrival keeps the slot, except that a drillable row
+///   (an offline street with corners) always wins over a plain pin;
 /// - [reverse] returns the first non-null answer, in order.
 class CompositeSearchLocationService
     with SearchLocationDrillDown, LanguageAwareSearch
@@ -27,14 +37,21 @@ class CompositeSearchLocationService
   /// How long to wait for each service before dropping its results.
   final Duration timeout;
 
-  /// Coordinates closer than this (in degrees, ~1e-5 ≈ 1 m) are treated as
-  /// the same place when merging.
+  /// Legacy floor for the near-duplicate radius: the effective radius is
+  /// `max(nearDuplicateEpsilon, dedupeEpsilon)` per axis, so with the
+  /// defaults this field is inert. Passing `nearDuplicateEpsilon: 0`
+  /// restores the old exact-spot-only merging (~1e-5 ≈ 1 m).
   final double dedupeEpsilon;
+
+  /// Results with the same display name closer than this (in degrees,
+  /// ~2e-3 ≈ 220 m) are treated as near-copies of one place and merged.
+  final double nearDuplicateEpsilon;
 
   CompositeSearchLocationService({
     required this.services,
     this.timeout = const Duration(seconds: 8),
     this.dedupeEpsilon = 1e-5,
+    this.nearDuplicateEpsilon = 2e-3,
   }) : assert(services.isNotEmpty, 'at least one service is required');
 
   @override
@@ -50,10 +67,25 @@ class CompositeSearchLocationService
 
     final perService = await Future.wait(futures);
     final merged = <SearchLocation>[];
-    for (final results in perService) {
-      for (final result in results) {
-        if (!_alreadyPresent(merged, result)) merged.add(result);
+    var round = 0;
+    var anyRemaining = true;
+    while (anyRemaining) {
+      anyRemaining = false;
+      for (final results in perService) {
+        if (round >= results.length) continue;
+        anyRemaining = true;
+        final result = results[round];
+        final dup = _indexOfDuplicate(merged, result);
+        if (dup < 0) {
+          merged.add(result);
+        } else if (canDrillDown(result) && !canDrillDown(merged[dup])) {
+          // Keep the richer row: a drillable street (with its corners)
+          // must not be swallowed by a plain pin for the same place that
+          // happened to arrive in an earlier round.
+          merged[dup] = result;
+        }
       }
+      round++;
     }
     return merged;
   }
@@ -115,18 +147,23 @@ class CompositeSearchLocationService
     }
   }
 
-  bool _alreadyPresent(List<SearchLocation> merged, SearchLocation candidate) {
-    for (final existing in merged) {
-      if (existing.id == candidate.id) return true;
-      final sameSpot =
-          (existing.latitude - candidate.latitude).abs() < dedupeEpsilon &&
-          (existing.longitude - candidate.longitude).abs() < dedupeEpsilon;
-      if (sameSpot &&
-          existing.displayName.toLowerCase() ==
-              candidate.displayName.toLowerCase()) {
-        return true;
-      }
+  /// Index in [merged] of an entry this candidate duplicates, or -1.
+  int _indexOfDuplicate(List<SearchLocation> merged, SearchLocation candidate) {
+    for (var i = 0; i < merged.length; i++) {
+      final existing = merged[i];
+      if (existing.id == candidate.id) return i;
+      final sameName =
+          existing.displayName.trim().toLowerCase() ==
+          candidate.displayName.trim().toLowerCase();
+      if (!sameName) continue;
+      final epsilon = nearDuplicateEpsilon > dedupeEpsilon
+          ? nearDuplicateEpsilon
+          : dedupeEpsilon;
+      final nearby =
+          (existing.latitude - candidate.latitude).abs() < epsilon &&
+          (existing.longitude - candidate.longitude).abs() < epsilon;
+      if (nearby) return i;
     }
-    return false;
+    return -1;
   }
 }
