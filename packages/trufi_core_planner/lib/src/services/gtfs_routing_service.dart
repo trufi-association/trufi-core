@@ -26,6 +26,14 @@ class RoutingSegment {
   /// Computed in O(1) via the pattern's precomputed `cumDist`.
   final double transitDistance;
 
+  /// Board/alight positions in `pattern.stopIds`, recorded at build time.
+  /// `-1` when unknown (e.g. segments deserialized from JSON). They must be
+  /// carried instead of re-derived from the stop IDs: on patterns that visit
+  /// a stop twice (circular lines) `indexOfStop` returns the FIRST occurrence,
+  /// which is not necessarily the one this segment rides through (#986).
+  final int fromIdx;
+  final int toIdx;
+
   const RoutingSegment({
     required this.route,
     required this.fromStop,
@@ -36,6 +44,8 @@ class RoutingSegment {
     this.scheduledDuration,
     this.shapePoints = const [],
     this.transitDistance = 0,
+    this.fromIdx = -1,
+    this.toIdx = -1,
   });
 
   /// Stop IDs for this segment (derived from stops).
@@ -463,6 +473,8 @@ class GtfsRoutingService {
       pattern: pattern,
       transitDistance: transit,
       scheduledDuration: estDuration,
+      fromIdx: fromIdx,
+      toIdx: toIdx,
     );
   }
 
@@ -473,8 +485,16 @@ class GtfsRoutingService {
       originWalkDistance: path.originWalkDistance,
       originStop: path.originStop,
       segments: path.segments.map((seg) {
-        final fromIdx = seg.pattern.indexOfStop(seg.fromStop.id);
-        final toIdx = seg.pattern.indexOfStop(seg.toStop.id);
+        // Prefer the indices recorded at build time: re-deriving them from
+        // stop IDs picks the FIRST occurrence on the pattern, which breaks
+        // segments that board/alight at a repeated stop's later visit (#986 —
+        // the transfer leg lost its geometry and rendered as a straight line).
+        final fromIdx = seg.fromIdx >= 0
+            ? seg.fromIdx
+            : seg.pattern.indexOfStop(seg.fromStop.id);
+        final toIdx = seg.toIdx >= 0
+            ? seg.toIdx
+            : seg.pattern.indexOfStop(seg.toStop.id);
         if (fromIdx >= 0 && toIdx > fromIdx) {
           final ids = seg.pattern.stopIds.sublist(fromIdx, toIdx + 1);
           final stops = ids
@@ -499,6 +519,8 @@ class GtfsRoutingService {
             scheduledDuration: seg.scheduledDuration,
             shapePoints: shapePoints,
             transitDistance: seg.transitDistance,
+            fromIdx: fromIdx,
+            toIdx: toIdx,
           );
         }
         return seg;
