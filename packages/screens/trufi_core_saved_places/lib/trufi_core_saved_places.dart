@@ -31,6 +31,7 @@ library;
 
 // Models
 export 'src/models/saved_place.dart';
+export 'src/models/saved_place_icons.dart';
 
 // Repository
 export 'src/repository/saved_places_repository.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/saved_place.dart';
+import '../models/saved_place_icons.dart';
 import '../../l10n/saved_places_localizations.dart';
 
 /// Callback to open a map picker and return coordinates.
@@ -76,24 +77,8 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   bool get _isEditing => widget.place != null;
   bool get _hasLocation => _latitude != 0.0 || _longitude != 0.0;
 
-  static const List<_IconOption> _iconOptions = [
-    _IconOption('place', Icons.place_outlined),
-    _IconOption('star', Icons.star_outline),
-    _IconOption('favorite', Icons.favorite_outline),
-    _IconOption('bookmark', Icons.bookmark_outline),
-    _IconOption('school', Icons.school_outlined),
-    _IconOption('shopping', Icons.shopping_bag_outlined),
-    _IconOption('restaurant', Icons.restaurant_outlined),
-    _IconOption('cafe', Icons.coffee_outlined),
-    _IconOption('gym', Icons.fitness_center_outlined),
-    _IconOption('hospital', Icons.local_hospital_outlined),
-    _IconOption('park', Icons.park_outlined),
-    _IconOption('airport', Icons.flight_outlined),
-    _IconOption('train', Icons.train_outlined),
-    _IconOption('bus', Icons.directions_bus_outlined),
-    _IconOption('parking', Icons.local_parking_outlined),
-    _IconOption('gas', Icons.local_gas_station_outlined),
-  ];
+  // Single source of truth shared with SavedPlaceTile — see #985.
+  static const List<SavedPlaceIcon> _iconOptions = savedPlaceIcons;
 
   @override
   void initState() {
@@ -148,7 +133,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       (o) => o.name == _selectedIcon,
       orElse: () => _iconOptions.first,
     );
-    return option.icon;
+    return option.outlined;
   }
 
   Color _getTypeColor() {
@@ -554,7 +539,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                         )
                       : null,
                   child: Icon(
-                    option.icon,
+                    option.outlined,
                     size: 22,
                     color: isSelected
                         ? theme.colorScheme.onPrimaryContainer
@@ -624,11 +609,4 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 
     widget.onSave(updatedPlace);
   }
-}
-
-class _IconOption {
-  final String name;
-  final IconData icon;
-
-  const _IconOption(this.name, this.icon);
 }
