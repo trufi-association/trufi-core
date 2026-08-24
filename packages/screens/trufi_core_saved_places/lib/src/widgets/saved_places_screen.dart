@@ -134,11 +134,8 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     );
 
     if (place != null && context.mounted) {
-      if (cubit.isDuplicatePlace(place)) {
-        _showDuplicateWarning(context, place);
-        return;
-      }
-      cubit.savePlace(place);
+      final saved = await cubit.savePlace(place);
+      if (!saved && context.mounted) _showDuplicateWarning(context, place);
     }
   }
 
@@ -154,17 +151,10 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     );
 
     if (updatedPlace != null && context.mounted) {
-      // An edit that keeps the same name and coordinates can't create a
-      // new duplicate — skip the check so places that were duplicated
-      // before this guard existed stay editable (icon, type, ...).
-      final identityChanged =
-          !SavedPlacesCubit.hasSameIdentity(updatedPlace, place);
-      if (identityChanged &&
-          cubit.isDuplicatePlace(updatedPlace, excludeId: place.id)) {
+      final saved = await cubit.updatePlace(updatedPlace);
+      if (!saved && context.mounted) {
         _showDuplicateWarning(context, updatedPlace);
-        return;
       }
-      cubit.updatePlace(updatedPlace);
     }
   }
 

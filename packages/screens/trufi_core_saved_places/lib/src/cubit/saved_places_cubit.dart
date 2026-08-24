@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -101,16 +103,62 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
     }
   }
 
-  /// Whether two places share the same identity: same name (trimmed,
-  /// case-insensitive) at the same coordinates (sub-meter epsilon).
+  /// Two saved places closer than this many metres count as "the same spot"
+  /// when their names match (#898).
+  ///
+  /// The map picker returns the raw camera centre, so two taps on the same
+  /// building differ by a few metres — a sub-metre epsilon only ever matched
+  /// when the map was not moved at all. 50 m is roughly half a city block:
+  /// inside it, a same-named entry is a duplicate; beyond it, the user may
+  /// legitimately have two "Farmacia" in different neighbourhoods.
+  static const double duplicateRadiusMeters = 50;
+
+  /// Great-circle distance in metres between two coordinates (haversine).
+  static double distanceMeters(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+  ) {
+    const earthRadius = 6371000.0;
+    double rad(double deg) => deg * math.pi / 180;
+    final dLat = rad(lat2 - lat1);
+    final dLon = rad(lon2 - lon1);
+    final a =
+        math.pow(math.sin(dLat / 2), 2) +
+        math.cos(rad(lat1)) *
+            math.cos(rad(lat2)) *
+            math.pow(math.sin(dLon / 2), 2);
+    return earthRadius * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+  }
+
+  /// Normalises a place name for comparison: trimmed, lower-cased, accents
+  /// folded ("Café" == "cafe", also when the accent arrives as a combining
+  /// mark), inner whitespace collapsed.
+  static String normalizeName(String name) {
+    const from = 'áàäâãéèëêíìïîóòöôõúùüûñç';
+    const to = 'aaaaaeeeeiiiiooooouuuunc';
+    final buffer = StringBuffer();
+    for (final rune in name.toLowerCase().trim().runes) {
+      // Combining diacritical marks (U+0300–U+036F): decomposed accents.
+      if (rune >= 0x0300 && rune <= 0x036F) continue;
+      final char = String.fromCharCode(rune);
+      final index = from.indexOf(char);
+      buffer.write(index >= 0 ? to[index] : char);
+    }
+    return buffer.toString().replaceAll(RegExp(r'\s+'), ' ');
+  }
+
+  /// Whether two places share the same identity: same name (see
+  /// [normalizeName]) within [duplicateRadiusMeters] of each other.
   static bool hasSameIdentity(SavedPlace a, SavedPlace b) =>
-      a.name.trim().toLowerCase() == b.name.trim().toLowerCase() &&
-      (a.latitude - b.latitude).abs() < 1e-6 &&
-      (a.longitude - b.longitude).abs() < 1e-6;
+      normalizeName(a.name) == normalizeName(b.name) &&
+      distanceMeters(a.latitude, a.longitude, b.latitude, b.longitude) <=
+          duplicateRadiusMeters;
 
   /// Whether an equivalent place is already saved — see [hasSameIdentity].
   /// Pass [excludeId] when editing so a place doesn't collide with
-  /// itself (#898).
+  /// itself (#898). History entries never count.
   bool isDuplicatePlace(SavedPlace place, {String? excludeId}) {
     bool same(SavedPlace other) =>
         other.id != excludeId && hasSameIdentity(other, place);
@@ -161,7 +209,25 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
 
   /// Saves a place based on its type.
   /// Handles type changes correctly (e.g., other -> home).
-  Future<void> savePlace(
+  ///
+  /// Returns `false` — and persists nothing — when an equivalent place is
+  /// already saved (#898). The guard lives here, on the path every screen
+  /// saves through, instead of in each screen's dialog wiring; history
+  /// entries are never checked. ([addOtherPlace], [setHome] and [setWork]
+  /// stay unguarded low-level writers.)
+  Future<bool> savePlace(
+    SavedPlace place, {
+    SavedPlaceType? originalType,
+  }) async {
+    if (place.type != SavedPlaceType.history &&
+        isDuplicatePlace(place, excludeId: place.id)) {
+      return false;
+    }
+    await _savePlace(place, originalType: originalType);
+    return true;
+  }
+
+  Future<void> _savePlace(
     SavedPlace place, {
     SavedPlaceType? originalType,
   }) async {
@@ -228,21 +294,37 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   }
 
   /// Updates any saved place. Handles type changes.
-  Future<void> updatePlace(SavedPlace updatedPlace) async {
+  ///
+  /// Returns `false` when the edit would turn the place into a duplicate of
+  /// another saved place. An edit that keeps the place's own identity (icon,
+  /// type, a nudge of a few metres) is always accepted, so entries that were
+  /// duplicated before the guard existed stay editable.
+  Future<bool> updatePlace(SavedPlace updatedPlace) async {
     // Find original place to detect type change
+    SavedPlace? original;
     SavedPlaceType? originalType;
 
     if (state.home?.id == updatedPlace.id) {
+      original = state.home;
       originalType = SavedPlaceType.home;
     } else if (state.work?.id == updatedPlace.id) {
+      original = state.work;
       originalType = SavedPlaceType.work;
     } else if (state.otherPlaces.any((p) => p.id == updatedPlace.id)) {
+      original = state.otherPlaces.firstWhere((p) => p.id == updatedPlace.id);
       originalType = SavedPlaceType.other;
     } else if (state.history.any((p) => p.id == updatedPlace.id)) {
+      original = state.history.firstWhere((p) => p.id == updatedPlace.id);
       originalType = SavedPlaceType.history;
     }
 
-    await savePlace(updatedPlace, originalType: originalType);
+    final identityChanged =
+        original == null || !hasSameIdentity(updatedPlace, original);
+    if (identityChanged) {
+      return savePlace(updatedPlace, originalType: originalType);
+    }
+    await _savePlace(updatedPlace, originalType: originalType);
+    return true;
   }
 
   /// Deletes any saved place.
