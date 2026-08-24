@@ -97,6 +97,66 @@ void main() {
       expect(results.length, 2);
     });
 
+    test('results interleave round-robin across services (#984)', () async {
+      // Concatenating source-by-source buried every online place under up
+      // to ten offline street rows — more than a phone screen shows.
+      final offline = _FakeService([
+        _loc('street:1', 'Calle Universidad A', lat: -17.391),
+        _loc('street:2', 'Calle Universidad B', lat: -17.392),
+        _loc('street:3', 'Calle Universidad C', lat: -17.393),
+      ]);
+      final online = _FakeService([
+        _loc('photon:1', 'Universidad Mayor de San Simón', lat: -17.394),
+        _loc('photon:2', 'Universidad del Valle', lat: -17.395),
+      ]);
+
+      final results = await CompositeSearchLocationService(
+        services: [offline, online],
+      ).search('universidad');
+
+      expect(results.map((r) => r.id), [
+        'street:1',
+        'photon:1',
+        'street:2',
+        'photon:2',
+        'street:3',
+      ]);
+    });
+
+    test('near-copies of the same place a few blocks apart merge (#984)', () async {
+      // Photon returns the same POI several times (per building/entrance),
+      // eating the result budget: Universidad Latinoamericana ×3.
+      final online = _FakeService([
+        _loc('photon:1', 'Universidad Latinoamericana', lat: -17.3900),
+        _loc('photon:2', 'Universidad Latinoamericana', lat: -17.3910),
+        _loc('photon:3', 'universidad latinoamericana ', lat: -17.3905),
+        _loc('photon:4', 'Plaza Colón', lat: -17.3902),
+      ]);
+
+      final results = await CompositeSearchLocationService(
+        services: [online],
+      ).search('universidad');
+
+      expect(results.map((r) => r.id), ['photon:1', 'photon:4']);
+    });
+
+    test('an online near-copy of an offline street collapses into it', () async {
+      // The offline street row keeps the corner drill-down; the online pin
+      // for the same street adds nothing.
+      final offline = _FakeService([
+        _loc('street:1', 'Calle Manuel Virreira', lat: -17.3900),
+      ]);
+      final online = _FakeService([
+        _loc('photon:1', 'Calle Manuel Virreira', lat: -17.3908),
+      ]);
+
+      final results = await CompositeSearchLocationService(
+        services: [offline, online],
+      ).search('virreira');
+
+      expect(results.single.id, 'street:1');
+    });
+
     test('reverse uses the first service that answers', () async {
       final offline = _FakeService(const []); // returns null by design
       final online = _FakeService(const [])
