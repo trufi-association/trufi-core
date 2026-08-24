@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/saved_place.dart';
+import '../models/saved_place_icons.dart';
 import '../../l10n/saved_places_localizations.dart';
 
 /// A tile widget for displaying a saved place with Material 3 design.
@@ -128,32 +129,8 @@ class SavedPlaceTile extends StatelessWidget {
     );
   }
 
-  IconData _getIconFromName(String? iconName) {
-    switch (iconName) {
-      case 'star':
-        return Icons.star_rounded;
-      case 'school':
-        return Icons.school_rounded;
-      case 'shopping':
-        return Icons.shopping_cart_rounded;
-      case 'restaurant':
-        return Icons.restaurant_rounded;
-      case 'gym':
-        return Icons.fitness_center_rounded;
-      case 'hospital':
-        return Icons.local_hospital_rounded;
-      case 'park':
-        return Icons.park_rounded;
-      case 'airport':
-        return Icons.flight_rounded;
-      case 'train':
-        return Icons.train_rounded;
-      case 'bus':
-        return Icons.directions_bus_rounded;
-      default:
-        return Icons.place_rounded;
-    }
-  }
+  IconData _getIconFromName(String? iconName) =>
+      savedPlaceRoundedIcon(iconName);
 
   String _getDisplayName(SavedPlacesLocalizations localization) {
     if (place.type == SavedPlaceType.home && !place.name.contains('_')) {
