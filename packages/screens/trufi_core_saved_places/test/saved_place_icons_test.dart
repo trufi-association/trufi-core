@@ -43,6 +43,29 @@ void main() {
     expect(names.length, savedPlaceIcons.length);
   });
 
+  test('the key set is pinned — removing or renaming a key breaks storage', () {
+    // Keys live in the user's SharedPreferences: dropping one from the table
+    // silently sends already-saved places back to the pin (the #985 symptom).
+    expect(savedPlaceIcons.map((i) => i.name).toList(), const [
+      'place',
+      'star',
+      'favorite',
+      'bookmark',
+      'school',
+      'shopping',
+      'restaurant',
+      'cafe',
+      'gym',
+      'hospital',
+      'park',
+      'airport',
+      'train',
+      'bus',
+      'parking',
+      'gas',
+    ]);
+  });
+
   test('unknown and null keys fall back to the pin', () {
     expect(savedPlaceRoundedIcon('no-such-icon'), Icons.place_rounded);
     expect(savedPlaceRoundedIcon(null), Icons.place_rounded);
