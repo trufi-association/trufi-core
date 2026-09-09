@@ -4,6 +4,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:test/test.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 
+import 'support/connection_tables.dart';
+
 /// Unit coverage for the transfer connection table of [GtfsRouteIndex]:
 /// walkable transfers between distinct stops, the conditional same-name
 /// rule, and the sorted columnar layout the routing service relies on.
@@ -243,6 +245,32 @@ void main() {
       },
     );
 
+    test('shared-stop connections are kept at every stop of a corridor', () {
+      // 209 (67 and 68) and 110 share the three hub stops in a row. The
+      // one-per-crossing thinning applies to walkable connections only:
+      // the historical table — one entry per shared stop, every stop, both
+      // ways — must come out exactly, not just its first stop.
+      final data = feed(
+        stops: hub,
+        routes: {
+          '67': bus('67', '209'),
+          '68': bus('68', '209'),
+          '12': bus('12', '110'),
+        },
+        tripStops: {
+          '67': ['h0', 'h1', 'h2'],
+          '68': ['h2', 'h1', 'h0'],
+          '12': ['h0', 'h1', 'h2'],
+        },
+      );
+      final index = GtfsRouteIndex(data);
+      final expected = sharedStopTable(index);
+      // 67 ↔ 12 and 68 ↔ 12 at three stops, both directions; never 67 ↔ 68.
+      expect(expected, hasLength(2 * 3 * 2));
+      expect(walkZeroTable(index), expected);
+      expect(index.connectionCount, expected.length, reason: 'no walkable');
+    });
+
     test('three route_ids sharing a name are still one line (the limit)', () {
       final data = feed(
         stops: hub,
@@ -386,6 +414,13 @@ void main() {
       // P: 4 (Q, R, S at p1; T at p2). Q, R, S: 3 each (the other two of
       // the p1 cluster + P). T: 1 (P at p2). Terminals are all distinct.
       expect(index.connectionCount, 4 + 3 * 3 + 1);
+    });
+
+    test('walk-0 entries are exactly the shared-stop table', () {
+      // P ↔ Q at p1 and P ↔ T at p2, both ways; everything else is walkable.
+      final expected = sharedStopTable(index);
+      expect(expected, hasLength(4));
+      expect(walkZeroTable(index), expected);
     });
   });
 

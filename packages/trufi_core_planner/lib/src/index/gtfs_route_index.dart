@@ -130,8 +130,9 @@ class PatternConnection {
 ///
 /// The index keeps every connection of every pattern in four flat typed
 /// arrays (three `Int32List` + one `Float32List`, 16 bytes per connection)
-/// instead of one object each: with walkable transfers Cochabamba holds
-/// ~300k connections, which is ~5 MB columnar versus ~17 MB boxed. This
+/// instead of one object each: with walkable transfers the dense Cochabamba
+/// feed (23.7k stops, 657 patterns) holds 2.6 M connections in 40 MB, less
+/// than the ~58 MB its 1.2 M shared-stop connections took as objects. This
 /// view exposes them as a `List<PatternConnection>` for convenience and as
 /// `...At(i)` accessors for allocation-free hot loops.
 ///
@@ -398,7 +399,11 @@ class GtfsRouteIndex {
   /// (23.7k stops, 657 patterns) from 1.2 M to 16 M connections for no
   /// extra reachability — boarding Q at its first nearby stop already
   /// reaches everything downstream, and stops inside the shared stretch are
-  /// served by P directly.
+  /// served by P directly. Thinning never loses a reachable pattern pair or
+  /// destination, but the best score of a pair can move slightly (the
+  /// dropped stop is occasionally the cheaper transfer: median +0.1 %, max
+  /// +14 % over 340 random Cochabamba queries). Shared-stop connections are
+  /// never thinned.
   ///
   /// Transfers within one logical line (same line key, see
   /// [lineKeyForRoute]) are skipped: "ride 209 then transfer to 209" is
@@ -412,6 +417,15 @@ class GtfsRouteIndex {
     final chunkMyIdx = <Int32List>[];
     final chunkOtherIdx = <Int32List>[];
     final chunkWalk = <Float32List>[];
+    // Scratch for the pattern being built, grown on demand and reused. Its
+    // size is the pre-thinning upper bound, so each pattern's chunk below is
+    // an exact-size copy: keeping a view of the scratch instead would pin
+    // every oversized buffer until the concatenation (on the dense
+    // Cochabamba feed 7.3 M entries = 111 MB of bounds for a 40 MB table).
+    var scratchOther = Int32List(0);
+    var scratchMyIdx = Int32List(0);
+    var scratchOtherIdx = Int32List(0);
+    var scratchWalk = Float32List(0);
 
     // Integer line id per pattern: the inner loops below run once per
     // (stop, neighbouring pattern) pair — hundreds of thousands of times on
@@ -510,10 +524,16 @@ class GtfsRouteIndex {
       for (final nb in nearest) {
         capacity += nb.length;
       }
-      final other = Int32List(capacity);
-      final myIdx = Int32List(capacity);
-      final otherIdx = Int32List(capacity);
-      final walk = Float32List(capacity);
+      if (scratchOther.length < capacity) {
+        scratchOther = Int32List(capacity);
+        scratchMyIdx = Int32List(capacity);
+        scratchOtherIdx = Int32List(capacity);
+        scratchWalk = Float32List(capacity);
+      }
+      final other = scratchOther;
+      final myIdx = scratchMyIdx;
+      final otherIdx = scratchOtherIdx;
+      final walk = scratchWalk;
       var count = 0;
 
       for (var idx1 = 0; idx1 < stopCount; idx1++) {
@@ -556,10 +576,10 @@ class GtfsRouteIndex {
         next?.resetWalks(nextWalk);
       }
 
-      chunkOther.add(Int32List.sublistView(other, 0, count));
-      chunkMyIdx.add(Int32List.sublistView(myIdx, 0, count));
-      chunkOtherIdx.add(Int32List.sublistView(otherIdx, 0, count));
-      chunkWalk.add(Float32List.sublistView(walk, 0, count));
+      chunkOther.add(other.sublist(0, count));
+      chunkMyIdx.add(myIdx.sublist(0, count));
+      chunkOtherIdx.add(otherIdx.sublist(0, count));
+      chunkWalk.add(walk.sublist(0, count));
       total += count;
       starts[i + 1] = total;
     }

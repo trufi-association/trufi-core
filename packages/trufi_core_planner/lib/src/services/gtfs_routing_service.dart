@@ -168,14 +168,34 @@ class RoutingPath {
 
 /// Service for GTFS-based routing.
 class GtfsRoutingService {
+  /// Default for [maxTransferCandidates].
+  ///
+  /// It was 1 500 when every candidate built two segments. Since a
+  /// candidate is now a score comparison (one path per pattern pair is
+  /// kept), it costs ~6× less — and walkable transfers roughly double the
+  /// connections per pattern, so at 1 500 the budget ran out on the first
+  /// origin stops: on the dense Cochabamba feed the best itinerary of 24 of
+  /// 340 random queries got worse than with shared stops only (up to +23 %
+  /// score). At 20 000 none did, at ~9 ms average per query on desktop
+  /// (~5 ms at 1 500; the maximum is set by the direct phase either way).
+  static const int defaultMaxTransferCandidates = 20000;
+
   final GtfsData data;
   final GtfsSpatialIndex spatialIndex;
   final GtfsRouteIndex routeIndex;
+
+  /// Upper bound on the (transfer connection, destination stop) candidates
+  /// one query evaluates in the one-transfer phase; bounds tail latency on
+  /// dense feeds. Candidates are enumerated origin stop by origin stop,
+  /// nearest first, so when the budget runs out farther origin stops are
+  /// never considered.
+  final int maxTransferCandidates;
 
   GtfsRoutingService({
     required this.data,
     required this.spatialIndex,
     required this.routeIndex,
+    this.maxTransferCandidates = defaultMaxTransferCandidates,
   });
 
   /// Find routes between two locations.
@@ -371,14 +391,13 @@ class GtfsRoutingService {
     // a transfer at a hub that's a few km away).
     final transferMaxDistFromDestM = max(3000.0, straightLine);
 
-    // Hard cap on total candidate enumeration. In dense feeds with
-    // transit-saturated city centers, the precomputed connection list can
-    // still produce thousands of valid transfer candidates per query.
-    // Beyond a reasonable count, additional candidates rarely change the
-    // top-K result — score-sort + bucket cap discard them anyway. Cutting
-    // the inner loop bounds tail latency without affecting the user-visible
-    // top results.
-    const maxCandidatesEnumerated = 1500;
+    // Hard cap on total candidate enumeration, bounding tail latency in
+    // dense feeds where the connection table yields thousands of valid
+    // (alight, board, destination) candidates per query. The budget is
+    // spent origin stop by origin stop, nearest first: once it runs out the
+    // remaining origin stops are never looked at, so a cap that is too low
+    // silently drops good itineraries (see [maxTransferCandidates]).
+    final maxCandidatesEnumerated = maxTransferCandidates;
     var enumerated = 0;
 
     // Only the best candidate per (origin pattern, other pattern) pair can

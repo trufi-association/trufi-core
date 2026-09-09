@@ -4,6 +4,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:test/test.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 
+import 'support/connection_tables.dart';
+
 /// Regression for trufi-sanaa#2 (reopened): four real origin/destination
 /// pairs from the reporter that the planner answered with "no routes".
 ///
@@ -23,9 +25,9 @@ import 'package:trufi_core_planner/trufi_core_planner.dart';
 void main() {
   late GtfsData data;
   late GtfsSpatialIndex spatial;
+  final file = File('test/fixtures/sanaa_issue2_mini.gtfs.zip');
 
   setUpAll(() async {
-    final file = File('test/fixtures/sanaa_issue2_mini.gtfs.zip');
     expect(
       file.existsSync(),
       isTrue,
@@ -50,11 +52,16 @@ void main() {
 
   /// Same parameters the app wires through `LocalPlannerClient`
   /// (maxWalkingDistance 1500, maxItineraries 5, pool 150).
-  List<RoutingPath> plan(GtfsRouteIndex index, (LatLng, LatLng) trip) {
+  List<RoutingPath> plan(
+    GtfsRouteIndex index,
+    (LatLng, LatLng) trip, {
+    int maxTransferCandidates = GtfsRoutingService.defaultMaxTransferCandidates,
+  }) {
     final service = GtfsRoutingService(
       data: data,
       spatialIndex: spatial,
       routeIndex: index,
+      maxTransferCandidates: maxTransferCandidates,
     );
     return service.findRoutes(
       origin: trip.$1,
@@ -256,14 +263,83 @@ void main() {
       expect(legacy.connectionCount, lessThan(radiusOnly.connectionCount));
       expect(nameRuleOnly.connectionCount, lessThan(full.connectionCount));
       expect(radiusOnly.connectionCount, lessThan(full.connectionCount));
-      // Every legacy connection is still present (shared stop, walk 0).
-      var zeroWalk = 0;
-      for (var p = 0; p < full.patternCount; p++) {
-        for (final c in full.getConnectionsFor(p)) {
-          if (c.walkMeters == 0) zeroWalk++;
-        }
-      }
-      expect(zeroWalk, greaterThanOrEqualTo(legacy.connectionCount));
     });
+
+    test('shared-stop connections are exactly the brute-force table', () {
+      // "Kept exactly as before" pinned against an independent computation
+      // (public API only): one walk-0 entry per (pattern, position, other
+      // pattern at that stop, other line) — no missing, no extra, no
+      // duplicates. The thinning rule must not touch these: on this cut 94
+      // of them follow another shared stop with the same pattern and would
+      // vanish if it did.
+      final full = GtfsRouteIndex(data, spatialIndex: spatial);
+      final expected = sharedStopTable(full);
+      expect(expected.length, greaterThan(100));
+      expect(walkZeroTable(full), expected);
+      // Same for the legacy index (all of its table is shared-stop), and
+      // every legacy connection is still in the new table.
+      expect(walkZeroTable(legacy), sharedStopTable(legacy));
+      expect(walkZeroTable(full), containsAll(walkZeroTable(legacy)));
+    });
+
+    test('LocalPlannerClient passes both knobs to the index it builds', () {
+      final bytes = file.readAsBytesSync();
+      final asLegacy = LocalPlannerClient(
+        transferRadiusMeters: 0,
+        sameNameRouteLimit: 1 << 30,
+      )..loadFromBytes(bytes);
+      expect(asLegacy.routeIndex!.connectionCount, legacy.connectionCount);
+      final asDefault = LocalPlannerClient()..loadFromBytes(bytes);
+      expect(asDefault.routeIndex!.transferRadiusMeters, 100);
+      expect(asDefault.routeIndex!.sameNameRouteLimit, 3);
+      expect(
+        asDefault.routeIndex!.connectionCount,
+        GtfsRouteIndex(data, spatialIndex: spatial).connectionCount,
+      );
+    });
+  });
+
+  group('candidate cap (GtfsRoutingService.maxTransferCandidates)', () {
+    late GtfsRouteIndex index;
+    setUpAll(() => index = GtfsRouteIndex(data, spatialIndex: spatial));
+
+    List<(String, int)> signature(List<RoutingPath> paths) => [
+      for (final p in paths)
+        (p.segments.map((s) => s.route.id).join('>'), p.score.round()),
+    ];
+
+    test('the default cap does not truncate any of the four cases', () {
+      for (final entry in cases.entries) {
+        expect(
+          signature(plan(index, entry.value)),
+          signature(plan(index, entry.value, maxTransferCandidates: 1 << 30)),
+          reason: entry.key,
+        );
+      }
+    });
+
+    test(
+      'a cap that runs out on the first origin stops loses A-rev\'s best',
+      () {
+        // Candidates are enumerated origin stop by origin stop, nearest first:
+        // a small budget is spent before the stop where the 54 m-walk
+        // itinerary (7 20046784 → 7 18800658) boards, so only the shared-stop
+        // one is left and the top score gets worse — the failure mode that
+        // made the cap move from 1 500 to 20 000.
+        final full = plan(index, cases['A-rev mall → origin']!);
+        final capped = plan(
+          index,
+          cases['A-rev mall → origin']!,
+          maxTransferCandidates: 100,
+        );
+        expect(capped.length, lessThan(full.length));
+        expect(capped.first.score, greaterThan(full.first.score));
+        expect(
+          signature(capped).map((s) => s.$1),
+          isNot(contains('20046784>18800658')),
+        );
+        expect(signature(full).map((s) => s.$1), contains('20046784>18800658'));
+      },
+    );
   });
 }
