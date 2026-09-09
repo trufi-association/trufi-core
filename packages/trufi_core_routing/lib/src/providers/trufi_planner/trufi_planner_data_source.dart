@@ -17,10 +17,12 @@ enum TrufiPlannerDataStatus { unloaded, loading, loaded, error }
 class _GtfsLoadRequest {
   final Uint8List bytes;
   final double transferRadiusMeters;
+  final int sameNameRouteLimit;
 
   const _GtfsLoadRequest({
     required this.bytes,
     required this.transferRadiusMeters,
+    required this.sameNameRouteLimit,
   });
 }
 
@@ -198,6 +200,7 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
       _GtfsLoadRequest(
         bytes: assetData,
         transferRadiusMeters: config.transferRadiusMeters,
+        sameNameRouteLimit: config.sameNameRouteLimit,
       ),
     );
 
@@ -230,6 +233,7 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
       data,
       spatialIndex: spatialIndex,
       transferRadiusMeters: request.transferRadiusMeters,
+      sameNameRouteLimit: request.sameNameRouteLimit,
     );
     final scheduleIndex = GtfsScheduleIndex(
       trips: data.trips,

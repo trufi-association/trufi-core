@@ -26,8 +26,14 @@ class LocalPlannerClient implements PlannerRoutingClient {
   /// [loadFromBytes]; [loadFromParsed] takes an already-built index.
   final double transferRadiusMeters;
 
+  /// How many `route_id`s may share a `route_short_name` and still count as
+  /// one line (see [GtfsRouteIndex.sameNameRouteLimit]). Used by
+  /// [loadFromBytes]; [loadFromParsed] takes an already-built index.
+  final int sameNameRouteLimit;
+
   LocalPlannerClient({
     this.transferRadiusMeters = GtfsRouteIndex.defaultTransferRadiusMeters,
+    this.sameNameRouteLimit = GtfsRouteIndex.defaultSameNameRouteLimit,
   });
 
   /// Load from raw GTFS ZIP bytes.
@@ -38,6 +44,7 @@ class LocalPlannerClient implements PlannerRoutingClient {
       _data!,
       spatialIndex: _spatialIndex,
       transferRadiusMeters: transferRadiusMeters,
+      sameNameRouteLimit: sameNameRouteLimit,
     );
     _routingService = GtfsRoutingService(
       data: _data!,
