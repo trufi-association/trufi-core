@@ -13,6 +13,11 @@ class NearbyStop {
 }
 
 /// Spatial index for fast nearest-stop queries using a KD-Tree.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build a different tree from the same GTFS, bump
+/// `PlannerIndexCodec.formatVersion`, or users keep the previous release's
+/// index until the bundled feed changes.
 class GtfsSpatialIndex {
   final Map<String, GtfsStop> _stops;
   late final _KdTree _tree;

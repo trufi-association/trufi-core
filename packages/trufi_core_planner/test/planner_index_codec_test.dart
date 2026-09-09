@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -6,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:test/test.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
 
+import 'support/bundle_dump.dart';
 import 'support/connection_tables.dart';
 
 /// The persisted planner index (#993): a snapshot must restore exactly the
@@ -633,14 +635,30 @@ void main() {
       }
     });
 
-    test('a single flipped byte anywhere in the payload → null', () {
+    test('a single flipped bit anywhere → null', () {
       final rnd = Random(7);
-      // Header + string pool live in the first KB; the rest is payload.
       for (var i = 0; i < 300; i++) {
         final at = rnd.nextInt(blob.length - 4);
         final other = Uint8List.fromList(blob);
         other[at] ^= 0x01 << rnd.nextInt(8);
         expect(rejectReason(other), isNotNull, reason: 'flip at $at');
+      }
+    });
+
+    test('every bit of the header is validated (no reserved bytes)', () {
+      // The header is 56 bytes; the checksum covers the payload only, so
+      // each header field must be caught by its own check — including the
+      // string pool offset, which is validated against the payload.
+      for (var at = 0; at < 64; at++) {
+        for (var bit = 0; bit < 8; bit++) {
+          final other = Uint8List.fromList(blob);
+          other[at] ^= 1 << bit;
+          expect(
+            rejectReason(other),
+            isNotNull,
+            reason: 'byte $at bit $bit accepted',
+          );
+        }
       }
     });
 
@@ -721,34 +739,38 @@ void main() {
   });
 
   group('format version guard', () {
-    test('the integer skeleton of the fixture snapshot is pinned — if this '
-        'fails, the index build changed: bump PlannerIndexCodec.formatVersion '
-        'and update the digest', () {
-      final loaded = load(blob);
-      final sb = StringBuffer();
-      final index = loaded.routeIndex;
-      for (var p = 0; p < index.patternCount; p++) {
-        final pat = index.patternById(p);
-        sb.writeln('P $p ${pat.routeId} ${pat.stopIds.join(',')}');
-        final c = index.getConnectionsFor(p);
-        for (var k = 0; k < c.length; k++) {
-          sb.writeln(
-            'C ${c.otherPatternIdAt(k)} ${c.myStopIdxAt(k)} '
-            '${c.otherStopIdxAt(k)}',
-          );
-        }
-      }
-      sb.writeln(
-        'S ${loaded.spatialIndex.preorder.map((s) => s.id).join(',')}',
-      );
-      for (final e in loaded.scheduleIndex.stopTimesByStop.entries) {
-        sb.writeln('T ${e.key} ${e.value.map((st) => st.tripId).join(',')}');
-      }
-      final digest = PlannerIndexCodec.fingerprint(
-        Uint8List.fromList(sb.toString().codeUnits),
-      );
-      expect(PlannerIndexCodec.formatVersion, 1);
-      expect(digest, '94eb0e89a69b5fd9');
-    });
+    test(
+      'every field of the fixture bundle is pinned — if this fails, the '
+      'parser or an index build now produces something different from the '
+      'same GTFS: bump PlannerIndexCodec.formatVersion and update the digest',
+      () {
+        // The snapshot persists the parsed data as well as the indices, and
+        // the cache directory survives app updates: a core release that
+        // changes any of it without bumping the version would keep serving
+        // last release's output from the cache (the #973 failure mode).
+        // The dump covers every field of GtfsData (stop names, colours,
+        // times, shape points…), every pattern field (cumDist, bbox,
+        // headsign, shape), all four connection columns, line keys, the
+        // per-stop lookup order, the KD-tree pre-order and the schedule
+        // groups; calendar instants go in as year-month-day (local time).
+        final text = describeBundle(built);
+        expect(
+          describeBundle(load(blob)),
+          text,
+          reason: 'the restored bundle differs from the built one',
+        );
+        expect(text.split('\n').length, greaterThan(3000));
+        final digest = PlannerIndexCodec.fingerprint(utf8.encode(text));
+        expect(PlannerIndexCodec.formatVersion, 1);
+        expect(
+          digest,
+          '4023095d04461e4c',
+          reason:
+              'the planner now builds or parses something different from the '
+              'same GTFS — bump PlannerIndexCodec.formatVersion so cached '
+              'snapshots are rebuilt, then update this digest',
+        );
+      },
+    );
   });
 }

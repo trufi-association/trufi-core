@@ -34,6 +34,11 @@ class RouteFrequencyInfo {
 }
 
 /// Index for schedule-based queries (departures, frequencies).
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build different groups or order from the same GTFS, bump
+/// `PlannerIndexCodec.formatVersion`, or users keep the previous release's
+/// index until the bundled feed changes.
 class GtfsScheduleIndex {
   final Map<String, GtfsTrip> _trips;
   final List<GtfsStopTime> _stopTimes;

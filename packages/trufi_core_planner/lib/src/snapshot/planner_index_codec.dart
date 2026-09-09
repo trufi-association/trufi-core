@@ -42,10 +42,16 @@ class PlannerIndexEncodeException implements Exception {
 /// Layout (host byte order — the file is a local cache and never travels):
 ///
 /// ```
-/// 'TPIX' · formatVersion u32 · byte-order marker u32 · reserved u32
+/// 'TPIX' · formatVersion u32 · byte-order marker u32 · stringsOffset u32
 /// transferRadiusMeters f64 · sameNameRouteLimit i32 · fingerprint (u32 + utf8)
 /// payloadLength u32 · payloadChecksum u32 · payload (sections) · 'XIPT'
 /// ```
+///
+/// The payload is the data and index sections followed by the string pool
+/// as its **last** section; `stringsOffset` (from the payload start) lets
+/// [decode] read the pool first. Writing the pool last is what lets
+/// [encode] stream the whole blob into a single buffer: the pool is only
+/// complete once every other section has been written.
 ///
 /// Each section starts 8-byte aligned (typed-data views require offsets
 /// that are multiples of the element size) with a tag and its byte length;
@@ -64,14 +70,24 @@ class PlannerIndexEncodeException implements Exception {
 /// checksum mismatch, truncation, or any index out of range while
 /// restoring — and the caller rebuilds from the GTFS.
 class PlannerIndexCodec {
-  /// Version of the snapshot schema **and** of the index-building rules it
-  /// captures. Bump it whenever the layout changes or when
-  /// [GtfsRouteIndex], [GtfsSpatialIndex] or [GtfsScheduleIndex] would build
-  /// something different from the same GTFS (thinning rule, line keys, tree
-  /// shape, sort order…): a snapshot written by the previous version is then
-  /// rejected and rebuilt instead of serving stale indices — the failure
-  /// mode of the asset-extraction cache in #973. A test pins a digest of the
-  /// integer columns of a fixture snapshot to catch a forgotten bump.
+  /// Version of the snapshot schema **and** of everything the snapshot
+  /// captures: the parsed [GtfsData] and the three indices. Bump it whenever
+  /// the layout changes, when [GtfsParser], `CsvParser` or a model's
+  /// `fromCsv` would parse something different from the same GTFS (trimming
+  /// or normalising a field, colour / time / distance parsing, shape point
+  /// order, BOM handling…), or when [GtfsRouteIndex], [GtfsSpatialIndex] or
+  /// [GtfsScheduleIndex] would build something different (distances,
+  /// thinning rule, line keys, tree shape, sort order…). A snapshot written
+  /// by the previous version is then rejected and rebuilt instead of serving
+  /// stale data — the failure mode of the asset-extraction cache in #973.
+  /// The cache directory survives app updates, so this bump is the only
+  /// thing between a core release and its users keeping the previous
+  /// release's parse for as long as the bundled GTFS does not change.
+  ///
+  /// The `format version guard` test digests every field of the fixture
+  /// bundle (parsed data and indices; calendar instants as year-month-day
+  /// because the parser builds them in local time) and pins the digest, so a
+  /// forgotten bump fails the suite.
   static const int formatVersion = 1;
 
   static const List<int> _magic = [0x54, 0x50, 0x49, 0x58]; // 'TPIX'
@@ -158,15 +174,19 @@ class PlannerIndexCodec {
     PlannerIndexBundle bundle, {
     required String fingerprint,
   }) {
+    // One buffer for the whole blob. The sections stream into it and the
+    // string pool — complete only once every section has been written — goes
+    // last, located through `stringsOffset` in the header. A first draft
+    // wrote the body into a second writer and copied it behind the pool; on
+    // the Cochabamba feed that cost ~150 MB of transient peak in the
+    // first-start isolate on top of the build itself.
     final pool = _StringPool();
-    final body = _Writer();
-    _writeBody(body, bundle, pool);
-
     final out = _Writer();
     out.rawBytes(_magic);
     out.u32(formatVersion);
     out.u32(_byteOrderMarker);
-    out.u32(0); // reserved
+    final stringsOffsetAt = out.position;
+    out.u32(0); // stringsOffset, patched below
     out.f64(bundle.routeIndex.transferRadiusMeters);
     out.i32(_i32(bundle.routeIndex.sameNameRouteLimit, 'sameNameRouteLimit'));
     out.string(fingerprint);
@@ -176,9 +196,11 @@ class PlannerIndexCodec {
     out.u32(0); // payload checksum, patched below
     out.align(8);
     final payloadStart = out.position;
+    _writeBody(out, bundle, pool);
+    final stringsAt = out.position; // 8-aligned: every section ends aligned
     _writeSection(out, _tagStrings, () => pool.write(out));
-    out.rawBytes(body.finish());
     final payloadEnd = out.position;
+    out.patchU32(stringsOffsetAt, stringsAt - payloadStart);
     out.patchU32(payloadLengthAt, payloadEnd - payloadStart);
     final bytes = out.finish(trailer: _trailer);
     final checksum = _checksum(bytes, payloadStart, payloadEnd);
@@ -544,7 +566,7 @@ class PlannerIndexCodec {
       throw _Rejected('format version $version, expected $formatVersion');
     }
     if (r.u32() != _byteOrderMarker) throw const _Rejected('byte order');
-    r.u32(); // reserved
+    final stringsOffset = r.u32();
     final radius = r.f64();
     final limit = r.i32();
     if (radius != transferRadiusMeters || limit != sameNameRouteLimit) {
@@ -565,14 +587,25 @@ class PlannerIndexCodec {
     if (payloadLength % 8 != 0 || payloadEnd + 4 != bytes.length) {
       throw const _Rejected('payload length does not match the file');
     }
+    if (stringsOffset % 8 != 0 || stringsOffset + 8 > payloadLength) {
+      throw const _Rejected('string pool offset out of range');
+    }
     if (_checksum(bytes, payloadStart, payloadEnd) != checksum) {
       throw const _Rejected('checksum mismatch');
     }
 
-    final pool = _StringPool.read(r, _tagStrings);
+    // The string pool is the last section (see the layout); every other
+    // section refers into it, so read it first through its own cursor. It
+    // must close the payload exactly.
+    final poolReader = _Reader(bytes)..skip(payloadStart + stringsOffset);
+    final pool = _StringPool.read(poolReader, _tagStrings);
+    if (poolReader.position != payloadEnd) {
+      throw const _Rejected('string pool does not close the payload');
+    }
 
     final agencies = r.section(_tagAgencies, () {
       final n = r.u32();
+      r.need(n * 32); // eight u32 refs each — bound n before allocating
       return List<GtfsAgency>.generate(n, (_) {
         return GtfsAgency(
           id: pool.required(r.u32()),
@@ -728,6 +761,7 @@ class PlannerIndexCodec {
 
     final calendarList = r.section(_tagCalendars, () {
       final n = r.u32();
+      r.need(n * 24); // u32 + 3 u8, padded to 8, + 2 f64
       return List<GtfsCalendar>.generate(n, (_) {
         final serviceId = pool.required(r.u32());
         final days = r.u8();
@@ -759,6 +793,7 @@ class PlannerIndexCodec {
 
     final calendarDates = r.section(_tagCalendarDates, () {
       final n = r.u32();
+      r.need(n * 16); // u32 + 2 u8, padded to 8, + f64
       return List<GtfsCalendarDate>.generate(n, (_) {
         final serviceId = pool.required(r.u32());
         final exception = r.u8();
@@ -868,7 +903,7 @@ class PlannerIndexCodec {
             stopIds: stopIds,
             headsign: pool.optional(headsign[i]),
             shapeId: pool.optional(shape[i]),
-            cumDist: Float64List.fromList(cumDist.sublist(at, at + count)),
+            cumDist: cumDist.sublist(at, at + count),
             minLat: minLat[i],
             minLon: minLon[i],
             maxLat: maxLat[i],
@@ -971,7 +1006,7 @@ class PlannerIndexCodec {
     });
 
     r.align(8);
-    if (r.position != payloadEnd) {
+    if (r.position != payloadStart + stringsOffset) {
       throw const _Rejected('trailing bytes after the last section');
     }
 
@@ -1230,40 +1265,43 @@ class _Reader {
 
   int get position => _pos;
 
-  void _need(int n) {
+  /// Rejects unless [n] more bytes exist. Sections whose records are read
+  /// one by one call it with `count * recordSize` before allocating `count`
+  /// objects, so a forged count cannot allocate gigabytes first.
+  void need(int n) {
     if (n < 0 || _pos + n > bytes.length) {
       throw const _Rejected('truncated snapshot');
     }
   }
 
   void skip(int n) {
-    _need(n);
+    need(n);
     _pos += n;
   }
 
   void align(int n) => skip((n - _pos % n) % n);
 
   int u8() {
-    _need(1);
+    need(1);
     return bytes[_pos++];
   }
 
   int u32() {
-    _need(4);
+    need(4);
     final v = _data.getUint32(_pos, Endian.host);
     _pos += 4;
     return v;
   }
 
   int i32() {
-    _need(4);
+    need(4);
     final v = _data.getInt32(_pos, Endian.host);
     _pos += 4;
     return v;
   }
 
   double f64() {
-    _need(8);
+    need(8);
     final v = _data.getFloat64(_pos, Endian.host);
     _pos += 8;
     return v;
@@ -1271,7 +1309,7 @@ class _Reader {
 
   String string() {
     final n = u32();
-    _need(n);
+    need(n);
     final s = utf8.decoder.convert(bytes, _pos, _pos + n);
     _pos += n;
     return s;
@@ -1283,7 +1321,7 @@ class _Reader {
     if (actual != tag) throw _Rejected('expected section $tag, found $actual');
     final length = u32();
     final start = _pos;
-    _need(length);
+    need(length);
     final result = body();
     if (_pos - start != length) {
       throw _Rejected('section $tag length mismatch');
@@ -1300,7 +1338,7 @@ class _Reader {
 
   Uint8List u8List(int expected) {
     final n = _count(expected);
-    _need(n);
+    need(n);
     final view = Uint8List.sublistView(bytes, _pos, _pos + n);
     _pos += n;
     return view;
@@ -1310,7 +1348,7 @@ class _Reader {
   Float64List f64List(int expected) {
     final n = _count(expected);
     align(8);
-    _need(n * 8);
+    need(n * 8);
     final view = Float64List.view(bytes.buffer, bytes.offsetInBytes + _pos, n);
     _pos += n * 8;
     return Float64List.fromList(view);
@@ -1319,7 +1357,7 @@ class _Reader {
   Float32List f32List(int expected) {
     final n = _count(expected);
     align(4);
-    _need(n * 4);
+    need(n * 4);
     final view = Float32List.view(bytes.buffer, bytes.offsetInBytes + _pos, n);
     _pos += n * 4;
     return Float32List.fromList(view);
@@ -1334,7 +1372,7 @@ class _Reader {
       throw const _Rejected('column width');
     }
     align(width);
-    _need(n * width);
+    need(n * width);
     final base = bytes.offsetInBytes + _pos;
     final out = Int32List(n);
     switch (width) {

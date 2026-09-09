@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -8,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart';
+import 'package:trufi_core_routing/src/providers/trufi_planner/planner_index_store_io.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 /// The persisted planner index end to end through [TrufiPlannerDataSource]
@@ -62,6 +64,7 @@ void main() {
   });
 
   tearDown(() async {
+    debugBeforePlannerIndexRename = null;
     TestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', null);
     await tempDir.delete(recursive: true);
@@ -183,7 +186,7 @@ void main() {
         second.getNextDepartures(first.data!.stops.keys.first, limit: 3).length,
         first.getNextDepartures(first.data!.stops.keys.first, limit: 3).length,
       );
-      expect('${info2}', contains('loaded from cache'));
+      expect('$info2', contains('loaded from cache'));
     },
   );
 
@@ -301,9 +304,121 @@ void main() {
   test('clear() forgets the load diagnostics', () async {
     final source = await preload();
     expect(source.lastIndexLoad, isNotNull);
+    expect(source.pendingSnapshotWrite, isNotNull);
     source.clear();
     expect(source.lastIndexLoad, isNull);
+    expect(source.pendingSnapshotWrite, isNull);
     expect(source.status, TrufiPlannerDataStatus.unloaded);
+  });
+
+  test('the planner is ready before the snapshot write starts, and the write '
+      'goes through a temp file renamed into place', () async {
+    // Hold the write between "temp file complete" and "rename": the
+    // preload must have finished by then, and nothing named .idx may exist.
+    final gate = Completer<void>();
+    addTearDown(() {
+      if (!gate.isCompleted) gate.complete();
+    });
+    late TrufiPlannerDataSource source;
+    TrufiPlannerDataStatus? statusAtRename;
+    String? tmpAtRename;
+    int? tmpLengthAtRename;
+    var finalExistedAtRename = true;
+    debugBeforePlannerIndexRename = (tmp, path) async {
+      statusAtRename = source.status;
+      tmpAtRename = tmp;
+      tmpLengthAtRename = File(tmp).lengthSync();
+      finalExistedAtRename = File(path).existsSync();
+      await gate.future;
+    };
+    source = TrufiPlannerDataSource(
+      config: const TrufiPlannerConfig.local(
+        gtfsAsset: asset,
+        maxWalkingDistance: 1500,
+      ),
+    );
+    // A preload that waited for the write would hang on the gate.
+    await source.preload().timeout(const Duration(seconds: 20));
+    expect(source.isLoaded, isTrue, reason: source.errorMessage);
+    expect(source.lastIndexLoad!.source, PlannerIndexSource.built);
+    expect(source.pendingSnapshotWrite, isNotNull);
+    expect(
+      snapshotFiles().where((f) => f.path.endsWith('.idx')),
+      isEmpty,
+      reason: 'planner ready while the snapshot is not on disk yet',
+    );
+    expect((await plan(source)).where((s) => s.isNotEmpty), hasLength(4));
+
+    gate.complete();
+    await source.pendingSnapshotWrite;
+    expect(statusAtRename, TrufiPlannerDataStatus.loaded);
+    expect(finalExistedAtRename, isFalse);
+    expect(tmpAtRename, endsWith('.tmp'));
+    expect(tmpLengthAtRename, source.lastIndexLoad!.snapshotBytes);
+    final file = snapshotFile();
+    expect(tmpAtRename, startsWith('${file.path}.'));
+    expect(file.lengthSync(), source.lastIndexLoad!.snapshotBytes);
+    expect(snapshotFiles().where((f) => f.path.endsWith('.tmp')), isEmpty);
+  });
+
+  group('writePlannerIndex', () {
+    late Directory dir;
+    late String path;
+    setUp(() async {
+      dir = await Directory('${tempDir.path}/store').create();
+      path = '${dir.path}/a.idx';
+    });
+
+    test(
+      'writes a temp file next to the target and renames it over the '
+      'previous snapshot; stale temp files are swept, nothing else is left',
+      () async {
+        final old = Uint8List.fromList([1, 2, 3]);
+        await File(path).writeAsBytes(old, flush: true);
+        await File('$path.999.1.tmp').writeAsBytes([9], flush: true);
+        final bytes = Uint8List.fromList(
+          List.generate(200000, (i) => (i * 31) & 0xff),
+        );
+        // A reader that opened the old snapshot keeps seeing the old bytes
+        // after a rename (the inode is untouched); a rewrite in place or a
+        // copy over the file would change what it reads.
+        final oldHandle = await File(path).open();
+        addTearDown(oldHandle.close);
+
+        var calls = 0;
+        debugBeforePlannerIndexRename = (tmp, target) async {
+          calls++;
+          expect(target, path);
+          expect(tmp, startsWith('$path.'));
+          expect(tmp, endsWith('.tmp'));
+          expect(File(tmp).readAsBytesSync(), bytes, reason: 'temp complete');
+          expect(
+            File(path).readAsBytesSync(),
+            old,
+            reason: 'the previous snapshot is intact until the rename',
+          );
+          expect(File('$path.999.1.tmp').existsSync(), isFalse);
+        };
+        await writePlannerIndex(path, bytes);
+        expect(calls, 1, reason: 'the write must go through the seam');
+        expect(File(path).readAsBytesSync(), bytes);
+        expect(dir.listSync().map((e) => e.path), [path]);
+        if (!Platform.isWindows) {
+          expect(await oldHandle.read(3), old, reason: 'renamed, not copied');
+        }
+      },
+    );
+
+    test('a failed write leaves no temp file behind and rethrows', () async {
+      // Renaming a file over an existing directory fails (EISDIR), after the
+      // temp file has been fully written.
+      final target = await Directory('${dir.path}/taken.idx').create();
+      await expectLater(
+        writePlannerIndex(target.path, Uint8List.fromList([1, 2, 3])),
+        throwsA(isA<FileSystemException>()),
+      );
+      expect(dir.listSync().map((e) => e.path), [target.path]);
+    });
   });
 }
 

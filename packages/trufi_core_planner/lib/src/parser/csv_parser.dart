@@ -1,4 +1,9 @@
 /// Simple CSV parser for GTFS files.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this produce different rows from the same GTFS, bump
+/// `PlannerIndexCodec.formatVersion`, or users keep the previous release's
+/// parse until the bundled feed changes.
 class CsvParser {
   /// Parse CSV content into a list of maps.
   /// Each map represents a row with column names as keys.

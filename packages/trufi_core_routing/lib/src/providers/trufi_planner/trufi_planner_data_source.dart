@@ -489,5 +489,6 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
     _status = TrufiPlannerDataStatus.unloaded;
     _errorMessage = null;
     _lastIndexLoad = null;
+    _pendingSnapshotWrite = null;
   }
 }

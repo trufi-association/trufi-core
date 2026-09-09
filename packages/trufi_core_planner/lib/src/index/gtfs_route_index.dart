@@ -209,6 +209,11 @@ class PatternConnections extends ListBase<PatternConnection> {
 }
 
 /// Index for fast route lookups.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build different patterns, connections or line keys from the
+/// same GTFS, bump `PlannerIndexCodec.formatVersion`, or users keep the
+/// previous release's index until the bundled feed changes.
 class GtfsRouteIndex {
   /// Default radius within which two distinct stops count as one transfer
   /// point. Matches MOTIS' `link_stop_distance` (100 m straight-line);
