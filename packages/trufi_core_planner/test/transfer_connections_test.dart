@@ -148,6 +148,67 @@ void main() {
     });
   });
 
+  group('thinning: one walkable connection per crossing', () {
+    // Two lines running side by side for five stops 33 m apart, on kerbs
+    // 20 m from each other (the dense-feed shape: every stop of A is within
+    // 100 m of several stops of B). No stop is shared.
+    final stops = <String, GtfsStop>{
+      for (var k = 0; k < 5; k++)
+        'a$k': GtfsStop(id: 'a$k', name: 'a$k', lat: 0, lon: 0.0003 * k),
+      for (var k = 0; k < 5; k++)
+        'b$k': GtfsStop(id: 'b$k', name: 'b$k', lat: 0.00018, lon: 0.0003 * k),
+    };
+    final data = feed(
+      stops: stops,
+      routes: {'A': bus('A', '1'), 'B': bus('B', '2')},
+      tripStops: {
+        'A': ['a0', 'a1', 'a2', 'a3', 'a4'],
+        'B': ['b0', 'b1', 'b2', 'b3', 'b4'],
+      },
+    );
+
+    test('a parallel stretch yields a single connection each way', () {
+      final index = GtfsRouteIndex(data);
+      final a = index.getConnectionsFor(index.getPattern('A')!.id);
+      final b = index.getConnectionsFor(index.getPattern('B')!.id);
+      // Without thinning every stop would link to up to 4 stops of the
+      // other line (20 connections per direction).
+      expect(a, hasLength(1));
+      expect(b, hasLength(1));
+      // The first stop of the stretch: boarding there reaches everything
+      // downstream, and the stretch itself is served by A directly.
+      expect(a.single.myStopIdx, 0);
+      expect(a.single.otherStopIdx, 0);
+      expect(a.single.walkMeters, closeTo(20, 1));
+    });
+
+    test('two separate crossings keep one connection each', () {
+      // Line C crosses A near a0 and again near a4, far apart.
+      final crossing = feed(
+        stops: {
+          ...stops,
+          'c0': const GtfsStop(id: 'c0', name: 'c0', lat: -0.00018, lon: 0),
+          'c1': const GtfsStop(id: 'c1', name: 'c1', lat: -0.02, lon: 0.0006),
+          'c2': const GtfsStop(
+            id: 'c2',
+            name: 'c2',
+            lat: -0.00018,
+            lon: 0.0012,
+          ),
+        },
+        routes: {'A': bus('A', '1'), 'C': bus('C', '3')},
+        tripStops: {
+          'A': ['a0', 'a1', 'a2', 'a3', 'a4'],
+          'C': ['c0', 'c1', 'c2'],
+        },
+      );
+      final index = GtfsRouteIndex(crossing);
+      final a = index.getConnectionsFor(index.getPattern('A')!.id);
+      expect(a.map((c) => c.myStopIdx), [0, 4]);
+      expect(a.map((c) => c.otherStopIdx), [0, 2]);
+    });
+  });
+
   group('same-name rule', () {
     // A shared corridor: every line visits the hub stops h0 → h1 → h2.
     final hub = {
