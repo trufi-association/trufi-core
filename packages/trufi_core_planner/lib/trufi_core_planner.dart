@@ -24,6 +24,10 @@ export 'src/index/gtfs_schedule_index.dart';
 // Services
 export 'src/services/gtfs_routing_service.dart';
 
+// Snapshot (persisted index, #993)
+export 'src/snapshot/planner_index_bundle.dart';
+export 'src/snapshot/planner_index_codec.dart';
+
 // Client
 export 'src/client/planner_routing_client.dart';
 export 'src/client/local_planner_client.dart';

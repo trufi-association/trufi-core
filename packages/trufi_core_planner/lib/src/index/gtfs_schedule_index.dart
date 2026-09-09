@@ -60,6 +60,32 @@ class GtfsScheduleIndex {
     _buildIndices();
   }
 
+  /// Restores an index from the already grouped and sorted
+  /// [stopTimesByStop] of an index built over the same data (see
+  /// [stopTimesByStop]); the per-route trip lists are re-derived from
+  /// [trips], whose order is preserved by the snapshot. Used by the planner
+  /// index snapshot.
+  GtfsScheduleIndex.restore({
+    required Map<String, GtfsTrip> trips,
+    required List<GtfsStopTime> stopTimes,
+    required Map<String, GtfsCalendar> calendars,
+    required List<GtfsCalendarDate> calendarDates,
+    required List<GtfsFrequency> frequencies,
+    required Map<String, List<GtfsStopTime>> stopTimesByStop,
+  }) : _trips = trips,
+       _stopTimes = stopTimes,
+       _calendars = calendars,
+       _calendarDates = calendarDates,
+       _frequencies = frequencies {
+    _stopTimesByStop = stopTimesByStop;
+    _indexTripsByRoute();
+  }
+
+  /// Stop times grouped by stop id, each list sorted by departure time —
+  /// the index's own working table, exposed for the snapshot codec. Treat
+  /// as read-only.
+  Map<String, List<GtfsStopTime>> get stopTimesByStop => _stopTimesByStop;
+
   void _buildIndices() {
     // Index stop times by stop ID
     _stopTimesByStop = {};
@@ -67,11 +93,7 @@ class GtfsScheduleIndex {
       _stopTimesByStop.putIfAbsent(st.stopId, () => []).add(st);
     }
 
-    // Index trips by route ID
-    _tripsByRoute = {};
-    for (final trip in _trips.values) {
-      _tripsByRoute.putIfAbsent(trip.routeId, () => []).add(trip);
-    }
+    _indexTripsByRoute();
 
     // Sort stop times by departure time
     for (final stopTimes in _stopTimesByStop.values) {
@@ -80,6 +102,13 @@ class GtfsScheduleIndex {
         final timeB = b.departureTime ?? b.arrivalTime ?? Duration.zero;
         return timeA.compareTo(timeB);
       });
+    }
+  }
+
+  void _indexTripsByRoute() {
+    _tripsByRoute = {};
+    for (final trip in _trips.values) {
+      _tripsByRoute.putIfAbsent(trip.routeId, () => []).add(trip);
     }
   }
 

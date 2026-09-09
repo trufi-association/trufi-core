@@ -30,9 +30,11 @@ dependencies:
   provider: ^6.1.5+1
   shared_preferences: ^2.5.4
   archive: ^4.0.4
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   mocktail: ^1.0.4
+  path_provider_platform_interface: ^2.1.0
