@@ -662,6 +662,62 @@ void main() {
       }
     });
 
+    test('forged counts and offsets (valid checksum) are rejected by their '
+        'bounds before anything is allocated', () {
+      // Header: magic, version, marker, stringsOffset, f64, i32, then the
+      // fingerprint (u32 length + bytes), aligned to 8; then payload
+      // length + checksum, aligned to 8. The checksum covers the payload
+      // only, so a forged header field needs no fix-up; a forged payload
+      // word gets the checksum recomputed here (FNV-1a over u32 words,
+      // like the codec).
+      final data = ByteData.sublistView(blob);
+      var at = 32 + data.getUint32(28, Endian.host);
+      at = (at + 7) & ~7;
+      final payloadLength = data.getUint32(at, Endian.host);
+      final checksumAt = at + 4;
+      final payloadStart = (at + 8 + 7) & ~7;
+      Uint8List forgePayload(int offset, int value) {
+        final other = Uint8List.fromList(blob);
+        final d = ByteData.sublistView(other);
+        d.setUint32(offset, value, Endian.host);
+        var h = 0x811c9dc5;
+        for (var i = payloadStart; i < payloadStart + payloadLength; i += 4) {
+          h = ((h ^ d.getUint32(i, Endian.host)) * 0x01000193) & 0xffffffff;
+        }
+        d.setUint32(checksumAt, h, Endian.host);
+        return other;
+      }
+
+      // Sections are (tag u32, length u32, body) in order, 8-aligned;
+      // agencies = 2, calendars = 7, calendar dates = 8 start with u32 n.
+      int bodyOf(int tag) {
+        var pos = payloadStart;
+        while (pos < payloadStart + payloadLength) {
+          final t = data.getUint32(pos, Endian.host);
+          final len = data.getUint32(pos + 4, Endian.host);
+          if (t == tag) return pos + 8;
+          pos = (pos + 8 + len + 7) & ~7;
+        }
+        fail('section $tag not found');
+      }
+
+      for (final tag in [2, 7, 8]) {
+        final sw = Stopwatch()..start();
+        expect(
+          rejectReason(forgePayload(bodyOf(tag), 0x7fffffff)),
+          contains('truncated'),
+          reason: 'section $tag: the count must fail the byte bound',
+        );
+        expect(sw.elapsedMilliseconds, lessThan(2000));
+      }
+      // String pool offset: beyond the payload, or not 8-aligned.
+      for (final offset in [payloadLength, payloadLength - 4, 12]) {
+        final other = Uint8List.fromList(blob);
+        ByteData.sublistView(other).setUint32(12, offset, Endian.host);
+        expect(rejectReason(other), contains('string pool offset'));
+      }
+    });
+
     test('trailing or missing trailer → null', () {
       final longer = Uint8List(blob.length + 8)..setRange(0, blob.length, blob);
       expect(rejectReason(longer), isNotNull);
