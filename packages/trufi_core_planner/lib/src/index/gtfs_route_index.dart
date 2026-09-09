@@ -487,6 +487,13 @@ class GtfsRouteIndex {
     }
 
     var total = 0;
+    // Scratch indexed by pattern id: walk to each pattern from the previous
+    // and next stop of the pattern being built (infinity = out of range),
+    // loaded per alight stop and reset through the neighbourhood's ids.
+    // O(1) instead of a binary search per candidate — the dominant cost of
+    // this pass on a dense feed.
+    final prevWalk = Float64List(n)..fillRange(0, n, double.infinity);
+    final nextWalk = Float64List(n)..fillRange(0, n, double.infinity);
     // Scratch: indices into a neighbourhood, insertion-sorted by walk.
     var order = Int32List(64);
 
@@ -498,47 +505,36 @@ class GtfsRouteIndex {
         for (final stopId in p1.stopIds) neighbourhoodOf(stopId),
       ];
 
-      /// Whether entry [k] of the neighbourhood at [idx1] becomes a
-      /// connection of P: another line, and — for a walkable one — a local
-      /// minimum of the walk along P.
-      bool keep(int idx1, int k) {
-        final here = nearest[idx1];
-        final j = here.patternIds[k];
-        if (j == i || patternLine[j] == line1) return false;
-        final walk = here.walks[k];
-        if (walk == 0) return true;
-        final wPrev = idx1 > 0
-            ? (nearest[idx1 - 1].walkTo(j) ?? double.infinity)
-            : double.infinity;
-        final wNext = idx1 + 1 < stopCount
-            ? (nearest[idx1 + 1].walkTo(j) ?? double.infinity)
-            : double.infinity;
-        return walk < wPrev && walk <= wNext;
+      // Upper bound: every neighbourhood entry becomes a connection.
+      var capacity = 0;
+      for (final nb in nearest) {
+        capacity += nb.length;
       }
-
-      // Count, then fill exact-sized chunks: no per-connection allocation.
+      final other = Int32List(capacity);
+      final myIdx = Int32List(capacity);
+      final otherIdx = Int32List(capacity);
+      final walk = Float32List(capacity);
       var count = 0;
-      for (var idx1 = 0; idx1 < stopCount; idx1++) {
-        final len = nearest[idx1].length;
-        for (var k = 0; k < len; k++) {
-          if (keep(idx1, k)) count++;
-        }
-      }
-      final other = Int32List(count);
-      final myIdx = Int32List(count);
-      final otherIdx = Int32List(count);
-      final walk = Float32List(count);
-      var at = 0;
+
       for (var idx1 = 0; idx1 < stopCount; idx1++) {
         final here = nearest[idx1];
+        final prev = idx1 > 0 ? nearest[idx1 - 1] : null;
+        final next = idx1 + 1 < stopCount ? nearest[idx1 + 1] : null;
+        prev?.loadWalks(prevWalk);
+        next?.loadWalks(nextWalk);
         if (order.length < here.length) order = Int32List(here.length * 2);
-        // Shortest walks first within one alight stop; insertion sort is
-        // stable, and the neighbourhood is in pattern-id order, so ties
-        // fall back to pattern id and the table is deterministic.
+
+        // Filter: another line, and — for a walkable connection — a local
+        // minimum of the walk along P. Shortest walks first within one
+        // alight stop; insertion sort is stable and the neighbourhood is in
+        // pattern-id order, so ties fall back to pattern id and the table
+        // is deterministic.
         var m = 0;
         for (var k = 0; k < here.length; k++) {
-          if (!keep(idx1, k)) continue;
+          final j = here.patternIds[k];
+          if (j == i || patternLine[j] == line1) continue;
           final w = here.walks[k];
+          if (w > 0 && !(w < prevWalk[j] && w <= nextWalk[j])) continue;
           var pos = m;
           while (pos > 0 && here.walks[order[pos - 1]] > w) {
             order[pos] = order[pos - 1];
@@ -549,17 +545,21 @@ class GtfsRouteIndex {
         }
         for (var q = 0; q < m; q++) {
           final k = order[q];
-          other[at] = here.patternIds[k];
-          myIdx[at] = idx1;
-          otherIdx[at] = here.stopIdxs[k];
-          walk[at] = here.walks[k];
-          at++;
+          other[count] = here.patternIds[k];
+          myIdx[count] = idx1;
+          otherIdx[count] = here.stopIdxs[k];
+          walk[count] = here.walks[k];
+          count++;
         }
+
+        prev?.resetWalks(prevWalk);
+        next?.resetWalks(nextWalk);
       }
-      chunkOther.add(other);
-      chunkMyIdx.add(myIdx);
-      chunkOtherIdx.add(otherIdx);
-      chunkWalk.add(walk);
+
+      chunkOther.add(Int32List.sublistView(other, 0, count));
+      chunkMyIdx.add(Int32List.sublistView(myIdx, 0, count));
+      chunkOtherIdx.add(Int32List.sublistView(otherIdx, 0, count));
+      chunkWalk.add(Float32List.sublistView(walk, 0, count));
       total += count;
       starts[i + 1] = total;
     }
@@ -695,20 +695,17 @@ class _StopNeighbourhood {
 
   int get length => patternIds.length;
 
-  /// Walk to [patternId]'s nearest stop, or null when out of range.
-  double? walkTo(int patternId) {
-    var lo = 0;
-    var hi = patternIds.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >> 1;
-      final v = patternIds[mid];
-      if (v == patternId) return walks[mid];
-      if (v < patternId) {
-        lo = mid + 1;
-      } else {
-        hi = mid;
-      }
+  /// Writes this stop's walks into [scratch] (indexed by pattern id).
+  void loadWalks(Float64List scratch) {
+    for (var k = 0; k < patternIds.length; k++) {
+      scratch[patternIds[k]] = walks[k];
     }
-    return null;
+  }
+
+  /// Undoes [loadWalks] (back to infinity = out of range).
+  void resetWalks(Float64List scratch) {
+    for (var k = 0; k < patternIds.length; k++) {
+      scratch[patternIds[k]] = double.infinity;
+    }
   }
 }
