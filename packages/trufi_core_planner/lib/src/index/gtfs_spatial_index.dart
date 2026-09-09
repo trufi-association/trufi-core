@@ -39,13 +39,35 @@ class GtfsSpatialIndex {
         .toList();
   }
 
-  /// Find all stops within a radius.
+  /// Find ALL stops within [radiusMeters] of [location], nearest first.
+  ///
+  /// Unlike [findNearestStops] there is no result cap: this is an exact
+  /// range query, so callers that must not miss a neighbour (the transfer
+  /// index links every stop pair within walking range) can rely on it.
   List<NearbyStop> findStopsInRadius(LatLng location, double radiusMeters) {
-    return findNearestStops(
-      location,
-      maxResults: 100,
-      maxDistance: radiusMeters,
+    final results = <NearbyStop>[];
+    _tree.visitWithin(
+      location.latitude,
+      location.longitude,
+      radiusMeters,
+      (stop, distance) =>
+          results.add(NearbyStop(stop: stop, distance: distance)),
     );
+    results.sort((a, b) => a.distance.compareTo(b.distance));
+    return results;
+  }
+
+  /// Calls [visit] for every stop within [radiusMeters] of ([lat], [lon]),
+  /// in tree order (not sorted), without allocating a result list. Meant
+  /// for bulk work such as building the transfer index, which runs one
+  /// range query per pattern stop — ~100k on a dense feed.
+  void forEachStopWithin(
+    double lat,
+    double lon,
+    double radiusMeters,
+    void Function(GtfsStop stop, double distance) visit,
+  ) {
+    _tree.visitWithin(lat, lon, radiusMeters, visit);
   }
 }
 
@@ -169,6 +191,58 @@ class _KdTree {
         maxResults,
         maxDistance,
       );
+    }
+  }
+
+  /// Exact range query: visits every stop within [radius] meters.
+  void visitWithin(
+    double lat,
+    double lon,
+    double radius,
+    void Function(GtfsStop stop, double distance) visit,
+  ) {
+    _searchWithin(_root, lat, lon, 0, radius, visit);
+  }
+
+  void _searchWithin(
+    _KdNode? node,
+    double lat,
+    double lon,
+    int depth,
+    double radius,
+    void Function(GtfsStop stop, double distance) visit,
+  ) {
+    if (node == null) return;
+
+    // Cheap rectangular pre-check before the trigonometry: a stop more than
+    // `radius` away along latitude alone cannot be inside the circle. Same
+    // 1% padding as the pruning below.
+    if ((node.stop.lat - lat).abs() * 111000 <= radius * 1.01) {
+      final dist = _haversineDistance(lat, lon, node.stop.lat, node.stop.lon);
+      if (dist <= radius) {
+        visit(node.stop, dist);
+      }
+    }
+
+    final axis = depth % 2;
+    final nodeVal = axis == 0 ? node.stop.lat : node.stop.lon;
+    final targetVal = axis == 0 ? lat : lon;
+
+    final first = targetVal < nodeVal ? node.left : node.right;
+    final second = targetVal < nodeVal ? node.right : node.left;
+
+    _searchWithin(first, lat, lon, depth + 1, radius, visit);
+
+    // The far side can only hold hits if the splitting plane itself is
+    // within the radius. Same degree→meter approximation as
+    // `_searchNearest`, padded by 1% so the rough conversion never prunes
+    // a stop that the exact haversine would have accepted.
+    final axisDist = (targetVal - nodeVal).abs();
+    final axisDistMeters = axis == 0
+        ? axisDist * 111000
+        : axisDist * 111000 * math.cos(lat * math.pi / 180);
+    if (axisDistMeters <= radius * 1.01) {
+      _searchWithin(second, lat, lon, depth + 1, radius, visit);
     }
   }
 

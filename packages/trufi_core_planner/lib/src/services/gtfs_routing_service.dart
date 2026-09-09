@@ -107,6 +107,11 @@ class RoutingPath {
   final double destinationWalkDistance;
   final double score;
 
+  /// Straight-line meters walked between transit segments (alight stop of
+  /// one leg → boarding stop of the next), summed over all transfers. `0`
+  /// when every transfer happens at a shared stop.
+  final double transferWalkDistance;
+
   const RoutingPath({
     required this.originWalkDistance,
     required this.originStop,
@@ -114,10 +119,12 @@ class RoutingPath {
     required this.destinationStop,
     required this.destinationWalkDistance,
     required this.score,
+    this.transferWalkDistance = 0,
   });
 
-  /// Total walk distance in meters.
-  double get totalWalkDistance => originWalkDistance + destinationWalkDistance;
+  /// Total walk distance in meters, transfer walks included.
+  double get totalWalkDistance =>
+      originWalkDistance + destinationWalkDistance + transferWalkDistance;
 
   /// Number of transfers.
   int get transfers => segments.isEmpty ? 0 : segments.length - 1;
@@ -141,6 +148,7 @@ class RoutingPath {
       ),
       destinationWalkDistance: (json['destinationWalk'] as num).toDouble(),
       score: (json['score'] as num).toDouble(),
+      transferWalkDistance: (json['transferWalk'] as num?)?.toDouble() ?? 0,
     );
   }
 
@@ -150,6 +158,7 @@ class RoutingPath {
     'segments': segments.map((s) => s.toJson()).toList(),
     'destinationStop': destinationStop.toJson(),
     'destinationWalk': destinationWalkDistance,
+    if (transferWalkDistance > 0) 'transferWalk': transferWalkDistance,
     'totalWalk': totalWalkDistance,
     'transfers': transfers,
     'totalStops': totalStops,
@@ -225,13 +234,19 @@ class GtfsRoutingService {
     // Sort all paths by score (lower is better)
     paths.sort((a, b) => a.score.compareTo(b.score));
 
-    // Deduplicate: keep only the best path per route combination.
+    // Deduplicate: keep only the best path per line combination.
     // E.g., all "Bus 15 → Z14" variants collapse into the best one,
-    // leaving room for genuinely different route options.
+    // leaving room for genuinely different route options. The key is the
+    // index's line key, not the bare `route_short_name`: where many
+    // distinct lines share one short name (Sana'a's "7"), keying by name
+    // would collapse every "7 → 7" itinerary — different lines, different
+    // terminals — into a single row.
     final seen = <String>{};
     final uniquePaths = <RoutingPath>[];
     for (final path in paths) {
-      final key = path.segments.map((s) => s.route.shortName).join('|');
+      final key = path.segments
+          .map((s) => routeIndex.lineKeyForRoute(s.route.id))
+          .join('|');
       if (seen.add(key)) {
         uniquePaths.add(path);
       }
@@ -316,6 +331,12 @@ class GtfsRoutingService {
   /// if any destination stop is reachable on the other pattern after the
   /// transfer point. No per-query candidate map: transfer geometry is
   /// fixed at index build time.
+  ///
+  /// A connection may alight and board at two different stops (walkable
+  /// transfer, see [GtfsRouteIndex.transferRadiusMeters]): the second leg
+  /// then starts at the real boarding stop and the walk between the two is
+  /// scored like any other walked meter and reported as
+  /// [RoutingPath.transferWalkDistance].
   void _findOneTransferRoutes(
     List<NearbyStop> originStops,
     List<NearbyStop> destinationStops,
@@ -360,19 +381,37 @@ class GtfsRoutingService {
     const maxCandidatesEnumerated = 1500;
     var enumerated = 0;
 
+    // Only the best candidate per (origin pattern, other pattern) pair can
+    // survive the line-key dedupe in [findRoutes], so score first and keep
+    // one path per pair: the final result is identical, and far fewer
+    // segment objects are built and sorted. With walkable transfers a
+    // pattern pair typically yields tens of (alight, board, dest) variants.
+    final patternCount = routeIndex.patternCount;
+    final bestByPair = <int, RoutingPath>{};
+
+    origins:
     for (final originNearby in originStops) {
       final originPatterns = routeIndex.getPatternsAtStop(originNearby.stop.id);
       for (final originPattern in originPatterns) {
         final originIdx = originPattern.indexOfStop(originNearby.stop.id);
         if (originIdx < 0) continue;
 
-        for (final conn in routeIndex.getConnectionsFor(originPattern.id)) {
-          // Transfer stop must be AFTER the origin within the origin pattern.
-          if (conn.myStopIdx <= originIdx) continue;
+        final originRoute = data.routes[originPattern.routeId];
+        if (originRoute == null) continue;
 
+        final conns = routeIndex.getConnectionsFor(originPattern.id);
+        // Transfer stop must be AFTER the origin within the origin pattern;
+        // connections are sorted by alight position, so jump straight past
+        // the ones at or before it.
+        for (var k = conns.firstIndexAfter(originIdx); k < conns.length; k++) {
           // Skip patterns that don't serve any destination stop.
-          final destStopsOnOther = relevantDestStops[conn.otherPatternId];
+          final otherPatternId = conns.otherPatternIdAt(k);
+          final destStopsOnOther = relevantDestStops[otherPatternId];
           if (destStopsOnOther == null) continue;
+
+          final alightIdx = conns.myStopIdxAt(k);
+          final alightStop = data.stops[originPattern.stopIds[alightIdx]];
+          if (alightStop == null) continue;
 
           // Discard transfers that happen far from the destination region.
           // The check is on the transfer point itself, not the pattern's
@@ -380,71 +419,77 @@ class GtfsRoutingService {
           // some point, but its bbox alone isn't enough to know which stop
           // does. This pointwise version preserves valid transfers and
           // skips the "ride past the destination then come back" candidates.
-          if (destBbox != null) {
-            final transferStop =
-                data.stops[originPattern.stopIds[conn.myStopIdx]];
-            if (transferStop != null &&
-                !_pointNearBbox(
-                  transferStop.lat,
-                  transferStop.lon,
-                  destBbox,
-                  transferMaxDistFromDestM,
-                )) {
-              continue;
-            }
+          if (destBbox != null &&
+              !_pointNearBbox(
+                alightStop.lat,
+                alightStop.lon,
+                destBbox,
+                transferMaxDistFromDestM,
+              )) {
+            continue;
           }
 
-          final otherPattern = routeIndex.patternById(conn.otherPatternId);
+          final otherPattern = routeIndex.patternById(otherPatternId);
+          final boardIdx = conns.otherStopIdxAt(k);
+          final transferWalk = conns.walkMetersAt(k);
+          final pairKey = originPattern.id * patternCount + otherPatternId;
+          final transit1 = originPattern.distanceBetween(originIdx, alightIdx);
 
           for (final destNearby in destStopsOnOther) {
             final destIdx = otherPattern.indexOfStop(destNearby.stop.id);
-            if (destIdx <= conn.otherStopIdx) continue;
+            if (destIdx <= boardIdx) continue;
 
-            final transferStopId = originPattern.stopIds[conn.myStopIdx];
-            final transferStop = data.stops[transferStopId];
-            if (transferStop == null) continue;
+            enumerated++;
+            final score = _calculateScore(
+              walkDistance:
+                  originNearby.distance + destNearby.distance + transferWalk,
+              transfers: 1,
+              transitDistance:
+                  transit1 + otherPattern.distanceBetween(boardIdx, destIdx),
+            );
+            final incumbent = bestByPair[pairKey];
+            if (incumbent != null && incumbent.score <= score) {
+              if (enumerated >= maxCandidatesEnumerated) break origins;
+              continue;
+            }
 
-            final originRoute = data.routes[originPattern.routeId];
+            final boardStop = data.stops[otherPattern.stopIds[boardIdx]];
             final destRoute = data.routes[otherPattern.routeId];
-            if (originRoute == null || destRoute == null) continue;
+            if (boardStop == null || destRoute == null) continue;
 
             final seg1 = _buildSegmentForPattern(
               pattern: originPattern,
               fromIdx: originIdx,
-              toIdx: conn.myStopIdx,
+              toIdx: alightIdx,
               route: originRoute,
               fromStop: originNearby.stop,
-              toStop: transferStop,
+              toStop: alightStop,
             );
             final seg2 = _buildSegmentForPattern(
               pattern: otherPattern,
-              fromIdx: conn.otherStopIdx,
+              fromIdx: boardIdx,
               toIdx: destIdx,
               route: destRoute,
-              fromStop: transferStop,
+              fromStop: boardStop,
               toStop: destNearby.stop,
             );
 
-            paths.add(
-              RoutingPath(
-                originWalkDistance: originNearby.distance,
-                originStop: originNearby.stop,
-                segments: [seg1, seg2],
-                destinationStop: destNearby.stop,
-                destinationWalkDistance: destNearby.distance,
-                score: _calculateScore(
-                  walkDistance: originNearby.distance + destNearby.distance,
-                  transfers: 1,
-                  transitDistance: seg1.transitDistance + seg2.transitDistance,
-                ),
-              ),
+            bestByPair[pairKey] = RoutingPath(
+              originWalkDistance: originNearby.distance,
+              originStop: originNearby.stop,
+              segments: [seg1, seg2],
+              destinationStop: destNearby.stop,
+              destinationWalkDistance: destNearby.distance,
+              score: score,
+              transferWalkDistance: transferWalk,
             );
-            enumerated++;
-            if (enumerated >= maxCandidatesEnumerated) return;
+            if (enumerated >= maxCandidatesEnumerated) break origins;
           }
         }
       }
     }
+
+    paths.addAll(bestByPair.values);
   }
 
   /// Build a transit segment from a known pattern and stop indices.
@@ -528,6 +573,7 @@ class GtfsRoutingService {
       destinationStop: path.destinationStop,
       destinationWalkDistance: path.destinationWalkDistance,
       score: path.score,
+      transferWalkDistance: path.transferWalkDistance,
     );
   }
 

@@ -21,11 +21,24 @@ class LocalPlannerClient implements PlannerRoutingClient {
   GtfsRouteIndex? _routeIndex;
   GtfsRoutingService? _routingService;
 
+  /// Straight-line radius within which two distinct stops form a transfer
+  /// point (see [GtfsRouteIndex.transferRadiusMeters]). Used by
+  /// [loadFromBytes]; [loadFromParsed] takes an already-built index.
+  final double transferRadiusMeters;
+
+  LocalPlannerClient({
+    this.transferRadiusMeters = GtfsRouteIndex.defaultTransferRadiusMeters,
+  });
+
   /// Load from raw GTFS ZIP bytes.
   void loadFromBytes(Uint8List bytes) {
     _data = GtfsParser.parseFromBytes(bytes);
     _spatialIndex = GtfsSpatialIndex(_data!.stops);
-    _routeIndex = GtfsRouteIndex(_data!);
+    _routeIndex = GtfsRouteIndex(
+      _data!,
+      spatialIndex: _spatialIndex,
+      transferRadiusMeters: transferRadiusMeters,
+    );
     _routingService = GtfsRoutingService(
       data: _data!,
       spatialIndex: _spatialIndex!,

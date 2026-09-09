@@ -159,7 +159,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
     // direct-vs-transfer bucket rule. Provider only handles walk-only
     // injection; otherwise we trust the backend order.
     final itineraries = paths
-        .map((path) => _convertToItinerary(path, from, to, dateTime))
+        .map((path) => convertToItinerary(path, from, to, dateTime))
         .toList();
 
     final straightDistance = _haversineMeters(from.position, to.position);
@@ -228,7 +228,12 @@ class TrufiPlannerProvider extends IRoutingProvider {
     return 2 * r * asin(sqrt(h));
   }
 
-  Itinerary _convertToItinerary(
+  /// Turns a planner [RoutingPath] into the UI's [Itinerary]: walk to the
+  /// first stop, one transit leg per segment with a walk leg between two
+  /// segments whenever the rider alights and boards at different stops,
+  /// then the walk to the destination.
+  @visibleForTesting
+  Itinerary convertToItinerary(
     RoutingPath path,
     RoutingLocation from,
     RoutingLocation to,
@@ -271,7 +276,52 @@ class TrufiPlannerProvider extends IRoutingProvider {
 
     // Transit segments
     final agencyNames = _buildAgencyNameMap();
+    RoutingSegment? previous;
     for (final segment in path.segments) {
+      // Walkable transfer: the previous leg alights at one stop and this one
+      // boards at another (two kerbs of the same street, typically). Without
+      // an explicit leg the map would draw the itinerary jumping between
+      // the two stops and the summary would hide the walk.
+      if (previous != null && previous.toStop.id != segment.fromStop.id) {
+        final walkDistance = _haversineMeters(
+          previous.toStop.position,
+          segment.fromStop.position,
+        );
+        final walkDuration = Duration(
+          seconds: (walkDistance / _walkSpeedMps).round(),
+        );
+        final walkPoints = [
+          previous.toStop.position,
+          segment.fromStop.position,
+        ];
+        legs.add(
+          Leg(
+            mode: 'WALK',
+            distance: walkDistance,
+            duration: walkDuration,
+            transitLeg: false,
+            fromPlace: Place(
+              name: previous.toStop.name,
+              lat: previous.toStop.lat,
+              lon: previous.toStop.lon,
+              stopId: previous.toStop.id,
+            ),
+            toPlace: Place(
+              name: segment.fromStop.name,
+              lat: segment.fromStop.lat,
+              lon: segment.fromStop.lon,
+              stopId: segment.fromStop.id,
+            ),
+            encodedPoints: PolylineCodec.encode(walkPoints),
+            decodedPoints: walkPoints,
+            startTime: currentTime,
+            endTime: currentTime.add(walkDuration),
+          ),
+        );
+        currentTime = currentTime.add(walkDuration);
+      }
+      previous = segment;
+
       final points = segment.shapePoints.isNotEmpty
           ? segment.shapePoints
           : segment.stops.map((s) => s.position).toList();

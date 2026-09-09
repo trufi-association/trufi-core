@@ -62,6 +62,19 @@ class TrufiPlannerConfig {
   /// Maximum number of transfers allowed (default: 1).
   final int maxTransfers;
 
+  /// Straight-line distance, in meters, within which two distinct stops
+  /// count as one transfer point (default: 100 m; local mode only).
+  ///
+  /// The planner only chained two lines where they shared a `stop_id`.
+  /// Feeds derived from OSM give the two kerbs of a street different stop
+  /// ids, so lines crossing at the same corner in opposite directions could
+  /// never be combined — Sana'a lost every trip that needed such a transfer
+  /// (trufi-sanaa#2). 100 m is what MOTIS uses to link nearby stops
+  /// (`link_stop_distance`); `0` restores shared-stop-only transfers. Raising
+  /// it grows the precomputed connection table roughly linearly (Cochabamba:
+  /// ~4× at 100 m, ~6× at 150 m versus shared stops only).
+  final double transferRadiusMeters;
+
   /// Create a local (offline) configuration using GTFS asset.
   const TrufiPlannerConfig.local({
     required String this.gtfsAsset,
@@ -72,9 +85,13 @@ class TrufiPlannerConfig {
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
     this.maxStopCandidates = 150,
+    this.transferRadiusMeters = 100,
   }) : serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
+  ///
+  /// Transfer geometry is decided by the server, so [transferRadiusMeters]
+  /// is not configurable here.
   const TrufiPlannerConfig.remote({
     required String this.serverUrl,
     this.providerId,
@@ -84,5 +101,6 @@ class TrufiPlannerConfig {
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
     this.maxStopCandidates = 150,
-  }) : gtfsAsset = null;
+  }) : gtfsAsset = null,
+       transferRadiusMeters = 100;
 }

@@ -13,6 +13,17 @@ import 'trufi_planner_config.dart';
 /// Status of the data source.
 enum TrufiPlannerDataStatus { unloaded, loading, loaded, error }
 
+/// Input for [_loadAndBuildInIsolate] (for isolate communication).
+class _GtfsLoadRequest {
+  final Uint8List bytes;
+  final double transferRadiusMeters;
+
+  const _GtfsLoadRequest({
+    required this.bytes,
+    required this.transferRadiusMeters,
+  });
+}
+
 /// Result of loading GTFS data with indices (for isolate communication).
 class _GtfsLoadResult {
   final GtfsData data;
@@ -182,7 +193,13 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
     final bytes = await rootBundle.load(config.gtfsAsset!);
     final assetData = bytes.buffer.asUint8List();
 
-    final result = await compute(_loadAndBuildInIsolate, assetData);
+    final result = await compute(
+      _loadAndBuildInIsolate,
+      _GtfsLoadRequest(
+        bytes: assetData,
+        transferRadiusMeters: config.transferRadiusMeters,
+      ),
+    );
 
     _localData = result.data;
     _scheduleIndex = result.scheduleIndex;
@@ -206,10 +223,14 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
     debugPrint('TrufiPlannerDataSource: Remote server ready');
   }
 
-  static _GtfsLoadResult _loadAndBuildInIsolate(Uint8List assetData) {
-    final data = GtfsParser.parseFromBytes(assetData);
+  static _GtfsLoadResult _loadAndBuildInIsolate(_GtfsLoadRequest request) {
+    final data = GtfsParser.parseFromBytes(request.bytes);
     final spatialIndex = GtfsSpatialIndex(data.stops);
-    final routeIndex = GtfsRouteIndex(data);
+    final routeIndex = GtfsRouteIndex(
+      data,
+      spatialIndex: spatialIndex,
+      transferRadiusMeters: request.transferRadiusMeters,
+    );
     final scheduleIndex = GtfsScheduleIndex(
       trips: data.trips,
       stopTimes: data.stopTimes,
