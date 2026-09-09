@@ -39,5 +39,17 @@
   "searchCornersHint": "Search corners...",
   "@searchCornersHint": {
     "description": "Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners"
+  },
+  "copiedToClipboard": "Copied",
+  "@copiedToClipboard": {
+    "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"
+  },
+  "originFieldLabel": "From",
+  "@originFieldLabel": {
+    "description": "Tiny caption above the origin field of the wide search bar"
+  },
+  "destinationFieldLabel": "To",
+  "@destinationFieldLabel": {
+    "description": "Tiny caption above the destination field of the wide search bar"
   }
 }

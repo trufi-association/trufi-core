@@ -655,6 +655,7 @@ class _PlaceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final name = place?.name ?? '';
 
     return Row(
       children: [
@@ -693,15 +694,28 @@ class _PlaceItem extends StatelessWidget {
                 ),
         ),
         const SizedBox(width: 12),
-        // Place name
+        // Place name — long-press copies it (trufi-sanaa#9). A bare
+        // GestureDetector keeps the row's fixed height and leaves taps alone.
         Expanded(
-          child: Text(
-            place?.name ?? '',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onLongPress: name.isEmpty
+                ? null
+                : () => copyToClipboard(
+                    context,
+                    name,
+                    confirmation: HomeScreenLocalizations.of(
+                      context,
+                    ).copiedToClipboard,
+                  ),
+            child: Text(
+              name,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ),
         // Time — hidden when the routing time is overridden, since
@@ -1201,15 +1215,23 @@ class _LegItemState extends State<_LegItem> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Stop name
+                // Stop name — long-press copies it (trufi-sanaa#9).
                 Expanded(
-                  child: Text(
-                    stop.name,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onLongPress: () => copyToClipboard(
+                      context,
+                      stop.name,
+                      confirmation: widget.l10n.copiedToClipboard,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Text(
+                      stop.name,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 // Time — hidden under routing time override (synthetic).

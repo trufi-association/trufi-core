@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/poi_layers_localizations.dart';
 import '../models/poi.dart';
@@ -63,13 +64,16 @@ class POIDetailPanel extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      poi.displayName,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                    _CopyOnLongPress(
+                      text: poi.displayName,
+                      child: Text(
+                        poi.displayName,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       _getTypeDisplayName(context),
@@ -79,6 +83,19 @@ class POIDetailPanel extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              // The one "place card" in the app, so copying gets a visible
+              // button here and not only the long-press (trufi-sanaa#9).
+              // Flutter ships the tooltip in every language it supports.
+              IconButton(
+                icon: const Icon(Icons.copy_rounded),
+                tooltip: MaterialLocalizations.of(context).copyButtonLabel,
+                onPressed: () => copyToClipboard(
+                  context,
+                  poi.displayName,
+                  confirmation: l10n.copiedToClipboard,
+                ),
+                visualDensity: VisualDensity.compact,
               ),
               if (onClose != null)
                 IconButton(
@@ -238,13 +255,36 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
-      ],
+    return _CopyOnLongPress(
+      text: text,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
+        ],
+      ),
     );
   }
+}
+
+/// Long-press on [child] copies [text] (trufi-sanaa#9). A bare gesture
+/// detector: no ripple, no layout change, taps left to whoever had them.
+class _CopyOnLongPress extends StatelessWidget {
+  final String text;
+  final Widget child;
+
+  const _CopyOnLongPress({required this.text, required this.child});
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onLongPress: () => copyToClipboard(
+      context,
+      text,
+      confirmation: POILayersLocalizations.of(context).copiedToClipboard,
+    ),
+    child: child,
+  );
 }

@@ -162,6 +162,24 @@ abstract class SearchLocationsLocalizations {
   /// In en, this message translates to:
   /// **'Search corners...'**
   String get searchCornersHint;
+
+  /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copiedToClipboard;
+
+  /// Tiny caption above the origin field of the wide search bar
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get originFieldLabel;
+
+  /// Tiny caption above the destination field of the wide search bar
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get destinationFieldLabel;
 }
 
 class _SearchLocationsLocalizationsDelegate

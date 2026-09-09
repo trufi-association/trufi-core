@@ -62,5 +62,6 @@
   "modeTrolleybus": "Trolebús",
   "modeMonorail": "Monorriel",
   "distanceKilometers": "{value} km",
-  "distanceMeters": "{value} m"
+  "distanceMeters": "{value} m",
+  "copiedToClipboard": "Copiado"
 }

@@ -9,5 +9,8 @@
   "yourPlaces": "TUS LUGARES",
   "searchResults": "RESULTADOS DE BÚSQUEDA",
   "noResultsFound": "No se encontraron resultados",
-  "searchCornersHint": "Buscar esquinas..."
+  "searchCornersHint": "Buscar esquinas...",
+  "copiedToClipboard": "Copiado",
+  "originFieldLabel": "Desde",
+  "destinationFieldLabel": "Hasta"
 }

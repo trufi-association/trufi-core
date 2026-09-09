@@ -473,4 +473,7 @@ class HomeScreenLocalizationsEn extends HomeScreenLocalizations {
 
   @override
   String get resolvingLocation => 'Finding place name…';
+
+  @override
+  String get copiedToClipboard => 'Copied';
 }

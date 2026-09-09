@@ -882,6 +882,12 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Finding place name…'**
   String get resolvingLocation;
+
+  /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copiedToClipboard;
 }
 
 class _HomeScreenLocalizationsDelegate

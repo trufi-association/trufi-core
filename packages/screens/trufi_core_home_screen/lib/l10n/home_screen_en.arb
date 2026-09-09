@@ -646,5 +646,9 @@
   "resolvingLocation": "Finding place name…",
   "@resolvingLocation": {
     "description": "Transient snackbar while reverse-geocoding a point picked on the map"
+  },
+  "copiedToClipboard": "Copied",
+  "@copiedToClipboard": {
+    "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"
   }
 }

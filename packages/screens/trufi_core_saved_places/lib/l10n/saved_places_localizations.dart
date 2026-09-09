@@ -318,6 +318,12 @@ abstract class SavedPlacesLocalizations {
   /// In en, this message translates to:
   /// **'\"{placeName}\" is already saved at that location'**
   String placeAlreadySaved(String placeName);
+
+  /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copiedToClipboard;
 }
 
 class _SavedPlacesLocalizationsDelegate

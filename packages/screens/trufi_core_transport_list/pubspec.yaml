@@ -32,6 +32,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # MapEngineManager (needed to pump TransportDetailScreen) reads its saved
+  # engine from SharedPreferences; tests give it an in-memory store.
+  shared_preferences: ^2.5.4
 
 flutter:
   generate: true

@@ -9,5 +9,8 @@
   "yourPlaces": "DEINE ORTE",
   "searchResults": "SUCHERGEBNISSE",
   "noResultsFound": "Keine Ergebnisse gefunden",
-  "searchCornersHint": "Kreuzungen suchen..."
+  "searchCornersHint": "Kreuzungen suchen...",
+  "copiedToClipboard": "Kopiert",
+  "originFieldLabel": "Von",
+  "destinationFieldLabel": "Nach"
 }

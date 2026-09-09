@@ -354,6 +354,12 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'{value} m'**
   String distanceMeters(String value);
+
+  /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copiedToClipboard;
 }
 
 class _TransportListLocalizationsDelegate

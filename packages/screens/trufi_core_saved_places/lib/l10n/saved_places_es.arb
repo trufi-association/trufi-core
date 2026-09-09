@@ -35,5 +35,6 @@
   "errorLoadingPlaces": "Error al cargar lugares",
   "retry": "Reintentar",
   "history": "Historial",
-  "placeAlreadySaved": "\"{placeName}\" ya está guardado en esa ubicación"
+  "placeAlreadySaved": "\"{placeName}\" ya está guardado en esa ubicación",
+  "copiedToClipboard": "Copiado"
 }
