@@ -1025,9 +1025,20 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   /// Compute and apply camera position to fit the given points.
+  ///
+  /// The fit only takes bearing and tilt from the base camera — target and
+  /// zoom come from the points — so before the map has reported a camera the
+  /// initial one is used instead of dropping the fit. That is the cold-start
+  /// case with a plan restored from the previous session: the plan is back a
+  /// few milliseconds after the first frame, hundreds of milliseconds before
+  /// the map's first camera report, and nothing replayed the fit afterwards,
+  /// so the restored route was drawn outside the default viewport (#995).
+  /// The controlled camera set here is held by [TrufiMap] until its style has
+  /// loaded (#946), so nothing needs to wait for the map.
   void _fitCameraToPoints(List<LatLng> points) {
-    if (_fitCameraUtil == null || _currentCamera == null) return;
-    final newCam = _fitCameraUtil!.cameraForPoints(points, _currentCamera!);
+    final baseCamera = _currentCamera ?? _initialCamera;
+    if (_fitCameraUtil == null || baseCamera == null) return;
+    final newCam = _fitCameraUtil!.cameraForPoints(points, baseCamera);
     if (newCam != null) {
       setState(() {
         _cameraTarget = newCam;
