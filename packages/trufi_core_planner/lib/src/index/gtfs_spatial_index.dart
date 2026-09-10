@@ -13,6 +13,11 @@ class NearbyStop {
 }
 
 /// Spatial index for fast nearest-stop queries using a KD-Tree.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build a different tree from the same GTFS, bump
+/// `PlannerIndexCodec.formatVersion`, or users keep the previous release's
+/// index until the bundled feed changes.
 class GtfsSpatialIndex {
   final Map<String, GtfsStop> _stops;
   late final _KdTree _tree;
@@ -20,6 +25,19 @@ class GtfsSpatialIndex {
   GtfsSpatialIndex(this._stops) {
     _tree = _KdTree(_stops.values.toList());
   }
+
+  /// Restores an index from the pre-order traversal of a tree built by
+  /// [GtfsSpatialIndex.new] over the same stops (see [preorder]). The tree
+  /// shape is a function of the stop count alone (median split), so the
+  /// result is the very same tree — same answers, same result order —
+  /// without sorting anything. Used by the planner index snapshot.
+  GtfsSpatialIndex.restore(this._stops, List<GtfsStop> preorder) {
+    _tree = _KdTree.fromPreorder(preorder);
+  }
+
+  /// The tree's stops in pre-order (node, left subtree, right subtree);
+  /// feeds [GtfsSpatialIndex.restore].
+  List<GtfsStop> get preorder => _tree.preorder();
 
   /// Find the nearest stops to a location.
   List<NearbyStop> findNearestStops(
@@ -79,6 +97,39 @@ class _KdTree {
     if (stops.isNotEmpty) {
       _root = _buildTree(stops, 0);
     }
+  }
+
+  /// Rebuilds the tree from its pre-order listing. [_buildTree] puts the
+  /// median (`length ~/ 2`) at the node with the `mid` smaller stops on the
+  /// left, so the left subtree of a node covering `count` stops always has
+  /// `count ~/ 2` of them.
+  _KdTree.fromPreorder(List<GtfsStop> preorder) {
+    if (preorder.isNotEmpty) {
+      _root = _fromPreorder(preorder, 0, preorder.length);
+    }
+  }
+
+  _KdNode? _fromPreorder(List<GtfsStop> stops, int start, int count) {
+    if (count == 0) return null;
+    final leftCount = count ~/ 2;
+    return _KdNode(
+      stop: stops[start],
+      left: _fromPreorder(stops, start + 1, leftCount),
+      right: _fromPreorder(stops, start + 1 + leftCount, count - leftCount - 1),
+    );
+  }
+
+  List<GtfsStop> preorder() {
+    final out = <GtfsStop>[];
+    void visit(_KdNode? node) {
+      if (node == null) return;
+      out.add(node.stop);
+      visit(node.left);
+      visit(node.right);
+    }
+
+    visit(_root);
+    return out;
   }
 
   _KdNode? _buildTree(List<GtfsStop> stops, int depth) {

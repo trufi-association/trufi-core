@@ -89,6 +89,21 @@ class TrufiPlannerConfig {
   /// the same line" rule.
   final int sameNameRouteLimit;
 
+  /// Keep the built planner index on disk between cold starts (default:
+  /// true; local mode only).
+  ///
+  /// Parsing the bundled GTFS and building the indices runs on every cold
+  /// start otherwise — ~1.6 s on a desktop VM for the Cochabamba feed,
+  /// several times that on a low-end phone — and the planner is not ready
+  /// until it finishes (#993). With this on, the first start after an
+  /// install or update still builds once and writes a snapshot to the app's
+  /// cache directory; later starts load it in a fraction of the time. The
+  /// snapshot is keyed by the GTFS content, [transferRadiusMeters],
+  /// [sameNameRouteLimit] and the snapshot format version, so a changed
+  /// feed or engine rebuilds; anything unreadable is silently rebuilt too.
+  /// Turn it off if a deployment must not write to the cache directory.
+  final bool persistIndex;
+
   /// Create a local (offline) configuration using GTFS asset.
   const TrufiPlannerConfig.local({
     required String this.gtfsAsset,
@@ -101,6 +116,7 @@ class TrufiPlannerConfig {
     this.maxStopCandidates = 150,
     this.transferRadiusMeters = 100,
     this.sameNameRouteLimit = 3,
+    this.persistIndex = true,
   }) : serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
@@ -118,5 +134,6 @@ class TrufiPlannerConfig {
     this.maxStopCandidates = 150,
   }) : gtfsAsset = null,
        transferRadiusMeters = 100,
-       sameNameRouteLimit = 3;
+       sameNameRouteLimit = 3,
+       persistIndex = false;
 }

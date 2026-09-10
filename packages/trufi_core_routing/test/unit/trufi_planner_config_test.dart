@@ -30,4 +30,21 @@ void main() {
       expect(config.sameNameRouteLimit, 3);
     });
   });
+
+  group('TrufiPlannerConfig persisted index (#993)', () {
+    test('local mode persists by default and can opt out', () {
+      const on = TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip');
+      expect(on.persistIndex, isTrue);
+      const off = TrufiPlannerConfig.local(
+        gtfsAsset: 'assets/gtfs.zip',
+        persistIndex: false,
+      );
+      expect(off.persistIndex, isFalse);
+    });
+
+    test('remote mode has nothing to persist', () {
+      const config = TrufiPlannerConfig.remote(serverUrl: 'https://p.example');
+      expect(config.persistIndex, isFalse);
+    });
+  });
 }

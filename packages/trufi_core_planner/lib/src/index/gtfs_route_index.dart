@@ -209,6 +209,11 @@ class PatternConnections extends ListBase<PatternConnection> {
 }
 
 /// Index for fast route lookups.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build different patterns, connections or line keys from the
+/// same GTFS, bump `PlannerIndexCodec.formatVersion`, or users keep the
+/// previous release's index until the bundled feed changes.
 class GtfsRouteIndex {
   /// Default radius within which two distinct stops count as one transfer
   /// point. Matches MOTIS' `link_stop_distance` (100 m straight-line);
@@ -267,6 +272,81 @@ class GtfsRouteIndex {
           : null,
     );
   }
+
+  /// Restores an index from a snapshot of one built by [GtfsRouteIndex.new]
+  /// over the same [data] with the same knobs: the [patterns] in id order
+  /// and the CSR connection columns exactly as [connectionStarts],
+  /// [connectionOtherPattern], [connectionMyStopIdx], [connectionOtherStopIdx]
+  /// and [connectionWalk] returned them. The cheap per-stop and per-route
+  /// maps are re-derived from the patterns: iterating them in id order
+  /// inserts every (stop, pattern) and (stop, route) pair in the same order
+  /// the build did — a pattern id is the order of first appearance of its
+  /// trip, so the first trip of a route that visits a stop is also its first
+  /// pattern there. Used by the planner index snapshot; the codec validates
+  /// the arrays before calling this.
+  GtfsRouteIndex.restore({
+    required GtfsData data,
+    required List<RoutePattern> patterns,
+    required Int32List connectionStarts,
+    required Int32List connectionOtherPattern,
+    required Int32List connectionMyStopIdx,
+    required Int32List connectionOtherStopIdx,
+    required Float32List connectionWalk,
+    required this.transferRadiusMeters,
+    required this.sameNameRouteLimit,
+  }) : _data = data {
+    if (connectionStarts.length != patterns.length + 1) {
+      throw ArgumentError(
+        'connectionStarts must have patterns.length + 1 entries',
+      );
+    }
+    final total = connectionStarts.isEmpty ? 0 : connectionStarts.last;
+    if (connectionOtherPattern.length != total ||
+        connectionMyStopIdx.length != total ||
+        connectionOtherStopIdx.length != total ||
+        connectionWalk.length != total) {
+      throw ArgumentError('connection columns must have $total entries');
+    }
+    for (var i = 0; i < patterns.length; i++) {
+      if (patterns[i].id != i) {
+        throw ArgumentError('pattern at position $i has id ${patterns[i].id}');
+      }
+    }
+    _patterns = patterns;
+    _routePatterns = {};
+    _stopToPatternIds = {};
+    _stopToRoutes = {};
+    for (final pattern in patterns) {
+      _routePatterns.putIfAbsent(pattern.routeId, () => []).add(pattern);
+      for (final stopId in pattern.stopIds) {
+        _stopToRoutes.putIfAbsent(stopId, () => {}).add(pattern.routeId);
+        _stopToPatternIds.putIfAbsent(stopId, () => {}).add(pattern.id);
+      }
+    }
+    _buildLineKeys();
+    _connStart = connectionStarts;
+    _connOther = connectionOtherPattern;
+    _connMyIdx = connectionMyStopIdx;
+    _connOtherIdx = connectionOtherStopIdx;
+    _connWalk = connectionWalk;
+  }
+
+  /// CSR offsets of the connection table: pattern `p` owns entries
+  /// `[connectionStarts[p], connectionStarts[p + 1])` of the four columns
+  /// below. Exposed for the snapshot codec; treat all five as read-only.
+  Int32List get connectionStarts => _connStart;
+
+  /// Column: id of the pattern boarded (see [PatternConnection.otherPatternId]).
+  Int32List get connectionOtherPattern => _connOther;
+
+  /// Column: alight position in the source pattern.
+  Int32List get connectionMyStopIdx => _connMyIdx;
+
+  /// Column: boarding position in the other pattern.
+  Int32List get connectionOtherStopIdx => _connOtherIdx;
+
+  /// Column: straight-line walk between alight and boarding stop, meters.
+  Float32List get connectionWalk => _connWalk;
 
   void _buildIndices() {
     _patterns = [];
