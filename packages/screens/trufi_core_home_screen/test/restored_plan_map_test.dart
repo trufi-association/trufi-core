@@ -59,27 +59,29 @@ routing.Leg _leg(
   );
 }
 
-/// walk → bus 7 → bus 14 → walk (the "7 → 14, 57 min" trip of the report).
-routing.Plan _universityPlan() => routing.Plan(
+/// walk → bus [first] → bus [second] → walk (the "7 → 14, 57 min" trip of the
+/// report; other route names give an alternative over the same stops).
+routing.Itinerary _universityItinerary({
+  String first = '7',
+  String second = '14',
+}) => routing.Itinerary(
+  legs: [
+    _leg([_origin, _boarding], startMinute: 0, minutes: 5),
+    _leg([_boarding, _transfer], route: first, startMinute: 5, minutes: 20),
+    _leg([_transfer, _alighting], route: second, startMinute: 25, minutes: 27),
+    _leg([_alighting, _destination], startMinute: 52, minutes: 5),
+  ],
+  startTime: DateTime(2026, 9, 10, 12),
+  endTime: DateTime(2026, 9, 10, 12, 57),
+  walkTime: const Duration(minutes: 10),
+  duration: const Duration(minutes: 57),
+  walkDistance: 833,
+);
+
+routing.Plan _universityPlan({bool withAlternative = false}) => routing.Plan(
   itineraries: [
-    routing.Itinerary(
-      legs: [
-        _leg([_origin, _boarding], startMinute: 0, minutes: 5),
-        _leg([_boarding, _transfer], route: '7', startMinute: 5, minutes: 20),
-        _leg(
-          [_transfer, _alighting],
-          route: '14',
-          startMinute: 25,
-          minutes: 27,
-        ),
-        _leg([_alighting, _destination], startMinute: 52, minutes: 5),
-      ],
-      startTime: DateTime(2026, 9, 10, 12),
-      endTime: DateTime(2026, 9, 10, 12, 57),
-      walkTime: const Duration(minutes: 10),
-      duration: const Duration(minutes: 57),
-      walkDistance: 833,
-    ),
+    _universityItinerary(),
+    if (withAlternative) _universityItinerary(first: '9', second: '21'),
   ],
 );
 
@@ -365,6 +367,76 @@ void _expectRouteDrawnAndFitted(_MapCalls calls) {
     lessThan(_defaultZoom),
     reason: 'the trip spans ~11 km: fitting it must zoom out from 14',
   );
+  expect(
+    camera.bearing,
+    0,
+    reason: 'the fit keeps the base camera bearing: the map is not rotated',
+  );
+}
+
+/// Any HomeScreen rebuild — here a viewport change (keyboard, rotation); on a
+/// device also every GPS tick, which calls setState.
+Future<void> _rebuildHome(WidgetTester tester) async {
+  tester.view.physicalSize = const Size(1080, 2000);
+  await tester.pumpAndSettle();
+}
+
+/// The recentre button is faded out while the route is in focus.
+double _recentreOpacity(WidgetTester tester) => tester
+    .widget<AnimatedOpacity>(
+      find.ancestor(
+        of: find.byIcon(Icons.crop_free_rounded),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    )
+    .opacity;
+
+/// Geolocator answering "service on, permission granted, here is a fix", so
+/// LocationService auto-starts tracking and the my-location button takes the
+/// real path.
+void _mockGeolocatorWithFix(LatLng fix) {
+  final position = <String, dynamic>{
+    'latitude': fix.latitude,
+    'longitude': fix.longitude,
+    'timestamp': DateTime(2026, 9, 10, 12).millisecondsSinceEpoch,
+    'accuracy': 5.0,
+    'altitude': 0.0,
+    'altitude_accuracy': 0.0,
+    'heading': 0.0,
+    'heading_accuracy': 0.0,
+    'speed': 0.0,
+    'speed_accuracy': 0.0,
+    'is_mocked': true,
+  };
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMethodCallHandler(
+    const MethodChannel('flutter.baseflow.com/geolocator'),
+    (call) async {
+      switch (call.method) {
+        case 'isLocationServiceEnabled':
+          return true;
+        case 'checkPermission':
+        case 'requestPermission':
+          return 3; // LocationPermission.always
+        case 'getLastKnownPosition':
+        case 'getCurrentPosition':
+          return position;
+        case 'getLocationAccuracy':
+          return 0;
+      }
+      return null;
+    },
+  );
+  const updates = EventChannel('flutter.baseflow.com/geolocator_updates');
+  messenger.setMockStreamHandler(
+    updates,
+    MockStreamHandler.inline(
+      onListen: (args, events) => events.success(position),
+      onCancel: (args) {},
+    ),
+  );
+  addTearDown(() => messenger.setMockStreamHandler(updates, null));
 }
 
 void main() {
@@ -462,7 +534,15 @@ void main() {
       // while the controlled camera is pending — see TrufiMap).
       calls.report(fitted);
       await tester.pumpAndSettle();
+      // Once the map has reported the fit the screen releases it: a later
+      // rebuild hands no controlled camera, and the map keeps its view.
+      await _rebuildHome(tester);
 
+      expect(
+        calls.camera,
+        isNull,
+        reason: 'the screen keeps re-driving the fit',
+      );
       final held =
           (tester.state(find.byType(_FakeMap)) as _FakeMapState).cameraPosition;
       expect(held, equals(fitted));
@@ -496,6 +576,79 @@ void main() {
         containsAll(['origin-preview', 'destination-preview']),
       );
       expect(find.textContaining('57'), findsNothing);
+    });
+  });
+
+  group('after the fit', () {
+    testWidgets(
+      'my-location, then a rebuild (a GPS tick): the map stays on the '
+      'user, the screen does not hand the fit back',
+      (tester) async {
+        const fix = LatLng(15.40, 44.24);
+        _mockGeolocatorWithFix(fix);
+        final repository = _JsonRepository()..seed(_universityPlan());
+        final cubit = RoutePlannerCubit(
+          repository: repository,
+          requestService: _FakePlanService(_universityPlan()),
+        );
+        addTearDown(cubit.close);
+        await cubit.initialize();
+        final calls = await _pumpHome(tester, cubit);
+        _expectRouteDrawnAndFitted(calls);
+        final map = tester.state(find.byType(_FakeMap)) as _FakeMapState;
+
+        // Tracking auto-started with the granted permission: filled icon, and
+        // the tap takes the "already tracking" path of _onMyLocationPressed.
+        final myLocation = find.byIcon(Icons.my_location_rounded);
+        expect(myLocation, findsOneWidget, reason: 'tracking should be on');
+        await tester.tap(myLocation);
+        await tester.pumpAndSettle();
+        expect(map.cameraPosition.target, equals(fix));
+        expect(map.cameraPosition.zoom, 16);
+
+        await _rebuildHome(tester);
+
+        expect(
+          calls.camera,
+          isNull,
+          reason: 'a programmatic move must drop the controlled camera',
+        );
+        expect(
+          map.cameraPosition.target,
+          equals(fix),
+          reason: 'a rebuild must not yank the camera back to the route fit',
+        );
+        expect(map.cameraPosition.zoom, 16);
+      },
+    );
+
+    testWidgets('panning away shows the recentre button; fitting another '
+        'itinerary hides it again', (tester) async {
+      final plan = _universityPlan(withAlternative: true);
+      final repository = _JsonRepository()..seed(plan);
+      final cubit = RoutePlannerCubit(
+        repository: repository,
+        requestService: _FakePlanService(plan),
+      );
+      addTearDown(cubit.close);
+      await cubit.initialize();
+      final calls = await _pumpHome(tester, cubit);
+      _expectRouteDrawnAndFitted(calls);
+      expect(_recentreOpacity(tester), 0.0);
+
+      // The user pans ~50 km away: the map reports a camera off the fit.
+      calls.report(
+        const TrufiCameraPosition(target: LatLng(15.80, 44.60), zoom: 16),
+      );
+      await tester.pumpAndSettle();
+      expect(_recentreOpacity(tester), 1.0, reason: 'route out of focus');
+
+      // Selecting the other itinerary fits it from the reported camera (no
+      // intermediate loading state): the route is in focus again.
+      await cubit.selectItinerary(cubit.state.plan!.itineraries![1]);
+      await tester.pumpAndSettle();
+      _expectRouteDrawnAndFitted(calls);
+      expect(_recentreOpacity(tester), 0.0, reason: 'the fit resets focus');
     });
   });
 
