@@ -37,4 +37,13 @@ class SearchLocationsLocalizationsEn extends SearchLocationsLocalizations {
 
   @override
   String get searchCornersHint => 'Search corners...';
+
+  @override
+  String get copiedToClipboard => 'Copied';
+
+  @override
+  String get originFieldLabel => 'From';
+
+  @override
+  String get destinationFieldLabel => 'To';
 }

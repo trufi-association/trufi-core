@@ -648,6 +648,12 @@ abstract class POILayersLocalizations {
   /// In en, this message translates to:
   /// **'{enabled} of {total} active'**
   String typesActive(int enabled, int total);
+
+  /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copiedToClipboard;
 }
 
 class _POILayersLocalizationsDelegate

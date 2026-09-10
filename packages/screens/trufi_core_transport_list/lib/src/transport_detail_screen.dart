@@ -993,25 +993,31 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Origin
-                      Text(
-                        originLabel,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
+                      _CopyOnLongPress(
+                        text: originLabel,
+                        child: Text(
+                          originLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 16),
                       // Destination
-                      Text(
-                        destinationLabel,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
+                      _CopyOnLongPress(
+                        text: destinationLabel,
+                        child: Text(
+                          destinationLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -1212,6 +1218,15 @@ class _StopTimelineItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
+          // Long-press copies the stop name (trufi-sanaa#9); tap still
+          // centres the map on the stop.
+          onLongPress: () => copyToClipboard(
+            context,
+            stop.name,
+            confirmation: TransportListLocalizations.of(
+              context,
+            ).copiedToClipboard,
+          ),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -1265,6 +1280,27 @@ class _StopTimelineItem extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Long-press on [child] copies [text] — the terminal names in the route
+/// header (trufi-sanaa#9). A bare gesture detector: no ripple, no layout
+/// change, and the sheet's drag keeps working.
+class _CopyOnLongPress extends StatelessWidget {
+  final String text;
+  final Widget child;
+
+  const _CopyOnLongPress({required this.text, required this.child});
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onLongPress: () => copyToClipboard(
+      context,
+      text,
+      confirmation: TransportListLocalizations.of(context).copiedToClipboard,
+    ),
+    child: child,
+  );
 }
 
 /// Loading state with animated indicator
@@ -1426,6 +1462,12 @@ class _SidePanelStopsContent extends StatelessWidget {
     final stops = route.stops ?? [];
     final routeColor = route.backgroundColor ?? colorScheme.primary;
     final distance = _RouteDistanceCalculator.calculate(route.geometry);
+    final originLabel = route.directionId == 1
+        ? route.longNameLast
+        : route.longNameStart;
+    final destinationLabel = route.directionId == 1
+        ? route.longNameStart
+        : route.longNameLast;
 
     return Column(
       children: [
@@ -1481,29 +1523,31 @@ class _SidePanelStopsContent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Origin
-                      Text(
-                        route.directionId == 1
-                            ? route.longNameLast
-                            : route.longNameStart,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
+                      _CopyOnLongPress(
+                        text: originLabel,
+                        child: Text(
+                          originLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 16),
                       // Destination
-                      Text(
-                        route.directionId == 1
-                            ? route.longNameStart
-                            : route.longNameLast,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurface,
+                      _CopyOnLongPress(
+                        text: destinationLabel,
+                        child: Text(
+                          destinationLabel,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

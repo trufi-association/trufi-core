@@ -474,4 +474,7 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
 
   @override
   String get resolvingLocation => 'Obteniendo el nombre del lugar…';
+
+  @override
+  String get copiedToClipboard => 'Copiado';
 }

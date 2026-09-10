@@ -90,5 +90,6 @@
   "selectAll": "Todos",
   "clearAll": "Limpiar",
   "typesAvailable": "{count} tipos disponibles",
-  "typesActive": "{enabled} de {total} activos"
+  "typesActive": "{enabled} de {total} activos",
+  "copiedToClipboard": "Copiado"
 }

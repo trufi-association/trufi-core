@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/search_locations_localizations.dart';
 import '../models/search_location.dart';
@@ -994,6 +995,14 @@ class _YourPlaceItem extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        // Long-press copies the name (trufi-sanaa#9); tap keeps selecting.
+        onLongPress: () => copyToClipboard(
+          context,
+          location.displayName,
+          confirmation: SearchLocationsLocalizations.of(
+            context,
+          ).copiedToClipboard,
+        ),
         borderRadius: BorderRadius.vertical(
           top: isFirst ? const Radius.circular(16) : Radius.zero,
           bottom: isLast ? const Radius.circular(16) : Radius.zero,
@@ -1166,6 +1175,16 @@ class _ModernLocationTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
+        // Long-press copies the full name — not the trimmed
+        // [displayNameOverride] — so a corner copied from its street's list
+        // keeps both streets (trufi-sanaa#9). Tap keeps selecting.
+        onLongPress: () => copyToClipboard(
+          context,
+          location.displayName,
+          confirmation: SearchLocationsLocalizations.of(
+            context,
+          ).copiedToClipboard,
+        ),
         borderRadius: BorderRadius.circular(14),
         child: Padding(
           padding: const EdgeInsets.all(12),

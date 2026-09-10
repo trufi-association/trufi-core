@@ -286,4 +286,7 @@ class POILayersLocalizationsEn extends POILayersLocalizations {
   String typesActive(int enabled, int total) {
     return '$enabled of $total active';
   }
+
+  @override
+  String get copiedToClipboard => 'Copied';
 }

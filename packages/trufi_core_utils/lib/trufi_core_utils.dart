@@ -14,3 +14,6 @@ export './src/location_service.dart';
 export './src/device/shared_preferences_device_id_service.dart';
 export 'src/time_format.dart';
 export 'src/number_format.dart';
+
+// Clipboard
+export 'src/clipboard.dart';

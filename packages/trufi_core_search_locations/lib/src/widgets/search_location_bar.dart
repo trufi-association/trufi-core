@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/search_locations_localizations.dart';
+import '../models/search_location.dart';
 import '../models/search_location_bar_configuration.dart';
 import '../models/search_location_state.dart';
 
@@ -362,11 +364,27 @@ class SearchLocationBar extends StatelessWidget {
   }
 }
 
+/// Long-press on a filled origin/destination field copies the place name
+/// (trufi-sanaa#9) — the name only, not the "name, address" the field shows.
+/// Null when the field is empty, so an empty field has no long-press at all.
+VoidCallback? _copyNameOnLongPress(
+  BuildContext context,
+  SearchLocation? value,
+) {
+  final name = value?.displayName;
+  if (name == null) return null;
+  return () => copyToClipboard(
+    context,
+    name,
+    confirmation: SearchLocationsLocalizations.of(context).copiedToClipboard,
+  );
+}
+
 /// Compact location field with optional clear button
 class _LocationFieldWithClear extends StatelessWidget {
   final bool isOrigin;
   final String hintText;
-  final dynamic value;
+  final SearchLocation? value;
   final VoidCallback onTap;
   final VoidCallback? onClear;
   final ThemeData theme;
@@ -389,6 +407,7 @@ class _LocationFieldWithClear extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        onLongPress: _copyNameOnLongPress(context, value),
         borderRadius: BorderRadius.circular(10),
         child: Container(
           height: 40,
@@ -497,7 +516,7 @@ class _ActionButton extends StatelessWidget {
 class _LocationFieldModernWithClear extends StatelessWidget {
   final bool isOrigin;
   final String hintText;
-  final dynamic value;
+  final SearchLocation? value;
   final VoidCallback onTap;
   final VoidCallback? onClear;
   final ThemeData theme;
@@ -522,6 +541,7 @@ class _LocationFieldModernWithClear extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        onLongPress: _copyNameOnLongPress(context, value),
         borderRadius: BorderRadius.circular(12),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -555,7 +575,13 @@ class _LocationFieldModernWithClear extends StatelessWidget {
                   children: [
                     // Label
                     Text(
-                      isOrigin ? 'From' : 'To',
+                      isOrigin
+                          ? SearchLocationsLocalizations.of(
+                              context,
+                            ).originFieldLabel
+                          : SearchLocationsLocalizations.of(
+                              context,
+                            ).destinationFieldLabel,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w600,

@@ -21,6 +21,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 import '../../l10n/home_screen_localizations.dart';
 import '../config/home_screen_config.dart';
 import 'live_vehicle_info_panel.dart';
+import 'poi_compact_card.dart';
 import 'live_vehicles_settings_section.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
@@ -1808,7 +1809,6 @@ class _HomeScreenState extends State<HomeScreen>
                         widget.config.poiLayersManager?.selectedPOI != null)
                       _buildPOIDetailPanel(
                         widget.config.poiLayersManager!.selectedPOI!,
-                        theme,
                         isWideScreen: false,
                       ),
                   ],
@@ -2304,7 +2304,6 @@ class _HomeScreenState extends State<HomeScreen>
               if (widget.config.poiLayersManager?.selectedPOI != null)
                 _buildPOIDetailPanel(
                   widget.config.poiLayersManager!.selectedPOI!,
-                  theme,
                   isWideScreen: true,
                 ),
             ],
@@ -2568,147 +2567,15 @@ class _HomeScreenState extends State<HomeScreen>
   /// Builds the POI detail panel.
   ///
   /// - On narrow screens: Shows as a bottom panel that replaces/overlays the results sheet
-  /// - On wide screens: Shows at the bottom of the side panel
-  Widget _buildPOIDetailPanel(
-    POI poi,
-    ThemeData theme, {
-    required bool isWideScreen,
-  }) {
-    final l10n = HomeScreenLocalizations.of(context);
-
+  /// - On wide screens: Shows a [POICompactCard] at the bottom of the side panel
+  Widget _buildPOIDetailPanel(POI poi, {required bool isWideScreen}) {
     if (isWideScreen) {
       // Wide screen: compact card style at bottom of side panel
-      return Container(
-        margin: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 8, 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: poi.category.color.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      poi.category.fallbackIcon,
-                      color: poi.category.color,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          poi.displayName,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          poi.subcategoryConfig?.displayName ??
-                              poi.subcategory ??
-                              poi.category.displayName,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 20),
-                    onPressed: () =>
-                        widget.config.poiLayersManager?.clearSelection(),
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(
-                      minWidth: 32,
-                      minHeight: 32,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Details
-            if (poi.address != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      size: 14,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        poi.address!,
-                        style: theme.textTheme.bodySmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            // Action buttons
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => _setPoiAsOrigin(poi),
-                      icon: Container(
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF4CAF50),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                      ),
-                      label: Text(l10n.setAsOrigin),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: FilledButton.icon(
-                      onPressed: () => _setPoiAsDestination(poi),
-                      icon: const Icon(Icons.place, size: 16),
-                      label: Text(l10n.setAsDestination),
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      return POICompactCard(
+        poi: poi,
+        onClose: () => widget.config.poiLayersManager?.clearSelection(),
+        onSetAsOrigin: () => _setPoiAsOrigin(poi),
+        onSetAsDestination: () => _setPoiAsDestination(poi),
       );
     }
 

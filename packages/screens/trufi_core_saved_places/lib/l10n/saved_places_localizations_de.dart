@@ -119,4 +119,7 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
   String placeAlreadySaved(String placeName) {
     return '„$placeName“ ist an diesem Ort bereits gespeichert';
   }
+
+  @override
+  String get copiedToClipboard => 'Kopiert';
 }

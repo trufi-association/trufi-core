@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/saved_place.dart';
 import '../models/saved_place_icons.dart';
@@ -37,6 +38,13 @@ class SavedPlaceTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
+        // Long-press copies the label shown (trufi-sanaa#9); tap still
+        // selects. Not a menu item: that would cost every app one more key.
+        onLongPress: () => copyToClipboard(
+          context,
+          _getDisplayName(localization),
+          confirmation: localization.copiedToClipboard,
+        ),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(14),

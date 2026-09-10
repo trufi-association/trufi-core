@@ -145,4 +145,7 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String distanceMeters(String value) {
     return '$value m';
   }
+
+  @override
+  String get copiedToClipboard => 'Kopiert';
 }
