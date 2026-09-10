@@ -53,6 +53,11 @@ class GtfsData {
 }
 
 /// Parser for GTFS feeds.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this produce different data from the same GTFS, bump
+/// `PlannerIndexCodec.formatVersion`, or users keep the previous release's
+/// parse until the bundled feed changes.
 class GtfsParser {
   /// Parse a GTFS ZIP file from a file path.
   static Future<GtfsData> parseFromFile(String filePath) async {

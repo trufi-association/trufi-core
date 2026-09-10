@@ -1,8 +1,11 @@
+import 'dart:collection';
 import 'dart:math';
+import 'dart:typed_data';
 
 import '../models/gtfs_stop.dart';
 import '../models/gtfs_stop_time.dart';
 import '../parser/gtfs_parser.dart';
+import 'gtfs_spatial_index.dart';
 
 /// A pattern representing a sequence of stops for a route.
 class RoutePattern {
@@ -95,33 +98,255 @@ class RoutePattern {
   };
 }
 
-/// A precomputed transfer point between two patterns at a shared stop.
+/// A precomputed transfer point between two patterns.
+///
+/// The rider alights the source pattern at `myStopIdx` and boards the other
+/// pattern at `otherStopIdx`. The two stops are the same GTFS stop when
+/// [walkMeters] is 0, or two distinct stops within the index's transfer
+/// radius otherwise (e.g. the two kerbs of an avenue, which OSM-derived
+/// feeds encode as different `stop_id`s).
 class PatternConnection {
   /// Index of the other pattern in `GtfsRouteIndex._patterns`.
   final int otherPatternId;
 
-  /// Stop position in the source pattern at which the transfer happens.
+  /// Stop position in the source pattern at which the rider alights.
   final int myStopIdx;
 
-  /// Stop position in the destination pattern at which the transfer happens.
+  /// Stop position in the destination pattern at which the rider boards.
   final int otherStopIdx;
 
-  const PatternConnection(this.otherPatternId, this.myStopIdx, this.otherStopIdx);
+  /// Straight-line distance between the alight and board stops, in meters.
+  final double walkMeters;
+
+  const PatternConnection(
+    this.otherPatternId,
+    this.myStopIdx,
+    this.otherStopIdx, [
+    this.walkMeters = 0,
+  ]);
+}
+
+/// Read-only view over one pattern's precomputed connections.
+///
+/// The index keeps every connection of every pattern in four flat typed
+/// arrays (three `Int32List` + one `Float32List`, 16 bytes per connection)
+/// instead of one object each: with walkable transfers the dense Cochabamba
+/// feed (23.7k stops, 657 patterns) holds 2.6 M connections in 40 MB, less
+/// than the ~58 MB its 1.2 M shared-stop connections took as objects. This
+/// view exposes them as a `List<PatternConnection>` for convenience and as
+/// `...At(i)` accessors for allocation-free hot loops.
+///
+/// Connections are sorted by [PatternConnection.myStopIdx] ascending and,
+/// within one alight stop, by [PatternConnection.walkMeters] ascending —
+/// so a scan can skip everything at or before a boarding position with
+/// [firstIndexAfter], and meets the shortest walks first.
+class PatternConnections extends ListBase<PatternConnection> {
+  final Int32List _other;
+  final Int32List _myIdx;
+  final Int32List _otherIdx;
+  final Float32List _walk;
+  final int _start;
+  final int _end;
+
+  const PatternConnections._(
+    this._other,
+    this._myIdx,
+    this._otherIdx,
+    this._walk,
+    this._start,
+    this._end,
+  );
+
+  /// A view with no connections (unknown / deserialized patterns).
+  static final PatternConnections empty = PatternConnections._(
+    Int32List(0),
+    Int32List(0),
+    Int32List(0),
+    Float32List(0),
+    0,
+    0,
+  );
+
+  @override
+  int get length => _end - _start;
+
+  @override
+  PatternConnection operator [](int index) {
+    RangeError.checkValidIndex(index, this);
+    final k = _start + index;
+    return PatternConnection(_other[k], _myIdx[k], _otherIdx[k], _walk[k]);
+  }
+
+  int otherPatternIdAt(int index) => _other[_start + index];
+  int myStopIdxAt(int index) => _myIdx[_start + index];
+  int otherStopIdxAt(int index) => _otherIdx[_start + index];
+  double walkMetersAt(int index) => _walk[_start + index];
+
+  /// Index of the first connection whose alight position is strictly after
+  /// [stopIdx] (binary search on the sorted `myStopIdx` column). Returns
+  /// [length] when there is none.
+  int firstIndexAfter(int stopIdx) {
+    var lo = 0;
+    var hi = length;
+    while (lo < hi) {
+      final mid = (lo + hi) >> 1;
+      if (_myIdx[_start + mid] <= stopIdx) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    return lo;
+  }
+
+  @override
+  set length(int newLength) =>
+      throw UnsupportedError('PatternConnections is read-only');
+
+  @override
+  void operator []=(int index, PatternConnection value) =>
+      throw UnsupportedError('PatternConnections is read-only');
 }
 
 /// Index for fast route lookups.
+///
+/// Persisted by the planner index snapshot (#993): whenever a change here
+/// makes this build different patterns, connections or line keys from the
+/// same GTFS, bump `PlannerIndexCodec.formatVersion`, or users keep the
+/// previous release's index until the bundled feed changes.
 class GtfsRouteIndex {
+  /// Default radius within which two distinct stops count as one transfer
+  /// point. Matches MOTIS' `link_stop_distance` (100 m straight-line);
+  /// OpenTripPlanner pre-computes street transfers up to 30 min / 2 km, so
+  /// neither engine requires two lines to share a `stop_id` to connect.
+  static const double defaultTransferRadiusMeters = 100;
+
+  /// Default for [sameNameRouteLimit]: a `route_short_name` carried by up to
+  /// this many `route_id`s is treated as one line (outbound/inbound or
+  /// per-agency split, e.g. Cochabamba's "209" as route_id 67 and 68).
+  static const int defaultSameNameRouteLimit = 3;
+
   final GtfsData _data;
+
+  /// Stops within this straight-line distance of an alight stop are
+  /// boarding candidates for a transfer. `0` restores the historical
+  /// behaviour of only connecting patterns that share a `stop_id`.
+  final double transferRadiusMeters;
+
+  /// Two routes with the same trimmed `route_short_name` are considered the
+  /// same line — and never connected by a transfer — only when that name is
+  /// carried by at most this many `route_id`s. Feeds built per OSM relation
+  /// (Sana'a: 157 routes named "7") share one informal ref across dozens of
+  /// genuinely different lines, and treating them as one line silently
+  /// discards every valid transfer between them.
+  final int sameNameRouteLimit;
 
   late final List<RoutePattern> _patterns;
   late final Map<String, Set<int>> _stopToPatternIds;
   late final Map<String, Set<String>> _stopToRoutes;
   late final Map<String, List<RoutePattern>> _routePatterns;
-  late final List<List<PatternConnection>> _connections;
+  late final Map<String, String> _lineKeyByRoute;
 
-  GtfsRouteIndex(this._data) {
+  // Columnar connection storage (CSR): pattern p owns entries
+  // [_connStart[p], _connStart[p + 1]).
+  late final Int32List _connStart;
+  late final Int32List _connOther;
+  late final Int32List _connMyIdx;
+  late final Int32List _connOtherIdx;
+  late final Float32List _connWalk;
+
+  /// Builds the index. [spatialIndex] is used to find walkable transfer
+  /// stops; when omitted (and [transferRadiusMeters] > 0) one is built from
+  /// the feed's stops.
+  GtfsRouteIndex(
+    this._data, {
+    GtfsSpatialIndex? spatialIndex,
+    this.transferRadiusMeters = defaultTransferRadiusMeters,
+    this.sameNameRouteLimit = defaultSameNameRouteLimit,
+  }) {
     _buildIndices();
+    _buildLineKeys();
+    _buildConnections(
+      transferRadiusMeters > 0
+          ? (spatialIndex ?? GtfsSpatialIndex(_data.stops))
+          : null,
+    );
   }
+
+  /// Restores an index from a snapshot of one built by [GtfsRouteIndex.new]
+  /// over the same [data] with the same knobs: the [patterns] in id order
+  /// and the CSR connection columns exactly as [connectionStarts],
+  /// [connectionOtherPattern], [connectionMyStopIdx], [connectionOtherStopIdx]
+  /// and [connectionWalk] returned them. The cheap per-stop and per-route
+  /// maps are re-derived from the patterns: iterating them in id order
+  /// inserts every (stop, pattern) and (stop, route) pair in the same order
+  /// the build did — a pattern id is the order of first appearance of its
+  /// trip, so the first trip of a route that visits a stop is also its first
+  /// pattern there. Used by the planner index snapshot; the codec validates
+  /// the arrays before calling this.
+  GtfsRouteIndex.restore({
+    required GtfsData data,
+    required List<RoutePattern> patterns,
+    required Int32List connectionStarts,
+    required Int32List connectionOtherPattern,
+    required Int32List connectionMyStopIdx,
+    required Int32List connectionOtherStopIdx,
+    required Float32List connectionWalk,
+    required this.transferRadiusMeters,
+    required this.sameNameRouteLimit,
+  }) : _data = data {
+    if (connectionStarts.length != patterns.length + 1) {
+      throw ArgumentError(
+        'connectionStarts must have patterns.length + 1 entries',
+      );
+    }
+    final total = connectionStarts.isEmpty ? 0 : connectionStarts.last;
+    if (connectionOtherPattern.length != total ||
+        connectionMyStopIdx.length != total ||
+        connectionOtherStopIdx.length != total ||
+        connectionWalk.length != total) {
+      throw ArgumentError('connection columns must have $total entries');
+    }
+    for (var i = 0; i < patterns.length; i++) {
+      if (patterns[i].id != i) {
+        throw ArgumentError('pattern at position $i has id ${patterns[i].id}');
+      }
+    }
+    _patterns = patterns;
+    _routePatterns = {};
+    _stopToPatternIds = {};
+    _stopToRoutes = {};
+    for (final pattern in patterns) {
+      _routePatterns.putIfAbsent(pattern.routeId, () => []).add(pattern);
+      for (final stopId in pattern.stopIds) {
+        _stopToRoutes.putIfAbsent(stopId, () => {}).add(pattern.routeId);
+        _stopToPatternIds.putIfAbsent(stopId, () => {}).add(pattern.id);
+      }
+    }
+    _buildLineKeys();
+    _connStart = connectionStarts;
+    _connOther = connectionOtherPattern;
+    _connMyIdx = connectionMyStopIdx;
+    _connOtherIdx = connectionOtherStopIdx;
+    _connWalk = connectionWalk;
+  }
+
+  /// CSR offsets of the connection table: pattern `p` owns entries
+  /// `[connectionStarts[p], connectionStarts[p + 1])` of the four columns
+  /// below. Exposed for the snapshot codec; treat all five as read-only.
+  Int32List get connectionStarts => _connStart;
+
+  /// Column: id of the pattern boarded (see [PatternConnection.otherPatternId]).
+  Int32List get connectionOtherPattern => _connOther;
+
+  /// Column: alight position in the source pattern.
+  Int32List get connectionMyStopIdx => _connMyIdx;
+
+  /// Column: boarding position in the other pattern.
+  Int32List get connectionOtherStopIdx => _connOtherIdx;
+
+  /// Column: straight-line walk between alight and boarding stop, meters.
+  Float32List get connectionWalk => _connWalk;
 
   void _buildIndices() {
     _patterns = [];
@@ -209,47 +434,247 @@ class GtfsRouteIndex {
         }
       }
     }
+  }
 
-    // Precompute pattern-to-pattern connections at every shared stop.
-    // For each pattern P, for each stop S in P, find every OTHER pattern Q
-    // that also contains S. Each (P, S, Q) becomes a connection record
-    // describing where the transfer would happen.
+  /// Assigns every route a "line key": routes with the same key are one
+  /// logical line. The key is the trimmed `route_short_name` when that name
+  /// is shared by at most [sameNameRouteLimit] routes (a direction/agency
+  /// split of one line), and the `route_id` itself otherwise — including
+  /// when the short name is empty.
+  void _buildLineKeys() {
+    final routesPerName = <String, int>{};
+    for (final r in _data.routes.values) {
+      final name = r.shortName.trim();
+      if (name.isEmpty) continue;
+      routesPerName[name] = (routesPerName[name] ?? 0) + 1;
+    }
+    _lineKeyByRoute = {};
+    for (final r in _data.routes.values) {
+      final name = r.shortName.trim();
+      final shared = routesPerName[name] ?? 0;
+      _lineKeyByRoute[r.id] = name.isNotEmpty && shared <= sameNameRouteLimit
+          ? 'n:$name'
+          : 'r:${r.id}';
+    }
+  }
+
+  /// Precomputes pattern-to-pattern transfer points.
+  ///
+  /// Two kinds of connection are stored for each pattern P:
+  ///
+  /// * **Shared stop** (walk 0): for each stop S of P, every other pattern Q
+  ///   that also serves S — exactly the historical table, kept in full.
+  /// * **Walkable** (walk > 0): Q serves a stop T within
+  ///   [transferRadiusMeters] of S but not S itself. OSM-derived feeds give
+  ///   the two kerbs of a street different stop ids, so two lines crossing
+  ///   at the same corner in opposite directions could never be chained
+  ///   (trufi-sanaa#2 — 1953 stop pairs within 15 m in that feed).
+  ///
+  /// Walkable connections are thinned to one per crossing: at a given S
+  /// only Q's nearest stop is kept, and along P only the stops where the
+  /// walk to Q is a local minimum (strictly shorter than at the previous
+  /// stop, no longer than at the next). Where P and Q run side by side
+  /// with stops every 30 m, every stop of P is within 100 m of several
+  /// stops of Q; keeping all of them multiplied the dense Cochabamba feed
+  /// (23.7k stops, 657 patterns) from 1.2 M to 16 M connections for no
+  /// extra reachability — boarding Q at its first nearby stop already
+  /// reaches everything downstream, and stops inside the shared stretch are
+  /// served by P directly. Thinning never loses a reachable pattern pair or
+  /// destination, but the best score of a pair can move slightly (the
+  /// dropped stop is occasionally the cheaper transfer: median +0.1 %, max
+  /// +14 % over 340 random Cochabamba queries). Shared-stop connections are
+  /// never thinned.
+  ///
+  /// Transfers within one logical line (same line key, see
+  /// [lineKeyForRoute]) are skipped: "ride 209 then transfer to 209" is
+  /// never a useful itinerary.
+  void _buildConnections(GtfsSpatialIndex? spatialIndex) {
+    final n = _patterns.length;
+    final starts = Int32List(n + 1);
+    // Per-pattern chunks, concatenated once the total is known — keeps the
+    // build free of boxed doubles and lets the final arrays be exact-sized.
+    final chunkOther = <Int32List>[];
+    final chunkMyIdx = <Int32List>[];
+    final chunkOtherIdx = <Int32List>[];
+    final chunkWalk = <Float32List>[];
+    // Scratch for the pattern being built, grown on demand and reused. Its
+    // size is the pre-thinning upper bound, so each pattern's chunk below is
+    // an exact-size copy: keeping a view of the scratch instead would pin
+    // every oversized buffer until the concatenation (on the dense
+    // Cochabamba feed 7.3 M entries = 111 MB of bounds for a 40 MB table).
+    var scratchOther = Int32List(0);
+    var scratchMyIdx = Int32List(0);
+    var scratchOtherIdx = Int32List(0);
+    var scratchWalk = Float32List(0);
+
+    // Integer line id per pattern: the inner loops below run once per
+    // (stop, neighbouring pattern) pair — hundreds of thousands of times on
+    // a dense feed — so compare ints, not line-key strings.
+    final lineIds = <String, int>{};
+    final patternLine = Int32List(n);
+    for (var i = 0; i < n; i++) {
+      final key = lineKeyForRoute(_patterns[i].routeId);
+      patternLine[i] = lineIds.putIfAbsent(key, () => lineIds.length);
+    }
+
+    // "Nearest stop of every pattern within the radius" depends only on the
+    // stop, not on the pattern being built — compute it once per distinct
+    // stop. Patterns share most of their stops on a dense feed (Cochabamba:
+    // 23.7k stops, ~95k pattern-stops), and consecutive stops 30 m apart
+    // have neighbourhoods that overlap almost entirely.
     //
-    // Cost: O(sum over patterns of (stopCount * avgPatternsPerStop)).
-    // For Cochabamba: ~150 patterns, ~30 stops avg, ~5 patterns/stop avg
-    // → ~22.5k iterations at boot. Trivial.
-    _connections = List.generate(_patterns.length, (_) => []);
-    for (var i = 0; i < _patterns.length; i++) {
-      final p1 = _patterns[i];
-      final r1 = _data.routes[p1.routeId];
-      final shortName1 = r1?.shortName.trim() ?? '';
-      for (var idx1 = 0; idx1 < p1.stopIds.length; idx1++) {
-        final stopId = p1.stopIds[idx1];
-        final patternIds = _stopToPatternIds[stopId];
-        if (patternIds == null) continue;
-        for (final j in patternIds) {
-          if (j == i) continue;
-          final p2 = _patterns[j];
-          // Skip transfers within the same logical line. Two cases:
-          //   (a) Same route_id (e.g., outbound + inbound encoded as
-          //       multiple patterns of one route).
-          //   (b) Same route_short_name across distinct route_ids
-          //       (e.g., Cochabamba "Línea 209" split into route_id 67 and 68
-          //       by direction/agency).
-          // Both produce nonsensical "ride X then transfer to X" itineraries.
-          if (p2.routeId == p1.routeId) continue;
-          if (shortName1.isNotEmpty) {
-            final r2 = _data.routes[p2.routeId];
-            if (r2 != null && r2.shortName.trim() == shortName1) continue;
-          }
-          final idx2 = p2.indexOfStop(stopId);
-          if (idx2 < 0) continue; // shouldn't happen given how the map is built
-          _connections[i].add(PatternConnection(j, idx1, idx2));
+    // Scratch indexed by pattern id (reset through `touched` after each stop)
+    // instead of a hash map: on the dense feed the visitor below runs a few
+    // million times.
+    final neighbourhoods = <String, _StopNeighbourhood>{};
+    final bestWalk = Float64List(n)..fillRange(0, n, double.infinity);
+    final bestIdx = Int32List(n);
+    final touched = <int>[];
+    // Pattern ids per stop as a plain list — iterating a Set<int> is slower
+    // and this is the innermost loop of the build.
+    final patternsAtStop = <String, List<int>>{
+      for (final e in _stopToPatternIds.entries) e.key: e.value.toList(),
+    };
+    _StopNeighbourhood neighbourhoodOf(String stopId) {
+      final cached = neighbourhoods[stopId];
+      if (cached != null) return cached;
+      touched.clear();
+      final sharing = patternsAtStop[stopId];
+      if (sharing != null) {
+        for (final j in sharing) {
+          final idx2 = _patterns[j].indexOfStop(stopId);
+          if (idx2 < 0) continue;
+          bestWalk[j] = 0;
+          bestIdx[j] = idx2;
+          touched.add(j);
         }
       }
-      // Sort by myStopIdx ascending so query-time iteration can skip past
-      // connections at or before the origin's index without scanning them.
-      _connections[i].sort((a, b) => a.myStopIdx.compareTo(b.myStopIdx));
+      final stop = _data.stops[stopId];
+      if (spatialIndex != null && stop != null) {
+        spatialIndex.forEachStopWithin(
+          stop.lat,
+          stop.lon,
+          transferRadiusMeters,
+          (near, distance) {
+            if (near.id == stopId) return; // shared stops handled above
+            final atNeighbour = patternsAtStop[near.id];
+            if (atNeighbour == null) return;
+            for (final j in atNeighbour) {
+              // Keep the nearest boarding stop per pattern (a shared stop,
+              // walk 0, always wins).
+              final current = bestWalk[j];
+              if (current <= distance) continue;
+              final idx2 = _patterns[j].indexOfStop(near.id);
+              if (idx2 < 0) continue;
+              if (current == double.infinity) touched.add(j);
+              bestWalk[j] = distance;
+              bestIdx[j] = idx2;
+            }
+          },
+        );
+      }
+      final result = _StopNeighbourhood.collect(touched, bestIdx, bestWalk);
+      for (final j in touched) {
+        bestWalk[j] = double.infinity;
+      }
+      return neighbourhoods[stopId] = result;
+    }
+
+    var total = 0;
+    // Scratch indexed by pattern id: walk to each pattern from the previous
+    // and next stop of the pattern being built (infinity = out of range),
+    // loaded per alight stop and reset through the neighbourhood's ids.
+    // O(1) instead of a binary search per candidate — the dominant cost of
+    // this pass on a dense feed.
+    final prevWalk = Float64List(n)..fillRange(0, n, double.infinity);
+    final nextWalk = Float64List(n)..fillRange(0, n, double.infinity);
+    // Scratch: indices into a neighbourhood, insertion-sorted by walk.
+    var order = Int32List(64);
+
+    for (var i = 0; i < n; i++) {
+      final p1 = _patterns[i];
+      final line1 = patternLine[i];
+      final stopCount = p1.stopIds.length;
+      final nearest = [
+        for (final stopId in p1.stopIds) neighbourhoodOf(stopId),
+      ];
+
+      // Upper bound: every neighbourhood entry becomes a connection.
+      var capacity = 0;
+      for (final nb in nearest) {
+        capacity += nb.length;
+      }
+      if (scratchOther.length < capacity) {
+        scratchOther = Int32List(capacity);
+        scratchMyIdx = Int32List(capacity);
+        scratchOtherIdx = Int32List(capacity);
+        scratchWalk = Float32List(capacity);
+      }
+      final other = scratchOther;
+      final myIdx = scratchMyIdx;
+      final otherIdx = scratchOtherIdx;
+      final walk = scratchWalk;
+      var count = 0;
+
+      for (var idx1 = 0; idx1 < stopCount; idx1++) {
+        final here = nearest[idx1];
+        final prev = idx1 > 0 ? nearest[idx1 - 1] : null;
+        final next = idx1 + 1 < stopCount ? nearest[idx1 + 1] : null;
+        prev?.loadWalks(prevWalk);
+        next?.loadWalks(nextWalk);
+        if (order.length < here.length) order = Int32List(here.length * 2);
+
+        // Filter: another line, and — for a walkable connection — a local
+        // minimum of the walk along P. Shortest walks first within one
+        // alight stop; insertion sort is stable and the neighbourhood is in
+        // pattern-id order, so ties fall back to pattern id and the table
+        // is deterministic.
+        var m = 0;
+        for (var k = 0; k < here.length; k++) {
+          final j = here.patternIds[k];
+          if (j == i || patternLine[j] == line1) continue;
+          final w = here.walks[k];
+          if (w > 0 && !(w < prevWalk[j] && w <= nextWalk[j])) continue;
+          var pos = m;
+          while (pos > 0 && here.walks[order[pos - 1]] > w) {
+            order[pos] = order[pos - 1];
+            pos--;
+          }
+          order[pos] = k;
+          m++;
+        }
+        for (var q = 0; q < m; q++) {
+          final k = order[q];
+          other[count] = here.patternIds[k];
+          myIdx[count] = idx1;
+          otherIdx[count] = here.stopIdxs[k];
+          walk[count] = here.walks[k];
+          count++;
+        }
+
+        prev?.resetWalks(prevWalk);
+        next?.resetWalks(nextWalk);
+      }
+
+      chunkOther.add(other.sublist(0, count));
+      chunkMyIdx.add(myIdx.sublist(0, count));
+      chunkOtherIdx.add(otherIdx.sublist(0, count));
+      chunkWalk.add(walk.sublist(0, count));
+      total += count;
+      starts[i + 1] = total;
+    }
+
+    _connStart = starts;
+    _connOther = Int32List(total);
+    _connMyIdx = Int32List(total);
+    _connOtherIdx = Int32List(total);
+    _connWalk = Float32List(total);
+    for (var i = 0; i < n; i++) {
+      final at = starts[i];
+      _connOther.setAll(at, chunkOther[i]);
+      _connMyIdx.setAll(at, chunkMyIdx[i]);
+      _connOtherIdx.setAll(at, chunkOtherIdx[i]);
+      _connWalk.setAll(at, chunkWalk[i]);
     }
   }
 
@@ -266,6 +691,16 @@ class GtfsRouteIndex {
 
   /// Total number of patterns indexed.
   int get patternCount => _patterns.length;
+
+  /// Total number of precomputed connections across all patterns.
+  int get connectionCount => _connStart.isEmpty ? 0 : _connStart.last;
+
+  /// Identity of the logical line a route belongs to. Two routes with the
+  /// same key are one line (never chained by a transfer, collapsed to one
+  /// itinerary row); see [sameNameRouteLimit] for when a shared
+  /// `route_short_name` counts. Unknown routes are their own line.
+  String lineKeyForRoute(String routeId) =>
+      _lineKeyByRoute[routeId] ?? 'r:$routeId';
 
   /// Get all routes that serve a stop.
   Set<String> getRoutesAtStop(String stopId) {
@@ -300,11 +735,20 @@ class GtfsRouteIndex {
     return routesAtFrom.intersection(routesAtTo).toList();
   }
 
-  /// Precomputed transfer points from a given pattern.
-  /// Empty list for unknown / deserialized patterns.
-  List<PatternConnection> getConnectionsFor(int patternId) {
-    if (patternId < 0 || patternId >= _connections.length) return const [];
-    return _connections[patternId];
+  /// Precomputed transfer points from a given pattern, sorted by alight
+  /// position then walk distance. Empty for unknown / deserialized patterns.
+  PatternConnections getConnectionsFor(int patternId) {
+    if (patternId < 0 || patternId >= _patterns.length) {
+      return PatternConnections.empty;
+    }
+    return PatternConnections._(
+      _connOther,
+      _connMyIdx,
+      _connOtherIdx,
+      _connWalk,
+      _connStart[patternId],
+      _connStart[patternId + 1],
+    );
   }
 
   static double _haversineStops(GtfsStop a, GtfsStop b) {
@@ -313,8 +757,55 @@ class GtfsRouteIndex {
     final lat2 = b.lat * pi / 180;
     final dLat = (b.lat - a.lat) * pi / 180;
     final dLon = (b.lon - a.lon) * pi / 180;
-    final h = sin(dLat / 2) * sin(dLat / 2) +
+    final h =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     return 2 * r * asin(sqrt(h));
+  }
+}
+
+/// Build-time record for one stop: the nearest stop of every pattern within
+/// the transfer radius (walk 0 when the pattern serves the stop itself).
+/// Columns sorted by pattern id so [walkTo] is a binary search.
+class _StopNeighbourhood {
+  final Int32List patternIds;
+  final Int32List stopIdxs;
+  final Float32List walks;
+
+  _StopNeighbourhood._(this.patternIds, this.stopIdxs, this.walks);
+
+  /// Snapshot of the scratch arrays for the pattern ids in [touched].
+  factory _StopNeighbourhood.collect(
+    List<int> touched,
+    Int32List bestIdx,
+    Float64List bestWalk,
+  ) {
+    final ids = touched.toList()..sort();
+    final patternIds = Int32List(ids.length);
+    final stopIdxs = Int32List(ids.length);
+    final walks = Float32List(ids.length);
+    for (var k = 0; k < ids.length; k++) {
+      final j = ids[k];
+      patternIds[k] = j;
+      stopIdxs[k] = bestIdx[j];
+      walks[k] = bestWalk[j];
+    }
+    return _StopNeighbourhood._(patternIds, stopIdxs, walks);
+  }
+
+  int get length => patternIds.length;
+
+  /// Writes this stop's walks into [scratch] (indexed by pattern id).
+  void loadWalks(Float64List scratch) {
+    for (var k = 0; k < patternIds.length; k++) {
+      scratch[patternIds[k]] = walks[k];
+    }
+  }
+
+  /// Undoes [loadWalks] (back to infinity = out of range).
+  void resetWalks(Float64List scratch) {
+    for (var k = 0; k < patternIds.length; k++) {
+      scratch[patternIds[k]] = double.infinity;
+    }
   }
 }

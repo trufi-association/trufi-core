@@ -282,6 +282,13 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       _suppressCameraCallback = false;
       return;
     }
+    // A controlled camera is waiting for the style to load. The idle events
+    // the native map emits meanwhile describe its initial position (Android
+    // fires one before the style has loaded), not a move anyone asked for:
+    // recording it as the current camera would turn the replay in
+    // onStyleLoadedCallback into an "already there" no-op and silently drop
+    // the camera the parent set (#995).
+    if (_pendingCameraApply) return;
     final ctl = _mapCtl;
     if (ctl == null) return;
     final cam = ctl.cameraPosition;

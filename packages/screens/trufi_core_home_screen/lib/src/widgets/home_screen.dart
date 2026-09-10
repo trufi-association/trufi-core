@@ -1026,9 +1026,17 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   /// Compute and apply camera position to fit the given points.
+  ///
+  /// The fit only takes the bearing from the base camera — target and zoom
+  /// come from the points and the viewport — so before the map has reported a
+  /// camera the initial one is used instead of dropping the fit: a plan
+  /// restored on a cold start lands before the map's first camera report and
+  /// nothing replayed the fit afterwards (#995). The controlled camera set
+  /// here is held by [TrufiMap] until its style has loaded (#946).
   void _fitCameraToPoints(List<LatLng> points) {
-    if (_fitCameraUtil == null || _currentCamera == null) return;
-    final newCam = _fitCameraUtil!.cameraForPoints(points, _currentCamera!);
+    final baseCamera = _currentCamera ?? _initialCamera;
+    if (_fitCameraUtil == null || baseCamera == null) return;
+    final newCam = _fitCameraUtil!.cameraForPoints(points, baseCamera);
     if (newCam != null) {
       setState(() {
         _cameraTarget = newCam;
@@ -1071,9 +1079,14 @@ class _HomeScreenState extends State<HomeScreen>
   /// Programmatic moves suppress the map's onCameraChanged callback, so
   /// without this the recorded viewport goes stale and an engine switch
   /// right after (e.g. my-location → change map style) snaps back to the
-  /// previous view (#902).
+  /// previous view (#902). For the same reason the controlled camera is
+  /// dropped here: [_onCameraChanged] never runs for this move, so it would
+  /// stay set to the route fit and the next rebuild (a GPS tick, the
+  /// keyboard, a rotation) would hand it back to [TrufiMap], snapping the
+  /// view away from the location the user asked for (#995).
   void _moveCameraTracked(TrufiCameraPosition position) {
     _currentCamera = position;
+    _cameraTarget = null;
     _mapController?.moveCamera(position);
   }
 
