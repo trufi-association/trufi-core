@@ -70,12 +70,14 @@ class TrufiPlannerConfig {
   /// plannable 54 % of the time with one transfer, 77.5 % with two, 90 %
   /// with three (trufi-sanaa#2, second reopening); on Cochabamba's long
   /// crossing lines the same step is 95.8 % → 99.5 %. Cost: the extra
-  /// search runs only on queries that would otherwise return nothing and
-  /// took under 1 ms on Sana'a and 0.7 ms average / 12 ms worst case on
-  /// the dense Cochabamba feed (desktop). Above 3 the search rarely finds
-  /// anything new and stops by itself once no new line is reached. Must be
-  /// >= 0. Remote mode forwards it to the server, which applies it if its
-  /// planner supports it.
+  /// search runs only on queries that would otherwise return nothing;
+  /// measured on those queries (desktop, whole query) it took 0.65 ms
+  /// average / 4.5 ms worst case on Sana'a and 28 ms average / 150 ms
+  /// worst case on the dense Cochabamba feed (2.6 M connections; the same
+  /// queries take 9 / 88 ms to answer "no routes" today). Above 3 the
+  /// search rarely finds anything new and stops by itself once no new line
+  /// is reached. Must be >= 0. Remote mode forwards it to the server, which
+  /// applies it if its planner supports it.
   final int maxTransfers;
 
   /// Straight-line distance, in meters, within which two distinct stops
