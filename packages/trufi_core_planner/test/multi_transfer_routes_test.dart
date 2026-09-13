@@ -185,6 +185,20 @@ void main() {
       expect(plan(s, maxTransfers: 2), isEmpty);
       expect(s.multiTransferSearches, 1);
     });
+
+    test('the service default is one transfer: phase 3 never runs unasked', () {
+      final s = service();
+      expect(
+        s.findRoutes(
+          origin: stops['s0']!.position,
+          destination: stops['s6']!.position,
+          maxWalkDistance: 50,
+          maxResults: 5,
+        ),
+        isEmpty,
+      );
+      expect(s.multiTransferSearches, 0);
+    });
   });
 
   group('four lines in a row: three transfers', () {
@@ -466,6 +480,245 @@ void main() {
       );
       expect(toD1.map(chain), [
         ['A1', 'B', 'E'],
+      ]);
+    });
+  });
+
+  group('fewest transfers win across rounds', () {
+    // A → B → C reaches s6 with two transfers; A → B → D → E reaches it
+    // with three (D leaves B's last stop northwards, E comes back down to
+    // s6). The first round that yields an itinerary ends the search, so a
+    // limit of 3 — or any larger one — offers the two-transfer chain only.
+    final stops = {
+      for (var i = 0; i <= 6; i++) 's$i': at('s$i', 0.001 * i),
+      'd': at('d', 0.005, lat: 0.002),
+      'e': at('e', 0.006, lat: 0.002),
+    };
+    final data = feed(
+      stops: stops,
+      routes: {
+        'A': bus('A', '1'),
+        'B': bus('B', '2'),
+        'C': bus('C', '3'),
+        'D': bus('D', '4'),
+        'E': bus('E', '5'),
+      },
+      tripStops: {
+        'A': ['s0', 's1', 's2'],
+        'B': ['s2', 's3', 's4'],
+        'C': ['s4', 's5', 's6'],
+        'D': ['s4', 'd', 'e'],
+        'E': ['e', 's6'],
+      },
+    );
+    final spatial = GtfsSpatialIndex(data.stops);
+    final service = GtfsRoutingService(
+      data: data,
+      spatialIndex: spatial,
+      routeIndex: GtfsRouteIndex(data, spatialIndex: spatial),
+    );
+    List<RoutingPath> plan(int maxTransfers) => service.findRoutes(
+      origin: stops['s0']!.position,
+      destination: stops['s6']!.position,
+      maxWalkDistance: 50,
+      maxResults: 5,
+      maxTransfers: maxTransfers,
+    );
+
+    test(
+      'a three-transfer chain is not offered next to a two-transfer one',
+      () {
+        expect(plan(3).map(chain), [
+          ['A', 'B', 'C'],
+        ]);
+        expect(plan(10).map(chain), [
+          ['A', 'B', 'C'],
+        ]);
+      },
+    );
+  });
+
+  group('chain-rule fallback stays within its round', () {
+    // Case L. Route X has an outbound pattern Xout (boards 89 m from the
+    // origin) and a return pattern Xback, the only one serving the
+    // destination y20. P detours north, meets Xout at p10 (56 m) and Xback
+    // at p50 (56 m) — 3.3 km past a destination 2.2 km away, so phase 2
+    // prunes the one-transfer P → Xback by its destination-bbox rule. The
+    // only two-transfer chain, Xout → P → Xback, rides X twice. In round 2
+    // P's cheapest label (via Xout) is vetoed for the hop into Xback; a
+    // fallback to P's round-0 label would emit P → Xback from phase 3 with
+    // ONE transfer — the very chain phase 2 pruned. Nothing is the answer.
+    final stopsL = {
+      's0': at('s0', 0),
+      'x0': at('x0', 0, lat: -0.0008),
+      'x10': at('x10', 0.010, lat: 0.0005),
+      'x50': at('x50', 0.050, lat: 0.001),
+      'y50': at('y50', 0.050, lat: -0.0005),
+      'y20': at('y20', 0.020, lat: -0.001),
+      'y0': at('y0', 0.001, lat: -0.001),
+      'pd': at('pd', 0.005, lat: 0.004),
+      'p10': at('p10', 0.010),
+      'p50': at('p50', 0.050),
+    };
+    final dataL = feed(
+      stops: stopsL,
+      routes: {'X': bus('X', 'X'), 'P': bus('P', '1')},
+      tripStops: {
+        'Xout': ['x0', 'x10', 'x50'],
+        'Xback': ['y50', 'y20', 'y0'],
+        'P': ['s0', 'pd', 'p10', 'p50'],
+      },
+      tripRoute: {'Xout': 'X', 'Xback': 'X', 'P': 'P'},
+    );
+
+    test('case L: a vetoed label never falls back to an earlier round', () {
+      final spatial = GtfsSpatialIndex(dataL.stops);
+      final s = GtfsRoutingService(
+        data: dataL,
+        spatialIndex: spatial,
+        routeIndex: GtfsRouteIndex(dataL, spatialIndex: spatial),
+      );
+      List<RoutingPath> plan(int maxTransfers) => s.findRoutes(
+        origin: stopsL['s0']!.position,
+        destination: stopsL['y20']!.position,
+        maxWalkDistance: 100,
+        maxResults: 5,
+        maxTransfers: maxTransfers,
+      );
+      expect(plan(1), isEmpty, reason: 'phase 2 prunes P → Xback (bbox)');
+      expect(s.multiTransferSearches, 0);
+      expect(
+        plan(2),
+        isEmpty,
+        reason:
+            'the only two-transfer chain rides X twice; no one-transfer '
+            'itinerary may come out of phase 3',
+      );
+      expect(s.multiTransferSearches, 1);
+      expect(plan(3), isEmpty);
+    });
+
+    // Case F. The same-round fallback is genuinely needed: A boards P at
+    // p2 cheaply, B detours north and boards P at p1 — earlier and dearer,
+    // so both labels live on P's front. Only Aback, route A's return trip,
+    // serves the destination z, from p8. The A-label owns the alight at p8
+    // but rides A → vetoed; B's label, of the same round, takes it.
+    final stopsF = {
+      's0': at('s0', 0),
+      for (var i = 0; i <= 9; i++) 'p$i': at('p$i', 0.002 + 0.001 * i),
+      'n': at('n', 0.0015, lat: 0.003),
+      'z': at('z', 0.011, lat: -0.002),
+    };
+    final dataF = feed(
+      stops: stopsF,
+      routes: {'A': bus('A', '1'), 'B': bus('B', '2'), 'P': bus('P', '9')},
+      tripStops: {
+        'A': ['s0', 'p2'],
+        'Aback': ['p8', 'z'],
+        'B': ['s0', 'n', 'p1'],
+        'P': [for (var i = 0; i <= 9; i++) 'p$i'],
+      },
+      tripRoute: {'A': 'A', 'Aback': 'A', 'B': 'B', 'P': 'P'},
+    );
+
+    test('case F: the earlier boarding of the same round takes the vetoed '
+        'connection', () {
+      final spatial = GtfsSpatialIndex(dataF.stops);
+      final s = GtfsRoutingService(
+        data: dataF,
+        spatialIndex: spatial,
+        routeIndex: GtfsRouteIndex(dataF, spatialIndex: spatial),
+      );
+      final paths = s.findRoutes(
+        origin: stopsF['s0']!.position,
+        destination: stopsF['z']!.position,
+        maxWalkDistance: 50,
+        maxResults: 5,
+        maxTransfers: 2,
+      );
+      expect(paths.map(chain), [
+        ['B', 'P', 'A'],
+      ]);
+      final p = paths.single;
+      expect(p.transfers, 2);
+      expect(p.segments[0].toStop.id, 'p1');
+      expect(p.segments[1].fromStop.id, 'p1');
+      expect(p.segments[1].toStop.id, 'p8');
+      expect(p.segments[2].fromStop.id, 'p8');
+      expect(p.segments[2].toStop.id, 'z');
+      // Ridden only: s0 → n → p1 (746 m), P p1 → p8 (778 m), Aback p8 → z
+      // (249 m); no walks anywhere.
+      expect(p.score, closeTo(1773, 3));
+      expect(p.score, closeTo(p.totalTransitDistance, 0.001));
+    });
+
+    // Case H — a known limitation, documented in _findMultiTransferRoutes.
+    // Q runs east; route 2 has R2out (s0 → q3, the cheap way onto Q) and
+    // R2back (q9 → z, the only pattern serving z); route 1 detours north
+    // and joins Q at q6, dearer. R1 → Q at q6 is dominated by R2out → Q at
+    // q3 and dropped — yet it carried the only history the chain rule
+    // accepts for Q → R2back (R2out → Q → R2back rides route 2 twice), so
+    // the legal itinerary R1 → Q → R2back is not found. On the Sana'a,
+    // Cochabamba and Lima feeds this never removed a reachable pair. The
+    // control gives the return trip its own route: the chain is found as
+    // soon as the rule does not veto it.
+    final stopsH = {
+      's0': at('s0', 0),
+      for (var i = 0; i <= 9; i++) 'q$i': at('q$i', 0.002 + 0.001 * i),
+      'n': at('n', 0.004, lat: 0.003),
+      'z': at('z', 0.012, lat: -0.002),
+    };
+    const tripsH = {
+      'R2out': ['s0', 'q3'],
+      'R2back': ['q9', 'z'],
+      'R1': ['s0', 'n', 'q6'],
+      'Q': ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9'],
+    };
+    List<RoutingPath> planH(GtfsData data) {
+      final spatial = GtfsSpatialIndex(data.stops);
+      return GtfsRoutingService(
+        data: data,
+        spatialIndex: spatial,
+        routeIndex: GtfsRouteIndex(data, spatialIndex: spatial),
+      ).findRoutes(
+        origin: stopsH['s0']!.position,
+        destination: stopsH['z']!.position,
+        maxWalkDistance: 50,
+        maxResults: 5,
+        maxTransfers: 2,
+      );
+    }
+
+    test('case H (known limitation): dominance can drop the only history '
+        'the chain rule accepts', () {
+      final limitation = feed(
+        stops: stopsH,
+        routes: {
+          'R1': bus('R1', '1'),
+          'R2': bus('R2', '2'),
+          'Q': bus('Q', '9'),
+        },
+        tripStops: tripsH,
+        tripRoute: {'R2out': 'R2', 'R2back': 'R2', 'R1': 'R1', 'Q': 'Q'},
+      );
+      expect(
+        planH(limitation),
+        isEmpty,
+        reason: 'R1 → Q → R2back exists, but R1\'s label on Q is dominated',
+      );
+      final control = feed(
+        stops: stopsH,
+        routes: {
+          'R1': bus('R1', '1'),
+          'R2': bus('R2', '2'),
+          'R2x': bus('R2x', '3'),
+          'Q': bus('Q', '9'),
+        },
+        tripStops: tripsH,
+        tripRoute: {'R2out': 'R2', 'R2back': 'R2x', 'R1': 'R1', 'Q': 'Q'},
+      );
+      expect(planH(control).map(chain), [
+        ['R2', 'Q', 'R2x'],
       ]);
     });
   });

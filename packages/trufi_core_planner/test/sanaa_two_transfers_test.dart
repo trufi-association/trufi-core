@@ -189,6 +189,133 @@ void main() {
     });
   });
 
+  group('exact optimum on the fixture (exhaustive enumeration)', () {
+    // Random pairs over the fixture's stops, planned with the app's
+    // parameters, against an exhaustive enumeration of every
+    // chain-rule-legal two-transfer chain over the connection table — no
+    // pruning, no dominance, a different algorithm — so these values do
+    // not come from the engine. The first itinerary must be the exact
+    // optimum; the listed scores are the enumeration's best score per
+    // line chain in order. They pin the two ranking pieces nothing else
+    // exercises: best-per-chain candidates (with "last candidate wins"
+    // the first score is 10–15 % worse on fx-17 and fx-0) and the removal
+    // of dominated labels on insert (with it off a dearer boarding
+    // expands and takes the first row: 8 077.0 instead of 8 076.4 on
+    // fx-664, 19 417.8 instead of 17 647.6 on fx-1082).
+    const cases =
+        <
+          ({
+            String name,
+            LatLng from,
+            LatLng to,
+            String originStop,
+            String destinationStop,
+            List<(int, int)> legs,
+            double transferWalk,
+            List<String> chains,
+            List<double> scores,
+          })
+        >[
+          (
+            name: 'fx-17: five rows, both first lines (7 and 7/14) survive',
+            from: LatLng(15.349753509695734, 44.210020040033065),
+            to: LatLng(15.337268611472185, 44.170345906663286),
+            originStop: '13483250288',
+            destinationStop: '6579214892',
+            legs: [(35, 42), (3, 39), (13, 49)],
+            transferWalk: 99.3,
+            chains: [
+              '20083001>19955711>18800916',
+              '19955711>18800916>18904090',
+              '19955711>18904090>18800916',
+              '19955711>18800916>18800934',
+              '19955711>18800934>18800916',
+            ],
+            scores: [12306.593, 12396.441, 12396.441, 12622.535, 13089.725],
+          ),
+          (
+            name: 'fx-0: two rows, the alternative through the other 14 after',
+            from: LatLng(15.375267033452502, 44.20462797564028),
+            to: LatLng(15.358305690934694, 44.1751034573387),
+            originStop: '9433317887',
+            destinationStop: '588479901',
+            legs: [(18, 42), (3, 39), (13, 71)],
+            transferWalk: 99.3,
+            chains: [
+              '20083001>19955711>18800916',
+              '20083001>19955711>18904090',
+            ],
+            scores: [18828.165, 20671.141],
+          ),
+          (
+            name:
+                'fx-1082: one row, the cheaper first 14 (a dearer one is dominated)',
+            from: LatLng(15.316222814148432, 44.22121693601033),
+            to: LatLng(15.348748886948714, 44.21493145068907),
+            originStop: '588460202',
+            destinationStop: '9433209819',
+            legs: [(19, 41), (0, 69), (8, 33)],
+            transferWalk: 73.3,
+            chains: ['18800916>19954455>20083001'],
+            scores: [17647.622],
+          ),
+          (
+            name: 'fx-664: one row, first leg decided by 0.6 m of score',
+            from: LatLng(15.315115774460512, 44.221406235335046),
+            to: LatLng(15.273301888777084, 44.22664089985786),
+            originStop: '7034963676',
+            destinationStop: '417345859',
+            legs: [(35, 45), (0, 27), (36, 47)],
+            transferWalk: 0,
+            chains: ['20046631>19985849>20046723'],
+            scores: [8076.385],
+          ),
+          (
+            name: "the reporter's pair, forward",
+            from: darSalm,
+            to: hasaba,
+            originStop: '6221151568',
+            destinationStop: '1634764477',
+            legs: [(2, 31), (0, 41), (0, 68)],
+            transferWalk: 81.5,
+            chains: [
+              '19985848>18800916>19954455',
+              '19985848>18904090>19954455',
+            ],
+            scores: [18266.731, 20175.104],
+          ),
+          (
+            name: "the reporter's pair, reverse",
+            from: hasaba,
+            to: darSalm,
+            originStop: '262083544',
+            destinationStop: '6221151573',
+            legs: [(7, 42), (3, 53), (0, 26)],
+            transferWalk: 99.3,
+            chains: ['20083001>19955711>19985849'],
+            scores: [13514.524],
+          ),
+        ];
+
+    for (final c in cases) {
+      test(c.name, () {
+        final paths = plan(c.from, c.to, maxTransfers: 2);
+        expect(paths.map((p) => chain(p).join('>')).toSet(), c.chains.toSet());
+        expect(paths, hasLength(c.scores.length));
+        for (var i = 0; i < paths.length; i++) {
+          expect(paths[i].score, closeTo(c.scores[i], 0.01), reason: 'row $i');
+        }
+        final top = paths.first;
+        expect(chain(top).join('>'), c.chains.first);
+        expect(top.transfers, 2);
+        expect(top.originStop.id, c.originStop);
+        expect(top.destinationStop.id, c.destinationStop);
+        expect(top.segments.map((s) => (s.fromIdx, s.toIdx)), c.legs);
+        expect(top.transferWalkDistance, closeTo(c.transferWalk, 0.1));
+      });
+    }
+  });
+
   group('regression: trips that already plan are untouched by the limit', () {
     // The four pairs of the first reopening (#992) on that fixture, all
     // answered with one transfer today. Raising the limit must not change
