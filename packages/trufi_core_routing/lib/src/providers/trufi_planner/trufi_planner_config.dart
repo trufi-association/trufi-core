@@ -59,7 +59,27 @@ class TrufiPlannerConfig {
   /// coverage for speed.
   final int maxStopCandidates;
 
-  /// Maximum number of transfers allowed (default: 1).
+  /// Most bus changes an itinerary may have (default: 1, i.e. two buses).
+  ///
+  /// The planner offers the fewest transfers that reach the destination:
+  /// direct lines hide one-transfer options, and one-transfer options hide
+  /// anything longer, so raising this never changes a trip that already
+  /// plans — it only turns some "no routes" into an answer. `0` offers
+  /// direct lines only. `2` is worth it on fragmented networks: Sana'a's
+  /// feed is 194 short OSM-derived lines and a random ≥ 2 km pair is
+  /// plannable 54 % of the time with one transfer, 77.5 % with two, 90 %
+  /// with three (trufi-sanaa#2, second reopening); on Cochabamba's long
+  /// crossing lines the same step is 95.8 % → 99.5 %. Cost: the extra
+  /// search runs only on queries that would otherwise return nothing;
+  /// measured on those queries (desktop, whole query) it took 0.65 ms
+  /// average / 4.5 ms worst case on Sana'a and 28 ms average / 150 ms
+  /// worst case on the dense Cochabamba feed (2.6 M connections; the same
+  /// queries take 9 / 88 ms to answer "no routes" today). Above 3 the
+  /// search rarely finds anything new and stops by itself once no new line
+  /// is reached. Must be >= 0. Remote mode sends it in the `/plan` request;
+  /// it takes effect there once trufi-server-planner's handler reads it and
+  /// passes it to its planner (today's handler ignores unknown keys, so an
+  /// older server neither fails nor honours it).
   final int maxTransfers;
 
   /// Straight-line distance, in meters, within which two distinct stops
@@ -117,7 +137,8 @@ class TrufiPlannerConfig {
     this.transferRadiusMeters = 100,
     this.sameNameRouteLimit = 3,
     this.persistIndex = true,
-  }) : serverUrl = null;
+  }) : assert(maxTransfers >= 0, 'maxTransfers must be >= 0'),
+       serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
   ///
@@ -132,7 +153,8 @@ class TrufiPlannerConfig {
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
     this.maxStopCandidates = 150,
-  }) : gtfsAsset = null,
+  }) : assert(maxTransfers >= 0, 'maxTransfers must be >= 0'),
+       gtfsAsset = null,
        transferRadiusMeters = 100,
        sameNameRouteLimit = 3,
        persistIndex = false;

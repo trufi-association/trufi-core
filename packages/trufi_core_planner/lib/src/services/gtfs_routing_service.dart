@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:latlong2/latlong.dart';
 
@@ -180,6 +181,19 @@ class GtfsRoutingService {
   /// (~5 ms at 1 500; the maximum is set by the direct phase either way).
   static const int defaultMaxTransferCandidates = 20000;
 
+  /// Default for [maxMultiTransferScans].
+  ///
+  /// The multi-transfer search (see [findRoutes]) scans the connections of
+  /// every pattern it has labelled, once per round. Measured on the 17 of
+  /// 400 random pairs that reach the search on the dense Cochabamba feed
+  /// (2.6 M connections, 800 m walk, two rounds): 904 k scans on average
+  /// and 2.65 M in the worst pair; on Sana'a (16 k connections, 1 500 m)
+  /// 3.4 k on average and 11.5 k at most. The default leaves a 2.3× margin
+  /// over the densest feed measured, so it only guards against a
+  /// pathological one; when it runs out the search answers with the
+  /// candidates of the round in progress.
+  static const int defaultMaxMultiTransferScans = 6000000;
+
   final GtfsData data;
   final GtfsSpatialIndex spatialIndex;
   final GtfsRouteIndex routeIndex;
@@ -191,20 +205,67 @@ class GtfsRoutingService {
   /// never considered.
   final int maxTransferCandidates;
 
+  /// Upper bound on the connection scans one query spends in the
+  /// multi-transfer search (`maxTransfers >= 2`, all rounds together).
+  /// When it runs out the search stops expanding and answers with the
+  /// chains found so far, so a truncated query can miss itineraries but
+  /// never returns a malformed one. See [defaultMaxMultiTransferScans].
+  final int maxMultiTransferScans;
+
   GtfsRoutingService({
     required this.data,
     required this.spatialIndex,
     required this.routeIndex,
     this.maxTransferCandidates = defaultMaxTransferCandidates,
+    this.maxMultiTransferScans = defaultMaxMultiTransferScans,
   });
 
+  int _multiTransferSearches = 0;
+
+  /// How many queries so far went into the multi-transfer search (phase 3
+  /// of [findRoutes]). Diagnostics: the phase only runs when the direct and
+  /// one-transfer phases found nothing, and tests pin that rule here.
+  int get multiTransferSearches => _multiTransferSearches;
+
+  /// Integer line id per pattern (see [GtfsRouteIndex.lineKeyForRoute]),
+  /// built on the first multi-transfer search: the chain rule compares
+  /// lines on every scanned connection, so it compares ints, not strings.
+  late final Int32List _patternLine = _buildPatternLines();
+
+  Int32List _buildPatternLines() {
+    final n = routeIndex.patternCount;
+    final ids = <String, int>{};
+    final lines = Int32List(n);
+    for (var i = 0; i < n; i++) {
+      final key = routeIndex.lineKeyForRoute(routeIndex.patternById(i).routeId);
+      lines[i] = ids.putIfAbsent(key, () => ids.length);
+    }
+    return lines;
+  }
+
   /// Find routes between two locations.
-  /// Supports direct routes and routes with 1 transfer.
   ///
-  /// Results are returned in two buckets back-to-back:
+  /// Three phases, each one only when the previous ones came back empty at
+  /// the end (a direct line suppresses transfers, see below):
+  ///   1. direct routes (no transfer);
+  ///   2. routes with exactly one transfer, when [maxTransfers] >= 1;
+  ///   3. routes with 2..[maxTransfers] transfers — the fewest that reach
+  ///      the destination — through a round-based search over the pattern
+  ///      graph, **only when phases 1 and 2 produced no itinerary at all**.
+  ///      A city that keeps the default (1) never runs it; a city that opts
+  ///      in gets exactly today's answer wherever today's answer exists.
+  ///
+  /// Results are returned in buckets:
   ///   1. up to [maxDirects] zero-transfer paths (best by score)
-  ///   2. up to [maxTransferPaths] one-transfer paths (best by score)
+  ///   2. up to [maxTransferPaths] transfer paths (best by score) — the
+  ///      one-transfer ones, or the multi-transfer ones when phase 3 ran.
   /// Direct routes always come first in the returned list.
+  ///
+  /// [maxTransfers] must be >= 0; `0` returns direct routes only. Values
+  /// above 3 rarely add anything (on Sana'a, the most fragmented feed
+  /// measured, two transfers take a random pair from 54 % to 77.5 %
+  /// plannable and three to 90 %) and the search stops on its own once no
+  /// new pattern is reached.
   ///
   /// [maxResults] is kept as a backwards-compatible upper bound — the final
   /// list is truncated to it. Pass it >= maxDirects + maxTransferPaths to
@@ -219,6 +280,10 @@ class GtfsRoutingService {
     int maxTransferPaths = 5,
     int maxStopCandidates = 150,
   }) {
+    if (maxTransfers < 0) {
+      throw ArgumentError.value(maxTransfers, 'maxTransfers', 'must be >= 0');
+    }
+
     // Consider every stop within walking distance (bounded by
     // [maxStopCandidates]), not just the nearest handful: in dense
     // networks the boarding stop of a direct line is often slightly
@@ -254,23 +319,7 @@ class GtfsRoutingService {
     // Sort all paths by score (lower is better)
     paths.sort((a, b) => a.score.compareTo(b.score));
 
-    // Deduplicate: keep only the best path per line combination.
-    // E.g., all "Bus 15 → Z14" variants collapse into the best one,
-    // leaving room for genuinely different route options. The key is the
-    // index's line key, not the bare `route_short_name`: where many
-    // distinct lines share one short name (Sana'a's "7"), keying by name
-    // would collapse every "7 → 7" itinerary — different lines, different
-    // terminals — into a single row.
-    final seen = <String>{};
-    final uniquePaths = <RoutingPath>[];
-    for (final path in paths) {
-      final key = path.segments
-          .map((s) => routeIndex.lineKeyForRoute(s.route.id))
-          .join('|');
-      if (seen.add(key)) {
-        uniquePaths.add(path);
-      }
-    }
+    final uniquePaths = _dedupeByLine(paths);
 
     // Split into direct vs transfer buckets. In Cochabamba each ride is a
     // separate fare, so a transfer doubles the cost — only worth offering
@@ -290,7 +339,45 @@ class GtfsRoutingService {
       }
     }
     final ordered = directs.isNotEmpty ? directs : transfers;
+
+    // Phase 3: two or more transfers, only when nothing else exists. The
+    // same "fewer transfers win outright" rule that hides transfers behind
+    // a direct line hides these behind any one-transfer itinerary, so a
+    // query that plans today returns exactly what it returned before.
+    if (ordered.isEmpty && maxTransfers >= 2) {
+      final multi = _findMultiTransferRoutes(
+        originStops,
+        destinationStops,
+        maxTransfers: maxTransfers,
+      );
+      multi.sort((a, b) => a.score.compareTo(b.score));
+      return _dedupeByLine(
+        multi,
+      ).take(min(maxTransferPaths, maxResults)).map(_resolvePathStops).toList();
+    }
+
     return ordered.take(maxResults).map(_resolvePathStops).toList();
+  }
+
+  /// Keeps only the best path per line combination of a score-sorted list.
+  /// E.g., all "Bus 15 → Z14" variants collapse into the best one,
+  /// leaving room for genuinely different route options. The key is the
+  /// index's line key, not the bare `route_short_name`: where many
+  /// distinct lines share one short name (Sana'a's "7"), keying by name
+  /// would collapse every "7 → 7" itinerary — different lines, different
+  /// terminals — into a single row.
+  List<RoutingPath> _dedupeByLine(List<RoutingPath> sortedPaths) {
+    final seen = <String>{};
+    final uniquePaths = <RoutingPath>[];
+    for (final path in sortedPaths) {
+      final key = path.segments
+          .map((s) => routeIndex.lineKeyForRoute(s.route.id))
+          .join('|');
+      if (seen.add(key)) {
+        uniquePaths.add(path);
+      }
+    }
+    return uniquePaths;
   }
 
   /// Find direct routes (0 transfers) between origin and destination stops.
@@ -509,6 +596,356 @@ class GtfsRoutingService {
     }
 
     paths.addAll(bestByPair.values);
+  }
+
+  /// Find routes with 2..[maxTransfers] transfers — as few as reach the
+  /// destination — by a round-based search over the pattern graph (the
+  /// idea of RAPTOR, Delling–Pajor–Werneck 2015, without the time axis).
+  ///
+  /// Nodes are patterns, edges the precomputed connections of the index
+  /// (alight at `myStopIdx`, board the other pattern at `otherStopIdx`,
+  /// `walkMeters` in between). A *label* is "aboard pattern P from stop
+  /// position `entry`, having spent `cost` (walk × reluctance + transit) to
+  /// get there with `round` transfers". Round 0 labels board at the origin
+  /// stops; round k labels come from scanning the connections **after the
+  /// entry** of every label created in round k − 1. From round 2 on, a
+  /// labelled pattern that serves a destination stop after its entry is an
+  /// itinerary; the first round that yields any ends the search, so every
+  /// answer has the minimum number of transfers.
+  ///
+  /// Each pattern keeps a Pareto front of labels: boarding earlier reaches
+  /// more stops, boarding later may be cheaper. Label A (entry a, cost cA)
+  /// dominates B (entry b ≥ a, cost cB) when riding A down to b is no
+  /// dearer than B — `cA + dist(a, b) <= cB` — in which case B is not
+  /// expanded: A reaches every stop B reaches for no more and with no more
+  /// transfers. This is what keeps the search bounded on a dense feed
+  /// (Cochabamba, 657 patterns, 2.6 M connections: 904 k scans on average
+  /// and 2.65 M in the worst of the 17 / 400 pairs that reach the search)
+  /// while every chain prefix it expands is the cheapest way to be aboard
+  /// that pattern at that position: the top itinerary is the exact optimum
+  /// (checked against an exhaustive enumeration of every legal two-transfer
+  /// chain on 94 Sana'a and 15 Cochabamba pairs). Extending today's pair
+  /// loop to triples instead would scan up to ~200 M connections per query
+  /// there.
+  ///
+  /// One caveat, because the chain rule below vetoes by history: A and B
+  /// may carry different histories, so dropping B can drop the only chain
+  /// a later connection accepts (B rode line 1, A rode line 2, and the
+  /// last leg is line 2's return trip). Measured on Sana'a, Cochabamba and
+  /// Lima this never lost a reachable pair (0 of 352 queries that reached
+  /// the search), and the chain rule itself changed no result on Sana'a's
+  /// 400 pairs. If it ever matters: keep dominated labels as shadows only
+  /// the fallback may consult, run dominance per first line, or drop the
+  /// chain rule and let dominance and score decide, as RAPTOR does.
+  ///
+  /// The hop **into** a pattern that serves a destination stop is not a
+  /// label but an itinerary candidate, evaluated on the spot for every
+  /// destination stop after the boarding position and kept best per chain
+  /// of pattern ids. Alternatives survive only where their labels survive:
+  /// two chains that reach the same intermediate pattern collapse into the
+  /// cheaper one there (Pareto dominance, or the expansion range handing
+  /// the connection to the cheaper boarding), so the list offers distinct
+  /// last legs and Pareto-incomparable prefixes — not every (first, second)
+  /// pair the way the one-transfer phase's best-per-pair does. Positions
+  /// 2–5 differ from the exhaustive top five in 45 of 94 Sana'a pairs and
+  /// 2 of 15 Cochabamba pairs; the top itinerary never does. Then
+  /// [findRoutes] dedupes by line.
+  ///
+  /// A chain never boards a line it has already ridden (the index already
+  /// forbids that between consecutive legs; here it holds across the whole
+  /// chain — "7 → 14 → back onto the same 7" is a detour, not an option).
+  /// When the rule vetoes the label that owns a connection, the nearest
+  /// earlier boarding of the same round on that front whose chain did not
+  /// ride the line takes it ([_ExpansionRange.fallbackFor]); a label of an
+  /// earlier round never does — its hop would have fewer transfers than the
+  /// round, i.e. a one-transfer chain the one-transfer phase pruned on
+  /// purpose. In the last round only patterns serving a destination stop
+  /// are worth a look: nothing else could still become an itinerary.
+  ///
+  /// The scan budget [maxMultiTransferScans] bounds a pathological query;
+  /// when it runs out the search answers with the candidates of the round
+  /// in progress. Returns one path per distinct pattern chain.
+  List<RoutingPath> _findMultiTransferRoutes(
+    List<NearbyStop> originStops,
+    List<NearbyStop> destinationStops, {
+    required int maxTransfers,
+  }) {
+    _multiTransferSearches++;
+
+    // Destination stops per pattern, arranged so that "the best stop to
+    // alight after position b" is one binary search (see
+    // [_DestinationsOnPattern]).
+    final destStopsByPattern = <int, List<NearbyStop>>{};
+    for (final destNearby in destinationStops) {
+      for (final p in routeIndex.getPatternsAtStop(destNearby.stop.id)) {
+        destStopsByPattern.putIfAbsent(p.id, () => []).add(destNearby);
+      }
+    }
+    if (destStopsByPattern.isEmpty) return [];
+    // Indexed by pattern id: the hot loop reads it once per connection.
+    final destinations = List<_DestinationsOnPattern?>.filled(
+      routeIndex.patternCount,
+      null,
+    );
+    for (final e in destStopsByPattern.entries) {
+      destinations[e.key] = _DestinationsOnPattern(
+        routeIndex.patternById(e.key),
+        e.value,
+        _walkReluctance,
+      );
+    }
+
+    final patternLine = _patternLine;
+    final patternCount = routeIndex.patternCount;
+    final fronts = List<_Front?>.filled(patternCount, null);
+
+    // Round 0: aboard every pattern that serves an origin stop.
+    var marked = <_TransferLabel>[];
+    for (var i = 0; i < originStops.length; i++) {
+      final originNearby = originStops[i];
+      for (final pattern in routeIndex.getPatternsAtStop(
+        originNearby.stop.id,
+      )) {
+        final entry = pattern.indexOfStop(originNearby.stop.id);
+        if (entry < 0) continue;
+        final cost = originNearby.distance * _walkReluctance;
+        final offset = cost - pattern.distanceBetween(0, entry);
+        final front = fronts[pattern.id] ??= _Front();
+        if (front.dominates(entry, offset)) continue;
+        final label = _TransferLabel(
+          pattern: pattern.id,
+          entry: entry,
+          cost: cost,
+          round: 0,
+          originStop: i,
+          chainKey: pattern.id,
+        );
+        front.insert(label, entry, offset);
+        marked.add(label);
+      }
+    }
+
+    var scans = 0;
+    for (var round = 1; round <= maxTransfers && marked.isNotEmpty; round++) {
+      final lastRound = round == maxTransfers;
+      // Phases 1 and 2 already answered for 0 and 1 transfers: a hop into
+      // a destination pattern counts as an itinerary from round 2 on.
+      final checkDestination = round >= 2;
+      final next = <_TransferLabel>[];
+      final candidates = <int, _ChainCandidate>{};
+
+      // Within a front, a later boarding always has the lower offset cost
+      // (else it would be dominated), so the cheapest way to be aboard at
+      // alight position `a` is the label with the largest entry below `a`.
+      // Each new label therefore only scans the connections between its
+      // entry and the next label's: every connection of a pattern is
+      // examined once per round, not once per label — around a dense
+      // origin a pattern easily carries 20+ non-dominated boardings.
+      // Ranges are fixed before the round inserts anything.
+      final ranges = <_ExpansionRange>[];
+      final snapshots = <int, _FrontSnapshot>{};
+      for (final label in marked) {
+        // Dominated by a label of its own round: same transfers, dearer.
+        // (Nothing else can have dominated it yet: rounds are sequential,
+        // and its round's labels were the last ones inserted.)
+        if (label.dominatedInRound == label.round) continue;
+        final front = snapshots.putIfAbsent(
+          label.pattern,
+          () => fronts[label.pattern]!.snapshot(),
+        );
+        final position = front.labels.indexOf(label);
+        if (position < 0) continue;
+        ranges.add(
+          _ExpansionRange(
+            label: label,
+            front: front,
+            position: position,
+            lastAlight: position + 1 < front.labels.length
+                ? front.entries[position + 1]
+                : 1 << 30,
+          ),
+        );
+      }
+
+      rounds:
+      for (final range in ranges) {
+        final label = range.label;
+        final labelPattern = routeIndex.patternById(label.pattern);
+        final conns = routeIndex.getConnectionsFor(label.pattern);
+        for (
+          var k = conns.firstIndexAfter(label.entry);
+          k < conns.length;
+          k++
+        ) {
+          final alightIdx = conns.myStopIdxAt(k);
+          if (alightIdx > range.lastAlight) break;
+          if (scans++ >= maxMultiTransferScans) break rounds;
+          final otherId = conns.otherPatternIdAt(k);
+          final destination = checkDestination ? destinations[otherId] : null;
+          if (lastRound && destination == null) continue;
+          final other = routeIndex.patternById(otherId);
+          final boardIdx = conns.otherStopIdxAt(k);
+          final walk = conns.walkMetersAt(k);
+          var source = label;
+          var cost =
+              label.cost +
+              labelPattern.distanceBetween(label.entry, alightIdx) +
+              walk * _walkReluctance;
+          var offset = cost - other.distanceBetween(0, boardIdx);
+          // Most hops die here (a cheaper boarding of the same pattern is
+          // already known), so nothing else is computed before this test.
+          final front = fronts[otherId];
+          if (destination == null &&
+              front != null &&
+              front.dominates(boardIdx, offset)) {
+            continue;
+          }
+          // The chain rule can veto the cheapest label; an earlier boarding
+          // of the same round with a different history may still take it.
+          final lineId = patternLine[otherId];
+          if (_chainRidesLine(label, patternLine, lineId)) {
+            final fallback = range.fallbackFor(patternLine, lineId);
+            if (fallback == null) continue;
+            source = fallback;
+            cost =
+                source.cost +
+                routeIndex
+                    .patternById(source.pattern)
+                    .distanceBetween(source.entry, alightIdx) +
+                walk * _walkReluctance;
+            offset = cost - other.distanceBetween(0, boardIdx);
+          }
+          _TransferLabel? hop;
+
+          if (destination != null) {
+            // Cheap score first; the path is only built for the winner of
+            // each chain once the round is over.
+            final best = destination.bestAfter(boardIdx);
+            if (best >= 0) {
+              final score =
+                  cost +
+                  other.distanceBetween(boardIdx, destination.stopIdx[best]) +
+                  destination.walkCost[best];
+              final chainKey = source.chainKey * patternCount + otherId;
+              final incumbent = candidates[chainKey];
+              if (incumbent == null || score < incumbent.score) {
+                hop = _TransferLabel(
+                  pattern: otherId,
+                  entry: boardIdx,
+                  cost: cost,
+                  round: round,
+                  prev: source,
+                  prevAlight: alightIdx,
+                  walk: walk,
+                  chainKey: chainKey,
+                );
+                candidates[chainKey] = _ChainCandidate(
+                  hop: hop,
+                  destIdx: destination.stopIdx[best],
+                  destNearby: destination.nearby[best],
+                  score: score,
+                );
+              }
+            }
+          }
+          if (lastRound) continue;
+          final target = front ?? (fronts[otherId] = _Front());
+          if (target.dominates(boardIdx, offset)) continue;
+          hop ??= _TransferLabel(
+            pattern: otherId,
+            entry: boardIdx,
+            cost: cost,
+            round: round,
+            prev: source,
+            prevAlight: alightIdx,
+            walk: walk,
+            chainKey: source.chainKey * patternCount + otherId,
+          );
+          target.insert(hop, boardIdx, offset);
+          next.add(hop);
+        }
+      }
+      if (candidates.isNotEmpty) {
+        return [
+          for (final c in candidates.values)
+            ?_buildChainPath(c.hop, c.destIdx, c.destNearby, originStops),
+        ];
+      }
+      marked = next;
+    }
+    return [];
+  }
+
+  /// True when the chain ending in [label] already rides [lineId].
+  static bool _chainRidesLine(
+    _TransferLabel label,
+    Int32List patternLine,
+    int lineId,
+  ) {
+    for (_TransferLabel? l = label; l != null; l = l.prev) {
+      if (patternLine[l.pattern] == lineId) return true;
+    }
+    return false;
+  }
+
+  /// Materializes the chain ending in [label], alighting at [destIdx] of its
+  /// pattern to walk to [destNearby]. Null when a stop or route referenced
+  /// by a pattern is missing from the feed (never on a consistent feed).
+  RoutingPath? _buildChainPath(
+    _TransferLabel label,
+    int destIdx,
+    NearbyStop destNearby,
+    List<NearbyStop> originStops,
+  ) {
+    final segments = <RoutingSegment>[];
+    var transferWalk = 0.0;
+    var transit = 0.0;
+    var toIdx = destIdx;
+    var toStop = destNearby.stop;
+    _TransferLabel l = label;
+    while (true) {
+      final pattern = routeIndex.patternById(l.pattern);
+      final route = data.routes[pattern.routeId];
+      final prev = l.prev;
+      final fromStop = prev == null
+          ? originStops[l.originStop].stop
+          : data.stops[pattern.stopIds[l.entry]];
+      if (route == null || fromStop == null) return null;
+      final segment = _buildSegmentForPattern(
+        pattern: pattern,
+        fromIdx: l.entry,
+        toIdx: toIdx,
+        route: route,
+        fromStop: fromStop,
+        toStop: toStop,
+      );
+      segments.insert(0, segment);
+      transit += segment.transitDistance;
+      if (prev == null) {
+        final originNearby = originStops[l.originStop];
+        return RoutingPath(
+          originWalkDistance: originNearby.distance,
+          originStop: originNearby.stop,
+          segments: segments,
+          destinationStop: destNearby.stop,
+          destinationWalkDistance: destNearby.distance,
+          score: _calculateScore(
+            walkDistance:
+                originNearby.distance + destNearby.distance + transferWalk,
+            transfers: segments.length - 1,
+            transitDistance: transit,
+          ),
+          transferWalkDistance: transferWalk,
+        );
+      }
+      transferWalk += l.walk;
+      toIdx = l.prevAlight;
+      final alightStop =
+          data.stops[routeIndex.patternById(prev.pattern).stopIds[toIdx]];
+      if (alightStop == null) return null;
+      toStop = alightStop;
+      l = prev;
+    }
   }
 
   /// Build a transit segment from a known pattern and stop indices.
@@ -803,4 +1240,263 @@ class GtfsRoutingService {
         cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     return 2 * r * asin(sqrt(h));
   }
+}
+
+/// One state of the multi-transfer search: aboard [pattern] from stop
+/// position [entry], having spent [cost] (walked meters × reluctance plus
+/// ridden meters) to get there with [round] transfers. Round 0 labels
+/// remember which origin stop they boarded at; later ones point at the
+/// label they were reached from, the position they alighted it at and the
+/// walk in between, so a chain is rebuilt by following [prev].
+class _TransferLabel {
+  final int pattern;
+  final int entry;
+  final double cost;
+  final int round;
+  final _TransferLabel? prev;
+  final int prevAlight;
+  final double walk;
+  final int originStop;
+
+  /// Round of the label that made this one redundant on its pattern, or
+  /// `-1`. When a label's turn to expand comes, only a label of its own
+  /// round can have dominated it — a round-k label expands in round k + 1,
+  /// before any round-(k + 1) label exists — so a non-negative value means
+  /// "same transfers, dearer": not expanded.
+  int dominatedInRound = -1;
+
+  /// The chain's pattern ids packed base `patternCount` (first ridden most
+  /// significant): identifies a chain for best-per-chain bookkeeping
+  /// without building a string per scanned connection. Exact while
+  /// `patternCount ^ patternsInChain` fits in 63 bits: chains of up to
+  /// five patterns on feeds of up to 6 208 patterns, six on up to 1 448
+  /// (Cochabamba has 657); in a JavaScript build (53-bit integers) five up
+  /// to 1 552 and six up to 456. Beyond that a wrapped key could merge two
+  /// chains into one candidate (the cheaper one survives), never corrupt a
+  /// path.
+  final int chainKey;
+
+  _TransferLabel({
+    required this.pattern,
+    required this.entry,
+    required this.cost,
+    required this.round,
+    this.prev,
+    this.prevAlight = -1,
+    this.walk = 0,
+    this.originStop = -1,
+    required this.chainKey,
+  });
+}
+
+/// The connections one label scans in a round: alight positions after its
+/// entry up to (and including) the entry of the next label on the same
+/// pattern's front, as the front stood when the round began.
+class _ExpansionRange {
+  final _TransferLabel label;
+  final _FrontSnapshot front;
+  final int position;
+  final int lastAlight;
+
+  const _ExpansionRange({
+    required this.label,
+    required this.front,
+    required this.position,
+    required this.lastAlight,
+  });
+
+  /// When this range's own label is vetoed by the chain rule for a
+  /// connection into a pattern of [lineId]: the nearest earlier boarding on
+  /// the front, **of the same round**, whose chain did not ride that line;
+  /// null when there is none. Labels of earlier rounds are skipped: a hop
+  /// from one would carry fewer transfers than the round — from round 2 on
+  /// a one-transfer itinerary, exactly what the one-transfer phase pruned —
+  /// and their connections were already examined in their own round.
+  _TransferLabel? fallbackFor(Int32List patternLine, int lineId) {
+    for (var j = position - 1; j >= 0; j--) {
+      final earlier = front.labels[j];
+      if (earlier.round != label.round) continue;
+      if (!GtfsRoutingService._chainRidesLine(earlier, patternLine, lineId)) {
+        return earlier;
+      }
+    }
+    return null;
+  }
+}
+
+/// The Pareto front of one pattern (see [_findMultiTransferRoutes]) as
+/// parallel typed arrays: entries ascending, offsets — cost minus the
+/// cumulative distance at the entry — strictly descending. Dominance is a
+/// binary search on the entries plus one offset comparison; it runs once
+/// per scanned connection, hundreds of thousands of times per query on a
+/// dense feed, so no object is touched until a label actually survives.
+class _Front {
+  Int32List _entries = Int32List(8);
+  Float64List _offsets = Float64List(8);
+  List<_TransferLabel?> _labels = List<_TransferLabel?>.filled(8, null);
+  int _length = 0;
+
+  /// Position of the first entry strictly after [entry] (`_length` if none).
+  int _firstAfter(int entry) {
+    var lo = 0;
+    var hi = _length;
+    while (lo < hi) {
+      final mid = (lo + hi) >> 1;
+      if (_entries[mid] <= entry) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    return lo;
+  }
+
+  /// True when boarding at [entry] with [offset] adds nothing: the last
+  /// label boarding at or before it — the cheapest one eligible there —
+  /// reaches every later position for no more.
+  bool dominates(int entry, double offset) {
+    final before = _firstAfter(entry) - 1;
+    return before >= 0 && _offsets[before] <= offset;
+  }
+
+  /// Inserts a label known not to be dominated (see [dominates]). The
+  /// labels it dominates form a contiguous run right after its position
+  /// (their offsets are at least its own); they leave the front flagged
+  /// with its round.
+  void insert(_TransferLabel label, int entry, double offset) {
+    final position = _firstAfter(entry - 1);
+    var end = position;
+    while (end < _length && _offsets[end] >= offset) {
+      _labels[end]!.dominatedInRound = label.round;
+      end++;
+    }
+    final tail = _length - end;
+    final newLength = position + 1 + tail;
+    if (newLength > _entries.length) _grow(newLength);
+    if (tail > 0) {
+      _entries.setRange(position + 1, position + 1 + tail, _entries, end);
+      _offsets.setRange(position + 1, position + 1 + tail, _offsets, end);
+      _labels.setRange(position + 1, position + 1 + tail, _labels, end);
+    }
+    _entries[position] = entry;
+    _offsets[position] = offset;
+    _labels[position] = label;
+    _length = newLength;
+  }
+
+  void _grow(int atLeast) {
+    var capacity = _entries.length * 2;
+    while (capacity < atLeast) {
+      capacity *= 2;
+    }
+    _entries = Int32List(capacity)..setRange(0, _length, _entries);
+    _offsets = Float64List(capacity)..setRange(0, _length, _offsets);
+    _labels = List<_TransferLabel?>.filled(capacity, null)
+      ..setRange(0, _length, _labels);
+  }
+
+  /// The front as it stands, for the expansion ranges of a round.
+  _FrontSnapshot snapshot() => _FrontSnapshot(_entries.sublist(0, _length), [
+    for (var i = 0; i < _length; i++) _labels[i]!,
+  ]);
+}
+
+/// A [_Front] frozen at the start of a round.
+class _FrontSnapshot {
+  final Int32List entries;
+  final List<_TransferLabel> labels;
+
+  const _FrontSnapshot(this.entries, this.labels);
+}
+
+/// The destination stops one pattern serves, arranged for the question the
+/// search asks on every connection into it: "boarding at position b, which
+/// stop after b gives the cheapest itinerary?" The answer minimizes
+/// `cumDist[stop] + walk × reluctance` over stops after b — independent of
+/// b except for the filter — so a suffix minimum over the stops sorted by
+/// position answers it with one binary search.
+class _DestinationsOnPattern {
+  /// Stop positions on the pattern, ascending.
+  final Int32List stopIdx;
+
+  /// The destination stop at each position.
+  final List<NearbyStop> nearby;
+
+  /// `nearby[i].distance × reluctance`.
+  final Float64List walkCost;
+
+  /// For each position i, the index j ≥ i minimizing
+  /// `cumDist[stopIdx[j]] + walkCost[j]`.
+  final Int32List _bestFrom;
+
+  factory _DestinationsOnPattern(
+    RoutePattern pattern,
+    List<NearbyStop> stops,
+    double walkReluctance,
+  ) {
+    final entries = <(int, NearbyStop)>[
+      for (final s in stops)
+        if (pattern.indexOfStop(s.stop.id) >= 0)
+          (pattern.indexOfStop(s.stop.id), s),
+    ]..sort((a, b) => a.$1.compareTo(b.$1));
+    final n = entries.length;
+    final stopIdx = Int32List(n);
+    final nearby = <NearbyStop>[];
+    final walkCost = Float64List(n);
+    for (var i = 0; i < n; i++) {
+      stopIdx[i] = entries[i].$1;
+      nearby.add(entries[i].$2);
+      walkCost[i] = entries[i].$2.distance * walkReluctance;
+    }
+    final bestFrom = Int32List(n);
+    for (var i = n - 1; i >= 0; i--) {
+      bestFrom[i] = i;
+      if (i + 1 < n) {
+        final j = bestFrom[i + 1];
+        final here = pattern.distanceBetween(0, stopIdx[i]) + walkCost[i];
+        final there = pattern.distanceBetween(0, stopIdx[j]) + walkCost[j];
+        if (there < here) bestFrom[i] = j;
+      }
+    }
+    return _DestinationsOnPattern._(stopIdx, nearby, walkCost, bestFrom);
+  }
+
+  const _DestinationsOnPattern._(
+    this.stopIdx,
+    this.nearby,
+    this.walkCost,
+    this._bestFrom,
+  );
+
+  /// Index (into [stopIdx] / [nearby]) of the cheapest destination stop
+  /// strictly after [boardIdx], or `-1` when none is.
+  int bestAfter(int boardIdx) {
+    var lo = 0;
+    var hi = stopIdx.length;
+    while (lo < hi) {
+      final mid = (lo + hi) >> 1;
+      if (stopIdx[mid] <= boardIdx) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    return lo < stopIdx.length ? _bestFrom[lo] : -1;
+  }
+}
+
+/// A destination reached in the round in progress: the hop into the last
+/// pattern, where to alight it and the cheap score the round ranks by.
+class _ChainCandidate {
+  final _TransferLabel hop;
+  final int destIdx;
+  final NearbyStop destNearby;
+  final double score;
+
+  const _ChainCandidate({
+    required this.hop,
+    required this.destIdx,
+    required this.destNearby,
+    required this.score,
+  });
 }

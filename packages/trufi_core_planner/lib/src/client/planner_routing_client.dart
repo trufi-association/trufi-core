@@ -12,12 +12,17 @@ import '../services/gtfs_routing_service.dart';
 /// - Remote trufi-server-planner API (web/online)
 abstract class PlannerRoutingClient {
   /// Find routes between two locations.
+  ///
+  /// [maxTransfers] is the most bus changes an itinerary may have (default
+  /// 1, see [GtfsRoutingService.findRoutes]); itineraries with two or more
+  /// are only searched for when none with fewer exists.
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
     double maxWalkDistance = 800,
     int maxResults = 5,
     int maxStopCandidates = 150,
+    int maxTransfers = 1,
   });
 
   /// Get all transit routes.
