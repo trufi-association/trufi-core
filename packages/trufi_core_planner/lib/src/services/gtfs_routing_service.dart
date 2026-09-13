@@ -184,11 +184,14 @@ class GtfsRoutingService {
   /// Default for [maxMultiTransferScans].
   ///
   /// The multi-transfer search (see [findRoutes]) scans the connections of
-  /// every pattern it has labelled, once per round. Measured over 400
-  /// random pairs on the dense Cochabamba feed (2.6 M connections, 800 m
-  /// walk): 77 k scans on average and 2.9 M in the worst pair for two
-  /// rounds; Sana'a stays under 10 k. The default sits well above the
-  /// measured maximum so it only guards against a pathological feed.
+  /// every pattern it has labelled, once per round. Measured on the 17 of
+  /// 400 random pairs that reach the search on the dense Cochabamba feed
+  /// (2.6 M connections, 800 m walk, two rounds): 904 k scans on average
+  /// and 2.65 M in the worst pair; on Sana'a (16 k connections, 1 500 m)
+  /// 3.4 k on average and 11.5 k at most. The default leaves a 2.3× margin
+  /// over the densest feed measured, so it only guards against a
+  /// pathological one; when it runs out the search answers with the
+  /// candidates of the round in progress.
   static const int defaultMaxMultiTransferScans = 6000000;
 
   final GtfsData data;
@@ -613,29 +616,51 @@ class GtfsRoutingService {
   /// Each pattern keeps a Pareto front of labels: boarding earlier reaches
   /// more stops, boarding later may be cheaper. Label A (entry a, cost cA)
   /// dominates B (entry b ≥ a, cost cB) when riding A down to b is no
-  /// dearer than B — `cA + dist(a, b) <= cB` — in which case B leads to
-  /// nothing A cannot reach for less with no more transfers and is not
-  /// expanded. This is what keeps the search bounded on a dense feed
-  /// (Cochabamba, 657 patterns, 2.6 M connections: well under a hundred
-  /// thousand scans for a typical pair, ~3 M in the worst one) while every
-  /// chain prefix it expands is the cheapest way to be aboard that pattern
-  /// at that position. Extending today's pair loop to triples instead
-  /// would scan up to ~200 M connections per query there.
+  /// dearer than B — `cA + dist(a, b) <= cB` — in which case B is not
+  /// expanded: A reaches every stop B reaches for no more and with no more
+  /// transfers. This is what keeps the search bounded on a dense feed
+  /// (Cochabamba, 657 patterns, 2.6 M connections: 904 k scans on average
+  /// and 2.65 M in the worst of the 17 / 400 pairs that reach the search)
+  /// while every chain prefix it expands is the cheapest way to be aboard
+  /// that pattern at that position: the top itinerary is the exact optimum
+  /// (checked against an exhaustive enumeration of every legal two-transfer
+  /// chain on 94 Sana'a and 15 Cochabamba pairs). Extending today's pair
+  /// loop to triples instead would scan up to ~200 M connections per query
+  /// there.
+  ///
+  /// One caveat, because the chain rule below vetoes by history: A and B
+  /// may carry different histories, so dropping B can drop the only chain
+  /// a later connection accepts (B rode line 1, A rode line 2, and the
+  /// last leg is line 2's return trip). Measured on Sana'a, Cochabamba and
+  /// Lima this never lost a reachable pair (0 of 352 queries that reached
+  /// the search), and the chain rule itself changed no result on Sana'a's
+  /// 400 pairs. If it ever matters: keep dominated labels as shadows only
+  /// the fallback may consult, run dominance per first line, or drop the
+  /// chain rule and let dominance and score decide, as RAPTOR does.
   ///
   /// The hop **into** a pattern that serves a destination stop is not a
   /// label but an itinerary candidate, evaluated on the spot for every
-  /// destination stop after the boarding position and kept best-per-chain
-  /// (pattern ids) — the multi-transfer counterpart of the one-transfer
-  /// phase's best-per-pattern-pair. So two chains that end on the same
-  /// last bus through different intermediate lines are both offered, in
-  /// score order; only chains that share every pattern collapse. Then
+  /// destination stop after the boarding position and kept best per chain
+  /// of pattern ids. Alternatives survive only where their labels survive:
+  /// two chains that reach the same intermediate pattern collapse into the
+  /// cheaper one there (Pareto dominance, or the expansion range handing
+  /// the connection to the cheaper boarding), so the list offers distinct
+  /// last legs and Pareto-incomparable prefixes — not every (first, second)
+  /// pair the way the one-transfer phase's best-per-pair does. Positions
+  /// 2–5 differ from the exhaustive top five in 45 of 94 Sana'a pairs and
+  /// 2 of 15 Cochabamba pairs; the top itinerary never does. Then
   /// [findRoutes] dedupes by line.
   ///
   /// A chain never boards a line it has already ridden (the index already
   /// forbids that between consecutive legs; here it holds across the whole
   /// chain — "7 → 14 → back onto the same 7" is a detour, not an option).
-  /// In the last round only patterns serving a destination stop are worth
-  /// a look: nothing else could still become an itinerary.
+  /// When the rule vetoes the label that owns a connection, the nearest
+  /// earlier boarding of the same round on that front whose chain did not
+  /// ride the line takes it ([_ExpansionRange.fallbackFor]); a label of an
+  /// earlier round never does — its hop would have fewer transfers than the
+  /// round, i.e. a one-transfer chain the one-transfer phase pruned on
+  /// purpose. In the last round only patterns serving a destination stop
+  /// are worth a look: nothing else could still become an itinerary.
   ///
   /// The scan budget [maxMultiTransferScans] bounds a pathological query;
   /// when it runs out the search answers with the candidates of the round
@@ -721,8 +746,8 @@ class GtfsRoutingService {
       final snapshots = <int, _FrontSnapshot>{};
       for (final label in marked) {
         // Dominated by a label of its own round: same transfers, dearer.
-        // (An earlier-round label dominated by a later one still expands —
-        // fewer transfers win outright, whatever the cost.)
+        // (Nothing else can have dominated it yet: rounds are sequential,
+        // and its round's labels were the last ones inserted.)
         if (label.dominatedInRound == label.round) continue;
         final front = snapshots.putIfAbsent(
           label.pattern,
@@ -776,7 +801,7 @@ class GtfsRoutingService {
             continue;
           }
           // The chain rule can veto the cheapest label; an earlier boarding
-          // with a different history may still take this connection.
+          // of the same round with a different history may still take it.
           final lineId = patternLine[otherId];
           if (_chainRidesLine(label, patternLine, lineId)) {
             final fallback = range.fallbackFor(patternLine, lineId);
@@ -1234,17 +1259,21 @@ class _TransferLabel {
   final int originStop;
 
   /// Round of the label that made this one redundant on its pattern, or
-  /// `-1`. Only a label of the *same* round stops this one from being
-  /// expanded: a dearer label with fewer transfers still expands, because
-  /// fewer transfers win outright.
+  /// `-1`. When a label's turn to expand comes, only a label of its own
+  /// round can have dominated it — a round-k label expands in round k + 1,
+  /// before any round-(k + 1) label exists — so a non-negative value means
+  /// "same transfers, dearer": not expanded.
   int dominatedInRound = -1;
 
   /// The chain's pattern ids packed base `patternCount` (first ridden most
   /// significant): identifies a chain for best-per-chain bookkeeping
-  /// without building a string per scanned connection. Exact for chains of
-  /// up to six patterns on feeds of up to 4 096 patterns; beyond that a
-  /// wrapped key could merge two chains into one candidate (the cheaper
-  /// one survives), never corrupt a path.
+  /// without building a string per scanned connection. Exact while
+  /// `patternCount ^ patternsInChain` fits in 63 bits: chains of up to
+  /// five patterns on feeds of up to 6 208 patterns, six on up to 1 448
+  /// (Cochabamba has 657); in a JavaScript build (53-bit integers) five up
+  /// to 1 552 and six up to 456. Beyond that a wrapped key could merge two
+  /// chains into one candidate (the cheaper one survives), never corrupt a
+  /// path.
   final int chainKey;
 
   _TransferLabel({
@@ -1278,11 +1307,15 @@ class _ExpansionRange {
 
   /// When this range's own label is vetoed by the chain rule for a
   /// connection into a pattern of [lineId]: the nearest earlier boarding on
-  /// the front whose chain did not ride that line, or null when every
-  /// eligible label is vetoed.
+  /// the front, **of the same round**, whose chain did not ride that line;
+  /// null when there is none. Labels of earlier rounds are skipped: a hop
+  /// from one would carry fewer transfers than the round — from round 2 on
+  /// a one-transfer itinerary, exactly what the one-transfer phase pruned —
+  /// and their connections were already examined in their own round.
   _TransferLabel? fallbackFor(Int32List patternLine, int lineId) {
     for (var j = position - 1; j >= 0; j--) {
       final earlier = front.labels[j];
+      if (earlier.round != label.round) continue;
       if (!GtfsRoutingService._chainRidesLine(earlier, patternLine, lineId)) {
         return earlier;
       }

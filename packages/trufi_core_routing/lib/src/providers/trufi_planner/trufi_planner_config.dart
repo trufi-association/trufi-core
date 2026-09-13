@@ -76,8 +76,10 @@ class TrufiPlannerConfig {
   /// worst case on the dense Cochabamba feed (2.6 M connections; the same
   /// queries take 9 / 88 ms to answer "no routes" today). Above 3 the
   /// search rarely finds anything new and stops by itself once no new line
-  /// is reached. Must be >= 0. Remote mode forwards it to the server, which
-  /// applies it if its planner supports it.
+  /// is reached. Must be >= 0. Remote mode sends it in the `/plan` request;
+  /// it takes effect there once trufi-server-planner's handler reads it and
+  /// passes it to its planner (today's handler ignores unknown keys, so an
+  /// older server neither fails nor honours it).
   final int maxTransfers;
 
   /// Straight-line distance, in meters, within which two distinct stops
