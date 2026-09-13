@@ -63,6 +63,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
     double maxWalkDistance = 800,
     int maxResults = 5,
     int maxStopCandidates = 150,
+    int maxTransfers = 1,
   }) async {
     final response = await _httpClient.post(
       Uri.parse('$_baseUrl/plan'),
@@ -76,6 +77,9 @@ class RemotePlannerClient implements PlannerRoutingClient {
         'maxResults': maxResults,
         'maxWalkDistance': maxWalkDistance,
         'maxStopCandidates': maxStopCandidates,
+        // Same for the transfer limit: a server built on an older planner
+        // ignores it and keeps its own default.
+        'maxTransfers': maxTransfers,
       }),
     );
 
