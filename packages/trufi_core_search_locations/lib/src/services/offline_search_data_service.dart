@@ -28,7 +28,12 @@ import 'search_location_service.dart';
 /// `region` is the municipality the street centre falls in (the OSM
 /// `admin_level=8` boundary). It becomes the row's subtitle, so the
 /// "Calle Sucre" of Cochabamba and the one of Sacaba can be told apart
-/// (#972); an index that lacks it only loses the subtitle.
+/// (#972); an index that lacks it only loses the subtitle. This assumes
+/// one street entry per (name, municipality), which the exporter emits
+/// from 1.2.0 on: an older index merges every same-named way of the
+/// extract into one entry with one centre, and its `region` (when present)
+/// can name a homonym 40 km away — regenerate the index rather than trust
+/// such a subtitle.
 ///
 /// Meant to be combined with an online service rather than to replace it
 /// (see [CompositeSearchLocationService]): this one owns streets and
@@ -172,7 +177,9 @@ String _normalize(String value) {
 /// Subtitle of the corner of [street] and [other]: the municipality of
 /// [street], plus the other's when the corner sits on a boundary
 /// ("Cercado / Sacaba"). Whichever one is known when the other isn't;
-/// null when neither is.
+/// null when neither is. Relies on each street entry belonging to a
+/// single municipality (see the class doc): the corner itself carries no
+/// region in the index, only the two streets do.
 String? _junctionAddress(_Street street, _Street other) {
   final region = street.region;
   final otherRegion = other.region;

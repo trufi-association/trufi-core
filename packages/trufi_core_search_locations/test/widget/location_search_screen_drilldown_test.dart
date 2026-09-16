@@ -274,5 +274,12 @@ void main() {
 
       expect(headerLines(tester), ['Avenida Ayacucho']);
     });
+
+    testWidgets('an empty municipality string leaves the header bare too',
+        (tester) async {
+      await openCorners(tester, locality: '');
+
+      expect(headerLines(tester), ['Avenida Ayacucho']);
+    });
   });
 }

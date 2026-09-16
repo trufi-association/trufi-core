@@ -234,6 +234,12 @@ void main() {
         'e': ['Calle Colombia', <String>[], [-66.1580, -17.3950]],
         'f': ['Calle España', <String>[], [-66.1590, -17.3960], ''],
         'g': ['Calle Perú', <String>[], [-66.1600, -17.3970], null],
+        // Rows a hand-edited or future index could carry: padding around
+        // the name, blank padding only, and non-string values.
+        'h': ['Calle Junín', <String>[], [-66.1610, -17.3980], '  Sacaba \n'],
+        'i': ['Calle Chile', <String>[], [-66.1620, -17.3990], '   '],
+        'j': ['Calle Ecuador', <String>[], [-66.1630, -17.4000], 42],
+        'k': ['Calle Brasil', <String>[], [-66.1640, -17.4010], ['Cercado']],
       },
       'streetJunctions': {
         'a': [
@@ -262,6 +268,27 @@ void main() {
     });
 
     tearDown(() => localities.dispose());
+
+    test('padding around the region is trimmed; blank padding is nothing',
+        () async {
+      final results = await localities.search('calle');
+      final byName = {for (final r in results) r.displayName: r.address};
+      expect(byName['Calle Junín'], 'Sacaba');
+      expect(byName['Calle Chile'], isNull);
+    });
+
+    test('a non-string region is ignored and does not sink the index',
+        () async {
+      final results = await localities.search('calle');
+      final byName = {for (final r in results) r.displayName: r.address};
+      expect(byName['Calle Ecuador'], isNull);
+      expect(byName['Calle Brasil'], isNull);
+      // The odd rows are still there, and so is everything else: the ten
+      // "Calle …" rows of the fixture (two "Calle Sucre" collapse in the
+      // map above, hence nine keys).
+      expect(byName.keys, containsAll(['Calle Ecuador', 'Calle Brasil']));
+      expect(results.length, 10);
+    });
 
     test('a street carries its municipality as the address', () async {
       final results = await service.search('ayacucho');
