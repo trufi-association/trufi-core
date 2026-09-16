@@ -22,6 +22,19 @@ class RoutePattern {
   /// Empty for patterns deserialized from JSON.
   final List<double> cumDist;
 
+  /// Seconds from the first stop's arrival to the arrival at `stopIds[i]`
+  /// ([arrivalOffsets]) and to the departure from it ([departureOffsets]),
+  /// read from the `stop_times` of the trip that defined this pattern (#997).
+  /// Both empty when that trip carries no usable timings — a stop without
+  /// `arrival_time` and `departure_time`, or times that run backwards — and
+  /// for patterns deserialized from JSON; the planner then estimates the
+  /// in-vehicle time from distance instead (see
+  /// `GtfsRoutingService.fallbackVehicleSpeedKmh`). Frequency-based feeds
+  /// write `stop_times` as offsets from `00:00:00` and timetables as clock
+  /// times; only differences are used, so both work.
+  final List<int> arrivalOffsets;
+  final List<int> departureOffsets;
+
   /// Axis-aligned bounding box of all stops in this pattern, in degrees.
   /// `(minLat, minLon, maxLat, maxLon)`. Allows O(1) "is this pattern
   /// near point P" pruning before heavier per-stop work.
@@ -41,6 +54,8 @@ class RoutePattern {
     this.shapeId,
     this.id = -1,
     this.cumDist = const [],
+    this.arrivalOffsets = const [],
+    this.departureOffsets = const [],
     this.minLat = 0,
     this.minLon = 0,
     this.maxLat = 0,
@@ -79,6 +94,28 @@ class RoutePattern {
   double distanceBetween(int fromIdx, int toIdx) {
     if (cumDist.isEmpty || fromIdx < 0 || toIdx >= cumDist.length) return 0;
     return cumDist[toIdx] - cumDist[fromIdx];
+  }
+
+  /// Whether this pattern carries `stop_times` timings
+  /// ([arrivalOffsets] / [departureOffsets]).
+  bool get hasStopTimes => arrivalOffsets.isNotEmpty;
+
+  /// Scheduled in-vehicle time, in seconds, from boarding at [fromIdx] to
+  /// alighting at [toIdx] according to the pattern's `stop_times`: the
+  /// arrival at the alighting stop minus the departure from the boarding
+  /// stop. Null when the pattern has no usable timings, when the indices are
+  /// out of range or not in riding order, or when the feed says the ride
+  /// takes no time at all (every time `00:00:00`) — callers then fall back
+  /// to a distance-based estimate.
+  int? scheduledSecondsBetween(int fromIdx, int toIdx) {
+    if (arrivalOffsets.isEmpty ||
+        fromIdx < 0 ||
+        toIdx <= fromIdx ||
+        toIdx >= arrivalOffsets.length) {
+      return null;
+    }
+    final seconds = arrivalOffsets[toIdx] - departureOffsets[fromIdx];
+    return seconds > 0 ? seconds : null;
   }
 
   factory RoutePattern.fromJson(Map<String, dynamic> json) {
@@ -413,6 +450,12 @@ class GtfsRouteIndex {
           minLat = minLon = maxLat = maxLon = 0;
         }
 
+        // Timings of the trip that defines the pattern (#997). Other trips
+        // with the same stop sequence are not looked at: builder feeds have
+        // one trip per pattern, and a timetable's first trip is as good a
+        // representative as any single trip.
+        final timing = _timingOffsets(stopTimes, stopIds.length);
+
         final patternId = _patterns.length;
         final pattern = RoutePattern(
           id: patternId,
@@ -421,6 +464,8 @@ class GtfsRouteIndex {
           headsign: trip.headsign,
           shapeId: trip.shapeId,
           cumDist: cumDist,
+          arrivalOffsets: timing.$1,
+          departureOffsets: timing.$2,
           minLat: minLat,
           minLon: minLon,
           maxLat: maxLat,
@@ -676,6 +721,50 @@ class GtfsRouteIndex {
       _connOtherIdx.setAll(at, chunkOtherIdx[i]);
       _connWalk.setAll(at, chunkWalk[i]);
     }
+  }
+
+  /// Arrival and departure offsets, in seconds from the first arrival, for
+  /// the deduplicated stop list of a trip, from its [stopTimes] sorted by
+  /// `stop_sequence`; a pair of empty lists when any stop has neither
+  /// `arrival_time` nor `departure_time`, when the times run backwards
+  /// (an arrival before the previous departure, a departure before its
+  /// arrival), or when the row count does not match [stopCount].
+  /// Consecutive rows for the same stop collapse exactly like the stop list
+  /// does: the first row's arrival and the last row's departure survive.
+  /// A missing `arrival_time` takes the row's `departure_time` and vice
+  /// versa, as the GTFS reference allows for timepoints.
+  static (List<int>, List<int>) _timingOffsets(
+    List<GtfsStopTime> stopTimes,
+    int stopCount,
+  ) {
+    const none = (<int>[], <int>[]);
+    if (stopTimes.isEmpty) return none;
+    final arrivals = <int>[];
+    final departures = <int>[];
+    String? lastStopId;
+    for (final st in stopTimes) {
+      final arrival = st.arrivalTime ?? st.departureTime;
+      final departure = st.departureTime ?? st.arrivalTime;
+      if (arrival == null || departure == null) return none;
+      if (st.stopId == lastStopId) {
+        departures[departures.length - 1] = departure.inSeconds;
+      } else {
+        arrivals.add(arrival.inSeconds);
+        departures.add(departure.inSeconds);
+        lastStopId = st.stopId;
+      }
+    }
+    if (arrivals.length != stopCount) return none;
+    for (var i = 0; i < arrivals.length; i++) {
+      if (departures[i] < arrivals[i]) return none;
+      if (i > 0 && arrivals[i] < departures[i - 1]) return none;
+    }
+    final base = arrivals.first;
+    for (var i = 0; i < arrivals.length; i++) {
+      arrivals[i] -= base;
+      departures[i] -= base;
+    }
+    return (arrivals, departures);
   }
 
   bool _sameStopSequence(List<String> a, List<String> b) {

@@ -44,6 +44,22 @@ class TrufiPlannerConfig {
   /// Walking speed in meters per second (default: 1.2 m/s).
   final double walkSpeed;
 
+  /// Average in-vehicle speed, in km/h, for rides on lines whose
+  /// `stop_times` carry no usable timings (default: 20 km/h; local mode
+  /// only).
+  ///
+  /// The planner takes a ride's duration from the feed's `stop_times`
+  /// (arrival at the alighting stop minus departure from the boarding stop),
+  /// so it shows the same minutes as OTP or MOTIS would for the same feed —
+  /// before #997 it used a hard-coded 18 km/h whatever the feed said, and the
+  /// same trip changed duration when the user switched engines. This value
+  /// only matters for a pattern whose defining trip has a stop with neither
+  /// `arrival_time` nor `departure_time`, or times that run backwards; feeds
+  /// written by trufi-gtfs-builder never hit it. Set it to the speed your
+  /// city's feed assumes for buses if you want those estimates to agree.
+  /// Must be > 0. In remote mode the server's planner decides.
+  final double fallbackVehicleSpeedKmh;
+
   /// How many candidate stops to consider around the origin and the
   /// destination when searching for routes (default: 150).
   ///
@@ -137,13 +153,19 @@ class TrufiPlannerConfig {
     this.transferRadiusMeters = 100,
     this.sameNameRouteLimit = 3,
     this.persistIndex = true,
+    this.fallbackVehicleSpeedKmh = 20,
   }) : assert(maxTransfers >= 0, 'maxTransfers must be >= 0'),
+       assert(
+         fallbackVehicleSpeedKmh > 0,
+         'fallbackVehicleSpeedKmh must be > 0',
+       ),
        serverUrl = null;
 
   /// Create a remote (online) configuration using server URL.
   ///
-  /// Transfer geometry is decided by the server, so [transferRadiusMeters]
-  /// and [sameNameRouteLimit] are not configurable here.
+  /// Transfer geometry and ride durations are decided by the server, so
+  /// [transferRadiusMeters], [sameNameRouteLimit] and
+  /// [fallbackVehicleSpeedKmh] are not configurable here.
   const TrufiPlannerConfig.remote({
     required String this.serverUrl,
     this.providerId,
@@ -157,5 +179,6 @@ class TrufiPlannerConfig {
        gtfsAsset = null,
        transferRadiusMeters = 100,
        sameNameRouteLimit = 3,
-       persistIndex = false;
+       persistIndex = false,
+       fallbackVehicleSpeedKmh = 20;
 }

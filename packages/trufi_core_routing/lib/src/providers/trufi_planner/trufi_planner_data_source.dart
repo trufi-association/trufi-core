@@ -144,7 +144,9 @@ class TrufiPlannerDataSource implements ServiceHoursLookup {
     if (config.isRemote) {
       _client = RemotePlannerClient(serverUrl: config.serverUrl!);
     } else {
-      _client = LocalPlannerClient();
+      _client = LocalPlannerClient(
+        fallbackVehicleSpeedKmh: config.fallbackVehicleSpeedKmh,
+      );
     }
   }
 
