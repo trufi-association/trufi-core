@@ -221,4 +221,105 @@ void main() {
       );
     });
   });
+
+  group('street locality (#972)', () {
+    // Two municipalities side by side, plus the rows a real index may
+    // carry: no region at all (three elements), an empty one, a null one.
+    const localityJson = {
+      'streets': {
+        'a': ['Calle Sucre', <String>[], [-66.1570, -17.3940], 'Cercado'],
+        'b': ['Calle Sucre', <String>[], [-66.0400, -17.4040], 'Sacaba'],
+        'c': ['Calle Bolívar', <String>[], [-66.1560, -17.3930], 'Cercado'],
+        'd': ['Avenida Villazón', <String>[], [-66.1000, -17.3980], 'Sacaba'],
+        'e': ['Calle Colombia', <String>[], [-66.1580, -17.3950]],
+        'f': ['Calle España', <String>[], [-66.1590, -17.3960], ''],
+        'g': ['Calle Perú', <String>[], [-66.1600, -17.3970], null],
+      },
+      'streetJunctions': {
+        'a': [
+          ['c', [-66.1565, -17.3935]], // both in Cercado
+          ['e', [-66.1575, -17.3945]], // the other street has no region
+        ],
+        'c': [
+          ['d', [-66.1200, -17.3960]], // Cercado meets Sacaba
+        ],
+        'e': [
+          ['a', [-66.1575, -17.3945]], // the queried street has no region
+        ],
+        'f': [
+          ['g', [-66.1595, -17.3965]], // neither has one
+        ],
+      },
+    };
+
+    late OfflineSearchDataService localities;
+
+    setUp(() {
+      _mockAsset('assets/search/localities.json', localityJson);
+      localities = OfflineSearchDataService(
+        assetPath: 'assets/search/localities.json',
+      );
+    });
+
+    tearDown(() => localities.dispose());
+
+    test('a street carries its municipality as the address', () async {
+      final results = await service.search('ayacucho');
+      expect(results.single.address, 'Cercado');
+    });
+
+    test('same-named streets of neighbouring towns are told apart', () async {
+      final results = await localities.search('sucre');
+      expect(results.map((r) => r.displayName), everyElement('Calle Sucre'));
+      expect(
+        results.map((r) => r.formattedDisplay),
+        unorderedEquals(['Calle Sucre, Cercado', 'Calle Sucre, Sacaba']),
+      );
+    });
+
+    test('a row without region, or with an empty or null one, has no address',
+        () async {
+      for (final query in ['colombia', 'espana', 'peru']) {
+        final results = await localities.search(query);
+        expect(results.single.address, isNull, reason: query);
+      }
+    });
+
+    test('a corner inside one municipality names it once', () async {
+      final results = await localities.search('sucre y bolivar');
+      final corner = results.firstWhere((r) => r.id == 'junction:a:c');
+      expect(corner.address, 'Cercado');
+    });
+
+    test('a corner on a municipal boundary names both', () async {
+      final results = await localities.search('bolivar y villazon');
+      final corner = results.firstWhere((r) => r.id == 'junction:c:d');
+      expect(corner.address, 'Cercado / Sacaba');
+    });
+
+    test('a corner where only one street has a region uses that one', () async {
+      final fromKnown = await localities.search('sucre y colombia');
+      expect(
+        fromKnown.firstWhere((r) => r.id == 'junction:a:e').address,
+        'Cercado',
+      );
+      final fromUnknown = await localities.search('colombia y sucre');
+      expect(
+        fromUnknown.firstWhere((r) => r.id == 'junction:e:a').address,
+        'Cercado',
+      );
+    });
+
+    test('a corner where neither street has a region has no address', () async {
+      final results = await localities.search('espana y peru');
+      expect(results.firstWhere((r) => r.id == 'junction:f:g').address, isNull);
+    });
+
+    test('junctionsOf carries the same subtitles', () async {
+      final boundary = await localities.junctionsOf('c');
+      expect(boundary.single.address, 'Cercado / Sacaba');
+      final inside = await service.junctionsOf('s1');
+      expect(inside.map((c) => c.address), everyElement('Cercado'));
+    });
+  });
 }

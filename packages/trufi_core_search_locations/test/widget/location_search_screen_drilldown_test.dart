@@ -15,12 +15,19 @@ class _DrillDownService
   @override
   set searchLanguage(String? languageCode) => languageReceived = languageCode;
 
-  static const street = SearchLocation(
-    id: 'street:s1',
-    displayName: 'Avenida Ayacucho',
-    latitude: -17.3925,
-    longitude: -66.1588,
-  );
+  /// Municipality carried by the street result (#972). Null renders the
+  /// bare name, as an index without `region` does.
+  final String? locality;
+
+  _DrillDownService({this.locality});
+
+  SearchLocation get street => SearchLocation(
+        id: 'street:s1',
+        displayName: 'Avenida Ayacucho',
+        address: locality,
+        latitude: -17.3925,
+        longitude: -66.1588,
+      );
   static const plainResult = SearchLocation(
     id: 'photon:1',
     displayName: 'Plaza Colón',
@@ -62,7 +69,7 @@ class _DrillDownService
 void main() {
   SearchLocation? picked;
 
-  Future<void> pumpAndSearch(WidgetTester tester) async {
+  Future<void> pumpAndSearch(WidgetTester tester, {String? locality}) async {
     picked = null;
     await tester.pumpWidget(
       MaterialApp(
@@ -77,7 +84,7 @@ void main() {
                 MaterialPageRoute(
                   builder: (_) => LocationSearchScreen(
                     isOrigin: true,
-                    searchService: _DrillDownService(),
+                    searchService: _DrillDownService(locality: locality),
                     onYourLocation: () async => null,
                     onChooseOnMap: () async => null,
                   ),
@@ -98,10 +105,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> openCorners(WidgetTester tester) async {
-    await pumpAndSearch(tester);
+  Future<void> openCorners(WidgetTester tester, {String? locality}) async {
+    await pumpAndSearch(tester, locality: locality);
     await tester.tap(find.text('Avenida Ayacucho'));
     await tester.pumpAndSettle();
+  }
+
+  /// The text lines of the corners header — everything rendered above the
+  /// corner filter field: the street name, plus its municipality when the
+  /// index carries one (#972).
+  List<String> headerLines(WidgetTester tester) {
+    final filterTop = tester.getTopLeft(find.byType(TextField).first).dy;
+    return [
+      for (final text in tester.widgetList<Text>(find.byType(Text)))
+        if (tester.getTopLeft(find.byWidget(text)).dy < filterTop)
+          text.data ?? '',
+    ];
   }
 
   testWidgets('a drillable street shows the corners affordance; a plain '
@@ -196,5 +215,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(service.languageReceived, 'es');
+  });
+
+  group('street locality (#972)', () {
+    testWidgets('a street result shows its municipality under the name',
+        (tester) async {
+      await pumpAndSearch(tester, locality: 'Sacaba');
+
+      expect(find.text('Sacaba'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Sacaba')).dy,
+        greaterThan(tester.getTopLeft(find.text('Avenida Ayacucho')).dy),
+      );
+    });
+
+    testWidgets('the corners header repeats it under the street name',
+        (tester) async {
+      await openCorners(tester, locality: 'Sacaba');
+
+      expect(headerLines(tester), ['Avenida Ayacucho', 'Sacaba']);
+      // The corners of this fake carry no address, so the header's line
+      // is the only "Sacaba" on screen.
+      expect(find.text('Sacaba'), findsOneWidget);
+    });
+
+    testWidgets('without a municipality the header is the bare street name',
+        (tester) async {
+      await openCorners(tester);
+
+      expect(headerLines(tester), ['Avenida Ayacucho']);
+    });
   });
 }
