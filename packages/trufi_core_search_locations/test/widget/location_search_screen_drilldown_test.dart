@@ -15,12 +15,19 @@ class _DrillDownService
   @override
   set searchLanguage(String? languageCode) => languageReceived = languageCode;
 
-  static const street = SearchLocation(
-    id: 'street:s1',
-    displayName: 'Avenida Ayacucho',
-    latitude: -17.3925,
-    longitude: -66.1588,
-  );
+  /// Municipality carried by the street result (#972). Null renders the
+  /// bare name, as an index without `region` does.
+  final String? locality;
+
+  _DrillDownService({this.locality});
+
+  SearchLocation get street => SearchLocation(
+        id: 'street:s1',
+        displayName: 'Avenida Ayacucho',
+        address: locality,
+        latitude: -17.3925,
+        longitude: -66.1588,
+      );
   static const plainResult = SearchLocation(
     id: 'photon:1',
     displayName: 'Plaza Colón',
@@ -47,9 +54,26 @@ class _DrillDownService
   @override
   bool canDrillDown(SearchLocation location) => location.id == street.id;
 
+  /// Aroma lies in the street's own municipality; Heroínas is a boundary
+  /// corner shared with Sacaba. Same ids as the constants, so equality
+  /// (by id) with them still holds.
   @override
-  Future<List<SearchLocation>> drillDown(SearchLocation location) async =>
-      [cornerAroma, cornerHeroinas];
+  Future<List<SearchLocation>> drillDown(SearchLocation location) async => [
+        _located(cornerAroma, locality),
+        _located(
+          cornerHeroinas,
+          locality == null ? null : '$locality / Sacaba',
+        ),
+      ];
+
+  static SearchLocation _located(SearchLocation corner, String? address) =>
+      SearchLocation(
+        id: corner.id,
+        displayName: corner.displayName,
+        address: address,
+        latitude: corner.latitude,
+        longitude: corner.longitude,
+      );
 
   @override
   Future<SearchLocation?> reverse(double latitude, double longitude) async =>
@@ -62,7 +86,7 @@ class _DrillDownService
 void main() {
   SearchLocation? picked;
 
-  Future<void> pumpAndSearch(WidgetTester tester) async {
+  Future<void> pumpAndSearch(WidgetTester tester, {String? locality}) async {
     picked = null;
     await tester.pumpWidget(
       MaterialApp(
@@ -77,7 +101,7 @@ void main() {
                 MaterialPageRoute(
                   builder: (_) => LocationSearchScreen(
                     isOrigin: true,
-                    searchService: _DrillDownService(),
+                    searchService: _DrillDownService(locality: locality),
                     onYourLocation: () async => null,
                     onChooseOnMap: () async => null,
                   ),
@@ -98,10 +122,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> openCorners(WidgetTester tester) async {
-    await pumpAndSearch(tester);
+  Future<void> openCorners(WidgetTester tester, {String? locality}) async {
+    await pumpAndSearch(tester, locality: locality);
     await tester.tap(find.text('Avenida Ayacucho'));
     await tester.pumpAndSettle();
+  }
+
+  /// The text lines of the corners header — everything rendered above the
+  /// corner filter field: the street name, plus its municipality when the
+  /// index carries one (#972).
+  List<String> headerLines(WidgetTester tester) {
+    final filterTop = tester.getTopLeft(find.byType(TextField).first).dy;
+    return [
+      for (final text in tester.widgetList<Text>(find.byType(Text)))
+        if (tester.getTopLeft(find.byWidget(text)).dy < filterTop)
+          text.data ?? '',
+    ];
   }
 
   testWidgets('a drillable street shows the corners affordance; a plain '
@@ -196,5 +232,54 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(service.languageReceived, 'es');
+  });
+
+  group('street locality (#972)', () {
+    testWidgets('a street result shows its municipality under the name',
+        (tester) async {
+      await pumpAndSearch(tester, locality: 'Sacaba');
+
+      expect(find.text('Sacaba'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Sacaba')).dy,
+        greaterThan(tester.getTopLeft(find.text('Avenida Ayacucho')).dy),
+      );
+    });
+
+    testWidgets('the corners header repeats it under the street name',
+        (tester) async {
+      await openCorners(tester, locality: 'Cercado');
+
+      expect(headerLines(tester), ['Avenida Ayacucho', 'Cercado']);
+    });
+
+    testWidgets(
+        'corner rows do not repeat the header\'s municipality, only a '
+        'boundary corner names both', (tester) async {
+      await openCorners(tester, locality: 'Cercado');
+
+      // Aroma shares the street's municipality → the header's line is the
+      // only "Cercado"; Heroínas sits on the boundary → its own subtitle.
+      expect(find.text('Cercado'), findsOneWidget);
+      expect(find.text('Cercado / Sacaba'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Cercado / Sacaba')).dy,
+        greaterThan(tester.getTopLeft(find.text('& Avenida Heroínas')).dy),
+      );
+    });
+
+    testWidgets('without a municipality the header is the bare street name',
+        (tester) async {
+      await openCorners(tester);
+
+      expect(headerLines(tester), ['Avenida Ayacucho']);
+    });
+
+    testWidgets('an empty municipality string leaves the header bare too',
+        (tester) async {
+      await openCorners(tester, locality: '');
+
+      expect(headerLines(tester), ['Avenida Ayacucho']);
+    });
   });
 }

@@ -384,6 +384,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
               children: [
                 _DrillDownHeader(
                   title: _drillDownParent!.displayName,
+                  subtitle: _drillDownParent!.address,
                   onBack: () {
                     HapticFeedback.selectionClick();
                     _exitDrillDown();
@@ -428,6 +429,12 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                                   child: _ModernLocationTile(
                                     location: corner,
                                     displayNameOverride: _cornerLabel(corner),
+                                    // The header already names the street's
+                                    // municipality; a corner only adds its
+                                    // own when it differs (a boundary
+                                    // corner, "Cercado / Sacaba").
+                                    showAddress: corner.address !=
+                                        _drillDownParent!.address,
                                     icon: Icons.fork_right_rounded,
                                     iconColor: colorScheme.primary,
                                     onTap: () {
@@ -1089,12 +1096,21 @@ class _SectionTitle extends StatelessWidget {
 
 /// Title bar of the corners sub-screen: back to the results + the street
 /// name as the title (the rows below start at "&", so the street's own
-/// name lives only here).
+/// name lives only here), with the street's municipality underneath when
+/// the index knows it (#972).
 class _DrillDownHeader extends StatelessWidget {
   final String title;
+
+  /// Rendered under [title] the way result rows render
+  /// [SearchLocation.address]; null or empty leaves the bar as it was.
+  final String? subtitle;
   final VoidCallback onBack;
 
-  const _DrillDownHeader({required this.title, required this.onBack});
+  const _DrillDownHeader({
+    required this.title,
+    this.subtitle,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1125,14 +1141,31 @@ class _DrillDownHeader extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (subtitle != null && subtitle!.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
             ),
           ),
         ],
@@ -1156,6 +1189,10 @@ class _ModernLocationTile extends StatelessWidget {
   /// The location itself — and whatever gets popped on tap — is untouched.
   final String? displayNameOverride;
 
+  /// Whether to render [SearchLocation.address] under the name. Off for
+  /// corners whose municipality the corners header already shows (#972).
+  final bool showAddress;
+
   const _ModernLocationTile({
     required this.location,
     required this.icon,
@@ -1163,6 +1200,7 @@ class _ModernLocationTile extends StatelessWidget {
     required this.onTap,
     this.trailing,
     this.displayNameOverride,
+    this.showAddress = true,
   });
 
   @override
@@ -1213,7 +1251,8 @@ class _ModernLocationTile extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (location.address != null &&
+                    if (showAddress &&
+                        location.address != null &&
                         location.address!.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(

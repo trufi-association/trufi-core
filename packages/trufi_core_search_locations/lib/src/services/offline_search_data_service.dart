@@ -21,9 +21,19 @@ import 'search_location_service.dart';
 /// city app) in its `json-compact` shape:
 ///
 /// ```json
-/// { "streets": { "<ref>": [name, alternativeNames, coordinates, region] },
+/// { "streets": { "<ref>": [name, alternativeNames, [lon, lat], region] },
 ///   "streetJunctions": { "<ref>": [[otherStreetRef, [lon, lat]], …] } }
 /// ```
+///
+/// `region` is the municipality the street centre falls in (the OSM
+/// `admin_level=8` boundary). It becomes the row's subtitle, so the
+/// "Calle Sucre" of Cochabamba and the one of Sacaba can be told apart
+/// (#972); an index that lacks it only loses the subtitle. This assumes
+/// one street entry per (name, municipality), which the exporter emits
+/// from 1.2.0 on: an older index merges every same-named way of the
+/// extract into one entry with one centre, and its `region` (when present)
+/// can name a homonym 40 km away — regenerate the index rather than trust
+/// such a subtitle.
 ///
 /// Meant to be combined with an online service rather than to replace it
 /// (see [CompositeSearchLocationService]): this one owns streets and
@@ -164,12 +174,29 @@ String _normalize(String value) {
   return buffer.toString().replaceAll(RegExp(r'\s+'), ' ');
 }
 
+/// Subtitle of the corner of [street] and [other]: the municipality of
+/// [street], plus the other's when the corner sits on a boundary
+/// ("Cercado / Sacaba"). Whichever one is known when the other isn't;
+/// null when neither is. Relies on each street entry belonging to a
+/// single municipality (see the class doc): the corner itself carries no
+/// region in the index, only the two streets do.
+String? _junctionAddress(_Street street, _Street other) {
+  final region = street.region;
+  final otherRegion = other.region;
+  if (region == null) return otherRegion;
+  if (otherRegion == null || otherRegion == region) return region;
+  return '$region / $otherRegion';
+}
+
 class _Street {
   final String ref;
   final String name;
   final List<String> alternativeNames;
   final double? latitude;
   final double? longitude;
+
+  /// Municipality the street lies in; null when the index has none.
+  final String? region;
   final String normalized;
 
   _Street({
@@ -178,6 +205,7 @@ class _Street {
     required this.alternativeNames,
     required this.latitude,
     required this.longitude,
+    required this.region,
   }) : normalized = [name, ...alternativeNames].map(_normalize).join(' | ');
 }
 
@@ -194,6 +222,9 @@ class _SearchData {
     (json['streets'] as Map<String, dynamic>? ?? {}).forEach((ref, value) {
       final row = value as List<dynamic>;
       final coords = row.length > 2 ? row[2] as List<dynamic>? : null;
+      // Older indexes stop at the coordinates; some rows carry an empty
+      // or null region. All of those simply have no municipality.
+      final region = row.length > 3 ? row[3] : null;
       streets[ref] = _Street(
         ref: ref,
         name: row.isNotEmpty ? row[0] as String? ?? '' : '',
@@ -206,6 +237,9 @@ class _SearchData {
             : null,
         latitude: coords != null && coords.length > 1
             ? (coords[1] as num).toDouble()
+            : null,
+        region: region is String && region.trim().isNotEmpty
+            ? region.trim()
             : null,
       );
     });
@@ -248,6 +282,7 @@ class _SearchData {
           (s) => SearchLocation(
             id: 'street:${s.ref}',
             displayName: s.name,
+            address: s.region,
             latitude: s.latitude!,
             longitude: s.longitude!,
           ),
@@ -266,6 +301,7 @@ class _SearchData {
           SearchLocation(
             id: 'junction:${street.ref}:${junction.$1}',
             displayName: '${street.name} & ${other.name}',
+            address: _junctionAddress(street, other),
             latitude: junction.$2,
             longitude: junction.$3,
           ),
@@ -286,10 +322,11 @@ class _SearchData {
     if (street == null) return const [];
     return [
       for (final junction in junctions[streetRef] ?? const [])
-        if (streets[junction.$1] != null)
+        if (streets[junction.$1] case final other?)
           SearchLocation(
             id: 'junction:$streetRef:${junction.$1}',
-            displayName: '${street.name} & ${streets[junction.$1]!.name}',
+            displayName: '${street.name} & ${other.name}',
+            address: _junctionAddress(street, other),
             latitude: junction.$2,
             longitude: junction.$3,
           ),
