@@ -1,3 +1,5 @@
+import 'package:trufi_core_planner/trufi_core_planner.dart';
+
 /// Configuration for TrufiPlannerProvider.
 ///
 /// Supports two modes:
@@ -153,7 +155,8 @@ class TrufiPlannerConfig {
     this.transferRadiusMeters = 100,
     this.sameNameRouteLimit = 3,
     this.persistIndex = true,
-    this.fallbackVehicleSpeedKmh = 20,
+    this.fallbackVehicleSpeedKmh =
+        GtfsRoutingService.defaultFallbackVehicleSpeedKmh,
   }) : assert(maxTransfers >= 0, 'maxTransfers must be >= 0'),
        assert(
          fallbackVehicleSpeedKmh > 0,
@@ -180,5 +183,6 @@ class TrufiPlannerConfig {
        transferRadiusMeters = 100,
        sameNameRouteLimit = 3,
        persistIndex = false,
-       fallbackVehicleSpeedKmh = 20;
+       fallbackVehicleSpeedKmh =
+           GtfsRoutingService.defaultFallbackVehicleSpeedKmh;
 }

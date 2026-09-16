@@ -450,10 +450,11 @@ class GtfsRouteIndex {
           minLat = minLon = maxLat = maxLon = 0;
         }
 
-        // Timings of the trip that defines the pattern (#997). Other trips
-        // with the same stop sequence are not looked at: builder feeds have
-        // one trip per pattern, and a timetable's first trip is as good a
-        // representative as any single trip.
+        // Timings of the trip that defines the pattern (#997): the first
+        // trip, in stop_times order, with this stop sequence. Other trips
+        // are not looked at — builder feeds mostly carry one trip per
+        // pattern (Lima: three per pattern, identical), and for a timetable
+        // the first trip is as good a representative as any single one.
         final timing = _timingOffsets(stopTimes, stopIds.length);
 
         final patternId = _patterns.length;
