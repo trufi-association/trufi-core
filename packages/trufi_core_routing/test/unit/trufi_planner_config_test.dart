@@ -31,6 +31,33 @@ void main() {
     });
   });
 
+  group('TrufiPlannerConfig fallback vehicle speed (#997)', () {
+    test('local mode defaults to 20 km/h and exposes the knob', () {
+      const config = TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip');
+      expect(config.fallbackVehicleSpeedKmh, 20);
+      const custom = TrufiPlannerConfig.local(
+        gtfsAsset: 'assets/gtfs.zip',
+        fallbackVehicleSpeedKmh: 32,
+      );
+      expect(custom.fallbackVehicleSpeedKmh, 32);
+    });
+
+    test('a non-positive speed fails the assertion', () {
+      expect(
+        () => TrufiPlannerConfig.local(
+          gtfsAsset: 'assets/gtfs.zip',
+          fallbackVehicleSpeedKmh: 0,
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test('remote mode leaves it to the server (fixed default)', () {
+      const config = TrufiPlannerConfig.remote(serverUrl: 'https://p.example');
+      expect(config.fallbackVehicleSpeedKmh, 20);
+    });
+  });
+
   group('TrufiPlannerConfig persisted index (#993)', () {
     test('local mode persists by default and can opt out', () {
       const on = TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip');

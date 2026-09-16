@@ -57,9 +57,10 @@ class PlannerIndexEncodeException implements Exception {
 /// that are multiples of the element size) with a tag and its byte length;
 /// integer columns are stored with the narrowest width their maximum fits
 /// (1, 2 or 4 bytes) and widened to `Int32List` on load. Coordinates,
-/// `cumDist` and `shape_dist_traveled` are `Float64`, GTFS times are
-/// `Int32` seconds, dates are microseconds since the epoch as `Float64`
-/// (exact below 2^53) plus a UTC flag — the round trip is lossless.
+/// `cumDist` and `shape_dist_traveled` are `Float64`, GTFS times and the
+/// patterns' `stop_times` offsets are `Int32` seconds, dates are
+/// microseconds since the epoch as `Float64` (exact below 2^53) plus a UTC
+/// flag — the round trip is lossless.
 ///
 /// Every integer operation is 32-bit (`_mul32`, masks), because dart2js
 /// compiles all reachable code and 64-bit literals broke `flutter build web`
@@ -88,7 +89,7 @@ class PlannerIndexCodec {
   /// bundle (parsed data and indices; calendar instants as year-month-day
   /// because the parser builds them in local time) and pins the digest, so a
   /// forgotten bump fails the suite.
-  static const int formatVersion = 1;
+  static const int formatVersion = 2;
 
   static const List<int> _magic = [0x54, 0x50, 0x49, 0x58]; // 'TPIX'
   static const List<int> _trailer = [0x58, 0x49, 0x50, 0x54]; // 'XIPT'
@@ -402,6 +403,14 @@ class PlannerIndexCodec {
             '${p.stopIds.length} stops',
           );
         }
+        if (p.arrivalOffsets.length != p.departureOffsets.length ||
+            (p.hasStopTimes && p.arrivalOffsets.length != p.stopIds.length)) {
+          throw PlannerIndexEncodeException(
+            'pattern $i has ${p.arrivalOffsets.length} arrival and '
+            '${p.departureOffsets.length} departure offsets for '
+            '${p.stopIds.length} stops',
+          );
+        }
       }
       w.uintColumn([for (final p in patterns) pool.ref(p.routeId)]);
       w.uintColumn([for (final p in patterns) pool.ref(p.headsign)]);
@@ -422,6 +431,19 @@ class PlannerIndexCodec {
       w.u32(stopRefs.length);
       w.uintColumn(stopRefs);
       w.f64List(cumDist);
+      // stop_times offsets (#997): a flag per pattern, then the offsets of
+      // the timed patterns back to back — a pattern without timings owns
+      // zero entries, so the columns stay narrow on feeds without times.
+      w.u8List([for (final p in patterns) p.hasStopTimes ? 1 : 0]);
+      final arrivals = <int>[];
+      final departures = <int>[];
+      for (final p in patterns) {
+        arrivals.addAll(p.arrivalOffsets);
+        departures.addAll(p.departureOffsets);
+      }
+      w.u32(arrivals.length);
+      w.uintColumn(arrivals);
+      w.uintColumn(departures);
     });
 
     _writeSection(w, _tagConnections, () {
@@ -886,8 +908,13 @@ class PlannerIndexCodec {
       final total = r.u32();
       final stopRefs = r.uintColumn(total);
       final cumDist = r.f64List(total);
+      final timed = r.u8List(n);
+      final timedTotal = r.u32();
+      final arrivals = r.uintColumn(timedTotal);
+      final departures = r.uintColumn(timedTotal);
       final out = <RoutePattern>[];
       var at = 0;
+      var timedAt = 0;
       for (var i = 0; i < n; i++) {
         final count = counts[i];
         if (at + count > total) throw const _Rejected('pattern stops overflow');
@@ -896,6 +923,17 @@ class PlannerIndexCodec {
           (k) => pool.required(stopRefs[at + k]),
           growable: false,
         );
+        List<int> arrivalOffsets = const [];
+        List<int> departureOffsets = const [];
+        if (timed[i] != 0) {
+          if (timed[i] != 1) throw const _Rejected('pattern timing flag');
+          if (timedAt + count > timedTotal) {
+            throw const _Rejected('pattern timings overflow');
+          }
+          arrivalOffsets = arrivals.sublist(timedAt, timedAt + count);
+          departureOffsets = departures.sublist(timedAt, timedAt + count);
+          timedAt += count;
+        }
         out.add(
           RoutePattern(
             id: i,
@@ -904,6 +942,8 @@ class PlannerIndexCodec {
             headsign: pool.optional(headsign[i]),
             shapeId: pool.optional(shape[i]),
             cumDist: cumDist.sublist(at, at + count),
+            arrivalOffsets: arrivalOffsets,
+            departureOffsets: departureOffsets,
             minLat: minLat[i],
             minLon: minLon[i],
             maxLat: maxLat[i],
@@ -913,6 +953,9 @@ class PlannerIndexCodec {
         at += count;
       }
       if (at != total) throw const _Rejected('pattern table inconsistent');
+      if (timedAt != timedTotal) {
+        throw const _Rejected('pattern timings inconsistent');
+      }
       return out;
     });
 

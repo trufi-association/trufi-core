@@ -89,6 +89,7 @@ String describeBundle(PlannerIndexBundle b) {
     sb.writeln(
       'P ${p.id}|${p.routeId}|${p.headsign}|${p.shapeId}|'
       '${p.stopIds.join(',')}|${p.cumDist.join(',')}|'
+      '${p.arrivalOffsets.join(',')}|${p.departureOffsets.join(',')}|'
       '${p.minLat},${p.minLon},${p.maxLat},${p.maxLon}',
     );
     final c = index.getConnectionsFor(i);

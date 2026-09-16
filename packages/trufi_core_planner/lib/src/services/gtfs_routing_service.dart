@@ -194,6 +194,15 @@ class GtfsRoutingService {
   /// candidates of the round in progress.
   static const int defaultMaxMultiTransferScans = 6000000;
 
+  /// Default for [fallbackVehicleSpeedKmh]: 20 km/h.
+  ///
+  /// What trufi-gtfs-builder writes into Cochabamba's `stop_times` for buses
+  /// after trufi-gtfs-builder#9 — the municipal traffic office measures
+  /// 10–11 km/h in congestion and calls 25 km/h "satisfactory" — and the
+  /// figure the issue that introduced this knob settled on (#997). It
+  /// replaces an unexplained 18 km/h constant that ignored the feed.
+  static const double defaultFallbackVehicleSpeedKmh = 20;
+
   final GtfsData data;
   final GtfsSpatialIndex spatialIndex;
   final GtfsRouteIndex routeIndex;
@@ -212,13 +221,32 @@ class GtfsRoutingService {
   /// never returns a malformed one. See [defaultMaxMultiTransferScans].
   final int maxMultiTransferScans;
 
+  /// Average in-vehicle speed, in km/h, used to estimate a ride's duration
+  /// from its distance when the pattern's `stop_times` carry no usable
+  /// timings (see [RoutePattern.scheduledSecondsBetween]). Rides on
+  /// patterns with timings take their duration from the feed and never use
+  /// this. Must be > 0; see [defaultFallbackVehicleSpeedKmh].
+  final double fallbackVehicleSpeedKmh;
+
+  /// [fallbackVehicleSpeedKmh] in meters per second.
+  final double _fallbackSpeedMps;
+
   GtfsRoutingService({
     required this.data,
     required this.spatialIndex,
     required this.routeIndex,
     this.maxTransferCandidates = defaultMaxTransferCandidates,
     this.maxMultiTransferScans = defaultMaxMultiTransferScans,
-  });
+    this.fallbackVehicleSpeedKmh = defaultFallbackVehicleSpeedKmh,
+  }) : _fallbackSpeedMps = fallbackVehicleSpeedKmh / 3.6 {
+    if (!(fallbackVehicleSpeedKmh > 0) || !fallbackVehicleSpeedKmh.isFinite) {
+      throw ArgumentError.value(
+        fallbackVehicleSpeedKmh,
+        'fallbackVehicleSpeedKmh',
+        'must be a positive number of km/h',
+      );
+    }
+  }
 
   int _multiTransferSearches = 0;
 
@@ -949,7 +977,10 @@ class GtfsRoutingService {
   }
 
   /// Build a transit segment from a known pattern and stop indices.
-  /// `transitDistance` is read in O(1) from the pattern's precomputed `cumDist`.
+  /// `transitDistance` is read in O(1) from the pattern's precomputed
+  /// `cumDist`; `scheduledDuration` is the feed's own timing between the two
+  /// stops when the pattern has one (#997), else distance at
+  /// [fallbackVehicleSpeedKmh].
   RoutingSegment _buildSegmentForPattern({
     required RoutePattern pattern,
     required int fromIdx,
@@ -960,11 +991,15 @@ class GtfsRoutingService {
   }) {
     final stopCount = toIdx - fromIdx + 1;
     final transit = pattern.distanceBetween(fromIdx, toIdx);
-    // Estimate in-vehicle time from transit distance at ~18 km/h average
-    // urban transit speed. Independent of stop spacing — works for both
-    // sparse feeds (stops every ~500m) and dense feeds (stops every ~30m).
-    // The downstream UI converts this to "X min" display.
-    final estDuration = Duration(seconds: (transit / 5).round());
+    // In-vehicle time: what the feed's stop_times say for this ride — the
+    // same figure OTP and MOTIS show for it — or, when the pattern carries
+    // no usable timings, distance at the configured average speed
+    // (independent of stop spacing, so sparse and dense feeds alike). The
+    // downstream UI converts this to "X min" display.
+    final scheduled = pattern.scheduledSecondsBetween(fromIdx, toIdx);
+    final estDuration = scheduled != null
+        ? Duration(seconds: scheduled)
+        : Duration(seconds: (transit / _fallbackSpeedMps).round());
     return RoutingSegment(
       route: route,
       fromStop: fromStop,

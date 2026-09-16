@@ -334,35 +334,50 @@ void main() {
     late PlannerIndexBundle loaded;
     setUpAll(() => loaded = load(blob));
 
-    test('patterns: ids, stops, cumDist, bbox, line keys', () {
-      final a = built.routeIndex, b = loaded.routeIndex;
-      expect(b.patternCount, a.patternCount);
-      expect(b.transferRadiusMeters, a.transferRadiusMeters);
-      expect(b.sameNameRouteLimit, a.sameNameRouteLimit);
-      for (var i = 0; i < a.patternCount; i++) {
-        final pa = a.patternById(i), pb = b.patternById(i);
-        expect(pb.id, pa.id);
-        expect(pb.routeId, pa.routeId);
-        expect(pb.stopIds, orderedEquals(pa.stopIds));
-        expect(pb.headsign, pa.headsign);
-        expect(pb.shapeId, pa.shapeId);
-        expect(pb.cumDist, orderedEquals(pa.cumDist));
+    test(
+      'patterns: ids, stops, cumDist, stop_times offsets, bbox, line keys',
+      () {
+        final a = built.routeIndex, b = loaded.routeIndex;
+        expect(b.patternCount, a.patternCount);
+        expect(b.transferRadiusMeters, a.transferRadiusMeters);
+        expect(b.sameNameRouteLimit, a.sameNameRouteLimit);
+        // The fixture is a builder feed: every pattern carries timings (#997),
+        // so the round trip below is not vacuous.
         expect(
-          [pb.minLat, pb.minLon, pb.maxLat, pb.maxLon],
-          [pa.minLat, pa.minLon, pa.maxLat, pa.maxLon],
+          List.generate(a.patternCount, (i) => a.patternById(i).hasStopTimes),
+          everyElement(isTrue),
         );
-        for (final stopId in pa.stopIds) {
-          expect(pb.indexOfStop(stopId), pa.indexOfStop(stopId));
+        for (var i = 0; i < a.patternCount; i++) {
+          final pa = a.patternById(i), pb = b.patternById(i);
+          expect(pb.id, pa.id);
+          expect(pb.routeId, pa.routeId);
+          expect(pb.stopIds, orderedEquals(pa.stopIds));
+          expect(pb.headsign, pa.headsign);
+          expect(pb.shapeId, pa.shapeId);
+          expect(pb.cumDist, orderedEquals(pa.cumDist));
+          expect(pb.arrivalOffsets, orderedEquals(pa.arrivalOffsets));
+          expect(pb.departureOffsets, orderedEquals(pa.departureOffsets));
+          expect(
+            pb.scheduledSecondsBetween(0, pb.stopIds.length - 1),
+            pa.scheduledSecondsBetween(0, pa.stopIds.length - 1),
+          );
+          expect(
+            [pb.minLat, pb.minLon, pb.maxLat, pb.maxLon],
+            [pa.minLat, pa.minLon, pa.maxLat, pa.maxLon],
+          );
+          for (final stopId in pa.stopIds) {
+            expect(pb.indexOfStop(stopId), pa.indexOfStop(stopId));
+          }
         }
-      }
-      for (final route in built.data.routes.values) {
-        expect(b.lineKeyForRoute(route.id), a.lineKeyForRoute(route.id));
-        expect(
-          b.getPatternsForRoute(route.id).map((p) => p.id),
-          orderedEquals(a.getPatternsForRoute(route.id).map((p) => p.id)),
-        );
-      }
-    });
+        for (final route in built.data.routes.values) {
+          expect(b.lineKeyForRoute(route.id), a.lineKeyForRoute(route.id));
+          expect(
+            b.getPatternsForRoute(route.id).map((p) => p.id),
+            orderedEquals(a.getPatternsForRoute(route.id).map((p) => p.id)),
+          );
+        }
+      },
+    );
 
     test('per-stop lookups in the same order (drives enumeration order)', () {
       final a = built.routeIndex, b = loaded.routeIndex;
@@ -817,10 +832,10 @@ void main() {
         );
         expect(text.split('\n').length, greaterThan(3000));
         final digest = PlannerIndexCodec.fingerprint(utf8.encode(text));
-        expect(PlannerIndexCodec.formatVersion, 1);
+        expect(PlannerIndexCodec.formatVersion, 2);
         expect(
           digest,
-          '4023095d04461e4c',
+          'ae629379caba60b6',
           reason:
               'the planner now builds or parses something different from the '
               'same GTFS — bump PlannerIndexCodec.formatVersion so cached '

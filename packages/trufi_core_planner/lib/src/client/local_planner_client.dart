@@ -31,9 +31,16 @@ class LocalPlannerClient implements PlannerRoutingClient {
   /// [loadFromBytes]; [loadFromParsed] takes an already-built index.
   final int sameNameRouteLimit;
 
+  /// Average speed, in km/h, for rides whose pattern has no `stop_times`
+  /// timings (see [GtfsRoutingService.fallbackVehicleSpeedKmh]). Used by
+  /// both load methods when building the routing service.
+  final double fallbackVehicleSpeedKmh;
+
   LocalPlannerClient({
     this.transferRadiusMeters = GtfsRouteIndex.defaultTransferRadiusMeters,
     this.sameNameRouteLimit = GtfsRouteIndex.defaultSameNameRouteLimit,
+    this.fallbackVehicleSpeedKmh =
+        GtfsRoutingService.defaultFallbackVehicleSpeedKmh,
   });
 
   /// Load from raw GTFS ZIP bytes.
@@ -50,6 +57,7 @@ class LocalPlannerClient implements PlannerRoutingClient {
       data: _data!,
       spatialIndex: _spatialIndex!,
       routeIndex: _routeIndex!,
+      fallbackVehicleSpeedKmh: fallbackVehicleSpeedKmh,
     );
   }
 
@@ -66,6 +74,7 @@ class LocalPlannerClient implements PlannerRoutingClient {
       data: data,
       spatialIndex: spatialIndex,
       routeIndex: routeIndex,
+      fallbackVehicleSpeedKmh: fallbackVehicleSpeedKmh,
     );
   }
 
