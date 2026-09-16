@@ -54,9 +54,26 @@ class _DrillDownService
   @override
   bool canDrillDown(SearchLocation location) => location.id == street.id;
 
+  /// Aroma lies in the street's own municipality; Heroínas is a boundary
+  /// corner shared with Sacaba. Same ids as the constants, so equality
+  /// (by id) with them still holds.
   @override
-  Future<List<SearchLocation>> drillDown(SearchLocation location) async =>
-      [cornerAroma, cornerHeroinas];
+  Future<List<SearchLocation>> drillDown(SearchLocation location) async => [
+        _located(cornerAroma, locality),
+        _located(
+          cornerHeroinas,
+          locality == null ? null : '$locality / Sacaba',
+        ),
+      ];
+
+  static SearchLocation _located(SearchLocation corner, String? address) =>
+      SearchLocation(
+        id: corner.id,
+        displayName: corner.displayName,
+        address: address,
+        latitude: corner.latitude,
+        longitude: corner.longitude,
+      );
 
   @override
   Future<SearchLocation?> reverse(double latitude, double longitude) async =>
@@ -231,12 +248,24 @@ void main() {
 
     testWidgets('the corners header repeats it under the street name',
         (tester) async {
-      await openCorners(tester, locality: 'Sacaba');
+      await openCorners(tester, locality: 'Cercado');
 
-      expect(headerLines(tester), ['Avenida Ayacucho', 'Sacaba']);
-      // The corners of this fake carry no address, so the header's line
-      // is the only "Sacaba" on screen.
-      expect(find.text('Sacaba'), findsOneWidget);
+      expect(headerLines(tester), ['Avenida Ayacucho', 'Cercado']);
+    });
+
+    testWidgets(
+        'corner rows do not repeat the header\'s municipality, only a '
+        'boundary corner names both', (tester) async {
+      await openCorners(tester, locality: 'Cercado');
+
+      // Aroma shares the street's municipality → the header's line is the
+      // only "Cercado"; Heroínas sits on the boundary → its own subtitle.
+      expect(find.text('Cercado'), findsOneWidget);
+      expect(find.text('Cercado / Sacaba'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Cercado / Sacaba')).dy,
+        greaterThan(tester.getTopLeft(find.text('& Avenida Heroínas')).dy),
+      );
     });
 
     testWidgets('without a municipality the header is the bare street name',

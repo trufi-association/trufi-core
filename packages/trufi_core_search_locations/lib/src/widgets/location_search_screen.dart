@@ -429,6 +429,12 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                                   child: _ModernLocationTile(
                                     location: corner,
                                     displayNameOverride: _cornerLabel(corner),
+                                    // The header already names the street's
+                                    // municipality; a corner only adds its
+                                    // own when it differs (a boundary
+                                    // corner, "Cercado / Sacaba").
+                                    showAddress: corner.address !=
+                                        _drillDownParent!.address,
                                     icon: Icons.fork_right_rounded,
                                     iconColor: colorScheme.primary,
                                     onTap: () {
@@ -1183,6 +1189,10 @@ class _ModernLocationTile extends StatelessWidget {
   /// The location itself — and whatever gets popped on tap — is untouched.
   final String? displayNameOverride;
 
+  /// Whether to render [SearchLocation.address] under the name. Off for
+  /// corners whose municipality the corners header already shows (#972).
+  final bool showAddress;
+
   const _ModernLocationTile({
     required this.location,
     required this.icon,
@@ -1190,6 +1200,7 @@ class _ModernLocationTile extends StatelessWidget {
     required this.onTap,
     this.trailing,
     this.displayNameOverride,
+    this.showAddress = true,
   });
 
   @override
@@ -1240,7 +1251,8 @@ class _ModernLocationTile extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (location.address != null &&
+                    if (showAddress &&
+                        location.address != null &&
                         location.address!.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
