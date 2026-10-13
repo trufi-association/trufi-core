@@ -204,6 +204,7 @@ class _FaresContentState extends State<_FaresContent>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final fares = widget.config.fares;
+    final additionalNotes = widget.config.localizedAdditionalNotes(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -276,11 +277,11 @@ class _FaresContentState extends State<_FaresContent>
               ),
             ),
           ],
-          if (widget.config.additionalNotes != null) ...[
+          if (additionalNotes != null) ...[
             const SizedBox(height: 20),
             _buildAnimatedItem(
               index: 3 + fares.length,
-              child: FaresNotesCard(notes: widget.config.additionalNotes!),
+              child: FaresNotesCard(notes: additionalNotes),
             ),
           ],
           if (widget.config.externalFareUrl != null) ...[
