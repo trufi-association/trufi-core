@@ -1,0 +1,289 @@
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+
+import '../nearby_geometry.dart';
+import '../nearby_line.dart';
+import '../nearby_lines_cubit.dart';
+import '../nearby_radius.dart';
+import 'nearby_lines_sheet.dart' show nearbyContrastColor;
+
+/// Marker id prefix of the per-line "201 · 75 m" labels; the rest of the id
+/// is the [NearbyLine.lineKey], so a tap on the label toggles that line.
+const String nearbyPointMarkerPrefix = 'nearby-point-';
+
+/// Labels drawn on the map: the list is the source of truth, the map shows
+/// the nearest ones so a dense corner does not become a wall of chips.
+const int maxNearbyPointMarkers = 40;
+
+/// Pure function of the state: radius rings and their label, the
+/// highlighted line, one label per nearby line and the anchor marker.
+///
+/// Rings are outlines, not the mock's translucent fill: no map engine reads
+/// `TrufiMarker.metersRadius` and line colors are serialised without alpha,
+/// so a filled buffer needs a maps-package change first.
+List<TrufiLayer> buildNearbyLayers({
+  required NearbyLinesState state,
+  required ColorScheme colorScheme,
+  required String Function(double meters) formatMeters,
+}) {
+  final anchor = state.anchor;
+  if (anchor == null) return const [];
+
+  final selected = state.selectedLine;
+  final ringLabelPosition = LatLng(
+    anchor.latitude + state.radius.meters / NearbyGeometry.metersPerDegree,
+    anchor.longitude,
+  );
+
+  return [
+    TrufiLayer(
+      id: 'nearby-rings',
+      layerLevel: 0,
+      lines: [
+        for (final radius in NearbyRadius.values)
+          TrufiLine(
+            id: 'nearby-ring-${radius.meters.round()}',
+            position: NearbyGeometry.circlePolygon(anchor, radius.meters),
+            color: radius == state.radius
+                ? colorScheme.primary
+                : colorScheme.outline,
+            lineWidth: radius == state.radius ? 3 : 1,
+            layerLevel: 0,
+          ),
+      ],
+      markers: [
+        TrufiMarker(
+          id: 'nearby-ring-label',
+          position: ringLabelPosition,
+          widget: _RingLabel(
+            text: formatMeters(state.radius.meters),
+            color: colorScheme.primary,
+          ),
+          size: const Size(56, 22),
+          layerLevel: 0,
+          allowOverlap: true,
+          imageCacheKey:
+              'nearby-ring-label-${state.radius.meters.round()}-'
+              '${colorScheme.primary.toARGB32()}',
+        ),
+      ],
+    ),
+    if (state.selectedGeometry.length > 1)
+      TrufiLayer(
+        id: 'nearby-selected-line',
+        layerLevel: 1,
+        lines: [
+          TrufiLine(
+            id: 'nearby-selected-line',
+            position: state.selectedGeometry,
+            color: selected?.color ?? colorScheme.primary,
+            lineWidth: 5,
+            layerLevel: 1,
+          ),
+        ],
+      ),
+    TrufiLayer(
+      id: 'nearby-points',
+      layerLevel: 2,
+      markers: [
+        for (final line in state.lines.take(maxNearbyPointMarkers))
+          _pointMarker(
+            line,
+            inside: line.isWithin(state.radius),
+            selected: line.lineKey == state.selectedLineKey,
+            colorScheme: colorScheme,
+            label: formatMeters(line.distanceMeters),
+          ),
+      ],
+    ),
+    TrufiLayer(
+      id: 'nearby-anchor',
+      layerLevel: 5,
+      markers: [
+        TrufiMarker(
+          id: 'nearby-anchor',
+          position: anchor,
+          widget: _AnchorMarker(
+            source: state.anchorSource,
+            colorScheme: colorScheme,
+          ),
+          size: state.anchorSource == NearbyAnchorSource.device
+              ? const Size(24, 24)
+              : const Size(32, 32),
+          alignment: state.anchorSource == NearbyAnchorSource.device
+              ? Alignment.center
+              : Alignment.bottomCenter,
+          layerLevel: 5,
+          allowOverlap: true,
+          imageCacheKey:
+              'nearby-anchor-${state.anchorSource.name}-'
+              '${colorScheme.error.toARGB32()}',
+        ),
+      ],
+    ),
+  ];
+}
+
+TrufiMarker _pointMarker(
+  NearbyLine line, {
+  required bool inside,
+  required bool selected,
+  required ColorScheme colorScheme,
+  required String label,
+}) {
+  return TrufiMarker(
+    id: '$nearbyPointMarkerPrefix${line.lineKey}',
+    position: line.nearestPoint,
+    widget: _NearestPointMarker(
+      line: line,
+      label: label,
+      inside: inside,
+      selected: selected,
+      colorScheme: colorScheme,
+    ),
+    size: const Size(110, 28),
+    layerLevel: selected ? 3 : 2,
+    // The selected label always shows; the others may yield to neighbours.
+    allowOverlap: selected,
+    imageCacheKey:
+        'nearby-point-${line.displayName}-${line.distanceMeters.round()}-'
+        '${line.color?.toARGB32()}-$inside-$selected',
+  );
+}
+
+/// "300 m" pill on top of the selected ring.
+class _RingLabel extends StatelessWidget {
+  const _RingLabel({required this.text, required this.color});
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(11),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "201 · 75 m": the badge on the route color plus the distance chip, in
+/// the primary color inside the selected radius and plain outside.
+class _NearestPointMarker extends StatelessWidget {
+  const _NearestPointMarker({
+    required this.line,
+    required this.label,
+    required this.inside,
+    required this.selected,
+    required this.colorScheme,
+  });
+
+  final NearbyLine line;
+  final String label;
+  final bool inside;
+  final bool selected;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final badgeColor = line.color ?? colorScheme.primary;
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: badgeColor,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                line.displayName,
+                style: TextStyle(
+                  color: line.textColor ?? nearbyContrastColor(badgeColor),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Container(
+              height: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: selected
+                      ? colorScheme.primary
+                      : colorScheme.outlineVariant,
+                  width: selected ? 2 : 1,
+                ),
+              ),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: inside ? colorScheme.primary : colorScheme.onSurface,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Blue dot for a GPS fix (the home screen's), a pin otherwise.
+class _AnchorMarker extends StatelessWidget {
+  const _AnchorMarker({required this.source, required this.colorScheme});
+
+  final NearbyAnchorSource source;
+  final ColorScheme colorScheme;
+
+  /// Google-blue dot, same as the home screen's my-location marker.
+  static const Color _deviceDotColor = Color(0xFF4285F4);
+
+  @override
+  Widget build(BuildContext context) {
+    if (source == NearbyAnchorSource.device) {
+      return Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: _deviceDotColor,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 3),
+        ),
+      );
+    }
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        const Icon(Icons.location_on_rounded, size: 32, color: Colors.white),
+        Icon(Icons.location_on_rounded, size: 26, color: colorScheme.error),
+      ],
+    );
+  }
+}

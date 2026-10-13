@@ -360,6 +360,132 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Copied'**
   String get copiedToClipboard;
+
+  /// Drawer entry and title of the nearby lines screen (lines passing within walking distance)
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby lines'**
+  String get menuNearbyLines;
+
+  /// Anchor row label when the search is centred on the device position
+  ///
+  /// In en, this message translates to:
+  /// **'Your location'**
+  String get nearbyAnchorYourLocation;
+
+  /// Anchor row label when the search is centred on a pin the user placed on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned location'**
+  String get nearbyAnchorPinned;
+
+  /// Anchor row label when no fix and no pin exist and the app's default center is used
+  ///
+  /// In en, this message translates to:
+  /// **'City center (location unavailable)'**
+  String get nearbyAnchorDefault;
+
+  /// Button that re-centres the search on the device position
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get nearbyUseMyLocation;
+
+  /// Hint under the anchor row and in the empty state explaining how to move the search point
+  ///
+  /// In en, this message translates to:
+  /// **'Long-press the map to move the pin'**
+  String get nearbyMovePinHint;
+
+  /// Radius filter chip: distance bracket in meters and how many lines fall inside it
+  ///
+  /// In en, this message translates to:
+  /// **'{meters} m ({count})'**
+  String nearbyRadiusChip(int meters, int count);
+
+  /// Row title when the line is reached at a stop; {distance} is already formatted (e.g. '75 m')
+  ///
+  /// In en, this message translates to:
+  /// **'At {distance}'**
+  String nearbyAtDistance(String distance);
+
+  /// Row title when the line's route runs closer than any of its stops; {distance} is already formatted
+  ///
+  /// In en, this message translates to:
+  /// **'Passes by at {distance}'**
+  String nearbyPassesAtDistance(String distance);
+
+  /// Row subtitle: name of the nearest stop of the line
+  ///
+  /// In en, this message translates to:
+  /// **'Stop {name}'**
+  String nearbyStopName(String name);
+
+  /// Row subtitle: destination (headsign) of the line
+  ///
+  /// In en, this message translates to:
+  /// **'To {headsign}'**
+  String nearbyTowards(String headsign);
+
+  /// Banner over the list naming the line whose route is highlighted on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Highlighted: {name}'**
+  String nearbySelectedLine(String name);
+
+  /// Empty state when no line passes within the widest search radius
+  ///
+  /// In en, this message translates to:
+  /// **'No lines pass within {meters} m'**
+  String nearbyEmptyTitle(int meters);
+
+  /// Empty state when lines exist farther away but none inside the selected radius
+  ///
+  /// In en, this message translates to:
+  /// **'No lines within {meters} m. Try a larger radius.'**
+  String nearbyEmptyInRadius(int meters);
+
+  /// Shown when the app has no local GTFS feed to search
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby lines need the offline GTFS planner'**
+  String get nearbyUnavailableTitle;
+
+  /// Developer-facing hint under the unavailable title
+  ///
+  /// In en, this message translates to:
+  /// **'Add a local TrufiPlannerProvider with a bundled GTFS feed to the routing engines.'**
+  String get nearbyUnavailableHint;
+
+  /// Shown while the bundled GTFS feed is being read
+  ///
+  /// In en, this message translates to:
+  /// **'Loading offline data…'**
+  String get nearbyLoadingData;
+
+  /// Footer note of the nearby lines sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Based on GTFS routes and schedules'**
+  String get nearbyFooterNote;
+
+  /// Tooltip of the chevron that opens the route detail of a nearby line
+  ///
+  /// In en, this message translates to:
+  /// **'Line details'**
+  String get nearbyOpenDetails;
+
+  /// Tooltip of the button that removes the highlighted route from the map
+  ///
+  /// In en, this message translates to:
+  /// **'Clear highlight'**
+  String get nearbyClearSelection;
+
+  /// Tooltip of the close button of the nearby lines screen
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get nearbyClose;
 }
 
 class _TransportListLocalizationsDelegate

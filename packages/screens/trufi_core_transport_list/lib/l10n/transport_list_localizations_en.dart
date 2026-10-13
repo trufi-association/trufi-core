@@ -153,4 +153,85 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get copiedToClipboard => 'Copied';
+
+  @override
+  String get menuNearbyLines => 'Nearby lines';
+
+  @override
+  String get nearbyAnchorYourLocation => 'Your location';
+
+  @override
+  String get nearbyAnchorPinned => 'Pinned location';
+
+  @override
+  String get nearbyAnchorDefault => 'City center (location unavailable)';
+
+  @override
+  String get nearbyUseMyLocation => 'Use my location';
+
+  @override
+  String get nearbyMovePinHint => 'Long-press the map to move the pin';
+
+  @override
+  String nearbyRadiusChip(int meters, int count) {
+    return '$meters m ($count)';
+  }
+
+  @override
+  String nearbyAtDistance(String distance) {
+    return 'At $distance';
+  }
+
+  @override
+  String nearbyPassesAtDistance(String distance) {
+    return 'Passes by at $distance';
+  }
+
+  @override
+  String nearbyStopName(String name) {
+    return 'Stop $name';
+  }
+
+  @override
+  String nearbyTowards(String headsign) {
+    return 'To $headsign';
+  }
+
+  @override
+  String nearbySelectedLine(String name) {
+    return 'Highlighted: $name';
+  }
+
+  @override
+  String nearbyEmptyTitle(int meters) {
+    return 'No lines pass within $meters m';
+  }
+
+  @override
+  String nearbyEmptyInRadius(int meters) {
+    return 'No lines within $meters m. Try a larger radius.';
+  }
+
+  @override
+  String get nearbyUnavailableTitle =>
+      'Nearby lines need the offline GTFS planner';
+
+  @override
+  String get nearbyUnavailableHint =>
+      'Add a local TrufiPlannerProvider with a bundled GTFS feed to the routing engines.';
+
+  @override
+  String get nearbyLoadingData => 'Loading offline data…';
+
+  @override
+  String get nearbyFooterNote => 'Based on GTFS routes and schedules';
+
+  @override
+  String get nearbyOpenDetails => 'Line details';
+
+  @override
+  String get nearbyClearSelection => 'Clear highlight';
+
+  @override
+  String get nearbyClose => 'Close';
 }

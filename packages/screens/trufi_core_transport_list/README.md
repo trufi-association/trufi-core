@@ -1,6 +1,6 @@
 # trufi_core_transport_list
 
-Routes list, route detail, and the operator QR sheet.
+Routes list, route detail, the operator QR sheet, and the nearby lines screen.
 
 ## Host-app requirements
 
@@ -57,3 +57,76 @@ with `android/app/src/main/res/xml/provider_paths.xml`:
 app's internal cache. (The plugin's own README documents only
 `external-path`, which leaves copying failing with *"Failed to find
 configured root that contains /data/data/&lt;pkg&gt;/cache/…"*.)
+
+## Nearby lines screen
+
+`NearbyLinesTrufiScreen` (`/nearby`, drawer order 2) lists the lines passing
+within **100 / 300 / 500 m** of the rider's position or of a pin placed on the
+map, with the three radii drawn as rings, a label at the closest stop or point
+of every line, and the full route highlighted when a row is tapped. The whole
+query runs on the device against the planner's already-loaded GTFS — no
+network call anywhere (#1006).
+
+```dart
+screens: [
+  HomeScreenTrufiScreen(...),
+  TransportListTrufiScreen(),
+  NearbyLinesTrufiScreen(),
+],
+```
+
+### Requirements
+
+- A `MapEngineManager` in the app providers (the map and the default center).
+- A **local** `TrufiPlannerProvider` among the `RoutingEngineManager` engines:
+
+  ```dart
+  TrufiPlannerProvider(
+    config: const TrufiPlannerConfig.local(gtfsAsset: 'assets/routing/city.gtfs.zip'),
+  )
+  ```
+
+  The screen picks the first local planner it finds, whichever engine is
+  currently selected, and preloads it when needed. Without one (remote-only
+  planner, e.g. the example on web) it shows "Nearby lines need the offline
+  GTFS planner" instead of failing. Any other feed can be plugged through
+  `dataSourceBuilder` by implementing `NearbyLinesDataSource`.
+
+### How a line is matched
+
+Stops within 500 m come from the planner's spatial index; route geometries
+are tested with a bounding-box prefilter and a point-to-polyline distance.
+A row reads **"At X m · Stop …"** when the nearest stop is the way to board,
+and **"Passes by at X m · To …"** when the route runs more than 50 m closer
+than any of its stops (`NearbyLinesService.stopPreferenceMeters`). Routes the
+planner treats as one logical line (same `route_short_name`, outbound and
+inbound) are one row. The 100/300 m chips only filter the 500 m result, so
+switching them never re-queries.
+
+### Location and the pin
+
+On every visit the screen asks for the device position (one permission
+request when merely denied; no dialogs). Permanently denied, services off or
+no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
+long-press the map to move the pin anywhere, "Use my location" re-anchors.
+
+### Route detail
+
+The chevron of a row opens `TransportDetailScreen` with details built from
+the local feed (`nearbyLineToRouteDetails`), so it works whichever routing
+engine is current. Apps whose routes list is served by
+`GtfsTransportDataProvider` can route through their own list instead:
+
+```dart
+NearbyLinesTrufiScreen(
+  onLineDetails: (context, line) =>
+      TransportDetailScreen.show(context, routeCode: line.tripId!),
+)
+```
+
+### Limits
+
+- The rings are outlines; no map engine renders a translucent buffer yet
+  (`TrufiMarker.metersRadius` is not consumed and line colors carry no alpha).
+- One row per logical line: the headsign shown is the closest pattern's.
+- At most 40 line labels are drawn on the map; the list is complete.

@@ -63,5 +63,85 @@
   "modeMonorail": "Monorriel",
   "distanceKilometers": "{value} km",
   "distanceMeters": "{value} m",
-  "copiedToClipboard": "Copiado"
+  "copiedToClipboard": "Copiado",
+  "menuNearbyLines": "Líneas cercanas",
+  "nearbyAnchorYourLocation": "Tu ubicación",
+  "nearbyAnchorPinned": "Ubicación marcada",
+  "nearbyAnchorDefault": "Centro de la ciudad (ubicación no disponible)",
+  "nearbyUseMyLocation": "Usar mi ubicación",
+  "nearbyMovePinHint": "Mantén pulsado el mapa para mover el pin",
+  "nearbyRadiusChip": "{meters} m ({count})",
+  "@nearbyRadiusChip": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyAtDistance": "A {distance}",
+  "@nearbyAtDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyPassesAtDistance": "Pasa a {distance}",
+  "@nearbyPassesAtDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyStopName": "Parada {name}",
+  "@nearbyStopName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyTowards": "Hacia {headsign}",
+  "@nearbyTowards": {
+    "placeholders": {
+      "headsign": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbySelectedLine": "Resaltada: {name}",
+  "@nearbySelectedLine": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyEmptyTitle": "Ninguna línea pasa a menos de {meters} m",
+  "@nearbyEmptyTitle": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyEmptyInRadius": "No hay líneas a menos de {meters} m. Prueba un radio mayor.",
+  "@nearbyEmptyInRadius": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyUnavailableTitle": "Las líneas cercanas necesitan el planificador GTFS sin conexión",
+  "nearbyUnavailableHint": "Añade a los motores de rutas un TrufiPlannerProvider local con un GTFS incluido en la app.",
+  "nearbyLoadingData": "Cargando datos sin conexión…",
+  "nearbyFooterNote": "Basado en rutas y horarios GTFS",
+  "nearbyOpenDetails": "Detalles de la línea",
+  "nearbyClearSelection": "Quitar resaltado",
+  "nearbyClose": "Cerrar"
 }

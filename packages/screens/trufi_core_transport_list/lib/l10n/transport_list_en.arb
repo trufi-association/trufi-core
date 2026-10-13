@@ -155,5 +155,141 @@
   "copiedToClipboard": "Copied",
   "@copiedToClipboard": {
     "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"
+  },
+  "menuNearbyLines": "Nearby lines",
+  "@menuNearbyLines": {
+    "description": "Drawer entry and title of the nearby lines screen (lines passing within walking distance)"
+  },
+  "nearbyAnchorYourLocation": "Your location",
+  "@nearbyAnchorYourLocation": {
+    "description": "Anchor row label when the search is centred on the device position"
+  },
+  "nearbyAnchorPinned": "Pinned location",
+  "@nearbyAnchorPinned": {
+    "description": "Anchor row label when the search is centred on a pin the user placed on the map"
+  },
+  "nearbyAnchorDefault": "City center (location unavailable)",
+  "@nearbyAnchorDefault": {
+    "description": "Anchor row label when no fix and no pin exist and the app's default center is used"
+  },
+  "nearbyUseMyLocation": "Use my location",
+  "@nearbyUseMyLocation": {
+    "description": "Button that re-centres the search on the device position"
+  },
+  "nearbyMovePinHint": "Long-press the map to move the pin",
+  "@nearbyMovePinHint": {
+    "description": "Hint under the anchor row and in the empty state explaining how to move the search point"
+  },
+  "nearbyRadiusChip": "{meters} m ({count})",
+  "@nearbyRadiusChip": {
+    "description": "Radius filter chip: distance bracket in meters and how many lines fall inside it",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "300"
+      },
+      "count": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "nearbyAtDistance": "At {distance}",
+  "@nearbyAtDistance": {
+    "description": "Row title when the line is reached at a stop; {distance} is already formatted (e.g. '75 m')",
+    "placeholders": {
+      "distance": {
+        "type": "String",
+        "example": "75 m"
+      }
+    }
+  },
+  "nearbyPassesAtDistance": "Passes by at {distance}",
+  "@nearbyPassesAtDistance": {
+    "description": "Row title when the line's route runs closer than any of its stops; {distance} is already formatted",
+    "placeholders": {
+      "distance": {
+        "type": "String",
+        "example": "150 m"
+      }
+    }
+  },
+  "nearbyStopName": "Stop {name}",
+  "@nearbyStopName": {
+    "description": "Row subtitle: name of the nearest stop of the line",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Calle San Simón"
+      }
+    }
+  },
+  "nearbyTowards": "To {headsign}",
+  "@nearbyTowards": {
+    "description": "Row subtitle: destination (headsign) of the line",
+    "placeholders": {
+      "headsign": {
+        "type": "String",
+        "example": "Av. Blanco Galindo"
+      }
+    }
+  },
+  "nearbySelectedLine": "Highlighted: {name}",
+  "@nearbySelectedLine": {
+    "description": "Banner over the list naming the line whose route is highlighted on the map",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "201"
+      }
+    }
+  },
+  "nearbyEmptyTitle": "No lines pass within {meters} m",
+  "@nearbyEmptyTitle": {
+    "description": "Empty state when no line passes within the widest search radius",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  },
+  "nearbyEmptyInRadius": "No lines within {meters} m. Try a larger radius.",
+  "@nearbyEmptyInRadius": {
+    "description": "Empty state when lines exist farther away but none inside the selected radius",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "nearbyUnavailableTitle": "Nearby lines need the offline GTFS planner",
+  "@nearbyUnavailableTitle": {
+    "description": "Shown when the app has no local GTFS feed to search"
+  },
+  "nearbyUnavailableHint": "Add a local TrufiPlannerProvider with a bundled GTFS feed to the routing engines.",
+  "@nearbyUnavailableHint": {
+    "description": "Developer-facing hint under the unavailable title"
+  },
+  "nearbyLoadingData": "Loading offline data…",
+  "@nearbyLoadingData": {
+    "description": "Shown while the bundled GTFS feed is being read"
+  },
+  "nearbyFooterNote": "Based on GTFS routes and schedules",
+  "@nearbyFooterNote": {
+    "description": "Footer note of the nearby lines sheet"
+  },
+  "nearbyOpenDetails": "Line details",
+  "@nearbyOpenDetails": {
+    "description": "Tooltip of the chevron that opens the route detail of a nearby line"
+  },
+  "nearbyClearSelection": "Clear highlight",
+  "@nearbyClearSelection": {
+    "description": "Tooltip of the button that removes the highlighted route from the map"
+  },
+  "nearbyClose": "Close",
+  "@nearbyClose": {
+    "description": "Tooltip of the close button of the nearby lines screen"
   }
 }

@@ -63,5 +63,85 @@
   "modeMonorail": "Einschienenbahn",
   "distanceKilometers": "{value} km",
   "distanceMeters": "{value} m",
-  "copiedToClipboard": "Kopiert"
+  "copiedToClipboard": "Kopiert",
+  "menuNearbyLines": "Linien in der Nähe",
+  "nearbyAnchorYourLocation": "Dein Standort",
+  "nearbyAnchorPinned": "Markierter Ort",
+  "nearbyAnchorDefault": "Stadtzentrum (Standort nicht verfügbar)",
+  "nearbyUseMyLocation": "Meinen Standort verwenden",
+  "nearbyMovePinHint": "Halte die Karte gedrückt, um den Pin zu verschieben",
+  "nearbyRadiusChip": "{meters} m ({count})",
+  "@nearbyRadiusChip": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyAtDistance": "In {distance}",
+  "@nearbyAtDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyPassesAtDistance": "Fährt in {distance} vorbei",
+  "@nearbyPassesAtDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyStopName": "Haltestelle {name}",
+  "@nearbyStopName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyTowards": "Richtung {headsign}",
+  "@nearbyTowards": {
+    "placeholders": {
+      "headsign": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbySelectedLine": "Hervorgehoben: {name}",
+  "@nearbySelectedLine": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nearbyEmptyTitle": "Keine Linien im Umkreis von {meters} m",
+  "@nearbyEmptyTitle": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyEmptyInRadius": "Keine Linien im Umkreis von {meters} m. Versuche einen größeren Radius.",
+  "@nearbyEmptyInRadius": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyUnavailableTitle": "Linien in der Nähe benötigen den Offline-GTFS-Planer",
+  "nearbyUnavailableHint": "Füge den Routing-Engines einen lokalen TrufiPlannerProvider mit gebündeltem GTFS hinzu.",
+  "nearbyLoadingData": "Offline-Daten werden geladen…",
+  "nearbyFooterNote": "Basierend auf GTFS-Linien und -Fahrplänen",
+  "nearbyOpenDetails": "Liniendetails",
+  "nearbyClearSelection": "Hervorhebung entfernen",
+  "nearbyClose": "Schließen"
 }

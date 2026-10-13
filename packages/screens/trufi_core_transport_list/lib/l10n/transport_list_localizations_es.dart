@@ -147,4 +147,86 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get copiedToClipboard => 'Copiado';
+
+  @override
+  String get menuNearbyLines => 'Líneas cercanas';
+
+  @override
+  String get nearbyAnchorYourLocation => 'Tu ubicación';
+
+  @override
+  String get nearbyAnchorPinned => 'Ubicación marcada';
+
+  @override
+  String get nearbyAnchorDefault =>
+      'Centro de la ciudad (ubicación no disponible)';
+
+  @override
+  String get nearbyUseMyLocation => 'Usar mi ubicación';
+
+  @override
+  String get nearbyMovePinHint => 'Mantén pulsado el mapa para mover el pin';
+
+  @override
+  String nearbyRadiusChip(int meters, int count) {
+    return '$meters m ($count)';
+  }
+
+  @override
+  String nearbyAtDistance(String distance) {
+    return 'A $distance';
+  }
+
+  @override
+  String nearbyPassesAtDistance(String distance) {
+    return 'Pasa a $distance';
+  }
+
+  @override
+  String nearbyStopName(String name) {
+    return 'Parada $name';
+  }
+
+  @override
+  String nearbyTowards(String headsign) {
+    return 'Hacia $headsign';
+  }
+
+  @override
+  String nearbySelectedLine(String name) {
+    return 'Resaltada: $name';
+  }
+
+  @override
+  String nearbyEmptyTitle(int meters) {
+    return 'Ninguna línea pasa a menos de $meters m';
+  }
+
+  @override
+  String nearbyEmptyInRadius(int meters) {
+    return 'No hay líneas a menos de $meters m. Prueba un radio mayor.';
+  }
+
+  @override
+  String get nearbyUnavailableTitle =>
+      'Las líneas cercanas necesitan el planificador GTFS sin conexión';
+
+  @override
+  String get nearbyUnavailableHint =>
+      'Añade a los motores de rutas un TrufiPlannerProvider local con un GTFS incluido en la app.';
+
+  @override
+  String get nearbyLoadingData => 'Cargando datos sin conexión…';
+
+  @override
+  String get nearbyFooterNote => 'Basado en rutas y horarios GTFS';
+
+  @override
+  String get nearbyOpenDetails => 'Detalles de la línea';
+
+  @override
+  String get nearbyClearSelection => 'Quitar resaltado';
+
+  @override
+  String get nearbyClose => 'Cerrar';
 }

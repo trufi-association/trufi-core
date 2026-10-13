@@ -27,6 +27,7 @@ A cross-platform multi-modal public transport app built in [Flutter](https://flu
 ## Features
 
 - **Multi-modal route planning** — bus, walking, biking and combinations, powered by [OpenTripPlanner](https://github.com/opentripplanner/OpenTripPlanner) (OTP 1.5, 2.4 and 2.8 supported).
+- **Nearby lines** — offline discovery of the lines passing within 100 / 300 / 500 m of your position or a map pin, computed from the bundled GTFS.
 - **Live GTFS-RT vehicle positions** — optional real-time bus markers tinted by route color, with live indicators on itinerary cards.
 - **Turn-by-turn navigation** for transit and walking legs.
 - **Origin/destination search** — online (Photon, Nominatim) and offline (asset-based POI search via [osm-search-data-export](https://github.com/trufi-association/osm-search-data-export)).
@@ -82,7 +83,7 @@ The example in [apps/example](apps/example) is the canonical place to see how pa
 | --- | --- |
 | [`trufi_core_home_screen`](packages/screens/trufi_core_home_screen) | Home screen with route planning, search and itinerary view. |
 | [`trufi_core_saved_places`](packages/screens/trufi_core_saved_places) | Manage favorites, history, custom places and saved origin–destination routes. |
-| [`trufi_core_transport_list`](packages/screens/trufi_core_transport_list) | Routes list with route details. |
+| [`trufi_core_transport_list`](packages/screens/trufi_core_transport_list) | Routes list with route details and nearby lines by distance radius (offline). |
 | [`trufi_core_fares`](packages/screens/trufi_core_fares) | Fares / pricing information. |
 | [`trufi_core_feedback`](packages/screens/trufi_core_feedback) | External feedback flow with app context. |
 | [`trufi_core_settings`](packages/screens/trufi_core_settings) | Settings screen module. |
