@@ -24,8 +24,10 @@ import 'live_vehicle_info_panel.dart';
 import 'poi_compact_card.dart';
 import 'live_vehicles_settings_section.dart';
 import '../cubit/route_planner_cubit.dart';
+import '../cubit/vehicle_eta_cubit.dart';
 import '../models/route_planner_state.dart';
 import '../services/share_route_service.dart';
+import 'eta_refresh_button.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
 import 'save_route_button.dart';
@@ -129,6 +131,11 @@ class _HomeScreenState extends State<HomeScreen>
   routing.RoutingEngineManager? _routingEngineManager;
   RealtimeVehiclesProvider? _realtimeVehiclesProvider;
 
+  /// Last plan handed to the [VehicleEtaCubit]. `Plan` has no `==` and
+  /// `RoutePlannerCubit` only creates a new object per fetch/restore, so
+  /// identity tells "new plan" from "same plan, other itinerary selected".
+  routing.Plan? _lastEtaPlan;
+
   @override
   void initState() {
     super.initState();
@@ -142,6 +149,30 @@ class _HomeScreenState extends State<HomeScreen>
     _liveVehiclesEnabled.value = widget.config.liveVehiclesInitiallyEnabled;
     _liveVehiclesEnabled.addListener(_onLiveVehiclesEnabledChanged);
     _restoreLiveVehiclesToggle();
+    // A plan restored by RoutePlannerCubit.initialize() can land in the
+    // state before the BlocConsumer listener attaches; sync the ETAs once
+    // after the first frame so a restored plan gets its badges too.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _syncVehicleEtas(context.read<RoutePlannerCubit>().state);
+    });
+  }
+
+  /// Keeps the optional [VehicleEtaCubit] in step with the plan (#1004): a
+  /// new plan loads ETAs for its first boarding vehicles, clearing the plan
+  /// clears them, selecting another itinerary of the same plan does nothing.
+  void _syncVehicleEtas(RoutePlannerState state) {
+    if (identical(state.plan, _lastEtaPlan)) return;
+    _lastEtaPlan = state.plan;
+    final etaCubit = context.read<VehicleEtaCubit?>();
+    if (etaCubit == null) return;
+    final plan = state.plan;
+    final origin = state.fromPlace?.latLng;
+    if (plan == null || !plan.hasItineraries || origin == null) {
+      etaCubit.clear();
+      return;
+    }
+    etaCubit.loadForPlan(plan, origin);
   }
 
   Future<void> _restoreLiveVehiclesToggle() async {
@@ -1637,6 +1668,7 @@ class _HomeScreenState extends State<HomeScreen>
             _expandSheetIfNeeded(state);
             // Update URL with current state (web only)
             _updateUrlWithState(state);
+            _syncVehicleEtas(state);
           },
           builder: (context, state) {
             final locationState = SearchLocationState(
@@ -2110,6 +2142,10 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           ),
+          const EtaRefreshButton(
+            compact: true,
+            padding: EdgeInsets.only(right: 8),
+          ),
           _buildCloseButton(),
         ],
       ),
@@ -2482,6 +2518,7 @@ class _HomeScreenState extends State<HomeScreen>
               itinerary: state.selectedItinerary ?? itineraries?.firstOrNull,
               endSpacing: 4,
             ),
+          const EtaRefreshButton(padding: EdgeInsets.only(left: 4)),
           const SizedBox(width: 4),
           // Close button
           IconButton.filled(

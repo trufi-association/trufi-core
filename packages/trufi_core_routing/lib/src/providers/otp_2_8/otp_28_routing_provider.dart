@@ -85,7 +85,7 @@ class Otp28RoutingProvider extends IRoutingProvider {
   OtpVehiclePositionsProvider? _realtimeVehiclesProvider;
 
   @override
-  RealtimeVehiclesProvider? get realtimeVehiclesProvider {
+  OtpVehiclePositionsProvider? get realtimeVehiclesProvider {
     if (!liveVehiclesEnabled) return null;
     return _realtimeVehiclesProvider ??= OtpVehiclePositionsProvider(
       endpoint: endpoint,

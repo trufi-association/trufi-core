@@ -1,7 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
+    show VehicleEtaProvider;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
+
+import '../models/vehicle_eta_state.dart' show defaultEtaRefreshCooldown;
 
 /// Configuration for the Home Screen module.
 ///
@@ -54,6 +58,18 @@ class HomeScreenConfig {
   /// their choice is persisted and this value no longer applies.
   final bool liveVehiclesInitiallyEnabled;
 
+  /// Optional telemetry source for the "next vehicle" badges on itinerary
+  /// cards (#1004): `RealtimeVehiclesEtaProvider` over a GTFS-RT feed, a
+  /// `TrufiTecEtaProvider`, or any other `VehicleEtaProvider`.
+  ///
+  /// Null (default) hides the feature entirely: no cubit is created, no
+  /// badge and no refresh button are rendered.
+  final VehicleEtaProvider? vehicleEtaProvider;
+
+  /// Minimum gap between two user-triggered ETA requests (issue #1004 asks
+  /// for a 10–15 s client-side throttle). Only used with [vehicleEtaProvider].
+  final Duration etaRefreshCooldown;
+
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
     this.searchService,
@@ -65,5 +81,7 @@ class HomeScreenConfig {
     this.poiLayersManager,
     this.extraMapLayerSettings,
     this.liveVehiclesInitiallyEnabled = false,
+    this.vehicleEtaProvider,
+    this.etaRefreshCooldown = defaultEtaRefreshCooldown,
   });
 }

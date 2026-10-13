@@ -1,0 +1,263 @@
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+
+import 'support/vehicle_eta_fakes.dart';
+
+/// #1004: one request per plan for the FIRST boarding vehicle of every
+/// itinerary, a 12 s throttle on manual refresh that never re-plans, and
+/// stale answers dropped after clear/new plan.
+void main() {
+  late FakeVehicleEtaProvider provider;
+  late DateTime now;
+  late VehicleEtaCubit cubit;
+
+  setUp(() {
+    provider = FakeVehicleEtaProvider();
+    now = etaT0;
+    cubit = VehicleEtaCubit(provider: provider, now: () => now);
+  });
+
+  tearDown(() => cubit.close());
+
+  group('loadForPlan', () {
+    test('asks once for the first boarding vehicle of every ride', () async {
+      provider.answer = (_) => [eta('1:A', 240), eta('1:C', 600)];
+
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+
+      expect(provider.calls, 1);
+      final request = provider.requests.single;
+      expect(request.origin, etaOrigin);
+      expect(
+        request.routeIds,
+        {'1:A', '1:C'},
+        reason:
+            'B is a connection, not the bus the rider waits for; the '
+            'walk-only ride adds nothing',
+      );
+      expect(request.stopIds, {'sA', 'sC'});
+
+      final state = cubit.state;
+      expect(state.status, VehicleEtaStatus.ready);
+      expect(state.hasRequest, isTrue);
+      expect(state.etaFor('1:A')?.eta, const Duration(seconds: 240));
+      expect(
+        state.etaFor('A')?.eta,
+        const Duration(seconds: 240),
+        reason: 'keys are feed-prefix agnostic',
+      );
+      expect(state.etaFor('1:B'), isNull);
+      expect(state.fetchedAt, provider.fetchedAt);
+      expect(
+        state.nextAllowedAt,
+        etaT0.add(const Duration(seconds: 12)),
+        reason: 'the cooldown is armed when the request starts',
+      );
+      expect(state.error, isNull);
+    });
+
+    test('an empty answer is "unavailable", not an error', () async {
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(cubit.state.status, VehicleEtaStatus.unavailable);
+      expect(cubit.state.etasByRoute, isEmpty);
+      expect(cubit.state.hasRequest, isTrue);
+    });
+
+    test('a failing provider leaves "error" with no estimates', () async {
+      provider.failure = const VehicleEtaException('down', statusCode: 503);
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(cubit.state.status, VehicleEtaStatus.error);
+      expect(cubit.state.etasByRoute, isEmpty);
+      expect(cubit.state.error, contains('503'));
+      expect(cubit.state.hasRequest, isTrue);
+    });
+
+    test('a walk-only plan resets without calling the provider', () async {
+      await cubit.loadForPlan(
+        routing.Plan(
+          itineraries: [
+            itinerary([walkLeg()]),
+          ],
+        ),
+        etaOrigin,
+      );
+      expect(provider.calls, 0);
+      expect(cubit.state, const VehicleEtaState());
+    });
+
+    test('a newer plan supersedes the previous in-flight answer', () async {
+      provider.gate = Completer();
+      final first = cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+
+      provider.gate = null;
+      provider.answer = (_) => [eta('1:X', 60)];
+      await cubit.loadForPlan(
+        routing.Plan(
+          itineraries: [
+            itinerary([busLeg('X')]),
+          ],
+        ),
+        etaOrigin,
+      );
+      expect(cubit.state.etaFor('X'), isNotNull);
+
+      // The old reply lands late with the old plan's routes.
+      final oldGate = provider.requests.first;
+      expect(oldGate.routeIds, {'1:A', '1:C'});
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.etaFor('X'), isNotNull);
+      expect(cubit.state.etaFor('A'), isNull);
+      // Let the first call finish so the test leaves no dangling future.
+      unawaited(first);
+    });
+  });
+
+  group('refresh', () {
+    test('is throttled within the cooldown and re-sends the stored '
+        'request afterwards', () async {
+      provider.answer = (_) => [eta('1:A', 240)];
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+      final before = cubit.state;
+
+      now = etaT0.add(const Duration(seconds: 5));
+      await cubit.refresh();
+      expect(provider.calls, 1, reason: 'inside the cooldown nothing is sent');
+      expect(cubit.state, same(before), reason: 'and nothing is emitted');
+
+      now = etaT0.add(const Duration(seconds: 12));
+      await cubit.refresh();
+      expect(provider.calls, 2);
+      expect(
+        provider.requests[1],
+        provider.requests[0],
+        reason: 'the same request again — a refresh never re-plans',
+      );
+      expect(cubit.state.status, VehicleEtaStatus.ready);
+      expect(cubit.state.nextAllowedAt, etaT0.add(const Duration(seconds: 24)));
+    });
+
+    test('is ignored while a request is in flight', () async {
+      provider.gate = Completer();
+      final load = cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(cubit.state.status, VehicleEtaStatus.loading);
+
+      now = etaT0.add(const Duration(minutes: 1));
+      await cubit.refresh();
+      expect(provider.calls, 1, reason: 'no duplicate request');
+
+      provider.gate!.complete(
+        VehicleEtaSnapshot(etas: [eta('1:A', 60)], fetchedAt: etaT0),
+      );
+      await load;
+      expect(cubit.state.status, VehicleEtaStatus.ready);
+    });
+
+    test('keeps the previous estimates while loading', () async {
+      provider.answer = (_) => [eta('1:A', 240)];
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+
+      provider.gate = Completer();
+      now = etaT0.add(const Duration(seconds: 12));
+      final refresh = cubit.refresh();
+      expect(cubit.state.status, VehicleEtaStatus.loading);
+      expect(
+        cubit.state.etaFor('A'),
+        isNotNull,
+        reason: 'the badge dims the old value instead of flashing a spinner',
+      );
+      expect(cubit.state.fetchedAt, etaT0);
+
+      provider.gate!.complete(VehicleEtaSnapshot.empty(now));
+      await refresh;
+      expect(cubit.state.status, VehicleEtaStatus.unavailable);
+      expect(cubit.state.etasByRoute, isEmpty);
+      expect(cubit.state.fetchedAt, now);
+    });
+
+    test('does nothing before any plan was loaded', () async {
+      await cubit.refresh();
+      expect(provider.calls, 0);
+      expect(cubit.state, const VehicleEtaState());
+    });
+  });
+
+  group('clear', () {
+    test('resets the state and drops an in-flight answer', () async {
+      provider.gate = Completer();
+      final load = cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+
+      cubit.clear();
+      expect(cubit.state, const VehicleEtaState());
+
+      provider.gate!.complete(
+        VehicleEtaSnapshot(etas: [eta('1:A', 60)], fetchedAt: etaT0),
+      );
+      await load;
+      expect(
+        cubit.state.status,
+        VehicleEtaStatus.idle,
+        reason: 'a stale answer must not resurrect cleared badges',
+      );
+      expect(cubit.state.hasRequest, isFalse);
+    });
+  });
+
+  group('buildVehicleEtaRequest', () {
+    test('falls back to route.id and skips legs without any id', () {
+      final plan = routing.Plan(
+        itineraries: [
+          itinerary([busLeg('X', gtfsId: null, id: 'x-id')]),
+          itinerary([busLeg('Y', gtfsId: null, id: '')]),
+          itinerary([busLeg('Z', gtfsId: null, stopId: null)]),
+        ],
+      );
+      final request = buildVehicleEtaRequest(plan, etaOrigin);
+      expect(request?.routeIds, {'x-id'});
+      expect(request?.stopIds, {'sX'});
+    });
+
+    test('omits the stop hint when no boarding stop carries an id', () {
+      final plan = routing.Plan(
+        itineraries: [
+          itinerary([busLeg('A', stopId: null)]),
+        ],
+      );
+      expect(buildVehicleEtaRequest(plan, etaOrigin)?.stopIds, isNull);
+    });
+
+    test('returns null for an empty plan', () {
+      expect(buildVehicleEtaRequest(const routing.Plan(), etaOrigin), isNull);
+    });
+  });
+
+  group('VehicleEtaState', () {
+    test('cooldownRemaining and canRefreshAt', () {
+      final state = VehicleEtaState(
+        status: VehicleEtaStatus.ready,
+        nextAllowedAt: etaT0.add(const Duration(seconds: 12)),
+        hasRequest: true,
+      );
+      expect(state.cooldownRemaining(etaT0), const Duration(seconds: 12));
+      expect(
+        state.cooldownRemaining(etaT0.add(const Duration(seconds: 20))),
+        Duration.zero,
+      );
+      expect(state.canRefreshAt(etaT0), isFalse);
+      expect(
+        state.canRefreshAt(etaT0.add(const Duration(seconds: 12))),
+        isTrue,
+      );
+      expect(
+        state
+            .copyWith(status: VehicleEtaStatus.loading)
+            .canRefreshAt(etaT0.add(const Duration(seconds: 12))),
+        isFalse,
+      );
+      expect(const VehicleEtaState().canRefreshAt(etaT0), isFalse);
+    });
+  });
+}

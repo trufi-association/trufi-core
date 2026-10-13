@@ -141,5 +141,11 @@
   "saveRouteName": "Routenname",
   "buttonSave": "Speichern",
   "routeSaved": "Route als \"{routeName}\" gespeichert",
-  "routeAlreadySaved": "Diese Route ist bereits als \"{routeName}\" gespeichert"
+  "routeAlreadySaved": "Diese Route ist bereits als \"{routeName}\" gespeichert",
+  "etaArrivesIn": "Kommt in ~{minutes} Min.",
+  "etaUnavailable": "Live-Ankunft nicht verfügbar",
+  "etaLoading": "Live-Ankunft wird geprüft…",
+  "etaRefresh": "Aktualisieren",
+  "etaRefreshCooldown": "Aktualisierung in {seconds} s möglich",
+  "etaUpdated": "Aktualisiert {time}"
 }

@@ -682,5 +682,47 @@
         "example": "Home → Work"
       }
     }
+  },
+  "etaArrivesIn": "Arrives in ~{minutes} min",
+  "@etaArrivesIn": {
+    "description": "Badge on an itinerary card: minutes until the next vehicle of its first bus reaches the origin",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "4"
+      }
+    }
+  },
+  "etaUnavailable": "Live ETA unavailable",
+  "@etaUnavailable": {
+    "description": "Badge fallback when the telemetry source has no vehicle for the route"
+  },
+  "etaLoading": "Checking live ETA…",
+  "@etaLoading": {
+    "description": "Badge while the ETA request is in flight"
+  },
+  "etaRefresh": "Refresh",
+  "@etaRefresh": {
+    "description": "Tooltip/label of the manual ETA refresh button"
+  },
+  "etaRefreshCooldown": "Refresh available in {seconds} s",
+  "@etaRefreshCooldown": {
+    "description": "Tooltip of the refresh button while the throttle cooldown runs",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  "etaUpdated": "Updated {time}",
+  "@etaUpdated": {
+    "description": "Tooltip on the ETA badge with the time of the last successful update",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "10:32"
+      }
+    }
   }
 }

@@ -31,6 +31,17 @@ const _query = '''
 }
 ''';
 
+/// Thrown by [OtpVehiclePositionsProvider.fetchOnce] when OTP answers with
+/// GraphQL errors or no data. Network failures propagate untouched.
+class OtpVehiclePositionsException implements Exception {
+  const OtpVehiclePositionsException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => 'OtpVehiclePositionsException: $message';
+}
+
 /// OTP-backed implementation of [RealtimeVehiclesProvider]. Polls the OTP
 /// GraphQL endpoint periodically for GTFS-Realtime vehicle positions.
 ///
@@ -87,53 +98,70 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
     await _controller.close();
   }
 
-  Future<void> _tick() async {
-    final client = _client;
-    if (client == null) return;
-    try {
-      final result = await client.query(
-        WatchQueryOptions(
-          document: parseString(_query),
-          fetchResults: true,
-          fetchPolicy: FetchPolicy.networkOnly,
-        ),
+  /// Runs ONE vehicle-positions query without touching the polling timer:
+  /// creates the GraphQL client lazily, updates [latest], emits on
+  /// [positionsStream] and returns the parsed fleet. Lets on-demand
+  /// consumers (the ETA badges of #1004) take a fresh snapshot while the
+  /// "Live buses" layer is off, with no background polling.
+  ///
+  /// Throws [OtpVehiclePositionsException] on GraphQL errors or null data;
+  /// network errors propagate untouched. The polling path ([start]) keeps
+  /// its swallow-and-log behaviour through [_tick].
+  Future<List<VehiclePosition>> fetchOnce() async {
+    final client = _client ??= GraphQLClientFactory.create(
+      _graphqlEndpoint,
+      timeout: requestTimeout,
+    );
+    final result = await client.query(
+      WatchQueryOptions(
+        document: parseString(_query),
+        fetchResults: true,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      throw OtpVehiclePositionsException(
+        'query exception: ${result.exception}',
       );
+    }
+    if (result.data == null) {
+      throw const OtpVehiclePositionsException('query returned null data');
+    }
 
-      if (result.hasException) {
-        debugPrint('[RealtimeVehicles] query exception: ${result.exception}');
-        return;
-      }
-      if (result.data == null) {
-        debugPrint('[RealtimeVehicles] query returned null data');
-        return;
-      }
+    final routes = result.data!['routes'] as List<dynamic>? ?? const [];
+    final positions = <VehiclePosition>[];
 
-      final routes = result.data!['routes'] as List<dynamic>? ?? const [];
-      final positions = <VehiclePosition>[];
-
-      for (final route in routes) {
-        final routeMap = route as Map<String, dynamic>;
-        final routeId = routeMap['gtfsId'] as String?;
-        final routeColor = routeMap['color'] as String?;
-        final patterns = routeMap['patterns'] as List<dynamic>? ?? const [];
-        for (final pattern in patterns) {
-          final patternMap = pattern as Map<String, dynamic>;
-          final vehicles =
-              patternMap['vehiclePositions'] as List<dynamic>? ?? const [];
-          for (final v in vehicles) {
-            final position = _parseVehicle(
-              v as Map<String, dynamic>,
-              routeId,
-              routeColor,
-            );
-            if (position != null) positions.add(position);
-          }
+    for (final route in routes) {
+      final routeMap = route as Map<String, dynamic>;
+      final routeId = routeMap['gtfsId'] as String?;
+      final routeColor = routeMap['color'] as String?;
+      final patterns = routeMap['patterns'] as List<dynamic>? ?? const [];
+      for (final pattern in patterns) {
+        final patternMap = pattern as Map<String, dynamic>;
+        final vehicles =
+            patternMap['vehiclePositions'] as List<dynamic>? ?? const [];
+        for (final v in vehicles) {
+          final position = _parseVehicle(
+            v as Map<String, dynamic>,
+            routeId,
+            routeColor,
+          );
+          if (position != null) positions.add(position);
         }
       }
+    }
 
-      _latest = positions;
-      _controller.add(positions);
-      debugPrint('[RealtimeVehicles] tick: ${positions.length} vehicles');
+    _latest = positions;
+    if (!_controller.isClosed) _controller.add(positions);
+    debugPrint('[RealtimeVehicles] tick: ${positions.length} vehicles');
+    return positions;
+  }
+
+  Future<void> _tick() async {
+    if (_client == null) return;
+    try {
+      await fetchOnce();
     } catch (e, st) {
       debugPrint('[RealtimeVehicles] tick error: $e\n$st');
     }
