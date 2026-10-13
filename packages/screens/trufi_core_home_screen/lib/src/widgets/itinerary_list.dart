@@ -9,6 +9,7 @@ import '../models/route_planner_state.dart';
 import '../../l10n/home_screen_localizations.dart';
 import 'itinerary_card.dart';
 import 'itinerary_detail_screen.dart';
+import 'save_route_button.dart';
 
 /// List of itinerary options with inline detail view.
 /// When an itinerary is tapped, shows details inline replacing the list.
@@ -174,11 +175,24 @@ class _ItineraryListState extends State<ItineraryList> {
     final group = cubit.state.plan?.groupedItineraries
         ?.where((g) => g.alternatives.contains(itinerary))
         .firstOrNull;
+    // Bookmark for the detailed trip (#1005); the button hides itself when
+    // the app has no saved routes screen.
+    final from = cubit.state.fromPlace;
+    final to = cubit.state.toPlace;
 
     return ItineraryDetailContent(
       itinerary: itinerary,
       shrinkWrap: widget.shrinkWrap,
       onBack: _hideDetails,
+      headerAction: from != null && to != null
+          ? SaveRouteButton(
+              from: from,
+              to: to,
+              itinerary: itinerary,
+              dense: true,
+              endSpacing: 4,
+            )
+          : null,
       onRouteTap: widget.onRouteTap,
       alternatives: group?.alternatives,
       onSelectAlternative: (alternative) {

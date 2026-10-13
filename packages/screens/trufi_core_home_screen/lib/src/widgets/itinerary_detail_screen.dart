@@ -41,6 +41,11 @@ class ItineraryDetailContent extends StatelessWidget {
   /// Called when the rider picks another option in the switcher.
   final void Function(routing.Itinerary alternative)? onSelectAlternative;
 
+  /// Extra action rendered in the header's first row, right before the Go
+  /// button (the home screen puts its save-route bookmark here, #1005). The
+  /// detail does not know what it does; null renders nothing.
+  final Widget? headerAction;
+
   const ItineraryDetailContent({
     super.key,
     required this.itinerary,
@@ -50,6 +55,7 @@ class ItineraryDetailContent extends StatelessWidget {
     this.shrinkWrap = false,
     this.alternatives,
     this.onSelectAlternative,
+    this.headerAction,
   });
 
   @override
@@ -436,6 +442,7 @@ class ItineraryDetailContent extends StatelessWidget {
                 )
               else
                 const Spacer(),
+              ?headerAction,
               // Go button
               if (onStartNavigation != null)
                 FilledButton.icon(

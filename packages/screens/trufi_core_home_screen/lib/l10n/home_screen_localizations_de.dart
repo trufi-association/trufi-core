@@ -477,4 +477,23 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get copiedToClipboard => 'Kopiert';
+
+  @override
+  String get saveRoute => 'Route speichern';
+
+  @override
+  String get saveRouteName => 'Routenname';
+
+  @override
+  String get buttonSave => 'Speichern';
+
+  @override
+  String routeSaved(String routeName) {
+    return 'Route als \"$routeName\" gespeichert';
+  }
+
+  @override
+  String routeAlreadySaved(String routeName) {
+    return 'Diese Route ist bereits als \"$routeName\" gespeichert';
+  }
 }

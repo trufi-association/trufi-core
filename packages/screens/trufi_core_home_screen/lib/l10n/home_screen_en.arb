@@ -650,5 +650,37 @@
   "copiedToClipboard": "Copied",
   "@copiedToClipboard": {
     "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"
+  },
+  "saveRoute": "Save route",
+  "@saveRoute": {
+    "description": "Tooltip of the bookmark button on route results and title of the dialog naming the route to save (#1005)"
+  },
+  "saveRouteName": "Route name",
+  "@saveRouteName": {
+    "description": "Label of the name field in the save route dialog"
+  },
+  "buttonSave": "Save",
+  "@buttonSave": {
+    "description": "Save button label"
+  },
+  "routeSaved": "Route saved as \"{routeName}\"",
+  "@routeSaved": {
+    "description": "Snackbar after the current trip was bookmarked as a saved route",
+    "placeholders": {
+      "routeName": {
+        "type": "String",
+        "example": "Home → Work"
+      }
+    }
+  },
+  "routeAlreadySaved": "This route is already saved as \"{routeName}\"",
+  "@routeAlreadySaved": {
+    "description": "Snackbar when the current origin and destination are already bookmarked as a saved route",
+    "placeholders": {
+      "routeName": {
+        "type": "String",
+        "example": "Home → Work"
+      }
+    }
   }
 }

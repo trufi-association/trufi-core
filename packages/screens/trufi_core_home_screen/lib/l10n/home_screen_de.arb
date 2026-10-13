@@ -136,5 +136,10 @@
   "placeDestination": "Ziel",
   "providerNoOptions": "Der Anbieter \"{provider}\" hat keine konfigurierbaren Optionen.",
   "resolvingLocation": "Ortsname wird gesucht…",
-  "copiedToClipboard": "Kopiert"
+  "copiedToClipboard": "Kopiert",
+  "saveRoute": "Route speichern",
+  "saveRouteName": "Routenname",
+  "buttonSave": "Speichern",
+  "routeSaved": "Route als \"{routeName}\" gespeichert",
+  "routeAlreadySaved": "Diese Route ist bereits als \"{routeName}\" gespeichert"
 }
