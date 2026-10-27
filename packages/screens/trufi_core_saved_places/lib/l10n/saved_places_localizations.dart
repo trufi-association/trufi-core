@@ -343,6 +343,12 @@ abstract class SavedPlacesLocalizations {
   /// **'Plan a trip and tap the bookmark to keep it here'**
   String get noRoutesSavedHint;
 
+  /// Section label above the cards of the saved routes screen (not the screen title, which is menuSavedRoutes)
+  ///
+  /// In en, this message translates to:
+  /// **'Saved routes'**
+  String get savedRoutesSection;
+
   /// Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)
   ///
   /// In en, this message translates to:

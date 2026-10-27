@@ -40,6 +40,7 @@
   "menuSavedRoutes": "Tus Rutas",
   "noRoutesSaved": "Aún no hay rutas guardadas",
   "noRoutesSavedHint": "Planifica un viaje y toca el marcador para guardarlo aquí",
+  "savedRoutesSection": "Rutas guardadas",
   "routeOrigin": "Origen: {name}",
   "routeDestination": "Destino: {name}",
   "distanceMeters": "{meters} m",

@@ -134,6 +134,9 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
       'Planen Sie eine Fahrt und tippen Sie auf das Lesezeichen, um sie hier zu speichern';
 
   @override
+  String get savedRoutesSection => 'Gespeicherte Routen';
+
+  @override
   String routeOrigin(String name) {
     return 'Start: $name';
   }

@@ -134,6 +134,9 @@ class SavedPlacesLocalizationsEn extends SavedPlacesLocalizations {
       'Plan a trip and tap the bookmark to keep it here';
 
   @override
+  String get savedRoutesSection => 'Saved routes';
+
+  @override
   String routeOrigin(String name) {
     return 'Origin: $name';
   }

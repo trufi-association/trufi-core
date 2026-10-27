@@ -106,6 +106,7 @@ void main() {
 
     expect(find.text('Your Routes'), findsOneWidget);
     expect(find.text('No routes saved yet'), findsOneWidget);
+    expect(find.text('Saved routes'), findsNothing);
     expect(find.byType(SavedRouteCard), findsNothing);
   });
 
@@ -115,6 +116,7 @@ void main() {
     await cubit.saveRoute(_casaATrabajo());
     await pumpScreen(tester);
 
+    expect(find.text('Saved routes'), findsOneWidget, reason: 'section');
     expect(find.text('Casa a Trabajo'), findsOneWidget);
     expect(find.text('Casa'), findsOneWidget);
     expect(find.text('Trabajo'), findsOneWidget);

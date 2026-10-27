@@ -40,6 +40,7 @@
   "menuSavedRoutes": "Ihre Routen",
   "noRoutesSaved": "Noch keine Routen gespeichert",
   "noRoutesSavedHint": "Planen Sie eine Fahrt und tippen Sie auf das Lesezeichen, um sie hier zu speichern",
+  "savedRoutesSection": "Gespeicherte Routen",
   "routeOrigin": "Start: {name}",
   "routeDestination": "Ziel: {name}",
   "distanceMeters": "{meters} m",

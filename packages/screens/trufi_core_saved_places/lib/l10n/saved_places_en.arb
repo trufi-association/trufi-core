@@ -72,6 +72,10 @@
   "@noRoutesSavedHint": {
     "description": "Empty state hint of the saved routes screen, shown below noRoutesSaved"
   },
+  "savedRoutesSection": "Saved routes",
+  "@savedRoutesSection": {
+    "description": "Section label above the cards of the saved routes screen (not the screen title, which is menuSavedRoutes)"
+  },
   "routeOrigin": "Origin: {name}",
   "@routeOrigin": {
     "description": "Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)",
