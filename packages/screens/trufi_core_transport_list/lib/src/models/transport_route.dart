@@ -85,13 +85,46 @@ class TransportRoute {
     return longName!;
   }
 
-  String get longNameStart => _longNameWithoutPrefix.split(" → ").first;
+  /// The origin half of a `route_long_name` written as `from <arrow> to`.
+  ///
+  /// Feeds write the arrow in several ways: "→" (trufi-gtfs-builder), "⟵"
+  /// (Sana'a, whose names are Arabic and read right to left), "←", "->",
+  /// "<-", "⟶" or a spaced dash. A left-pointing arrow in a left-to-right
+  /// name ("B ← A") means the trip goes from A to B, so the halves are
+  /// swapped; in a right-to-left name the same arrow points from the first
+  /// written half to the second, which is the plain reading order.
+  String get longNameStart => _longNameHalves?.$1 ?? _longNameWithoutPrefix;
 
-  String get longNameLast => _longNameWithoutPrefix.split(" → ").last;
+  String get longNameLast => _longNameHalves?.$2 ?? _longNameWithoutPrefix;
 
   String get longNameFull => longName ?? '';
 
-  bool get hasOriginDestination => _longNameWithoutPrefix.contains(" → ");
+  bool get hasOriginDestination => _longNameHalves != null;
+
+  /// `(from, to)` when the name carries exactly one arrow with text on both
+  /// sides; null otherwise (a bare name, several arrows, an empty half).
+  (String, String)? get _longNameHalves {
+    final name = _longNameWithoutPrefix;
+    final matches = _longNameArrow.allMatches(name).toList();
+    if (matches.length != 1) return null;
+    final m = matches.single;
+    final first = name.substring(0, m.start).trim();
+    final last = name.substring(m.end).trim();
+    if (first.isEmpty || last.isEmpty) return null;
+    final arrow = m.group(1)!;
+    final pointsLeft = _leftArrows.contains(arrow);
+    final rtl = _rtlScript.hasMatch(name);
+    // A left arrow in LTR text is "to ← from"; in RTL text the first written
+    // half sits on the right and the arrow points to the second, so the
+    // written order already is "from, to".
+    return pointsLeft && !rtl ? (last, first) : (first, last);
+  }
+
+  static final RegExp _longNameArrow = RegExp(r'\s+(→|⟶|⟵|←|->|<-|–|—|-)\s+');
+  static const Set<String> _leftArrows = {'⟵', '←', '<-'};
+  static final RegExp _rtlScript = RegExp(
+    r'[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]',
+  );
 }
 
 /// Represents a stop on a transport route
