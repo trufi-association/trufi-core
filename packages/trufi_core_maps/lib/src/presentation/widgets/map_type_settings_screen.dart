@@ -142,57 +142,62 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                 children: [
-                  // Map type section header
-                  _buildAnimatedItem(
-                    index: 1,
-                    child: _MapTypeHeroSection(
-                      title:
-                          widget.sectionTitle ??
-                          MapsLocalizations.of(context).mapType,
-                    ),
-                  ),
-
-                  // Online/Offline toggle (only if both types exist)
-                  if (showToggle)
+                  // Map type section: only when there is a style to choose.
+                  // With a single engine the sheet is the home of the layer
+                  // toggles alone (#1021).
+                  if (widget.mapOptions.length > 1) ...[
                     _buildAnimatedItem(
-                      index: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: MapOnlineOfflineToggle(
-                          showOnline: _showOnline,
-                          onToggle: (value) {
-                            setState(() {
-                              _showOnline = value;
-                            });
-                          },
-                          compact: false,
-                        ),
+                      index: 1,
+                      child: _MapTypeHeroSection(
+                        title:
+                            widget.sectionTitle ??
+                            MapsLocalizations.of(context).mapType,
                       ),
                     ),
 
-                  // Map type options (filtered)
-                  ...List.generate(filteredMaps.length, (filteredIndex) {
-                    final entry = filteredMaps[filteredIndex];
-                    final originalIndex = entry.key;
-                    final option = entry.value;
-                    final isSelected = selectedMapIndex == originalIndex;
-
-                    return _buildAnimatedItem(
-                      index: filteredIndex + (showToggle ? 3 : 2),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                        child: _ModernMapTypeCard(
-                          option: option,
-                          isSelected: isSelected,
-                          onTap: () => _onMapTypeSelected(originalIndex),
+                    // Online/Offline toggle (only if both types exist)
+                    if (showToggle)
+                      _buildAnimatedItem(
+                        index: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                          child: MapOnlineOfflineToggle(
+                            showOnline: _showOnline,
+                            onToggle: (value) {
+                              setState(() {
+                                _showOnline = value;
+                              });
+                            },
+                            compact: false,
+                          ),
                         ),
                       ),
-                    );
-                  }),
+
+                    // Map type options (filtered)
+                    ...List.generate(filteredMaps.length, (filteredIndex) {
+                      final entry = filteredMaps[filteredIndex];
+                      final originalIndex = entry.key;
+                      final option = entry.value;
+                      final isSelected = selectedMapIndex == originalIndex;
+
+                      return _buildAnimatedItem(
+                        index: filteredIndex + (showToggle ? 3 : 2),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                          child: _ModernMapTypeCard(
+                            option: option,
+                            isSelected: isSelected,
+                            onTap: () => _onMapTypeSelected(originalIndex),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
 
                   // Additional settings section (e.g., POI layers)
                   if (widget.additionalSettings != null) ...[
-                    const SizedBox(height: 16),
+                    if (widget.mapOptions.length > 1)
+                      const SizedBox(height: 16),
                     widget.additionalSettings!,
                   ],
                 ],

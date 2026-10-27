@@ -1829,6 +1829,7 @@ class _HomeScreenState extends State<HomeScreen>
     double sidePanelOffset = 0,
     bool isWideScreen = false,
   }) {
+    final mapLayerExtras = _buildMapLayerExtras();
     return Positioned(
       right: 16 + sidePanelOffset,
       top: 0,
@@ -1840,15 +1841,20 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Map type button (with optional POI layers if available)
-              if (mapEngineManager.engines.length > 1) ...[
+              // Map type button: shown when there is a map style to choose
+              // OR a layer to toggle (POIs, live buses, app extras). An app
+              // with a single map engine but POI layers used to lose the
+              // toggles with the button (#1021); the sheet skips the style
+              // list when there is only one.
+              if (mapEngineManager.engines.length > 1 ||
+                  mapLayerExtras != null) ...[
                 MapTypeButton.fromEngines(
                   engines: mapEngineManager.engines,
                   currentEngineIndex: mapEngineManager.currentIndex,
                   onEngineChanged: (engine) {
                     mapEngineManager.setEngine(engine);
                   },
-                  additionalSettings: _buildMapLayerExtras(),
+                  additionalSettings: mapLayerExtras,
                 ),
                 const SizedBox(height: 8),
               ],
