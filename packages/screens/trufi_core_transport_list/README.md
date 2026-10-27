@@ -74,7 +74,9 @@ NearbyLinesTrufiScreen(showStops: false),
 The detail then shows the line on the map with its two end pins (taken from
 the shape itself), the route identity, operating hours, distance and mode.
 On phones the draggable stops sheet becomes a fixed summary card, so the map
-keeps the whole screen; the wide side panel just drops its stops section.
+keeps the whole screen, and the camera fit reserves the card's measured
+height at the bottom instead of the sheet's 30 %; the wide side panel just
+drops its stops section.
 The origin/destination labels come from a `route_long_name` of the form
 `A → B` and never from the first/last stop. `TransportDetailScreen` takes
 the same `showStops` when embedded directly.

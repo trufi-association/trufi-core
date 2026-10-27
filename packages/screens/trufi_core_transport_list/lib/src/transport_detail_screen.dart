@@ -139,6 +139,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   StopSelectionCallback? _stopSelectionCallback;
   int? _selectedStopIndex;
   double? _headerMinSize; // Computed from measured header height
+  // What the fixed summary card covers of the map, from its bottom edge
+  // (card, margins and safe-area inset), measured after layout; the camera
+  // fit reserves exactly that instead of the sheet's 30 %.
+  double? _summaryCardInset;
 
   @override
   void initState() {
@@ -170,10 +174,13 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   }
 
   /// Builds the map widget using MapEngineManager from context.
-  Widget _buildMap(BuildContext context) {
+  /// [bottomInset] is what covers the bottom of the map (see
+  /// [_RouteMapView.bottomInset]); null stands for the stops sheet.
+  Widget _buildMap(BuildContext context, {double? bottomInset}) {
     return _RouteMapView(
       route: _route,
       showStops: widget.showStops,
+      bottomInset: bottomInset,
       registerMapMoveCallback: (callback) => _mapMoveCallback = callback,
       registerStopSelectionCallback: (callback) =>
           _stopSelectionCallback = callback,
@@ -574,7 +581,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         Positioned.fill(
           child: FadeTransition(
             opacity: _fadeController,
-            child: _buildMap(context),
+            child: _buildMap(
+              context,
+              bottomInset: widget.showStops ? null : _summaryCardInset,
+            ),
           ),
         ),
 
@@ -624,7 +634,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
             },
           )
         else
-          _buildSummaryCard(context, colorScheme),
+          _buildSummaryCard(),
       ],
     );
   }
@@ -632,27 +642,20 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   /// What replaces the stops sheet when [TransportDetailScreen.showStops]
   /// is false: the same summary (terminals, hours, distance, mode) on a
   /// card with nothing to drag — no grabber, no snap points — so the map
-  /// keeps the whole screen for panning and zooming.
-  Widget _buildSummaryCard(BuildContext context, ColorScheme colorScheme) {
+  /// keeps the whole screen for panning and zooming. The card reports its
+  /// height so the camera fit reserves that much and no more.
+  Widget _buildSummaryCard() {
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Material(
-            color: colorScheme.surface.withValues(alpha: 0.95),
-            borderRadius: BorderRadius.circular(16),
-            elevation: 2,
-            shadowColor: Colors.black26,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: _RouteSummary(route: _route!, showStops: false),
-            ),
-          ),
-        ),
+      child: _SummaryCard(
+        route: _route!,
+        onMeasured: (height) {
+          if (_summaryCardInset != height) {
+            setState(() => _summaryCardInset = height);
+          }
+        },
       ),
     );
   }
@@ -903,6 +906,71 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
             }, childCount: stops.length),
           ),
       ],
+    );
+  }
+}
+
+/// The fixed summary card of the phone layout without stops: the
+/// [_RouteSummary] on a floating card (surface 0.95, radius 16, elevation
+/// 2 — the style of the top bar) above the bottom safe area.
+///
+/// After every layout that changes it, [onMeasured] gets the height of the
+/// whole block — card, margins and safe-area inset, i.e. what it covers of
+/// the map from the bottom edge — the way the stops sheet reports its
+/// header, so the camera fit can reserve exactly that.
+class _SummaryCard extends StatefulWidget {
+  final TransportRouteDetails route;
+  final ValueChanged<double>? onMeasured;
+
+  const _SummaryCard({required this.route, this.onMeasured});
+
+  @override
+  State<_SummaryCard> createState() => _SummaryCardState();
+}
+
+class _SummaryCardState extends State<_SummaryCard> {
+  final _key = GlobalKey();
+  double? _height;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
+  }
+
+  @override
+  void didUpdateWidget(covariant _SummaryCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
+  }
+
+  void _measure() {
+    if (!mounted) return;
+    final box = _key.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize || box.size.height == _height) return;
+    _height = box.size.height;
+    widget.onMeasured?.call(_height!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SafeArea(
+      key: _key,
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Material(
+          color: colorScheme.surface.withValues(alpha: 0.95),
+          borderRadius: BorderRadius.circular(16),
+          elevation: 2,
+          shadowColor: Colors.black26,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: _RouteSummary(route: widget.route, showStops: false),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -1716,12 +1784,19 @@ class _RouteMapView extends StatefulWidget {
   /// [TransportDetailScreen.showStops]: false draws the shape with its two
   /// end pins and no stop dots.
   final bool showStops;
+
+  /// How much of the map, from its bottom edge, an overlay covers: the
+  /// camera fit and the out-of-focus check leave that strip free. Null
+  /// stands for the stops sheet, which takes 30 % of the map's height (it
+  /// opens at 35 %); the summary card passes its measured height.
+  final double? bottomInset;
   final void Function(MapMoveCallback) registerMapMoveCallback;
   final void Function(StopSelectionCallback) registerStopSelectionCallback;
 
   const _RouteMapView({
     required this.route,
     required this.showStops,
+    this.bottomInset,
     required this.registerMapMoveCallback,
     required this.registerStopSelectionCallback,
   });
@@ -1789,6 +1864,14 @@ class _RouteMapViewState extends State<_RouteMapView> {
     super.didUpdateWidget(oldWidget);
     if (widget.route != oldWidget.route) {
       _updateRoute();
+    }
+    if (widget.bottomInset != oldWidget.bottomInset) {
+      // The overlay changed size (the summary card was just measured, or
+      // re-measured after a relayout). The viewport padding is refreshed
+      // during this frame's layout, so re-fit once it is in.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _reFitCamera();
+      });
     }
   }
 
@@ -1981,10 +2064,12 @@ class _RouteMapViewState extends State<_RouteMapView> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final viewPadding = MediaQuery.of(context).viewPadding;
-        final sheetHeight = constraints.maxHeight * 0.30;
+        final bottomInset =
+            widget.bottomInset ??
+            viewPadding.bottom + constraints.maxHeight * 0.30;
         final adjustedPadding = EdgeInsets.only(
           top: viewPadding.top + 70,
-          bottom: viewPadding.bottom + sheetHeight,
+          bottom: bottomInset,
           left: viewPadding.left,
           right: viewPadding.right,
         );

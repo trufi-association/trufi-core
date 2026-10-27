@@ -17,6 +17,7 @@ import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 /// it is handed, both ways.
 class _FakeEngine extends ITrufiMapEngine {
   List<TrufiLayer> lastLayers = const [];
+  TrufiCameraPosition? lastCamera;
 
   @override
   String get id => 'fake';
@@ -37,6 +38,7 @@ class _FakeEngine extends ITrufiMapEngine {
     List<WidgetMarker> widgetMarkers = const [],
   }) {
     lastLayers = layers;
+    lastCamera = camera;
     return const SizedBox.expand();
   }
 }
@@ -82,24 +84,37 @@ const _geometry = [
   (latitude: -17.401, longitude: -66.161),
 ];
 
-TransportRouteDetails _details({String? longName}) => TransportRouteDetails(
+/// A north–south line, taller than wide on the phone surface, so the fit's
+/// zoom (not only its target) depends on how much bottom strip is reserved.
+const _tallGeometry = [
+  (latitude: -17.38, longitude: -66.15),
+  (latitude: -17.40, longitude: -66.151),
+  (latitude: -17.42, longitude: -66.15),
+];
+
+TransportRouteDetails _details({
+  String? longName,
+  List<({double latitude, double longitude})> geometry = _geometry,
+}) => TransportRouteDetails(
   id: 'r1',
   code: 'A1',
   name: 'Linea A',
   shortName: 'A',
   longName: longName,
   stops: _stops,
-  geometry: _geometry,
+  geometry: geometry,
   modeName: 'Bus',
 );
 
 const _phone = Size(400, 800);
+const _defaultCenter = LatLng(-17.39, -66.15);
 
 Future<_FakeEngine> _pumpDetail(
   WidgetTester tester, {
   required bool showStops,
   String? longName = 'Terminal Norte → Plaza Principal',
   Size? size,
+  List<({double latitude, double longitude})> geometry = _geometry,
 }) async {
   if (size != null) {
     tester.view.physicalSize = size;
@@ -110,7 +125,7 @@ Future<_FakeEngine> _pumpDetail(
   final engine = _FakeEngine();
   final manager = MapEngineManager(
     engines: [engine],
-    defaultCenter: const LatLng(-17.39, -66.15),
+    defaultCenter: _defaultCenter,
   );
   await tester.pumpWidget(
     ChangeNotifierProvider<MapEngineManager>.value(
@@ -121,7 +136,8 @@ Future<_FakeEngine> _pumpDetail(
         supportedLocales: TransportListLocalizations.supportedLocales,
         home: TransportDetailScreen(
           routeCode: 'A1',
-          getRouteDetails: (_) async => _details(longName: longName),
+          getRouteDetails: (_) async =>
+              _details(longName: longName, geometry: geometry),
           showStops: showStops,
         ),
       ),
@@ -139,6 +155,33 @@ TrufiMarker _marker(_FakeEngine engine, String id) =>
 
 Iterable<String> _stopDotIds(_FakeEngine engine) =>
     _markers(engine).map((m) => m.id).where((id) => id.startsWith('stop-'));
+
+/// The camera the detail should end on for [_tallGeometry] on the phone
+/// surface when [bottomInset] logical pixels are kept free at the bottom
+/// (70 at the top for the floating top bar), computed as the screen does.
+TrufiCameraPosition _fitFor(double bottomInset) {
+  final fit = FitCameraUtil()
+    ..updateViewport(_phone, EdgeInsets.only(top: 70, bottom: bottomInset));
+  return fit.cameraForPoints([
+    for (final p in _tallGeometry) LatLng(p.latitude, p.longitude),
+  ], TrufiCameraPosition(target: _defaultCenter, zoom: 12))!;
+}
+
+void _expectCamera(TrufiCameraPosition? actual, TrufiCameraPosition expected) {
+  expect(actual, isNotNull);
+  expect(actual!.zoom, closeTo(expected.zoom, 1e-6));
+  expect(actual.target.latitude, closeTo(expected.target.latitude, 1e-6));
+  expect(actual.target.longitude, closeTo(expected.target.longitude, 1e-6));
+}
+
+/// The summary card's Material (radius 16, elevation 2); the re-fit button
+/// and the top bar use radius 12.
+final _summaryCard = find.byWidgetPredicate(
+  (w) =>
+      w is Material &&
+      w.elevation == 2 &&
+      w.borderRadius == BorderRadius.circular(16),
+);
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
@@ -255,6 +298,43 @@ void main() {
       expect(
         _marker(engine, 'origin-marker').position,
         const LatLng(-17.389, -66.149),
+      );
+    });
+  });
+
+  group('camera fit on the phone', () {
+    testWidgets('default: the lower 30 % of the map is kept for the sheet', (
+      tester,
+    ) async {
+      final engine = await _pumpDetail(
+        tester,
+        showStops: true,
+        size: _phone,
+        geometry: _tallGeometry,
+      );
+
+      _expectCamera(engine.lastCamera, _fitFor(_phone.height * 0.30));
+    });
+
+    testWidgets('showStops: false: exactly the summary card (margins '
+        'included) is kept, not the sheet\'s 30 %', (tester) async {
+      final engine = await _pumpDetail(
+        tester,
+        showStops: false,
+        size: _phone,
+        geometry: _tallGeometry,
+      );
+
+      // The card sits 12 px above the bottom edge with a 12 px top margin.
+      final card = tester.getRect(_summaryCard);
+      final cardInset = _phone.height - card.top + 12;
+      expect(cardInset, lessThan(_phone.height * 0.30));
+
+      _expectCamera(engine.lastCamera, _fitFor(cardInset));
+      // And the two fits are told apart: the card frees more height.
+      expect(
+        engine.lastCamera!.zoom,
+        greaterThan(_fitFor(_phone.height * 0.30).zoom + 0.05),
       );
     });
   });
