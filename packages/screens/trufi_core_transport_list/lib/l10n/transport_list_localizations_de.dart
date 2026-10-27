@@ -148,4 +148,97 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
 
   @override
   String get copiedToClipboard => 'Kopiert';
+
+  @override
+  String get menuNearbyLines => 'Linien in der Nähe';
+
+  @override
+  String get nearbyAnchorYourLocation => 'Dein Standort';
+
+  @override
+  String get nearbyAnchorPinned => 'Markierter Ort';
+
+  @override
+  String get nearbyAnchorDefault => 'Stadtzentrum (Standort nicht verfügbar)';
+
+  @override
+  String get nearbyUseMyLocation => 'Meinen Standort verwenden';
+
+  @override
+  String get nearbyMovePinHint =>
+      'Halte die Karte gedrückt, um den Pin zu verschieben';
+
+  @override
+  String nearbyRadiusChip(int meters, int count) {
+    return '$meters m ($count)';
+  }
+
+  @override
+  String nearbyLinesInRadius(int count, int meters) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Linien',
+      one: '1 Linie',
+    );
+    return '$_temp0 im Umkreis von $meters m';
+  }
+
+  @override
+  String nearbyAtDistance(String distance) {
+    return 'In $distance';
+  }
+
+  @override
+  String nearbyPassesAtDistance(String distance) {
+    return 'Fährt in $distance vorbei';
+  }
+
+  @override
+  String nearbyStopName(String name) {
+    return 'Haltestelle $name';
+  }
+
+  @override
+  String nearbyTowards(String headsign) {
+    return 'Richtung $headsign';
+  }
+
+  @override
+  String nearbySelectedLine(String name) {
+    return 'Hervorgehoben: $name';
+  }
+
+  @override
+  String nearbyEmptyTitle(int meters) {
+    return 'Keine Linien im Umkreis von $meters m';
+  }
+
+  @override
+  String nearbyEmptyInRadius(int meters) {
+    return 'Keine Linien im Umkreis von $meters m. Versuche einen größeren Radius.';
+  }
+
+  @override
+  String get nearbyUnavailableTitle =>
+      'Linien in der Nähe benötigen den Offline-GTFS-Planer';
+
+  @override
+  String get nearbyUnavailableHint =>
+      'Füge den Routing-Engines einen lokalen TrufiPlannerProvider mit gebündeltem GTFS hinzu.';
+
+  @override
+  String get nearbyLoadingData => 'Offline-Daten werden geladen…';
+
+  @override
+  String get nearbyFooterNote => 'Basierend auf GTFS-Linien und -Fahrplänen';
+
+  @override
+  String get nearbyOpenDetails => 'Liniendetails';
+
+  @override
+  String get nearbyClearSelection => 'Hervorhebung entfernen';
+
+  @override
+  String get nearbyClose => 'Schließen';
 }

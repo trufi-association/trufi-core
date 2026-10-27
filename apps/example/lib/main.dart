@@ -338,6 +338,9 @@ void main() {
         SavedPlacesTrufiScreen(),
         SavedRoutesTrufiScreen(),
         TransportListTrufiScreen(),
+        // Offline nearby lines (#1006): needs the local TrufiPlannerProvider
+        // above; on web (remote planner only) it shows the unavailable state.
+        NearbyLinesTrufiScreen(),
         FaresTrufiScreen(
           config: FaresConfig(
             currency: 'Bs.',

@@ -13,6 +13,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
+import 'widgets/transport_list_states.dart';
 
 /// Returns a darkened version of [color] if it's too light for use as
 /// foreground (icons, dots) on white/light backgrounds.
@@ -352,7 +353,11 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     if (_isLoading) {
       return Stack(
         children: [
-          Positioned.fill(child: _LoadingState()),
+          Positioned.fill(
+            child: TransportLoadingState(
+              message: TransportListLocalizations.of(context).loadingRoute,
+            ),
+          ),
           _buildBackButton(context, colorScheme),
         ],
       );
@@ -1248,48 +1253,6 @@ class _CopyOnLongPress extends StatelessWidget {
     ),
     child: child,
   );
-}
-
-/// Loading state with animated indicator
-class _LoadingState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: SizedBox(
-                width: 32,
-                height: 32,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            TransportListLocalizations.of(context).loadingRoute,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 /// Error state with retry option
