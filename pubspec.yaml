@@ -37,7 +37,7 @@ dependencies:
   back_button_interceptor: ^7.0.1
   flutter_map_marker_cluster: ^1.3.4
   path_provider: ^2.1.4
-  routemaster: ^1.0.1
+  routemaster: ^1.1.1
   share_plus: ^10.0.2
   app_links: ^6.3.2
   uuid: ^4.3.3
