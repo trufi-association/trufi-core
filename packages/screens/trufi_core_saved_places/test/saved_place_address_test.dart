@@ -68,6 +68,21 @@ void main() {
     });
   });
 
+  group('looksLikeCoordinates', () {
+    test('our own label and Photon\'s four-decimal one', () {
+      expect(looksLikeCoordinates(_coordinates), isTrue);
+      expect(looksLikeCoordinates('-17.3988, -66.1627'), isTrue);
+      expect(looksLikeCoordinates(' 0, 0 '), isTrue);
+    });
+
+    test('an address with numbers is not one', () {
+      expect(looksLikeCoordinates(_street), isFalse);
+      expect(looksLikeCoordinates('Av. Heroínas 123, Cochabamba'), isFalse);
+      expect(looksLikeCoordinates('12, 34 km'), isFalse);
+      expect(looksLikeCoordinates(''), isFalse);
+    });
+  });
+
   group('SavedPlace JSON', () {
     test('a null address stays null through toJson/fromJson', () {
       final restored = SavedPlace.fromJson(_place().toJson());
@@ -98,8 +113,19 @@ void main() {
       expect(find.text(_street), findsOneWidget);
     });
 
-    testWidgets('a place without address shows only its name', (tester) async {
+    testWidgets('a place saved without address (before #1003) shows its '
+        'coordinates, so old rows read apart without being edited', (
+      tester,
+    ) async {
       await tester.pumpWidget(_app(SavedPlaceTile(place: _place())));
+      expect(find.text('Parada'), findsOneWidget);
+      expect(find.text(_coordinates), findsOneWidget);
+    });
+
+    testWidgets('a place without location shows only its name', (tester) async {
+      await tester.pumpWidget(
+        _app(SavedPlaceTile(place: _place(lat: 0, lng: 0))),
+      );
       expect(find.text('Parada'), findsOneWidget);
       expect(
         find.descendant(
@@ -108,6 +134,15 @@ void main() {
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('a place named by its coordinates does not repeat them', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(SavedPlaceTile(place: _place(name: _coordinates))),
+      );
+      expect(find.text(_coordinates), findsOneWidget);
     });
 
     testWidgets('two same-named places read differently', (tester) async {
@@ -286,6 +321,35 @@ void main() {
       await tester.ensureVisible(find.text('Save'));
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('a place stored with its coordinates as address (saved '
+        'offline, or before the lookup answered) is looked up again on edit', (
+      tester,
+    ) async {
+      var lookups = 0;
+      SavedPlace? saved;
+      _phone(tester);
+      await tester.pumpWidget(
+        _app(
+          EditPlaceDialog(
+            place: _place(address: _coordinates),
+            onResolveAddress: (_, _) async {
+              lookups++;
+              return _street;
+            },
+            onSave: (p) => saved = p,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(lookups, 1);
+      expect(_locationSubtitle(_street), findsOneWidget);
+
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      expect(saved?.address, _street);
     });
 
     testWidgets('editing a place that has an address keeps it and does not '

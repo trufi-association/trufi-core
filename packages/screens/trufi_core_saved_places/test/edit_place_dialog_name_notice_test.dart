@@ -25,14 +25,21 @@ SavedPlace _place({
   createdAt: DateTime(2026, 1, 1),
 );
 
-Widget _app(Widget child, {String locale = 'en'}) => MaterialApp(
+Widget _app(
+  Widget child, {
+  String locale = 'en',
+  TextDirection direction = TextDirection.ltr,
+}) => MaterialApp(
   locale: Locale(locale),
   supportedLocales: SavedPlacesLocalizations.supportedLocales,
   localizationsDelegates: const [
     SavedPlacesLocalizations.delegate,
     ...GlobalMaterialLocalizations.delegates,
   ],
-  home: Scaffold(body: child),
+  home: Directionality(
+    textDirection: direction,
+    child: Scaffold(body: child),
+  ),
 );
 
 bool _taken(String name) => SavedPlacesCubit.normalizeName(name) == 'parada';
@@ -103,6 +110,43 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text(_notice), findsNothing);
+  });
+
+  testWidgets('the notice and the location error line are inset 16 from the '
+      'field\'s start edge in both text directions (trufi-sanaa is RTL)', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+
+    for (final direction in TextDirection.values) {
+      await tester.pumpWidget(
+        _app(
+          EditPlaceDialog(
+            key: ValueKey(direction), // a fresh sheet per direction
+            isNameTaken: _taken,
+            onSave: (_) {},
+          ),
+          direction: direction,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextFormField), 'Parada');
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save')); // no location: the error line shows
+      await tester.pumpAndSettle();
+
+      final field = tester.getRect(find.byType(TextFormField));
+      final icon = tester.getRect(find.byIcon(Icons.info_outline_rounded));
+      final error = tester.getRect(find.text('Location is required'));
+      double inset(Rect r) => direction == TextDirection.rtl
+          ? field.right - r.right
+          : r.left - field.left;
+      expect(inset(icon), 16, reason: 'notice, $direction');
+      expect(inset(error), 16, reason: 'error line, $direction');
+    }
   });
 
   testWidgets('the notice is localized', (tester) async {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,6 +20,8 @@ import 'in_memory_storage.dart';
 
 const _lat = -17.39884;
 const _lng = -66.16269;
+const _coordinates = '-17.39884, -66.16269';
+const _heroinas = 'Avenida Heroínas, Cochabamba, Bolivia';
 
 SearchLocation _answer({required String displayName, String? address}) =>
     SearchLocation(
@@ -103,6 +107,13 @@ Future<void> _pumpTrufiScreen(
   await tester.pumpAndSettle();
 }
 
+/// The text inside the edit sheet (the tile behind it shows the same
+/// coordinates for a place without address).
+Finder _inSheet(String text) => find.descendant(
+  of: find.byType(EditPlaceDialog),
+  matching: find.text(text),
+);
+
 Future<void> _openEditOfParada(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.more_vert_rounded));
   await tester.pumpAndSettle();
@@ -148,6 +159,39 @@ void main() {
         'Cochabamba, Bolivia',
       );
       expect(addressFromReverseGeocode(_answer(displayName: ' ')), isNull);
+    });
+
+    test('a POI whose name is only a fragment of the address keeps it; a '
+        'whole-word mention, any case, is not repeated', () {
+      expect(
+        addressFromReverseGeocode(
+          _answer(
+            displayName: 'Cala',
+            address: 'Av. Calacoto, La Paz, Bolivia',
+          ),
+        ),
+        'Cala, Av. Calacoto, La Paz, Bolivia',
+      );
+      expect(
+        addressFromReverseGeocode(
+          _answer(displayName: 'heroínas', address: 'Av. Heroínas, Cochabamba'),
+        ),
+        'Av. Heroínas, Cochabamba',
+      );
+    });
+
+    test('a feature with no properties, which Photon names by its '
+        'coordinates, is no address', () {
+      expect(
+        addressFromReverseGeocode(_answer(displayName: '-17.3988, -66.1627')),
+        isNull,
+      );
+      expect(
+        addressFromReverseGeocode(
+          _answer(displayName: '-17.3988, -66.1627', address: 'Cochabamba'),
+        ),
+        'Cochabamba',
+      );
     });
   });
 
@@ -209,15 +253,12 @@ void main() {
         ),
       );
       await _openEditOfParada(tester);
-      expect(find.text('-17.39884, -66.16269'), findsOneWidget);
+      expect(_inSheet(_coordinates), findsOneWidget);
 
       await tester.ensureVisible(find.text('Save'));
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
-      expect(
-        (await repository.getOtherPlaces()).single.address,
-        '-17.39884, -66.16269',
-      );
+      expect((await repository.getOtherPlaces()).single.address, _coordinates);
     });
 
     testWidgets('a geocoder that answers nothing yields the coordinates', (
@@ -236,7 +277,39 @@ void main() {
       );
       await _openEditOfParada(tester);
       expect(service.reverseCalls, 1);
-      expect(find.text('-17.39884, -66.16269'), findsOneWidget);
+      expect(_inSheet(_coordinates), findsOneWidget);
+    });
+
+    testWidgets('a geocoder that never answers gets 5 s; then the coordinates '
+        'stand and a later answer is ignored', (tester) async {
+      final repository = InMemorySavedPlacesRepository();
+      await repository.savePlace(_parada());
+      final late = Completer<SearchLocation?>();
+      final service = _FakeSearchService((_, _) => late.future);
+
+      await _pumpTrufiScreen(
+        tester,
+        screen: SavedPlacesTrufiScreen(
+          config: SavedPlacesConfig(repository: repository),
+        ),
+        searchService: service,
+      );
+      await _openEditOfParada(tester);
+      expect(service.reverseCalls, 1);
+      expect(_inSheet(_coordinates), findsOneWidget, reason: 'pending');
+
+      await tester.pump(const Duration(seconds: 6)); // past the 5 s budget
+      late.complete(
+        _answer(displayName: 'Avenida Heroínas', address: _heroinas),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text(_heroinas), findsNothing, reason: 'answered too late');
+      expect(_inSheet(_coordinates), findsOneWidget);
+
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      expect((await repository.getOtherPlaces()).single.address, _coordinates);
     });
 
     testWidgets('SavedPlacesConfig.resolveAddress overrides the cubit', (

@@ -11,6 +11,17 @@ enum SavedPlaceType { home, work, other, history }
 String formatCoordinates(double latitude, double longitude) =>
     '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}';
 
+/// Whether [text] is a bare "lat, lon" label — [formatCoordinates], or the
+/// four-decimal string Photon names a feature by when it has no properties —
+/// rather than a resolved address. A place carrying one as its address is
+/// still unresolved: the edit sheet looks it up again, and a reverse-geocode
+/// answer made of it is treated as no answer (#1003).
+bool looksLikeCoordinates(String text) => _coordinatesLabel.hasMatch(text);
+
+final RegExp _coordinatesLabel = RegExp(
+  r'^\s*-?\d{1,3}(?:\.\d+)?\s*,\s*-?\d{1,3}(?:\.\d+)?\s*$',
+);
+
 /// A saved place with additional metadata for display and storage.
 class SavedPlace extends Equatable {
   final String id;

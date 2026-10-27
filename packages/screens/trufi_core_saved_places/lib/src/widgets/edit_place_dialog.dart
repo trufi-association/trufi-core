@@ -130,14 +130,20 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     _longitude = widget.place?.longitude ?? 0.0;
     _selectedIcon = widget.place?.iconName ?? 'place';
     _address = _cleanAddress(widget.place?.address);
-    // A place saved before #1003 has coordinates but no address: resolve it
-    // now so a plain edit (icon, name) fills the subtitle too.
+    // A place saved before #1003 has coordinates but no address, and one
+    // saved offline (or before its lookup answered) carries them as its
+    // address: resolve both now so a plain edit (icon, name) fills the
+    // subtitle too.
     if (_hasLocation && _address == null) _resolveAddress();
   }
 
+  /// Null for an empty address and for a bare "lat, lon" label: coordinates
+  /// are the fallback, never a resolved address, so a place that stores them
+  /// is looked up again and, failing that, keeps the same label.
   static String? _cleanAddress(String? address) {
     final trimmed = address?.trim();
-    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+    if (trimmed == null || trimmed.isEmpty) return null;
+    return looksLikeCoordinates(trimmed) ? null : trimmed;
   }
 
   Future<void> _resolveAddress() async {
@@ -573,7 +579,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
         if (hasError) ...[
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsetsDirectional.only(start: 16),
             child: Text(
               localization.locationRequired,
               style: theme.textTheme.bodySmall?.copyWith(
@@ -710,8 +716,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
 }
 
 /// "You already have a place with this name": an info row under the name
-/// field — icon 16 + bodySmall onSurfaceVariant, the ecosystem's info line —
-/// announced to screen readers when it appears.
+/// field — icon 16 in `primary` (the ecosystem's informational accent) +
+/// bodySmall onSurfaceVariant — announced to screen readers when it appears.
+/// Insets are directional: trufi-sanaa runs RTL.
 class _NameInUseNotice extends StatelessWidget {
   const _NameInUseNotice({required this.message});
 
@@ -723,7 +730,7 @@ class _NameInUseNotice extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8, left: 16),
+      padding: const EdgeInsetsDirectional.only(top: 8, start: 16),
       child: Semantics(
         liveRegion: true,
         child: Row(
@@ -734,7 +741,7 @@ class _NameInUseNotice extends StatelessWidget {
               child: Icon(
                 Icons.info_outline_rounded,
                 size: 16,
-                color: colorScheme.tertiary,
+                color: colorScheme.primary,
               ),
             ),
             const SizedBox(width: 6),
