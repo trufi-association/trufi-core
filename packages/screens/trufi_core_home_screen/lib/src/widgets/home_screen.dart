@@ -29,6 +29,7 @@ import '../services/share_route_service.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
 import 'save_route_button.dart';
+import '../services/coordinate_address.dart';
 
 /// Main home screen widget with route planning functionality.
 class HomeScreen extends StatefulWidget {
@@ -728,12 +729,58 @@ class _HomeScreenState extends State<HomeScreen>
     final cubit = context.read<RoutePlannerCubit>();
     await cubit.setFromPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
+    unawaited(_completeCoordinateAddress(location, origin: true));
   }
 
   Future<void> _onDestinationSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
     await cubit.setToPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
+    unawaited(_completeCoordinateAddress(location, origin: false));
+  }
+
+  /// A "Go to lat, lon" row chosen before its reverse geocode answered pops
+  /// without an address (#1023). Resolve it here, after the plan request is
+  /// on its way, and store it on the place if the field still holds that
+  /// same pair; the plan is untouched (setFromPlace/setToPlace only emit the
+  /// place).
+  Future<void> _completeCoordinateAddress(
+    SearchLocation location, {
+    required bool origin,
+  }) async {
+    if (!isBareCoordinateLocation(location)) return;
+    SearchLocationsCubit? geocoder;
+    try {
+      geocoder = context.read<SearchLocationsCubit>();
+    } catch (_) {
+      return; // no geocoder in this app: the pair stays bare
+    }
+    final address = await resolveCoordinateAddress(
+      geocoder,
+      location.latitude,
+      location.longitude,
+    );
+    if (address == null || !mounted) return;
+    final cubit = context.read<RoutePlannerCubit>();
+    final current = origin ? cubit.state.fromPlace : cubit.state.toPlace;
+    if (current == null ||
+        current.description != location.displayName ||
+        current.latitude != location.latitude ||
+        current.longitude != location.longitude ||
+        (current.address != null && current.address!.isNotEmpty)) {
+      return; // the user moved on, or something else filled the address
+    }
+    final resolved = TrufiLocation(
+      description: current.description,
+      latitude: current.latitude,
+      longitude: current.longitude,
+      address: address,
+    );
+    if (origin) {
+      await cubit.setFromPlace(resolved);
+    } else {
+      await cubit.setToPlace(resolved);
+    }
   }
 
   Future<void> _onSwapLocations() async {
