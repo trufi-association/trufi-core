@@ -1,7 +1,10 @@
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 /// One-shot loader of a vehicle fleet, e.g. `OtpVehiclePositionsProvider.fetchOnce`.
-typedef VehicleSnapshotLoader = Future<List<VehiclePosition>> Function();
+/// One-shot loader of a vehicle fleet, e.g. `OtpVehiclePositionsProvider.fetchOnce`;
+/// [routeIds] lets it ask the backend for the requested routes only (#1017).
+typedef VehicleSnapshotLoader =
+    Future<List<VehiclePosition>> Function({Set<String>? routeIds});
 
 /// [VehicleEtaProvider] derived from live vehicle positions: for every
 /// requested route, the soonest-arriving reporting vehicle — not the
@@ -81,7 +84,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
 
   @override
   Future<VehicleEtaSnapshot> fetchEtas(VehicleEtaRequest request) async {
-    final positions = await _loadPositions();
+    final positions = await _loadPositions(request);
     final now = _now();
     final etas = <VehicleEta>[];
     for (final routeId in request.routeIds) {
@@ -96,11 +99,13 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     return VehicleEtaSnapshot(etas: etas, fetchedAt: now, source: source);
   }
 
-  Future<List<VehiclePosition>> _loadPositions() async {
+  Future<List<VehiclePosition>> _loadPositions(
+    VehicleEtaRequest request,
+  ) async {
     final loader = snapshotLoader;
     if (loader == null) return vehicles.latest;
     try {
-      return await loader();
+      return await loader(routeIds: request.routeIds);
     } catch (e) {
       throw VehicleEtaException('vehicle snapshot failed', cause: e);
     }

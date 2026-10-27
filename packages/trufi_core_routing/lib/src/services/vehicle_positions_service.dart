@@ -8,6 +8,23 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../providers/otp_2_4/graphql_client_factory.dart';
 
+/// The vehicle-positions query: the whole fleet, or only [routeIds]
+/// (OTP `routes(ids: [...])`, GTFS GraphQL 2.8/2.9).
+///
+/// OTP route ids carry the feed prefix (`1:1185`). When any id comes
+/// without it the filter cannot be built, so the query asks for every
+/// route and the caller matches feed-agnostically as before (#1017).
+String buildVehiclePositionsQuery({Set<String>? routeIds}) {
+  final ids = routeIds?.where((id) => id.trim().isNotEmpty).toList();
+  if (ids == null || ids.isEmpty || ids.any((id) => !id.contains(':'))) {
+    return _query;
+  }
+  final literal = ids
+      .map((id) => '"${id.replaceAll(r'\', r'\\').replaceAll('"', r'\"')}"')
+      .join(', ');
+  return _query.replaceFirst('routes {', 'routes(ids: [$literal]) {');
+}
+
 const _query = '''
 {
   routes {
@@ -116,21 +133,23 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
   /// network errors propagate untouched. The polling path ([start]) keeps
   /// its swallow-and-log behaviour through [_tick]. Logs `snapshot: N
   /// vehicles`, so a `tick:` line in the log always means the poller.
-  Future<List<VehiclePosition>> fetchOnce() async {
-    final positions = await _fetchPositions();
+  Future<List<VehiclePosition>> fetchOnce({Set<String>? routeIds}) async {
+    final positions = await _fetchPositions(routeIds: routeIds);
     debugPrint('[RealtimeVehicles] snapshot: ${positions.length} vehicles');
     return positions;
   }
 
-  /// The query itself, shared by [fetchOnce] and the poller's [_tick].
-  Future<List<VehiclePosition>> _fetchPositions() async {
+  /// The query itself, shared by [fetchOnce] and the poller's [_tick]; the
+  /// poller always asks for the whole fleet (it feeds the map layer), an
+  /// on-demand snapshot may ask for [routeIds] only.
+  Future<List<VehiclePosition>> _fetchPositions({Set<String>? routeIds}) async {
     final client = _client ??= GraphQLClientFactory.create(
       _graphqlEndpoint,
       timeout: requestTimeout,
     );
     final result = await client.query(
       WatchQueryOptions(
-        document: parseString(_query),
+        document: parseString(buildVehiclePositionsQuery(routeIds: routeIds)),
         fetchResults: true,
         fetchPolicy: FetchPolicy.networkOnly,
       ),
