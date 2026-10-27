@@ -51,5 +51,15 @@
   "destinationFieldLabel": "To",
   "@destinationFieldLabel": {
     "description": "Tiny caption above the destination field of the wide search bar"
+  },
+  "goToCoordinates": "Go to {coordinates}",
+  "@goToCoordinates": {
+    "description": "Row offered when the typed query is a decimal latitude/longitude pair (trufi-sanaa#22); the placeholder is the pair as shown, e.g. \"15.29483, 44.22437\"",
+    "placeholders": {
+      "coordinates": {
+        "type": "String",
+        "example": "15.29483, 44.22437"
+      }
+    }
   }
 }

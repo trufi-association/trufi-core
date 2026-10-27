@@ -12,5 +12,6 @@
   "searchCornersHint": "Buscar esquinas...",
   "copiedToClipboard": "Copiado",
   "originFieldLabel": "Desde",
-  "destinationFieldLabel": "Hasta"
+  "destinationFieldLabel": "Hasta",
+  "goToCoordinates": "Ir a {coordinates}"
 }

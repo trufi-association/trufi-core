@@ -46,4 +46,9 @@ class SearchLocationsLocalizationsEn extends SearchLocationsLocalizations {
 
   @override
   String get destinationFieldLabel => 'To';
+
+  @override
+  String goToCoordinates(String coordinates) {
+    return 'Go to $coordinates';
+  }
 }
