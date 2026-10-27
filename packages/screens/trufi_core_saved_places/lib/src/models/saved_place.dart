@@ -4,6 +4,13 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 /// Types of saved places
 enum SavedPlaceType { home, work, other, history }
 
+/// "lat, lon" with five decimals (~1 m): the label the location card shows
+/// and the address a map-picked place falls back to when no reverse geocode
+/// answered, so two same-named rows in the list never look identical
+/// (#1003). Same format the home screen stores for map-picked locations.
+String formatCoordinates(double latitude, double longitude) =>
+    '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}';
+
 /// A saved place with additional metadata for display and storage.
 class SavedPlace extends Equatable {
   final String id;

@@ -16,6 +16,12 @@ typedef OnChooseOnMap =
 /// blocks the save.
 typedef IsPlaceNameTaken = bool Function(String name);
 
+/// Turns a picked point into a human-readable address (reverse geocode).
+/// Null, an empty string or a throw all mean "unknown": the place is then
+/// saved with its coordinates as address.
+typedef OnResolveAddress =
+    Future<String?> Function(double latitude, double longitude);
+
 /// Bottom sheet for creating or editing a saved place.
 ///
 /// Design inspired by Google Maps and Apple Maps:
@@ -38,6 +44,12 @@ class EditPlaceDialog extends StatefulWidget {
   /// below the navigator.
   final IsPlaceNameTaken? isNameTaken;
 
+  /// Resolves the address of a point picked on the map (and of an existing
+  /// place that has none), shown on the location card and stored with the
+  /// place so the list can tell same-named rows apart (#1003). Without it
+  /// the place is saved with its coordinates as address.
+  final OnResolveAddress? onResolveAddress;
+
   const EditPlaceDialog({
     super.key,
     this.place,
@@ -47,6 +59,7 @@ class EditPlaceDialog extends StatefulWidget {
     this.defaultLatitude = 0.0,
     this.defaultLongitude = 0.0,
     this.isNameTaken,
+    this.onResolveAddress,
   });
 
   /// Shows the edit/create place bottom sheet.
@@ -58,6 +71,7 @@ class EditPlaceDialog extends StatefulWidget {
     double defaultLatitude = 0.0,
     double defaultLongitude = 0.0,
     IsPlaceNameTaken? isNameTaken,
+    OnResolveAddress? onResolveAddress,
   }) {
     return showModalBottomSheet<SavedPlace>(
       context: context,
@@ -71,6 +85,7 @@ class EditPlaceDialog extends StatefulWidget {
         defaultLatitude: defaultLatitude,
         defaultLongitude: defaultLongitude,
         isNameTaken: isNameTaken,
+        onResolveAddress: onResolveAddress,
         onSave: (updatedPlace) => Navigator.of(context).pop(updatedPlace),
       ),
     );
@@ -89,6 +104,15 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameFocusNode = FocusNode();
 
+  /// Resolved address of the current coordinates; null until a lookup
+  /// answers (or when none is configured), in which case the place is saved
+  /// with [formatCoordinates] instead.
+  String? _address;
+
+  /// Sequence of address lookups: a user who re-picks while a slow lookup is
+  /// in flight must not get the first point's street under the second point.
+  int _addressRequest = 0;
+
   bool get _isEditing => widget.place != null;
   bool get _hasLocation => _latitude != 0.0 || _longitude != 0.0;
 
@@ -105,6 +129,33 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     _latitude = widget.place?.latitude ?? 0.0;
     _longitude = widget.place?.longitude ?? 0.0;
     _selectedIcon = widget.place?.iconName ?? 'place';
+    _address = _cleanAddress(widget.place?.address);
+    // A place saved before #1003 has coordinates but no address: resolve it
+    // now so a plain edit (icon, name) fills the subtitle too.
+    if (_hasLocation && _address == null) _resolveAddress();
+  }
+
+  static String? _cleanAddress(String? address) {
+    final trimmed = address?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+  }
+
+  Future<void> _resolveAddress() async {
+    final resolve = widget.onResolveAddress;
+    if (resolve == null || !_hasLocation) return;
+    final request = ++_addressRequest;
+    final latitude = _latitude;
+    final longitude = _longitude;
+
+    String? address;
+    try {
+      address = await resolve(latitude, longitude);
+    } catch (_) {
+      address = null; // unknown: the coordinates fallback applies
+    }
+
+    if (!mounted || request != _addressRequest) return;
+    setState(() => _address = _cleanAddress(address));
   }
 
   @override
@@ -180,7 +231,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       setState(() {
         _latitude = result.latitude;
         _longitude = result.longitude;
+        _address = null;
       });
+      _resolveAddress();
     }
   }
 
@@ -494,11 +547,14 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                         const SizedBox(height: 2),
                         Text(
                           _hasLocation
-                              ? '${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}'
+                              ? _address ??
+                                    formatCoordinates(_latitude, _longitude)
                               : (localization.tapToSelectLocation),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -623,10 +679,14 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     }
 
     final SavedPlace updatedPlace;
+    // Never save without a subtitle: the list is where same-named places
+    // get confused (#1003).
+    final address = _address ?? formatCoordinates(_latitude, _longitude);
 
     if (_isEditing) {
       updatedPlace = widget.place!.copyWith(
         name: _nameController.text.trim(),
+        address: address,
         type: _selectedType,
         latitude: _latitude,
         longitude: _longitude,
@@ -636,6 +696,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
       updatedPlace = SavedPlace(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: _nameController.text.trim(),
+        address: address,
         latitude: _latitude,
         longitude: _longitude,
         type: _selectedType,
