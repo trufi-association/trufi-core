@@ -132,6 +132,10 @@ class _HomeScreenState extends State<HomeScreen>
   routing.RoutingEngineManager? _routingEngineManager;
   RealtimeVehiclesProvider? _realtimeVehiclesProvider;
 
+  /// Read in [didChangeDependencies]: [_rewireVehicleEta] also runs from the
+  /// engine manager's notifications, where `context` may be deactivated.
+  VehicleEtaCubit? _vehicleEtaCubit;
+
   /// Last plan handed to the [VehicleEtaCubit]. `Plan` has no `==` and
   /// `RoutePlannerCubit` only creates a new object per fetch/restore, so
   /// identity tells "new plan" from "same plan, other itinerary selected".
@@ -233,10 +237,18 @@ class _HomeScreenState extends State<HomeScreen>
   /// The ETA badges follow the selected engine's telemetry (#1018); the
   /// config's provider, if any, is the legacy override for apps that wire
   /// one source for every engine.
+  ///
+  /// Runs on every engine change, not only for a restored plan. The routing
+  /// settings sheet applies an engine as soon as its card is tapped, so
+  /// with a live plan this asks the NEW engine about the plan the OLD one
+  /// computed; "Apply" then re-plans and [_syncVehicleEtas] asks again.
+  /// Known double request: the ids keep the newest answer, the first
+  /// snapshot is just wasted. Closing the sheet without "Apply" leaves one
+  /// engine's plan with another engine's badges — consistent with the
+  /// engine the rider selected. Skipping the first request needs the plan
+  /// to carry the engine that produced it (follow-up).
   void _rewireVehicleEta() {
-    final cubit = context.read<VehicleEtaCubit?>();
-    if (cubit == null) return;
-    cubit.useProvider(
+    _vehicleEtaCubit?.useProvider(
       widget.config.vehicleEtaProvider ??
           _routingEngineManager?.currentEngine.vehicleEtaProvider,
     );
@@ -276,6 +288,7 @@ class _HomeScreenState extends State<HomeScreen>
     _parseUrlAndSetPlaces();
     // Wire the realtime-vehicles provider from the currently-active routing
     // engine. Re-wires automatically when the user switches engines.
+    _vehicleEtaCubit = context.read<VehicleEtaCubit?>();
     final manager = context.read<routing.RoutingEngineManager?>();
     if (_routingEngineManager != manager) {
       _routingEngineManager?.removeListener(_onRoutingEngineChanged);

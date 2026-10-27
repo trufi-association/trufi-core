@@ -92,17 +92,18 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
   TrufiLatLng? _lastOrigin;
 
   /// Switches the telemetry source. Null clears the estimates and hides the
-  /// badges; a new source re-asks for the last plan so the badges follow
-  /// the engine the rider just picked.
+  /// badges; a new source starts from a blank state — the previous engine's
+  /// estimates are dropped rather than shown as "stale" while it answers —
+  /// and re-asks for the last plan so the badges follow the engine the
+  /// rider just picked. That plan may have been computed by the engine just
+  /// left; the home screen accepts the extra snapshot (`_rewireVehicleEta`).
   void useProvider(VehicleEtaProvider? next) {
     if (identical(next, _provider)) return;
     _provider = next;
+    _reset();
     final plan = _lastPlan;
     final origin = _lastOrigin;
-    if (next == null || plan == null || origin == null) {
-      _reset();
-      return;
-    }
+    if (next == null || plan == null || origin == null) return;
     loadForPlan(plan, origin);
   }
 
@@ -154,6 +155,11 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
   }
 
   Future<void> _fetch(VehicleEtaRequest request) async {
+    final provider = _provider;
+    if (provider == null) {
+      _reset();
+      return;
+    }
     final id = ++_requestId;
     _lastRequest = request;
     // The gate is armed when the request STARTS, so a slow backend cannot
@@ -167,11 +173,6 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
         hasRequest: true,
       ),
     );
-    final provider = _provider;
-    if (provider == null) {
-      _reset();
-      return;
-    }
     final VehicleEtaSnapshot snapshot;
     try {
       snapshot = await provider.fetchEtas(request);

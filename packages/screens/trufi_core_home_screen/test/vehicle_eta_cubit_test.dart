@@ -292,6 +292,39 @@ void main() {
       );
     });
 
+    test('a new source starts from a blank state', () async {
+      final a = FakeVehicleEtaProvider()..answer = (_) => [eta('1:A', 240)];
+      final b = FakeVehicleEtaProvider()..gate = Completer();
+      final c = VehicleEtaCubit(provider: a, now: () => now);
+      addTearDown(c.close);
+      await c.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(c.state.status, VehicleEtaStatus.ready);
+
+      c.useProvider(b);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(b.calls, 1);
+      expect(c.state.status, VehicleEtaStatus.loading);
+      expect(c.state.hasRequest, isTrue);
+      expect(
+        c.state.etaFor('1:A'),
+        isNull,
+        reason:
+            'the estimate of the engine just left must not survive the '
+            'switch as "stale" while the new source answers',
+      );
+      expect(c.state.fetchedAt, isNull);
+      expect(
+        EtaBadge.kindFor(c.state.status, c.state.etaFor('1:A')),
+        EtaBadgeKind.loading,
+        reason: 'the badge spins instead of dimming the old value',
+      );
+
+      b.gate!.complete(VehicleEtaSnapshot.empty(now));
+      await Future<void>.delayed(Duration.zero);
+      expect(c.state.status, VehicleEtaStatus.unavailable);
+    });
+
     test('clear forgets the plan: a later source has nothing to ask', () async {
       await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
       cubit.clear();
