@@ -42,7 +42,6 @@
   "noRoutesSavedHint": "Planifica un viaje y toca el marcador para guardarlo aquí",
   "routeOrigin": "Origen: {name}",
   "routeDestination": "Destino: {name}",
-  "routeSummary": "{distance}, ~{duration}",
   "distanceMeters": "{meters} m",
   "distanceKilometers": "{km} km",
   "durationMinutes": "{minutes} min",

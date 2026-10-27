@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show TransportModeExtension;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/saved_places_localizations.dart';
 import '../models/saved_route.dart';
 
-/// Card for one saved route (#1005): title, origin/destination chips, one
-/// badge per transit leg of the saved itinerary and a "distance, ~duration"
-/// caption. Pure UI: every action is a typed callback the screen wires; a
-/// null callback hides its menu entry, and the menu itself when all are null.
+/// Card for one saved route (#1005), in the family of `SavedPlaceTile`:
+/// tinted icon tile, title, the origin → destination terminals of the route
+/// detail, one [RouteBadge] per transit leg of the saved itinerary and the
+/// distance / duration chips of the itinerary card. Pure UI: every action is
+/// a typed callback the screen wires; a null callback hides its menu entry,
+/// and the menu itself when all are null.
 class SavedRouteCard extends StatelessWidget {
   const SavedRouteCard({
     super.key,
@@ -24,19 +30,6 @@ class SavedRouteCard extends StatelessWidget {
   final VoidCallback? onSwap;
   final VoidCallback? onDelete;
 
-  /// Six hex digits, the GTFS `route_color` shape.
-  static final RegExp _sixHexDigits = RegExp(r'^[0-9a-fA-F]{6}$');
-
-  /// Badge colour from a GTFS route colour (leading `#` tolerated); null or
-  /// malformed values fall back to [fallback] instead of painting garbage.
-  static Color badgeColor(String? hex, Color fallback) {
-    if (hex == null) return fallback;
-    final digits = hex.startsWith('#') ? hex.substring(1) : hex;
-    if (!_sixHexDigits.hasMatch(digits)) return fallback;
-    final parsed = int.tryParse('FF$digits', radix: 16);
-    return parsed == null ? fallback : Color(parsed);
-  }
-
   bool get _hasMenu => onRename != null || onSwap != null || onDelete != null;
 
   @override
@@ -51,107 +44,128 @@ class SavedRouteCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(_Dimensions.radius),
       child: InkWell(
         onTap: onTap,
+        // Long-press copies the name, as the saved place tile does.
+        onLongPress: () => copyToClipboard(
+          context,
+          route.name,
+          confirmation: localization.copiedToClipboard,
+        ),
         borderRadius: BorderRadius.circular(_Dimensions.radius),
         child: Padding(
           padding: const EdgeInsets.all(_Dimensions.padding),
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: _Dimensions.iconBox,
-                    height: _Dimensions.iconBox,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(
-                        _Dimensions.iconRadius,
+              Container(
+                width: _Dimensions.iconBox,
+                height: _Dimensions.iconBox,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(_Dimensions.iconRadius),
+                ),
+                child: Icon(
+                  Icons.route_rounded,
+                  color: colorScheme.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // As tall as the icon tile (the menu button's 48 px), so
+                    // the title sits centred on the tile like the saved
+                    // place tile's does, with or without a menu.
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minHeight: _Dimensions.iconBox,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              route.name,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (_hasMenu) ...[
+                            const SizedBox(width: 4),
+                            _RouteMenuButton(
+                              onRename: onRename,
+                              onSwap: onSwap,
+                              onDelete: onDelete,
+                              localization: localization,
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                    child: Icon(
-                      Icons.route_rounded,
-                      color: colorScheme.onPrimaryContainer,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      route.name,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onSurface,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (_hasMenu)
-                    _RouteMenuButton(
-                      onRename: onRename,
-                      onSwap: onSwap,
-                      onDelete: onDelete,
+                    const SizedBox(height: 2),
+                    _Terminals(
+                      origin: route.origin.name,
+                      destination: route.destination.name,
                       localization: localization,
                     ),
-                ],
-              ),
-              const SizedBox(height: _Dimensions.gap),
-              Row(
-                children: [
-                  Flexible(
-                    child: _EndpointChip(
-                      icon: Icons.trip_origin_rounded,
-                      label: localization.routeOrigin(route.origin.name),
-                    ),
-                  ),
-                  const SizedBox(width: _Dimensions.gap),
-                  Flexible(
-                    child: _EndpointChip(
-                      icon: Icons.place_rounded,
-                      label: localization.routeDestination(
-                        route.destination.name,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              if (snapshot != null) ...[
-                const SizedBox(height: _Dimensions.gap),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        spacing: 6,
-                        runSpacing: 4,
+                    if (snapshot != null) ...[
+                      const SizedBox(height: _Dimensions.gap),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 6,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           if (snapshot.transitLegs.isEmpty)
                             const _WalkBadge()
                           else
                             for (final leg in snapshot.transitLegs)
-                              _TransitBadge(leg: leg),
+                              _legBadge(leg, colorScheme),
+                          _InfoChip(
+                            icon: Icons.straighten_rounded,
+                            label: _formatDistance(
+                              snapshot.distanceMeters,
+                              localization,
+                            ),
+                          ),
+                          _InfoChip(
+                            icon: Icons.schedule_rounded,
+                            label: _formatDuration(
+                              Duration(seconds: snapshot.durationSeconds),
+                              localization,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: _Dimensions.gap),
-                    Text(
-                      localization.routeSummary(
-                        _formatDistance(snapshot.distanceMeters, localization),
-                        _formatDuration(
-                          Duration(seconds: snapshot.durationSeconds),
-                          localization,
-                        ),
-                      ),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+                    ],
                   ],
                 ),
-              ],
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// The itinerary card's leg chip: GTFS colours when the snapshot has them,
+  /// the theme's primary otherwise; the mode glyph when the mode was saved,
+  /// the badge's own bus for routes saved before it existed.
+  Widget _legBadge(SavedRouteTransitLeg leg, ColorScheme colorScheme) {
+    final mode = leg.mode;
+    return RouteBadge(
+      label: leg.shortName,
+      color: parseGtfsColor(leg.colorHex) ?? colorScheme.primary,
+      textColor: parseGtfsColor(leg.textColorHex),
+      icon: mode == null
+          ? null
+          : Icon(
+              transportModeBadgeIcon(TransportModeExtension.fromString(mode)),
+            ),
+      variant: RouteBadgeVariant.chip,
     );
   }
 }
@@ -169,21 +183,146 @@ String _formatDuration(Duration duration, SavedPlacesLocalizations l10n) {
   return l10n.durationMinutes(minutes);
 }
 
-/// Card metrics. Outer shape (16 / 14) matches `SavedPlaceTile` so both
-/// lists read as one family.
+/// Card metrics: the outer shape and the icon tile are `SavedPlaceTile`'s,
+/// so both lists read as one family; the badge radius is the leg chip's.
 abstract final class _Dimensions {
   static const double radius = 16;
   static const double padding = 14;
-  static const double iconBox = 44;
-  static const double iconRadius = 12;
-  static const double chipRadius = 8;
-  static const double badgeRadius = 6;
+  static const double iconBox = 48;
+  static const double iconRadius = 14;
+  static const double badgeRadius = 8;
   static const double gap = 8;
 }
 
-/// Outlined "Origin: …" / "Destination: …" chip.
-class _EndpointChip extends StatelessWidget {
-  const _EndpointChip({required this.icon, required this.label});
+/// Origin above destination with the route detail's timeline (green dot,
+/// dotted line, red dot — `transport_detail_screen.dart`, origin/destination
+/// header). The dots say which is which, so the names carry no prefix;
+/// screen readers get "Origin: …" / "Destination: …" instead.
+class _Terminals extends StatelessWidget {
+  const _Terminals({
+    required this.origin,
+    required this.destination,
+    required this.localization,
+  });
+
+  final String origin;
+  final String destination;
+  final SavedPlacesLocalizations localization;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final style = theme.textTheme.bodyMedium?.copyWith(
+      color: colorScheme.onSurface,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            // The detail's terminal colours, not theme roles: green is the
+            // map's origin marker and red its destination (design contract
+            // §0.1, §3.4).
+            _TerminalDot(color: Colors.green, border: Colors.green.shade700),
+            CustomPaint(
+              size: const Size(2, 28),
+              painter: _DottedLinePainter(color: colorScheme.outlineVariant),
+            ),
+            _TerminalDot(color: Colors.red, border: Colors.red.shade700),
+          ],
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                label: localization.routeOrigin(origin),
+                excludeSemantics: true,
+                child: Text(
+                  origin,
+                  style: style,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Semantics(
+                label: localization.routeDestination(destination),
+                excludeSemantics: true,
+                child: Text(
+                  destination,
+                  style: style,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TerminalDot extends StatelessWidget {
+  const _TerminalDot({required this.color, required this.border});
+
+  final Color color;
+  final Color border;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: border, width: 2),
+      ),
+    );
+  }
+}
+
+/// Dotted line between the terminals — a private copy of the route detail's
+/// painter: screen packages do not import each other for a widget.
+class _DottedLinePainter extends CustomPainter {
+  const _DottedLinePainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+
+    const dashHeight = 4.0;
+    const dashSpace = 4.0;
+    double startY = 0;
+
+    while (startY < size.height) {
+      canvas.drawLine(
+        Offset(size.width / 2, startY),
+        Offset(size.width / 2, startY + dashHeight),
+        paint,
+      );
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DottedLinePainter oldDelegate) =>
+      oldDelegate.color != color;
+}
+
+/// The itinerary card's footer chip: icon + text in onSurfaceVariant.
+class _InfoChip extends StatelessWidget {
+  const _InfoChip({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
@@ -193,65 +332,18 @@ class _EndpointChip extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.outlineVariant),
-        borderRadius: BorderRadius.circular(_Dimensions.chipRadius),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: colorScheme.onSurfaceVariant),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              label,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: colorScheme.onSurfaceVariant),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
           ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Route short name on the route colour; text colour picked for contrast.
-class _TransitBadge extends StatelessWidget {
-  const _TransitBadge({required this.leg});
-
-  final SavedRouteTransitLeg leg;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final background = SavedRouteCard.badgeColor(
-      leg.colorHex,
-      colorScheme.primary,
-    );
-    final foreground =
-        ThemeData.estimateBrightnessForColor(background) == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(_Dimensions.badgeRadius),
-      ),
-      child: Text(
-        leg.shortName,
-        style: TextStyle(
-          color: foreground,
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
         ),
-      ),
+      ],
     );
   }
 }

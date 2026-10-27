@@ -74,7 +74,7 @@
   },
   "routeOrigin": "Origin: {name}",
   "@routeOrigin": {
-    "description": "Origin chip on a saved route card",
+    "description": "Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)",
     "placeholders": {
       "name": {
         "type": "String",
@@ -84,25 +84,11 @@
   },
   "routeDestination": "Destination: {name}",
   "@routeDestination": {
-    "description": "Destination chip on a saved route card",
+    "description": "Accessibility label of the destination row on a saved route card (the row itself shows only the name, next to a red dot)",
     "placeholders": {
       "name": {
         "type": "String",
         "example": "Work"
-      }
-    }
-  },
-  "routeSummary": "{distance}, ~{duration}",
-  "@routeSummary": {
-    "description": "Caption of a saved route card: distance and approximate duration of the itinerary saved with it",
-    "placeholders": {
-      "distance": {
-        "type": "String",
-        "example": "5.0 km"
-      },
-      "duration": {
-        "type": "String",
-        "example": "30 min"
       }
     }
   },

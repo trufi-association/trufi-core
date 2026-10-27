@@ -343,23 +343,17 @@ abstract class SavedPlacesLocalizations {
   /// **'Plan a trip and tap the bookmark to keep it here'**
   String get noRoutesSavedHint;
 
-  /// Origin chip on a saved route card
+  /// Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)
   ///
   /// In en, this message translates to:
   /// **'Origin: {name}'**
   String routeOrigin(String name);
 
-  /// Destination chip on a saved route card
+  /// Accessibility label of the destination row on a saved route card (the row itself shows only the name, next to a red dot)
   ///
   /// In en, this message translates to:
   /// **'Destination: {name}'**
   String routeDestination(String name);
-
-  /// Caption of a saved route card: distance and approximate duration of the itinerary saved with it
-  ///
-  /// In en, this message translates to:
-  /// **'{distance}, ~{duration}'**
-  String routeSummary(String distance, String duration);
 
   /// Distance below one kilometre
   ///

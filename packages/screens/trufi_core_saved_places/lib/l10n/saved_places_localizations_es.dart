@@ -144,11 +144,6 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
   }
 
   @override
-  String routeSummary(String distance, String duration) {
-    return '$distance, ~$duration';
-  }
-
-  @override
   String distanceMeters(int meters) {
     return '$meters m';
   }

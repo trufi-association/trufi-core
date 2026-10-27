@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 
 import 'in_memory_storage.dart';
 
 // #1005 through the real widgets: the Your Routes screen lists each saved
-// route as a card (title, endpoint chips, transit badges, summary), launches
+// route as a card (title, terminals, transit badges, info chips), launches
 // the trip through the SharedRouteNotifier channel on tap, and manages the
 // route from its menu (rename / swap direction / remove).
 
@@ -31,7 +32,7 @@ SavedRoute _casaATrabajo() => SavedRoute(
   createdAt: DateTime(2026, 10, 13),
   snapshot: const SavedRouteSnapshot(
     transitLegs: [
-      SavedRouteTransitLeg(shortName: 'B301', colorHex: '7E57C2'),
+      SavedRouteTransitLeg(shortName: 'B301', colorHex: '7E57C2', mode: 'BUS'),
       SavedRouteTransitLeg(shortName: 'T105'),
     ],
     distanceMeters: 5000,
@@ -108,29 +109,36 @@ void main() {
     expect(find.byType(SavedRouteCard), findsNothing);
   });
 
-  testWidgets('renders a card with title, chips, badges and summary', (
+  testWidgets('renders a card with title, terminals, badges and info chips', (
     tester,
   ) async {
     await cubit.saveRoute(_casaATrabajo());
     await pumpScreen(tester);
 
     expect(find.text('Casa a Trabajo'), findsOneWidget);
-    expect(find.text('Origin: Casa'), findsOneWidget);
-    expect(find.text('Destination: Trabajo'), findsOneWidget);
+    expect(find.text('Casa'), findsOneWidget);
+    expect(find.text('Trabajo'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Casa')).dy,
+      lessThan(tester.getTopLeft(find.text('Trabajo')).dy),
+      reason: 'origin above destination',
+    );
     expect(find.text('B301'), findsOneWidget);
     expect(find.text('T105'), findsOneWidget);
-    expect(find.text('5.0 km, ~30 min'), findsOneWidget);
+    expect(find.text('5.0 km'), findsOneWidget);
+    expect(find.text('30 min'), findsOneWidget);
+    expect(find.byIcon(Icons.straighten_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.schedule_rounded), findsOneWidget);
 
-    final badge = tester.widget<Container>(
-      find
-          .ancestor(of: find.text('B301'), matching: find.byType(Container))
-          .first,
+    final badge = tester.widget<RouteBadge>(
+      find.ancestor(of: find.text('B301'), matching: find.byType(RouteBadge)),
     );
     expect(
-      (badge.decoration as BoxDecoration).color,
+      badge.color,
       const Color(0xFF7E57C2),
       reason: 'the badge wears the saved route colour',
     );
+    expect(find.byIcon(Icons.directions_bus_rounded), findsNWidgets(2));
   });
 
   testWidgets('tapping a card hands the trip to the home screen and marks '
@@ -205,7 +213,7 @@ void main() {
     expect(cubit.state.routes.single.name, 'Rutina');
   });
 
-  testWidgets('swap direction inverts the chips and drops the badges', (
+  testWidgets('swap direction inverts the terminals and drops the badges', (
     tester,
   ) async {
     await cubit.saveRoute(_casaATrabajo());
@@ -213,10 +221,14 @@ void main() {
 
     await openMenuAction(tester, 'Swap direction');
 
-    expect(find.text('Origin: Trabajo'), findsOneWidget);
-    expect(find.text('Destination: Casa'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Trabajo')).dy,
+      lessThan(tester.getTopLeft(find.text('Casa')).dy),
+      reason: 'the former destination is now the origin',
+    );
+    expect(find.byType(RouteBadge), findsNothing);
     expect(find.text('B301'), findsNothing);
-    expect(find.text('5.0 km, ~30 min'), findsNothing);
+    expect(find.text('5.0 km'), findsNothing);
   });
 
   testWidgets('swap is refused with a warning when the reversed trip '

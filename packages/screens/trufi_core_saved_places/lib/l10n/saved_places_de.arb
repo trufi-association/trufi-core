@@ -42,7 +42,6 @@
   "noRoutesSavedHint": "Planen Sie eine Fahrt und tippen Sie auf das Lesezeichen, um sie hier zu speichern",
   "routeOrigin": "Start: {name}",
   "routeDestination": "Ziel: {name}",
-  "routeSummary": "{distance}, ~{duration}",
   "distanceMeters": "{meters} m",
   "distanceKilometers": "{km} km",
   "durationMinutes": "{minutes} Min.",
