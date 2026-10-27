@@ -7,7 +7,6 @@ import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
-import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
 import 'package:trufi_core_routing/trufi_core_routing.dart'
     show RoutingEngineManager;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
@@ -131,17 +130,6 @@ Future<LatLng?> locateDevice(LocationService service) async {
   }
 }
 
-const Map<GtfsRouteType, IconData> _modeIcons = {
-  GtfsRouteType.bus: Icons.directions_bus,
-  GtfsRouteType.tram: Icons.tram,
-  GtfsRouteType.subway: Icons.subway,
-  GtfsRouteType.rail: Icons.train,
-  GtfsRouteType.ferry: Icons.directions_ferry,
-  GtfsRouteType.cableTram: Icons.airline_seat_recline_extra,
-  GtfsRouteType.aerialLift: Icons.airline_seat_recline_extra,
-  GtfsRouteType.funicular: Icons.terrain,
-};
-
 /// What [TransportDetailScreen] renders for a nearby line, built from the
 /// local feed — no engine call, so it works whichever routing engine is
 /// current (the OTP engines cannot resolve a local `routeId#patternId`).
@@ -157,10 +145,7 @@ TransportRouteDetails nearbyLineToRouteDetails(
     longName: line.longName.isEmpty ? null : line.longName,
     backgroundColor: line.color,
     textColor: line.textColor,
-    modeIcon: Icon(
-      _modeIcons[line.routeType] ?? Icons.directions_transit,
-      size: 16,
-    ),
+    modeIcon: Icon(gtfsRouteTypeIcon(line.routeType), size: 16),
     agencyName: line.agencyName,
     headsign: line.headsign,
     geometry: [
@@ -226,9 +211,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   /// until the viewport is known and a real fit is possible.
   static const double _anchorZoom = 15;
 
-  /// Height of the floating header card: the camera fit keeps the ring below
-  /// it on phones.
-  static const double _headerReserve = 150;
+  /// Margin around the floating header; with the header card's height it
+  /// is what the camera fit keeps clear of the ring on phones.
+  static const double _headerPadding = 12;
 
   static const double _sheetMinSize = 0.14;
   static const double _sheetInitialSize = 0.35;
@@ -425,10 +410,12 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     BoxConstraints constraints,
   ) {
     final viewPadding = MediaQuery.viewPaddingOf(context);
+    final headerReserve =
+        _headerPadding * 2 + NearbyHeaderCard.heightFor(state);
     _fitCamera.updateViewport(
       Size(constraints.maxWidth, constraints.maxHeight),
       EdgeInsets.only(
-        top: viewPadding.top + _headerReserve,
+        top: viewPadding.top + headerReserve,
         bottom: viewPadding.bottom + constraints.maxHeight * _sheetInitialSize,
         left: viewPadding.left,
         right: viewPadding.right,
@@ -446,13 +433,13 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
           child: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(_headerPadding),
               child: _buildHeader(state, elevated: true),
             ),
           ),
         ),
         Positioned(
-          top: viewPadding.top + _headerReserve,
+          top: viewPadding.top + headerReserve,
           right: 16,
           child: _MapControls(
             manager: manager,
@@ -574,7 +561,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       onLineTap: (line) => cubit.toggleLine(line.lineKey),
       onLineDetails: (line) => widget.onLineDetails(context, line),
       onClearSelection: cubit.clearSelection,
-      onClose: _close,
+      onRetry: cubit.refresh,
     );
   }
 }

@@ -150,19 +150,22 @@ void main() {
       'map layers of the fallback anchor', (tester) async {
     final engine = await _pumpScreen(tester);
 
-    // Header card and panel title.
-    expect(find.text('Nearby lines'), findsNWidgets(2));
+    // Header row: the title once (the sheet no longer repeats it), the
+    // anchor line with its hint, the locate and close buttons.
+    expect(find.text('Nearby lines'), findsOneWidget);
     expect(find.text('City center (location unavailable)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
-    expect(find.text('Use my location'), findsOneWidget);
+    expect(find.byTooltip('Use my location'), findsOneWidget);
+    expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byType(TrufiBottomSheet), findsNothing);
+    expect(find.text('2 lines within 300 m'), findsOneWidget);
 
     expect(find.text('100 m (1)'), findsOneWidget);
     expect(find.text('300 m (2)'), findsOneWidget);
     expect(find.text('500 m (3)'), findsOneWidget);
-    expect(find.text('At 80 m'), findsOneWidget);
-    expect(find.text('Passes by at 150 m'), findsOneWidget);
-    expect(find.text('At 380 m'), findsNothing);
+    expect(find.textContaining('At 80 m'), findsOneWidget);
+    expect(find.textContaining('Passes by at 150 m'), findsOneWidget);
+    expect(find.textContaining('At 380 m'), findsNothing);
 
     final ids = engine.lastLayers.map((l) => l.id).toList();
     expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
@@ -180,6 +183,9 @@ void main() {
       'nearby-point-n:X10',
       'nearby-point-n:18',
     ]);
+    // Badge with the mode glyph plus the distance chip need the wider box.
+    expect(points.markers.first.size, const Size(130, 32));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('tapping a row highlights it on the map; the chevron opens the '
@@ -190,7 +196,7 @@ void main() {
       onLineDetails: (_, line) => opened.add(line),
     );
 
-    await tester.tap(find.text('At 80 m'));
+    await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
     expect(find.text('Highlighted: 201'), findsOneWidget);
     final ids = engine.lastLayers.map((l) => l.id).toList();
@@ -201,7 +207,7 @@ void main() {
     expect(selected.lines.single.position, hasLength(2));
     expect(selected.lines.single.lineWidth, 5);
 
-    await tester.tap(find.text('At 80 m'));
+    await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
     expect(find.text('Highlighted: 201'), findsNothing);
 
@@ -217,7 +223,7 @@ void main() {
     await tester.tap(find.text('500 m (3)'));
     await tester.pumpAndSettle();
 
-    expect(find.text('At 380 m'), findsOneWidget);
+    expect(find.textContaining('At 380 m'), findsOneWidget);
     final rings = engine.lastLayers.first;
     expect(rings.lines[2].lineWidth, 3);
     expect(rings.lines[1].lineWidth, 1);
@@ -248,8 +254,10 @@ void main() {
     await _pumpScreen(tester);
     expect(find.byType(TrufiBottomSheet), findsOneWidget);
     expect(find.byType(NearbyHeaderCard), findsOneWidget);
+    expect(find.text('Nearby lines'), findsOneWidget);
     expect(find.text('300 m (2)'), findsOneWidget);
-    expect(find.text('At 80 m'), findsOneWidget);
+    expect(find.textContaining('At 80 m'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('without a local planner the screen explains instead of '
@@ -259,7 +267,7 @@ void main() {
       find.text('Nearby lines need the offline GTFS planner'),
       findsOneWidget,
     );
-    expect(find.byType(ChoiceChip), findsNothing);
+    expect(find.byType(NearbyRadiusPill), findsNothing);
     expect(find.text('City center (location unavailable)'), findsOneWidget);
   });
 

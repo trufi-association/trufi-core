@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show RouteBadge, RouteBadgeVariant;
 import 'package:trufi_core_utils/trufi_core_utils.dart' show safeNumberFormat;
 
 import '../../../l10n/transport_list_localizations.dart';
+import '../../models/transport_route.dart' show gtfsRouteTypeIcon;
+import '../../widgets/route_count_indicator.dart';
+import '../../widgets/transport_list_states.dart';
 import '../nearby_line.dart';
 import '../nearby_lines_cubit.dart';
 import '../nearby_lines_data_source.dart';
@@ -25,9 +30,11 @@ extension NearbyRadiusLabel on NearbyRadius {
       l10n.nearbyRadiusChip(meters.round(), count);
 }
 
-/// Content of the nearby-lines sheet (phone) or side panel (wide): title,
-/// highlight banner, radius chips, the rows for the selected radius (or the
-/// matching empty/unavailable state) and the GTFS footer note.
+/// Content of the nearby-lines sheet (phone) or side panel (wide), in the
+/// routes list's language: the highlight chip, the count pill, the radius
+/// pills, the GTFS note and the rows for the selected radius (or the
+/// matching loading / empty / error state). The screen title and the close
+/// action live in the floating header, not here.
 class NearbyLinesSheet extends StatelessWidget {
   const NearbyLinesSheet({
     super.key,
@@ -37,7 +44,7 @@ class NearbyLinesSheet extends StatelessWidget {
     required this.onLineTap,
     required this.onLineDetails,
     this.onClearSelection,
-    this.onClose,
+    this.onRetry,
   });
 
   final NearbyLinesState state;
@@ -48,25 +55,42 @@ class NearbyLinesSheet extends StatelessWidget {
   final ValueChanged<NearbyLine> onLineTap;
   final ValueChanged<NearbyLine> onLineDetails;
   final VoidCallback? onClearSelection;
-  final VoidCallback? onClose;
+
+  /// Re-runs the query after an error; null hides the retry button.
+  final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
     final l10n = TransportListLocalizations.of(context);
     final selected = state.selectedLine;
+    final available = state.availability == NearbyAvailability.available;
+    final visible = state.visibleLines;
+    // Like the routes list: the count only heads an actual list of rows.
+    final showCount =
+        available &&
+        state.errorMessage == null &&
+        !state.isLoading &&
+        visible.isNotEmpty;
 
     return CustomScrollView(
       controller: scrollController,
       primary: scrollController == null ? false : null,
       slivers: [
-        SliverToBoxAdapter(
-          child: _SheetHeader(title: l10n.menuNearbyLines, onClose: onClose),
-        ),
         if (selected != null)
           SliverToBoxAdapter(
             child: _SelectionBanner(line: selected, onClear: onClearSelection),
           ),
-        if (state.availability == NearbyAvailability.available)
+        if (showCount)
+          SliverToBoxAdapter(
+            child: RouteCountIndicator(
+              icon: Icons.radar_rounded,
+              label: l10n.nearbyLinesInRadius(
+                visible.length,
+                state.radius.meters.round(),
+              ),
+            ),
+          ),
+        if (available) ...[
           SliverToBoxAdapter(
             child: _RadiusChips(
               radius: state.radius,
@@ -74,19 +98,9 @@ class NearbyLinesSheet extends StatelessWidget {
               onRadiusChanged: onRadiusChanged,
             ),
           ),
+          SliverToBoxAdapter(child: _InfoRow(text: l10n.nearbyFooterNote)),
+        ],
         _buildBody(context, l10n),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text(
-              l10n.nearbyFooterNote,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -94,17 +108,11 @@ class NearbyLinesSheet extends StatelessWidget {
   /// First matching state wins; the order is the order a rider can hit them.
   Widget _buildBody(BuildContext context, TransportListLocalizations l10n) {
     if (state.isLoading && state.availability == NearbyAvailability.loading) {
-      return SliverToBoxAdapter(
-        child: _NearbyMessage(
-          icon: Icons.downloading_rounded,
-          title: l10n.nearbyLoadingData,
-          showSpinner: true,
-        ),
-      );
+      return _boxed(TransportLoadingState(message: l10n.nearbyLoadingData));
     }
     if (state.availability == NearbyAvailability.missing) {
-      return SliverToBoxAdapter(
-        child: _NearbyMessage(
+      return _boxed(
+        TransportEmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.nearbyUnavailableTitle,
           hint: l10n.nearbyUnavailableHint,
@@ -113,25 +121,21 @@ class NearbyLinesSheet extends StatelessWidget {
     }
     final error = state.errorMessage;
     if (error != null) {
-      return SliverToBoxAdapter(
-        child: _NearbyMessage(
-          icon: Icons.error_outline_rounded,
-          title: l10n.errorLoadingRoutes,
+      return _boxed(
+        TransportLoadErrorState(
+          message: l10n.errorLoadingRoutes,
           hint: error,
+          retryLabel: l10n.retry,
+          onRetry: onRetry,
         ),
       );
     }
     if (state.isLoading) {
-      return const SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      );
+      return _boxed(TransportLoadingState(message: l10n.nearbyLoadingData));
     }
     if (state.lines.isEmpty) {
-      return SliverToBoxAdapter(
-        child: _NearbyMessage(
+      return _boxed(
+        TransportEmptyState(
           icon: Icons.near_me_disabled_rounded,
           title: l10n.nearbyEmptyTitle(NearbyRadius.maxMeters.round()),
           hint: l10n.nearbyMovePinHint,
@@ -140,15 +144,15 @@ class NearbyLinesSheet extends StatelessWidget {
     }
     final visible = state.visibleLines;
     if (visible.isEmpty) {
-      return SliverToBoxAdapter(
-        child: _NearbyMessage(
+      return _boxed(
+        TransportEmptyState(
           icon: Icons.radar_rounded,
           title: l10n.nearbyEmptyInRadius(state.radius.meters.round()),
         ),
       );
     }
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       sliver: SliverList.separated(
         itemCount: visible.length,
         itemBuilder: (context, index) {
@@ -161,47 +165,27 @@ class NearbyLinesSheet extends StatelessWidget {
             onDetails: () => onLineDetails(line),
           );
         },
-        separatorBuilder: (_, _) => const SizedBox(height: 8),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
       ),
     );
   }
+
+  /// A state widget as a sliver, with room above and below: the states are
+  /// built for a bounded body and centre themselves there, while a sheet
+  /// gives them no height to centre in.
+  Widget _boxed(Widget child) => SliverToBoxAdapter(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: child,
+    ),
+  );
 }
 
-class _SheetHeader extends StatelessWidget {
-  const _SheetHeader({required this.title, required this.onClose});
-
-  final String title;
-  final VoidCallback? onClose;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = TransportListLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-          ),
-          if (onClose != null)
-            IconButton(
-              icon: const Icon(Icons.close_rounded),
-              tooltip: l10n.nearbyClose,
-              onPressed: onClose,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
+/// The highlighted line in the shape of the routes list's active-filter
+/// chip (`secondaryContainer`, radius 20, × to clear), with the line's
+/// badge in front of "Highlighted: 201". Hand-built rather than an
+/// [InputChip]: a chip sizes its avatar to the label's height, and the
+/// 24 px badge trips that assertion.
 class _SelectionBanner extends StatelessWidget {
   const _SelectionBanner({required this.line, required this.onClear});
 
@@ -214,40 +198,62 @@ class _SelectionBanner extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = TransportListLocalizations.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      child: Material(
-        color: colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 6, 4, 6),
-          child: Row(
-            children: [
-              _LineBadge(line: line),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  l10n.nearbySelectedLine(line.displayName),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onPrimaryContainer,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Row(
+        children: [
+          Flexible(
+            child: Material(
+              color: colorScheme.secondaryContainer,
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(6, 4, 4, 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RouteBadge(
+                      variant: RouteBadgeVariant.chip,
+                      label: line.displayName,
+                      color: line.color ?? colorScheme.primary,
+                      textColor: line.textColor,
+                      icon: Icon(gtfsRouteTypeIcon(line.routeType)),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        l10n.nearbySelectedLine(line.displayName),
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSecondaryContainer,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Tooltip(
+                      message: l10n.nearbyClearSelection,
+                      child: InkResponse(
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          onClear?.call();
+                        },
+                        radius: 18,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.close_rounded,
+                            size: 18,
+                            color: colorScheme.onSecondaryContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.close_rounded,
-                  color: colorScheme.onPrimaryContainer,
-                ),
-                tooltip: l10n.nearbyClearSelection,
-                onPressed: () {
-                  HapticFeedback.selectionClick();
-                  onClear?.call();
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -266,26 +272,18 @@ class _RadiusChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final l10n = TransportListLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Wrap(
         spacing: 8,
+        runSpacing: 8,
         children: [
           for (final candidate in NearbyRadius.values)
-            ChoiceChip(
-              label: Text(candidate.chipLabel(l10n, counts[candidate] ?? 0)),
+            NearbyRadiusPill(
+              label: candidate.chipLabel(l10n, counts[candidate] ?? 0),
               selected: candidate == radius,
-              showCheckmark: false,
-              selectedColor: colorScheme.primaryContainer,
-              labelStyle: theme.textTheme.labelLarge?.copyWith(
-                color: candidate == radius
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurface,
-              ),
-              onSelected: (_) {
+              onTap: () {
                 HapticFeedback.selectionClick();
                 onRadiusChanged(candidate);
               },
@@ -296,7 +294,93 @@ class _RadiusChips extends StatelessWidget {
   }
 }
 
-/// One nearby line: badge, distance, stop or destination, detail chevron.
+/// One radius bracket, in the shape of the list's count pill: radius 20,
+/// `labelMedium` w600, `primaryContainer` when selected.
+class NearbyRadiusPill extends StatelessWidget {
+  const NearbyRadiusPill({
+    super.key,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: Material(
+        color: selected
+            ? colorScheme.primaryContainer
+            : colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Text(
+              label,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: selected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The home screen's info line: a small outlined icon and a `bodySmall`
+/// note ("Based on GTFS routes and schedules").
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            size: 16,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One nearby line, with the anatomy of the routes list tile: the color bar,
+/// the badge, the line's identity as title, the walk as subtitle and the
+/// detail chevron.
 class NearbyLineTile extends StatelessWidget {
   const NearbyLineTile({
     super.key,
@@ -310,8 +394,8 @@ class NearbyLineTile extends StatelessWidget {
   final NearbyLine line;
   final bool isSelected;
 
-  /// Distance text in the primary color when inside the selected radius
-  /// (the green labels of the mock), plain otherwise.
+  /// Distance in the primary color when inside the selected radius, in the
+  /// subtitle's plain color otherwise.
   final bool isInsideRadius;
   final VoidCallback onTap;
   final VoidCallback onDetails;
@@ -320,48 +404,67 @@ class NearbyLineTile extends StatelessWidget {
     NearbyMatchKind,
     String Function(TransportListLocalizations l10n, String distance)
   >
-  _titles = {
+  _distances = {
     NearbyMatchKind.stop: (l10n, distance) => l10n.nearbyAtDistance(distance),
     NearbyMatchKind.passes: (l10n, distance) =>
         l10n.nearbyPassesAtDistance(distance),
   };
 
-  static final Map<
-    NearbyMatchKind,
-    String Function(TransportListLocalizations l10n, NearbyLine line)
-  >
-  _subtitles = {
-    NearbyMatchKind.stop: (l10n, line) =>
-        l10n.nearbyStopName(line.stopName ?? ''),
-    NearbyMatchKind.passes: (l10n, line) {
-      final headsign = line.headsign;
-      return headsign != null && headsign.isNotEmpty
-          ? l10n.nearbyTowards(headsign)
-          : line.longName;
-    },
-  };
+  /// Title: the line's identity, with the routes list's rules
+  /// (`route_long_name`, else the headsign, else the short name).
+  static String _title(NearbyLine line) {
+    if (line.longName.isNotEmpty) return line.longName;
+    final headsign = line.headsign;
+    if (headsign != null && headsign.isNotEmpty) return headsign;
+    return line.displayName;
+  }
+
+  /// What follows the distance: the stop reached, or the destination of
+  /// the pattern that passes by. Null when there is nothing beyond the
+  /// title (a passing line without headsign would only repeat it).
+  static String? _place(TransportListLocalizations l10n, NearbyLine line) {
+    switch (line.kind) {
+      case NearbyMatchKind.stop:
+        return l10n.nearbyStopName(line.stopName ?? '');
+      case NearbyMatchKind.passes:
+        final headsign = line.headsign;
+        return headsign != null && headsign.isNotEmpty
+            ? l10n.nearbyTowards(headsign)
+            : null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = TransportListLocalizations.of(context);
-    final distance = formatNearbyMeters(context, line.distanceMeters);
+    final lineColor = line.color ?? colorScheme.primary;
+    final distance = _distances[line.kind]!(
+      l10n,
+      formatNearbyMeters(context, line.distanceMeters),
+    );
+    final place = _place(l10n, line);
+    final subtitleStyle = theme.textTheme.bodySmall?.copyWith(
+      color: colorScheme.onSurfaceVariant,
+      height: 1.3,
+    );
 
     return Material(
       color: isSelected
-          ? colorScheme.primaryContainer.withValues(alpha: 0.35)
+          ? colorScheme.primaryContainer.withValues(alpha: 0.3)
           : colorScheme.surface,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
           HapticFeedback.selectionClick();
           onTap();
         },
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isSelected
                   ? colorScheme.primary
@@ -369,146 +472,122 @@ class NearbyLineTile extends StatelessWidget {
               width: isSelected ? 2 : 1,
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
           child: Row(
             children: [
-              _LineBadge(line: line),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _titles[line.kind]!(l10n, distance),
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: isInsideRadius
-                            ? colorScheme.primary
-                            : colorScheme.onSurface,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      _subtitles[line.kind]!(l10n, line),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+              // Color accent bar
+              Container(
+                width: 4,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: lineColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.chevron_right_rounded,
-                  color: colorScheme.onSurfaceVariant,
+              Expanded(
+                child: Padding(
+                  // 2 on the right: the chevron brings its own 6 of tap area.
+                  padding: const EdgeInsets.fromLTRB(12, 12, 2, 12),
+                  child: Row(
+                    children: [
+                      RouteBadge(
+                        label: line.displayName,
+                        color: lineColor,
+                        textColor: line.textColor,
+                        icon: Icon(gtfsRouteTypeIcon(line.routeType)),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _title(line),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.directions_walk_rounded,
+                                  size: 14,
+                                  color: colorScheme.onSurfaceVariant
+                                      .withValues(alpha: 0.7),
+                                ),
+                                const SizedBox(width: 4),
+                                // One text so a tight column trims the
+                                // place first and the walk never overflows.
+                                Expanded(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: distance,
+                                          style: subtitleStyle?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: isInsideRadius
+                                                ? colorScheme.primary
+                                                : colorScheme.onSurfaceVariant,
+                                          ),
+                                        ),
+                                        if (place != null)
+                                          TextSpan(text: ' · $place'),
+                                      ],
+                                    ),
+                                    style: subtitleStyle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Chevron: opens the detail (the rest of the tile
+                      // toggles the highlight).
+                      Tooltip(
+                        message: l10n.nearbyOpenDetails,
+                        child: InkResponse(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+                            onDetails();
+                          },
+                          radius: 22,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: colorScheme.surfaceContainerHighest
+                                    .withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(
+                                Icons.chevron_right_rounded,
+                                color: colorScheme.onSurfaceVariant,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                tooltip: l10n.nearbyOpenDetails,
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  onDetails();
-                },
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Route number on the route color (theme primary when the feed has none).
-class _LineBadge extends StatelessWidget {
-  const _LineBadge({required this.line});
-
-  final NearbyLine line;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final background = line.color ?? colorScheme.primary;
-    final foreground = line.textColor ?? nearbyContrastColor(background);
-    return Container(
-      constraints: const BoxConstraints(minWidth: 48, minHeight: 36),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        line.displayName,
-        style: TextStyle(
-          color: foreground,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-}
-
-/// Black or white, whichever reads on [background] (the rule of
-/// `TransportTile`).
-Color nearbyContrastColor(Color background) =>
-    background.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
-
-class _NearbyMessage extends StatelessWidget {
-  const _NearbyMessage({
-    required this.icon,
-    required this.title,
-    this.hint,
-    this.showSpinner = false,
-  });
-
-  final IconData icon;
-  final String title;
-  final String? hint;
-  final bool showSpinner;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final hint = this.hint;
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showSpinner)
-            const SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(strokeWidth: 2.5),
-            )
-          else
-            Icon(icon, size: 40, color: colorScheme.onSurfaceVariant),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          if (hint != null) ...[
-            const SizedBox(height: 6),
-            Text(
-              hint,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ],
       ),
     );
   }

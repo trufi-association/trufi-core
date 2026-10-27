@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show RouteBadge;
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 
 const anchor = LatLng(-17.39, -66.15);
@@ -77,7 +79,7 @@ class _Calls {
   final taps = <NearbyLine>[];
   final details = <NearbyLine>[];
   int clears = 0;
-  int closes = 0;
+  int retries = 0;
 }
 
 Future<_Calls> _pumpSheet(WidgetTester tester, NearbyLinesState state) async {
@@ -93,7 +95,7 @@ Future<_Calls> _pumpSheet(WidgetTester tester, NearbyLinesState state) async {
           onLineTap: calls.taps.add,
           onLineDetails: calls.details.add,
           onClearSelection: () => calls.clears++,
-          onClose: () => calls.closes++,
+          onRetry: () => calls.retries++,
         ),
       ),
     ),
@@ -108,23 +110,98 @@ void main() {
   ) async {
     await _pumpSheet(tester, state());
 
-    expect(find.text('Nearby lines'), findsOneWidget);
+    // The screen title lives in the floating header; the sheet opens with
+    // the count pill and the radius pills.
+    expect(find.text('Nearby lines'), findsNothing);
+    expect(find.text('2 lines within 300 m'), findsOneWidget);
+    expect(find.byType(NearbyRadiusPill), findsNWidgets(3));
     expect(find.text('100 m (1)'), findsOneWidget);
     expect(find.text('300 m (2)'), findsOneWidget);
     expect(find.text('500 m (3)'), findsOneWidget);
 
-    expect(find.text('At 80 m'), findsOneWidget);
-    expect(find.text('Stop Calle San Simón'), findsOneWidget);
-    expect(find.text('Passes by at 133 m'), findsOneWidget);
-    expect(find.text('To Av. Humberto Asin'), findsOneWidget);
-    expect(find.text('At 380 m'), findsNothing);
+    // Each row: badge (mode icon + short name), the line's name as title,
+    // the walk and the place as subtitle.
+    expect(find.byType(RouteBadge), findsNWidgets(2));
+    expect(find.byIcon(Icons.directions_bus), findsNWidgets(2));
+    expect(find.text('201'), findsOneWidget);
+    expect(find.text('Línea 201'), findsOneWidget);
+    expect(find.textContaining('At 80 m'), findsOneWidget);
+    expect(find.textContaining('Stop Calle San Simón'), findsOneWidget);
+    expect(find.text('Línea X10'), findsOneWidget);
+    expect(find.textContaining('Passes by at 133 m'), findsOneWidget);
+    expect(find.textContaining('To Av. Humberto Asin'), findsOneWidget);
+    expect(find.textContaining('At 380 m'), findsNothing);
     expect(find.text('Based on GTFS routes and schedules'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a passing line without headsign shows the walk alone', (
+    tester,
+  ) async {
+    await _pumpSheet(
+      tester,
+      state(
+        lines: const [
+          NearbyLine(
+            lineKey: 'n:7',
+            routeId: 'd',
+            patternId: 0,
+            shortName: '7',
+            longName: 'Línea 7',
+            routeType: GtfsRouteType.tram,
+            distanceMeters: 40,
+            kind: NearbyMatchKind.passes,
+            nearestPoint: LatLng(-17.3893, -66.15),
+          ),
+        ],
+      ),
+    );
+    expect(find.text('Línea 7'), findsOneWidget);
+    expect(find.textContaining('Passes by at 40 m'), findsOneWidget);
+    expect(find.textContaining(' · '), findsNothing);
+    expect(find.byIcon(Icons.tram), findsOneWidget);
+    expect(find.text('1 line within 300 m'), findsOneWidget);
+  });
+
+  testWidgets('phone width: a selected row, a long place and the chip do '
+      'not overflow', (tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await _pumpSheet(
+      tester,
+      state(
+        lines: [
+          rows.first,
+          const NearbyLine(
+            lineKey: 'n:huay',
+            routeId: 'e',
+            patternId: 0,
+            shortName: 'HUAY',
+            longName: 'Asociación Mixta de Transporte Huayñacota',
+            headsign: 'Plaza 14 de Septiembre → Hospital Viedma',
+            routeType: GtfsRouteType.bus,
+            distanceMeters: 120,
+            kind: NearbyMatchKind.passes,
+            nearestPoint: LatLng(-17.3888, -66.15),
+          ),
+        ],
+        selectedLineKey: 'n:huay',
+      ),
+    );
+    expect(find.byTooltip('Clear highlight'), findsOneWidget);
+    expect(find.text('Highlighted: HUAY'), findsOneWidget);
+    // The chip's avatar and the row's badge both carry the short name.
+    expect(find.text('HUAY'), findsNWidgets(2));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('a wider radius shows the farther rows', (tester) async {
     await _pumpSheet(tester, state(radius: NearbyRadius.m500));
-    expect(find.text('At 380 m'), findsOneWidget);
-    expect(find.text('Stop Av. Blanco Galindo'), findsOneWidget);
+    expect(find.textContaining('At 380 m'), findsOneWidget);
+    expect(find.textContaining('Stop Av. Blanco Galindo'), findsOneWidget);
   });
 
   testWidgets('tapping a chip reports the radius', (tester) async {
@@ -138,7 +215,7 @@ void main() {
     tester,
   ) async {
     final calls = await _pumpSheet(tester, state());
-    await tester.tap(find.text('At 80 m'));
+    await tester.tap(find.textContaining('At 80 m'));
     await tester.pump();
     expect(calls.taps.map((l) => l.displayName), ['201']);
     expect(calls.details, isEmpty);
@@ -159,20 +236,14 @@ void main() {
     expect(calls.clears, 1);
   });
 
-  testWidgets('close button reports', (tester) async {
-    final calls = await _pumpSheet(tester, state());
-    await tester.tap(find.byTooltip('Close'));
-    await tester.pump();
-    expect(calls.closes, 1);
-  });
-
   testWidgets('no line within 500 m shows the empty state and the pin hint', (
     tester,
   ) async {
     await _pumpSheet(tester, state(lines: const []));
     expect(find.text('No lines pass within 500 m'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
-    expect(find.byType(ChoiceChip), findsNWidgets(3));
+    expect(find.byType(NearbyRadiusPill), findsNWidgets(3));
+    expect(find.byType(RouteCountIndicator), findsNothing);
   });
 
   testWidgets('lines beyond the selected radius only: suggest widening', (
@@ -186,7 +257,7 @@ void main() {
       find.text('No lines within 100 m. Try a larger radius.'),
       findsOneWidget,
     );
-    expect(find.text('At 380 m'), findsNothing);
+    expect(find.textContaining('At 380 m'), findsNothing);
   });
 
   testWidgets('no offline planner: explanation, no chips', (tester) async {
@@ -199,7 +270,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.textContaining('TrufiPlannerProvider'), findsOneWidget);
-    expect(find.byType(ChoiceChip), findsNothing);
+    expect(find.byType(NearbyRadiusPill), findsNothing);
   });
 
   testWidgets('loading the feed shows the offline-data message', (
@@ -217,10 +288,18 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('a query error is reported with its message', (tester) async {
-    await _pumpSheet(tester, state(lines: const [], errorMessage: 'boom'));
+  testWidgets('a query error is reported with its message and a retry', (
+    tester,
+  ) async {
+    final calls = await _pumpSheet(
+      tester,
+      state(lines: const [], errorMessage: 'boom'),
+    );
     expect(find.text('Could not load routes'), findsOneWidget);
     expect(find.text('boom'), findsOneWidget);
+    await tester.tap(find.text('Retry'));
+    await tester.pump();
+    expect(calls.retries, 1);
   });
 
   testWidgets('Spanish copy', (tester) async {
@@ -241,11 +320,11 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('Líneas cercanas'), findsOneWidget);
-    expect(find.text('A 80 m'), findsOneWidget);
-    expect(find.text('Parada Calle San Simón'), findsOneWidget);
-    expect(find.text('Pasa a 133 m'), findsOneWidget);
-    expect(find.text('Hacia Av. Humberto Asin'), findsOneWidget);
+    expect(find.text('2 líneas a 300 m'), findsOneWidget);
+    expect(find.textContaining('A 80 m'), findsOneWidget);
+    expect(find.textContaining('Parada Calle San Simón'), findsOneWidget);
+    expect(find.textContaining('Pasa a 133 m'), findsOneWidget);
+    expect(find.textContaining('Hacia Av. Humberto Asin'), findsOneWidget);
     expect(find.text('Basado en rutas y horarios GTFS'), findsOneWidget);
   });
 }

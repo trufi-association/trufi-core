@@ -403,6 +403,12 @@ abstract class TransportListLocalizations {
   /// **'{meters} m ({count})'**
   String nearbyRadiusChip(int meters, int count);
 
+  /// Count pill at the top of the nearby lines sheet: how many lines fall within the selected radius
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 line} other{{count} lines}} within {meters} m'**
+  String nearbyLinesInRadius(int count, int meters);
+
   /// Row title when the line is reached at a stop; {distance} is already formatted (e.g. '75 m')
   ///
   /// In en, this message translates to:

@@ -194,6 +194,20 @@
       }
     }
   },
+  "nearbyLinesInRadius": "{count, plural, =1{1 line} other{{count} lines}} within {meters} m",
+  "@nearbyLinesInRadius": {
+    "description": "Count pill at the top of the nearby lines sheet: how many lines fall within the selected radius",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "12"
+      },
+      "meters": {
+        "type": "int",
+        "example": "300"
+      }
+    }
+  },
   "nearbyAtDistance": "At {distance}",
   "@nearbyAtDistance": {
     "description": "Row title when the line is reached at a stop; {distance} is already formatted (e.g. '75 m')",

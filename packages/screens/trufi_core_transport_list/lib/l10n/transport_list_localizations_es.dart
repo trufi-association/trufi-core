@@ -173,6 +173,17 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
   }
 
   @override
+  String nearbyLinesInRadius(int count, int meters) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líneas',
+      one: '1 línea',
+    );
+    return '$_temp0 a $meters m';
+  }
+
+  @override
   String nearbyAtDistance(String distance) {
     return 'A $distance';
   }

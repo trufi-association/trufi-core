@@ -3,6 +3,8 @@ import 'dart:ui' show Color;
 import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show parseGtfsColor;
 
 import 'nearby_radius.dart';
 
@@ -18,15 +20,10 @@ enum NearbyMatchKind {
 
 /// Parses a GTFS `route_color` / `route_text_color` (`RRGGBB`, with or
 /// without `#`) into an opaque [Color]; null when absent or malformed so the
-/// UI falls back to the theme instead of painting a wrong color.
-Color? parseGtfsColorHex(String? hex) {
-  if (hex == null) return null;
-  final clean = hex.trim().replaceFirst('#', '');
-  if (clean.length != 6) return null;
-  final value = int.tryParse(clean, radix: 16);
-  if (value == null) return null;
-  return Color(0xFF000000 | value);
-}
+/// UI falls back to the theme instead of painting a wrong color. The rule
+/// itself is the ecosystem's [parseGtfsColor]; this name stays for the
+/// service and its tests.
+Color? parseGtfsColorHex(String? hex) => parseGtfsColor(hex);
 
 /// One row of the nearby-lines result: a logical line and the closest place
 /// where the rider can reach it.
