@@ -12,7 +12,8 @@ import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.
 class CustomItinerary extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
 
-  /// Rendered as the last row of the itineraries list, after every result.
+  /// Rendered as the last row of the itineraries list, after every result,
+  /// and under the legs of the itinerary details.
   final WidgetBuilder? footerBuilder;
 
   const CustomItinerary({
@@ -120,6 +121,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                 });
               },
               moveTo: widget.moveTo,
+              footerBuilder: widget.footerBuilder,
             ),
           )
       ],

@@ -31,9 +31,9 @@ class HomePage extends StatefulWidget {
   final MapChooseLocationProvider mapChooseLocationProvider;
   final AsyncExecutor asyncExecutor;
 
-  /// Optional widget rendered after the last itinerary of a plan, e.g. a
-  /// notice that the times are estimates (trufi-arequipa#56). The app owns
-  /// its text and localization.
+  /// Optional widget rendered after the last itinerary of a plan and under
+  /// the legs of the itinerary details, e.g. a notice that the times are
+  /// estimates (trufi-arequipa#56). The app owns its text and localization.
   final WidgetBuilder? itinerariesFooterBuilder;
 
   const HomePage({
