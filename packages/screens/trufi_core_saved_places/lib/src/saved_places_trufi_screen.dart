@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 import '../l10n/saved_places_localizations.dart';
 import 'cubit/saved_places_cubit.dart';
 import 'models/saved_place.dart';
 import 'repository/saved_places_repository.dart';
 import 'repository/saved_places_repository_impl.dart';
+import 'services/saved_place_address.dart';
 import 'widgets/edit_place_dialog.dart';
 import 'widgets/saved_places_header.dart';
 import 'widgets/saved_places_list.dart';
@@ -22,7 +24,17 @@ class SavedPlacesConfig {
   /// Callback when a place is selected
   final void Function(SavedPlace place)? onPlaceSelected;
 
-  const SavedPlacesConfig({this.repository, this.onPlaceSelected});
+  /// Reverse geocoder for points picked on the map (#1003). By default the
+  /// screen asks the app's [SearchLocationsCubit] — the one the home screen
+  /// uses — and falls back to "lat, lon" when it is absent or silent; set
+  /// this to use another source.
+  final OnResolveAddress? resolveAddress;
+
+  const SavedPlacesConfig({
+    this.repository,
+    this.onPlaceSelected,
+    this.resolveAddress,
+  });
 }
 
 /// Saved Places screen module for TrufiApp integration
@@ -118,6 +130,34 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
     return (latitude: result.latitude, longitude: result.longitude);
   }
 
+  /// How long a reverse geocode may hold the address of a picked point
+  /// before the sheet settles for its coordinates (same budget as the home
+  /// screen's map picks).
+  static const Duration _reverseGeocodeTimeout = Duration(seconds: 5);
+
+  /// The address resolver handed to the sheet, resolved up front while
+  /// [context] is certainly mounted: the configured one, else the app's
+  /// [SearchLocationsCubit] (null when the app provides none — the sheet
+  /// then stores coordinates).
+  OnResolveAddress? _addressResolver(BuildContext context) {
+    final configured = config.resolveAddress;
+    if (configured != null) return configured;
+
+    final SearchLocationsCubit cubit;
+    try {
+      cubit = context.read<SearchLocationsCubit>();
+    } catch (_) {
+      return null; // not provided by this app
+    }
+
+    return (latitude, longitude) async {
+      final reverse = await cubit
+          .reverseGeocode(latitude, longitude)
+          .timeout(_reverseGeocodeTimeout, onTimeout: () => null);
+      return reverse == null ? null : addressFromReverseGeocode(reverse);
+    };
+  }
+
   void _showAddPlaceDialog(BuildContext context) async {
     final cubit = context.read<SavedPlacesCubit>();
     final mapEngineManager = MapEngineManager.read(context);
@@ -133,6 +173,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
       isNameTaken: cubit.hasSameName,
+      onResolveAddress: _addressResolver(context),
     );
 
     if (place != null && context.mounted) {
@@ -164,6 +205,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
       isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
+      onResolveAddress: _addressResolver(context),
     );
 
     if (updatedPlace != null && context.mounted) {

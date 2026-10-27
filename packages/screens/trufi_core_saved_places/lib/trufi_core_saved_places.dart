@@ -34,6 +34,9 @@ export 'src/models/saved_place.dart';
 export 'src/models/saved_place_icons.dart';
 export 'src/models/saved_route.dart';
 
+// Services
+export 'src/services/saved_place_address.dart';
+
 // Repository
 export 'src/repository/saved_places_repository.dart';
 export 'src/repository/saved_places_repository_impl.dart';
