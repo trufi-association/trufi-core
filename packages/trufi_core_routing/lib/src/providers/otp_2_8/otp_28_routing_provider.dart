@@ -124,9 +124,6 @@ class Otp28RoutingProvider extends IRoutingProvider {
   );
 
   @override
-  bool get hasConfigurablePreferences => true;
-
-  @override
   void resetPreferences() => _prefs.reset();
 
   @override

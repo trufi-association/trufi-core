@@ -45,9 +45,11 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  test('a provider without a preferences UI has nothing to configure', () {
+  test('a provider that overrides nothing keeps its button', () {
+    // Opt-out default: adding the flag changed nothing for providers written
+    // before it. Forgetting to override costs an empty sheet, never a form.
     final provider = _BareProvider();
-    expect(provider.hasConfigurablePreferences, isFalse);
+    expect(provider.hasConfigurablePreferences, isTrue);
   });
 
   test('the Trufi planner declares no configurable preferences', () {
@@ -86,6 +88,7 @@ void main() {
   });
 
   test('the OTP providers expose a preferences form', () {
+    // They ship a form and inherit the default; nothing to override.
     expect(
       Otp28RoutingProvider(
         endpoint: 'https://otp.example.org',

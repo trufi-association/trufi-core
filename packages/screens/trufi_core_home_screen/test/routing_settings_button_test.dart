@@ -37,9 +37,13 @@ class _FakeProvider extends routing.IRoutingProvider {
   @override
   bool get hasConfigurablePreferences => configurable;
 
+  /// The non-configurable shape is the local Trufi planner's: a panel that
+  /// is not null but only informs, so the home has to read the flag and not
+  /// `buildPreferencesUI != null`.
   @override
-  Widget? buildPreferencesUI(BuildContext context) =>
-      configurable ? const Text('fake preferences form') : null;
+  Widget? buildPreferencesUI(BuildContext context) => configurable
+      ? const Text('fake preferences form')
+      : const Text('fake info panel');
 
   @override
   Future<routing.Plan> fetchPlan({
@@ -55,8 +59,7 @@ class _FakeProvider extends routing.IRoutingProvider {
   Future<List<routing.TransitRoute>> fetchTransitRoutes() async => [];
 
   @override
-  Future<routing.TransitRoute?> fetchTransitRouteById(String id) async =>
-      null;
+  Future<routing.TransitRoute?> fetchTransitRouteById(String id) async => null;
 }
 
 class _FakePlanService implements RequestPlanService {
@@ -205,14 +208,12 @@ void main() {
 
       expect(find.text('Routing Provider'), findsOneWidget);
       expect(find.text('fake preferences form'), findsNothing);
+      // The current engine's informational panel is still part of the sheet.
+      expect(find.text('fake info panel'), findsOneWidget);
     });
 
     testWidgets('the wide layout follows the same rule', (tester) async {
-      await _pumpHome(
-        tester,
-        engines: [_FakeProvider('local')],
-        phone: false,
-      );
+      await _pumpHome(tester, engines: [_FakeProvider('local')], phone: false);
       expect(_tuneButton, findsNothing);
       expect(_swapButton, findsOneWidget);
 

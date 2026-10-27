@@ -195,7 +195,7 @@ class _SettingsContentState extends State<_SettingsContent>
     final hasRoutingChoice = routing.RoutingEngineManager.watch(
       context,
     ).hasMultipleEngines;
-    final hasMapChoice = MapEngineManager.watch(context).engines.length > 1;
+    final hasMapChoice = MapEngineManager.watch(context).hasMultipleEngines;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),

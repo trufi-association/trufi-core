@@ -127,10 +127,13 @@ abstract class IRoutingProvider {
   /// gets no button, instead of a sheet whose only action is an "Apply"
   /// that changes nothing (trufi-sanaa#23).
   ///
-  /// Defaults to `false`, consistent with the default [buildPreferencesUI]
-  /// (null). A provider that returns a form from [buildPreferencesUI] must
-  /// override this to `true`, or single-engine apps will hide its button.
-  bool get hasConfigurablePreferences => false;
+  /// Defaults to `true`: a provider written before this flag existed keeps
+  /// the button it always had, and the worst a provider that forgets to
+  /// override gets is the old sheet with nothing in it, never a lost form.
+  /// Override to `false` when there is nothing the user can change: no
+  /// [buildPreferencesUI] at all, or an informational panel like the local
+  /// Trufi planner's.
+  bool get hasConfigurablePreferences => true;
 
   /// Resets provider-specific preferences to defaults.
   void resetPreferences() {}

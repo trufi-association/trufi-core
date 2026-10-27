@@ -82,6 +82,9 @@ class MapEngineManager extends ChangeNotifier {
   /// List of available engines.
   List<ITrufiMapEngine> get engines => List.unmodifiable(_engines);
 
+  /// Returns true if there are multiple engines available.
+  bool get hasMultipleEngines => _engines.length > 1;
+
   /// Initialize all engines.
   ///
   /// This should be called during app startup to prepare all engines.
