@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' show Bidi;
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
@@ -44,6 +45,12 @@ class LocationSearchScreenConfiguration {
   /// Icon builder for places. Returns icon based on location id.
   final IconData Function(String id)? placeIconBuilder;
 
+  /// Whether a decimal latitude/longitude pair typed or pasted into the
+  /// field is offered as a "Go to `<lat>`, `<lon>`" row above the results
+  /// (trufi-sanaa#22). On by default; off, such a query is searched as
+  /// plain text, exactly as before.
+  final bool coordinateSearch;
+
   const LocationSearchScreenConfiguration({
     this.originHintText,
     this.destinationHintText,
@@ -55,6 +62,7 @@ class LocationSearchScreenConfiguration {
     this.yourLocationIcon = Icons.gps_fixed,
     this.chooseOnMapIcon = Icons.map,
     this.placeIconBuilder,
+    this.coordinateSearch = true,
   });
 }
 
@@ -202,12 +210,17 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     _debounce?.cancel();
     // Editing the query means the user moved on from the corners list.
     _exitDrillDown();
-    final coordinates = CoordinateParser.parse(query);
-    setState(() {
-      _coordinateResult = coordinates == null
-          ? null
-          : _coordinateLocation(coordinates);
-    });
+    final coordinates = widget.configuration.coordinateSearch
+        ? CoordinateParser.parse(query)
+        : null;
+    final next = coordinates == null ? null : _coordinateLocation(coordinates);
+    // The field's own setState already rebuilt the screen; only a row that
+    // changed needs another. [SearchLocation] compares by id, which carries
+    // the pair, so the same pair retyped (a trailing space, say) keeps its
+    // row — reverse-geocoded address included — instead of blinking.
+    if (next != _coordinateResult) {
+      setState(() => _coordinateResult = next);
+    }
     if (query.trim().isEmpty) {
       _performSearch(query);
       return;
@@ -636,8 +649,15 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                         padding: const EdgeInsets.only(bottom: 8),
                         child: _ModernLocationTile(
                           location: _coordinateResult!,
+                          // An LRM in front of the pair keeps it reading
+                          // left to right inside a right-to-left wording
+                          // (UAX #9: with ", " between two numbers in an
+                          // RTL paragraph the comma flips and a leading
+                          // minus hangs on the wrong side). Display only:
+                          // the popped location and the copied text are
+                          // the bare pair.
                           displayNameOverride: l10n.goToCoordinates(
-                            _coordinateResult!.displayName,
+                            '${Bidi.LRM}${_coordinateResult!.displayName}',
                           ),
                           icon: Icons.pin_drop_rounded,
                           iconColor: colorScheme.primary,

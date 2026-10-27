@@ -84,6 +84,8 @@ void main() {
     WidgetTester tester,
     _Service service, {
     Locale? locale,
+    LocationSearchScreenConfiguration configuration =
+        const LocationSearchScreenConfiguration(),
   }) async {
     picked = null;
     await tester.pumpWidget(
@@ -101,6 +103,7 @@ void main() {
                   builder: (_) => LocationSearchScreen(
                     isOrigin: true,
                     searchService: service,
+                    configuration: configuration,
                     onYourLocation: () async => null,
                     onChooseOnMap: () async => null,
                   ),
@@ -130,6 +133,12 @@ void main() {
 
   final goTo = find.textContaining('Go to ');
 
+  /// The row's exact text. An LRM (U+200E) sits in front of the pair so
+  /// that inside a right-to-left wording (trufi-sanaa's Arabic UI) the
+  /// comma and a leading minus stay where they belong; in en/es/de it is
+  /// invisible.
+  Finder goToRow(String pair) => find.text('Go to \u200e$pair');
+
   testWidgets('a coordinate pair is offered as "Go to <lat>, <lon>" at once, '
       'before any service is asked', (tester) async {
     final service = _Service();
@@ -137,7 +146,7 @@ void main() {
 
     await type(tester, '15.294830, 44.2243701');
 
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
     expect(find.byIcon(Icons.pin_drop_rounded), findsOneWidget);
     expect(service.searched, isEmpty);
     expect(service.reversed, isEmpty);
@@ -153,11 +162,11 @@ void main() {
 
     expect(service.reversed, [(15.294830, 44.2243701)]);
     expect(service.searched, ['15.294830, 44.2243701']);
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
     expect(find.text('Avenida Heroínas, Cochabamba'), findsOneWidget);
     expect(
       tester.getTopLeft(find.text('Avenida Heroínas, Cochabamba')).dy,
-      greaterThan(tester.getTopLeft(find.text('Go to 15.29483, 44.22437')).dy),
+      greaterThan(tester.getTopLeft(goToRow('15.29483, 44.22437')).dy),
     );
   });
 
@@ -168,7 +177,7 @@ void main() {
 
     await type(tester, '15.294830, 44.2243701');
     await debounce(tester);
-    await tester.tap(find.text('Go to 15.29483, 44.22437'));
+    await tester.tap(goToRow('15.29483, 44.22437'));
     await tester.pumpAndSettle();
 
     expect(picked, isNotNull);
@@ -186,7 +195,7 @@ void main() {
     await pumpScreen(tester, service);
 
     await type(tester, '-17.39, -66.16');
-    await tester.tap(find.text('Go to -17.39, -66.16'));
+    await tester.tap(goToRow('-17.39, -66.16'));
     await tester.pumpAndSettle();
 
     expect(picked?.displayName, '-17.39, -66.16');
@@ -207,10 +216,10 @@ void main() {
     await debounce(tester);
 
     expect(service.reversed, hasLength(1));
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.text('Go to 15.29483, 44.22437'));
+    await tester.tap(goToRow('15.29483, 44.22437'));
     await tester.pumpAndSettle();
     expect(picked?.address, isNull);
     expect(picked?.latitude, 15.294830);
@@ -225,7 +234,7 @@ void main() {
     await type(tester, '15.294830, 44.2243701');
     await debounce(tester);
 
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
     // Only the title and the section header and hints are texts with
     // content under the row: no address line was added.
     expect(find.text('Cochabamba'), findsNothing);
@@ -243,13 +252,13 @@ void main() {
 
     expect(service.searched, hasLength(1));
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
 
     gate.complete(const []);
     await tester.pumpAndSettle();
 
     expect(find.text('No results found'), findsNothing);
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
   });
 
   testWidgets('text results, when there are any, come under the row', (
@@ -261,11 +270,11 @@ void main() {
     await type(tester, '15.294830, 44.2243701');
     await debounce(tester);
 
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
     expect(find.text('Plaza Colón'), findsOneWidget);
     expect(
       tester.getTopLeft(find.text('Plaza Colón')).dy,
-      greaterThan(tester.getTopLeft(find.text('Go to 15.29483, 44.22437')).dy),
+      greaterThan(tester.getTopLeft(goToRow('15.29483, 44.22437')).dy),
     );
   });
 
@@ -295,7 +304,7 @@ void main() {
     await pumpScreen(tester, service);
 
     await type(tester, '15.33255° N, 44.19772° E');
-    expect(find.text('Go to 15.33255, 44.19772'), findsOneWidget);
+    expect(goToRow('15.33255, 44.19772'), findsOneWidget);
 
     // ١٥٫٢٩٤٨٣، ٤٤٫٢٢٤٣٧ — as copied from an Arabic UI.
     await type(
@@ -303,8 +312,8 @@ void main() {
       '\u0661\u0665\u066b\u0662\u0669\u0664\u0668\u0663\u060c '
       '\u0664\u0664\u066b\u0662\u0662\u0664\u0663\u0667',
     );
-    expect(find.text('Go to 15.29483, 44.22437'), findsOneWidget);
-    expect(find.text('Go to 15.33255, 44.19772'), findsNothing);
+    expect(goToRow('15.29483, 44.22437'), findsOneWidget);
+    expect(goToRow('15.33255, 44.19772'), findsNothing);
   });
 
   testWidgets('the row follows the query: it goes away when the text stops '
@@ -343,7 +352,7 @@ void main() {
     first.complete(_Service.plaza);
     await tester.pumpAndSettle();
     expect(find.text('Plaza Colón, Cochabamba'), findsNothing);
-    expect(find.text('Go to 15.4, 44.2'), findsOneWidget);
+    expect(goToRow('15.4, 44.2'), findsOneWidget);
 
     second.complete(_Service.heroinas);
     await tester.pumpAndSettle();
@@ -358,7 +367,7 @@ void main() {
     await pumpScreen(tester, service);
 
     await type(tester, '15.294830, 44.2243701');
-    await tester.longPress(find.text('Go to 15.29483, 44.22437'));
+    await tester.longPress(goToRow('15.29483, 44.22437'));
     await tester.pumpAndSettle();
 
     expect(copied, ['15.29483, 44.22437']);
@@ -371,6 +380,106 @@ void main() {
 
     await type(tester, '-17.39, -66.16');
 
-    expect(find.text('Ir a -17.39, -66.16'), findsOneWidget);
+    expect(find.text('Ir a \u200e-17.39, -66.16'), findsOneWidget);
   });
+
+  testWidgets('the pair reads left to right inside a right-to-left wording', (
+    tester,
+  ) async {
+    final service = _Service();
+    await pumpScreen(tester, service);
+    await type(tester, '-17.39, -66.16');
+
+    // What the row renders, mark included; an app's Arabic ARB puts its own
+    // words around the same placeholder.
+    final rendered = tester.widget<Text>(goToRow('-17.39, -66.16')).data!;
+    final pair = rendered.substring(rendered.indexOf('\u200e'));
+    // "الانتقال إلى " — trufi-sanaa's wording for "Go to ".
+    const arabic =
+        '\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644 \u0625\u0644\u0649 ';
+
+    expect(
+      _visualOrder('$arabic$pair', TextDirection.rtl),
+      contains('-17.39, -66.16'),
+    );
+    // Without the mark the bidi algorithm (UAX #9, rules W4/N1) flips the
+    // comma and hangs the minus on the wrong side: why the mark is there.
+    expect(
+      _visualOrder('$arabic-17.39, -66.16', TextDirection.rtl),
+      contains('66.16- ,17.39-'),
+    );
+  });
+
+  testWidgets('with coordinateSearch off a pair is an ordinary query: no '
+      'row, and the spinner and empty state as before', (tester) async {
+    final gate = Completer<List<SearchLocation>>();
+    final service = _Service()..results = () => gate.future;
+    await pumpScreen(
+      tester,
+      service,
+      configuration: const LocationSearchScreenConfiguration(
+        coordinateSearch: false,
+      ),
+    );
+
+    await type(tester, '15.294830, 44.2243701');
+    expect(goTo, findsNothing);
+    expect(find.byIcon(Icons.pin_drop_rounded), findsNothing);
+
+    await tester.pump(const Duration(milliseconds: 350));
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    gate.complete(const []);
+    await tester.pumpAndSettle();
+    expect(find.text('No results found'), findsOneWidget);
+    expect(service.searched, ['15.294830, 44.2243701']);
+    expect(service.reversed, isEmpty);
+  });
+
+  testWidgets('the same pair retyped keeps its row and address; a different '
+      'one starts bare', (tester) async {
+    final service = _Service()..reverseAnswer = _Service.heroinas;
+    await pumpScreen(tester, service);
+
+    await type(tester, '15.3, 44.2');
+    await debounce(tester);
+    expect(find.text('Avenida Heroínas, Cochabamba'), findsOneWidget);
+
+    // A trailing space is still the same pair: the row is not rebuilt bare
+    // for the 300 ms until the reverse geocoder answers again.
+    await type(tester, '15.3, 44.2 ');
+    expect(goToRow('15.3, 44.2'), findsOneWidget);
+    expect(find.text('Avenida Heroínas, Cochabamba'), findsOneWidget);
+
+    await type(tester, '15.3, 44.3');
+    expect(goToRow('15.3, 44.3'), findsOneWidget);
+    expect(find.text('Avenida Heroínas, Cochabamba'), findsNothing);
+
+    await debounce(tester);
+    // The retyped pair's debounce was cancelled by the next keystroke, as
+    // for any query: one reverse per settled pair.
+    expect(service.reversed, [(15.3, 44.2), (15.3, 44.3)]);
+    expect(find.text('Avenida Heroínas, Cochabamba'), findsOneWidget);
+  });
+}
+
+/// The characters of [text] in the order they are painted, left to right,
+/// under [direction]: what a reader sees rather than the logical string.
+String _visualOrder(String text, TextDirection direction) {
+  final painter = TextPainter(
+    text: TextSpan(text: text, style: const TextStyle(fontSize: 20)),
+    textDirection: direction,
+  )..layout();
+  final glyphs = <(double, String)>[];
+  for (var i = 0; i < text.length; i++) {
+    final boxes = painter.getBoxesForSelection(
+      TextSelection(baseOffset: i, extentOffset: i + 1),
+    );
+    if (boxes.isEmpty) continue;
+    glyphs.add((boxes.first.left, text[i]));
+  }
+  painter.dispose();
+  glyphs.sort((a, b) => a.$1.compareTo(b.$1));
+  return glyphs.map((g) => g.$2).join();
 }

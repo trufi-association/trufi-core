@@ -44,8 +44,9 @@ class ParsedCoordinates {
 ///   only when that is the sole reading in range (first `|value| > 90`,
 ///   second `|value| <= 90`);
 /// - Arabic-Indic and Persian digits, the Arabic comma `،` and decimal
-///   separator `٫`, the Unicode minus and bidi control marks are
-///   normalised first, so a pair copied from an Arabic UI parses as-is;
+///   separator `٫` and the Unicode minus are normalised first, and bidi
+///   control marks and zero-width characters dropped, so a pair copied
+///   from an Arabic UI or a chat app parses as-is;
 /// - a comma glued between digits is a decimal comma (`15,29483 44,22437`)
 ///   only when the text has no dot and the pair separator is unmistakable
 ///   (whitespace, or a comma next to a space).
@@ -144,12 +145,15 @@ abstract final class CoordinateParser {
     return '${one(latitude)}, ${one(longitude)}';
   }
 
-  /// Bidi marks that travel along with text copied from an RTL UI; they
-  /// carry no meaning for the parser and would break the match.
+  /// Characters that travel along with text copied from an RTL UI, a chat
+  /// app or a web page and carry no meaning for the parser: bidi marks,
+  /// embeddings and isolates, and the zero-width space and joiners. They
+  /// would break the match, so they are dropped.
   static const _invisible = {
     0x200E, 0x200F, 0x061C, // LRM, RLM, ALM
     0x202A, 0x202B, 0x202C, 0x202D, 0x202E, // embeddings and overrides
     0x2066, 0x2067, 0x2068, 0x2069, // isolates
+    0x200B, 0x200C, 0x200D, 0x2060, // ZWSP, ZWNJ, ZWJ, word joiner
     0xFEFF, // BOM / zero-width no-break space
   };
 

@@ -148,6 +148,16 @@ void main() {
         parse('\u202b15.29483\u202c, \u2066-44.22437\u2069'),
         const ParsedCoordinates(15.29483, -44.22437),
       );
+      // Zero-width space, non-joiner, joiner and word joiner: some chat
+      // apps and web pages copy them along with the text.
+      expect(
+        parse('15.29483,\u200b 44.22437'),
+        const ParsedCoordinates(15.29483, 44.22437),
+      );
+      expect(
+        parse('\u200c15.29483\u200d, 44\u2060.22437'),
+        const ParsedCoordinates(15.29483, 44.22437),
+      );
     });
 
     test('fullwidth digits and comma', () {
