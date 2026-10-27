@@ -36,6 +36,7 @@
   "retry": "Reintentar",
   "history": "Historial",
   "placeAlreadySaved": "\"{placeName}\" ya está guardado en esa ubicación",
+  "placeNameInUse": "Ya tienes un lugar con este nombre",
   "copiedToClipboard": "Copiado",
   "menuSavedRoutes": "Tus Rutas",
   "noRoutesSaved": "Aún no hay rutas guardadas",

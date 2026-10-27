@@ -131,6 +131,7 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       onChooseOnMap: onChooseOnMap,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
+      isNameTaken: cubit.hasSameName,
     );
 
     if (place != null && context.mounted) {
@@ -148,6 +149,7 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       onChooseOnMap: onChooseOnMap,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
+      isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
     );
 
     if (updatedPlace != null && context.mounted) {

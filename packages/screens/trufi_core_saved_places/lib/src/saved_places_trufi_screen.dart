@@ -132,6 +132,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       ),
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
+      isNameTaken: cubit.hasSameName,
     );
 
     if (place != null && context.mounted) {
@@ -162,6 +163,7 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       ),
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
+      isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
     );
 
     if (updatedPlace != null && context.mounted) {

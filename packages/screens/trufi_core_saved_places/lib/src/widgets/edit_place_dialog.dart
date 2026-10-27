@@ -11,6 +11,11 @@ typedef OnChooseOnMap =
       double? initialLongitude,
     });
 
+/// Whether [name] is already used by another saved place — see
+/// `SavedPlacesCubit.hasSameName`. The sheet only shows a notice; it never
+/// blocks the save.
+typedef IsPlaceNameTaken = bool Function(String name);
+
 /// Bottom sheet for creating or editing a saved place.
 ///
 /// Design inspired by Google Maps and Apple Maps:
@@ -26,6 +31,13 @@ class EditPlaceDialog extends StatefulWidget {
   final double defaultLatitude;
   final double defaultLongitude;
 
+  /// Answers, while the user types, whether the name is already in use by
+  /// another saved place; a soft notice then appears under the field
+  /// (#1003). Injected rather than read from a cubit because the sheet is a
+  /// separate route and `SavedPlacesScreen(repository:)` provides its cubit
+  /// below the navigator.
+  final IsPlaceNameTaken? isNameTaken;
+
   const EditPlaceDialog({
     super.key,
     this.place,
@@ -34,6 +46,7 @@ class EditPlaceDialog extends StatefulWidget {
     this.onChooseOnMap,
     this.defaultLatitude = 0.0,
     this.defaultLongitude = 0.0,
+    this.isNameTaken,
   });
 
   /// Shows the edit/create place bottom sheet.
@@ -44,6 +57,7 @@ class EditPlaceDialog extends StatefulWidget {
     OnChooseOnMap? onChooseOnMap,
     double defaultLatitude = 0.0,
     double defaultLongitude = 0.0,
+    IsPlaceNameTaken? isNameTaken,
   }) {
     return showModalBottomSheet<SavedPlace>(
       context: context,
@@ -56,6 +70,7 @@ class EditPlaceDialog extends StatefulWidget {
         onChooseOnMap: onChooseOnMap,
         defaultLatitude: defaultLatitude,
         defaultLongitude: defaultLongitude,
+        isNameTaken: isNameTaken,
         onSave: (updatedPlace) => Navigator.of(context).pop(updatedPlace),
       ),
     );
@@ -317,44 +332,66 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     );
   }
 
+  bool get _isNameTaken =>
+      widget.isNameTaken?.call(_nameController.text) ?? false;
+
   Widget _buildNameField(
     ThemeData theme,
     SavedPlacesLocalizations localization,
   ) {
-    return TextFormField(
-      controller: _nameController,
-      focusNode: _nameFocusNode,
-      textCapitalization: TextCapitalization.words,
-      decoration: InputDecoration(
-        labelText: localization.name,
-        hintText: localization.enterName,
-        filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHighest,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _nameController,
+          focusNode: _nameFocusNode,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            labelText: localization.name,
+            hintText: localization.enterName,
+            filled: true,
+            fillColor: theme.colorScheme.surfaceContainerHighest,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: theme.colorScheme.error),
+            ),
+            prefixIcon: const Icon(Icons.label_outline),
+          ),
+          onChanged: (_) => setState(() {}),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return localization.nameRequired;
+            }
+            return null;
+          },
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+        // Soft notice, same slot and type as the location card's error line
+        // but not an error: the name stays valid and Save keeps working
+        // (#1003 — the list showed three identical "Parada" rows).
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: _isNameTaken
+              ? _NameInUseNotice(message: localization.placeNameInUse)
+              : const SizedBox(width: double.infinity),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-        prefixIcon: const Icon(Icons.label_outline),
-      ),
-      onChanged: (_) => setState(() {}),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return localization.nameRequired;
-        }
-        return null;
-      },
+      ],
     );
   }
 
@@ -608,5 +645,49 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     }
 
     widget.onSave(updatedPlace);
+  }
+}
+
+/// "You already have a place with this name": an info row under the name
+/// field — icon 16 + bodySmall onSurfaceVariant, the ecosystem's info line —
+/// announced to screen readers when it appears.
+class _NameInUseNotice extends StatelessWidget {
+  const _NameInUseNotice({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, left: 16),
+      child: Semantics(
+        liveRegion: true,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 1),
+              child: Icon(
+                Icons.info_outline_rounded,
+                size: 16,
+                color: colorScheme.tertiary,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                message,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
