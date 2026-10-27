@@ -340,9 +340,8 @@ void main() {
             deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
             // Live ETA badges (#1004) derived from the OTP 2.8 GTFS-RT feed:
-            // one snapshot per plan/refresh, no background polling. Swap in
-            // `TrufiTecEtaProvider(endpoint: ..., apiKey: ...)` for a city
-            // served by Trufi Tec.
+            // one snapshot per plan/refresh, no background polling. Any other
+            // `VehicleEtaProvider` (a city's telemetry API) plugs in here.
             vehicleEtaProvider: RealtimeVehiclesEtaProvider(
               vehicles: _otp28.realtimeVehiclesProvider!,
               snapshotLoader: _otp28.realtimeVehiclesProvider!.fetchOnce,

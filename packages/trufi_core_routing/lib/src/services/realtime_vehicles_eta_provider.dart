@@ -9,8 +9,8 @@ typedef VehicleSnapshotLoader = Future<List<VehiclePosition>> Function();
 /// [averageSpeedKmh].
 ///
 /// Makes the ETA badges work today wherever a GTFS-RT feed exists (OTP 2.x
-/// `vehiclePositions`) and gives external telemetry clients such as the
-/// Trufi Tec one a second implementation of the same interface.
+/// `vehiclePositions`); an external telemetry client implements the same
+/// [VehicleEtaProvider] interface and plugs into the same UI.
 ///
 /// MVP simplifications, on purpose: direction and route geometry are
 /// ignored, so a vehicle driving away from the origin still yields an ETA.

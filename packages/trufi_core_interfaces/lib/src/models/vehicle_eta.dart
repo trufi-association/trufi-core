@@ -6,7 +6,7 @@ import 'realtime_vehicles_provider.dart' show stripGtfsFeedPrefix;
 import 'trufi_latlng.dart';
 
 /// Next-vehicle estimate for one route, as answered by a telemetry source
-/// (Trufi Tec, a GTFS-RT derived estimate, SIRI, ...).
+/// (a GTFS-RT derived estimate, SIRI, a city's fleet-telemetry API, ...).
 class VehicleEta extends Equatable {
   const VehicleEta({
     required this.routeId,
@@ -102,7 +102,7 @@ class VehicleEtaSnapshot extends Equatable {
   final DateTime fetchedAt;
 
   /// Free-form identifier of the backend that produced the snapshot
-  /// (e.g. `trufi_tec`), for diagnostics only.
+  /// (e.g. `realtime_vehicles`), for diagnostics only.
   final String? source;
 
   @override
@@ -161,8 +161,8 @@ class VehicleEtaException implements Exception {
 }
 
 /// Contract for any vehicle-telemetry backend able to answer "when does the
-/// next vehicle of route R reach this point?" (Trufi Tec, a GTFS-RT derived
-/// estimate, SIRI, ...).
+/// next vehicle of route R reach this point?" (a GTFS-RT derived estimate,
+/// SIRI, a city's fleet-telemetry API, ...).
 ///
 /// On-demand snapshot only: one request, one answer. No streams and no
 /// background polling by design (issue #1004 keeps mobile data and battery

@@ -259,8 +259,8 @@ estimated.
 
 ### Providers
 
-Both ship in `trufi_core_routing` (see its README for the parameters and
-the Trufi Tec contract):
+`RealtimeVehiclesEtaProvider` ships in `trufi_core_routing` (see its README
+for the parameters); any other backend implements `VehicleEtaProvider`:
 
 ```dart
 // From an OTP 2.x GTFS-RT feed — works today wherever live positions exist.
@@ -273,11 +273,15 @@ final etaProvider = RealtimeVehiclesEtaProvider(
   snapshotLoader: otp28.realtimeVehiclesProvider!.fetchOnce, // fresh per request
 );
 
-// From the Trufi Tec telemetry service (contract to be confirmed with them).
-final etaProvider = TrufiTecEtaProvider(
-  endpoint: 'https://api.trufitec.example/v1',
-  apiKey: 'your-key',
-);
+// From any other telemetry service: implement the interface.
+class CityEtaProvider implements VehicleEtaProvider {
+  @override
+  Future<VehicleEtaSnapshot> fetchEtas(VehicleEtaRequest request) async {
+    // Ask the backend for request.routeIds around request.origin and map
+    // its answer to VehicleEta entries; throw VehicleEtaException on failure.
+    throw UnimplementedError();
+  }
+}
 ```
 
 Route ids are matched feed-agnostically, so OTP vehicles (`1:1132`) answer

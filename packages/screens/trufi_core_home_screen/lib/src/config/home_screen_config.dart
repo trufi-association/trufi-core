@@ -59,8 +59,8 @@ class HomeScreenConfig {
   final bool liveVehiclesInitiallyEnabled;
 
   /// Optional telemetry source for the "next vehicle" badges on itinerary
-  /// cards (#1004): `RealtimeVehiclesEtaProvider` over a GTFS-RT feed, a
-  /// `TrufiTecEtaProvider`, or any other `VehicleEtaProvider`.
+  /// cards (#1004): `RealtimeVehiclesEtaProvider` over a GTFS-RT feed, or
+  /// any other `VehicleEtaProvider`.
   ///
   /// Null (default) hides the feature entirely: no cubit is created, no
   /// badge and no refresh button are rendered.
