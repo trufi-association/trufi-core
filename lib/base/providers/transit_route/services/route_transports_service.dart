@@ -8,11 +8,20 @@ import 'package:trufi_core/base/utils/graphql_client/graphql_client.dart';
 
 import '../services/patter_queries.dart' as pattern_query;
 
-class RouteTransportsServices {
+/// What [RouteTransportsCubit] needs from the server: the list of patterns
+/// and the geometry/stops of one of them. [RouteTransportsServices] is the
+/// GraphQL implementation; tests can plug a fake.
+abstract class RouteTransportsRemoteRepository {
+  Future<List<TransitRoute>> fetchPatterns();
+  Future<TransitRoute> fetchDataPattern(String idStop);
+}
+
+class RouteTransportsServices implements RouteTransportsRemoteRepository {
   final GraphQLClient client;
 
   RouteTransportsServices(String endpoint) : client = getClient(endpoint);
 
+  @override
   Future<List<TransitRoute>> fetchPatterns() async {
     final WatchQueryOptions listPatterns = WatchQueryOptions(
       document: parseString(pattern_query.allPatterns),
@@ -33,6 +42,7 @@ class RouteTransportsServices {
     return patterns;
   }
 
+  @override
   Future<TransitRoute> fetchDataPattern(String idStop) async {
     final WatchQueryOptions pattern = WatchQueryOptions(
       document: parseString(pattern_query.dataPattern),

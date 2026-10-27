@@ -11,27 +11,40 @@ import '../services/route_transports_service.dart';
 part 'route_transports_state.dart';
 
 class RouteTransportsCubit extends Cubit<RouteTransportsState> {
-  final RouteTransportsLocalRepository localRepository =
-      RouteTransportsHiveLocalRepository();
-  final RouteTransportsServices routeTransportsRepository;
+  final RouteTransportsLocalRepository localRepository;
+  final RouteTransportsRemoteRepository routeTransportsRepository;
 
-  RouteTransportsCubit(String otpEndpoint)
-      : routeTransportsRepository = RouteTransportsServices(otpEndpoint),
+  RouteTransportsCubit(
+    String otpEndpoint, {
+    RouteTransportsLocalRepository? localRepository,
+    RouteTransportsRemoteRepository? routeTransportsRepository,
+  })  : localRepository = localRepository ?? RouteTransportsHiveLocalRepository(),
+        routeTransportsRepository =
+            routeTransportsRepository ?? RouteTransportsServices(otpEndpoint),
         super(const RouteTransportsState()) {
     load().catchError((error) {});
   }
 
+  /// Shows the cached list at once and, when there is one, fetches the feed
+  /// again in the background so a server update reaches installed apps
+  /// without the refresh button (trufi-arequipa#74). Offline or on error the
+  /// cached list simply stays.
   Future<void> load() async {
     if (state.transports.isNotEmpty) return;
     await localRepository.loadRepository();
-    final transports = await localRepository.getTransports();
-    emit(state.copyWith(transports: transports, filterTransports: transports));
-    if (state.transports.isNotEmpty) return;
-    await refresh();
+    final cached = await localRepository.getTransports();
+    emit(state.copyWith(transports: cached, filterTransports: cached));
+    if (cached.isEmpty) {
+      await refresh();
+      return;
+    }
+    await refresh(silent: true);
   }
 
-  Future<void> refresh() async {
-    emit(state.copyWith(isLoading: true));
+  /// Fetches the patterns from the server. With [silent] the loading overlay
+  /// is not shown and a failure is swallowed (the current list is kept).
+  Future<void> refresh({bool silent = false}) async {
+    if (!silent) emit(state.copyWith(isLoading: true));
     try {
       final transports = await routeTransportsRepository.fetchPatterns();
       sortTransitRoutesByAgencyNameAndShortName(transports);
@@ -54,6 +67,7 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
         isLoading: false,
       ));
     } catch (e) {
+      if (silent) return;
       emit(state.copyWith(isLoading: false));
       rethrow;
     }
