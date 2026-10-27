@@ -43,12 +43,26 @@ class TransportDetailScreen extends StatefulWidget {
   /// If not provided, uses Navigator.pop().
   final VoidCallback? onClose;
 
+  /// Whether the route's stops are part of the detail: the timeline sheet
+  /// (the side panel list on wide screens), the stop count in the stats
+  /// card and the intermediate dots on the map.
+  ///
+  /// Feeds built for a city with no stops mapped carry synthetic ones — the
+  /// GTFS builder invents a stop every 100 m along the shape — and showing
+  /// them as if they were real misleads riders (trufi-sanaa#18). With
+  /// `false` the detail keeps what is true: the line on the map with its
+  /// terminals, the route identity, operating hours, distance and mode.
+  /// The phone layout then shows a fixed summary card instead of the
+  /// draggable sheet, so the map keeps the whole screen.
+  final bool showStops;
+
   const TransportDetailScreen({
     super.key,
     required this.routeCode,
     required this.getRouteDetails,
     this.shareBaseUri,
     this.onClose,
+    this.showStops = true,
   });
 
   /// Creates a getRouteDetails function using RoutingEngineManager from context.
@@ -159,6 +173,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   Widget _buildMap(BuildContext context) {
     return _RouteMapView(
       route: _route,
+      showStops: widget.showStops,
       registerMapMoveCallback: (callback) => _mapMoveCallback = callback,
       registerStopSelectionCallback: (callback) =>
           _stopSelectionCallback = callback,
@@ -530,6 +545,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
               Expanded(
                 child: _SidePanelStopsContent(
                   route: _route!,
+                  showStops: widget.showStops,
                   selectedStopIndex: _selectedStopIndex,
                   onStopTap: (index, lat, lng) {
                     HapticFeedback.selectionClick();
@@ -565,47 +581,79 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         // Top bar with route info
         _buildTopBar(context, theme, colorScheme),
 
-        // Bottom sheet with stops only
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final screenHeight = constraints.maxHeight;
-            // Grabber height in TrufiBottomSheet: 12 top + 4 bar + 8 bottom = 24
-            const grabberHeight = 24.0;
-            final minSize = _headerMinSize != null
-                ? ((_headerMinSize! + grabberHeight) / screenHeight).clamp(
-                    0.1,
-                    0.4,
-                  )
-                : 0.12;
-            final snapSizes = [minSize, 0.35, 0.85];
+        // Bottom sheet with the stops — or, when they are hidden, a fixed
+        // summary card that leaves the map free to pan and zoom.
+        if (widget.showStops)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenHeight = constraints.maxHeight;
+              // Grabber height in TrufiBottomSheet: 12 top + 4 bar + 8 bottom = 24
+              const grabberHeight = 24.0;
+              final minSize = _headerMinSize != null
+                  ? ((_headerMinSize! + grabberHeight) / screenHeight).clamp(
+                      0.1,
+                      0.4,
+                    )
+                  : 0.12;
+              final snapSizes = [minSize, 0.35, 0.85];
 
-            return TrufiBottomSheet(
-              controller: _sheetController,
-              initialChildSize: 0.35,
-              minChildSize: minSize,
-              maxChildSize: 0.85,
-              snap: true,
-              snapSizes: snapSizes,
-              builder: (context, scrollController) => _StopsSheetContent(
-                route: _route!,
-                scrollController: scrollController,
-                selectedStopIndex: _selectedStopIndex,
-                onHeaderMeasured: (height) {
-                  if (_headerMinSize != height) {
-                    setState(() => _headerMinSize = height);
-                  }
-                },
-                onStopTap: (index, lat, lng) {
-                  HapticFeedback.selectionClick();
-                  setState(() => _selectedStopIndex = index);
-                  _mapMoveCallback?.call(lat, lng);
-                  _stopSelectionCallback?.call(index);
-                },
-              ),
-            );
-          },
-        ),
+              return TrufiBottomSheet(
+                controller: _sheetController,
+                initialChildSize: 0.35,
+                minChildSize: minSize,
+                maxChildSize: 0.85,
+                snap: true,
+                snapSizes: snapSizes,
+                builder: (context, scrollController) => _StopsSheetContent(
+                  route: _route!,
+                  scrollController: scrollController,
+                  selectedStopIndex: _selectedStopIndex,
+                  onHeaderMeasured: (height) {
+                    if (_headerMinSize != height) {
+                      setState(() => _headerMinSize = height);
+                    }
+                  },
+                  onStopTap: (index, lat, lng) {
+                    HapticFeedback.selectionClick();
+                    setState(() => _selectedStopIndex = index);
+                    _mapMoveCallback?.call(lat, lng);
+                    _stopSelectionCallback?.call(index);
+                  },
+                ),
+              );
+            },
+          )
+        else
+          _buildSummaryCard(context, colorScheme),
       ],
+    );
+  }
+
+  /// What replaces the stops sheet when [TransportDetailScreen.showStops]
+  /// is false: the same summary (terminals, hours, distance, mode) on a
+  /// card with nothing to drag — no grabber, no snap points — so the map
+  /// keeps the whole screen for panning and zooming.
+  Widget _buildSummaryCard(BuildContext context, ColorScheme colorScheme) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Material(
+            color: colorScheme.surface.withValues(alpha: 0.95),
+            borderRadius: BorderRadius.circular(16),
+            elevation: 2,
+            shadowColor: Colors.black26,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: _RouteSummary(route: _route!, showStops: false),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -860,11 +908,16 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
 }
 
 /// What the stops sheet pins above its timeline: origin → destination,
-/// the operating-hours badge and the distance / stops / mode card.
+/// the operating-hours badge and the distance / stops / mode card. With
+/// [showStops] false it is the whole detail: no stop count, no "Stops"
+/// label, and the terminals come from the route name only — never from
+/// the first/last stop, which is what must not leak when stops are
+/// synthetic.
 class _RouteSummary extends StatelessWidget {
   final TransportRouteDetails route;
+  final bool showStops;
 
-  const _RouteSummary({required this.route});
+  const _RouteSummary({required this.route, this.showStops = true});
 
   @override
   Widget build(BuildContext context) {
@@ -882,7 +935,7 @@ class _RouteSummary extends StatelessWidget {
     // feeds that pack "<from> → <to>" into route_long_name.
     String? originLabel;
     String? destinationLabel;
-    if (stops.length >= 2) {
+    if (showStops && stops.length >= 2) {
       originLabel = stops.first.name;
       destinationLabel = stops.last.name;
     } else if (route.hasOriginDestination) {
@@ -1017,20 +1070,22 @@ class _RouteSummary extends StatelessWidget {
                     color: _foregroundColor(routeColor),
                   ),
                 ),
-                Container(
-                  width: 1,
-                  height: 32,
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
-                ),
-                // Stops
-                Expanded(
-                  child: _StatItem(
-                    icon: Icons.pin_drop_rounded,
-                    label: TransportListLocalizations.of(context).labelStops,
-                    value: '${stops.length}',
-                    color: _foregroundColor(routeColor),
+                if (showStops) ...[
+                  Container(
+                    width: 1,
+                    height: 32,
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.3),
                   ),
-                ),
+                  // Stops
+                  Expanded(
+                    child: _StatItem(
+                      icon: Icons.pin_drop_rounded,
+                      label: TransportListLocalizations.of(context).labelStops,
+                      value: '${stops.length}',
+                      color: _foregroundColor(routeColor),
+                    ),
+                  ),
+                ],
                 Container(
                   width: 1,
                   height: 32,
@@ -1057,26 +1112,27 @@ class _RouteSummary extends StatelessWidget {
         ),
 
         // Stops header with divider
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-          child: Row(
-            children: [
-              Text(
-                TransportListLocalizations.of(context).labelStops,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
+        if (showStops)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Row(
+              children: [
+                Text(
+                  TransportListLocalizations.of(context).labelStops,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Divider(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Divider(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
@@ -1361,11 +1417,13 @@ class _DottedLinePainter extends CustomPainter {
 /// Content for the side panel stops list (wide screens).
 class _SidePanelStopsContent extends StatelessWidget {
   final TransportRouteDetails route;
+  final bool showStops;
   final int? selectedStopIndex;
   final void Function(int index, double lat, double lng)? onStopTap;
 
   const _SidePanelStopsContent({
     required this.route,
+    this.showStops = true,
     this.selectedStopIndex,
     this.onStopTap,
   });
@@ -1494,20 +1552,22 @@ class _SidePanelStopsContent extends StatelessWidget {
                     color: routeColor,
                   ),
                 ),
-                Container(
-                  width: 1,
-                  height: 32,
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
-                ),
-                // Stops
-                Expanded(
-                  child: _StatItem(
-                    icon: Icons.pin_drop_rounded,
-                    label: TransportListLocalizations.of(context).labelStops,
-                    value: '${stops.length}',
-                    color: routeColor,
+                if (showStops) ...[
+                  Container(
+                    width: 1,
+                    height: 32,
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.3),
                   ),
-                ),
+                  // Stops
+                  Expanded(
+                    child: _StatItem(
+                      icon: Icons.pin_drop_rounded,
+                      label: TransportListLocalizations.of(context).labelStops,
+                      value: '${stops.length}',
+                      color: routeColor,
+                    ),
+                  ),
+                ],
                 Container(
                   width: 1,
                   height: 32,
@@ -1533,59 +1593,65 @@ class _SidePanelStopsContent extends StatelessWidget {
           ),
         ),
 
-        // Stops header with divider
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-          child: Row(
-            children: [
-              Text(
-                TransportListLocalizations.of(context).labelStops,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
+        if (showStops) ...[
+          // Stops header with divider
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Row(
+              children: [
+                Text(
+                  TransportListLocalizations.of(context).labelStops,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Divider(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Divider(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        // Scrollable stops list
-        Expanded(
-          child: stops.isEmpty
-              ? const _EmptyStopsInline()
-              : ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: stops.length,
-                  itemBuilder: (context, index) {
-                    final stop = stops[index];
-                    final isFirst = index == 0;
-                    final isLast = index == stops.length - 1;
-                    final isSelected = selectedStopIndex == index;
-                    final routeColor =
-                        route.backgroundColor ?? colorScheme.primary;
+          // Scrollable stops list
+          Expanded(
+            child: stops.isEmpty
+                ? const _EmptyStopsInline()
+                : ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: stops.length,
+                    itemBuilder: (context, index) {
+                      final stop = stops[index];
+                      final isFirst = index == 0;
+                      final isLast = index == stops.length - 1;
+                      final isSelected = selectedStopIndex == index;
+                      final routeColor =
+                          route.backgroundColor ?? colorScheme.primary;
 
-                    return _StopTimelineItem(
-                      stop: stop,
-                      isFirst: isFirst,
-                      isLast: isLast,
-                      isSelected: isSelected,
-                      routeColor: _foregroundColor(routeColor),
-                      onTap: onStopTap != null
-                          ? () {
-                              HapticFeedback.selectionClick();
-                              onStopTap!(index, stop.latitude, stop.longitude);
-                            }
-                          : null,
-                    );
-                  },
-                ),
-        ),
+                      return _StopTimelineItem(
+                        stop: stop,
+                        isFirst: isFirst,
+                        isLast: isLast,
+                        isSelected: isSelected,
+                        routeColor: _foregroundColor(routeColor),
+                        onTap: onStopTap != null
+                            ? () {
+                                HapticFeedback.selectionClick();
+                                onStopTap!(
+                                  index,
+                                  stop.latitude,
+                                  stop.longitude,
+                                );
+                              }
+                            : null,
+                      );
+                    },
+                  ),
+          ),
+        ],
       ],
     );
   }
@@ -1646,11 +1712,16 @@ class _StatItem extends StatelessWidget {
 /// Map view for displaying a route (used by showWithRoutingEngine)
 class _RouteMapView extends StatefulWidget {
   final TransportRouteDetails? route;
+
+  /// [TransportDetailScreen.showStops]: false draws the shape with its two
+  /// end pins and no stop dots.
+  final bool showStops;
   final void Function(MapMoveCallback) registerMapMoveCallback;
   final void Function(StopSelectionCallback) registerStopSelectionCallback;
 
   const _RouteMapView({
     required this.route,
+    required this.showStops,
     required this.registerMapMoveCallback,
     required this.registerStopSelectionCallback,
   });
@@ -1768,7 +1839,12 @@ class _RouteMapViewState extends State<_RouteMapView> {
         ),
       );
 
-      _buildStopMarkers(route, markers);
+      if (widget.showStops) {
+        _buildStopMarkers(route, markers);
+      } else {
+        // Synthetic stops stay off the map: only the two ends of the shape.
+        markers.addAll(_terminalMarkers(points.first, points.last));
+      }
     }
 
     _routeMarkers = markers;
