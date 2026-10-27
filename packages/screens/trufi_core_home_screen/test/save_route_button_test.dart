@@ -201,7 +201,7 @@ void main() {
 
     await tester.tap(bookmarkOutlined());
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Cancel'));
+    await tester.tap(find.byTooltip('Cancel'));
     await tester.pumpAndSettle();
 
     expect(cubit.state.routes, isEmpty);

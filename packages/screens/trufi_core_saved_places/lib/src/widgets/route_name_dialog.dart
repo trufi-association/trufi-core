@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// Dialog asking for a route name, pre-filled with [initialName].
+/// Sheet asking for a route name, pre-filled with [initialName].
 ///
+/// Same anatomy as the edit-place sheet (`EditPlaceDialog`): modal bottom
+/// sheet with a drag handle, a title row closed by an X, a filled text
+/// field and a full-width save button that follows the keyboard.
 /// The whole text starts selected so typing replaces the "A → B" default.
-/// Every label is injected: `trufi_core_home_screen` reuses the dialog to
+/// Every label is injected: `trufi_core_home_screen` reuses the sheet to
 /// save a route with its own localizations, and must not depend on this
-/// package's delegate being installed in the host app.
+/// package's delegate being installed in the host app. [cancelLabel] is
+/// the tooltip of the close button.
 class RouteNameDialog extends StatefulWidget {
   const RouteNameDialog({
     super.key,
@@ -22,7 +26,7 @@ class RouteNameDialog extends StatefulWidget {
   final String cancelLabel;
   final String confirmLabel;
 
-  /// Shows the dialog. Resolves to the trimmed name, or null when cancelled.
+  /// Shows the sheet. Resolves to the trimmed name, or null when dismissed.
   static Future<String?> show(
     BuildContext context, {
     required String title,
@@ -31,8 +35,11 @@ class RouteNameDialog extends StatefulWidget {
     required String cancelLabel,
     required String confirmLabel,
   }) {
-    return showDialog<String>(
+    return showModalBottomSheet<String>(
       context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
       builder: (_) => RouteNameDialog(
         title: title,
         initialName: initialName,
@@ -74,32 +81,124 @@ class _RouteNameDialogState extends State<RouteNameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.title),
-      content: TextFormField(
-        controller: _controller,
-        autofocus: true,
-        textCapitalization: TextCapitalization.sentences,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-          labelText: widget.fieldLabel,
-          border: const OutlineInputBorder(),
-        ),
-        onFieldSubmitted: (_) => _confirm(),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(widget.cancelLabel),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDragHandle(colorScheme),
+            _buildHeader(theme),
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildNameField(colorScheme),
+                  const SizedBox(height: 24),
+                  _buildSaveButton(),
+                ],
+              ),
+            ),
+          ],
         ),
-        ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _controller,
-          builder: (context, value, _) => FilledButton(
-            onPressed: value.text.trim().isEmpty ? null : _confirm,
-            child: Text(widget.confirmLabel),
+      ),
+    );
+  }
+
+  Widget _buildDragHandle(ColorScheme colorScheme) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.only(top: 12),
+        width: 32,
+        height: 4,
+        decoration: BoxDecoration(
+          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 16, 8, 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              widget.title,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close),
+            tooltip: widget.cancelLabel,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNameField(ColorScheme colorScheme) {
+    return TextFormField(
+      controller: _controller,
+      autofocus: true,
+      textCapitalization: TextCapitalization.sentences,
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+        labelText: widget.fieldLabel,
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
+        ),
+        prefixIcon: const Icon(Icons.label_outline),
+      ),
+      onFieldSubmitted: (_) => _confirm(),
+    );
+  }
+
+  Widget _buildSaveButton() {
+    return SizedBox(
+      height: 56,
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _controller,
+        builder: (context, value, _) => FilledButton.icon(
+          onPressed: value.text.trim().isEmpty ? null : _confirm,
+          icon: const Icon(Icons.check),
+          label: Text(
+            widget.confirmLabel,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          style: FilledButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
