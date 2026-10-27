@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show RouteBadge, RouteBadgeVariant;
 
+import '../../models/transport_route.dart' show gtfsRouteTypeIcon;
 import '../nearby_geometry.dart';
 import '../nearby_line.dart';
 import '../nearby_lines_cubit.dart';
 import '../nearby_radius.dart';
-import 'nearby_lines_sheet.dart' show nearbyContrastColor;
 
 /// Marker id prefix of the per-line "201 · 75 m" labels; the rest of the id
 /// is the [NearbyLine.lineKey], so a tap on the label toggles that line.
@@ -59,13 +61,15 @@ List<TrufiLayer> buildNearbyLayers({
           widget: _RingLabel(
             text: formatMeters(state.radius.meters),
             color: colorScheme.primary,
+            textColor: colorScheme.onPrimary,
           ),
           size: const Size(56, 22),
           layerLevel: 0,
           allowOverlap: true,
           imageCacheKey:
               'nearby-ring-label-${state.radius.meters.round()}-'
-              '${colorScheme.primary.toARGB32()}',
+              '${colorScheme.primary.toARGB32()}-'
+              '${colorScheme.onPrimary.toARGB32()}',
         ),
       ],
     ),
@@ -142,22 +146,33 @@ TrufiMarker _pointMarker(
       selected: selected,
       colorScheme: colorScheme,
     ),
-    size: const Size(110, 28),
+    size: const Size(130, 32),
     layerLevel: selected ? 3 : 2,
     // The selected label always shows; the others may yield to neighbours.
     allowOverlap: selected,
+    // Everything the raster depends on: the mode glyph, the feed colors and
+    // the theme colors of the distance chip (light / dark), besides the
+    // name, the distance and the two states.
     imageCacheKey:
-        'nearby-point-${line.displayName}-${line.distanceMeters.round()}-'
-        '${line.color?.toARGB32()}-$inside-$selected',
+        'nearby-point-${line.displayName}-${line.routeType.name}-'
+        '${line.distanceMeters.round()}-'
+        '${line.color?.toARGB32()}-${line.textColor?.toARGB32()}-'
+        '${colorScheme.primary.toARGB32()}-${colorScheme.surface.toARGB32()}-'
+        '$inside-$selected',
   );
 }
 
-/// "300 m" pill on top of the selected ring.
+/// "300 m" pill on top of the selected ring, in the theme's primary pair.
 class _RingLabel extends StatelessWidget {
-  const _RingLabel({required this.text, required this.color});
+  const _RingLabel({
+    required this.text,
+    required this.color,
+    required this.textColor,
+  });
 
   final String text;
   final Color color;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -166,12 +181,12 @@ class _RingLabel extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(11),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: textColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
@@ -181,8 +196,10 @@ class _RingLabel extends StatelessWidget {
   }
 }
 
-/// "201 · 75 m": the badge on the route color plus the distance chip, in
-/// the primary color inside the selected radius and plain outside.
+/// "201 · 75 m": the line's badge as the home map draws its route labels
+/// (mode icon + name on the route color, white border, drop shadow) plus
+/// the distance chip, in the primary color inside the selected radius and
+/// plain outside.
 class _NearestPointMarker extends StatelessWidget {
   const _NearestPointMarker({
     required this.line,
@@ -200,29 +217,18 @@ class _NearestPointMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badgeColor = line.color ?? colorScheme.primary;
     return Center(
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: badgeColor,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                line.displayName,
-                style: TextStyle(
-                  color: line.textColor ?? nearbyContrastColor(badgeColor),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            RouteBadge(
+              variant: RouteBadgeVariant.mapLabel,
+              label: line.displayName,
+              color: line.color ?? colorScheme.primary,
+              textColor: line.textColor,
+              icon: Icon(gtfsRouteTypeIcon(line.routeType)),
             ),
             const SizedBox(width: 4),
             Container(
@@ -238,6 +244,13 @@ class _NearestPointMarker extends StatelessWidget {
                       : colorScheme.outlineVariant,
                   width: selected ? 2 : 1,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Text(
                 label,
