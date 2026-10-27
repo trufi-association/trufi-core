@@ -155,8 +155,10 @@ class EtaBadge extends StatelessWidget {
     }
     final updatedAt = fetchedAt;
     if (live && updatedAt != null) {
+      // Sources may stamp `fetchedAt` in UTC (ISO `...Z`, epoch): render
+      // the rider's wall clock, never the source's.
       badge = Tooltip(
-        message: l10n.etaUpdated(formatClockTime(context, updatedAt)),
+        message: l10n.etaUpdated(formatClockTime(context, updatedAt.toLocal())),
         child: badge,
       );
     }

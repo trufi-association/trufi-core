@@ -82,7 +82,12 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
     debugPrint(
       '[RealtimeVehicles] polling $_graphqlEndpoint every $pollInterval',
     );
-    _client = GraphQLClientFactory.create(_graphqlEndpoint, timeout: requestTimeout);
+    // `??=`: a client created lazily by [fetchOnce] is reused, not orphaned
+    // with its open HTTP connection pool.
+    _client ??= GraphQLClientFactory.create(
+      _graphqlEndpoint,
+      timeout: requestTimeout,
+    );
     await _tick();
     _timer = Timer.periodic(pollInterval, (_) => _tick());
   }
@@ -96,6 +101,9 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
   Future<void> dispose() async {
     stop();
     await _controller.close();
+    // HttpLink.dispose closes the http.Client it was given.
+    await _client?.link.dispose();
+    _client = null;
   }
 
   /// Runs ONE vehicle-positions query without touching the polling timer:
@@ -106,8 +114,16 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
   ///
   /// Throws [OtpVehiclePositionsException] on GraphQL errors or null data;
   /// network errors propagate untouched. The polling path ([start]) keeps
-  /// its swallow-and-log behaviour through [_tick].
+  /// its swallow-and-log behaviour through [_tick]. Logs `snapshot: N
+  /// vehicles`, so a `tick:` line in the log always means the poller.
   Future<List<VehiclePosition>> fetchOnce() async {
+    final positions = await _fetchPositions();
+    debugPrint('[RealtimeVehicles] snapshot: ${positions.length} vehicles');
+    return positions;
+  }
+
+  /// The query itself, shared by [fetchOnce] and the poller's [_tick].
+  Future<List<VehiclePosition>> _fetchPositions() async {
     final client = _client ??= GraphQLClientFactory.create(
       _graphqlEndpoint,
       timeout: requestTimeout,
@@ -154,14 +170,14 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
 
     _latest = positions;
     if (!_controller.isClosed) _controller.add(positions);
-    debugPrint('[RealtimeVehicles] tick: ${positions.length} vehicles');
     return positions;
   }
 
   Future<void> _tick() async {
     if (_client == null) return;
     try {
-      await fetchOnce();
+      final positions = await _fetchPositions();
+      debugPrint('[RealtimeVehicles] tick: ${positions.length} vehicles');
     } catch (e, st) {
       debugPrint('[RealtimeVehicles] tick error: $e\n$st');
     }

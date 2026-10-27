@@ -68,6 +68,36 @@ void main() {
     expect(find.byType(Opacity), findsNothing);
   });
 
+  testWidgets('the tooltip renders a UTC fetchedAt in local time', (
+    tester,
+  ) async {
+    // What a source that stamps ISO `...Z` / epoch timestamps hands over.
+    final fetchedAt = DateTime.utc(2026, 10, 13, 14, 32);
+    await tester.pumpWidget(
+      host(
+        EtaBadge(
+          status: VehicleEtaStatus.ready,
+          eta: eta,
+          fetchedAt: fetchedAt,
+        ),
+      ),
+    );
+
+    final context = tester.element(find.byType(EtaBadge));
+    String clock(DateTime time) => MaterialLocalizations.of(
+      context,
+    ).formatTimeOfDay(TimeOfDay.fromDateTime(time));
+    final message = tester.widget<Tooltip>(find.byType(Tooltip)).message!;
+    expect(message, 'Updated ${clock(fetchedAt.toLocal())}');
+    if (fetchedAt.toLocal().hour != fetchedAt.hour) {
+      expect(
+        message,
+        isNot(contains(clock(fetchedAt))),
+        reason: 'the rider reads their own wall clock, not the source\'s',
+      );
+    }
+  });
+
   testWidgets('unavailable shows the fallback without a tooltip', (
     tester,
   ) async {

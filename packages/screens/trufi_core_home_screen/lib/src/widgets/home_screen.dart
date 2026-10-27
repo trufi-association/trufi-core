@@ -1657,8 +1657,12 @@ class _HomeScreenState extends State<HomeScreen>
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
 
+    // The "live" dot on route chips (LiveBusBadge) follows the Live buses
+    // toggle: with the layer off the provider still takes on-demand
+    // snapshots for the ETA badges (#1004), which would otherwise light a
+    // dot that never updates again until the next plan.
     return Provider<RealtimeVehiclesProvider?>.value(
-      value: _realtimeVehiclesProvider,
+      value: _liveVehiclesEnabled.value ? _realtimeVehiclesProvider : null,
       child: Scaffold(
         body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
           listener: (context, state) {
