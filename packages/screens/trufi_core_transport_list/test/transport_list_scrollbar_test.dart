@@ -139,4 +139,51 @@ void main() {
     expect(controller.offset, 0);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'desktop (web with a mouse): only the explicit scrollbar is in the '
+    'tree, so the thumb is not painted twice',
+    (tester) async {
+      await _pump(tester, _routes(40));
+
+      // MaterialScrollBehavior wraps every vertical scrollable in a Scrollbar
+      // of its own on linux/macOS/windows; the list opts out of that one and
+      // keeps the explicit, draggable bar (#1020).
+      expect(find.byType(Scrollbar), findsOneWidget);
+      final scrollbar = tester.widget<Scrollbar>(find.byType(Scrollbar));
+      expect(scrollbar.thumbVisibility, isTrue);
+      expect(scrollbar.controller, same(_listController(tester)));
+
+      final list = tester.getRect(find.byType(ListView));
+      await _dragDown(tester, Offset(list.right - 2, list.top + 20), 60);
+      expect(_listController(tester).offset, greaterThan(120));
+      expect(tester.takeException(), isNull);
+    },
+    variant: TargetPlatformVariant.desktop(),
+  );
+
+  testWidgets(
+    'Android: still one scrollbar, and opting out of the automatic bar keeps '
+    'the rest of the platform behaviour (stretch overscroll)',
+    (tester) async {
+      await _pump(tester, _routes(40));
+
+      expect(find.byType(Scrollbar), findsOneWidget);
+      // The inherited behaviour is copied, not replaced: Android's stretch
+      // overscroll still wraps the list.
+      expect(
+        find.descendant(
+          of: find.byType(Scrollbar),
+          matching: find.byType(StretchingOverscrollIndicator),
+        ),
+        findsOneWidget,
+      );
+
+      final list = tester.getRect(find.byType(ListView));
+      await _dragDown(tester, Offset(list.right - 2, list.top + 20), 60);
+      expect(_listController(tester).offset, greaterThan(120));
+      expect(tester.takeException(), isNull);
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.android),
+  );
 }
