@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show routeBadgeForeground;
 
 /// One segment of a [SegmentedRouteChip].
 class RouteSegmentSpec {
@@ -80,12 +82,10 @@ class SegmentedRouteChip extends StatelessWidget {
   /// white-on-color (the map's route badges, Sam 2026-08-13: nothing black
   /// on the unselected options) — so white wins whenever it clears WCAG
   /// large-text AA (3:1), and near-black takes over only on fills too
-  /// light for white to stay readable.
-  static Color bestContrastOn(Color fill) {
-    final l = fill.computeLuminance();
-    final whiteRatio = 1.05 / (l + 0.05);
-    return whiteRatio >= 3.0 ? Colors.white : Colors.black87;
-  }
+  /// light for white to stay readable. The rule itself now lives in
+  /// trufi_core_routing_ui as [routeBadgeForeground] so every badge of the
+  /// ecosystem shares it; this alias keeps the chip's callers working.
+  static Color bestContrastOn(Color fill) => routeBadgeForeground(fill);
 
   @override
   Widget build(BuildContext context) {

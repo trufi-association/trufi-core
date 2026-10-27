@@ -24,6 +24,7 @@ dependencies:
   trufi_core_base_widgets: ^1.0.0
   trufi_core_interfaces: ^1.0.0
   trufi_core_routing: ^1.0.0
+  trufi_core_routing_ui: ^1.0.0
   trufi_core_maps: ^1.0.0
   trufi_core_utils: ^1.0.0
   trufi_core_planner: ^1.0.0
