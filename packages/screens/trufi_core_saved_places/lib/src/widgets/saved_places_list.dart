@@ -49,6 +49,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
   }
 
   void _triggerAnimation() {
+    if (!mounted) return;
     if (!_hasAnimated) {
       _hasAnimated = true;
       _staggerController.forward();
@@ -60,7 +61,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
     return BlocBuilder<SavedPlacesCubit, SavedPlacesState>(
       builder: (context, state) {
         if (state.status == SavedPlacesStatus.loading) {
-          return _ShimmerLoadingList();
+          return const SavedPlacesShimmerList();
         }
 
         if (state.status == SavedPlacesStatus.error) {
@@ -136,10 +137,9 @@ class _SavedPlacesListState extends State<SavedPlacesList>
       children: [
         _buildAnimatedItem(
           index: 0,
-          child: _buildSectionHeader(
-            context,
-            localization.defaultPlaces,
-            Icons.bookmark_rounded,
+          child: SavedPlacesSectionHeader(
+            title: localization.defaultPlaces,
+            icon: Icons.bookmark_rounded,
           ),
         ),
         const SizedBox(height: 12),
@@ -300,10 +300,9 @@ class _SavedPlacesListState extends State<SavedPlacesList>
       children: [
         _buildAnimatedItem(
           index: 3,
-          child: _buildSectionHeader(
-            context,
-            localization.customPlaces,
-            Icons.place_rounded,
+          child: SavedPlacesSectionHeader(
+            title: localization.customPlaces,
+            icon: Icons.place_rounded,
           ),
         ),
         const SizedBox(height: 12),
@@ -354,10 +353,9 @@ class _SavedPlacesListState extends State<SavedPlacesList>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildSectionHeader(
-                context,
-                localization.recentPlaces,
-                Icons.history_rounded,
+              SavedPlacesSectionHeader(
+                title: localization.recentPlaces,
+                icon: Icons.history_rounded,
               ),
               _ClearHistoryButton(
                 onPressed: () {
@@ -392,12 +390,22 @@ class _SavedPlacesListState extends State<SavedPlacesList>
       ],
     );
   }
+}
 
-  Widget _buildSectionHeader(
-    BuildContext context,
-    String title,
-    IconData icon,
-  ) {
+/// Section label of the lists of this package: a 16 px icon on a tinted
+/// 8 px tile and the title in titleSmall.
+class SavedPlacesSectionHeader extends StatelessWidget {
+  const SavedPlacesSectionHeader({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -472,13 +480,19 @@ class _ClearHistoryButton extends StatelessWidget {
   }
 }
 
-/// Shimmer loading skeleton for the saved places list
-class _ShimmerLoadingList extends StatefulWidget {
+/// Shimmer loading skeleton with the silhouette of the lists of this package
+/// (section header + tiles). [sections] is 2 for Your Places; Your Routes
+/// shows one.
+class SavedPlacesShimmerList extends StatefulWidget {
+  const SavedPlacesShimmerList({super.key, this.sections = 2});
+
+  final int sections;
+
   @override
-  State<_ShimmerLoadingList> createState() => _ShimmerLoadingListState();
+  State<SavedPlacesShimmerList> createState() => _SavedPlacesShimmerListState();
 }
 
-class _ShimmerLoadingListState extends State<_ShimmerLoadingList>
+class _SavedPlacesShimmerListState extends State<SavedPlacesShimmerList>
     with SingleTickerProviderStateMixin {
   late AnimationController _shimmerController;
 
@@ -536,15 +550,17 @@ class _ShimmerLoadingListState extends State<_ShimmerLoadingList>
           _ShimmerPlaceTile(),
           const SizedBox(height: 10),
           _ShimmerPlaceTile(),
-          const SizedBox(height: 24),
-          // Other places section
-          _ShimmerSectionHeader(),
-          const SizedBox(height: 12),
-          _ShimmerPlaceTile(),
-          const SizedBox(height: 10),
-          _ShimmerPlaceTile(),
-          const SizedBox(height: 10),
-          _ShimmerPlaceTile(),
+          if (widget.sections > 1) ...[
+            const SizedBox(height: 24),
+            // Other places section
+            _ShimmerSectionHeader(),
+            const SizedBox(height: 12),
+            _ShimmerPlaceTile(),
+            const SizedBox(height: 10),
+            _ShimmerPlaceTile(),
+            const SizedBox(height: 10),
+            _ShimmerPlaceTile(),
+          ],
         ],
       ),
     );

@@ -23,6 +23,12 @@ dependency_overrides:
     path: ../../../trufi_core_interfaces
   trufi_core_maps:
     path: ../../../trufi_core_maps
+  trufi_core_planner:
+    path: ../../../trufi_core_planner
+  trufi_core_routing:
+    path: ../../../trufi_core_routing
+  trufi_core_routing_ui:
+    path: ../../../trufi_core_routing_ui
   trufi_core_utils:
     path: ../../../trufi_core_utils
 

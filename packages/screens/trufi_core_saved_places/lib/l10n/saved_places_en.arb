@@ -59,5 +59,124 @@
   "copiedToClipboard": "Copied",
   "@copiedToClipboard": {
     "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"
+  },
+  "menuSavedRoutes": "Your Routes",
+  "@menuSavedRoutes": {
+    "description": "Drawer entry and header title of the saved origin-destination routes screen (#1005)"
+  },
+  "noRoutesSaved": "No routes saved yet",
+  "@noRoutesSaved": {
+    "description": "Empty state title of the saved routes screen"
+  },
+  "noRoutesSavedHint": "Plan a trip and tap the bookmark to keep it here",
+  "@noRoutesSavedHint": {
+    "description": "Empty state hint of the saved routes screen, shown below noRoutesSaved"
+  },
+  "savedRoutesSection": "Saved routes",
+  "@savedRoutesSection": {
+    "description": "Section label above the cards of the saved routes screen (not the screen title, which is menuSavedRoutes)"
+  },
+  "routeOrigin": "Origin: {name}",
+  "@routeOrigin": {
+    "description": "Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Home"
+      }
+    }
+  },
+  "routeDestination": "Destination: {name}",
+  "@routeDestination": {
+    "description": "Accessibility label of the destination row on a saved route card (the row itself shows only the name, next to a red dot)",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Work"
+      }
+    }
+  },
+  "distanceMeters": "{meters} m",
+  "@distanceMeters": {
+    "description": "Distance below one kilometre",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "450"
+      }
+    }
+  },
+  "distanceKilometers": "{km} km",
+  "@distanceKilometers": {
+    "description": "Distance of one kilometre or more, with one decimal",
+    "placeholders": {
+      "km": {
+        "type": "String",
+        "example": "5.0"
+      }
+    }
+  },
+  "durationMinutes": "{minutes} min",
+  "@durationMinutes": {
+    "description": "Duration below one hour",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours}h {minutes}min",
+  "@durationHoursMinutes": {
+    "description": "Duration of one hour or more",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "1"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "renameRoute": "Rename route",
+  "@renameRoute": {
+    "description": "Menu action and dialog title to rename a saved route"
+  },
+  "routeName": "Route name",
+  "@routeName": {
+    "description": "Label of the name field in the rename route dialog"
+  },
+  "swapDirection": "Swap direction",
+  "@swapDirection": {
+    "description": "Menu action that exchanges origin and destination of a saved route"
+  },
+  "removeRoute": "Remove route",
+  "@removeRoute": {
+    "description": "Menu action and confirmation title to delete a saved route"
+  },
+  "removeRouteConfirmation": "Are you sure you want to remove {routeName}?",
+  "@removeRouteConfirmation": {
+    "description": "Confirmation message shown when a user tries to delete a saved route.",
+    "placeholders": {
+      "routeName": {
+        "type": "String",
+        "example": "Home to Work"
+      }
+    }
+  },
+  "routeAlreadySaved": "This route is already saved as \"{routeName}\"",
+  "@routeAlreadySaved": {
+    "description": "Shown when saving or swapping a route would duplicate an existing one (same origin and destination).",
+    "placeholders": {
+      "routeName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingRoutes": "Error loading routes",
+  "@errorLoadingRoutes": {
+    "description": "Error state of the saved routes screen"
   }
 }

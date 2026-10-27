@@ -7,6 +7,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show RouteBadge, RouteBadgeVariant;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/transport_list_localizations.dart';
@@ -221,9 +223,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     ColorScheme colorScheme,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor =
-        _route?.textColor ??
-        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
@@ -278,38 +277,12 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                       child: Row(
                         children: [
                           // Route badge
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: routeColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (_route!.modeIcon != null) ...[
-                                  IconTheme(
-                                    data: IconThemeData(
-                                      color: textColor,
-                                      size: 16,
-                                    ),
-                                    child: _route!.modeIcon!,
-                                  ),
-                                  const SizedBox(width: 4),
-                                ],
-                                Text(
-                                  _route!.displayName,
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
+                          RouteBadge(
+                            label: _route!.displayName,
+                            color: routeColor,
+                            textColor: _route!.textColor,
+                            icon: _route!.modeIcon,
+                            variant: RouteBadgeVariant.pill,
                           ),
                           const SizedBox(width: 10),
                           // Route corridor + variant. Mirrors TransportTile's
@@ -452,9 +425,6 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     double width,
   ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
-    final textColor =
-        _route?.textColor ??
-        (routeColor.computeLuminance() > 0.5 ? Colors.black87 : Colors.white);
 
     return Positioned(
       top: 0,
@@ -506,35 +476,12 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                     const SizedBox(width: 12),
                     // Route badge
                     if (_route != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: routeColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (_route!.modeIcon != null) ...[
-                              IconTheme(
-                                data: IconThemeData(color: textColor, size: 16),
-                                child: _route!.modeIcon!,
-                              ),
-                              const SizedBox(width: 4),
-                            ],
-                            Text(
-                              _route!.displayName,
-                              style: TextStyle(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
+                      RouteBadge(
+                        label: _route!.displayName,
+                        color: routeColor,
+                        textColor: _route!.textColor,
+                        icon: _route!.modeIcon,
+                        variant: RouteBadgeVariant.pill,
                       ),
                     const SizedBox(width: 12),
                     // Route corridor + variant (same shape as the list tile).

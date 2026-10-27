@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart'
     show ServiceHoursIndicator;
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
+    show RouteBadge, RouteBadgeVariant;
 
 import '../models/transport_route.dart';
 
@@ -34,8 +36,7 @@ class TransportTile extends StatelessWidget {
   /// e.g. "Verde", "Bandera Roja"; otherwise the OSM `to` tag).
   /// Falls back to `route_desc` when present.
   String? _getSecondaryText(TransportRoute route) {
-    final hasLongName =
-        route.longName != null && route.longName!.isNotEmpty;
+    final hasLongName = route.longName != null && route.longName!.isNotEmpty;
     if (!hasLongName) return null;
     if (route.headsign != null && route.headsign!.isNotEmpty) {
       return route.headsign;
@@ -178,7 +179,9 @@ class TransportTile extends StatelessWidget {
   }
 }
 
-/// Modern route badge with transport type icon
+/// The list's square badge: [RouteBadge.tile] fed with the route's GTFS
+/// colours and mode icon (the geometry used to live here and was promoted
+/// to trufi_core_routing_ui so every screen draws the same badge).
 class _RouteBadge extends StatelessWidget {
   final TransportRoute route;
 
@@ -186,61 +189,14 @@ class _RouteBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final routeColor = route.backgroundColor ?? colorScheme.primary;
-    final textColor = route.textColor ?? _getContrastColor(routeColor);
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      constraints: const BoxConstraints(minWidth: 56, minHeight: 48),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: routeColor,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: routeColor.withValues(alpha: 0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Transport mode icon
-          if (route.modeIcon != null)
-            SizedBox(
-              width: 18,
-              height: 18,
-              child: IconTheme(
-                data: IconThemeData(color: textColor, size: 18),
-                child: route.modeIcon!,
-              ),
-            )
-          else
-            Icon(Icons.directions_bus_rounded, size: 18, color: textColor),
-          const SizedBox(height: 2),
-          // Route number
-          Text(
-            route.displayName,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
-              letterSpacing: 0.5,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return RouteBadge(
+      label: route.displayName,
+      color: route.backgroundColor ?? colorScheme.primary,
+      textColor: route.textColor,
+      icon: route.modeIcon,
+      variant: RouteBadgeVariant.tile,
     );
-  }
-
-  /// Calculate contrast color for text based on background
-  Color _getContrastColor(Color background) {
-    final luminance = background.computeLuminance();
-    return luminance > 0.5 ? Colors.black87 : Colors.white;
   }
 }

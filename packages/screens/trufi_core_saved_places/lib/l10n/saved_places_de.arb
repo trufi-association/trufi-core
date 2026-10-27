@@ -36,5 +36,22 @@
   "retry": "Erneut versuchen",
   "history": "Verlauf",
   "placeAlreadySaved": "„{placeName}“ ist an diesem Ort bereits gespeichert",
-  "copiedToClipboard": "Kopiert"
+  "copiedToClipboard": "Kopiert",
+  "menuSavedRoutes": "Ihre Routen",
+  "noRoutesSaved": "Noch keine Routen gespeichert",
+  "noRoutesSavedHint": "Planen Sie eine Fahrt und tippen Sie auf das Lesezeichen, um sie hier zu speichern",
+  "savedRoutesSection": "Gespeicherte Routen",
+  "routeOrigin": "Start: {name}",
+  "routeDestination": "Ziel: {name}",
+  "distanceMeters": "{meters} m",
+  "distanceKilometers": "{km} km",
+  "durationMinutes": "{minutes} Min.",
+  "durationHoursMinutes": "{hours} Std. {minutes} Min.",
+  "renameRoute": "Route umbenennen",
+  "routeName": "Routenname",
+  "swapDirection": "Richtung umkehren",
+  "removeRoute": "Route entfernen",
+  "removeRouteConfirmation": "Möchten Sie {routeName} wirklich entfernen?",
+  "routeAlreadySaved": "Diese Route ist bereits als „{routeName}“ gespeichert",
+  "errorLoadingRoutes": "Fehler beim Laden der Routen"
 }

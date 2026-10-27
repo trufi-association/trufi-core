@@ -33,6 +33,7 @@ export 'src/repository/home_screen_repository_impl.dart';
 
 // Services
 export 'src/services/request_plan_service.dart';
+export 'src/services/saved_route_snapshot.dart';
 
 // Cubit (State Management)
 export 'src/cubit/route_planner_cubit.dart';
@@ -44,6 +45,7 @@ export 'src/widgets/poi_compact_card.dart';
 export 'src/widgets/itinerary_card.dart';
 export 'src/widgets/itinerary_detail_screen.dart';
 export 'src/widgets/itinerary_list.dart';
+export 'src/widgets/save_route_button.dart';
 
 // TrufiScreen Integration
 export 'src/home_screen_trufi_screen.dart';

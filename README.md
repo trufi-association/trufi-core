@@ -31,7 +31,7 @@ A cross-platform multi-modal public transport app built in [Flutter](https://flu
 - **Turn-by-turn navigation** for transit and walking legs.
 - **Origin/destination search** — online (Photon, Nominatim) and offline (asset-based POI search via [osm-search-data-export](https://github.com/trufi-association/osm-search-data-export)).
 - **POI map layers** — render points of interest from GeoJSON or asset bundles.
-- **Saved places, fares, feedback, settings, about** — drop-in screens for the most common app sections.
+- **Saved places and routes, fares, feedback, settings, about** — drop-in screens for the most common app sections.
 - **Pluggable map engine** via the `ITrufiMapEngine` abstraction — ships with MapLibre GL; the example shows a drop-in `flutter_map` alternative.
 - **Push and in-app notifications** for service alerts.
 - **Localization-ready** with per-package Flutter `.arb` translations (English, Spanish and German included).
@@ -81,7 +81,7 @@ The example in [apps/example](apps/example) is the canonical place to see how pa
 | Package | Description |
 | --- | --- |
 | [`trufi_core_home_screen`](packages/screens/trufi_core_home_screen) | Home screen with route planning, search and itinerary view. |
-| [`trufi_core_saved_places`](packages/screens/trufi_core_saved_places) | Manage favorites, history and custom places. |
+| [`trufi_core_saved_places`](packages/screens/trufi_core_saved_places) | Manage favorites, history, custom places and saved origin–destination routes. |
 | [`trufi_core_transport_list`](packages/screens/trufi_core_transport_list) | Routes list with route details. |
 | [`trufi_core_fares`](packages/screens/trufi_core_fares) | Fares / pricing information. |
 | [`trufi_core_feedback`](packages/screens/trufi_core_feedback) | External feedback flow with app context. |

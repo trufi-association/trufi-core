@@ -122,4 +122,72 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
 
   @override
   String get copiedToClipboard => 'Copiado';
+
+  @override
+  String get menuSavedRoutes => 'Tus Rutas';
+
+  @override
+  String get noRoutesSaved => 'Aún no hay rutas guardadas';
+
+  @override
+  String get noRoutesSavedHint =>
+      'Planifica un viaje y toca el marcador para guardarlo aquí';
+
+  @override
+  String get savedRoutesSection => 'Rutas guardadas';
+
+  @override
+  String routeOrigin(String name) {
+    return 'Origen: $name';
+  }
+
+  @override
+  String routeDestination(String name) {
+    return 'Destino: $name';
+  }
+
+  @override
+  String distanceMeters(int meters) {
+    return '$meters m';
+  }
+
+  @override
+  String distanceKilometers(String km) {
+    return '$km km';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String durationHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}min';
+  }
+
+  @override
+  String get renameRoute => 'Renombrar ruta';
+
+  @override
+  String get routeName => 'Nombre de la ruta';
+
+  @override
+  String get swapDirection => 'Invertir dirección';
+
+  @override
+  String get removeRoute => 'Eliminar ruta';
+
+  @override
+  String removeRouteConfirmation(String routeName) {
+    return '¿Estás seguro de que quieres eliminar $routeName?';
+  }
+
+  @override
+  String routeAlreadySaved(String routeName) {
+    return 'Esta ruta ya está guardada como \"$routeName\"';
+  }
+
+  @override
+  String get errorLoadingRoutes => 'Error al cargar rutas';
 }

@@ -336,6 +336,7 @@ void main() {
           },
         ),
         SavedPlacesTrufiScreen(),
+        SavedRoutesTrufiScreen(),
         TransportListTrufiScreen(),
         FaresTrufiScreen(
           config: FaresConfig(

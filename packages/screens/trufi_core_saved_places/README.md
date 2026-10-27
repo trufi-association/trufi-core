@@ -9,6 +9,7 @@ Manage saved places (home, work, favorites, history) with persistence and UI.
 - Search history with auto-deduplication (max 50)
 - Hive-based persistence
 - Full UI: list, tiles, edit dialog
+- Saved origin–destination routes with an itinerary snapshot (#1005)
 - Localization (EN, ES, DE)
 
 ## Quick Start
@@ -129,6 +130,80 @@ place.toMyPlace()
 SavedPlace.fromTrufiLocation(location, type: SavedPlaceType.other)
 ```
 
+## Saved routes
+
+"Your Routes" keeps complete origin–destination trips so a recurring journey
+is one tap away. Register the screen next to the places one:
+
+```dart
+TrufiAppConfig(
+  screens: [
+    HomeScreenTrufiScreen(...),
+    SavedPlacesTrufiScreen(),
+    SavedRoutesTrufiScreen(), // path '/saved-routes', drawer order 55
+  ],
+)
+```
+
+Once the screen is registered, the route results of `trufi_core_home_screen`
+show a bookmark button (results header, side panel and itinerary detail)
+that saves the current trip under a name pre-filled with
+"origin → destination", together with a snapshot of the selected itinerary
+(transit badges, distance, duration). Without the screen the button does not
+render, so existing apps see no change.
+
+Tapping a saved route sets a pending `SharedRoute` on the app's
+`SharedRouteNotifier` and navigates to `/`; the home screen consumes it
+exactly like a deep link (origin, destination, fresh plan). To do something
+else instead, pass a callback — the caller value wins over the default:
+
+```dart
+SavedRoutesTrufiScreen(
+  config: SavedRoutesConfig(
+    onRouteSelected: (route) => myPlanner.plan(route.origin, route.destination),
+    repository: MySavedRoutesRepository(), // optional, defaults to SharedPreferences
+  ),
+)
+```
+
+### SavedRoutesCubit
+
+```dart
+cubit.saveRoute(route);        // false when the same trip is already saved
+cubit.renameRoute(id, name);
+cubit.swapRoute(id);           // false when the reversed trip already exists
+cubit.deleteRoute(id);
+cubit.markUsed(id);            // stamps lastUsedAt, keeps the order
+cubit.findDuplicate(origin: p, destination: q); // SavedRoute? within 50 m
+
+state.routes      // List<SavedRoute>, insertion order
+state.isLoading   // bool
+state.error       // String?
+```
+
+Two routes are the same trip when both endpoints lie within
+`SavedRoutesCubit.duplicateRadiusMeters` (50 m) of each other, in the same
+direction; names never take part. "Home → Work" and "Work → Home" are two
+different routes — "Swap direction" creates the second one.
+
+### SavedRoute
+
+```dart
+final route = SavedRoute.create(
+  name: 'Home → Work',
+  origin: SavedRoutePoint.fromTrufiLocation(from),
+  destination: SavedRoutePoint.fromTrufiLocation(to),
+  snapshot: savedRouteSnapshotFromItinerary(itinerary), // from trufi_core_home_screen, optional
+);
+
+route.swapped();           // inverted copy, snapshot dropped
+route.origin.toTrufiLocation();
+```
+
+Routes persist as one JSON list under the `trufi_saved_routes` key of the
+`StorageService` (`SharedPreferencesStorage` by default); implement
+`SavedRoutesRepository` for another backend.
+
 ## Widgets
 
 | Widget | Purpose |
@@ -138,6 +213,9 @@ SavedPlace.fromTrufiLocation(location, type: SavedPlaceType.other)
 | `SavedPlacesList` | List organized by sections |
 | `SavedPlaceTile` | Individual place card |
 | `EditPlaceDialog.show()` | Create/edit modal |
+| `SavedRoutesList` | Saved routes with loading / error / empty states |
+| `SavedRouteCard` | Individual route card (chips, transit badges, summary, menu) |
+| `RouteNameDialog.show()` | Name prompt shared by "save route" and "rename route" |
 
 ## Static vs Dynamic Places
 

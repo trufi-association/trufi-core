@@ -36,5 +36,22 @@
   "retry": "Reintentar",
   "history": "Historial",
   "placeAlreadySaved": "\"{placeName}\" ya está guardado en esa ubicación",
-  "copiedToClipboard": "Copiado"
+  "copiedToClipboard": "Copiado",
+  "menuSavedRoutes": "Tus Rutas",
+  "noRoutesSaved": "Aún no hay rutas guardadas",
+  "noRoutesSavedHint": "Planifica un viaje y toca el marcador para guardarlo aquí",
+  "savedRoutesSection": "Rutas guardadas",
+  "routeOrigin": "Origen: {name}",
+  "routeDestination": "Destino: {name}",
+  "distanceMeters": "{meters} m",
+  "distanceKilometers": "{km} km",
+  "durationMinutes": "{minutes} min",
+  "durationHoursMinutes": "{hours}h {minutes}min",
+  "renameRoute": "Renombrar ruta",
+  "routeName": "Nombre de la ruta",
+  "swapDirection": "Invertir dirección",
+  "removeRoute": "Eliminar ruta",
+  "removeRouteConfirmation": "¿Estás seguro de que quieres eliminar {routeName}?",
+  "routeAlreadySaved": "Esta ruta ya está guardada como \"{routeName}\"",
+  "errorLoadingRoutes": "Error al cargar rutas"
 }

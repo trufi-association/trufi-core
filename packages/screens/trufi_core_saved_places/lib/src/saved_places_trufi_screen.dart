@@ -11,6 +11,7 @@ import 'models/saved_place.dart';
 import 'repository/saved_places_repository.dart';
 import 'repository/saved_places_repository_impl.dart';
 import 'widgets/edit_place_dialog.dart';
+import 'widgets/saved_places_header.dart';
 import 'widgets/saved_places_list.dart';
 
 /// Configuration for the Saved Places screen
@@ -271,22 +272,23 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = SavedPlacesLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       color: colorScheme.surface,
       child: SafeArea(
         child: Column(
           children: [
-            // Modern header
-            _SavedPlacesHeader(
+            SavedPlacesHeader(
               title: localization.yourPlaces,
               onMenuPressed: () => _tryOpenDrawer(context),
-              onAddPressed: () {
-                HapticFeedback.lightImpact();
-                _showAddPlaceDialog(context);
-              },
+              action: SavedPlacesHeaderAction(
+                icon: Icons.add_rounded,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  _showAddPlaceDialog(context);
+                },
+              ),
             ),
             // Places list
             Expanded(
@@ -299,82 +301,6 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Modern header for saved places screen
-class _SavedPlacesHeader extends StatelessWidget {
-  final String title;
-  final VoidCallback onMenuPressed;
-  final VoidCallback onAddPressed;
-
-  const _SavedPlacesHeader({
-    required this.title,
-    required this.onMenuPressed,
-    required this.onAddPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Row(
-        children: [
-          // Menu button
-          Material(
-            color: colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(14),
-            child: InkWell(
-              onTap: onMenuPressed,
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                width: 48,
-                height: 48,
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.menu_rounded,
-                  color: colorScheme.onSurfaceVariant,
-                  size: 24,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Title
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ),
-          // Add button
-          Material(
-            color: colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(14),
-            child: InkWell(
-              onTap: onAddPressed,
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                width: 48,
-                height: 48,
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.add_rounded,
-                  color: colorScheme.onPrimaryContainer,
-                  size: 24,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

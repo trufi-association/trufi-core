@@ -324,6 +324,108 @@ abstract class SavedPlacesLocalizations {
   /// In en, this message translates to:
   /// **'Copied'**
   String get copiedToClipboard;
+
+  /// Drawer entry and header title of the saved origin-destination routes screen (#1005)
+  ///
+  /// In en, this message translates to:
+  /// **'Your Routes'**
+  String get menuSavedRoutes;
+
+  /// Empty state title of the saved routes screen
+  ///
+  /// In en, this message translates to:
+  /// **'No routes saved yet'**
+  String get noRoutesSaved;
+
+  /// Empty state hint of the saved routes screen, shown below noRoutesSaved
+  ///
+  /// In en, this message translates to:
+  /// **'Plan a trip and tap the bookmark to keep it here'**
+  String get noRoutesSavedHint;
+
+  /// Section label above the cards of the saved routes screen (not the screen title, which is menuSavedRoutes)
+  ///
+  /// In en, this message translates to:
+  /// **'Saved routes'**
+  String get savedRoutesSection;
+
+  /// Accessibility label of the origin row on a saved route card (the row itself shows only the name, next to a green dot)
+  ///
+  /// In en, this message translates to:
+  /// **'Origin: {name}'**
+  String routeOrigin(String name);
+
+  /// Accessibility label of the destination row on a saved route card (the row itself shows only the name, next to a red dot)
+  ///
+  /// In en, this message translates to:
+  /// **'Destination: {name}'**
+  String routeDestination(String name);
+
+  /// Distance below one kilometre
+  ///
+  /// In en, this message translates to:
+  /// **'{meters} m'**
+  String distanceMeters(int meters);
+
+  /// Distance of one kilometre or more, with one decimal
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String distanceKilometers(String km);
+
+  /// Duration below one hour
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String durationMinutes(int minutes);
+
+  /// Duration of one hour or more
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}min'**
+  String durationHoursMinutes(int hours, int minutes);
+
+  /// Menu action and dialog title to rename a saved route
+  ///
+  /// In en, this message translates to:
+  /// **'Rename route'**
+  String get renameRoute;
+
+  /// Label of the name field in the rename route dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Route name'**
+  String get routeName;
+
+  /// Menu action that exchanges origin and destination of a saved route
+  ///
+  /// In en, this message translates to:
+  /// **'Swap direction'**
+  String get swapDirection;
+
+  /// Menu action and confirmation title to delete a saved route
+  ///
+  /// In en, this message translates to:
+  /// **'Remove route'**
+  String get removeRoute;
+
+  /// Confirmation message shown when a user tries to delete a saved route.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {routeName}?'**
+  String removeRouteConfirmation(String routeName);
+
+  /// Shown when saving or swapping a route would duplicate an existing one (same origin and destination).
+  ///
+  /// In en, this message translates to:
+  /// **'This route is already saved as \"{routeName}\"'**
+  String routeAlreadySaved(String routeName);
+
+  /// Error state of the saved routes screen
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading routes'**
+  String get errorLoadingRoutes;
 }
 
 class _SavedPlacesLocalizationsDelegate

@@ -888,6 +888,36 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Copied'**
   String get copiedToClipboard;
+
+  /// Tooltip of the bookmark button on route results and title of the dialog naming the route to save (#1005)
+  ///
+  /// In en, this message translates to:
+  /// **'Save route'**
+  String get saveRoute;
+
+  /// Label of the name field in the save route dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Route name'**
+  String get saveRouteName;
+
+  /// Save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get buttonSave;
+
+  /// Snackbar after the current trip was bookmarked as a saved route
+  ///
+  /// In en, this message translates to:
+  /// **'Route saved as \"{routeName}\"'**
+  String routeSaved(String routeName);
+
+  /// Snackbar when the current origin and destination are already bookmarked as a saved route
+  ///
+  /// In en, this message translates to:
+  /// **'This route is already saved as \"{routeName}\"'**
+  String routeAlreadySaved(String routeName);
 }
 
 class _HomeScreenLocalizationsDelegate

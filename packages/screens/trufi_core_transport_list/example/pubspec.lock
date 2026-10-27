@@ -1028,6 +1028,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  trufi_core_routing_ui:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_routing_ui"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_transport_list:
     dependency: "direct main"
     description:

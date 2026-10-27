@@ -28,6 +28,7 @@ import '../models/route_planner_state.dart';
 import '../services/share_route_service.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
+import 'save_route_button.dart';
 
 /// Main home screen widget with route planning functionality.
 class HomeScreen extends StatefulWidget {
@@ -2047,6 +2048,15 @@ class _HomeScreenState extends State<HomeScreen>
               state.fromPlace != null &&
               state.toPlace != null)
             const SizedBox(width: 8),
+          // Bookmark the trip (#1005); hidden without a saved routes screen.
+          if (state.fromPlace != null && state.toPlace != null)
+            SaveRouteButton(
+              from: state.fromPlace!,
+              to: state.toPlace!,
+              itinerary: state.selectedItinerary ?? itineraries.first,
+              dense: true,
+              endSpacing: 8,
+            ),
           Icon(Icons.route_rounded, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
           Expanded(
@@ -2422,6 +2432,14 @@ class _HomeScreenState extends State<HomeScreen>
                 );
               },
               tooltip: l10n.tooltipShare,
+            ),
+          // Bookmark the trip (#1005); hidden without a saved routes screen.
+          if (state.fromPlace != null && state.toPlace != null)
+            SaveRouteButton(
+              from: state.fromPlace!,
+              to: state.toPlace!,
+              itinerary: state.selectedItinerary ?? itineraries?.firstOrNull,
+              endSpacing: 4,
             ),
           const SizedBox(width: 4),
           // Close button
