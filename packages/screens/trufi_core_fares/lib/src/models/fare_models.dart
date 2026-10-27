@@ -70,6 +70,9 @@ class FareInfo {
   /// Long-form notes shown at the bottom of the card.
   final String? notes;
 
+  /// Optional localized notes builder used when a [BuildContext] exists.
+  final LocalizedStringBuilder? notesBuilder;
+
   const FareInfo({
     required this.title,
     required this.icon,
@@ -78,12 +81,19 @@ class FareInfo {
     this.additional = const [],
     this.notes,
     this.titleBuilder,
+    this.notesBuilder,
   });
 
   /// Localized title when a [BuildContext] exists; mirrors the
   /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
   String localizedTitle(BuildContext context) =>
       titleBuilder?.call(context) ?? title;
+
+  /// Localized notes when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  /// `null` means the card renders no notes block.
+  String? localizedNotes(BuildContext context) =>
+      notesBuilder?.call(context) ?? notes;
 }
 
 /// Top-level configuration for the fares screen.
@@ -103,11 +113,21 @@ class FaresConfig {
   /// Free-form notes shown at the bottom of the screen.
   final String? additionalNotes;
 
+  /// Optional localized notes builder used when a [BuildContext] exists.
+  final LocalizedStringBuilder? additionalNotesBuilder;
+
   const FaresConfig({
     required this.currency,
     required this.fares,
     this.externalFareUrl,
     this.lastUpdated,
     this.additionalNotes,
+    this.additionalNotesBuilder,
   });
+
+  /// Localized screen-wide notes when a [BuildContext] exists; mirrors the
+  /// `localized*` convention of `ITrufiMapEngine`/`IRoutingProvider`.
+  /// `null` means the screen renders no tips card.
+  String? localizedAdditionalNotes(BuildContext context) =>
+      additionalNotesBuilder?.call(context) ?? additionalNotes;
 }

@@ -12,6 +12,8 @@ Display fare/pricing information for public transportation.
 - Last updated date
 - Optional external "More info" link
 - Localization support (EN, ES, DE) for the screen chrome
+- Fare titles, category labels and notes localizable by the app through
+  `titleBuilder`, `labelBuilder`, `notesBuilder` and `additionalNotesBuilder`
 - Material 3 design
 - Public composable widgets (`FaresHero`, `FareCard`, `FareCategoryChip`,
   `FaresNotesCard`) for consumers that want a custom layout
@@ -54,6 +56,7 @@ FaresConfig(
   externalFareUrl: String?,        // Optional - link to more info
   lastUpdated: DateTime?,          // Optional - when fares were verified
   additionalNotes: String?,        // Optional - screen-wide notes
+  additionalNotesBuilder: LocalizedStringBuilder?, // Optional - localized additionalNotes
 )
 ```
 
@@ -62,11 +65,13 @@ FaresConfig(
 ```dart
 FareInfo(
   title: String,                   // Required - card header (e.g., 'Trufi')
+  titleBuilder: LocalizedStringBuilder?, // Optional - localized title
   icon: IconData,                  // Required - icon next to the title
   primary: FareCategory,           // Required - headline price (badge)
   additional: List<FareCategory>,  // Optional - rendered as chips
   color: Color?,                   // Optional - accent color
   notes: String?,                  // Optional - card footer notes
+  notesBuilder: LocalizedStringBuilder?, // Optional - localized notes
 )
 ```
 
@@ -75,12 +80,49 @@ FareInfo(
 ```dart
 FareCategory(
   label: String,                   // Required - already-localized label
+  labelBuilder: LocalizedStringBuilder?, // Optional - localized label
   price: String,                   // Required - formatted, no currency
   icon: IconData?,                 // Optional - category icon
   color: Color?,                   // Optional - chip accent color
   note: String?,                   // Optional - sub-note under the price
 )
 ```
+
+## Localizing fare content
+
+The screen chrome (title, "Tips", "Last updated") ships localized, but the
+fare content is yours, so the package cannot translate it. Keep the plain
+strings as fallbacks and localize through the builders
+(`LocalizedStringBuilder = String Function(BuildContext)`): a builder wins
+over its plain string on every rebuild, so the cards and the tips card follow
+the app language instead of staying in the language the config was written in.
+
+```dart
+FaresConfig(
+  currency: 'Bs.',
+  additionalNotes: 'Tarifa provisional.',
+  additionalNotesBuilder: (context) => AppLocalizations.of(context)!.faresNotes,
+  fares: [
+    FareInfo(
+      title: 'Pasaje urbano',
+      titleBuilder: (context) => AppLocalizations.of(context)!.faresUrbanTitle,
+      icon: Icons.directions_bus_rounded,
+      primary: FareCategory(
+        label: 'Usuarios en general',
+        labelBuilder: (context) =>
+            FaresLocalizations.of(context).fareCategoryRegular,
+        price: '3.00',
+      ),
+      notes: 'Válido dentro del Cercado.',
+      notesBuilder: (context) => AppLocalizations.of(context)!.faresUrbanNotes,
+    ),
+  ],
+)
+```
+
+`FaresLocalizations` already ships `fareCategoryRegular`, `fareCategoryStudent`
+and `fareCategorySenior` for the most common categories; anything else comes
+from the app's own ARBs.
 
 ## Composable widgets
 

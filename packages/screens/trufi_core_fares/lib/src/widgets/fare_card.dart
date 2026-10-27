@@ -16,6 +16,7 @@ class FareCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final fareColor = fare.color ?? colorScheme.primary;
+    final notes = fare.localizedNotes(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -28,7 +29,7 @@ class FareCard extends StatelessWidget {
       child: Column(
         children: [
           _Header(fare: fare, currency: currency, fareColor: fareColor),
-          if (fare.additional.isNotEmpty || fare.notes != null)
+          if (fare.additional.isNotEmpty || notes != null)
             _Body(fare: fare, currency: currency),
         ],
       ),
@@ -122,6 +123,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final notes = fare.localizedNotes(context);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -150,7 +152,7 @@ class _Body extends StatelessWidget {
                 );
               },
             ),
-          if (fare.notes != null) ...[
+          if (notes != null) ...[
             if (fare.additional.isNotEmpty) const SizedBox(height: 12),
             Container(
               width: double.infinity,
@@ -172,7 +174,7 @@ class _Body extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      fare.notes!,
+                      notes,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
