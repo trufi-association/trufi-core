@@ -274,6 +274,56 @@ void main() {
       );
     });
 
+    test('carries the boarding direction of each route; the first ride '
+        'wins (#1016)', () {
+      final plan = routing.Plan(
+        itineraries: [
+          // No boarding stop: contributes neither a point nor a direction,
+          // so the two always come from the same ride.
+          itinerary([busLeg('A', stopId: null, directionId: 0)]),
+          itinerary([
+            walkLeg(),
+            busLeg('A', directionId: 1, stopLat: -17.40, stopLon: -66.16),
+          ]),
+          // Same route the other way, boarded elsewhere: the preferred ride
+          // already set both.
+          itinerary([
+            busLeg(
+              'A',
+              stopId: 'sA2',
+              directionId: 0,
+              stopLat: -17.41,
+              stopLon: -66.17,
+            ),
+          ]),
+          itinerary([busLeg('B')]),
+        ],
+      );
+      final request = buildVehicleEtaRequest(plan, etaOrigin)!;
+      expect(
+        request.directions,
+        {'1:A': 1},
+        reason: 'B reports no direction_id; A takes the first ride with a stop',
+      );
+      expect(
+        request.boardingPoints?['1:A'],
+        const TrufiLatLng(-17.40, -66.16),
+        reason: 'the direction and the stop come from the same ride',
+      );
+      expect(
+        request.directionFor('A'),
+        1,
+        reason: 'bare lookup must find the prefixed key',
+      );
+      expect(request.directionFor('1:B'), isNull);
+    });
+
+    test('omits the directions when no leg reports a direction_id', () {
+      final request = buildVehicleEtaRequest(threeRidesPlan(), etaOrigin)!;
+      expect(request.directions, isNull);
+      expect(request.directionFor('1:A'), isNull);
+    });
+
     test('returns null for an empty plan', () {
       expect(buildVehicleEtaRequest(const routing.Plan(), etaOrigin), isNull);
     });

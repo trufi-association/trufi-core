@@ -127,7 +127,9 @@ class Leg extends Equatable {
       tripPatternId: json['tripPatternId'] as String?,
       directionId: (json['directionId'] as num?)?.toInt(),
       serviceHours: json['serviceHours'] != null
-          ? ServiceHours.fromJson(json['serviceHours'] as Map<String, dynamic>)
+          ? ServiceHours.fromJson(
+              json['serviceHours'] as Map<String, dynamic>,
+            )
           : null,
     );
   }

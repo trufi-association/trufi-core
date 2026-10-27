@@ -104,8 +104,27 @@ final etaProvider = RealtimeVehiclesEtaProvider(
 | `now` | `DateTime.now` | Injectable clock (tests) |
 
 Route ids are matched feed-agnostically (`1:1132` from OTP matches `1132`
-from a bundled-GTFS plan). Direction and route geometry are ignored in this
-MVP, so a vehicle driving away still yields an ETA.
+from a bundled-GTFS plan). Vehicles that cannot reach the boarding stop on
+this trip are skipped (#1016), on two signals applied in turn:
+
+1. **GTFS `direction_id`**, when both the plan's leg and the vehicle carry
+   it: a bus on the opposite pattern is out however close it is. A match is
+   not a pass — the heading is still checked, so a same-pattern bus that
+   already went by does not win on distance. OTP reports no `direction_id`
+   for a loop whose direction is irrelevant; such vehicles rely on the
+   heading.
+2. **Reported heading**, for a moving vehicle (speed ≥ 1 m/s, or no speed at
+   all — the heading is a compass reading, independent of it): more than 90°
+   off the straight-line bearing to the stop means it is driving away, and
+   it is dropped. Within 30 m of the stop the bearing is GPS noise and the
+   test is skipped.
+
+A vehicle known to be stopped, or without a heading, is kept whatever it
+points at, and route geometry is still ignored (straight-line distance): a
+feed with neither signal gets the previous behaviour, the soonest vehicle
+wherever it goes. When every reporting vehicle of a route is filtered out
+the route is absent from the snapshot and the badge reads "Live ETA
+unavailable".
 
 ### Your own provider
 

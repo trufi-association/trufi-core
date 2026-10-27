@@ -7,6 +7,7 @@ import 'package:graphql/client.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../providers/otp_2_4/graphql_client_factory.dart';
+import '../utils/json_utils.dart';
 
 const _query = '''
 {
@@ -203,15 +204,9 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       routeId: routeId,
       routeColor: routeColor,
       tripId: trip?['gtfsId'] as String?,
-      directionId: _parseDirectionId(trip?['directionId']),
+      directionId: parseGtfsDirectionId(trip?['directionId']),
       timestamp: parseVehicleTimestamp(json),
     );
-  }
-
-  static int? _parseDirectionId(Object? raw) {
-    if (raw is num) return raw.toInt();
-    if (raw is String) return int.tryParse(raw.trim());
-    return null;
   }
 
   /// When the vehicle actually reported, per the GTFS-RT feed — NOT when we

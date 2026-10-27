@@ -83,7 +83,7 @@ class Otp28ResponseParser {
     final routeData = json['route'] as Map<String, dynamic>?;
     final tripData = json['trip'] as Map<String, dynamic>?;
     final tripPatternId = tripData?['pattern']?['code'] as String?;
-    final directionId = _parseDirectionId(tripData?['directionId']);
+    final directionId = parseGtfsDirectionId(tripData?['directionId']);
 
     return Leg(
       mode: mode,
@@ -111,14 +111,6 @@ class Otp28ResponseParser {
       tripPatternId: tripPatternId,
       directionId: directionId,
     );
-  }
-
-  /// OTP serialises `directionId` as a string ("0"/"1"); older servers may
-  /// send a number or nothing.
-  static int? _parseDirectionId(Object? raw) {
-    if (raw is num) return raw.toInt();
-    if (raw is String) return int.tryParse(raw.trim());
-    return null;
   }
 
   static Route _parseRoute(Map<String, dynamic> json) {

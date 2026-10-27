@@ -26,12 +26,15 @@ String? etaRouteKeyForItinerary(routing.Itinerary itinerary) {
 
 /// One request for the whole plan: every itinerary's first transit route
 /// (raw ids, as the planner reports them), their boarding stop ids as a
-/// hint and, per route, the boarding stop's coordinates (`leg.fromPlace`),
-/// so a source answers "when does the bus reach my stop" rather than "when
-/// does it reach me". When two itineraries board the same route at
-/// different stops the first one wins — the planner lists them by
-/// preference. Null when no itinerary has an identifiable transit route
-/// (walk-only plans) — nothing to ask for.
+/// hint and, per route, the boarding stop's coordinates (`leg.fromPlace`)
+/// — so a source answers "when does the bus reach my stop" rather than
+/// "when does it reach me" — and the trip's GTFS `direction_id` when the
+/// planner reports it, so a source can skip the vehicles going the other
+/// way (#1016). When two itineraries board the same route at different
+/// stops the first one wins — the planner lists them by preference — and
+/// its direction goes with its stop, never one from each ride. Null when
+/// no itinerary has an identifiable transit route (walk-only plans) —
+/// nothing to ask for.
 VehicleEtaRequest? buildVehicleEtaRequest(
   routing.Plan plan,
   TrufiLatLng origin,
@@ -46,8 +49,6 @@ VehicleEtaRequest? buildVehicleEtaRequest(
     final routeKey = etaRouteKeyForLeg(leg);
     if (routeKey == null) continue;
     routeIds.add(routeKey);
-    final direction = leg.directionId;
-    if (direction != null) directions.putIfAbsent(routeKey, () => direction);
     final boarding = leg.fromPlace;
     if (boarding == null) continue;
     final stopId = boarding.stopId;
@@ -56,6 +57,8 @@ VehicleEtaRequest? buildVehicleEtaRequest(
       routeKey,
       () => TrufiLatLng(boarding.lat, boarding.lon),
     );
+    final direction = leg.directionId;
+    if (direction != null) directions.putIfAbsent(routeKey, () => direction);
   }
   if (routeIds.isEmpty) return null;
   return VehicleEtaRequest(

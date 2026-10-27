@@ -16,9 +16,13 @@ typedef VehicleSnapshotLoader = Future<List<VehiclePosition>> Function();
 /// `vehiclePositions`); an external telemetry client implements the same
 /// [VehicleEtaProvider] interface and plugs into the same UI.
 ///
-/// MVP simplifications, on purpose: direction and route geometry are
-/// ignored, so a vehicle driving away from the origin still yields an ETA.
-/// Deterministic given [now], which tests inject.
+/// Vehicles that cannot reach the boarding stop on this trip are skipped
+/// (#1016, [headsTowards]): the GTFS `direction_id` rules out the opposite
+/// pattern when both the plan and the feed carry it, and the reported
+/// heading rules out a moving vehicle pointing away from the stop. Route
+/// geometry is still ignored (straight-line distance), and a feed with
+/// neither signal gets the previous behaviour: the soonest vehicle,
+/// wherever it goes. Deterministic given [now], which tests inject.
 class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
   RealtimeVehiclesEtaProvider({
     required this.vehicles,
@@ -43,9 +47,15 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
 
   /// Reported speeds (m/s on the GTFS-RT wire) outside this window are
   /// treated as noise: below ~3.6 km/h the bus is stopped at a light or the
-  /// GPS is drifting, above 108 km/h it is a sensor glitch.
+  /// GPS is drifting — and its heading says nothing about where it goes
+  /// next, see [headsTowards] — above 108 km/h it is a sensor glitch.
   static const double minPlausibleSpeedMps = 1.0;
   static const double maxPlausibleSpeedMps = 30.0;
+
+  /// Closer than this to the stop the bearing to it is GPS noise (and
+  /// exactly north when the two points coincide), so [headsTowards] skips
+  /// the heading test: the vehicle is arriving now, whatever it points at.
+  static const double headingIgnoredWithinMeters = 30.0;
 
   /// Diagnostic tag written into [VehicleEtaSnapshot.source].
   static const String source = 'realtime_vehicles';
@@ -131,9 +141,16 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
       if (reportedAt != null && now.difference(reportedAt) > maxVehicleAge) {
         continue;
       }
-      if (!headsTowards(vehicle, target, wantedDirection)) continue;
       final distance = vehicle.position.distanceTo(target);
       if (distance > maxDistanceMeters) continue;
+      if (!headsTowards(
+        vehicle,
+        target,
+        wantedDirection,
+        distanceMeters: distance,
+      )) {
+        continue;
+      }
       final eta = estimate(
         distanceMeters: distance,
         reportedSpeedMps: vehicle.speed,
@@ -151,32 +168,45 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     return best;
   }
 
-  /// Below this speed a vehicle counts as stopped: its heading says nothing
-  /// about where it goes next (dwelling at a stop, in traffic).
-  static const double minMovingSpeedMps = 1.0;
-
   /// Whether [vehicle] can still reach [target] on this trip (#1016).
   ///
-  /// When both the request and the feed carry the GTFS `direction_id` the
-  /// answer is theirs: a bus on the opposite pattern never reaches the
-  /// rider's stop on this trip, however close it is. Otherwise a moving
-  /// vehicle whose heading points away from [target] (more than 90° off the
-  /// bearing to it) is dropped, and a stopped or heading-less vehicle is
-  /// kept — the previous behaviour — because the feed says nothing useful.
+  /// Two signals, both optional on the GTFS-RT wire, applied in turn:
+  ///
+  /// 1. The GTFS `direction_id`, as a pre-filter: when the request and the
+  ///    vehicle both carry it, the opposite pattern never reaches this stop
+  ///    on this trip, however close the bus is. A match proves nothing by
+  ///    itself — a same-pattern bus that already passed the stop is moving
+  ///    away all the same — so the heading is checked next either way. OTP
+  ///    reports `null` when the direction is irrelevant (a loop with no
+  ///    `direction_id` in the GTFS): those rely on the heading too.
+  /// 2. The reported heading, for a moving vehicle: more than 90° off the
+  ///    initial bearing to [target] means it is driving away, and it is
+  ///    dropped. The heading is a compass reading independent of the speed,
+  ///    so an unknown speed does not silence it; only a vehicle known to be
+  ///    (nearly) stopped — below [minPlausibleSpeedMps], dwelling at a stop
+  ///    or in traffic — is kept whatever it points at, as is one without a
+  ///    heading or within [headingIgnoredWithinMeters] of the stop.
+  ///
+  /// [distanceMeters] is the distance to [target] when the caller already
+  /// measured it; computed here otherwise.
   static bool headsTowards(
     VehiclePosition vehicle,
     TrufiLatLng target,
-    int? wantedDirection,
-  ) {
+    int? wantedDirection, {
+    double? distanceMeters,
+  }) {
     final direction = vehicle.directionId;
-    if (wantedDirection != null && direction != null) {
-      return direction == wantedDirection;
+    if (wantedDirection != null &&
+        direction != null &&
+        direction != wantedDirection) {
+      return false;
     }
     final heading = vehicle.heading;
+    if (heading == null) return true;
     final speed = vehicle.speed;
-    if (heading == null || speed == null || speed < minMovingSpeedMps) {
-      return true;
-    }
+    if (speed != null && speed < minPlausibleSpeedMps) return true;
+    final distance = distanceMeters ?? vehicle.position.distanceTo(target);
+    if (distance < headingIgnoredWithinMeters) return true;
     final bearing = bearingDegrees(vehicle.position, target);
     var diff = (heading - bearing).abs() % 360;
     if (diff > 180) diff = 360 - diff;

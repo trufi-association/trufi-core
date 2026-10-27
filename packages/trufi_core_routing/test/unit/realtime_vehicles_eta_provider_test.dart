@@ -333,7 +333,55 @@ void main() {
       },
     );
 
-    test('when both sides know the GTFS direction, it decides', () async {
+    test('heading known, speed unknown: the heading still decides', () async {
+      // The heading is a compass reading on the GTFS-RT wire, independent of
+      // the speed: a feed that publishes one without the other keeps the
+      // filter. 200 m past the stop and pointing away, no speed → out.
+      final snapshot = await _provider([
+        _vehicle('passed', '1:1132', northMeters: 200, heading: 0),
+        _vehicle('in', '1:1132', speed: 8, heading: 180, northMeters: 2500),
+      ]).fetchEtas(_request({'1132'}));
+      expect(snapshot.etaForRoute('1132')?.vehicleId, 'in');
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(
+          _vehicle('towards', '1:1132', heading: 180),
+          _origin,
+          null,
+        ),
+        isTrue,
+        reason: 'no speed but pointing at the stop: kept',
+      );
+    });
+
+    test('within 30 m of the stop the heading is noise: kept', () {
+      // 5 m past the stop (south of it) and heading south, i.e. away:
+      // "arriving now" is the right answer, the bearing is GPS jitter.
+      final arriving = _vehicle(
+        'a',
+        '1:1132',
+        northMeters: -5,
+        speed: 8,
+        heading: 180,
+      );
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(arriving, _origin, null),
+        isTrue,
+      );
+      // On the stop itself the bearing is atan2(0, 0) = north: still kept.
+      final onStop = _vehicle('o', '1:1132', northMeters: 0, speed: 8, heading: 180);
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(onStop, _origin, null),
+        isTrue,
+      );
+      // The same vehicle 200 m past the stop is gone.
+      final gone = _vehicle('g', '1:1132', northMeters: -200, speed: 8, heading: 180);
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(gone, _origin, null),
+        isFalse,
+      );
+    });
+
+    test('the GTFS direction is a pre-filter: the opposite pattern is out', () async {
       final request = VehicleEtaRequest(
         origin: _origin,
         routeIds: const {'1132'},
@@ -343,19 +391,92 @@ void main() {
       expect(request.directionFor('1:1132'), 1);
       expect(request.directionFor('1481'), isNull);
       final snapshot = await _provider([
-        // Heading in, but on the opposite pattern: never reaches the stop.
+        // Nearer and heading in, but on the opposite pattern: never reaches
+        // the stop on this trip.
         _vehicle('wrong-way', '1:1132', speed: 8, heading: 180, directionId: 0),
-        // Heading away right now (a loop, a detour), same pattern: kept.
         _vehicle(
           'right-way',
           '1:1132',
           speed: 8,
-          heading: 0,
+          heading: 180,
           directionId: 1,
           northMeters: 2500,
         ),
       ]).fetchEtas(request);
       expect(snapshot.etaForRoute('1132')?.vehicleId, 'right-way');
+    });
+
+    test('same pattern, past the stop and moving away: dropped', () async {
+      // The issue's opening scenario. A direction match is not a pass: the
+      // heading still runs, so the bus 200 m past the stop loses to the one
+      // coming from 2500 m instead of winning on distance.
+      final snapshot = await _provider([
+        _vehicle(
+          'passed',
+          '1:1132',
+          northMeters: 200,
+          speed: 8,
+          heading: 0,
+          directionId: 1,
+        ),
+        _vehicle(
+          'coming',
+          '1:1132',
+          northMeters: 2500,
+          speed: 8,
+          heading: 180,
+          directionId: 1,
+        ),
+      ]).fetchEtas(
+        VehicleEtaRequest(
+          origin: _origin,
+          routeIds: const {'1132'},
+          directions: const {'1:1132': 1},
+        ),
+      );
+      expect(snapshot.etaForRoute('1132')?.vehicleId, 'coming');
+    });
+
+    test('the opposite pattern is out even when stopped', () async {
+      final snapshot = await _provider([
+        _vehicle(
+          'parked-wrong',
+          '1:1132',
+          northMeters: 300,
+          speed: 0.3,
+          heading: 180,
+          directionId: 0,
+        ),
+        _vehicle(
+          'parked-right',
+          '1:1132',
+          speed: 0.3,
+          heading: 0,
+          directionId: 1,
+        ),
+      ]).fetchEtas(
+        VehicleEtaRequest(
+          origin: _origin,
+          routeIds: const {'1132'},
+          directions: const {'1:1132': 1},
+        ),
+      );
+      expect(
+        snapshot.etaForRoute('1132')?.vehicleId,
+        'parked-right',
+        reason:
+            'stopped is no free pass for the wrong pattern; the right one '
+            'is kept whatever it points at',
+      );
+    });
+
+    test('a vehicle without direction_id (a loop, an older feed) uses the '
+        'heading', () {
+      // OTP reports trip.directionId null when the direction is irrelevant.
+      final away = _vehicle('x', '1:1132', speed: 8, heading: 0);
+      expect(RealtimeVehiclesEtaProvider.headsTowards(away, _origin, 1), isFalse);
+      final towards = _vehicle('y', '1:1132', speed: 8, heading: 180);
+      expect(RealtimeVehiclesEtaProvider.headsTowards(towards, _origin, 1), isTrue);
     });
 
     test('bearingDegrees: north is 0, east is 90', () {
