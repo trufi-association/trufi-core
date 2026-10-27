@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
@@ -129,6 +130,33 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     final opacity = tester.widget<Opacity>(find.byType(Opacity));
     expect(opacity.opacity, 0.6);
+  });
+
+  testWidgets('a narrow slot scales the label down instead of cutting it', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(
+        Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: 72,
+            child: EtaBadge(status: VehicleEtaStatus.ready, eta: eta),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull, reason: 'no RenderFlex overflow');
+    final paragraph = tester.renderObject<RenderParagraph>(
+      find.text('Arrives in ~4 min'),
+    );
+    expect(
+      paragraph.didExceedMaxLines,
+      isFalse,
+      reason: 'the whole label is laid out; it is scaled, never ellipsized',
+    );
+    expect(tester.getSize(find.byType(EtaBadge)).width, lessThanOrEqualTo(72));
   });
 
   testWidgets('idle renders nothing at all', (tester) async {

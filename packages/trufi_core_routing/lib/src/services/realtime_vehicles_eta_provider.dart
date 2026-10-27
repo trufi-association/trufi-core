@@ -4,8 +4,9 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 typedef VehicleSnapshotLoader = Future<List<VehiclePosition>> Function();
 
 /// [VehicleEtaProvider] derived from live vehicle positions: for every
-/// requested route, the nearest reporting vehicle's straight-line distance
-/// to the route's boarding point — the rider's origin when the request
+/// requested route, the soonest-arriving reporting vehicle — not the
+/// nearest one: a close bus crawling loses to a farther one at speed —
+/// by its straight-line distance to the route's boarding point — the rider's origin when the request
 /// carries none ([VehicleEtaRequest.pointFor]) — over its reported speed
 /// (when plausible) or over [averageSpeedKmh].
 ///

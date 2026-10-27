@@ -121,7 +121,10 @@ class _EtaRefreshButtonState extends State<EtaRefreshButton> {
                     ),
                   )
                 : const Icon(Icons.refresh_rounded, size: _iconSize),
-            tooltip: enabled
+            // In flight the reason is "checking", not the countdown.
+            tooltip: loading
+                ? l10n.etaLoading
+                : enabled
                 ? l10n.etaRefresh
                 : l10n.etaRefreshCooldown(remainingSeconds),
             onPressed: enabled

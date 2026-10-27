@@ -75,7 +75,8 @@ the itinerary cards (see the `trufi_core_home_screen` README).
 ### RealtimeVehiclesEtaProvider
 
 Derives ETAs from a `RealtimeVehiclesProvider` snapshot: for each requested
-route, the nearest reporting vehicle's straight-line distance to the route's
+route, the reporting vehicle with the soonest arrival (not the nearest one:
+reported speeds count), by its straight-line distance to the route's
 boarding stop (`VehicleEtaRequest.pointFor`; the rider's origin when the
 request carries no boarding point) over its reported speed (when plausible)
 or over an average speed.

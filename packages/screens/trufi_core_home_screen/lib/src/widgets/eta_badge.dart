@@ -136,15 +136,21 @@ class EtaBadge extends StatelessWidget {
         children: [
           _leadingByKind[kind]!(scheme),
           const SizedBox(width: _gap),
+          // Narrow cards (320 dp with a transfer chip and "Kommt in ~12
+          // Min.") would ellipsize mid-word; scaling the label down keeps
+          // the minutes readable.
           Flexible(
-            child: Text(
-              _labelByKind[kind]!(l10n, eta),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: foreground,
-                fontWeight: FontWeight.w600,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _labelByKind[kind]!(l10n, eta),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: foreground,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

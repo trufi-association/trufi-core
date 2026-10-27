@@ -103,7 +103,7 @@ void main() {
   });
 
   group('RealtimeVehiclesEtaProvider.fetchEtas', () {
-    test('answers the nearest vehicle of each requested route', () async {
+    test('answers the soonest vehicle of each requested route', () async {
       final near = _vehicle('near', '1:1132', northMeters: 1500);
       final snapshot = await _provider([
         _vehicle('far', '1:1132', northMeters: 3000),
@@ -115,7 +115,11 @@ void main() {
       expect(snapshot.fetchedAt, _now);
       expect(snapshot.etas, hasLength(1));
       final eta = snapshot.etas.single;
-      expect(eta.vehicleId, 'near', reason: 'the nearer vehicle wins');
+      expect(
+        eta.vehicleId,
+        'near',
+        reason: 'same (average) speed for both: the nearer one arrives first',
+      );
       expect(eta.routeId, '1132', reason: 'keyed by the REQUESTED id');
       // Geodesic distance (latlong2 Vincenty, rounded to whole meters), so
       // the oracle is computed with the same function the provider uses;
@@ -129,6 +133,16 @@ void main() {
         reason: 'no speed reported → average 15 km/h',
       );
       expect(eta.timestamp, _now, reason: 'no report time → now');
+    });
+
+    test('a farther bus at speed beats a nearer one that crawls', () async {
+      // 1000 m at an implausible 0.5 m/s -> average 15 km/h -> 240 s;
+      // 2000 m at 25 m/s -> 80 s. "Soonest", not "nearest".
+      final snapshot = await _provider([
+        _vehicle('crawling', '1:1132', northMeters: 1000, speed: 0.5),
+        _vehicle('fast', '1:1132', northMeters: 2000, speed: 25),
+      ]).fetchEtas(_request({'1132'}));
+      expect(snapshot.etaForRoute('1132')?.vehicleId, 'fast');
     });
 
     test('matches prefixed vehicles against a bare request id', () async {

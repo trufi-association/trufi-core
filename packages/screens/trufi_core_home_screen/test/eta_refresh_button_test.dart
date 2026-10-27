@@ -111,6 +111,11 @@ void main() {
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(button(tester).onPressed, isNull);
+    expect(
+      tooltip(tester),
+      'Checking live ETA…',
+      reason: 'while a request runs the tooltip must not count a cooldown',
+    );
 
     provider.gate!.complete(VehicleEtaSnapshot.empty(etaT0));
     await load;
