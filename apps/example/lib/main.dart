@@ -40,6 +40,12 @@ const _otp15Endpoint = String.fromEnvironment(
   'OTP15_ENDPOINT',
   defaultValue: 'https://otp150.trufi.app',
 );
+// Mimic a single-engine deploy (trufi-sanaa: one offline planner, one
+// offline map, nothing to switch to) to check what such apps show — no
+// route-settings button on the home, no engine cards in Settings
+// (trufi-sanaa#23):
+//   flutter run --dart-define=SINGLE_ENGINE=true
+const _singleEngine = bool.fromEnvironment('SINGLE_ENGINE');
 const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
@@ -71,14 +77,10 @@ final List<IRoutingProvider> _routingEngines = [
       ),
     ),
   // Online routing via OTP (dev servers by default, local via dart-define)
-  Otp28RoutingProvider(
-    endpoint: _otp28Endpoint,
-    displayName: 'OTP 2.8.1',
-  ),
-  Otp15RoutingProvider(
-    endpoint: _otp15Endpoint,
-    displayName: 'OTP 1.5.0',
-  ),
+  if (!_singleEngine) ...[
+    Otp28RoutingProvider(endpoint: _otp28Endpoint, displayName: 'OTP 2.8.1'),
+    Otp15RoutingProvider(endpoint: _otp15Endpoint, displayName: 'OTP 1.5.0'),
+  ],
 ];
 
 // Map engines
@@ -112,123 +114,128 @@ final List<ITrufiMapEngine> _mapEngines = [
         ],
       ),
     ),
-    OfflineMapLibreEngine(
-      engineId: 'offline_osm_bright',
-      displayName: 'Offline Bright',
-      descriptionBuilder: (context) =>
-          MapsLocalizations.of(context).mapStyleLightDescription,
-      config: OfflineMapConfig(
-        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
-        styleAsset: 'assets/offline/styles/osm-bright/style.json',
-        spritesAssetDir: 'assets/offline/styles/osm-bright/',
-        fontsAssetDir: 'assets/offline/fonts/',
-        fontMapping: {
-          'OpenSansRegular': 'Open Sans Regular',
-          'OpenSansBold': 'Open Sans Bold',
-          'OpenSansItalic': 'Open Sans Italic',
-        },
-        fontRanges: [
-          '0-255',
-          '256-511',
-          '512-767',
-          '768-1023',
-          '1024-1279',
-          '1280-1535',
-          '8192-8447',
-          '8448-8703',
-        ],
+    if (!_singleEngine) ...[
+      OfflineMapLibreEngine(
+        engineId: 'offline_osm_bright',
+        displayName: 'Offline Bright',
+        descriptionBuilder: (context) =>
+            MapsLocalizations.of(context).mapStyleLightDescription,
+        config: OfflineMapConfig(
+          mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+          styleAsset: 'assets/offline/styles/osm-bright/style.json',
+          spritesAssetDir: 'assets/offline/styles/osm-bright/',
+          fontsAssetDir: 'assets/offline/fonts/',
+          fontMapping: {
+            'OpenSansRegular': 'Open Sans Regular',
+            'OpenSansBold': 'Open Sans Bold',
+            'OpenSansItalic': 'Open Sans Italic',
+          },
+          fontRanges: [
+            '0-255',
+            '256-511',
+            '512-767',
+            '768-1023',
+            '1024-1279',
+            '1280-1535',
+            '8192-8447',
+            '8448-8703',
+          ],
+        ),
       ),
-    ),
-    OfflineMapLibreEngine(
-      engineId: 'offline_dark_matter',
-      displayName: 'Offline Dark Matter',
-      descriptionBuilder: (context) =>
-          MapsLocalizations.of(context).mapStyleDarkDescription,
-      config: OfflineMapConfig(
-        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
-        styleAsset: 'assets/offline/styles/dark-matter/style.json',
-        spritesAssetDir: 'assets/offline/styles/dark-matter/',
-        fontsAssetDir: 'assets/offline/fonts/',
-        fontMapping: {
-          'MetropolisLight': 'Metropolis Light',
-          'MetropolisLightItalic': 'Metropolis Light Italic',
-          'MetropolisRegular': 'Metropolis Regular',
-          'MetropolisMediumItalic': 'Metropolis Medium Italic',
-          'NotoSansRegular': 'Noto Sans Regular',
-          'NotoSansItalic': 'Noto Sans Italic',
-        },
-        fontRanges: [
-          '0-255',
-          '256-511',
-          '512-767',
-          '768-1023',
-          '1024-1279',
-          '1280-1535',
-          '8192-8447',
-          '8448-8703',
-        ],
+      OfflineMapLibreEngine(
+        engineId: 'offline_dark_matter',
+        displayName: 'Offline Dark Matter',
+        descriptionBuilder: (context) =>
+            MapsLocalizations.of(context).mapStyleDarkDescription,
+        config: OfflineMapConfig(
+          mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+          styleAsset: 'assets/offline/styles/dark-matter/style.json',
+          spritesAssetDir: 'assets/offline/styles/dark-matter/',
+          fontsAssetDir: 'assets/offline/fonts/',
+          fontMapping: {
+            'MetropolisLight': 'Metropolis Light',
+            'MetropolisLightItalic': 'Metropolis Light Italic',
+            'MetropolisRegular': 'Metropolis Regular',
+            'MetropolisMediumItalic': 'Metropolis Medium Italic',
+            'NotoSansRegular': 'Noto Sans Regular',
+            'NotoSansItalic': 'Noto Sans Italic',
+          },
+          fontRanges: [
+            '0-255',
+            '256-511',
+            '512-767',
+            '768-1023',
+            '1024-1279',
+            '1280-1535',
+            '8192-8447',
+            '8448-8703',
+          ],
+        ),
       ),
-    ),
-    OfflineMapLibreEngine(
-      engineId: 'offline_fiord_color',
-      displayName: 'Offline Fiord Color',
-      descriptionBuilder: (context) =>
-          MapsLocalizations.of(context).mapStyleColorfulDescription,
-      config: OfflineMapConfig(
-        mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
-        styleAsset: 'assets/offline/styles/fiord-color/style.json',
-        spritesAssetDir: 'assets/offline/styles/fiord-color/',
-        fontsAssetDir: 'assets/offline/fonts/',
-        fontMapping: {
-          'MetropolisLight': 'Metropolis Light',
-          'MetropolisLightItalic': 'Metropolis Light Italic',
-          'MetropolisRegular': 'Metropolis Regular',
-          'MetropolisMediumItalic': 'Metropolis Medium Italic',
-          'NotoSansRegular': 'Noto Sans Regular',
-          'NotoSansItalic': 'Noto Sans Italic',
-        },
-        fontRanges: [
-          '0-255',
-          '256-511',
-          '512-767',
-          '768-1023',
-          '1024-1279',
-          '1280-1535',
-          '8192-8447',
-          '8448-8703',
-        ],
+      OfflineMapLibreEngine(
+        engineId: 'offline_fiord_color',
+        displayName: 'Offline Fiord Color',
+        descriptionBuilder: (context) =>
+            MapsLocalizations.of(context).mapStyleColorfulDescription,
+        config: OfflineMapConfig(
+          mbtilesAsset: 'assets/offline/cochabamba.mbtiles',
+          styleAsset: 'assets/offline/styles/fiord-color/style.json',
+          spritesAssetDir: 'assets/offline/styles/fiord-color/',
+          fontsAssetDir: 'assets/offline/fonts/',
+          fontMapping: {
+            'MetropolisLight': 'Metropolis Light',
+            'MetropolisLightItalic': 'Metropolis Light Italic',
+            'MetropolisRegular': 'Metropolis Regular',
+            'MetropolisMediumItalic': 'Metropolis Medium Italic',
+            'NotoSansRegular': 'Noto Sans Regular',
+            'NotoSansItalic': 'Noto Sans Italic',
+          },
+          fontRanges: [
+            '0-255',
+            '256-511',
+            '512-767',
+            '768-1023',
+            '1024-1279',
+            '1280-1535',
+            '8192-8447',
+            '8448-8703',
+          ],
+        ),
       ),
-    ),
+    ],
   ],
   // Online maps
-  MapLibreEngine(
-    engineId: 'osm_bright',
-    styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
-    displayName: 'OSM Bright',
-    descriptionBuilder: (context) =>
+  if (!_singleEngine || kIsWeb)
+    MapLibreEngine(
+      engineId: 'osm_bright',
+      styleString: 'https://maps.trufi.app/styles/osm-bright/style.json',
+      displayName: 'OSM Bright',
+      descriptionBuilder: (context) =>
           MapsLocalizations.of(context).mapStyleLightDescription,
-  ),
-  MapLibreEngine(
-    engineId: 'osm_liberty',
-    styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
-    displayName: 'OSM Liberty',
-    descriptionBuilder: (context) =>
+    ),
+  if (!_singleEngine) ...[
+    MapLibreEngine(
+      engineId: 'osm_liberty',
+      styleString: 'https://maps.trufi.app/styles/osm-liberty/style.json',
+      displayName: 'OSM Liberty',
+      descriptionBuilder: (context) =>
           MapsLocalizations.of(context).mapStyleStandardDescription,
-  ),
-  MapLibreEngine(
-    engineId: 'dark_matter',
-    styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
-    displayName: 'Dark Matter',
-    descriptionBuilder: (context) =>
+    ),
+    MapLibreEngine(
+      engineId: 'dark_matter',
+      styleString: 'https://maps.trufi.app/styles/dark-matter/style.json',
+      displayName: 'Dark Matter',
+      descriptionBuilder: (context) =>
           MapsLocalizations.of(context).mapStyleDarkDescription,
-  ),
-  MapLibreEngine(
-    engineId: 'fiord_color',
-    styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
-    displayName: 'Fiord Color',
-    descriptionBuilder: (context) =>
+    ),
+    MapLibreEngine(
+      engineId: 'fiord_color',
+      styleString: 'https://maps.trufi.app/styles/fiord-color/style.json',
+      displayName: 'Fiord Color',
+      descriptionBuilder: (context) =>
           MapsLocalizations.of(context).mapStyleColorfulDescription,
-  ),
+    ),
+  ],
 ];
 // ========================================
 
