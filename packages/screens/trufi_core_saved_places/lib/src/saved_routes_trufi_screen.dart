@@ -11,6 +11,7 @@ import 'models/saved_route.dart';
 import 'repository/saved_routes_repository.dart';
 import 'repository/saved_routes_repository_impl.dart';
 import 'widgets/route_name_dialog.dart';
+import 'widgets/saved_places_header.dart';
 import 'widgets/saved_routes_list.dart';
 
 /// Configuration for the Saved Routes screen (#1005).
@@ -267,7 +268,8 @@ class _SavedRoutesScreenWidget extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            _SavedRoutesHeader(
+            // Routes are saved from the home screen results: no "+" action.
+            SavedPlacesHeader(
               title: localization.menuSavedRoutes,
               onMenuPressed: () => _tryOpenDrawer(context),
             ),
@@ -282,57 +284,6 @@ class _SavedRoutesScreenWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Header: menu button and title (same shape as the saved places header,
-/// without an add button — routes are saved from the home screen results).
-class _SavedRoutesHeader extends StatelessWidget {
-  final String title;
-  final VoidCallback onMenuPressed;
-
-  const _SavedRoutesHeader({required this.title, required this.onMenuPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Row(
-        children: [
-          Material(
-            color: colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(14),
-            child: InkWell(
-              onTap: onMenuPressed,
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                width: 48,
-                height: 48,
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.menu_rounded,
-                  color: colorScheme.onSurfaceVariant,
-                  size: 24,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
