@@ -50,6 +50,7 @@ class _SavedRoutesListState extends State<SavedRoutesList>
   }
 
   void _triggerAnimation() {
+    if (!mounted) return;
     if (!_hasAnimated) {
       _hasAnimated = true;
       _staggerController.forward();
@@ -91,7 +92,7 @@ class _SavedRoutesListState extends State<SavedRoutesList>
               index: 0,
               child: SavedPlacesSectionHeader(
                 title: localization.savedRoutesSection,
-                icon: Icons.route_rounded,
+                icon: Icons.bookmark_rounded,
               ),
             ),
             const SizedBox(height: 12),

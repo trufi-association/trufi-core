@@ -49,6 +49,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
   }
 
   void _triggerAnimation() {
+    if (!mounted) return;
     if (!_hasAnimated) {
       _hasAnimated = true;
       _staggerController.forward();

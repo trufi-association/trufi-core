@@ -58,11 +58,11 @@ void main() {
     // An empty GTFS colour is replaced by the itinerary's default palette
     // when the Itinerary is built, so the saved badge matches the results.
     expect(snapshot.transitLegs.last.colorHex, 'E91E63');
-    expect(snapshot.transitLegs.first.textColorHex, 'FFFFFF');
     expect(
-      snapshot.transitLegs.last.textColorHex,
-      isNull,
-      reason: 'no route_text_color → the card computes the contrast',
+      snapshot.transitLegs.map((l) => l.textColorHex),
+      [isNull, isNull],
+      reason: 'route_text_color is never persisted: the card computes the '
+          'contrast on the (possibly palette) background like the legs do',
     );
     expect(snapshot.transitLegs.map((l) => l.mode), ['BUS', 'BUS']);
     expect(snapshot.distanceMeters, trip.distance);

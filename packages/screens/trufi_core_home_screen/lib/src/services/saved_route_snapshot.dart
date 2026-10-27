@@ -14,7 +14,11 @@ SavedRouteSnapshot savedRouteSnapshotFromItinerary(
         SavedRouteTransitLeg(
           shortName: leg.displayName,
           colorHex: _nonEmpty(leg.routeColor),
-          textColorHex: _nonEmpty(leg.route?.textColor),
+          // route_text_color is deliberately not persisted: Itinerary swaps
+          // an empty/white route_color for its palette but keeps the feed's
+          // text color, so the pair could land black-on-purple; the card
+          // computes the contrast like the itinerary legs do.
+          textColorHex: null,
           // The OTP name round-trips through TransportModeExtension, so the
           // card draws the same glyph the itinerary legs did.
           mode: leg.transportMode.otpName,

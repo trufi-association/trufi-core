@@ -98,15 +98,20 @@ class _RouteNameDialogState extends State<RouteNameDialog> {
             _buildDragHandle(colorScheme),
             _buildHeader(theme),
             const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildNameField(colorScheme),
-                  const SizedBox(height: 24),
-                  _buildSaveButton(),
-                ],
+            // Scrolls like EditPlaceDialog: with isScrollControlled the sheet
+            // gets the full height and does not discount the keyboard, so a
+            // landscape phone would overflow the field and the button.
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildNameField(colorScheme),
+                    const SizedBox(height: 24),
+                    _buildSaveButton(),
+                  ],
+                ),
               ),
             ),
           ],
