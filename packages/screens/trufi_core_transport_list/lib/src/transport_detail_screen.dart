@@ -800,7 +800,7 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
 
     final header = KeyedSubtree(
       key: _headerKey,
-      child: _buildHeader(context, theme, colorScheme, stops),
+      child: _RouteSummary(route: widget.route),
     );
 
     // Before measurement, use Column so the header can size itself.
@@ -857,15 +857,24 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
       ],
     );
   }
+}
 
-  Widget _buildHeader(
-    BuildContext context,
-    ThemeData theme,
-    ColorScheme colorScheme,
-    List<TransportStop> stops,
-  ) {
-    final routeColor = widget.route.backgroundColor ?? colorScheme.primary;
-    final distance = _RouteDistanceCalculator.calculate(widget.route.geometry);
+/// What the stops sheet pins above its timeline: origin → destination,
+/// the operating-hours badge and the distance / stops / mode card.
+class _RouteSummary extends StatelessWidget {
+  final TransportRouteDetails route;
+
+  const _RouteSummary({required this.route});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    // Stops arrive in trip order (first = origin, last = destination) for
+    // both directions (#870).
+    final stops = route.stops ?? [];
+    final routeColor = route.backgroundColor ?? colorScheme.primary;
+    final distance = _RouteDistanceCalculator.calculate(route.geometry);
 
     // Origin/destination labels for the timeline header.
     // Prefer the trip's actual first/last stop (always available when
@@ -876,13 +885,13 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
     if (stops.length >= 2) {
       originLabel = stops.first.name;
       destinationLabel = stops.last.name;
-    } else if (widget.route.hasOriginDestination) {
-      originLabel = widget.route.directionId == 1
-          ? widget.route.longNameLast
-          : widget.route.longNameStart;
-      destinationLabel = widget.route.directionId == 1
-          ? widget.route.longNameStart
-          : widget.route.longNameLast;
+    } else if (route.hasOriginDestination) {
+      originLabel = route.directionId == 1
+          ? route.longNameLast
+          : route.longNameStart;
+      destinationLabel = route.directionId == 1
+          ? route.longNameStart
+          : route.longNameLast;
     }
     final hasOriginDestination =
         originLabel != null &&
@@ -981,12 +990,10 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
         // Operating hours indicator (when the feed exposes service
         // calendar + frequencies). One-line dot+label so the user
         // sees "is the bus running right now?" before committing.
-        if (widget.route.serviceHours != null)
+        if (route.serviceHours != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            child: ServiceHoursIndicator(
-              serviceHours: widget.route.serviceHours!,
-            ),
+            child: ServiceHoursIndicator(serviceHours: route.serviceHours!),
           ),
 
         // Route statistics
@@ -1032,13 +1039,13 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
                 // Mode
                 Expanded(
                   child: _StatItem(
-                    icon: widget.route.modeIcon != null
+                    icon: route.modeIcon != null
                         ? null
                         : Icons.directions_bus_rounded,
-                    customIcon: widget.route.modeIcon,
+                    customIcon: route.modeIcon,
                     label: TransportListLocalizations.of(context).labelMode,
                     value: _localizedModeName(
-                      widget.route.modeName,
+                      route.modeName,
                       TransportListLocalizations.of(context),
                     ),
                     color: _foregroundColor(routeColor),
@@ -1803,29 +1810,11 @@ class _RouteMapViewState extends State<_RouteMapView> {
     }
 
     final firstStop = stops.first;
-    markers.add(
-      TrufiMarker(
-        id: 'origin-marker',
-        position: LatLng(firstStop.latitude, firstStop.longitude),
-        widget: const _OriginMarker(),
-        size: const Size(28, 28),
-        layerLevel: 5,
-        imageCacheKey: 'origin_marker_v2',
-        allowOverlap: true,
-      ),
-    );
-
     final lastStop = stops.last;
-    markers.add(
-      TrufiMarker(
-        id: 'destination-marker',
-        position: LatLng(lastStop.latitude, lastStop.longitude),
-        widget: const _DestinationMarker(),
-        size: const Size(36, 36),
-        alignment: Alignment.topCenter,
-        layerLevel: 5,
-        imageCacheKey: 'destination_marker_v2',
-        allowOverlap: true,
+    markers.addAll(
+      _terminalMarkers(
+        LatLng(firstStop.latitude, firstStop.longitude),
+        LatLng(lastStop.latitude, lastStop.longitude),
       ),
     );
 
@@ -1843,6 +1832,29 @@ class _RouteMapViewState extends State<_RouteMapView> {
       );
     }
   }
+
+  /// The origin pin and the destination pin of the line.
+  List<TrufiMarker> _terminalMarkers(LatLng origin, LatLng destination) => [
+    TrufiMarker(
+      id: 'origin-marker',
+      position: origin,
+      widget: const _OriginMarker(),
+      size: const Size(28, 28),
+      layerLevel: 5,
+      imageCacheKey: 'origin_marker_v2',
+      allowOverlap: true,
+    ),
+    TrufiMarker(
+      id: 'destination-marker',
+      position: destination,
+      widget: const _DestinationMarker(),
+      size: const Size(36, 36),
+      alignment: Alignment.topCenter,
+      layerLevel: 5,
+      imageCacheKey: 'destination_marker_v2',
+      allowOverlap: true,
+    ),
+  ];
 
   void _onCameraChanged(TrufiCameraPosition cam) {
     // Track the user's camera: this widget passes a controlled `camera` down,
