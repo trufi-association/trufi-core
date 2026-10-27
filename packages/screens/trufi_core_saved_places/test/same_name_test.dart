@@ -111,7 +111,11 @@ void main() {
       );
       final es = lookupSavedPlacesLocalizations(const Locale('es'));
       expect(
-        cubit.hasSameName('Casa', excludeId: 'h', localization: es),
+        cubit.hasSameName(
+          'Casa',
+          excludeId: cubit.state.home!.id,
+          localization: es,
+        ),
         isFalse,
       );
     });
