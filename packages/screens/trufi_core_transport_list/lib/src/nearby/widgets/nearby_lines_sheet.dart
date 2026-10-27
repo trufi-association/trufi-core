@@ -185,7 +185,8 @@ class NearbyLinesSheet extends StatelessWidget {
 /// chip (`secondaryContainer`, radius 20, × to clear), with the line's
 /// badge in front of "Highlighted: 201". Hand-built rather than an
 /// [InputChip]: a chip sizes its avatar to the label's height, and the
-/// 24 px badge trips that assertion.
+/// 24 px badge trips that assertion. The × gets a 40 px target, which
+/// is what sets the chip's height.
 class _SelectionBanner extends StatelessWidget {
   const _SelectionBanner({required this.line, required this.onClear});
 
@@ -206,7 +207,7 @@ class _SelectionBanner extends StatelessWidget {
               color: colorScheme.secondaryContainer,
               borderRadius: BorderRadius.circular(20),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(6, 4, 4, 4),
+                padding: const EdgeInsetsDirectional.only(start: 6),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -237,13 +238,16 @@ class _SelectionBanner extends StatelessWidget {
                           HapticFeedback.selectionClick();
                           onClear?.call();
                         },
-                        radius: 18,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Icon(
-                            Icons.close_rounded,
-                            size: 18,
-                            color: colorScheme.onSecondaryContainer,
+                        radius: 20,
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Center(
+                            child: Icon(
+                              Icons.close_rounded,
+                              size: 18,
+                              color: colorScheme.onSecondaryContainer,
+                            ),
                           ),
                         ),
                       ),
@@ -324,7 +328,7 @@ class NearbyRadiusPill extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Text(
               label,
               style: theme.textTheme.labelMedium?.copyWith(
@@ -496,7 +500,9 @@ class NearbyLineTile extends StatelessWidget {
                         label: line.displayName,
                         color: lineColor,
                         textColor: line.textColor,
-                        icon: Icon(gtfsRouteTypeIcon(line.routeType)),
+                        // 16 like the icon the routes list gets from
+                        // its provider, so the two lists match.
+                        icon: Icon(gtfsRouteTypeIcon(line.routeType), size: 16),
                       ),
                       const SizedBox(width: 14),
                       Expanded(

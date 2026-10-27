@@ -158,6 +158,18 @@ void main() {
     expect(find.byTooltip('Use my location'), findsOneWidget);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byType(TrufiBottomSheet), findsNothing);
+    // The panel insets the flat header like the route detail (12 px):
+    // the buttons are not glued to the panel's edges. The panel is
+    // 340 px wide under 900 px.
+    final menuTopLeft = tester.getTopLeft(
+      find.byTooltip('Open navigation menu'),
+    );
+    expect(menuTopLeft.dx, greaterThanOrEqualTo(12));
+    expect(menuTopLeft.dy, greaterThanOrEqualTo(12));
+    expect(
+      tester.getTopRight(find.byTooltip('Close')).dx,
+      lessThanOrEqualTo(340 - 12),
+    );
     expect(find.text('2 lines within 300 m'), findsOneWidget);
 
     expect(find.text('100 m (1)'), findsOneWidget);

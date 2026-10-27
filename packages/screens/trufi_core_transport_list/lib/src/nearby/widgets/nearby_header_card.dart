@@ -120,7 +120,7 @@ class NearbyHeaderCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Padding(
                       // Aligned with the anchor label (icon 14 + gap 6).
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsetsDirectional.only(start: 20),
                       child: Text(
                         l10n.nearbyMovePinHint,
                         style: theme.textTheme.bodySmall?.copyWith(

@@ -219,6 +219,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static const double _sheetInitialSize = 0.35;
   static const double _sheetMaxSize = 0.85;
   static const double _controlsTopInset = 12;
+
+  /// Room between the header card and the map controls on phones.
+  static const double _controlsGap = 12;
   static const double _wideFitPadding = 24;
 
   final TrufiMapController _mapController = TrufiMapController();
@@ -410,8 +413,20 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     BoxConstraints constraints,
   ) {
     final viewPadding = MediaQuery.viewPaddingOf(context);
-    final headerReserve =
-        _headerPadding * 2 + NearbyHeaderCard.heightFor(state);
+    final cardHeight = NearbyHeaderCard.heightFor(state);
+    final headerReserve = _headerPadding * 2 + cardHeight;
+    // The card's figures assume text scale 1.0; a larger setting grows
+    // its title and anchor lines, so the controls follow the scaled card
+    // (clamped so an extreme setting cannot push them off the map) and
+    // keep a gap. The camera fit keeps the unscaled reserve.
+    final textScale = MediaQuery.textScalerOf(
+      context,
+    ).scale(1.0).clamp(1.0, 1.6).toDouble();
+    final controlsTop =
+        viewPadding.top +
+        _headerPadding * 2 +
+        cardHeight * textScale +
+        _controlsGap;
     _fitCamera.updateViewport(
       Size(constraints.maxWidth, constraints.maxHeight),
       EdgeInsets.only(
@@ -439,7 +454,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
           ),
         ),
         Positioned(
-          top: viewPadding.top + headerReserve,
+          top: controlsTop,
           right: 16,
           child: _MapControls(
             manager: manager,
@@ -492,7 +507,11 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
               right: false,
               child: Column(
                 children: [
-                  _buildHeader(state, elevated: false),
+                  // Inset like the route detail's side-panel header.
+                  Padding(
+                    padding: const EdgeInsets.all(_headerPadding),
+                    child: _buildHeader(state, elevated: false),
+                  ),
                   Expanded(child: _buildSheet(state, null)),
                 ],
               ),

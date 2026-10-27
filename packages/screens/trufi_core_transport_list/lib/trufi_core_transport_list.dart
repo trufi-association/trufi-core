@@ -21,8 +21,9 @@ export 'src/transport_list_trufi_screen.dart';
 // Widgets
 export 'src/widgets/transport_tile.dart';
 export 'src/widgets/transport_detail_sheet.dart';
+// The count pill heads both lists (tests find it by type); the
+// loading / empty / error states stay internal.
 export 'src/widgets/route_count_indicator.dart';
-export 'src/widgets/transport_list_states.dart';
 
 // Nearby lines (#1006): offline discovery by distance radius
 export 'src/nearby/nearby_radius.dart';
