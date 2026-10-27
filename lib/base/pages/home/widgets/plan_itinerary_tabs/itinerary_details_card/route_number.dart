@@ -55,14 +55,21 @@ class RouteNumber extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: getContrastColor(
-                            backgroundColor ?? Colors.black,
+                    ConstrainedBox(
+                      // Long route_short_name values are cut with an ellipsis instead
+                      // of widening the badge (trufi-arequipa#27).
+                      constraints: const BoxConstraints(maxWidth: 180),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: Text(
+                          text,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: getContrastColor(
+                              backgroundColor ?? Colors.black,
+                            ),
                           ),
                         ),
                       ),

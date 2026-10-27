@@ -37,32 +37,46 @@ class TileTransport extends StatelessWidget {
                           borderRadius: const BorderRadius.horizontal(
                               left: Radius.circular(5)),
                         ),
-                        child: Row(
-                          children: [
-                            Text(
-                              patternOtp.route?.shortName ?? '',
-                              style: TextStyle(
-                                color: getContrastColor(
-                                  patternOtp.route?.backgroundColor ??
-                                      Colors.white,
-                                ),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                        // A long route_short_name (the Arequipa feed carries
+                        // the operator's sub-brand, up to 32 characters) used
+                        // to push the terminal out of the row; now the code
+                        // keeps at most 55 % of the width and both texts end
+                        // in an ellipsis (trufi-arequipa#27).
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final textStyle = TextStyle(
+                              color: getContrastColor(
+                                patternOtp.route?.backgroundColor ??
+                                    Colors.white,
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              patternOtp.route?.longNameLast ?? '',
-                              style: TextStyle(
-                                color: getContrastColor(
-                                  patternOtp.route?.backgroundColor ??
-                                      Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            );
+                            return Row(
+                              children: [
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: constraints.maxWidth * 0.55,
+                                  ),
+                                  child: Text(
+                                    patternOtp.route?.shortName ?? '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textStyle,
+                                  ),
                                 ),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    patternOtp.route?.longNameLast ?? '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textStyle,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),

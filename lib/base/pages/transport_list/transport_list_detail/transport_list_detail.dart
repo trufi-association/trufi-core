@@ -126,6 +126,8 @@ class _TransportListDetailState extends State<TransportListDetail> {
               if (transitRoute?.route?.mode != null)
                 Text(
                   '${transitRoute!.route!.mode!.getTranslate(localization)} - ${transitRoute!.route?.shortName ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 18),
                 ),
               Row(

@@ -56,7 +56,7 @@ class IconTransport extends StatelessWidget {
                 ),
                 maxLines: 1,
                 softWrap: false,
-                overflow: TextOverflow.clip,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
