@@ -332,7 +332,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   Widget _buildHeader(ThemeData theme, SavedPlacesLocalizations localization) {
     final title =
         widget.title ??
-        (_isEditing ? (localization.editPlace) : (localization.addPlace));
+        (_isEditing
+            ? (localization.editPlace)
+            : (localization.addPlace));
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 8, 16),

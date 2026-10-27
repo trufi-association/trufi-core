@@ -96,7 +96,7 @@ void main() {
         expect(cubit.hasSameName('casa ', localization: es), isTrue);
         // Without the localization only the stored name is compared.
         expect(cubit.hasSameName('Casa'), isFalse);
-        // The default label of another language is not a match for a stranger.
+        // The other default label (Work) does not match.
         expect(cubit.hasSameName('Trabajo', localization: es), isFalse);
       },
     );

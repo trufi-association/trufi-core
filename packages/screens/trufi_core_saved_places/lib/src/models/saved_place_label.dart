@@ -10,7 +10,8 @@ import 'saved_place.dart';
 /// up in the list while the edit sheet, reading the stored name, did).
 ///
 /// Single source of that label for the tile and for the cubit's same-name
-/// notice (#1019): what the notice compares must be what the list shows.
+/// notice (#1019): besides the stored name, the notice compares what the
+/// list shows, so what it compares is what the user would see twice.
 String savedPlaceDisplayName(
   SavedPlace place,
   SavedPlacesLocalizations localization,
