@@ -180,6 +180,21 @@ void main() {
       );
     });
 
+    test('a pair carried as the address gets the mark too', () {
+      const picked = SearchLocation(
+        id: 'map:1',
+        displayName: 'الموقع المحدد',
+        address: '-17.3937, -66.1568',
+        latitude: -17.3937,
+        longitude: -66.1568,
+      );
+      expect(
+        picked.formattedDisplay,
+        'الموقع المحدد, \u200E-17.3937, -66.1568',
+      );
+      expect(picked.isCoordinatePair, isFalse);
+    });
+
     test('the bare displayName is untouched (copy and share stay clean)', () {
       expect(pair.displayName, '-17.3937, -66.1568');
       expect(pair.displayName.contains('\u200E'), isFalse);

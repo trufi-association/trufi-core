@@ -40,15 +40,24 @@ class SearchLocation {
   /// and sharing.
   String get formattedDisplay {
     final name = isCoordinatePair ? '${Bidi.LRM}$displayName' : displayName;
-    if (address != null && address!.isNotEmpty) {
-      return '$name, $address';
+    final address = this.address;
+    if (address != null && address.isNotEmpty) {
+      // A pair can also arrive as the address ("Selected location,
+      // -17.39, -66.16": a map pick with no geocoder): same mark.
+      final readable = _isCoordinatePair(address)
+          ? '${Bidi.LRM}$address'
+          : address;
+      return '$name, $readable';
     }
     return name;
   }
 
   /// Whether [displayName] reads as a decimal latitude/longitude pair (the
   /// "Go to" results, or any location named by its coordinates).
-  bool get isCoordinatePair => CoordinateParser.parse(displayName) != null;
+  bool get isCoordinatePair => _isCoordinatePair(displayName);
+
+  static bool _isCoordinatePair(String text) =>
+      CoordinateParser.parse(text) != null;
 
   @override
   bool operator ==(Object other) =>
