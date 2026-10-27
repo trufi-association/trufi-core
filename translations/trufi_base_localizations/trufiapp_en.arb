@@ -215,6 +215,16 @@
         },
         "description": "Itinerary leg duration in hours"
     },
+    "itineraryTransfers": "{count, plural, =0{Direct} =1{1 transfer} other{{count} transfers}}",
+    "@itineraryTransfers": {
+        "description": "Number of transfers of an itinerary, shown next to its distance in the results list (trufi-arequipa#29)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
     "instructionDurationMinutes": "{value} min",
     "@instructionDurationMinutes": {
         "placeholders": {

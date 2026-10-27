@@ -64,7 +64,16 @@ class ItineraryCard extends StatelessWidget {
                           style: TextStyle(
                             color: theme.colorScheme.secondary,
                           ),
-                        )
+                        ),
+                        // trufi-arequipa#29: how many times the rider changes
+                        // vehicle, next to the distance ("Directo" when none).
+                        TextSpan(
+                          text:
+                              " · ${localization.itineraryTransfers(itinerary.transfers)}",
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ],
                     ),
                   ),

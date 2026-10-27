@@ -215,6 +215,7 @@
         },
         "description": "Itinerary leg duration in hours"
     },
+    "itineraryTransfers": "{count, plural, =0{Direto} =1{1 transferência} other{{count} transferências}}",
     "instructionDurationMinutes": "{value} min",
     "@instructionDurationMinutes": {
         "placeholders": {
