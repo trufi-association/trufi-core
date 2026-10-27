@@ -118,6 +118,20 @@ abstract class IRoutingProvider {
   /// Returns null if this provider has no configurable preferences.
   Widget? buildPreferencesUI(BuildContext context) => null;
 
+  /// Whether [buildPreferencesUI] offers settings the user can change.
+  ///
+  /// The home screen shows its route-settings button only when the current
+  /// engine has configurable preferences or there is another engine to
+  /// switch to. A single-engine app whose provider has nothing to configure
+  /// (the local Trufi planner only ships an informational panel) therefore
+  /// gets no button, instead of a sheet whose only action is an "Apply"
+  /// that changes nothing (trufi-sanaa#23).
+  ///
+  /// Defaults to `false`, consistent with the default [buildPreferencesUI]
+  /// (null). A provider that returns a form from [buildPreferencesUI] must
+  /// override this to `true`, or single-engine apps will hide its button.
+  bool get hasConfigurablePreferences => false;
+
   /// Resets provider-specific preferences to defaults.
   void resetPreferences() {}
 

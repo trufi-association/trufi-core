@@ -89,6 +89,9 @@ class Otp24RoutingProvider extends IRoutingProvider {
       Otp24Preferences(state: _prefs);
 
   @override
+  bool get hasConfigurablePreferences => true;
+
+  @override
   void resetPreferences() => _prefs.reset();
 
   @override

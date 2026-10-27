@@ -98,6 +98,9 @@ class Otp15RoutingProvider extends IRoutingProvider {
       Otp15Preferences(state: _prefs, showWheelchair: showWheelchairOption);
 
   @override
+  bool get hasConfigurablePreferences => true;
+
+  @override
   void resetPreferences() => _prefs.reset();
 
   @override
