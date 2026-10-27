@@ -89,9 +89,9 @@ class _TransportListContentState extends State<TransportListContent>
     // debugging while users get the localized message only.
     debugPrint('TransportList: failed to load routes: $error');
     final localization = TransportListLocalizations.of(context);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(localization.errorLoadingRoutes)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(localization.errorLoadingRoutes)),
+    );
   }
 
   @override
