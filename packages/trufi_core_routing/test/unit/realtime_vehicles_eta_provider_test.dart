@@ -43,6 +43,8 @@ VehiclePosition _vehicle(
   String? route, {
   double northMeters = 1500,
   double? speed,
+  double? heading,
+  int? directionId,
   DateTime? timestamp,
 }) => VehiclePosition(
   vehicleId: id,
@@ -52,6 +54,8 @@ VehiclePosition _vehicle(
   ),
   routeId: route,
   speed: speed,
+  heading: heading,
+  directionId: directionId,
   timestamp: timestamp,
 );
 
@@ -281,6 +285,85 @@ void main() {
     test('an empty fleet is a valid empty answer', () async {
       final snapshot = await _provider(const []).fetchEtas(_request({'1132'}));
       expect(snapshot.etas, isEmpty);
+    });
+  });
+
+  group('direction of travel (#1016)', () {
+    // Every vehicle sits 1500 m NORTH of the origin: a heading of 180°
+    // (south) points at the rider, 0° (north) points away.
+    test(
+      'a moving vehicle heading away is dropped, one heading in is kept',
+      () async {
+        final snapshot = await _provider([
+          _vehicle('away', '1:1132', speed: 8, heading: 0),
+          _vehicle('in', '1:1132', speed: 8, heading: 180, northMeters: 2500),
+        ]).fetchEtas(_request({'1132'}));
+        expect(snapshot.etaForRoute('1132')?.vehicleId, 'in');
+      },
+    );
+
+    test('90° off the bearing is the limit', () {
+      final target = _origin;
+      final toward = _vehicle('t', '1:1132', speed: 8, heading: 180);
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(toward, target, null),
+        isTrue,
+      );
+      final sideways = _vehicle('s', '1:1132', speed: 8, heading: 90);
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(sideways, target, null),
+        isTrue,
+      );
+      final away = _vehicle('a', '1:1132', speed: 8, heading: 300);
+      expect(
+        RealtimeVehiclesEtaProvider.headsTowards(away, target, null),
+        isFalse,
+      );
+    });
+
+    test(
+      'a stopped or heading-less vehicle is kept whatever it points at',
+      () async {
+        final snapshot = await _provider([
+          _vehicle('stopped', '1:1132', speed: 0.3, heading: 0),
+          _vehicle('blind', '1:1481', speed: 8),
+        ]).fetchEtas(_request({'1132', '1481'}));
+        expect(snapshot.etaForRoute('1132')?.vehicleId, 'stopped');
+        expect(snapshot.etaForRoute('1481')?.vehicleId, 'blind');
+      },
+    );
+
+    test('when both sides know the GTFS direction, it decides', () async {
+      final request = VehicleEtaRequest(
+        origin: _origin,
+        routeIds: const {'1132'},
+        directions: const {'1:1132': 1},
+      );
+      expect(request.directionFor('1132'), 1);
+      expect(request.directionFor('1:1132'), 1);
+      expect(request.directionFor('1481'), isNull);
+      final snapshot = await _provider([
+        // Heading in, but on the opposite pattern: never reaches the stop.
+        _vehicle('wrong-way', '1:1132', speed: 8, heading: 180, directionId: 0),
+        // Heading away right now (a loop, a detour), same pattern: kept.
+        _vehicle(
+          'right-way',
+          '1:1132',
+          speed: 8,
+          heading: 0,
+          directionId: 1,
+          northMeters: 2500,
+        ),
+      ]).fetchEtas(request);
+      expect(snapshot.etaForRoute('1132')?.vehicleId, 'right-way');
+    });
+
+    test('bearingDegrees: north is 0, east is 90', () {
+      const a = TrufiLatLng(0, 0);
+      expect(bearingDegrees(a, const TrufiLatLng(1, 0)), closeTo(0, 0.01));
+      expect(bearingDegrees(a, const TrufiLatLng(0, 1)), closeTo(90, 0.01));
+      expect(bearingDegrees(a, const TrufiLatLng(-1, 0)), closeTo(180, 0.01));
+      expect(bearingDegrees(a, const TrufiLatLng(0, -1)), closeTo(270, 0.01));
     });
   });
 }

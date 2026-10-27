@@ -19,7 +19,9 @@ List<Itinerary> filterMaxTransitLegs(
   bool ridesTransit(Itinerary it) => it.legs.any((l) => l.transitLeg);
 
   final kept = itineraries
-      .where((it) => it.legs.where((l) => l.transitLeg).length <= maxTransitLegs)
+      .where(
+        (it) => it.legs.where((l) => l.transitLeg).length <= maxTransitLegs,
+      )
       .toList(growable: false);
 
   final droppedAllTransit =

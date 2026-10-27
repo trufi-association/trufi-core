@@ -128,7 +128,8 @@ class TransitRouteInfo {
         mode: TransportModeExtension.fromString(json['mode']?.toString()),
         color: json['color'] as String?,
         textColor: json['textColor'] as String?,
-        agencyName: (json['agency'] as Map<String, dynamic>?)?['name'] as String?,
+        agencyName:
+            (json['agency'] as Map<String, dynamic>?)?['name'] as String?,
       );
 
   Map<String, dynamic> toJson() => {

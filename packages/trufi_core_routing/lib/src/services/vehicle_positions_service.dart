@@ -24,7 +24,7 @@ const _query = '''
         speed
         lastUpdate
         lastUpdated
-        trip { gtfsId }
+        trip { gtfsId directionId }
       }
     }
   }
@@ -203,8 +203,15 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       routeId: routeId,
       routeColor: routeColor,
       tripId: trip?['gtfsId'] as String?,
+      directionId: _parseDirectionId(trip?['directionId']),
       timestamp: parseVehicleTimestamp(json),
     );
+  }
+
+  static int? _parseDirectionId(Object? raw) {
+    if (raw is num) return raw.toInt();
+    if (raw is String) return int.tryParse(raw.trim());
+    return null;
   }
 
   /// When the vehicle actually reported, per the GTFS-RT feed — NOT when we

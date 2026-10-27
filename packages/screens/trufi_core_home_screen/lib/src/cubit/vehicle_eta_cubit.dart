@@ -39,12 +39,15 @@ VehicleEtaRequest? buildVehicleEtaRequest(
   final routeIds = <String>{};
   final stopIds = <String>{};
   final boardingPoints = <String, TrufiLatLng>{};
+  final directions = <String, int>{};
   for (final itinerary in plan.itineraries ?? const <routing.Itinerary>[]) {
     final leg = itinerary.firstTransitLeg;
     if (leg == null) continue;
     final routeKey = etaRouteKeyForLeg(leg);
     if (routeKey == null) continue;
     routeIds.add(routeKey);
+    final direction = leg.directionId;
+    if (direction != null) directions.putIfAbsent(routeKey, () => direction);
     final boarding = leg.fromPlace;
     if (boarding == null) continue;
     final stopId = boarding.stopId;
@@ -60,6 +63,7 @@ VehicleEtaRequest? buildVehicleEtaRequest(
     routeIds: routeIds,
     stopIds: stopIds.isEmpty ? null : stopIds,
     boardingPoints: boardingPoints.isEmpty ? null : boardingPoints,
+    directions: directions.isEmpty ? null : directions,
   );
 }
 

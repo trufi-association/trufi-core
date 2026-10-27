@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 /// One-shot loader of a vehicle fleet, e.g. `OtpVehiclePositionsProvider.fetchOnce`.
@@ -90,6 +92,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
         positions,
         request.pointFor(routeId),
         now,
+        request.directionFor(routeId),
       );
       if (best != null) etas.add(best);
     }
@@ -115,6 +118,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     List<VehiclePosition> positions,
     TrufiLatLng target,
     DateTime now,
+    int? wantedDirection,
   ) {
     final want = stripGtfsFeedPrefix(routeId);
     VehicleEta? best;
@@ -127,6 +131,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
       if (reportedAt != null && now.difference(reportedAt) > maxVehicleAge) {
         continue;
       }
+      if (!headsTowards(vehicle, target, wantedDirection)) continue;
       final distance = vehicle.position.distanceTo(target);
       if (distance > maxDistanceMeters) continue;
       final eta = estimate(
@@ -145,4 +150,52 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     }
     return best;
   }
+
+  /// Below this speed a vehicle counts as stopped: its heading says nothing
+  /// about where it goes next (dwelling at a stop, in traffic).
+  static const double minMovingSpeedMps = 1.0;
+
+  /// Whether [vehicle] can still reach [target] on this trip (#1016).
+  ///
+  /// When both the request and the feed carry the GTFS `direction_id` the
+  /// answer is theirs: a bus on the opposite pattern never reaches the
+  /// rider's stop on this trip, however close it is. Otherwise a moving
+  /// vehicle whose heading points away from [target] (more than 90° off the
+  /// bearing to it) is dropped, and a stopped or heading-less vehicle is
+  /// kept — the previous behaviour — because the feed says nothing useful.
+  static bool headsTowards(
+    VehiclePosition vehicle,
+    TrufiLatLng target,
+    int? wantedDirection,
+  ) {
+    final direction = vehicle.directionId;
+    if (wantedDirection != null && direction != null) {
+      return direction == wantedDirection;
+    }
+    final heading = vehicle.heading;
+    final speed = vehicle.speed;
+    if (heading == null || speed == null || speed < minMovingSpeedMps) {
+      return true;
+    }
+    final bearing = bearingDegrees(vehicle.position, target);
+    var diff = (heading - bearing).abs() % 360;
+    if (diff > 180) diff = 360 - diff;
+    return diff <= 90;
+  }
 }
+
+/// Initial bearing from [from] to [to] in degrees clockwise from north,
+/// in `[0, 360)`.
+double bearingDegrees(TrufiLatLng from, TrufiLatLng to) {
+  final lat1 = _radians(from.latitude);
+  final lat2 = _radians(to.latitude);
+  final dLon = _radians(to.longitude - from.longitude);
+  final y = math.sin(dLon) * math.cos(lat2);
+  final x =
+      math.cos(lat1) * math.sin(lat2) -
+      math.sin(lat1) * math.cos(lat2) * math.cos(dLon);
+  final degrees = math.atan2(y, x) * 180 / math.pi;
+  return (degrees + 360) % 360;
+}
+
+double _radians(double degrees) => degrees * math.pi / 180;

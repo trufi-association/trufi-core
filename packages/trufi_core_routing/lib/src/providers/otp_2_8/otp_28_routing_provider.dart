@@ -227,10 +227,7 @@ class Otp28RoutingProvider extends IRoutingProvider {
 
     return plan.copyWith(
       itineraries: sortByGeneralizedCost(
-        filterLongWalks(
-          plan.itineraries,
-          walkOnlyRequested: walkOnlyRequested,
-        ),
+        filterLongWalks(plan.itineraries, walkOnlyRequested: walkOnlyRequested),
       ),
     );
   }

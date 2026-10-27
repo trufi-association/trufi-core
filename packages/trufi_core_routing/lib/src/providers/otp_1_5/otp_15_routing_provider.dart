@@ -55,6 +55,7 @@ class Otp15RoutingProvider extends IRoutingProvider {
 
   /// Whether to show the wheelchair accessibility toggle in preferences UI.
   final bool showWheelchairOption;
+
   /// Service used to inject the `X-Device-Id` header on every outgoing
   /// request. Defaults to [SharedPreferencesDeviceIdService].
   final DeviceIdService _deviceIdService;

@@ -35,6 +35,7 @@ class Leg extends Equatable {
     this.interlineWithPreviousLeg,
     this.headsign,
     this.tripPatternId,
+    this.directionId,
     this.serviceHours,
   });
 
@@ -59,6 +60,10 @@ class Leg extends Equatable {
   final bool? interlineWithPreviousLeg;
   final String? headsign;
   final String? tripPatternId;
+
+  /// GTFS `direction_id` of the trip (0/1), when the planner reports it.
+  /// Lets a telemetry source keep only vehicles going the rider's way.
+  final int? directionId;
 
   /// Operating hours for the route this leg belongs to. Set by the
   /// local planner (which can read `calendar.txt` + `frequencies.txt`
@@ -120,10 +125,9 @@ class Leg extends Equatable {
       interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
       headsign: json['headsign'] as String?,
       tripPatternId: json['tripPatternId'] as String?,
+      directionId: (json['directionId'] as num?)?.toInt(),
       serviceHours: json['serviceHours'] != null
-          ? ServiceHours.fromJson(
-              json['serviceHours'] as Map<String, dynamic>,
-            )
+          ? ServiceHours.fromJson(json['serviceHours'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -169,6 +173,7 @@ class Leg extends Equatable {
       'interlineWithPreviousLeg': interlineWithPreviousLeg,
       'headsign': headsign,
       'tripPatternId': tripPatternId,
+      'directionId': directionId,
       'serviceHours': serviceHours?.toJson(),
     };
   }
@@ -196,6 +201,7 @@ class Leg extends Equatable {
     bool? interlineWithPreviousLeg,
     String? headsign,
     String? tripPatternId,
+    int? directionId,
     ServiceHours? serviceHours,
   }) {
     return Leg(
@@ -221,6 +227,7 @@ class Leg extends Equatable {
           interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       headsign: headsign ?? this.headsign,
       tripPatternId: tripPatternId ?? this.tripPatternId,
+      directionId: directionId ?? this.directionId,
       serviceHours: serviceHours ?? this.serviceHours,
     );
   }
@@ -248,6 +255,7 @@ class Leg extends Equatable {
     routeLongName,
     headsign,
     tripPatternId,
+    directionId,
   ];
 }
 
