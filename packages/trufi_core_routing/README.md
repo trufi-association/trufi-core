@@ -64,8 +64,10 @@ final fleet = await otp28.realtimeVehiclesProvider!.fetchOnce();
 ## Vehicle ETA providers
 
 A `VehicleEtaProvider` (defined in `trufi_core_interfaces`) answers one
-`VehicleEtaRequest` — the rider's origin plus the routes of a plan — with a
-`VehicleEtaSnapshot` of `VehicleEta`s (one per reporting route). On-demand
+`VehicleEtaRequest` — the rider's origin, the routes of a plan and, per
+route, the boarding stop the planner picked — with a `VehicleEtaSnapshot`
+of `VehicleEta`s (one per reporting route, measured to that route's
+boarding stop; to the origin for routes without one). On-demand
 snapshot only: no streams, no background polling. Hand one to
 `HomeScreenConfig.vehicleEtaProvider` to get "Arrives in ~N min" badges on
 the itinerary cards (see the `trufi_core_home_screen` README).
@@ -73,8 +75,10 @@ the itinerary cards (see the `trufi_core_home_screen` README).
 ### RealtimeVehiclesEtaProvider
 
 Derives ETAs from a `RealtimeVehiclesProvider` snapshot: for each requested
-route, the nearest reporting vehicle's straight-line distance to the origin
-over its reported speed (when plausible) or over an average speed.
+route, the nearest reporting vehicle's straight-line distance to the route's
+boarding stop (`VehicleEtaRequest.pointFor`; the rider's origin when the
+request carries no boarding point) over its reported speed (when plausible)
+or over an average speed.
 
 ```dart
 final otp28 = Otp28RoutingProvider(

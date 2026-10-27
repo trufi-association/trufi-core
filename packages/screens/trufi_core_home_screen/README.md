@@ -225,7 +225,7 @@ This will add POI layers configuration to the map type settings modal, allowing 
 ## Optional: Live vehicle ETA
 
 Itinerary cards can show when the next vehicle of the ride's **first bus**
-reaches the rider's origin ("Arrives in ~4 min"), fed by any
+reaches its boarding stop ("Arrives in ~4 min"), fed by any
 `VehicleEtaProvider` from `trufi_core_interfaces`. The feature is off unless
 you hand the config a provider; then no cubit, badge or refresh button exists.
 

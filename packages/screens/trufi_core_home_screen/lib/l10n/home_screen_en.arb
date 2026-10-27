@@ -685,7 +685,7 @@
   },
   "etaArrivesIn": "Arrives in ~{minutes} min",
   "@etaArrivesIn": {
-    "description": "Badge on an itinerary card: minutes until the next vehicle of its first bus reaches the origin",
+    "description": "Badge on an itinerary card: minutes until the next vehicle of its first bus reaches its boarding stop",
     "placeholders": {
       "minutes": {
         "type": "int",

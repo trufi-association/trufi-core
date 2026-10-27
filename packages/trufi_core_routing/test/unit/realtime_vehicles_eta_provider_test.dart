@@ -144,6 +144,66 @@ void main() {
       );
     });
 
+    test(
+      'measures to the boarding stop when the request carries one',
+      () async {
+        // Bus 1500 m north of the rider, boarding stop 1000 m north: the bus
+        // is ~500 m from the stop, which is what the badge must count down.
+        final boarding = TrufiLatLng(
+          _origin.latitude + _dLat1500m * (1000 / 1500),
+          _origin.longitude,
+        );
+        final bus = _vehicle('A', '1:1132', northMeters: 1500);
+        final other = _vehicle('B', '1:1185', northMeters: 1500);
+        final snapshot = await _provider([bus, other]).fetchEtas(
+          VehicleEtaRequest(
+            origin: _origin,
+            routeIds: const {'1132', '1185'},
+            boardingPoints: {'1:1132': boarding},
+          ),
+        );
+
+        final toStop = bus.position.distanceTo(boarding);
+        expect(toStop, closeTo(500, 10));
+        final eta = snapshot.etaForRoute('1132')!;
+        expect(
+          eta.distanceMeters,
+          toStop,
+          reason: 'measured to the stop, not to where the rider stands',
+        );
+        expect(eta.eta, Duration(seconds: (toStop / (15 / 3.6)).round()));
+        expect(
+          snapshot.etaForRoute('1185')?.distanceMeters,
+          other.position.distanceTo(_origin),
+          reason:
+              'a route without a boarding point still measures to the origin',
+        );
+      },
+    );
+
+    test(
+      'the max distance applies to the boarding stop, not the rider',
+      () async {
+        // Stop 9 km away with the bus 500 m before it: fine. The same bus is
+        // 9.5 km from the rider — irrelevant, the rider walks/rides elsewhere.
+        final boarding = TrufiLatLng(
+          _origin.latitude + _dLat1500m * (9000 / 1500),
+          _origin.longitude,
+        );
+        final snapshot =
+            await _provider([
+              _vehicle('A', '1:1132', northMeters: 9500),
+            ]).fetchEtas(
+              VehicleEtaRequest(
+                origin: _origin,
+                routeIds: const {'1132'},
+                boardingPoints: {'1132': boarding},
+              ),
+            );
+        expect(snapshot.etaForRoute('1132')?.distanceMeters, closeTo(500, 10));
+      },
+    );
+
     test('drops vehicles beyond the max distance', () async {
       final snapshot = await _provider([
         _vehicle('A', '1:1132', northMeters: 12000),

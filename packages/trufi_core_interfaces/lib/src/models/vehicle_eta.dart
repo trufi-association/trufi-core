@@ -22,7 +22,10 @@ class VehicleEta extends Equatable {
   /// with `==`, so both spellings of the same route find each other.
   final String routeId;
 
-  /// Time until the vehicle reaches the rider's origin. Never negative.
+  /// Time until the vehicle reaches the rider's boarding stop — the
+  /// request's boarding point for this route — or the rider's origin when
+  /// the request carried no boarding point (see
+  /// [VehicleEtaRequest.pointFor]). Never negative.
   final Duration eta;
 
   /// When the estimate was produced (the source's clock when it reports
@@ -32,8 +35,8 @@ class VehicleEta extends Equatable {
   /// Identifier of the vehicle the estimate refers to, when known.
   final String? vehicleId;
 
-  /// Straight-line or road distance from the vehicle to the origin, when
-  /// the source reports it.
+  /// Straight-line or road distance from the vehicle to the point [eta]
+  /// is measured to, when the source reports it.
   final double? distanceMeters;
 
   /// Boarding stop the estimate refers to, when the source reports it.
@@ -62,16 +65,20 @@ class VehicleEta extends Equatable {
       'VehicleEta($routeId, ${eta.inSeconds}s, vehicle=$vehicleId)';
 }
 
-/// One query: the rider's origin plus the routes to answer for. [stopIds]
-/// is an optional hint (the boarding stops the planner picked) for sources
-/// that estimate per stop instead of per coordinate.
+/// One query: the rider's origin, the routes to answer for and, per route,
+/// the boarding point the planner picked. [stopIds] is an optional hint (the
+/// boarding stops' ids) for sources that estimate per stop instead of per
+/// coordinate; [boardingPoints] carries their coordinates for sources that
+/// measure distances themselves.
 class VehicleEtaRequest extends Equatable {
   const VehicleEtaRequest({
     required this.origin,
     required this.routeIds,
     this.stopIds,
+    this.boardingPoints,
   });
 
+  /// Where the rider is (the plan's origin).
   final TrufiLatLng origin;
 
   /// Route ids as the planner reports them (prefixed or bare); sources
@@ -80,8 +87,31 @@ class VehicleEtaRequest extends Equatable {
 
   final Set<String>? stopIds;
 
+  /// Boarding stop per route, keyed by the route id as it appears in
+  /// [routeIds] (either spelling; look up with [pointFor]). A source that
+  /// measures distances answers "when does the vehicle reach my stop"
+  /// instead of "when does it reach me" — on an itinerary with a long walk
+  /// to the stop those differ by minutes. Optional and backwards
+  /// compatible: routes missing here fall back to [origin].
+  final Map<String, TrufiLatLng>? boardingPoints;
+
+  /// The point the ETA of [routeId] is measured to: its boarding point when
+  /// the request carries one, otherwise [origin]. Feed-prefix agnostic, so
+  /// `1:1132` finds a point stored under `1132` and vice versa.
+  TrufiLatLng pointFor(String routeId) {
+    final points = boardingPoints;
+    if (points == null || points.isEmpty) return origin;
+    final direct = points[routeId];
+    if (direct != null) return direct;
+    final want = stripGtfsFeedPrefix(routeId);
+    for (final entry in points.entries) {
+      if (stripGtfsFeedPrefix(entry.key) == want) return entry.value;
+    }
+    return origin;
+  }
+
   @override
-  List<Object?> get props => [origin, routeIds, stopIds];
+  List<Object?> get props => [origin, routeIds, stopIds, boardingPoints];
 }
 
 /// The answer to one [VehicleEtaRequest]: at most a few [VehicleEta]s and
@@ -161,7 +191,7 @@ class VehicleEtaException implements Exception {
 }
 
 /// Contract for any vehicle-telemetry backend able to answer "when does the
-/// next vehicle of route R reach this point?" (a GTFS-RT derived estimate,
+/// next vehicle of route R reach the rider's boarding stop?" (a GTFS-RT derived estimate,
 /// SIRI, a city's fleet-telemetry API, ...).
 ///
 /// On-demand snapshot only: one request, one answer. No streams and no

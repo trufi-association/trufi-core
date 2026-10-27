@@ -40,6 +40,14 @@ void main() {
             'walk-only ride adds nothing',
       );
       expect(request.stopIds, {'sA', 'sC'});
+      expect(
+        request.boardingPoints,
+        {
+          '1:A': const TrufiLatLng(-17.39, -66.15),
+          '1:C': const TrufiLatLng(-17.39, -66.15),
+        },
+        reason: 'the source measures to the boarding stop, not to the rider',
+      );
 
       final state = cubit.state;
       expect(state.status, VehicleEtaStatus.ready);
@@ -226,7 +234,44 @@ void main() {
           itinerary([busLeg('A', stopId: null)]),
         ],
       );
-      expect(buildVehicleEtaRequest(plan, etaOrigin)?.stopIds, isNull);
+      final request = buildVehicleEtaRequest(plan, etaOrigin);
+      expect(request?.stopIds, isNull);
+      expect(
+        request?.boardingPoints,
+        isNull,
+        reason: 'no fromPlace → nothing to measure to but the origin',
+      );
+      expect(request?.pointFor('1:A'), etaOrigin);
+    });
+
+    test('carries the boarding stop of each route; the first ride wins', () {
+      final plan = routing.Plan(
+        itineraries: [
+          itinerary([walkLeg(), busLeg('A', stopLat: -17.40, stopLon: -66.16)]),
+          // Same route, boarded at another stop: the preferred ride wins.
+          itinerary([
+            walkLeg(),
+            busLeg('A', stopId: 'sA2', stopLat: -17.41, stopLon: -66.17),
+          ]),
+          itinerary([busLeg('B', stopId: null)]),
+        ],
+      );
+      final request = buildVehicleEtaRequest(plan, etaOrigin)!;
+      expect(request.routeIds, {'1:A', '1:B'});
+      expect(request.stopIds, {'sA', 'sA2'});
+      expect(request.boardingPoints, {
+        '1:A': const TrufiLatLng(-17.40, -66.16),
+      });
+      expect(
+        request.pointFor('A'),
+        const TrufiLatLng(-17.40, -66.16),
+        reason: 'bare lookup must find the prefixed key',
+      );
+      expect(
+        request.pointFor('1:B'),
+        etaOrigin,
+        reason: 'a route without a boarding stop falls back to the origin',
+      );
     });
 
     test('returns null for an empty plan', () {

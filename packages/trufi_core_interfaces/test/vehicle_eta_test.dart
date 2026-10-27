@@ -77,6 +77,67 @@ void main() {
     });
   });
 
+  group('VehicleEtaRequest.pointFor', () {
+    const origin = TrufiLatLng(-17.3936, -66.1570);
+    const stop = TrufiLatLng(-17.3900, -66.1500);
+
+    test('answers the boarding point with either spelling of the id', () {
+      final prefixed = VehicleEtaRequest(
+        origin: origin,
+        routeIds: const {'1:1132'},
+        boardingPoints: const {'1:1132': stop},
+      );
+      expect(prefixed.pointFor('1:1132'), stop);
+      expect(
+        prefixed.pointFor('1132'),
+        stop,
+        reason: 'a bare lookup must hit the prefixed key',
+      );
+      final bare = VehicleEtaRequest(
+        origin: origin,
+        routeIds: const {'1132'},
+        boardingPoints: const {'1132': stop},
+      );
+      expect(bare.pointFor('1:1132'), stop);
+    });
+
+    test('falls back to the origin without a boarding point', () {
+      expect(
+        VehicleEtaRequest(
+          origin: origin,
+          routeIds: const {'1132'},
+        ).pointFor('1132'),
+        origin,
+        reason: 'callers that send no boarding points keep the old semantics',
+      );
+      expect(
+        VehicleEtaRequest(
+          origin: origin,
+          routeIds: const {'1132', '1185'},
+          boardingPoints: const {'1132': stop},
+        ).pointFor('1185'),
+        origin,
+        reason: 'only the routes with a point are measured to it',
+      );
+    });
+
+    test('boarding points take part in equality', () {
+      final a = VehicleEtaRequest(
+        origin: origin,
+        routeIds: const {'1132'},
+        boardingPoints: const {'1132': stop},
+      );
+      final b = VehicleEtaRequest(
+        origin: origin,
+        routeIds: const {'1132'},
+        boardingPoints: const {'1132': stop},
+      );
+      final none = VehicleEtaRequest(origin: origin, routeIds: const {'1132'});
+      expect(a, b);
+      expect(a, isNot(none));
+    });
+  });
+
   test('VehicleEtaException carries status and cause in toString', () {
     const plain = VehicleEtaException('down');
     expect(plain.toString(), 'VehicleEtaException: down');

@@ -42,8 +42,8 @@ VehicleEta eta(String routeId, int seconds) => VehicleEta(
   timestamp: etaT0,
 );
 
-routing.Place stop(String id) =>
-    routing.Place(name: id, lat: -17.39, lon: -66.15, stopId: id);
+routing.Place stop(String id, {double lat = -17.39, double lon = -66.15}) =>
+    routing.Place(name: id, lat: lat, lon: lon, stopId: id);
 
 routing.Leg walkLeg() => routing.Leg(
   mode: 'WALK',
@@ -55,12 +55,15 @@ routing.Leg walkLeg() => routing.Leg(
 );
 
 /// Transit leg of route [name]; [gtfsId] defaults to `1:<name>` (OTP
-/// spelling), [stopId] to `s<name>`.
+/// spelling), [stopId] to `s<name>`; [stopLat]/[stopLon] place the boarding
+/// stop (null [stopId] = no `fromPlace` at all).
 routing.Leg busLeg(
   String name, {
   String? gtfsId = '',
   String? id,
   String? stopId = '',
+  double stopLat = -17.39,
+  double stopLon = -66.15,
 }) => routing.Leg(
   mode: 'BUS',
   startTime: etaT0.add(const Duration(minutes: 5)),
@@ -74,7 +77,9 @@ routing.Leg busLeg(
     shortName: name,
   ),
   shortName: name,
-  fromPlace: stopId == null ? null : stop(stopId == '' ? 's$name' : stopId),
+  fromPlace: stopId == null
+      ? null
+      : stop(stopId == '' ? 's$name' : stopId, lat: stopLat, lon: stopLon),
 );
 
 routing.Itinerary itinerary(List<routing.Leg> legs) => routing.Itinerary(

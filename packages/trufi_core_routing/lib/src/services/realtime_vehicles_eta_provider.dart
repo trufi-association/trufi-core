@@ -5,8 +5,9 @@ typedef VehicleSnapshotLoader = Future<List<VehiclePosition>> Function();
 
 /// [VehicleEtaProvider] derived from live vehicle positions: for every
 /// requested route, the nearest reporting vehicle's straight-line distance
-/// to the origin over its reported speed (when plausible) or over
-/// [averageSpeedKmh].
+/// to the route's boarding point — the rider's origin when the request
+/// carries none ([VehicleEtaRequest.pointFor]) — over its reported speed
+/// (when plausible) or over [averageSpeedKmh].
 ///
 /// Makes the ETA badges work today wherever a GTFS-RT feed exists (OTP 2.x
 /// `vehiclePositions`); an external telemetry client implements the same
@@ -83,7 +84,12 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     final now = _now();
     final etas = <VehicleEta>[];
     for (final routeId in request.routeIds) {
-      final best = _bestEtaForRoute(routeId, positions, request.origin, now);
+      final best = _bestEtaForRoute(
+        routeId,
+        positions,
+        request.pointFor(routeId),
+        now,
+      );
       if (best != null) etas.add(best);
     }
     return VehicleEtaSnapshot(etas: etas, fetchedAt: now, source: source);
@@ -100,12 +106,13 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
   }
 
   /// Soonest estimate among the reporting vehicles of [routeId] (matched
-  /// feed-agnostically, like `vehiclesForRoute`), or null when none is
+  /// feed-agnostically, like `vehiclesForRoute`) to reach [target] — the
+  /// route's boarding stop, or the rider's origin — or null when none is
   /// fresh and close enough.
   VehicleEta? _bestEtaForRoute(
     String routeId,
     List<VehiclePosition> positions,
-    TrufiLatLng origin,
+    TrufiLatLng target,
     DateTime now,
   ) {
     final want = stripGtfsFeedPrefix(routeId);
@@ -119,7 +126,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
       if (reportedAt != null && now.difference(reportedAt) > maxVehicleAge) {
         continue;
       }
-      final distance = vehicle.position.distanceTo(origin);
+      final distance = vehicle.position.distanceTo(target);
       if (distance > maxDistanceMeters) continue;
       final eta = estimate(
         distanceMeters: distance,

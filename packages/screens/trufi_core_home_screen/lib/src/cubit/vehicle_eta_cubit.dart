@@ -25,8 +25,12 @@ String? etaRouteKeyForItinerary(routing.Itinerary itinerary) {
 }
 
 /// One request for the whole plan: every itinerary's first transit route
-/// (raw ids, as the planner reports them) plus their boarding stop ids as a
-/// hint. Null when no itinerary has an identifiable transit route
+/// (raw ids, as the planner reports them), their boarding stop ids as a
+/// hint and, per route, the boarding stop's coordinates (`leg.fromPlace`),
+/// so a source answers "when does the bus reach my stop" rather than "when
+/// does it reach me". When two itineraries board the same route at
+/// different stops the first one wins — the planner lists them by
+/// preference. Null when no itinerary has an identifiable transit route
 /// (walk-only plans) — nothing to ask for.
 VehicleEtaRequest? buildVehicleEtaRequest(
   routing.Plan plan,
@@ -34,20 +38,28 @@ VehicleEtaRequest? buildVehicleEtaRequest(
 ) {
   final routeIds = <String>{};
   final stopIds = <String>{};
+  final boardingPoints = <String, TrufiLatLng>{};
   for (final itinerary in plan.itineraries ?? const <routing.Itinerary>[]) {
     final leg = itinerary.firstTransitLeg;
     if (leg == null) continue;
     final routeKey = etaRouteKeyForLeg(leg);
     if (routeKey == null) continue;
     routeIds.add(routeKey);
-    final stopId = leg.fromPlace?.stopId;
+    final boarding = leg.fromPlace;
+    if (boarding == null) continue;
+    final stopId = boarding.stopId;
     if (stopId != null && stopId.isNotEmpty) stopIds.add(stopId);
+    boardingPoints.putIfAbsent(
+      routeKey,
+      () => TrufiLatLng(boarding.lat, boarding.lon),
+    );
   }
   if (routeIds.isEmpty) return null;
   return VehicleEtaRequest(
     origin: origin,
     routeIds: routeIds,
     stopIds: stopIds.isEmpty ? null : stopIds,
+    boardingPoints: boardingPoints.isEmpty ? null : boardingPoints,
   );
 }
 

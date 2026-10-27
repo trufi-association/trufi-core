@@ -919,7 +919,7 @@ abstract class HomeScreenLocalizations {
   /// **'This route is already saved as \"{routeName}\"'**
   String routeAlreadySaved(String routeName);
 
-  /// Badge on an itinerary card: minutes until the next vehicle of its first bus reaches the origin
+  /// Badge on an itinerary card: minutes until the next vehicle of its first bus reaches its boarding stop
   ///
   /// In en, this message translates to:
   /// **'Arrives in ~{minutes} min'**
