@@ -265,26 +265,6 @@ class GtfsTransportDataProvider extends TransportListDataProvider {
 
   Widget? _getModeIcon(GtfsRouteType? type) {
     if (type == null) return null;
-    IconData iconData;
-    switch (type) {
-      case GtfsRouteType.bus:
-        iconData = Icons.directions_bus;
-      case GtfsRouteType.tram:
-        iconData = Icons.tram;
-      case GtfsRouteType.subway:
-        iconData = Icons.subway;
-      case GtfsRouteType.rail:
-        iconData = Icons.train;
-      case GtfsRouteType.ferry:
-        iconData = Icons.directions_ferry;
-      case GtfsRouteType.cableTram:
-      case GtfsRouteType.aerialLift:
-        iconData = Icons.airline_seat_recline_extra;
-      case GtfsRouteType.funicular:
-        iconData = Icons.terrain;
-      default:
-        iconData = Icons.directions_transit;
-    }
-    return Icon(iconData, size: 16);
+    return Icon(gtfsRouteTypeIcon(type), size: 16);
   }
 }

@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
 import 'package:trufi_core_routing/trufi_core_routing.dart' show ServiceHours;
 
 export 'package:trufi_core_routing/trufi_core_routing.dart' show ServiceHours;
+
+/// The mode glyph of a GTFS `route_type`: one map for the routes list, the
+/// route detail and the nearby-lines screen, so a line wears the same icon
+/// wherever it is shown. Unknown or missing types get the generic transit
+/// glyph.
+IconData gtfsRouteTypeIcon(GtfsRouteType? type) {
+  switch (type) {
+    case GtfsRouteType.bus:
+      return Icons.directions_bus;
+    case GtfsRouteType.tram:
+      return Icons.tram;
+    case GtfsRouteType.subway:
+      return Icons.subway;
+    case GtfsRouteType.rail:
+      return Icons.train;
+    case GtfsRouteType.ferry:
+      return Icons.directions_ferry;
+    case GtfsRouteType.cableTram:
+    case GtfsRouteType.aerialLift:
+      return Icons.airline_seat_recline_extra;
+    case GtfsRouteType.funicular:
+      return Icons.terrain;
+    default:
+      return Icons.directions_transit;
+  }
+}
 
 /// Represents a transport route for display in the list
 class TransportRoute {

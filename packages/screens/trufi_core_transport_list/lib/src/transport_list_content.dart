@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
 import 'transport_list_data_provider.dart';
+import 'widgets/route_count_indicator.dart';
+import 'widgets/transport_list_states.dart';
 import 'widgets/transport_tile.dart';
 
 /// Main content widget for transport list
@@ -149,6 +151,8 @@ class _TransportListContentState extends State<TransportListContent>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final state = widget.dataProvider.state;
+    final isFiltered =
+        _searchController.text.isNotEmpty || state.agencyFilter != null;
 
     return Container(
       color: colorScheme.surface,
@@ -191,11 +195,12 @@ class _TransportListContentState extends State<TransportListContent>
 
             // Route count indicator
             if (!state.isLoading && state.filteredRoutes.isNotEmpty)
-              _RouteCountIndicator(
-                count: state.filteredRoutes.length,
-                isFiltered:
-                    _searchController.text.isNotEmpty ||
-                    state.agencyFilter != null,
+              RouteCountIndicator(
+                label: localization.routeCount(state.filteredRoutes.length),
+                icon: isFiltered
+                    ? Icons.filter_list_rounded
+                    : Icons.route_rounded,
+                isFiltered: isFiltered,
               ),
 
             // Main content
@@ -217,7 +222,7 @@ class _TransportListContentState extends State<TransportListContent>
     // Load failed and there is nothing cached to show: error + retry,
     // instead of the eternal shimmer a stuck `isLoading` would produce.
     if (_loadFailed && state.filteredRoutes.isEmpty) {
-      return _LoadErrorState(
+      return TransportLoadErrorState(
         message: localization.errorLoadingRoutes,
         retryLabel: localization.retry,
         onRetry: _initialLoad,
@@ -231,10 +236,16 @@ class _TransportListContentState extends State<TransportListContent>
 
     // Empty state
     if (state.filteredRoutes.isEmpty) {
-      return _EmptyState(
-        message: localization.noRoutesFound,
-        isSearch:
-            _searchController.text.isNotEmpty || state.agencyFilter != null,
+      final isSearch =
+          _searchController.text.isNotEmpty || state.agencyFilter != null;
+      return TransportEmptyState(
+        icon: isSearch
+            ? Icons.search_off_rounded
+            : Icons.directions_bus_outlined,
+        title: localization.noRoutesFound,
+        hint: isSearch
+            ? localization.tryDifferentSearch
+            : localization.pullDownToRefresh,
       );
     }
 
@@ -709,59 +720,6 @@ class _AgencyFilterChip extends StatelessWidget {
   }
 }
 
-/// Route count indicator
-class _RouteCountIndicator extends StatelessWidget {
-  final int count;
-  final bool isFiltered;
-
-  const _RouteCountIndicator({required this.count, required this.isFiltered});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: isFiltered
-                  ? colorScheme.tertiaryContainer
-                  : colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  isFiltered ? Icons.filter_list_rounded : Icons.route_rounded,
-                  size: 16,
-                  color: isFiltered
-                      ? colorScheme.onTertiaryContainer
-                      : colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  TransportListLocalizations.of(context).routeCount(count),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: isFiltered
-                        ? colorScheme.onTertiaryContainer
-                        : colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// Shimmer loading list
 class _ShimmerList extends StatefulWidget {
   @override
@@ -894,122 +852,6 @@ class _ShimmerCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-/// Empty state widget
-class _LoadErrorState extends StatelessWidget {
-  final String message;
-  final String retryLabel;
-  final VoidCallback onRetry;
-
-  const _LoadErrorState({
-    required this.message,
-    required this.retryLabel,
-    required this.onRetry,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: colorScheme.errorContainer,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.cloud_off_rounded,
-                size: 40,
-                color: colorScheme.onErrorContainer.withValues(alpha: 0.8),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              message,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
-              label: Text(retryLabel),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyState extends StatelessWidget {
-  final String message;
-  final bool isSearch;
-
-  const _EmptyState({required this.message, required this.isSearch});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                isSearch
-                    ? Icons.search_off_rounded
-                    : Icons.directions_bus_outlined,
-                size: 40,
-                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              message,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              isSearch
-                  ? TransportListLocalizations.of(context).tryDifferentSearch
-                  : TransportListLocalizations.of(context).pullDownToRefresh,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

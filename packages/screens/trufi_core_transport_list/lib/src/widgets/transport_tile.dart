@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart'
     show ServiceHoursIndicator;
 import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
-    show RouteBadge, RouteBadgeVariant;
+    show RouteBadge;
 
 import '../models/transport_route.dart';
 
@@ -90,7 +90,12 @@ class TransportTile extends StatelessWidget {
                   child: Row(
                     children: [
                       // Route badge with icon
-                      _RouteBadge(route: route),
+                      RouteBadge(
+                        label: route.displayName,
+                        color: routeColor,
+                        textColor: route.textColor,
+                        icon: route.modeIcon,
+                      ),
                       const SizedBox(width: 14),
 
                       // Route info
@@ -179,24 +184,3 @@ class TransportTile extends StatelessWidget {
   }
 }
 
-/// The list's square badge: [RouteBadge.tile] fed with the route's GTFS
-/// colours and mode icon (the geometry used to live here and was promoted
-/// to trufi_core_routing_ui so every screen draws the same badge).
-class _RouteBadge extends StatelessWidget {
-  final TransportRoute route;
-
-  const _RouteBadge({required this.route});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return RouteBadge(
-      label: route.displayName,
-      color: route.backgroundColor ?? colorScheme.primary,
-      textColor: route.textColor,
-      icon: route.modeIcon,
-      variant: RouteBadgeVariant.tile,
-    );
-  }
-}
