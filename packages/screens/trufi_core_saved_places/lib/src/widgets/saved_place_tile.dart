@@ -4,6 +4,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/saved_place.dart';
 import '../models/saved_place_icons.dart';
+import '../models/saved_place_label.dart';
 import '../../l10n/saved_places_localizations.dart';
 
 /// A tile widget for displaying a saved place with Material 3 design.
@@ -156,45 +157,6 @@ class SavedPlaceTile extends StatelessWidget {
     final coordinates = formatCoordinates(place.latitude, place.longitude);
     return coordinates == displayName ? null : coordinates;
   }
-}
-
-/// The label a list shows for [place].
-///
-/// Home and Work are created with the localized default label as their name
-/// ("Casa", "Home", …); that label keeps following the UI language. Once the
-/// user renames the place, the stored name wins (#898 — the tile used to
-/// hard-code the default label for every home/work, so renames never showed
-/// up in the list while the edit sheet, reading the stored name, did).
-String savedPlaceDisplayName(
-  SavedPlace place,
-  SavedPlacesLocalizations localization,
-) {
-  final name = place.name.trim();
-  switch (place.type) {
-    case SavedPlaceType.home:
-      return name.isEmpty || _isDefaultLabel(name, (l) => l.home)
-          ? localization.home
-          : name;
-    case SavedPlaceType.work:
-      return name.isEmpty || _isDefaultLabel(name, (l) => l.work)
-          ? localization.work
-          : name;
-    case SavedPlaceType.other:
-    case SavedPlaceType.history:
-      return place.name;
-  }
-}
-
-/// Whether [name] is the default label of a home/work place in any supported
-/// language (the name is stored in whatever language the app ran in).
-bool _isDefaultLabel(
-  String name,
-  String Function(SavedPlacesLocalizations l10n) label,
-) {
-  final lower = name.toLowerCase();
-  return SavedPlacesLocalizations.supportedLocales
-      .map(lookupSavedPlacesLocalizations)
-      .any((l10n) => label(l10n).toLowerCase() == lower);
 }
 
 /// Favorite toggle button with animation
