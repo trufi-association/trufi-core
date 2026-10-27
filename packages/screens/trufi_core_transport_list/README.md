@@ -58,6 +58,27 @@ app's internal cache. (The plugin's own README documents only
 `external-path`, which leaves copying failing with *"Failed to find
 configured root that contains /data/data/&lt;pkg&gt;/cache/…"*.)
 
+## Route detail without stops
+
+Cities with no stops mapped get a feed whose stops are synthetic — the GTFS
+builder invents one every 100 m along each shape — and the route detail
+would present them as real: a "Stops" timeline of street names, a stop count
+in the hundreds and a dotted line on the map (trufi-sanaa#18). Pass
+`showStops: false` to keep them out:
+
+```dart
+TransportListTrufiScreen(showStops: false),
+NearbyLinesTrufiScreen(showStops: false),
+```
+
+The detail then shows the line on the map with its two end pins (taken from
+the shape itself), the route identity, operating hours, distance and mode.
+On phones the draggable stops sheet becomes a fixed summary card, so the map
+keeps the whole screen; the wide side panel just drops its stops section.
+The origin/destination labels come from a `route_long_name` of the form
+`A → B` and never from the first/last stop. `TransportDetailScreen` takes
+the same `showStops` when embedded directly.
+
 ## Nearby lines screen
 
 `NearbyLinesTrufiScreen` (`/nearby`, drawer order 2) lists the lines passing
