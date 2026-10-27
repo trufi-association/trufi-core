@@ -1,6 +1,5 @@
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
-/// One-shot loader of a vehicle fleet, e.g. `OtpVehiclePositionsProvider.fetchOnce`.
 /// One-shot loader of a vehicle fleet, e.g. `OtpVehiclePositionsProvider.fetchOnce`;
 /// [routeIds] lets it ask the backend for the requested routes only (#1017).
 typedef VehicleSnapshotLoader =
