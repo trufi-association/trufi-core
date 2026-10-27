@@ -141,7 +141,10 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       onResolveAddress: onResolveAddress,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
-      isNameTaken: cubit.hasSameName,
+      isNameTaken: (name) => cubit.hasSameName(
+        name,
+        localization: SavedPlacesLocalizations.of(context),
+      ),
     );
 
     if (place != null && context.mounted) {
@@ -160,7 +163,11 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       onResolveAddress: onResolveAddress,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
-      isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
+      isNameTaken: (name) => cubit.hasSameName(
+        name,
+        excludeId: place.id,
+        localization: SavedPlacesLocalizations.of(context),
+      ),
     );
 
     if (updatedPlace != null && context.mounted) {

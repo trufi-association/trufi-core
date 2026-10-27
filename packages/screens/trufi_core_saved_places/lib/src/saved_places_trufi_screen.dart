@@ -172,7 +172,10 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       ),
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
-      isNameTaken: cubit.hasSameName,
+      isNameTaken: (name) => cubit.hasSameName(
+        name,
+        localization: SavedPlacesLocalizations.of(context),
+      ),
       onResolveAddress: _addressResolver(context),
     );
 
@@ -204,7 +207,11 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
       ),
       defaultLatitude: defaultCenter.latitude,
       defaultLongitude: defaultCenter.longitude,
-      isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
+      isNameTaken: (name) => cubit.hasSameName(
+        name,
+        excludeId: place.id,
+        localization: SavedPlacesLocalizations.of(context),
+      ),
       onResolveAddress: _addressResolver(context),
     );
 

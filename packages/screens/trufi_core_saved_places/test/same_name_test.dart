@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 
@@ -76,6 +77,43 @@ void main() {
         _place(id: 'hist', name: 'Cine', type: SavedPlaceType.history),
       );
       expect(cubit.hasSameName('Cine'), isFalse);
+    });
+  });
+
+  group('localized default labels (#1019)', () {
+    test(
+      'a Home stored as "Home" counts as "Casa" under the Spanish labels',
+      () async {
+        final cubit = SavedPlacesCubit(
+          repository: InMemorySavedPlacesRepository(),
+        );
+        await cubit.initialize();
+        await cubit.setHome(
+          _place(id: 'h', name: 'Home', type: SavedPlaceType.home),
+        );
+        final es = lookupSavedPlacesLocalizations(const Locale('es'));
+        expect(cubit.hasSameName('Casa', localization: es), isTrue);
+        expect(cubit.hasSameName('casa ', localization: es), isTrue);
+        // Without the localization only the stored name is compared.
+        expect(cubit.hasSameName('Casa'), isFalse);
+        // The default label of another language is not a match for a stranger.
+        expect(cubit.hasSameName('Trabajo', localization: es), isFalse);
+      },
+    );
+
+    test('editing Home itself never collides with its own label', () async {
+      final cubit = SavedPlacesCubit(
+        repository: InMemorySavedPlacesRepository(),
+      );
+      await cubit.initialize();
+      await cubit.setHome(
+        _place(id: 'h', name: 'Home', type: SavedPlaceType.home),
+      );
+      final es = lookupSavedPlacesLocalizations(const Locale('es'));
+      expect(
+        cubit.hasSameName('Casa', excludeId: 'h', localization: es),
+        isFalse,
+      );
     });
   });
 }
