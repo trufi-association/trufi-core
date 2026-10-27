@@ -11,9 +11,14 @@ import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.
 
 class CustomItinerary extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
+
+  /// Rendered as the last row of the itineraries list, after every result.
+  final WidgetBuilder? footerBuilder;
+
   const CustomItinerary({
     super.key,
     required this.moveTo,
+    this.footerBuilder,
   });
 
   @override
@@ -81,9 +86,14 @@ class _CustomItineraryState extends State<CustomItinerary> {
               child: ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                itemCount: routePlannerState.plan?.itineraries?.length ?? 0,
+                itemCount: (routePlannerState.plan?.itineraries?.length ?? 0) +
+                    (widget.footerBuilder != null ? 1 : 0),
                 itemBuilder: (buildContext, index) {
-                  final itinerary = routePlannerState.plan!.itineraries![index];
+                  final itineraries = routePlannerState.plan?.itineraries ?? [];
+                  if (index == itineraries.length) {
+                    return widget.footerBuilder!(buildContext);
+                  }
+                  final itinerary = itineraries[index];
                   return ItineraryCard(
                     itinerary: itinerary,
                     onTap: () {
