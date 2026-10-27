@@ -227,6 +227,19 @@ class _HomeScreenState extends State<HomeScreen>
     _rewireRealtimeVehicles(
       _routingEngineManager?.currentEngine.realtimeVehiclesProvider,
     );
+    _rewireVehicleEta();
+  }
+
+  /// The ETA badges follow the selected engine's telemetry (#1018); the
+  /// config's provider, if any, is the legacy override for apps that wire
+  /// one source for every engine.
+  void _rewireVehicleEta() {
+    final cubit = context.read<VehicleEtaCubit?>();
+    if (cubit == null) return;
+    cubit.useProvider(
+      widget.config.vehicleEtaProvider ??
+          _routingEngineManager?.currentEngine.vehicleEtaProvider,
+    );
   }
 
   void _onLiveVehiclesEnabledChanged() {
@@ -269,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen>
       _routingEngineManager = manager;
       _routingEngineManager?.addListener(_onRoutingEngineChanged);
       _rewireRealtimeVehicles(manager?.currentEngine.realtimeVehiclesProvider);
+      _rewireVehicleEta();
     }
   }
 

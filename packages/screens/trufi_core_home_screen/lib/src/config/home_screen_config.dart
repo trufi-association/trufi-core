@@ -64,6 +64,9 @@ class HomeScreenConfig {
   ///
   /// Null (default) hides the feature entirely: no cubit is created, no
   /// badge and no refresh button are rendered.
+  /// Legacy override (#1018): since the badges follow the selected routing
+  /// engine's [IRoutingProvider.vehicleEtaProvider], an app only sets this
+  /// to force one telemetry source for every engine.
   final VehicleEtaProvider? vehicleEtaProvider;
 
   /// Minimum gap between two user-triggered ETA requests (issue #1004 asks

@@ -16,7 +16,6 @@ import 'package:trufi_core_routing/trufi_core_routing.dart'
         IRoutingProvider,
         Otp28RoutingProvider,
         Otp15RoutingProvider,
-        RealtimeVehiclesEtaProvider,
         TrufiPlannerProvider,
         TrufiPlannerConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
@@ -348,13 +347,12 @@ void main() {
             appName: _appName,
             deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
-            // Live ETA badges (#1004) derived from the OTP 2.8 GTFS-RT feed:
-            // one snapshot per plan/refresh, no background polling. Any other
-            // `VehicleEtaProvider` (a city's telemetry API) plugs in here.
-            vehicleEtaProvider: RealtimeVehiclesEtaProvider(
-              vehicles: _otp28.realtimeVehiclesProvider!,
-              snapshotLoader: _otp28.realtimeVehiclesProvider!.fetchOnce,
-            ),
+            // Live ETA badges (#1004) follow the selected routing engine:
+            // OTP 2.8 derives them from its GTFS-RT feed (one snapshot per
+            // plan/refresh, no background polling); the offline planner and
+            // OTP 1.5 have no telemetry, so the badges hide with them. A
+            // city's own telemetry API plugs in as the engine's
+            // `vehicleEtaProvider`, or here as a legacy override for all.
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(
