@@ -137,6 +137,7 @@ void main() {
     expect(route.destination.latitude, -17.37);
     expect(route.snapshot?.transitLegs.single.shortName, '123');
     expect(route.snapshot?.transitLegs.single.colorHex, '7E57C2');
+    expect(route.snapshot?.transitLegs.single.mode, 'BUS');
     expect(route.snapshot?.durationSeconds, 1800);
     expect(find.text('Route saved as "Plaza → Terminal"'), findsOneWidget);
     expect(

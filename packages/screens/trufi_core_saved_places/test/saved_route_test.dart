@@ -24,7 +24,12 @@ const _destination = SavedRoutePoint(
 );
 const _snapshot = SavedRouteSnapshot(
   transitLegs: [
-    SavedRouteTransitLeg(shortName: 'B301', colorHex: '7E57C2'),
+    SavedRouteTransitLeg(
+      shortName: 'B301',
+      colorHex: '7E57C2',
+      textColorHex: 'FFFFFF',
+      mode: 'BUS',
+    ),
     SavedRouteTransitLeg(shortName: 'T105'),
   ],
   distanceMeters: 5000,
@@ -64,6 +69,19 @@ void main() {
       expect(restored, original);
       expect(restored.snapshot, isNull);
       expect(restored.lastUsedAt, isNull);
+    });
+
+    test('legs stored before mode and textColorHex existed decode to null', () {
+      final leg = SavedRouteTransitLeg.fromJson({
+        'shortName': 'B301',
+        'colorHex': '7E57C2',
+      });
+      expect(leg.mode, isNull);
+      expect(leg.textColorHex, isNull);
+      expect(
+        leg,
+        const SavedRouteTransitLeg(shortName: 'B301', colorHex: '7E57C2'),
+      );
     });
 
     test('decodes integral coordinates stored as ints (web JSON)', () {

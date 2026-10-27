@@ -74,31 +74,49 @@ class SavedRoutePoint extends Equatable {
 
 /// A transit leg of the itinerary the user saved: just enough for a badge.
 class SavedRouteTransitLeg extends Equatable {
-  const SavedRouteTransitLeg({required this.shortName, this.colorHex});
+  const SavedRouteTransitLeg({
+    required this.shortName,
+    this.colorHex,
+    this.textColorHex,
+    this.mode,
+  });
 
   final String shortName;
 
   /// GTFS route colour as six hex digits without `#`; null when unknown.
   final String? colorHex;
 
+  /// GTFS `route_text_color`, same shape; null lets the card pick a
+  /// readable colour from [colorHex].
+  final String? textColorHex;
+
+  /// OTP mode name of the leg (`BUS`, `TRUFI`, `RAIL`…), which picks the
+  /// badge icon. Null for routes saved before the field existed: the card
+  /// then shows a bus.
+  final String? mode;
+
   factory SavedRouteTransitLeg.fromJson(Map<String, dynamic> json) {
     return SavedRouteTransitLeg(
       shortName: json['shortName'] as String,
       colorHex: json['colorHex'] as String?,
+      textColorHex: json['textColorHex'] as String?,
+      mode: json['mode'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'shortName': shortName,
     'colorHex': colorHex,
+    'textColorHex': textColorHex,
+    'mode': mode,
   };
 
   @override
-  List<Object?> get props => [shortName, colorHex];
+  List<Object?> get props => [shortName, colorHex, textColorHex, mode];
 }
 
-/// Snapshot of the itinerary at save time, shown on the card as badges and a
-/// "distance, ~duration" caption. Informative only: launching a saved route
+/// Snapshot of the itinerary at save time, shown on the card as line badges
+/// and distance / duration chips. Informative only: launching a saved route
 /// always plans the trip again.
 class SavedRouteSnapshot extends Equatable {
   const SavedRouteSnapshot({

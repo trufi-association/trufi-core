@@ -16,16 +16,22 @@ void main() {
     transitLeg: false,
   );
 
-  routing.Leg bus(String name, String? color) => routing.Leg(
-    mode: 'BUS',
-    startTime: DateTime(2026, 10, 13, 8, 5),
-    endTime: DateTime(2026, 10, 13, 8, 15),
-    duration: const Duration(minutes: 10),
-    distance: 2300,
-    transitLeg: true,
-    route: routing.Route(gtfsId: '1:$name', shortName: name, color: color),
-    shortName: name,
-  );
+  routing.Leg bus(String name, String? color, {String? textColor}) =>
+      routing.Leg(
+        mode: 'BUS',
+        startTime: DateTime(2026, 10, 13, 8, 5),
+        endTime: DateTime(2026, 10, 13, 8, 15),
+        duration: const Duration(minutes: 10),
+        distance: 2300,
+        transitLeg: true,
+        route: routing.Route(
+          gtfsId: '1:$name',
+          shortName: name,
+          color: color,
+          textColor: textColor,
+        ),
+        shortName: name,
+      );
 
   routing.Itinerary itinerary(List<routing.Leg> legs) => routing.Itinerary(
     legs: legs,
@@ -36,11 +42,11 @@ void main() {
     walkDistance: 800,
   );
 
-  test('keeps one entry per transit leg, in order, with the colour each '
-      'badge showed', () {
+  test('keeps one entry per transit leg, in order, with the colours and '
+      'mode each badge showed', () {
     final trip = itinerary([
       walk(),
-      bus('123', '7E57C2'),
+      bus('123', '7E57C2', textColor: 'FFFFFF'),
       walk(),
       bus('106', ''),
     ]);
@@ -52,6 +58,13 @@ void main() {
     // An empty GTFS colour is replaced by the itinerary's default palette
     // when the Itinerary is built, so the saved badge matches the results.
     expect(snapshot.transitLegs.last.colorHex, 'E91E63');
+    expect(snapshot.transitLegs.first.textColorHex, 'FFFFFF');
+    expect(
+      snapshot.transitLegs.last.textColorHex,
+      isNull,
+      reason: 'no route_text_color → the card computes the contrast',
+    );
+    expect(snapshot.transitLegs.map((l) => l.mode), ['BUS', 'BUS']);
     expect(snapshot.distanceMeters, trip.distance);
     expect(snapshot.distanceMeters, 5400);
     expect(snapshot.durationSeconds, 1800);
