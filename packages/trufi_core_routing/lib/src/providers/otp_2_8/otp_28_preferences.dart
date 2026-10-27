@@ -190,12 +190,7 @@ class Otp28Preferences extends StatelessWidget {
   final bool showWheelchair;
   final bool showBicycle;
 
-  const Otp28Preferences({
-    super.key,
-    required this.state,
-    this.showWheelchair = true,
-    this.showBicycle = true,
-  });
+  const Otp28Preferences({super.key, required this.state, this.showWheelchair = true, this.showBicycle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -244,11 +239,7 @@ class _AccessibilitySection extends StatelessWidget {
               size: 24,
             ),
             const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                RoutingLocalizations.of(context).prefsWheelchairAccessible,
-              ),
-            ),
+            Expanded(child: Text(RoutingLocalizations.of(context).prefsWheelchairAccessible)),
           ],
         ),
         subtitle: Text(

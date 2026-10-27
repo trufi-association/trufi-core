@@ -818,9 +818,7 @@ class _TrufiPlannerInfo extends StatelessWidget {
     final l10n = RoutingLocalizations.of(context);
     final lines = [
       l10n.trufiPlannerInfoIntro,
-      isLocal
-          ? l10n.trufiPlannerInfoLocalBody
-          : l10n.trufiPlannerInfoRemoteBody,
+      isLocal ? l10n.trufiPlannerInfoLocalBody : l10n.trufiPlannerInfoRemoteBody,
     ];
 
     return Container(
