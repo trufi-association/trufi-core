@@ -23,7 +23,7 @@ class ModeLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final perc = legLength.abs() / 10;
-    final minWidth = isEnd ? 24.0 : 41.0;
+    final minWidth = RouteLeg.minWidth(isEnd: isEnd);
     return SizedBox(
       width: perc > 1
           ? maxWidth
