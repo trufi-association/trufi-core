@@ -287,7 +287,15 @@ class GtfsRoutingService {
   ///   1. up to [maxDirects] zero-transfer paths (best by score)
   ///   2. up to [maxTransferPaths] transfer paths (best by score) — the
   ///      one-transfer ones, or the multi-transfer ones when phase 3 ran.
-  /// Direct routes always come first in the returned list.
+  /// Direct routes always come first in the returned list. By default
+  /// ([directsHideTransfers] true) the second bucket is only returned when
+  /// the first is empty — one fare per ride, a transfer is never worth
+  /// offering next to a direct line. With it off, the one-transfer bucket
+  /// follows the direct one: same rows, same order inside each bucket,
+  /// nothing extra searched (phase 2 runs either way), so a city whose
+  /// riders want the alternatives (trufi-sanaa#16: on that feed 75 % of
+  /// random queries show a single option, 58 % with the knob off) can
+  /// list them. Phase 3 still runs only when both buckets are empty.
   ///
   /// [maxTransfers] must be >= 0; `0` returns direct routes only. Values
   /// above 3 rarely add anything (on Sana'a, the most fragmented feed
@@ -307,6 +315,7 @@ class GtfsRoutingService {
     int maxDirects = 5,
     int maxTransferPaths = 5,
     int maxStopCandidates = 150,
+    bool directsHideTransfers = true,
   }) {
     if (maxTransfers < 0) {
       throw ArgumentError.value(maxTransfers, 'maxTransfers', 'must be >= 0');
@@ -351,8 +360,9 @@ class GtfsRoutingService {
 
     // Split into direct vs transfer buckets. In Cochabamba each ride is a
     // separate fare, so a transfer doubles the cost — only worth offering
-    // when there's no direct option. Suppress transfers entirely if at
-    // least one direct exists.
+    // when there's no direct option. By default transfers are suppressed
+    // entirely if at least one direct exists; with [directsHideTransfers]
+    // off they follow the directs instead (see [findRoutes]).
     final directs = <RoutingPath>[];
     final transfers = <RoutingPath>[];
     for (final p in uniquePaths) {
@@ -366,7 +376,9 @@ class GtfsRoutingService {
         break;
       }
     }
-    final ordered = directs.isNotEmpty ? directs : transfers;
+    final ordered = directsHideTransfers
+        ? (directs.isNotEmpty ? directs : transfers)
+        : <RoutingPath>[...directs, ...transfers];
 
     // Phase 3: two or more transfers, only when nothing else exists. The
     // same "fewer transfers win outright" rule that hides transfers behind

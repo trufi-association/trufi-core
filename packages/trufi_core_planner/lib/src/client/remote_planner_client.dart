@@ -64,6 +64,7 @@ class RemotePlannerClient implements PlannerRoutingClient {
     int maxResults = 5,
     int maxStopCandidates = 150,
     int maxTransfers = 1,
+    bool directsHideTransfers = true,
   }) async {
     final response = await _httpClient.post(
       Uri.parse('$_baseUrl/plan'),
@@ -80,6 +81,8 @@ class RemotePlannerClient implements PlannerRoutingClient {
         // Same for the transfer limit: a server built on an older planner
         // ignores it and keeps its own default.
         'maxTransfers': maxTransfers,
+        // And for the direct-vs-transfer rule (trufi-sanaa#16).
+        'directsHideTransfers': directsHideTransfers,
       }),
     );
 

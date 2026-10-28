@@ -149,6 +149,7 @@ class TrufiPlannerProvider extends IRoutingProvider {
       maxResults: numItineraries,
       maxStopCandidates: config.maxStopCandidates,
       maxTransfers: config.maxTransfers,
+      directsHideTransfers: config.directsHideTransfers,
     );
 
     sw.stop();
