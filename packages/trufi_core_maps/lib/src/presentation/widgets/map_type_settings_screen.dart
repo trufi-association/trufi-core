@@ -5,7 +5,11 @@ import '../../../l10n/maps_localizations.dart';
 import 'map_type_option.dart';
 import 'map_selection_widgets.dart';
 
-/// Full-screen settings screen for selecting map type and optional POI layers.
+/// Full-screen settings screen for the map style and optional layer toggles.
+///
+/// With a single style and [additionalSettings] the style list is skipped and
+/// the sheet holds the toggles alone (#1021); with a single style and nothing
+/// else it still lists that style, so the sheet is never empty.
 ///
 /// Text defaults resolve through [MapsLocalizations]: the enclosing app must
 /// register [MapsLocalizations.delegate] (`TrufiApp` does this automatically)
@@ -30,7 +34,8 @@ class MapTypeSettingsScreen extends StatefulWidget {
   final String? applyButtonText;
 
   /// Optional: Widget to display additional settings (e.g., POI layers).
-  /// This will be displayed below the map type selection.
+  /// Displayed below the map type selection, or alone when there is a
+  /// single style to choose from.
   final Widget? additionalSettings;
 
   const MapTypeSettingsScreen({
@@ -119,6 +124,11 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
     final hasOfflineMaps = widget.mapOptions.any((m) => m.isOffline);
     final hasOnlineMaps = widget.mapOptions.any((m) => !m.isOffline);
     final showToggle = hasOfflineMaps && hasOnlineMaps;
+    // The style list goes when there is one style AND something else to
+    // show (#1021): the sheet is then the home of the layer toggles alone.
+    // One style and nothing else still lists it, so the sheet is never empty.
+    final showStyles =
+        widget.mapOptions.length > 1 || widget.additionalSettings == null;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -142,10 +152,8 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                 children: [
-                  // Map type section: only when there is a style to choose.
-                  // With a single engine the sheet is the home of the layer
-                  // toggles alone (#1021).
-                  if (widget.mapOptions.length > 1) ...[
+                  // Map type section: see showStyles above.
+                  if (showStyles) ...[
                     _buildAnimatedItem(
                       index: 1,
                       child: _MapTypeHeroSection(
@@ -196,8 +204,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
 
                   // Additional settings section (e.g., POI layers)
                   if (widget.additionalSettings != null) ...[
-                    if (widget.mapOptions.length > 1)
-                      const SizedBox(height: 16),
+                    if (showStyles) const SizedBox(height: 16),
                     widget.additionalSettings!,
                   ],
                 ],

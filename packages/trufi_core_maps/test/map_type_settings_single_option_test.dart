@@ -44,6 +44,13 @@ void main() {
     expect(find.text('Map 0'), findsNothing);
   });
 
+  testWidgets('one style and nothing else: the style is still listed, the '
+      'sheet is never empty', (tester) async {
+    await pump(tester, options: 1);
+    expect(find.text(mapType), findsOneWidget);
+    expect(find.text('Map 0'), findsOneWidget);
+  });
+
   testWidgets('two styles: the map type section is back', (tester) async {
     await pump(tester, options: 2, extras: const Text('layer toggles'));
     expect(find.text(mapType), findsOneWidget);

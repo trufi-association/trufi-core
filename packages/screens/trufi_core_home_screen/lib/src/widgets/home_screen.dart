@@ -1855,6 +1855,10 @@ class _HomeScreenState extends State<HomeScreen>
                     mapEngineManager.setEngine(engine);
                   },
                   additionalSettings: mapLayerExtras,
+                  // Nothing to change with one engine: the sheet is settings.
+                  tooltip: mapEngineManager.engines.length > 1
+                      ? null
+                      : MapsLocalizations.of(context).mapSettings,
                 ),
                 const SizedBox(height: 8),
               ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     show TrufiLocation;
@@ -114,6 +116,26 @@ Future<void> _pumpHome(
 }
 
 void main() {
+  setUp(() {
+    // HomeScreen starts the location service and the map engine manager
+    // reads its preferences: without these mocks the platform-channel
+    // futures never complete (the test hangs rather than throws), and
+    // pumpAndSettle does not wait for them.
+    SharedPreferences.setMockInitialValues({});
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('flutter.baseflow.com/geolocator'),
+          (call) async => false,
+        );
+  });
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('flutter.baseflow.com/geolocator'),
+          null,
+        );
+  });
+
   testWidgets('one engine, no layers: no map-type button', (tester) async {
     await _pumpHome(tester, engines: 1);
     expect(find.byIcon(Icons.layers), findsNothing);
@@ -123,6 +145,11 @@ void main() {
       'sheet shows the extra without a style list', (tester) async {
     await _pumpHome(tester, engines: 1, extras: const Text('layer toggles'));
     expect(find.byIcon(Icons.layers), findsOneWidget);
+    expect(
+      tester.widget<Tooltip>(find.byType(Tooltip).first).message,
+      'Map Settings',
+      reason: 'nothing to change with one engine: the sheet is settings',
+    );
 
     await tester.tap(find.byIcon(Icons.layers));
     await tester.pumpAndSettle();
@@ -135,6 +162,10 @@ void main() {
   ) async {
     await _pumpHome(tester, engines: 2);
     expect(find.byIcon(Icons.layers), findsOneWidget);
+    expect(
+      tester.widget<Tooltip>(find.byType(Tooltip).first).message,
+      'Change map type',
+    );
     await tester.tap(find.byIcon(Icons.layers));
     await tester.pumpAndSettle();
     expect(find.text('Map e0'), findsOneWidget);
