@@ -90,6 +90,8 @@ class RouteLeg extends StatelessWidget {
   /// [IconTransport.minWidth].
   final double width;
   final Leg leg;
+  // TODO Implement a boolean to configure if the backend has a server or not
+  // Implement for otpServer without route color configuration
   final Color? forcedColor;
   final bool isEnd;
 

@@ -24,8 +24,8 @@ typedef SummaryChipSpec = ({double weight, double minWidth, bool hideable});
 /// resolve flexible lengths, which Flutter's [Row] does not (it sizes its
 /// fixed children first and hands the flexible one whatever is left, even
 /// nothing). The widths add up to [width] whenever the minimums fit; when
-/// they do not, every chip is at its minimum and the row overflows by the
-/// difference.
+/// they do not, every chip is at its minimum and the row overflows: its last
+/// chip, being [Expanded], gets what is left, possibly nothing.
 List<double?> distributeSummaryWidths(
   double width,
   List<SummaryChipSpec> chips, {
@@ -85,8 +85,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
 
     final compressLegs = itinerary.compressLegs;
 
-    // TODO Implement a boolean to configure if the backend has a server or not
-    // Implement for otpServer without route color configuration
     final chips = <SummaryChipSpec>[];
     final builders = <Widget Function(double width)>[];
     for (var index = 0; index < compressLegs.length; index++) {
