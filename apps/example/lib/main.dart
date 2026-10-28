@@ -334,6 +334,21 @@ void main() {
           onRouteTap: (context, routeCode) {
             TransportDetailScreen.show(context, routeCode: routeCode);
           },
+          // Lines along a street (trufi-sanaa#20): the corners list of the
+          // offline search opens the nearby-lines screen over every corner.
+          onLinesAlongStreet: (context, street, corners) {
+            NearbyLinesTrufiScreen.showAlongStreet(
+              context,
+              NearbyStreetAnchor(
+                name: street.displayName,
+                subtitle: street.address,
+                corners: [
+                  for (final corner in corners)
+                    LatLng(corner.latitude, corner.longitude),
+                ],
+              ),
+            );
+          },
         ),
         SavedPlacesTrufiScreen(),
         SavedRoutesTrufiScreen(),

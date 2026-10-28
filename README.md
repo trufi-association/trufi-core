@@ -27,7 +27,7 @@ A cross-platform multi-modal public transport app built in [Flutter](https://flu
 ## Features
 
 - **Multi-modal route planning** — bus, walking, biking and combinations, powered by [OpenTripPlanner](https://github.com/opentripplanner/OpenTripPlanner) (OTP 1.5, 2.4 and 2.8 supported).
-- **Nearby lines** — offline discovery of the lines passing within 100 / 300 / 500 m of your position or a map pin, computed from the bundled GTFS.
+- **Nearby lines** — offline discovery of the lines passing within 100 / 300 / 500 m of your position or a map pin, computed from the bundled GTFS; from the offline search, the lines along a street (every corner searched at once).
 - **Live GTFS-RT vehicle positions** — optional real-time bus markers tinted by route color, with live indicators on itinerary cards.
 - **Turn-by-turn navigation** for transit and walking legs.
 - **Origin/destination search** — online (Photon, Nominatim) and offline (asset-based POI search via [osm-search-data-export](https://github.com/trufi-association/osm-search-data-export)).
