@@ -124,9 +124,11 @@ on a street every line that crosses it is 0 m from the corner it crosses
 at, so the order — not the distance — is what tells the lines running along
 the street from the ones merely crossing it (a crossing line is still
 listed: the rider can board it at that corner). The header reads "Along
-<street>", the map shows a dot per corner instead of the rings and the pin,
-the chips filter by the distance to the nearest corner. A long-press or
-"Use my location" leaves the street again.
+<street> · <municipality>" (the `subtitle`, when the index carries one —
+Cochabamba has one "Avenida Circunvalación" per municipality; a long press
+shows the whole text), the map shows a dot per corner instead of the rings
+and the pin, the chips filter by the distance to the nearest corner. A
+long-press or "Use my location" leaves the street again.
 
 The search screen offers the row when the host app wires it:
 

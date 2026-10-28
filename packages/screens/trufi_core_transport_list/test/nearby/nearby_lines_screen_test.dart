@@ -361,7 +361,13 @@ void main() {
       final (:engine, :source) = await _pumpRouted(tester, street: street);
 
       expect(source.anchors, [cornerA, cornerB]);
-      expect(find.text('Along Avenida Heroínas'), findsOneWidget);
+      // The anchor line names the municipality too (same-named streets in
+      // several municipalities) and carries the whole text as a tooltip.
+      expect(find.text('Along Avenida Heroínas · Cercado'), findsOneWidget);
+      expect(
+        find.byTooltip('Along Avenida Heroínas · Cercado'),
+        findsOneWidget,
+      );
       expect(find.text('Your location'), findsNothing);
       expect(find.text('Long-press the map to move the pin'), findsNothing);
       // The same three lines from both corners collapse to three rows.
@@ -389,7 +395,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Your location'), findsOneWidget);
-      expect(find.text('Along Avenida Heroínas'), findsNothing);
+      expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
       expect(source.anchors.last, deviceFix);
       final ids = engine.lastLayers.map((l) => l.id).toList();
       expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
@@ -415,7 +421,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('open'), findsOneWidget);
-      expect(find.text('Along Avenida Heroínas'), findsNothing);
+      expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
     });
   });
 
