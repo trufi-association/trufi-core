@@ -68,13 +68,8 @@ class TransitInfo extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        shortName,
-        longName,
-        mode,
-        color,
-        textColor,
-      ];
+  List<Object?> get props =>
+      [shortName, longName, mode, color, textColor, agency];
 }
 
 class Agency extends Equatable {
@@ -99,5 +94,8 @@ class Agency extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name];
+  List<Object?> get props => [
+        name,
+        agency,
+      ];
 }

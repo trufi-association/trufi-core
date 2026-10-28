@@ -56,11 +56,15 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
   Future<void> refresh({bool silent = false}) async {
     if (!silent) emit(state.copyWith(isLoading: true));
     try {
-      final fetch = _inFlight ??= routeTransportsRepository
-          .fetchPatterns()
-          .whenComplete(() => _inFlight = null);
+      // Sorted once, inside the shared future: two awaiters get the same
+      // list, and List.sort is not stable (the two directions of a route
+      // tie), so sorting per caller could reorder a list already emitted.
+      final fetch =
+          _inFlight ??= routeTransportsRepository.fetchPatterns().then((list) {
+        sortTransitRoutesByAgencyNameAndShortName(list);
+        return list;
+      }).whenComplete(() => _inFlight = null);
       final transports = await fetch;
-      sortTransitRoutesByAgencyNameAndShortName(transports);
       if (listEquals(transports, state.transports)) {
         if (!silent) emit(state.copyWith(isLoading: false));
         return;
@@ -108,6 +112,7 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     emit(
       state.copyWith(
         transports: newPatterns,
+        filterTransports: _filtered(newPatterns, _query),
         isGeometryLoading: false,
       ),
     );
