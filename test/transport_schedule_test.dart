@@ -106,6 +106,51 @@ void main() {
     expect(silent, isEmpty, reason: silent.join('\n'));
   });
 
+  test('every token of every city map is a window, a departure or off', () {
+    // A malformed value changes class silently: base read
+    // "07:22-12:50-15:50" as 07:22-12:50, the branch rejects it.
+    final token = RegExp(r'^(\d{1,2}:\d{2}(-\d{1,2}:\d{2}|\+)?|off)$');
+    final bad = <String>[];
+    for (final entry
+        in {...transportOpeningHours, ...transportFrecuency}.entries) {
+      for (final day in SimpleOpeningHours(entry.value).openingHours.values) {
+        for (final t in day) {
+          if (!token.hasMatch(t))
+            bad.add('${entry.key} "${entry.value}" -> "$t"');
+        }
+      }
+    }
+    expect(bad, isEmpty, reason: bad.join('\n'));
+  });
+
+  test('every schedule of every city is in service at some instant of the week',
+      () {
+    // One instant every 10 minutes over a full week.
+    final instants = [
+      for (var d = 0; d < 7; d++)
+        for (var m = 0; m < 24 * 60; m += 10)
+          monday.add(Duration(days: d, minutes: m)),
+    ];
+    // An empty value means the schedule is unknown (nine entries,
+    // pre-existing): it renders as out of service and is not a schedule.
+    final silent = <String>[];
+    var empty = 0;
+    for (final entry
+        in {...transportOpeningHours, ...transportFrecuency}.entries) {
+      if (entry.value.isEmpty) {
+        empty++;
+        continue;
+      }
+      final openingHours = SimpleOpeningHours(entry.value);
+      if (!instants.any(openingHours.isOpenOn)) {
+        silent.add('${entry.key} "${entry.value}"');
+      }
+    }
+    expect(transportOpeningHours.length, greaterThan(500));
+    expect(empty, lessThan(20));
+    expect(silent, isEmpty, reason: silent.join('\n'));
+  });
+
   test('the special Jilotepec lines carry their departures or short windows',
       () {
     List<String> departures(String id) =>
