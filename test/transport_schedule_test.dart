@@ -115,8 +115,9 @@ void main() {
         in {...transportOpeningHours, ...transportFrecuency}.entries) {
       for (final day in SimpleOpeningHours(entry.value).openingHours.values) {
         for (final t in day) {
-          if (!token.hasMatch(t))
+          if (!token.hasMatch(t)) {
             bad.add('${entry.key} "${entry.value}" -> "$t"');
+          }
         }
       }
     }
