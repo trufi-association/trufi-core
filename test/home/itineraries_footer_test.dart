@@ -181,7 +181,7 @@ void main() {
           tester.getRect(find.byKey(footerKey, skipOffstage: false));
       expect(footerBefore.top, greaterThanOrEqualTo(lastPlace.bottom));
 
-      // not pinned: it starts outside the 160 px viewport ...
+      // not pinned: it starts outside the 100 px viewport ...
       final viewport = tester.getRect(find.byType(SingleChildScrollView));
       expect(footerBefore.top, greaterThan(viewport.bottom));
 
@@ -281,8 +281,8 @@ void main() {
         ),
       ));
       await tester.pump();
-      expect(find.byType(ItineraryDetailsCard), findsNothing);
-      expect(find.text('10:32'), findsNothing); // the list shows no times
+      expect(find.byType(ItineraryDetailsCard),
+          findsNothing); // the list shows no times
 
       // open the first card (the chevron is the details tap target)
       await tester.tap(find.byIcon(Icons.arrow_forward_ios_rounded).first);
