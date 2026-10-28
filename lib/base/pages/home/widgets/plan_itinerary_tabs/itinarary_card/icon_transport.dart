@@ -20,6 +20,12 @@ class IconTransport extends StatelessWidget {
     required this.isEnd,
   });
 
+  /// Narrowest chip that draws without overflowing: the 22 px icon with its
+  /// 1 + 1 px margins and, unless it is the last leg, the 15 px arrow with
+  /// its 2 px padding; the text sits in an [Expanded] and may measure 0.
+  /// A 24 px chip with an arrow overflowed by 17 px (trufi-core#1041).
+  static double minWidth({required bool isEnd}) => isEnd ? 24 : 41;
+
   @override
   Widget build(BuildContext context) {
     final contrastColor = getContrastColor(bacgroundColor);
