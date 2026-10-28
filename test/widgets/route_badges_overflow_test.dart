@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/base/models/transit_route/transit_info.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
@@ -6,7 +7,6 @@ import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
-import 'package:trufi_core/base/utils/text/outlined_text.dart';
 
 // The Arequipa feed takes route_short_name from the OSM ref, which carries the
 // operator's sub-brand: this is its longest value, 32 characters
@@ -93,16 +93,16 @@ void main() {
       ),
     );
     expect(tester.takeException(), isNull);
-    final natural = calculateTextWidth(code, _textWidget(tester, code).style!);
     final row = tester.getRect(
       find.ancestor(of: find.text(code), matching: find.byType(Row)).first,
     );
+    final paragraph = tester.renderObject<RenderParagraph>(find.text(code));
+    expect(paragraph.didExceedMaxLines, isFalse, reason: 'not cut');
     expect(
-      natural,
+      paragraph.size.width,
       greaterThan(row.width * 0.55),
       reason: 'the fixture must need more than the old 55 % cap',
     );
-    expect(tester.getRect(find.text(code)).width, closeTo(natural, 1));
     expect(find.text('Enace'), findsOneWidget);
   });
 
@@ -125,7 +125,7 @@ void main() {
             ),
           ],
         ),
-        width: 300,
+        width: 220,
       ),
     );
     // Before: a 180 px cap inside a min-size Row ignored the row's width and
