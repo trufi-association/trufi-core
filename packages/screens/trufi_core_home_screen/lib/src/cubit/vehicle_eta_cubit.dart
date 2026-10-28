@@ -53,12 +53,15 @@ VehicleEtaRequest? buildVehicleEtaRequest(
     if (boarding == null) continue;
     final stopId = boarding.stopId;
     if (stopId != null && stopId.isNotEmpty) stopIds.add(stopId);
-    boardingPoints.putIfAbsent(
-      routeKey,
-      () => TrufiLatLng(boarding.lat, boarding.lon),
-    );
+    var firstRide = false;
+    boardingPoints.putIfAbsent(routeKey, () {
+      firstRide = true;
+      return TrufiLatLng(boarding.lat, boarding.lon);
+    });
+    // The direction belongs to the ride that set the stop: a later ride of
+    // the same route must not lend its direction to another ride's stop.
     final direction = leg.directionId;
-    if (direction != null) directions.putIfAbsent(routeKey, () => direction);
+    if (firstRide && direction != null) directions[routeKey] = direction;
   }
   if (routeIds.isEmpty) return null;
   return VehicleEtaRequest(
