@@ -25,6 +25,13 @@ void main() {
       expect(q, isNot(contains('routes(ids')));
     });
 
+    test('a colon at either end is not a feed prefix: whole fleet', () {
+      for (final id in [':1185', '1185:']) {
+        final q = buildVehiclePositionsQuery(routeIds: {id});
+        expect(q, isNot(contains('routes(ids')), reason: id);
+      }
+    });
+
     test('quotes inside an id are escaped', () {
       final q = buildVehiclePositionsQuery(routeIds: {'1:a"b'});
       expect(q, contains(r'routes(ids: ["1:a\"b"]) {'));
