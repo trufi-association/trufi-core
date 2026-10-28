@@ -58,7 +58,7 @@ class ItineraryCard extends StatelessWidget {
                             .clamp(0.0, double.infinity),
                       ),
                       child: RichText(
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.end,
                         textScaler: MediaQuery.of(context).textScaler,
                         text: TextSpan(
                           children: [
