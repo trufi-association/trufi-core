@@ -38,11 +38,11 @@ void main() {
 
   group('RouteInfo (planner polyline, chips)', () {
     test('white falls back to the mode in both colours', () {
-      final white = RouteInfo(
+      const white = RouteInfo(
           id: 'r', gtfsId: 'r', mode: TransportMode.bus, color: 'FFFFFF');
       expect(white.backgroundColor, TransportMode.bus.backgroundColor);
       expect(white.primaryColor, TransportMode.bus.color);
-      final brand = RouteInfo(
+      const brand = RouteInfo(
           id: 'r', gtfsId: 'r', mode: TransportMode.bus, color: '0061D0');
       expect(brand.backgroundColor, const Color(0xFF0061D0));
     });

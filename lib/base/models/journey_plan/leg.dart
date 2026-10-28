@@ -201,7 +201,7 @@ class Leg extends Equatable {
     return route?.shortName ?? (route?.longName ?? (shortName ?? ''));
   }
 
-  int? get codeColor => parseRouteColor(route?.color ?? routeColor)?.value;
+  int? get codeColor => parseRouteColor(route?.color ?? routeColor)?.toARGB32();
 
   Color get primaryColor => transportMode.color;
 
