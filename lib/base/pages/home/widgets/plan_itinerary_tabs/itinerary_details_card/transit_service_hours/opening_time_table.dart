@@ -117,6 +117,7 @@ class _OpeningTimeTableState extends State<OpeningTimeTable> {
                                         dayKey, localization),
                                     style: style,
                                   ),
+                                  const SizedBox(width: 16),
                                   Column(
                                     children:
                                         _dayTimes(dayKey, localization, style),
