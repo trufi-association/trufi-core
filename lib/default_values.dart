@@ -112,6 +112,7 @@ abstract class DefaultValues {
   static RouterDelegate<Object> routerDelegate({
     required String appName,
     required String cityName,
+    WidgetBuilder? itinerariesFooterBuilder,
     required String countryName,
     WidgetBuilder? backgroundImageBuilder,
     AsyncExecutor? asyncExecutor,
@@ -154,6 +155,7 @@ abstract class DefaultValues {
                   mapChooseLocationProvider:
                       mapCollectionSelected.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
+                  itinerariesFooterBuilder: itinerariesFooterBuilder,
                 ),
               );
             },

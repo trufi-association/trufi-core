@@ -19,7 +19,8 @@ class ItineraryDetailsCard extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
 
   /// Drawn once under the legs, e.g. the app's notice that times are
-  /// estimates (trufi-arequipa#56): this is the view that shows them.
+  /// estimates (trufi-arequipa#56): the details replace the list when a
+  /// card is opened, so the notice has to be here too.
   final WidgetBuilder? footerBuilder;
 
   const ItineraryDetailsCard({
