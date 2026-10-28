@@ -7,10 +7,11 @@ bool isBareCoordinateLocation(SearchLocation location) =>
     (location.address == null || location.address!.trim().isEmpty);
 
 /// Looks the address of a bare coordinate location up through the app's
-/// geocoder, the way the search screen does for its subtitle: the reverse
-/// result's address, or its name when it has no address. Null when the
-/// geocoder has nothing, throws, or does not answer within [timeout], so
-/// the caller keeps the bare pair.
+/// geocoder and returns the same text the search screen stores when the row
+/// is chosen after the answer: the reverse result's [SearchLocation.formattedDisplay]
+/// (name and address, or whichever it has). Null when the geocoder has
+/// nothing, throws, or does not answer within [timeout], so the caller keeps
+/// the bare pair.
 Future<String?> resolveCoordinateAddress(
   SearchLocationsCubit cubit,
   double latitude,
@@ -22,10 +23,8 @@ Future<String?> resolveCoordinateAddress(
         .reverseGeocode(latitude, longitude)
         .timeout(timeout, onTimeout: () => null);
     if (reverse == null) return null;
-    final address = reverse.address?.trim();
-    if (address != null && address.isNotEmpty) return address;
-    final name = reverse.displayName.trim();
-    return name.isEmpty ? null : name;
+    final address = reverse.formattedDisplay.trim();
+    return address.isEmpty ? null : address;
   } catch (_) {
     return null;
   }

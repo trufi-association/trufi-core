@@ -64,7 +64,8 @@ void main() {
   });
 
   group('resolveCoordinateAddress', () {
-    test('returns the reverse result\'s address, or its name', () async {
+    test('returns the reverse result\'s formattedDisplay: name and address, '
+        'or whichever it has', () async {
       final withAddress = _FakeSearchService(
         (lat, lng) async => const SearchLocation(
           id: 'r',
@@ -76,7 +77,7 @@ void main() {
       );
       expect(
         await resolveCoordinateAddress(_cubit(withAddress), -17.3937, -66.1568),
-        'Cochabamba, Bolivia',
+        'Plaza 14 de Septiembre, Cochabamba, Bolivia',
       );
       final nameOnly = _FakeSearchService(
         (lat, lng) async => const SearchLocation(
