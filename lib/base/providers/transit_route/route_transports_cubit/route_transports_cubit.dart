@@ -141,17 +141,32 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     return tempList;
   }
 
+  /// Filters the list by [query], case- and accent-insensitively, against
+  /// the route code, its long name and its operator (trufi-core#1039: "C9"
+  /// and "Emarsistran" found nothing because only the lowercased code and
+  /// long name were searched, and only when the caller lowercased the
+  /// query; "union" found none of the 50 "Unión" patterns).
   void filterTransports(String query) {
-    _query = query;
-    emit(state.copyWith(filterTransports: _filtered(state.transports, query)));
+    _query = _fold(query);
+    emit(state.copyWith(filterTransports: _filtered(state.transports, _query)));
   }
 
   List<TransitRoute> _filtered(List<TransitRoute> transports, String query) {
-    if (query == "") return transports;
-    return transports
-        .where((element) =>
-            "${element.name.toLowerCase()} ${element.route?.longNameData.toLowerCase() ?? ''}"
-                .contains(query))
-        .toList();
+    if (query.isEmpty) return transports;
+    return transports.where((element) {
+      final route = element.route;
+      final haystack = _fold(
+        '${element.name} ${route?.longNameData ?? ''} ${route?.agency?.name ?? ''}',
+      );
+      return haystack.contains(query);
+    }).toList();
+  }
+
+  /// Lowercase, trimmed, without the accents the feed's names carry.
+  static String _fold(String text) {
+    var out = text.trim().toLowerCase();
+    const accents = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ü': 'u', 'ñ': 'n'};
+    accents.forEach((from, to) => out = out.replaceAll(from, to));
+    return out;
   }
 }
