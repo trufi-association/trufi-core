@@ -146,7 +146,14 @@ void main() {
     await _pumpHome(tester, engines: 1, extras: const Text('layer toggles'));
     expect(find.byIcon(Icons.layers), findsOneWidget);
     expect(
-      tester.widget<Tooltip>(find.byType(Tooltip).first).message,
+      tester
+          .widget<Tooltip>(
+            find.ancestor(
+              of: find.byIcon(Icons.layers),
+              matching: find.byType(Tooltip),
+            ),
+          )
+          .message,
       'Map Settings',
       reason: 'nothing to change with one engine: the sheet is settings',
     );
@@ -163,7 +170,14 @@ void main() {
     await _pumpHome(tester, engines: 2);
     expect(find.byIcon(Icons.layers), findsOneWidget);
     expect(
-      tester.widget<Tooltip>(find.byType(Tooltip).first).message,
+      tester
+          .widget<Tooltip>(
+            find.ancestor(
+              of: find.byIcon(Icons.layers),
+              matching: find.byType(Tooltip),
+            ),
+          )
+          .message,
       'Change map type',
     );
     await tester.tap(find.byIcon(Icons.layers));
