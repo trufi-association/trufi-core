@@ -39,12 +39,17 @@ Leg _leg(
       realTime: false,
     );
 
-/// `'w5 b25 w3'` = a 5-minute walk, a 25-minute bus, a 3-minute walk.
+/// `'w5 b25 w3'` = a 5-minute walk, a 25-minute bus, a 3-minute walk;
+/// `g10` = a 10-minute wait before the next leg.
 Itinerary _itinerary(String spec) {
   var time = DateTime(2026, 10, 27, 12);
   final legs = <Leg>[];
   for (final token in spec.split(' ')) {
     final minutes = int.parse(token.substring(1));
+    if (token.startsWith('g')) {
+      time = time.add(Duration(minutes: minutes));
+      continue;
+    }
     final leg = _leg(
       token.startsWith('w') ? TransportMode.walk : TransportMode.bus,
       minutes,
@@ -169,6 +174,24 @@ void main() {
       );
     });
 
+    test('a walk whose share is exactly 24 px stays', () {
+      // 290 × 1440 / 17400 = 24.0 exactly; one second less hides it.
+      expect(
+        distributeSummaryWidths(290, [
+          chip(1440, walk: true),
+          chip(15960, min: 24),
+        ]),
+        [41, 249],
+      );
+      expect(
+        distributeSummaryWidths(290, [
+          chip(1439, walk: true),
+          chip(15961, min: 24),
+        ]),
+        [null, 290],
+      );
+    });
+
     test('with minimums that do not fit every chip is at its minimum', () {
       expect(
         distributeSummaryWidths(100, [chip(1), chip(1), chip(1, min: 24)]),
@@ -248,6 +271,15 @@ void main() {
       final (_, chips) = await _pump(tester, 'w5 b30 b2', 320);
       expect(tester.takeException(), isNull);
       expect(_widths(chips), [42.3, 253.7, 24]);
+    });
+
+    testWidgets('a wait for the next leg is drawn as part of the leg before',
+        (tester) async {
+      // 5 min walk + 10 min wait = 15 of 45 min: 96.7 px; the bus 161.1,
+      // the last walk 32.2 (no minimum binds).
+      final (_, chips) = await _pump(tester, 'w5 g10 b25 w5', 290);
+      expect(tester.takeException(), isNull);
+      expect(_widths(chips), [96.7, 161.1, 32.2]);
     });
 
     testWidgets('#1041 stays: three short buses measure 41, 41, 41',
