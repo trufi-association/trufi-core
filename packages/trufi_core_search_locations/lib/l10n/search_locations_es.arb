@@ -10,6 +10,7 @@
   "searchResults": "RESULTADOS DE BÚSQUEDA",
   "noResultsFound": "No se encontraron resultados",
   "searchCornersHint": "Buscar esquinas...",
+  "linesAlongStreet": "Líneas que pasan por {street}",
   "copiedToClipboard": "Copiado",
   "originFieldLabel": "Desde",
   "destinationFieldLabel": "Hasta"

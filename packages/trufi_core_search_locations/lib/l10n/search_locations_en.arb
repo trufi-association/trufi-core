@@ -40,6 +40,16 @@
   "@searchCornersHint": {
     "description": "Hint of the filter field inside a street's corners list (drill-down flow); it searches only within those corners"
   },
+  "linesAlongStreet": "Lines along {street}",
+  "@linesAlongStreet": {
+    "description": "Action row on top of a street's corners list that opens the public transport lines running along that street (every corner searched at once)",
+    "placeholders": {
+      "street": {
+        "type": "String",
+        "example": "Avenida Heroínas"
+      }
+    }
+  },
   "copiedToClipboard": "Copied",
   "@copiedToClipboard": {
     "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"

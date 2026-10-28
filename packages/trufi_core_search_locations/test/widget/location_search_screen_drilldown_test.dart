@@ -86,7 +86,11 @@ class _DrillDownService
 void main() {
   SearchLocation? picked;
 
-  Future<void> pumpAndSearch(WidgetTester tester, {String? locality}) async {
+  Future<void> pumpAndSearch(
+    WidgetTester tester, {
+    String? locality,
+    LinesAlongStreetCallback? onLinesAlongStreet,
+  }) async {
     picked = null;
     await tester.pumpWidget(
       MaterialApp(
@@ -104,6 +108,7 @@ void main() {
                     searchService: _DrillDownService(locality: locality),
                     onYourLocation: () async => null,
                     onChooseOnMap: () async => null,
+                    onLinesAlongStreet: onLinesAlongStreet,
                   ),
                 ),
               );
@@ -122,8 +127,16 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> openCorners(WidgetTester tester, {String? locality}) async {
-    await pumpAndSearch(tester, locality: locality);
+  Future<void> openCorners(
+    WidgetTester tester, {
+    String? locality,
+    LinesAlongStreetCallback? onLinesAlongStreet,
+  }) async {
+    await pumpAndSearch(
+      tester,
+      locality: locality,
+      onLinesAlongStreet: onLinesAlongStreet,
+    );
     await tester.tap(find.text('Avenida Ayacucho'));
     await tester.pumpAndSettle();
   }
@@ -232,6 +245,70 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(service.languageReceived, 'es');
+  });
+
+  group('lines along the street (trufi-sanaa#20)', () {
+    testWidgets(
+        'with a handler the corners list starts with "Lines along <street>"; '
+        'tapping it hands over the street and every corner, whatever the '
+        'filter shows, and pops nothing', (tester) async {
+      SearchLocation? street;
+      List<SearchLocation>? corners;
+      await openCorners(
+        tester,
+        locality: 'Cercado',
+        onLinesAlongStreet: (_, s, c) {
+          street = s;
+          corners = c;
+        },
+      );
+
+      final row = find.text('Lines along Avenida Ayacucho');
+      expect(row, findsOneWidget);
+      expect(find.byIcon(Icons.directions_bus_rounded), findsOneWidget);
+      // First row: above the first corner, below the filter field.
+      expect(
+        tester.getTopLeft(row).dy,
+        lessThan(tester.getTopLeft(find.text('& Avenida Aroma')).dy),
+      );
+      expect(
+        tester.getTopLeft(row).dy,
+        greaterThan(tester.getTopLeft(find.byType(TextField).first).dy),
+      );
+      // The street's municipality is on the header only, not repeated.
+      expect(find.text('Cercado'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField).first, 'heroinas');
+      await tester.pumpAndSettle();
+      expect(find.text('& Avenida Aroma'), findsNothing);
+      expect(row, findsOneWidget);
+
+      await tester.tap(row);
+      await tester.pumpAndSettle();
+
+      expect(street?.id, 'street:s1');
+      expect(street?.displayName, 'Avenida Ayacucho');
+      expect(corners?.map((c) => c.id), ['junction:s1:s3', 'junction:s1:s2']);
+      expect(picked, isNull);
+      // Still inside the corners: the handler decides what it opens.
+      expect(find.text('& Avenida Heroínas'), findsOneWidget);
+    });
+
+    testWidgets('without a handler there is no such row', (tester) async {
+      await openCorners(tester);
+
+      expect(find.textContaining('Lines along'), findsNothing);
+      expect(find.byIcon(Icons.directions_bus_rounded), findsNothing);
+      expect(find.text('& Avenida Aroma'), findsOneWidget);
+    });
+
+    testWidgets('the row is not offered on the results list, only inside '
+        'the corners', (tester) async {
+      await pumpAndSearch(tester, onLinesAlongStreet: (_, _, _) {});
+
+      expect(find.text('Avenida Ayacucho'), findsOneWidget);
+      expect(find.textContaining('Lines along'), findsNothing);
+    });
   });
 
   group('street locality (#972)', () {

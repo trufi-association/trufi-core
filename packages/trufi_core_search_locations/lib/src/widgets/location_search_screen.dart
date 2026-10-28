@@ -57,6 +57,19 @@ class LocationSearchScreenConfiguration {
   });
 }
 
+/// Handler of the "Lines along `<street>`" row of a street's corners list
+/// (trufi-sanaa#20). [street] is the drilled-down result and [corners] every
+/// corner the service knows for it — the whole list, whatever the corner
+/// filter shows. The host app decides what it opens (trufi-core's
+/// `NearbyLinesTrufiScreen.showAlongStreet`); the row only exists when a
+/// handler is given.
+typedef LinesAlongStreetCallback =
+    void Function(
+      BuildContext context,
+      SearchLocation street,
+      List<SearchLocation> corners,
+    );
+
 /// A search screen with Your Location, Choose on Map, Your Places, and search results.
 ///
 /// Returns a [SearchLocation] when a location is selected.
@@ -89,6 +102,10 @@ class LocationSearchScreen extends StatefulWidget {
   /// Configuration for text and icons.
   final LocationSearchScreenConfiguration configuration;
 
+  /// Adds a "Lines along `<street>`" row on top of a street's corners list
+  /// (trufi-sanaa#20). Null leaves the corners list as it was.
+  final LinesAlongStreetCallback? onLinesAlongStreet;
+
   const LocationSearchScreen({
     super.key,
     required this.isOrigin,
@@ -98,6 +115,7 @@ class LocationSearchScreen extends StatefulWidget {
     this.onChooseOnMap,
     required this.searchService,
     this.configuration = const LocationSearchScreenConfiguration(),
+    this.onLinesAlongStreet,
   });
 
   @override
@@ -409,6 +427,37 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                     ),
                   ),
                 ),
+                // Lines along the street (trufi-sanaa#20): the host app
+                // decides what the row opens; without a handler there is
+                // no row. Always the whole street, whatever the filter
+                // shows, so the action does not depend on the field.
+                if (widget.onLinesAlongStreet != null &&
+                    !_isDrillingDown &&
+                    _drillDownResults.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: _ModernLocationTile(
+                      location: _drillDownParent!,
+                      displayNameOverride: l10n.linesAlongStreet(
+                        _drillDownParent!.displayName,
+                      ),
+                      showAddress: false,
+                      icon: Icons.directions_bus_rounded,
+                      iconColor: colorScheme.primary,
+                      onTap: () {
+                        HapticFeedback.selectionClick();
+                        widget.onLinesAlongStreet!(
+                          context,
+                          _drillDownParent!,
+                          List.unmodifiable(_drillDownResults),
+                        );
+                      },
+                      trailing: Icon(
+                        Icons.chevron_right_rounded,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
                 Expanded(
                   child: _isDrillingDown
                       ? const Center(child: CircularProgressIndicator())
