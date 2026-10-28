@@ -149,33 +149,55 @@ class NearbyLinesResult extends Equatable {
   /// Sorted by [NearbyLine.distanceMeters] ascending ([NearbyLine.compare]).
   final List<NearbyLine> lines;
 
-  /// One row per line across [results], as a single query from [anchor]
-  /// would list them: a line matched at several anchors keeps its nearest
-  /// match ([NearbyLine.compare] decides ties), nearest first. This is the
-  /// "lines along a street" result — [results] being the nearby lines of
-  /// each of its corners (trufi-sanaa#20).
+  /// One row per line across [results]: a line matched at several anchors
+  /// keeps its nearest match ([NearbyLine.compare] decides ties). This is
+  /// the "lines along a street" result — [results] being the nearby lines
+  /// of each of its corners (trufi-sanaa#20).
+  ///
+  /// Ordered by how many anchors each line passes within [alongMeters] of,
+  /// most first, then as a single query would ([NearbyLine.compare]): on a
+  /// street every line that crosses it is 0 m from the corner it crosses
+  /// at, so distance alone cannot tell the lines that run along the street
+  /// (near many consecutive corners) from the ones that merely cross it
+  /// (near one). The count is not exposed; the order is the signal.
   factory NearbyLinesResult.union(
     Iterable<NearbyLinesResult> results, {
     required LatLng anchor,
     double maxRadiusMeters = NearbyRadius.maxMeters,
+    double alongMeters = defaultAlongMeters,
   }) {
     final nearest = <String, NearbyLine>{};
+    final anchorsPassed = <String, int>{};
     for (final result in results) {
       for (final line in result.lines) {
-        final current = nearest[line.lineKey];
+        final key = line.lineKey;
+        if (line.distanceMeters <= alongMeters) {
+          anchorsPassed[key] = (anchorsPassed[key] ?? 0) + 1;
+        }
+        final current = nearest[key];
         if (current == null || NearbyLine.compare(line, current) < 0) {
-          nearest[line.lineKey] = line;
+          nearest[key] = line;
         }
       }
     }
+    int byCoverage(NearbyLine a, NearbyLine b) {
+      final byPassed = (anchorsPassed[b.lineKey] ?? 0).compareTo(
+        anchorsPassed[a.lineKey] ?? 0,
+      );
+      return byPassed != 0 ? byPassed : NearbyLine.compare(a, b);
+    }
+
     return NearbyLinesResult(
       anchor: anchor,
       maxRadiusMeters: maxRadiusMeters,
-      lines: List.unmodifiable(
-        nearest.values.toList()..sort(NearbyLine.compare),
-      ),
+      lines: List.unmodifiable(nearest.values.toList()..sort(byCoverage)),
     );
   }
+
+  /// A line within this many meters of an anchor "passes" it, for the
+  /// order of [union]: the tightest radius bracket, so a line one block
+  /// away from a corner does not count as running along the street.
+  static const double defaultAlongMeters = 100;
 
   /// Sentinel radius of [empty]: no query was run.
   static const double noMaxRadius = 0;

@@ -41,10 +41,7 @@ void main() {
     test('center is the mean of the corners, null without corners', () {
       final street = NearbyStreetAnchor(name: 'A', corners: const [c1, c3]);
       expect(street.center?.latitude, closeTo((-17.3925 - 17.3890) / 2, 1e-9));
-      expect(
-        street.center?.longitude,
-        closeTo((-66.1588 - 66.1554) / 2, 1e-9),
-      );
+      expect(street.center?.longitude, closeTo((-66.1588 - 66.1554) / 2, 1e-9));
       expect(NearbyStreetAnchor(name: 'A', corners: const []).center, isNull);
     });
 
@@ -61,29 +58,57 @@ void main() {
   });
 
   group('NearbyLinesResult.union', () {
-    test('keeps each line once, at its nearest corner, nearest first', () {
-      final union = NearbyLinesResult.union(
-        [
-          result(c1, [row('201', 80), row('X10', 150)]),
-          result(c2, [row('201', 40), row('18', 380)]),
-          // Same line, same distance at another corner: a tie, one row.
-          result(c3, [row('X10', 150), row('7', 40)]),
-        ],
-        anchor: c2,
-      );
+    test('keeps each line once, at its nearest corner; the lines passing '
+        'the most corners first, then nearest first', () {
+      final union = NearbyLinesResult.union([
+        result(c1, [row('201', 80), row('X10', 150)]),
+        result(c2, [row('201', 40), row('18', 380)]),
+        // Same line, same distance at another corner: a tie, one row.
+        result(c3, [row('X10', 150), row('7', 40)]),
+      ], anchor: c2);
 
       expect(union.anchor, c2);
       expect(union.maxRadiusMeters, NearbyRadius.maxMeters);
-      expect(union.lines.map((l) => l.displayName), ['7', '201', 'X10', '18']);
+      // 201 passes two corners (80 and 40 m), 7 one (40 m), X10 and 18
+      // none within 100 m: coverage first, then the single-query order.
+      expect(union.lines.map((l) => l.displayName), ['201', '7', 'X10', '18']);
       expect(union.lines.map((l) => l.distanceMeters), [40, 40, 150, 380]);
       // The 201 row is the c2 match (40 m), not the c1 one (80 m).
-      expect(union.lines[1].stopName, 'Stop 201 at 40');
+      expect(union.lines[0].stopName, 'Stop 201 at 40');
       expect(union.bracketCounts, {
         NearbyRadius.m100: 2,
         NearbyRadius.m300: 3,
         NearbyRadius.m500: 4,
       });
       expect(() => union.lines.clear(), throwsUnsupportedError);
+    });
+
+    test('a line running along the street outranks one that crosses it '
+        'nearer', () {
+      // 7 crosses at c1 (0 m, one corner); 201 runs along (20–30 m from
+      // every corner); X10 is a block away from every corner (150 m):
+      // present, but it does not count as passing any of them.
+      final union = NearbyLinesResult.union([
+        result(c1, [row('7', 0), row('201', 30), row('X10', 150)]),
+        result(c2, [row('201', 20), row('X10', 150)]),
+        result(c3, [row('201', 25), row('X10', 150)]),
+      ], anchor: c2);
+      expect(union.lines.map((l) => l.displayName), ['201', '7', 'X10']);
+      expect(union.lines.first.distanceMeters, 20);
+
+      // The threshold is a parameter: counting at 500 m makes X10 pass
+      // every corner too and the tie falls back to distance.
+      final wide = NearbyLinesResult.union(
+        [
+          result(c1, [row('7', 0), row('201', 30), row('X10', 150)]),
+          result(c2, [row('201', 20), row('X10', 150)]),
+          result(c3, [row('201', 25), row('X10', 150)]),
+        ],
+        anchor: c2,
+        alongMeters: NearbyRadius.maxMeters,
+      );
+      expect(wide.lines.map((l) => l.displayName), ['201', 'X10', '7']);
+      expect(NearbyLinesResult.defaultAlongMeters, NearbyRadius.m100.meters);
     });
 
     test('no results, or only empty ones, is an empty result', () {
