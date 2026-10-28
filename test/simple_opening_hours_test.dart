@@ -18,11 +18,12 @@ void main() {
       expect(oh.departuresOf('ph'), isEmpty);
     });
 
-    test('departures separated by commas keep their order, zero-padded', () {
-      final oh = SimpleOpeningHours('Mo-Fr 5:00,07:10');
+    test('departures separated by commas come out sorted and zero-padded', () {
+      final oh = SimpleOpeningHours('Mo-Fr 7:10,05:00');
       expect(oh.departuresOf('mo'), ['05:00', '07:10']);
       expect(oh.departuresOf('fr'), ['05:00', '07:10']);
       expect(oh.departuresOf('sa'), isEmpty);
+      expect(oh.nextDepartureOn(at(monday, 6)), '07:10');
     });
 
     test('service windows and departures mix across rules', () {
@@ -66,6 +67,15 @@ void main() {
       expect(SimpleOpeningHours.isDeparture('05:00-17:30'), isFalse);
       expect(SimpleOpeningHours.isDeparture('09:00+'), isFalse);
       expect(SimpleOpeningHours.isDeparture('off'), isFalse);
+    });
+
+    test('isDeparture rejects times that do not exist', () {
+      expect(SimpleOpeningHours.isDeparture('23:59'), isTrue);
+      expect(SimpleOpeningHours.isDeparture('00:00'), isTrue);
+      expect(SimpleOpeningHours.isDeparture('24:00'), isFalse);
+      expect(SimpleOpeningHours.isDeparture('25:99'), isFalse);
+      expect(SimpleOpeningHours.isDeparture('17:60'), isFalse);
+      expect(SimpleOpeningHours('Mo-Su 25:99').departuresOf('mo'), isEmpty);
     });
   });
 

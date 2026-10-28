@@ -31,7 +31,7 @@ class SimpleOpeningHours {
     "su",
   ];
 
-  static final RegExp _departureToken = RegExp(r'^[0-9]{1,2}:[0-9]{2}$');
+  static final RegExp _departureToken = RegExp(r'^([01]?\d|2[0-3]):[0-5]\d$');
 
   SimpleOpeningHours(this.inp) {
     parse(inp);
@@ -61,12 +61,13 @@ class SimpleOpeningHours {
       .where((token) => !isDeparture(token))
       .toList();
 
-  /// The single departures of the day [dayKey], zero-padded and in the
-  /// order they were written, e.g. `["05:00", "07:10"]`.
+  /// The single departures of the day [dayKey], zero-padded and sorted,
+  /// e.g. `["05:00", "07:10"]`.
   List<String> departuresOf(String dayKey) => (openingHours[dayKey] ?? const [])
       .where(isDeparture)
       .map(formatTimeString)
-      .toList();
+      .toList()
+    ..sort();
 
   /// The service windows of the weekday of [date].
   List<String> rangesOn(DateTime date) => rangesOf(_dayKey(date));

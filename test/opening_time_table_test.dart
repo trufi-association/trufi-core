@@ -55,8 +55,9 @@ void main() {
 
   testWidgets('only the departures still ahead are in the header',
       (tester) async {
+    // written out of order on purpose: the parser sorts them
     await tester.pumpWidget(app(OpeningTimeTable(
-      openingHours: SimpleOpeningHours('Mo-Su 05:00,07:10'),
+      openingHours: SimpleOpeningHours('Mo-Su 07:10,05:00'),
       now: at(6),
     )));
     expect(find.text('Salidas: 07:10'), findsOneWidget);
