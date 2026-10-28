@@ -201,14 +201,15 @@ class Leg extends Equatable {
     return route?.shortName ?? (route?.longName ?? (shortName ?? ''));
   }
 
-  int? get codeColor => int.tryParse('0xFF${route?.color ?? routeColor}');
+  int? get codeColor => parseRouteColor(route?.color ?? routeColor)?.value;
 
   Color get primaryColor => transportMode.color;
 
+  /// The feed's colour, or the mode's when the feed gives none or one that
+  /// would vanish on white (trufi-arequipa#77, see [parseRouteColor]).
   Color get backgroundColor {
-    return codeColor != null
-        ? Color(codeColor!)
-        : transportMode.backgroundColor;
+    return parseRouteColor(route?.color ?? routeColor) ??
+        transportMode.backgroundColor;
   }
 
   @override

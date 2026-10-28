@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/utils/colors/route_color.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
