@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
@@ -39,9 +41,11 @@ class TileTransport extends StatelessWidget {
                         ),
                         // A long route_short_name (the Arequipa feed carries
                         // the operator's sub-brand, up to 32 characters) used
-                        // to push the terminal out of the row; now the code
-                        // keeps at most 55 % of the width and both texts end
-                        // in an ellipsis (trufi-arequipa#27).
+                        // to push the terminal out of the row. The code now
+                        // yields only what the terminal needs (the terminal
+                        // never takes more than 45 % of the row) and keeps at
+                        // least 55 %; both texts end in an ellipsis
+                        // (trufi-arequipa#27).
                         child: LayoutBuilder(
                           builder: (context, constraints) {
                             final textStyle = TextStyle(
@@ -52,14 +56,27 @@ class TileTransport extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             );
+                            final code = patternOtp.route?.shortName ?? '';
+                            final terminal =
+                                patternOtp.route?.longNameLast ?? '';
+                            final width = constraints.maxWidth;
+                            final terminalWidth = math.min(
+                              calculateTextWidth(terminal, textStyle) *
+                                  MediaQuery.of(context).textScaler.scale(1),
+                              width * 0.45,
+                            );
+                            final codeMax = math.max(
+                              width * 0.55,
+                              width - 8 - terminalWidth,
+                            );
                             return Row(
                               children: [
                                 ConstrainedBox(
                                   constraints: BoxConstraints(
-                                    maxWidth: constraints.maxWidth * 0.55,
+                                    maxWidth: codeMax,
                                   ),
                                   child: Text(
-                                    patternOtp.route?.shortName ?? '',
+                                    code,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: textStyle,
@@ -68,7 +85,7 @@ class TileTransport extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    patternOtp.route?.longNameLast ?? '',
+                                    terminal,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: textStyle,

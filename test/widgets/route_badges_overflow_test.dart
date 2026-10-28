@@ -3,19 +3,27 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/base/models/transit_route/transit_info.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary_card/icon_transport.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
+import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
+import 'package:trufi_core/base/utils/text/outlined_text.dart';
 
 // The Arequipa feed takes route_short_name from the OSM ref, which carries the
-// operator's sub-brand: up to 32 characters (trufi-arequipa#27).
-const longShortName = '3 de octubre: B - Zona Alta Cono N';
+// operator's sub-brand: this is its longest value, 32 characters
+// (trufi-arequipa#27).
+const longShortName = '4 de octubre: Terminal Terrestre';
 
-TransitRoute _route({required String shortName}) => TransitRoute(
+TransitRoute _route({
+  required String shortName,
+  String longName = 'Terminal Terrestre → Ciudad de Dios',
+}) =>
+    TransitRoute(
       id: 'r1',
       name: 'r1',
       code: 'r1',
       route: TransitInfo(
         shortName: shortName,
-        longName: 'Terminal Terrestre → Ciudad de Dios',
+        longName: longName,
         color: '0061D0',
       ),
     );
@@ -36,7 +44,8 @@ void main() {
       'a 32-character route code neither overflows the list tile nor hides '
       'the terminal', (tester) async {
     await tester.pumpWidget(
-      _app(TileTransport(patternOtp: _route(shortName: longShortName), onTap: () {})),
+      _app(TileTransport(
+          patternOtp: _route(shortName: longShortName), onTap: () {})),
     );
 
     // Before the fix the row overflowed by dozens of pixels (RenderFlex
@@ -67,14 +76,78 @@ void main() {
     expect(tester.getRect(find.text('C9')).width, lessThan(40));
   });
 
-  testWidgets('the summary badge ends a long code with an ellipsis instead of '
+  testWidgets(
+      'a code the terminal leaves room for keeps its natural width '
+      '(a flat 55 % cap cut it)', (tester) async {
+    // A 12-character code next to a 5-character terminal: in the test font
+    // (1 em per glyph) the code needs 144 px, more than 55 % of the row,
+    // while the terminal needs only 80 px.
+    const code = 'TrabajoA1234';
+    await tester.pumpWidget(
+      _app(
+        TileTransport(
+          patternOtp: _route(shortName: code, longName: 'Río Seco → Enace'),
+          onTap: () {},
+        ),
+        width: 360,
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    final natural = calculateTextWidth(code, _textWidget(tester, code).style!);
+    final row = tester.getRect(
+      find.ancestor(of: find.text(code), matching: find.byType(Row)).first,
+    );
+    expect(
+      natural,
+      greaterThan(row.width * 0.55),
+      reason: 'the fixture must need more than the old 55 % cap',
+    );
+    expect(tester.getRect(find.text(code)).width, closeTo(natural, 1));
+    expect(find.text('Enace'), findsOneWidget);
+  });
+
+  testWidgets('the itinerary details badge stays inside a narrow row', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        const Row(
+          children: [
+            SizedBox(width: 60),
+            Expanded(
+              child: RouteNumber(
+                transportMode: TransportMode.bus,
+                backgroundColor: Colors.blue,
+                text: longShortName,
+                distance: '1,0 km',
+                duration: '10 min',
+              ),
+            ),
+          ],
+        ),
+        width: 300,
+      ),
+    );
+    // Before: a 180 px cap inside a min-size Row ignored the row's width and
+    // overflowed by dozens of pixels below 393 dp.
+    expect(tester.takeException(), isNull);
+    expect(_textWidget(tester, longShortName).overflow, TextOverflow.ellipsis);
+    final row = tester.getRect(find.byType(Row).first);
+    expect(
+      tester.getRect(find.text(longShortName)).right,
+      lessThanOrEqualTo(row.right),
+    );
+  });
+
+  testWidgets(
+      'the summary badge ends a long code with an ellipsis instead of '
       'cutting glyphs', (tester) async {
     await tester.pumpWidget(
       _app(
-        IconTransport(
+        const IconTransport(
           bacgroundColor: Colors.blue,
           color: Colors.white,
-          icon: const Icon(Icons.directions_bus, size: 16),
+          icon: Icon(Icons.directions_bus, size: 16),
           text: longShortName,
           isEnd: false,
         ),

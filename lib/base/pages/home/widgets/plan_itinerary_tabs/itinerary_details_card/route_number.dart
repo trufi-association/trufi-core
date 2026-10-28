@@ -42,7 +42,6 @@ class RouteNumber extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Wrap(
-          
           children: [
             if (transportMode != TransportMode.bicycle &&
                 transportMode != TransportMode.car)
@@ -55,10 +54,12 @@ class RouteNumber extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ConstrainedBox(
-                      // Long route_short_name values are cut with an ellipsis instead
-                      // of widening the badge (trufi-arequipa#27).
-                      constraints: const BoxConstraints(maxWidth: 180),
+                    Flexible(
+                      // Long route_short_name values are cut with an ellipsis
+                      // instead of widening the badge (trufi-arequipa#27). A
+                      // fixed cap did not help: a Row hands non-flex children
+                      // unbounded width, so the badge still overflowed the
+                      // Wrap below 393 dp; Flexible bounds it by the row.
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: Text(
@@ -83,7 +84,7 @@ class RouteNumber extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Text(
-                '${duration!=null?'$duration, ':  ''}${distance ?? ''}',
+                '${duration != null ? '$duration, ' : ''}${distance ?? ''}',
                 style: TextStyle(
                   fontSize: 15,
                   color: hintTextColor(theme),
@@ -92,7 +93,7 @@ class RouteNumber extends StatelessWidget {
             ),
             if (lastStopName != null)
               Container(
-                padding: const EdgeInsets.only(left: 5,right: 5, top: 5),
+                padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
                 child: RichText(
                   text: TextSpan(
                     children: [

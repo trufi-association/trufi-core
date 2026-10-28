@@ -78,9 +78,12 @@ Marker buildTransportMarker(
     maxLines: 1,
     softWrap: false,
     textAlign: TextAlign.start,
-    overflow: TextOverflow.clip,
+    // the marker is capped at 75 px: a long code ends with an ellipsis
+    // instead of a cut glyph (trufi-arequipa#27)
+    overflow: TextOverflow.ellipsis,
   );
-  final widthComponent = calculateTextWidth(textMarker, textComponent.style!) + 24;
+  final widthComponent =
+      calculateTextWidth(textMarker, textComponent.style!) + 24;
   return Marker(
     width: widthComponent >= 75
         ? 75
