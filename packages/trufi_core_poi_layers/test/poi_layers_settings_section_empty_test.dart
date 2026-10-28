@@ -90,6 +90,7 @@ void main() {
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', null);
+    rootBundle.clear();
   });
 
   testWidgets('no categories yet: the section takes no space', (tester) async {
@@ -118,5 +119,21 @@ void main() {
     await tester.pump();
     expect(find.text('Points of Interest'), findsOneWidget);
     expect(find.text('Health'), findsOneWidget);
+  });
+
+  testWidgets('a missing manifest: initialized, no categories, no section', (
+    tester,
+  ) async {
+    final manager = POILayersManager(
+      assetsBasePath: 'assets/missing',
+      storage: _MemoryStorage(),
+    );
+    addTearDown(manager.dispose);
+    await _pump(tester, manager);
+    await tester.runAsync(manager.initialize);
+    await tester.pump();
+    expect(manager.isInitialized, isTrue);
+    expect(manager.categories, isEmpty);
+    expect(tester.getSize(find.byType(POILayersSettingsSection)), Size.zero);
   });
 }
