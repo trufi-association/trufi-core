@@ -304,7 +304,11 @@ void main() {
       cubit.filterTransports('zzz');
       expect(cubit.state.filterTransports, isEmpty);
       cubit.filterTransports('   ');
-      expect(_codes(cubit.state.filterTransports), ['C9', '4D', 'AJ']);
+      // the background refresh re-sorts the list by operator, hence unordered
+      expect(
+        _codes(cubit.state.filterTransports),
+        unorderedEquals(['C9', '4D', 'AJ']),
+      );
     });
   });
 }
