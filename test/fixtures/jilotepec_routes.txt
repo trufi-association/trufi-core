@@ -1,0 +1,77 @@
+route_id,agency_id,route_short_name,route_long_name,route_color,route_type
+19455302,0,Mano Amiga,Mercado → Las Huertas/Agua Escondida,1D3A72,3
+19455324,0,Mano Amiga,Las Huertas/Agua Escondida → Mercado,1D3A72,3
+19455371,0,Mano Amiga,Mercado → Xhixhata/Santa Martha de la Cruz,1D3A72,3
+19455382,0,Mano Amiga,Mercado → La Comunidad,1D3A72,3
+19455390,0,Mano Amiga,Mercado → Buenavista,1D3A72,3
+19512377,0,Mano Amiga,Xhixhata/Santa Martha de la Cruz → Mercado,1D3A72,3
+19512573,0,Mano Amiga,La Comunidad → Terminal,1D3A72,3
+19512577,0,Mano Amiga,Mercado → El Huizache/El Banco,1D3A72,3
+19512581,0,Mano Amiga,El Huizache/El Banco → Base Panteon,1D3A72,3
+19525478,0,Mano Amiga A,Buenavista → Terminal,1D3A72,3
+19525486,0,Mano Amiga B,Buenavista → Terminal,1D3A72,3
+19525563,0,Mano Amiga,Mercado → La Huaracha (vía Llano Grande),1D3A72,3
+19525565,0,Mano Amiga,La Huaracha (vía Llano Grande) → Terminal,1D3A72,3
+19525567,0,Mano Amiga,Mercado → La Huaracha (vía Aldama),1D3A72,3
+19525570,0,Mano Amiga,La Huaracha (vía Aldama) → Terminal,1D3A72,3
+19525601,0,Mano Amiga,Mercado → El Saltillo,1D3A72,3
+19525606,0,Mano Amiga,El Saltillo → Terminal,1D3A72,3
+19525611,0,Mano Amiga,Mercado → Calpulalpan,1D3A72,3
+19525623,0,Mano Amiga,Calpulalpan → Terminal,1D3A72,3
+19525638,0,Mano Amiga,Mercado → Xhimohay,1D3A72,3
+19525651,0,Mano Amiga,Xhimohay → Terminal,1D3A72,3
+19525659,0,Mano Amiga,Mercado → Ejido San Lorenzo Octeyuco,1D3A72,3
+19525663,0,Mano Amiga,Ejido San Lorenzo Octeyuco → Terminal,1D3A72,3
+19525667,0,Mano Amiga,Mercado → Doxhicho,1D3A72,3
+19525674,0,Mano Amiga,Doxhicho → Terminal,1D3A72,3
+19525693,0,Mano Amiga,Mercado → San Lorenzo Octeyuco,1D3A72,3
+19525699,0,Mano Amiga,Mercado → San Pablo/El Pedregal,1D3A72,3
+19525710,0,Mano Amiga,San Lorenzo Octeyuco → Terminal,1D3A72,3
+19525711,0,Mano Amiga,San Pablo/El Pedregal → Terminal,1D3A72,3
+19525716,0,Mano Amiga,Mercado → Santiago Oxthoc,1D3A72,3
+19525720,0,Mano Amiga,Santiago Oxthoc → Aurrera,1D3A72,3
+19525723,1,Halcones Rojos,Terminal → San Lorenzo Nenamicoyan,FB0102,3
+19525724,1,Halcones Rojos,San Lorenzo Nenamicoyan → Terminal,FB0102,3
+19528431,2,AVM,Terminal → Km 107,99BF12,3
+19528433,2,AVM,Km 107 → Terminal,99BF12,3
+19528454,2,AVM,Terminal → San Juan Tuxtepec,99BF12,3
+19528471,2,AVM,San Juan Tuxtepec → Terminal,99BF12,3
+19528476,1,Halcones Rojos,Terminal → San Andrés Timilpan,FB0102,3
+19528479,1,Halcones Rojos,San Andrés Timilpan → Terminal,FB0102,3
+19528483,1,Halcones Rojos,Terminal → San Martín Tuchicuitlapilco,FB0102,3
+19528489,1,Halcones Rojos,San Martín Tuchicuitlapilco → Terminal,FB0102,3
+19528491,2,AVM,Terminal → Ojo de Agua,99BF12,3
+19528506,2,AVM,Ojo de Agua → Terminal,99BF12,3
+19528579,3,ANASA,Terminal → Chapa de Mota,0165BB,3
+19528584,3,ANASA,Chapa de Mota → Terminal,0165BB,3
+19528589,4,Rapidos,Terminal → Chapa de Mota,A52136,3
+19528594,4,Rapidos,Chapa de Mota → Terminal,A52136,3
+19528661,5,Herradura de Plata HP,Terminal → Santiago Oxthoc/El Xhiti - Aurrera,87888A,3
+19528662,5,Herradura de Plata HP,Santiago Oxthoc/El Xhiti - Aurrera → Terminal,87888A,3
+19528663,5,Herradura de Plata HP,Terminal → Emiliano Zapata,87888A,3
+19528664,5,Herradura de Plata HP,Emiliano Zapata → Terminal,87888A,3
+19528665,0,Mano Amiga,Enfrente Terminal → El Saltillito,1D3A72,3
+19528666,0,Mano Amiga,El Saltillito → Terminal,1D3A72,3
+19531727,6,Halcones Blancos,Enfrente Terminal → Ojo de Agua,D1AE3B,3
+19531728,6,Halcones Blancos,Ojo de Agua → Terminal,D1AE3B,3
+19531729,3,ANASA,Enfrente Terminal → San Juan Tuxtepec,0165BB,3
+19531730,3,ANASA,San Juan Tuxtepec → Enfrente Terminal,0165BB,3
+19531731,3,ANASA,Enfrente Terminal → Xhimohay,0165BB,3
+19531732,3,ANASA,Xhimohay → Terminal,0165BB,3
+19531734,6,Halcones Blancos,Aurrera → El Rosal,D1AE3B,3
+19531735,6,Halcones Blancos,El Rosal → Aurrera,D1AE3B,3
+19531736,6,Halcones Blancos,Aurrera → La Goleta/San Juan Daxthi,D1AE3B,3
+19531739,6,Halcones Blancos,La Goleta/San Juan Daxthi → Aurrera (vía el tejón),D1AE3B,3
+19531740,6,Halcones Blancos,La Goleta/San Juan Daxthi → Aurrera,D1AE3B,3
+19531741,2,AVM,Aurrera → Acazuchitlán (San Juanico),99BF12,3
+19531742,2,AVM,Acazuchitlán (San Juanico) → Aurrera,99BF12,3
+19531743,2,AVM,Aurrera → Bella Vista,99BF12,3
+19531744,2,AVM,Bella Vista → Aurrera,99BF12,3
+19531747,6,Halcones Blancos,Aurrera → Doxhicho,D1AE3B,3
+19531748,6,Halcones Blancos,Doxhicho → Aurrera,D1AE3B,3
+19558882,1,Halcones Rojos,Terminal → San Juan Tuxtepec,FB0102,3
+19558889,1,Halcones Rojos,San Juan Tuxtepec → Terminal,FB0102,3
+19558890,1,Halcones Rojos,Terminal → Ojo de Agua,FB0102,3
+19558896,1,Halcones Rojos,Ojo de Agua → Terminal,FB0102,3
+19558897,5,Herradura de Plata HP,Aurrera → El Rosal,87888A,3
+19558898,5,Herradura de Plata HP,El Rosal → Aurrera,87888A,3
