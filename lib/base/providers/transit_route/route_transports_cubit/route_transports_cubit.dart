@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,11 +14,19 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
   final RouteTransportsLocalRepository localRepository;
   final RouteTransportsRemoteRepository routeTransportsRepository;
 
+  /// The fetch in flight, shared by a background refresh and a refresh the
+  /// user asks for meanwhile: one request, each caller keeps its semantics.
+  Future<List<TransitRoute>>? _inFlight;
+
+  /// The query the list is filtered with, reapplied when the list changes.
+  String _query = '';
+
   RouteTransportsCubit(
     String otpEndpoint, {
     RouteTransportsLocalRepository? localRepository,
     RouteTransportsRemoteRepository? routeTransportsRepository,
-  })  : localRepository = localRepository ?? RouteTransportsHiveLocalRepository(),
+  })  : localRepository =
+            localRepository ?? RouteTransportsHiveLocalRepository(),
         routeTransportsRepository =
             routeTransportsRepository ?? RouteTransportsServices(otpEndpoint),
         super(const RouteTransportsState()) {
@@ -43,35 +51,34 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
 
   /// Fetches the patterns from the server. With [silent] the loading overlay
   /// is not shown and a failure is swallowed (the current list is kept).
+  /// A list equal to the one shown changes nothing: no emit, no cache write
+  /// (the Hive box is append-only, a frame per write).
   Future<void> refresh({bool silent = false}) async {
     if (!silent) emit(state.copyWith(isLoading: true));
     try {
-      final transports = await routeTransportsRepository.fetchPatterns();
+      final fetch = _inFlight ??= routeTransportsRepository
+          .fetchPatterns()
+          .whenComplete(() => _inFlight = null);
+      final transports = await fetch;
       sortTransitRoutesByAgencyNameAndShortName(transports);
-      // transports.sort((a, b) {
-      //   int res = -1;
-      //   final aShortName = int.tryParse(a.route?.shortName ?? '');
-      //   final bShortName = int.tryParse(b.route?.shortName ?? '');
-      //   if (aShortName != null && bShortName != null) {
-      //     res = aShortName.compareTo(bShortName);
-      //   } else if (aShortName == null && bShortName == null) {
-      //     res = a.route?.shortName?.compareTo(b.route?.shortName ?? '') ?? 1;
-      //   } else if (aShortName != null) {
-      //     res = 1;
-      //   }
-      //   return res;
-      // });
+      if (listEquals(transports, state.transports)) {
+        if (!silent) emit(state.copyWith(isLoading: false));
+        return;
+      }
       emit(state.copyWith(
         transports: transports,
-        filterTransports: transports,
+        filterTransports: _filtered(transports, _query),
         isLoading: false,
       ));
+      await localRepository.saveTransports(transports);
     } catch (e) {
-      if (silent) return;
+      if (silent) {
+        debugPrint('RouteTransportsCubit: background refresh failed: $e');
+        return;
+      }
       emit(state.copyWith(isLoading: false));
       rethrow;
     }
-    await localRepository.saveTransports(state.transports);
   }
 
   void sortTransitRoutesByAgencyNameAndShortName(List<TransitRoute> routes) {
@@ -130,24 +137,16 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
   }
 
   void filterTransports(String query) {
-    if (query == "") {
-      emit(
-        state.copyWith(
-          filterTransports: state.transports,
-        ),
-      );
-    } else {
-      final newFilterTransports = state.transports
-          .where((element) =>
-              "${element.name.toLowerCase()} ${element.route!.longNameData.toLowerCase()}"
-                  .contains(query))
-          .toList();
+    _query = query;
+    emit(state.copyWith(filterTransports: _filtered(state.transports, query)));
+  }
 
-      emit(
-        state.copyWith(
-          filterTransports: newFilterTransports,
-        ),
-      );
-    }
+  List<TransitRoute> _filtered(List<TransitRoute> transports, String query) {
+    if (query == "") return transports;
+    return transports
+        .where((element) =>
+            "${element.name.toLowerCase()} ${element.route?.longNameData.toLowerCase() ?? ''}"
+                .contains(query))
+        .toList();
   }
 }

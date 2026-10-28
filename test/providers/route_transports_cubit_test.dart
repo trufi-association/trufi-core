@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/providers/transit_route/repository/local_repository.dart';
@@ -38,9 +40,11 @@ class _FakeRemote implements RouteTransportsRemoteRepository {
       throw UnimplementedError();
 }
 
-TransitRoute _route(String code) => TransitRoute(id: code, name: code, code: code);
+TransitRoute _route(String code) =>
+    TransitRoute(id: code, name: code, code: code);
 
-Iterable<String> _codes(Iterable<TransitRoute> routes) => routes.map((r) => r.code);
+Iterable<String> _codes(Iterable<TransitRoute> routes) =>
+    routes.map((r) => r.code);
 
 /// Lets the constructor's load() run to completion.
 Future<void> _settle() async {
@@ -70,7 +74,8 @@ void main() {
     expect(states.any((s) => s.isLoading), isFalse,
         reason: 'the background fetch shows no loading overlay');
     expect(_codes(cubit.state.transports), unorderedEquals(['new-a', 'new-b']));
-    expect(_codes(cubit.state.filterTransports), unorderedEquals(['new-a', 'new-b']));
+    expect(_codes(cubit.state.filterTransports),
+        unorderedEquals(['new-a', 'new-b']));
     expect(_codes(local.stored), unorderedEquals(['new-a', 'new-b']),
         reason: 'the cache is updated');
     await cubit.close();
@@ -96,7 +101,8 @@ void main() {
     await cubit.close();
   });
 
-  test('without a cache the first fetch still shows the loading overlay', () async {
+  test('without a cache the first fetch still shows the loading overlay',
+      () async {
     final local = _FakeLocal([]);
     final remote = _FakeRemote(() async => [_route('new-a')]);
     final states = <RouteTransportsState>[];
@@ -112,6 +118,94 @@ void main() {
     expect(cubit.state.isLoading, isFalse);
     expect(_codes(cubit.state.transports), ['new-a']);
     expect(local.saves, 1);
+    await cubit.close();
+  });
+
+  test('a background refresh that fails completes quietly and keeps the list',
+      () async {
+    final local = _FakeLocal([_route('old-2024')]);
+    var fail = false;
+    final remote = _FakeRemote(() async {
+      if (fail) throw Exception('Error connection');
+      return [_route('old-2024')];
+    });
+    final cubit = RouteTransportsCubit(
+      'http://unused',
+      localRepository: local,
+      routeTransportsRepository: remote,
+    );
+    await _settle();
+    fail = true;
+    await expectLater(cubit.refresh(silent: true), completes);
+    expect(cubit.state.isLoading, isFalse);
+    expect(_codes(cubit.state.transports), ['old-2024']);
+    expect(local.saves, 0);
+    await cubit.close();
+  });
+
+  test('a feed equal to the list shown emits nothing and writes nothing',
+      () async {
+    final local = _FakeLocal([_route('a'), _route('b')]);
+    final remote = _FakeRemote(() async => [_route('a'), _route('b')]);
+    final states = <RouteTransportsState>[];
+    final cubit = RouteTransportsCubit(
+      'http://unused',
+      localRepository: local,
+      routeTransportsRepository: remote,
+    );
+    cubit.stream.listen(states.add);
+    await _settle();
+
+    expect(remote.calls, 1);
+    expect(states.length, 1, reason: 'only the cached list was emitted');
+    expect(local.saves, 0, reason: 'no Hive frame for an unchanged list');
+    await cubit.refresh(silent: true);
+    expect(local.saves, 0);
+    await cubit.close();
+  });
+
+  test(
+      'a refresh asked while the background one is in flight shares the '
+      'request', () async {
+    final local = _FakeLocal([_route('old-2024')]);
+    final gate = Completer<List<TransitRoute>>();
+    final remote = _FakeRemote(() => gate.future);
+    final cubit = RouteTransportsCubit(
+      'http://unused',
+      localRepository: local,
+      routeTransportsRepository: remote,
+    );
+    await _settle();
+    expect(remote.calls, 1, reason: 'the background fetch is in flight');
+    final explicit = cubit.refresh();
+    await _settle();
+    expect(remote.calls, 1, reason: 'the explicit refresh joins it');
+    expect(cubit.state.isLoading, isTrue);
+    gate.complete([_route('new-a')]);
+    await explicit;
+    expect(cubit.state.isLoading, isFalse);
+    expect(_codes(cubit.state.transports), ['new-a']);
+    expect(local.saves, 1, reason: 'one write for one answer');
+    await cubit.close();
+  });
+
+  test('the filter typed meanwhile survives the background refresh', () async {
+    final local = _FakeLocal([_route('old-2024')]);
+    final gate = Completer<List<TransitRoute>>();
+    final remote = _FakeRemote(() => gate.future);
+    final cubit = RouteTransportsCubit(
+      'http://unused',
+      localRepository: local,
+      routeTransportsRepository: remote,
+    );
+    await _settle();
+    cubit.filterTransports('new-a');
+    expect(cubit.state.filterTransports, isEmpty);
+    gate.complete([_route('new-a'), _route('new-b')]);
+    await _settle();
+    expect(_codes(cubit.state.transports), ['new-a', 'new-b']);
+    expect(_codes(cubit.state.filterTransports), ['new-a'],
+        reason: 'the fresh list is shown through the active filter');
     await cubit.close();
   });
 
