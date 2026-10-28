@@ -18,8 +18,13 @@ const String nearbyPointMarkerPrefix = 'nearby-point-';
 /// the nearest ones so a dense corner does not become a wall of chips.
 const int maxNearbyPointMarkers = 40;
 
+/// Marker id prefix of the corner dots drawn for a street anchor.
+const String nearbyCornerMarkerPrefix = 'nearby-corner-';
+
 /// Pure function of the state: radius rings and their label, the
-/// highlighted line, one label per nearby line and the anchor marker.
+/// highlighted line, one label per nearby line and the anchor marker. For
+/// a street anchor the rings and the pin give way to a dot per corner: the
+/// search ran from every corner, so one ring would be a lie.
 ///
 /// Rings are outlines, not the mock's translucent fill: no map engine reads
 /// `TrufiMarker.metersRadius` and line colors are serialised without alpha,
@@ -33,46 +38,65 @@ List<TrufiLayer> buildNearbyLayers({
   if (anchor == null) return const [];
 
   final selected = state.selectedLine;
+  final street = state.street;
   final ringLabelPosition = LatLng(
     anchor.latitude + state.radius.meters / NearbyGeometry.metersPerDegree,
     anchor.longitude,
   );
 
   return [
-    TrufiLayer(
-      id: 'nearby-rings',
-      layerLevel: 0,
-      lines: [
-        for (final radius in NearbyRadius.values)
-          TrufiLine(
-            id: 'nearby-ring-${radius.meters.round()}',
-            position: NearbyGeometry.circlePolygon(anchor, radius.meters),
-            color: radius == state.radius
-                ? colorScheme.primary
-                : colorScheme.outline,
-            lineWidth: radius == state.radius ? 3 : 1,
+    if (street != null)
+      TrufiLayer(
+        id: 'nearby-street-corners',
+        layerLevel: 0,
+        markers: [
+          for (final (index, corner) in street.corners.indexed)
+            TrufiMarker(
+              id: '$nearbyCornerMarkerPrefix$index',
+              position: corner,
+              widget: _CornerMarker(color: colorScheme.primary),
+              size: const Size(16, 16),
+              layerLevel: 0,
+              allowOverlap: true,
+              imageCacheKey: 'nearby-corner-${colorScheme.primary.toARGB32()}',
+            ),
+        ],
+      )
+    else
+      TrufiLayer(
+        id: 'nearby-rings',
+        layerLevel: 0,
+        lines: [
+          for (final radius in NearbyRadius.values)
+            TrufiLine(
+              id: 'nearby-ring-${radius.meters.round()}',
+              position: NearbyGeometry.circlePolygon(anchor, radius.meters),
+              color: radius == state.radius
+                  ? colorScheme.primary
+                  : colorScheme.outline,
+              lineWidth: radius == state.radius ? 3 : 1,
+              layerLevel: 0,
+            ),
+        ],
+        markers: [
+          TrufiMarker(
+            id: 'nearby-ring-label',
+            position: ringLabelPosition,
+            widget: _RingLabel(
+              text: formatMeters(state.radius.meters),
+              color: colorScheme.primary,
+              textColor: colorScheme.onPrimary,
+            ),
+            size: const Size(56, 22),
             layerLevel: 0,
+            allowOverlap: true,
+            imageCacheKey:
+                'nearby-ring-label-${state.radius.meters.round()}-'
+                '${colorScheme.primary.toARGB32()}-'
+                '${colorScheme.onPrimary.toARGB32()}',
           ),
-      ],
-      markers: [
-        TrufiMarker(
-          id: 'nearby-ring-label',
-          position: ringLabelPosition,
-          widget: _RingLabel(
-            text: formatMeters(state.radius.meters),
-            color: colorScheme.primary,
-            textColor: colorScheme.onPrimary,
-          ),
-          size: const Size(56, 22),
-          layerLevel: 0,
-          allowOverlap: true,
-          imageCacheKey:
-              'nearby-ring-label-${state.radius.meters.round()}-'
-              '${colorScheme.primary.toARGB32()}-'
-              '${colorScheme.onPrimary.toARGB32()}',
-        ),
-      ],
-    ),
+        ],
+      ),
     if (state.selectedGeometry.length > 1)
       TrufiLayer(
         id: 'nearby-selected-line',
@@ -101,31 +125,32 @@ List<TrufiLayer> buildNearbyLayers({
           ),
       ],
     ),
-    TrufiLayer(
-      id: 'nearby-anchor',
-      layerLevel: 5,
-      markers: [
-        TrufiMarker(
-          id: 'nearby-anchor',
-          position: anchor,
-          widget: _AnchorMarker(
-            source: state.anchorSource,
-            colorScheme: colorScheme,
+    if (street == null)
+      TrufiLayer(
+        id: 'nearby-anchor',
+        layerLevel: 5,
+        markers: [
+          TrufiMarker(
+            id: 'nearby-anchor',
+            position: anchor,
+            widget: _AnchorMarker(
+              source: state.anchorSource,
+              colorScheme: colorScheme,
+            ),
+            size: state.anchorSource == NearbyAnchorSource.device
+                ? const Size(24, 24)
+                : const Size(32, 32),
+            alignment: state.anchorSource == NearbyAnchorSource.device
+                ? Alignment.center
+                : Alignment.bottomCenter,
+            layerLevel: 5,
+            allowOverlap: true,
+            imageCacheKey:
+                'nearby-anchor-${state.anchorSource.name}-'
+                '${colorScheme.error.toARGB32()}',
           ),
-          size: state.anchorSource == NearbyAnchorSource.device
-              ? const Size(24, 24)
-              : const Size(32, 32),
-          alignment: state.anchorSource == NearbyAnchorSource.device
-              ? Alignment.center
-              : Alignment.bottomCenter,
-          layerLevel: 5,
-          allowOverlap: true,
-          imageCacheKey:
-              'nearby-anchor-${state.anchorSource.name}-'
-              '${colorScheme.error.toARGB32()}',
-        ),
-      ],
-    ),
+        ],
+      ),
   ];
 }
 
@@ -262,6 +287,28 @@ class _NearestPointMarker extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// One corner of the street anchor: a small dot in the primary colour.
+class _CornerMarker extends StatelessWidget {
+  const _CornerMarker({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
         ),
       ),
     );

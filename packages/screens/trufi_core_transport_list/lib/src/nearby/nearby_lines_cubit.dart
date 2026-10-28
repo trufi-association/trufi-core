@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'nearby_line.dart';
 import 'nearby_lines_data_source.dart';
 import 'nearby_radius.dart';
+import 'nearby_street_anchor.dart';
 
 /// Where the search anchor came from.
 enum NearbyAnchorSource {
@@ -16,6 +17,10 @@ enum NearbyAnchorSource {
 
   /// No fix and no pin yet: the app's default center.
   fallback,
+
+  /// A street picked in the search: every corner of
+  /// [NearbyLinesState.street] is an anchor (trufi-sanaa#20).
+  street,
 }
 
 /// Resolves the device position; null when permission is denied, location
@@ -28,6 +33,7 @@ class NearbyLinesState extends Equatable {
     required this.anchorSource,
     required this.radius,
     required this.availability,
+    this.street,
     this.lines = const [],
     this.counts = const {},
     this.selectedLineKey,
@@ -43,6 +49,10 @@ class NearbyLinesState extends Equatable {
   final NearbyAnchorSource anchorSource;
   final NearbyRadius radius;
   final NearbyAvailability availability;
+
+  /// Set while [anchorSource] is [NearbyAnchorSource.street]: [anchor] is
+  /// then the street's centre and [lines] the union over its corners.
+  final NearbyStreetAnchor? street;
 
   /// Every row within the widest radius, nearest first.
   final List<NearbyLine> lines;
@@ -81,6 +91,7 @@ class NearbyLinesState extends Equatable {
     NearbyAnchorSource? anchorSource,
     NearbyRadius? radius,
     NearbyAvailability? availability,
+    NearbyStreetAnchor? street,
     List<NearbyLine>? lines,
     Map<NearbyRadius, int>? counts,
     String? selectedLineKey,
@@ -91,12 +102,14 @@ class NearbyLinesState extends Equatable {
     String? errorMessage,
     bool clearSelection = false,
     bool clearError = false,
+    bool clearStreet = false,
   }) {
     return NearbyLinesState(
       anchor: anchor ?? this.anchor,
       anchorSource: anchorSource ?? this.anchorSource,
       radius: radius ?? this.radius,
       availability: availability ?? this.availability,
+      street: clearStreet ? null : (street ?? this.street),
       lines: lines ?? this.lines,
       counts: counts ?? this.counts,
       selectedLineKey: clearSelection
@@ -118,6 +131,7 @@ class NearbyLinesState extends Equatable {
     anchorSource,
     radius,
     availability,
+    street,
     lines,
     counts,
     selectedLineKey,
@@ -168,6 +182,33 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
   /// Runs on every screen visit: load the feed, locate, query.
   Future<void> start() async {
     final token = ++_startToken;
+    if (!await _loadFeed(token)) return;
+    await _locateAndQuery(token);
+  }
+
+  /// The lines along [street] (trufi-sanaa#20): the union of the nearby
+  /// lines of its corners, each line once at its nearest corner. Replaces a
+  /// fix or a pin; a long-press or [useMyLocation] leaves the street again.
+  Future<void> startAlongStreet(NearbyStreetAnchor street) async {
+    final token = ++_startToken;
+    emit(
+      state.copyWith(
+        anchor: street.center ?? state.anchor ?? defaultAnchor,
+        anchorSource: NearbyAnchorSource.street,
+        street: street,
+        locationDenied: false,
+        isLocating: false,
+        clearSelection: true,
+      ),
+    );
+    if (!await _loadFeed(token)) return;
+    _query();
+  }
+
+  /// Shared prologue of [start] and [startAlongStreet]: settles
+  /// [NearbyLinesState.availability]. False when nothing can be queried —
+  /// no source, feed missing — or when a newer start superseded [token].
+  Future<bool> _loadFeed(int token) async {
     final source = dataSource;
     if (source == null) {
       emit(
@@ -177,7 +218,7 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
           isLoading: false,
         ),
       );
-      return;
+      return false;
     }
 
     emit(
@@ -190,7 +231,7 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
       ),
     );
     await source.ensureLoaded();
-    if (token != _startToken || isClosed) return;
+    if (token != _startToken || isClosed) return false;
 
     if (source.availability != NearbyAvailability.available) {
       emit(
@@ -200,10 +241,10 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
           isLoading: false,
         ),
       );
-      return;
+      return false;
     }
     emit(state.copyWith(availability: NearbyAvailability.available));
-    await _locateAndQuery(token);
+    return true;
   }
 
   /// Re-anchors on a fresh fix; a pin set earlier survives a failed fix.
@@ -215,13 +256,14 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
     await _locateAndQuery(++_startToken);
   }
 
-  /// Map long-press: the pin becomes the anchor.
+  /// Map long-press: the pin becomes the anchor (and a street is left).
   void setAnchor(LatLng point) {
     emit(
       state.copyWith(
         anchor: point,
         anchorSource: NearbyAnchorSource.pin,
         locationDenied: false,
+        clearStreet: true,
       ),
     );
     _query();
@@ -284,6 +326,7 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
           anchorSource: NearbyAnchorSource.device,
           locationDenied: false,
           isLocating: false,
+          clearStreet: true,
         ),
       );
     } else {
@@ -306,7 +349,12 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
     final anchor = state.anchor;
     if (source == null || anchor == null) return;
     try {
-      final result = source.findNearby(anchor);
+      final street = state.street;
+      final result = street == null
+          ? source.findNearby(anchor)
+          : NearbyLinesResult.union([
+              for (final corner in street.corners) source.findNearby(corner),
+            ], anchor: anchor);
       final selected = state.selectedLineKey;
       NearbyLine? stillSelected;
       if (selected != null) {

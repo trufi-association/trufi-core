@@ -167,6 +167,11 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   String get nearbyAnchorDefault => 'City center (location unavailable)';
 
   @override
+  String nearbyAnchorAlongStreet(String street) {
+    return 'Along $street';
+  }
+
+  @override
   String get nearbyUseMyLocation => 'Use my location';
 
   @override

@@ -35,6 +35,9 @@ class _FakeDataSource implements NearbyLinesDataSource {
   NearbyAvailability? availabilityAfterLoad;
 
   List<NearbyLine> rows = [row('201', 80), row('X10', 150), row('18', 380)];
+
+  /// Rows per anchor for the street tests; [rows] for any other anchor.
+  Map<LatLng, List<NearbyLine>> rowsByAnchor = const {};
   bool throwOnFind = false;
   final anchors = <LatLng>[];
   int loadCalls = 0;
@@ -56,7 +59,7 @@ class _FakeDataSource implements NearbyLinesDataSource {
     return NearbyLinesResult(
       anchor: anchor,
       maxRadiusMeters: maxRadiusMeters,
-      lines: rows,
+      lines: rowsByAnchor[anchor] ?? rows,
     );
   }
 
@@ -75,6 +78,9 @@ void main() {
     NearbyRadius.m500: 3,
   };
 
+  var locateCalls = 0;
+  setUp(() => locateCalls = 0);
+
   NearbyLinesCubit cubit(
     _FakeDataSource? source, {
     LatLng? located = fix,
@@ -82,7 +88,10 @@ void main() {
   }) => NearbyLinesCubit(
     dataSource: source,
     defaultAnchor: defaultAnchor,
-    locate: () async => located,
+    locate: () async {
+      locateCalls++;
+      return located;
+    },
     initialRadius: initialRadius,
   );
 
@@ -311,5 +320,133 @@ void main() {
     expect(c.state.anchor, pin);
     expect(c.state.anchorSource, NearbyAnchorSource.device);
     expect(source.anchors, [pin]);
+  });
+
+  group('lines along a street (trufi-sanaa#20)', () {
+    const c1 = LatLng(-17.3925, -66.1588);
+    const c2 = LatLng(-17.3907, -66.1571);
+    // The index repeats a corner per crossing street: queried once.
+    final street = NearbyStreetAnchor(
+      name: 'Avenida Ayacucho',
+      subtitle: 'Cercado',
+      corners: const [c1, c2, c1],
+    );
+
+    _FakeDataSource streetSource() => _FakeDataSource()
+      ..rowsByAnchor = {
+        c1: [row('201', 80), row('X10', 150)],
+        c2: [row('201', 40), row('18', 380)],
+      };
+
+    test('startAlongStreet() queries every distinct corner, unions the rows '
+        'and does not locate', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.startAlongStreet(street);
+
+      expect(source.anchors, [c1, c2]);
+      expect(locateCalls, 0);
+      expect(c.state.anchorSource, NearbyAnchorSource.street);
+      expect(c.state.street, street);
+      expect(c.state.anchor, street.center);
+      expect(c.state.lines.map((l) => l.displayName), ['201', 'X10', '18']);
+      expect(c.state.lines.first.distanceMeters, 40);
+      expect(c.state.counts, expectedCounts);
+      expect(c.state.isLoading, isFalse);
+      expect(c.state.isLocating, isFalse);
+      expect(c.state.locationDenied, isFalse);
+      expect(c.state.errorMessage, isNull);
+    });
+
+    test('the street replaces a fix or a pin and clears the highlight', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.start();
+      c.toggleLine('n:201');
+      expect(c.state.hasSelection, isTrue);
+
+      await c.startAlongStreet(street);
+      expect(c.state.anchorSource, NearbyAnchorSource.street);
+      expect(c.state.hasSelection, isFalse);
+      expect(c.state.selectedGeometry, isEmpty);
+    });
+
+    test('a long-press leaves the street for a pin', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.startAlongStreet(street);
+
+      c.setAnchor(pin);
+      expect(c.state.anchorSource, NearbyAnchorSource.pin);
+      expect(c.state.street, isNull);
+      expect(c.state.anchor, pin);
+      expect(source.anchors.last, pin);
+      expect(c.state.lines, source.rows);
+    });
+
+    test('useMyLocation() leaves the street for the fix', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.startAlongStreet(street);
+
+      await c.useMyLocation();
+      expect(locateCalls, 1);
+      expect(c.state.anchorSource, NearbyAnchorSource.device);
+      expect(c.state.street, isNull);
+      expect(c.state.anchor, fix);
+    });
+
+    test('a failed fix keeps the street, as it keeps a pin', () async {
+      final source = streetSource();
+      final c = cubit(source, located: null);
+      await c.startAlongStreet(street);
+
+      await c.useMyLocation();
+      expect(c.state.anchorSource, NearbyAnchorSource.street);
+      expect(c.state.street, street);
+      expect(c.state.locationDenied, isTrue);
+      expect(c.state.lines.map((l) => l.displayName), ['201', 'X10', '18']);
+    });
+
+    test('refresh() re-runs the union; start() (a drawer visit) relocates '
+        'and drops the street', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.startAlongStreet(street);
+      source.anchors.clear();
+
+      await c.refresh();
+      expect(source.anchors, [c1, c2]);
+      expect(c.state.street, street);
+
+      await c.start();
+      expect(locateCalls, 1);
+      expect(c.state.anchorSource, NearbyAnchorSource.device);
+      expect(c.state.street, isNull);
+    });
+
+    test('without a source the street is reported unavailable', () async {
+      final c = cubit(null);
+      await c.startAlongStreet(street);
+
+      expect(c.state.availability, NearbyAvailability.missing);
+      expect(c.state.anchorSource, NearbyAnchorSource.street);
+      expect(c.state.street, street);
+      expect(c.state.anchor, street.center);
+      expect(c.state.isLoading, isFalse);
+    });
+
+    test('a street without corners queries nothing and lists nothing', () async {
+      final source = streetSource();
+      final c = cubit(source);
+      await c.startAlongStreet(
+        NearbyStreetAnchor(name: 'Sin esquinas', corners: const []),
+      );
+
+      expect(source.anchors, isEmpty);
+      expect(c.state.lines, isEmpty);
+      expect(c.state.anchor, defaultAnchor);
+      expect(c.state.isLoading, isFalse);
+    });
   });
 }

@@ -93,6 +93,26 @@ class NearbyLine extends Equatable {
 
   bool isWithin(NearbyRadius radius) => radius.contains(distanceMeters);
 
+  /// The order of a result: nearest first, then numeric names in numeric
+  /// order ("2" before "10") ahead of the rest alphabetically — the order
+  /// of the routes list — then the route id, so the order is total.
+  static int compare(NearbyLine a, NearbyLine b) {
+    final byDistance = a.distanceMeters.compareTo(b.distanceMeters);
+    if (byDistance != 0) return byDistance;
+    final byName = _compareRouteNames(a.shortName, b.shortName);
+    if (byName != 0) return byName;
+    return a.routeId.compareTo(b.routeId);
+  }
+
+  static int _compareRouteNames(String a, String b) {
+    final numA = int.tryParse(a);
+    final numB = int.tryParse(b);
+    if (numA != null && numB != null) return numA.compareTo(numB);
+    if (numA != null) return -1;
+    if (numB != null) return 1;
+    return a.compareTo(b);
+  }
+
   @override
   List<Object?> get props => [
     lineKey,
@@ -126,8 +146,36 @@ class NearbyLinesResult extends Equatable {
   final LatLng anchor;
   final double maxRadiusMeters;
 
-  /// Sorted by [NearbyLine.distanceMeters] ascending.
+  /// Sorted by [NearbyLine.distanceMeters] ascending ([NearbyLine.compare]).
   final List<NearbyLine> lines;
+
+  /// One row per line across [results], as a single query from [anchor]
+  /// would list them: a line matched at several anchors keeps its nearest
+  /// match ([NearbyLine.compare] decides ties), nearest first. This is the
+  /// "lines along a street" result — [results] being the nearby lines of
+  /// each of its corners (trufi-sanaa#20).
+  factory NearbyLinesResult.union(
+    Iterable<NearbyLinesResult> results, {
+    required LatLng anchor,
+    double maxRadiusMeters = NearbyRadius.maxMeters,
+  }) {
+    final nearest = <String, NearbyLine>{};
+    for (final result in results) {
+      for (final line in result.lines) {
+        final current = nearest[line.lineKey];
+        if (current == null || NearbyLine.compare(line, current) < 0) {
+          nearest[line.lineKey] = line;
+        }
+      }
+    }
+    return NearbyLinesResult(
+      anchor: anchor,
+      maxRadiusMeters: maxRadiusMeters,
+      lines: List.unmodifiable(
+        nearest.values.toList()..sort(NearbyLine.compare),
+      ),
+    );
+  }
 
   /// Sentinel radius of [empty]: no query was run.
   static const double noMaxRadius = 0;

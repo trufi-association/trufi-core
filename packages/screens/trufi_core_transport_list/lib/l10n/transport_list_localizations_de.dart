@@ -162,6 +162,11 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get nearbyAnchorDefault => 'Stadtzentrum (Standort nicht verfügbar)';
 
   @override
+  String nearbyAnchorAlongStreet(String street) {
+    return 'Entlang $street';
+  }
+
+  @override
   String get nearbyUseMyLocation => 'Meinen Standort verwenden';
 
   @override

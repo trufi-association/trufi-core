@@ -44,16 +44,19 @@ class NearbyHeaderCard extends StatelessWidget {
     NearbyAnchorSource.device: Icons.my_location_rounded,
     NearbyAnchorSource.pin: Icons.push_pin_rounded,
     NearbyAnchorSource.fallback: Icons.location_searching_rounded,
+    NearbyAnchorSource.street: Icons.signpost_rounded,
   };
 
   static final Map<
     NearbyAnchorSource,
-    String Function(TransportListLocalizations)
+    String Function(TransportListLocalizations, NearbyLinesState)
   >
   _anchorLabels = {
-    NearbyAnchorSource.device: (l10n) => l10n.nearbyAnchorYourLocation,
-    NearbyAnchorSource.pin: (l10n) => l10n.nearbyAnchorPinned,
-    NearbyAnchorSource.fallback: (l10n) => l10n.nearbyAnchorDefault,
+    NearbyAnchorSource.device: (l10n, _) => l10n.nearbyAnchorYourLocation,
+    NearbyAnchorSource.pin: (l10n, _) => l10n.nearbyAnchorPinned,
+    NearbyAnchorSource.fallback: (l10n, _) => l10n.nearbyAnchorDefault,
+    NearbyAnchorSource.street: (l10n, state) =>
+        l10n.nearbyAnchorAlongStreet(state.street?.name ?? ''),
   };
 
   @override
@@ -106,7 +109,7 @@ class NearbyHeaderCard extends StatelessWidget {
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          _anchorLabels[state.anchorSource]!(l10n),
+                          _anchorLabels[state.anchorSource]!(l10n, state),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),

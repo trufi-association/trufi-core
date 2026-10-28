@@ -385,6 +385,12 @@ abstract class TransportListLocalizations {
   /// **'City center (location unavailable)'**
   String get nearbyAnchorDefault;
 
+  /// Anchor row label when the search covers every corner of a street picked in the location search (lines along the street)
+  ///
+  /// In en, this message translates to:
+  /// **'Along {street}'**
+  String nearbyAnchorAlongStreet(String street);
+
   /// Button that re-centres the search on the device position
   ///
   /// In en, this message translates to:

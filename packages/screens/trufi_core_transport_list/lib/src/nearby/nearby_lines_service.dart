@@ -53,7 +53,7 @@ class NearbyLinesService {
         lines.add(line);
       }
     }
-    lines.sort(_compareLines);
+    lines.sort(NearbyLine.compare);
 
     return NearbyLinesResult(
       anchor: anchor,
@@ -238,25 +238,6 @@ class NearbyLinesService {
   RoutePattern? _patternById(int id) => id >= 0 && id < routeIndex.patternCount
       ? routeIndex.patternById(id)
       : null;
-
-  static int _compareLines(NearbyLine a, NearbyLine b) {
-    final byDistance = a.distanceMeters.compareTo(b.distanceMeters);
-    if (byDistance != 0) return byDistance;
-    final byName = _compareRouteNames(a.shortName, b.shortName);
-    if (byName != 0) return byName;
-    return a.routeId.compareTo(b.routeId);
-  }
-
-  /// Numeric names first in numeric order ("2" before "10"), then the rest
-  /// alphabetically — the order of the routes list.
-  static int _compareRouteNames(String a, String b) {
-    final numA = int.tryParse(a);
-    final numB = int.tryParse(b);
-    if (numA != null && numB != null) return numA.compareTo(numB);
-    if (numA != null) return -1;
-    if (numB != null) return 1;
-    return a.compareTo(b);
-  }
 
   static double _shapePointLatitude(GtfsShapePoint point) => point.lat;
 
