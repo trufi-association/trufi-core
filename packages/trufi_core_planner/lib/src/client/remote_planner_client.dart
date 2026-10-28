@@ -81,7 +81,8 @@ class RemotePlannerClient implements PlannerRoutingClient {
         // Same for the transfer limit: a server built on an older planner
         // ignores it and keeps its own default.
         'maxTransfers': maxTransfers,
-        // And for the direct-vs-transfer rule (trufi-sanaa#16).
+        // And for the direct-vs-transfer rule (trufi-sanaa#16): no server
+        // reads it yet either.
         'directsHideTransfers': directsHideTransfers,
       }),
     );

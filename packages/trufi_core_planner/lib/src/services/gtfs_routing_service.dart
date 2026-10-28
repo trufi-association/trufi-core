@@ -293,9 +293,10 @@ class GtfsRoutingService {
   /// offering next to a direct line. With it off, the one-transfer bucket
   /// follows the direct one: same rows, same order inside each bucket,
   /// nothing extra searched (phase 2 runs either way), so a city whose
-  /// riders want the alternatives (trufi-sanaa#16: on that feed 75 % of
-  /// random queries show a single option, 58 % with the knob off) can
-  /// list them. Phase 3 still runs only when both buckets are empty.
+  /// riders want the alternatives (trufi-sanaa#16: on that feed 32 % of
+  /// random trips get a single row, 75 % a single card after the app's
+  /// grouping; 18 % and 58 % with the knob off) can list them. Phase 3
+  /// still runs only when both buckets are empty.
   ///
   /// [maxTransfers] must be >= 0; `0` returns direct routes only. Values
   /// above 3 rarely add anything (on Sana'a, the most fragmented feed

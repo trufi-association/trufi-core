@@ -196,6 +196,34 @@ void main() {
       expect(twoTransfers.multiTransferSearches, b0);
     });
 
+    test('a one-transfer answer with the knob off never reaches phase 3', () {
+      // The #992 mall trip has no direct line and one-transfer options:
+      // with the knob off the one-transfer bucket is listed, so phase 3
+      // must stay out even with maxTransfers >= 2 (it would run if the
+      // condition looked at the direct bucket alone).
+      const from = LatLng(15.29408, 44.26392);
+      const to = LatLng(15.33736, 44.19833);
+      final before = mini.multiTransferSearches;
+      final today = plan(
+        mini,
+        from,
+        to,
+        directsHideTransfers: true,
+        maxTransfers: 2,
+      );
+      final all = plan(
+        mini,
+        from,
+        to,
+        directsHideTransfers: false,
+        maxTransfers: 2,
+      );
+      expect(mini.multiTransferSearches, before);
+      expect(today, isNotEmpty);
+      expect(today.map((p) => p.transfers), everyElement(1));
+      expect(all.map(signature), today.map(signature));
+    });
+
     test('LocalPlannerClient passes the knob through (default true)', () async {
       final client = LocalPlannerClient()
         ..loadFromBytes(
