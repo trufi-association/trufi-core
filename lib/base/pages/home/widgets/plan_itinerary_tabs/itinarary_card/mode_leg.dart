@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -6,30 +8,24 @@ import 'package:trufi_core/base/utils/text/outlined_text.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class ModeLeg extends StatelessWidget {
-  final double maxWidth;
+  /// Width the summary row allotted to this leg; never drawn narrower than
+  /// [IconTransport.minWidth].
+  final double width;
   final Leg leg;
-  final double legLength;
   final bool isEnd;
 
   const ModeLeg({
     super.key,
     required this.leg,
-    required this.legLength,
-    required this.maxWidth,
+    required this.width,
     required this.isEnd,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final perc = legLength.abs() / 10;
-    final minWidth = IconTransport.minWidth(isEnd: isEnd);
     return SizedBox(
-      width: perc > 1
-          ? maxWidth
-          : (maxWidth * perc) >= minWidth
-          ? (maxWidth * perc)
-          : minWidth,
+      width: math.max(width, IconTransport.minWidth(isEnd: isEnd)),
       height: 30,
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
@@ -90,31 +86,25 @@ class WaitLeg extends StatelessWidget {
 }
 
 class RouteLeg extends StatelessWidget {
-  final double maxWidth;
+  /// Width the summary row allotted to this leg; never drawn narrower than
+  /// [IconTransport.minWidth].
+  final double width;
   final Leg leg;
-  final double legLength;
   final Color? forcedColor;
   final bool isEnd;
 
   const RouteLeg({
     super.key,
     required this.leg,
-    required this.legLength,
-    required this.maxWidth,
+    required this.width,
     this.forcedColor,
     required this.isEnd,
   });
 
   @override
   Widget build(BuildContext context) {
-    final perc = legLength.abs() / 10;
-    final min = IconTransport.minWidth(isEnd: isEnd);
     return SizedBox(
-      width: perc > 1
-          ? maxWidth
-          : (maxWidth * perc) >= min
-          ? (maxWidth * perc)
-          : min,
+      width: math.max(width, IconTransport.minWidth(isEnd: isEnd)),
       height: 30,
       child: ClipRRect(
         child: IconTransport(

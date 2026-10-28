@@ -41,9 +41,9 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         _row([
-          RouteLeg(leg: _bus(2), legLength: 0.3, maxWidth: 300, isEnd: false),
-          RouteLeg(leg: _bus(2), legLength: 0.3, maxWidth: 300, isEnd: false),
-          RouteLeg(leg: _bus(2), legLength: 0.3, maxWidth: 300, isEnd: true),
+          RouteLeg(leg: _bus(2), width: 9, isEnd: false),
+          RouteLeg(leg: _bus(2), width: 9, isEnd: false),
+          RouteLeg(leg: _bus(2), width: 9, isEnd: true),
         ]),
       );
       expect(tester.takeException(), isNull);
@@ -61,10 +61,10 @@ void main() {
     },
   );
 
-  testWidgets('a leg with room keeps its proportional width', (tester) async {
+  testWidgets('a leg with room keeps the width it was given', (tester) async {
     await tester.pumpWidget(
       _row([
-        RouteLeg(leg: _bus(20), legLength: 5, maxWidth: 300, isEnd: false),
+        RouteLeg(leg: _bus(20), width: 150, isEnd: false),
       ]),
     );
     expect(tester.takeException(), isNull);
