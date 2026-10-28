@@ -111,6 +111,16 @@ void main() {
       expect(NearbyLinesResult.defaultAlongMeters, NearbyRadius.m100.meters);
     });
 
+    test('a line exactly 100 m from a corner still passes it (inclusive '
+        'bound, like NearbyRadius.contains)', () {
+      // B is 100 m from two corners, 7 is 0 m from one: B passes two.
+      final union = NearbyLinesResult.union([
+        result(c1, [row('7', 0), row('B', 100)]),
+        result(c2, [row('B', 100)]),
+      ], anchor: c1);
+      expect(union.lines.map((l) => l.displayName), ['B', '7']);
+    });
+
     test('no results, or only empty ones, is an empty result', () {
       expect(NearbyLinesResult.union(const [], anchor: c1).lines, isEmpty);
       expect(

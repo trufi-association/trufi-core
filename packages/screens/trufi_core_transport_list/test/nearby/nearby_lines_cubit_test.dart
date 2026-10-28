@@ -358,18 +358,21 @@ void main() {
       expect(c.state.errorMessage, isNull);
     });
 
-    test('the street replaces a fix or a pin and clears the highlight', () async {
-      final source = streetSource();
-      final c = cubit(source);
-      await c.start();
-      c.toggleLine('n:201');
-      expect(c.state.hasSelection, isTrue);
+    test(
+      'the street replaces a fix or a pin and clears the highlight',
+      () async {
+        final source = streetSource();
+        final c = cubit(source);
+        await c.start();
+        c.toggleLine('n:201');
+        expect(c.state.hasSelection, isTrue);
 
-      await c.startAlongStreet(street);
-      expect(c.state.anchorSource, NearbyAnchorSource.street);
-      expect(c.state.hasSelection, isFalse);
-      expect(c.state.selectedGeometry, isEmpty);
-    });
+        await c.startAlongStreet(street);
+        expect(c.state.anchorSource, NearbyAnchorSource.street);
+        expect(c.state.hasSelection, isFalse);
+        expect(c.state.selectedGeometry, isEmpty);
+      },
+    );
 
     test('a long-press leaves the street for a pin', () async {
       final source = streetSource();
@@ -436,17 +439,20 @@ void main() {
       expect(c.state.isLoading, isFalse);
     });
 
-    test('a street without corners queries nothing and lists nothing', () async {
-      final source = streetSource();
-      final c = cubit(source);
-      await c.startAlongStreet(
-        NearbyStreetAnchor(name: 'Sin esquinas', corners: const []),
-      );
+    test(
+      'a street without corners queries nothing and lists nothing',
+      () async {
+        final source = streetSource();
+        final c = cubit(source);
+        await c.startAlongStreet(
+          NearbyStreetAnchor(name: 'Sin esquinas', corners: const []),
+        );
 
-      expect(source.anchors, isEmpty);
-      expect(c.state.lines, isEmpty);
-      expect(c.state.anchor, defaultAnchor);
-      expect(c.state.isLoading, isFalse);
-    });
+        expect(source.anchors, isEmpty);
+        expect(c.state.lines, isEmpty);
+        expect(c.state.anchor, defaultAnchor);
+        expect(c.state.isLoading, isFalse);
+      },
+    );
   });
 }

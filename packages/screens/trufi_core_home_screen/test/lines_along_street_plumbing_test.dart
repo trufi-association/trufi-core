@@ -13,7 +13,7 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 /// trufi-sanaa#20: the home screen hands its `onLinesAlongStreet` to the
-/// search screen it opens, so the "Lines along <street>" row shows inside a
+/// search screen it opens, so the "Lines along `<street>`" row shows inside a
 /// street's corners list with the handler, and does not without it. Drives
 /// the real [HomeScreen] over a fake map and a search service that knows one
 /// street with two corners.
