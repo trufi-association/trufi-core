@@ -25,6 +25,11 @@ class POILayersSettingsSection extends StatelessWidget {
     final l10n = _getL10n(context);
     final manager = context.watch<POILayersManager>();
     final categories = manager.categories;
+    // Nothing to toggle yet (the manifest is still loading, failed to load
+    // or has no categories): no header either, so a sheet that holds only
+    // this section is not an empty "Points of interest" box
+    // (trufi-core#1042). The watch above rebuilds once the manager loads.
+    if (categories.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
