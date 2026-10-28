@@ -87,15 +87,10 @@ class TransitRoute extends Equatable {
       };
 
   SimpleOpeningHours? get getOpeningHours {
-    SimpleOpeningHours? openingHours;
-
-    String? id = code.split(':')[1];
-    if (transportOpeningHours.containsKey(id)) {
-      openingHours = SimpleOpeningHours(
-        transportOpeningHours[id]!,
-      );
-    }
-    return openingHours;
+    // OTP pattern codes are `<feedId>:<routeId>:<direction>:<index>`.
+    final parts = code.split(':');
+    final schedule = transportScheduleOf(parts.length > 1 ? parts[1] : null);
+    return schedule != null ? SimpleOpeningHours(schedule) : null;
   }
 
   @override

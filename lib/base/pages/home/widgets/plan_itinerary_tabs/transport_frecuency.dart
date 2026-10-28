@@ -1,3 +1,10 @@
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/transport_opening_hours.dart';
+
+/// Routes whose schedule is not an all-day service window but a few fixed
+/// departures (`Mo-Su 17:30`: one bus at 17:30) or a short window
+/// (`Mo-Su 04:00-05:45`). Same syntax as [transportOpeningHours]; the app
+/// renders single times as departures. Looked up through
+/// [transportScheduleOf], after [transportOpeningHours].
 const Map<String, String> transportFrecuency = {
   ...jilotepecFrecuency,
 };

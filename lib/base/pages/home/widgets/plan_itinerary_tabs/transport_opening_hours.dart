@@ -1,4 +1,13 @@
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/toluca_times.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/transport_frecuency.dart';
+
+/// The schedule string of an OSM route relation id, or null when no city
+/// has one for it: the all-day service windows of [transportOpeningHours]
+/// first, then the departure-based entries of [transportFrecuency].
+String? transportScheduleOf(String? routeId) {
+  if (routeId == null) return null;
+  return transportOpeningHours[routeId] ?? transportFrecuency[routeId];
+}
 
 const Map<String, String> transportOpeningHours = {
   ...oaxacaTransportOpenningHours,
