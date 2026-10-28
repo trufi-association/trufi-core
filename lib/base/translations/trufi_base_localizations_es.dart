@@ -268,6 +268,12 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get openingHoursCurrentlyOutService => '¡Actualmente fuera de servicio!';
 
   @override
+  String get openingHoursDepartures => 'Salidas';
+
+  @override
+  String get openingHoursNoMoreDeparturesToday => 'Sin más salidas hoy';
+
+  @override
   String get commonOpenAlways => 'Abierto 24/7';
 
   @override
