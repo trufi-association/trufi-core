@@ -12,6 +12,8 @@ import 'trufi_base_localizations_fr.dart';
 import 'trufi_base_localizations_it.dart';
 import 'trufi_base_localizations_pt.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of TrufiBaseLocalization
 /// returned by `TrufiBaseLocalization.of(context)`.
 ///
