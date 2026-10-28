@@ -117,14 +117,15 @@ void main() {
     await tester.pumpWidget(
       _app(
         TileTransport(
-            patternOtp: _route(shortName: longShortName), onTap: () {}),
+            patternOtp:
+                _route(shortName: longShortName, longName: 'Río Seco → Enace'),
+            onTap: () {}),
         width: 411,
         material3: true,
       ),
     );
     expect(tester.takeException(), isNull);
-    final terminal =
-        tester.renderObject<RenderParagraph>(find.text('Ciudad de Dios'));
+    final terminal = tester.renderObject<RenderParagraph>(find.text('Enace'));
     expect(terminal.didExceedMaxLines, isFalse);
   });
 
