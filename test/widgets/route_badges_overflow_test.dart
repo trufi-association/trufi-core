@@ -28,7 +28,9 @@ TransitRoute _route({
       ),
     );
 
-Widget _app(Widget child, {double width = 320}) => MaterialApp(
+Widget _app(Widget child, {double width = 320, bool material3 = false}) =>
+    MaterialApp(
+      theme: ThemeData(useMaterial3: material3),
       home: Scaffold(
         body: Center(
           child: SizedBox(width: width, child: child),
@@ -104,6 +106,26 @@ void main() {
       reason: 'the fixture must need more than the old 55 % cap',
     );
     expect(find.text('Enace'), findsOneWidget);
+  });
+
+  testWidgets(
+      'under Material 3 the terminal is measured with the rendered '
+      'style and is not cut', (tester) async {
+    // Material 3 adds letterSpacing to bodyMedium: measuring the terminal
+    // with the raw style under-estimated it by a few pixels and the last
+    // glyph was cut when the code took all of codeMax.
+    await tester.pumpWidget(
+      _app(
+        TileTransport(
+            patternOtp: _route(shortName: longShortName), onTap: () {}),
+        width: 411,
+        material3: true,
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    final terminal =
+        tester.renderObject<RenderParagraph>(find.text('Ciudad de Dios'));
+    expect(terminal.didExceedMaxLines, isFalse);
   });
 
   testWidgets('the itinerary details badge stays inside a narrow row', (

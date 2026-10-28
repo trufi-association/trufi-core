@@ -60,9 +60,17 @@ class TileTransport extends StatelessWidget {
                             final terminal =
                                 patternOtp.route?.longNameLast ?? '';
                             final width = constraints.maxWidth;
+                            // Measure with the style the Text will render
+                            // with (the theme's default merged in: Material 3
+                            // adds letterSpacing) and the real scale factor.
+                            final renderStyle = DefaultTextStyle.of(context)
+                                .style
+                                .merge(textStyle);
+                            final scale =
+                                MediaQuery.of(context).textScaler.scale(16) /
+                                    16;
                             final terminalWidth = math.min(
-                              calculateTextWidth(terminal, textStyle) *
-                                  MediaQuery.of(context).textScaler.scale(1),
+                              calculateTextWidth(terminal, renderStyle) * scale,
                               width * 0.45,
                             );
                             final codeMax = math.max(
