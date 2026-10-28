@@ -30,6 +30,7 @@ void main() {
       now: at(10),
     )));
     expect(find.text('Salidas: 17:30'), findsOneWidget);
+    expect(find.byIcon(Icons.schedule), findsOneWidget);
     expect(find.text('Servicio activo'), findsNothing);
     expect(find.text('¡Actualmente fuera de servicio!'), findsNothing);
     expect(find.textContaining('null'), findsNothing);
@@ -51,6 +52,17 @@ void main() {
     expect(find.text('Sin más salidas hoy'), findsOneWidget);
     expect(find.text('Servicio activo'), findsNothing);
     expect(find.text('¡Actualmente fuera de servicio!'), findsNothing);
+    // the same red badge as "out of service": the itinerary leg shows its
+    // red marker in this state (isOpenNow is false)
+    final badge = tester.widget<Container>(find
+        .ancestor(
+          of: find.text('Sin más salidas hoy'),
+          matching: find.byType(Container),
+        )
+        .first);
+    expect((badge.decoration as BoxDecoration).color, const Color(0xFFD72A2A));
+    expect(find.byIcon(Icons.schedule), findsNothing);
+    expect(SimpleOpeningHours('Mo-Su 17:30').isOpenOn(at(18)), isFalse);
   });
 
   testWidgets('only the departures still ahead are in the header',

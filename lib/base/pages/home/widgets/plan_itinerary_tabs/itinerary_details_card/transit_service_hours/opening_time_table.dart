@@ -220,9 +220,12 @@ class _OpeningTimeTableState extends State<OpeningTimeTable> {
     final departures = openingHours.departuresOn(now);
     if (departures.isNotEmpty) {
       final next = openingHours.nextDepartureOn(now);
-      final upcoming = next == null
-          ? const <String>[]
-          : departures.sublist(departures.indexOf(next));
+      if (next == null) {
+        // Every departure of the day has left: the same red badge the
+        // itinerary leg shows (its error marker), with its own text.
+        return _outOfService(localization.openingHoursNoMoreDeparturesToday);
+      }
+      final upcoming = departures.sublist(departures.indexOf(next));
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         child: Row(
@@ -237,9 +240,7 @@ class _OpeningTimeTableState extends State<OpeningTimeTable> {
               width: 8,
             ),
             Text(
-              upcoming.isNotEmpty
-                  ? '${localization.openingHoursDepartures}: ${upcoming.join(', ')}'
-                  : localization.openingHoursNoMoreDeparturesToday,
+              '${localization.openingHoursDepartures}: ${upcoming.join(', ')}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
@@ -250,6 +251,11 @@ class _OpeningTimeTableState extends State<OpeningTimeTable> {
         ),
       );
     }
+    return _outOfService(localization.openingHoursCurrentlyOutService);
+  }
+
+  /// The red badge: no service window active and no departure ahead.
+  Widget _outOfService(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       margin: const EdgeInsets.only(right: 30),
@@ -258,7 +264,7 @@ class _OpeningTimeTableState extends State<OpeningTimeTable> {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        localization.openingHoursCurrentlyOutService,
+        text,
         style: const TextStyle(
           fontSize: 14,
           color: Colors.white,
