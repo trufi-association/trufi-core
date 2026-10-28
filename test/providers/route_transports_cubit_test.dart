@@ -271,6 +271,8 @@ void main() {
             longName: 'El Golf → Feria Altiplano', agency: 'Emarsistran'),
         _namedRoute('4D', longName: 'Cayma → Enace', agency: 'Albotran'),
         _namedRoute('AJ', agency: 'Transportes Arequipa'),
+        _namedRoute('UN',
+            longName: 'Unión → Umacollo', agency: 'Unión Arequipa'),
       ];
       cubit = RouteTransportsCubit(
         'http://unused',
@@ -295,6 +297,13 @@ void main() {
       expect(_codes(cubit.state.filterTransports), ['AJ']);
     });
 
+    test('ignores accents on both sides: "union" finds "Unión"', () {
+      cubit.filterTransports('union');
+      expect(_codes(cubit.state.filterTransports), ['UN']);
+      cubit.filterTransports('Unión');
+      expect(_codes(cubit.state.filterTransports), ['UN']);
+    });
+
     test('matches the long name and trims the query', () {
       cubit.filterTransports('  altiplano ');
       expect(_codes(cubit.state.filterTransports), ['C9']);
@@ -307,7 +316,7 @@ void main() {
       // the background refresh re-sorts the list by operator, hence unordered
       expect(
         _codes(cubit.state.filterTransports),
-        unorderedEquals(['C9', '4D', 'AJ']),
+        unorderedEquals(['C9', '4D', 'AJ', 'UN']),
       );
     });
   });
