@@ -7,6 +7,7 @@ import 'package:graphql/client.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 import '../providers/otp_2_4/graphql_client_factory.dart';
+import '../utils/json_utils.dart';
 
 /// The vehicle-positions query: the whole fleet, or only [routeIds]
 /// (OTP `routes(ids: [...])`).
@@ -64,7 +65,7 @@ const _query = '''
         speed
         lastUpdate
         lastUpdated
-        trip { gtfsId }
+        trip { gtfsId directionId }
       }
     }
   }
@@ -320,6 +321,7 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       routeId: routeId,
       routeColor: routeColor,
       tripId: trip?['gtfsId'] as String?,
+      directionId: parseGtfsDirectionId(trip?['directionId']),
       timestamp: parseVehicleTimestamp(json),
     );
   }

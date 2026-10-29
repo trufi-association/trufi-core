@@ -26,12 +26,15 @@ String? etaRouteKeyForItinerary(routing.Itinerary itinerary) {
 
 /// One request for the whole plan: every itinerary's first transit route
 /// (raw ids, as the planner reports them), their boarding stop ids as a
-/// hint and, per route, the boarding stop's coordinates (`leg.fromPlace`),
-/// so a source answers "when does the bus reach my stop" rather than "when
-/// does it reach me". When two itineraries board the same route at
-/// different stops the first one wins — the planner lists them by
-/// preference. Null when no itinerary has an identifiable transit route
-/// (walk-only plans) — nothing to ask for.
+/// hint and, per route, the boarding stop's coordinates (`leg.fromPlace`)
+/// — so a source answers "when does the bus reach my stop" rather than
+/// "when does it reach me" — and the trip's GTFS `direction_id` when the
+/// planner reports it, so a source can skip the vehicles going the other
+/// way (#1016). When two itineraries board the same route at different
+/// stops the first one wins — the planner lists them by preference — and
+/// its direction goes with its stop, never one from each ride. Null when
+/// no itinerary has an identifiable transit route (walk-only plans) —
+/// nothing to ask for.
 VehicleEtaRequest? buildVehicleEtaRequest(
   routing.Plan plan,
   TrufiLatLng origin,
@@ -39,6 +42,7 @@ VehicleEtaRequest? buildVehicleEtaRequest(
   final routeIds = <String>{};
   final stopIds = <String>{};
   final boardingPoints = <String, TrufiLatLng>{};
+  final directions = <String, int>{};
   for (final itinerary in plan.itineraries ?? const <routing.Itinerary>[]) {
     final leg = itinerary.firstTransitLeg;
     if (leg == null) continue;
@@ -49,10 +53,15 @@ VehicleEtaRequest? buildVehicleEtaRequest(
     if (boarding == null) continue;
     final stopId = boarding.stopId;
     if (stopId != null && stopId.isNotEmpty) stopIds.add(stopId);
-    boardingPoints.putIfAbsent(
-      routeKey,
-      () => TrufiLatLng(boarding.lat, boarding.lon),
-    );
+    var firstRide = false;
+    boardingPoints.putIfAbsent(routeKey, () {
+      firstRide = true;
+      return TrufiLatLng(boarding.lat, boarding.lon);
+    });
+    // The direction belongs to the ride that set the stop: a later ride of
+    // the same route must not lend its direction to another ride's stop.
+    final direction = leg.directionId;
+    if (firstRide && direction != null) directions[routeKey] = direction;
   }
   if (routeIds.isEmpty) return null;
   return VehicleEtaRequest(
@@ -60,6 +69,7 @@ VehicleEtaRequest? buildVehicleEtaRequest(
     routeIds: routeIds,
     stopIds: stopIds.isEmpty ? null : stopIds,
     boardingPoints: boardingPoints.isEmpty ? null : boardingPoints,
+    directions: directions.isEmpty ? null : directions,
   );
 }
 

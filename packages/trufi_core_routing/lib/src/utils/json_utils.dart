@@ -10,6 +10,19 @@
 /// See: https://dart.dev/resources/language/number-representation
 /// See: https://github.com/dart-lang/sdk/issues/46883
 
+/// GTFS `direction_id` as OTP serialises it: the string `"0"`/`"1"`
+/// (GraphQL `Trip.directionId: String`), a number from older servers, or
+/// null — also when the direction is irrelevant, i.e. a loop whose trips
+/// carry no `direction_id`. Anything else is null. Shared by the plan
+/// parser (`trip.directionId` of a leg) and the vehicle positions provider
+/// (`trip { directionId }` of a vehicle), so both sides of the #1016 filter
+/// read the field the same way.
+int? parseGtfsDirectionId(Object? raw) {
+  if (raw is num) return raw.toInt();
+  if (raw is String) return int.tryParse(raw.trim());
+  return null;
+}
+
 /// Extension on `Map<String, dynamic>` for safe JSON value extraction.
 extension JsonMapExtension on Map<String, dynamic> {
   /// Gets an int value, handling both int and double representations.

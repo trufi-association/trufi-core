@@ -76,6 +76,7 @@ class VehicleEtaRequest extends Equatable {
     required this.routeIds,
     this.stopIds,
     this.boardingPoints,
+    this.directions,
   });
 
   /// Where the rider is (the plan's origin).
@@ -95,6 +96,25 @@ class VehicleEtaRequest extends Equatable {
   /// compatible: routes missing here fall back to [origin].
   final Map<String, TrufiLatLng>? boardingPoints;
 
+  /// GTFS `direction_id` of the trip the rider boards, per route (same keys
+  /// as [boardingPoints]). A source that knows which way each vehicle goes
+  /// can drop the ones heading away (#1016). Optional.
+  final Map<String, int>? directions;
+
+  /// The boarding direction of [routeId], feed-prefix agnostic; null when
+  /// the request does not know it.
+  int? directionFor(String routeId) {
+    final map = directions;
+    if (map == null || map.isEmpty) return null;
+    final direct = map[routeId];
+    if (direct != null) return direct;
+    final want = stripGtfsFeedPrefix(routeId);
+    for (final entry in map.entries) {
+      if (stripGtfsFeedPrefix(entry.key) == want) return entry.value;
+    }
+    return null;
+  }
+
   /// The point the ETA of [routeId] is measured to: its boarding point when
   /// the request carries one, otherwise [origin]. Feed-prefix agnostic, so
   /// `1:1132` finds a point stored under `1132` and vice versa.
@@ -111,7 +131,13 @@ class VehicleEtaRequest extends Equatable {
   }
 
   @override
-  List<Object?> get props => [origin, routeIds, stopIds, boardingPoints];
+  List<Object?> get props => [
+    origin,
+    routeIds,
+    stopIds,
+    boardingPoints,
+    directions,
+  ];
 }
 
 /// The answer to one [VehicleEtaRequest]: at most a few [VehicleEta]s and

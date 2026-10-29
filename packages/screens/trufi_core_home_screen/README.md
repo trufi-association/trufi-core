@@ -245,7 +245,7 @@ HomeScreenConfig(
 | Source answered for the route | `Arrives in ~N min` (N rounded up, never 0); tooltip "Updated HH:MM" |
 | Request in flight, first time | spinner + `Checking live ETA…` |
 | Request in flight, refresh | the previous estimate, dimmed |
-| Source answered nothing for the route, or failed | `Live ETA unavailable` |
+| Source answered nothing for the route (no vehicle reporting, or every reporting bus goes the other way — #1016), or failed | `Live ETA unavailable` |
 | Walk-only itinerary, or a leg without a route id | nothing |
 
 A refresh button sits in the results header (sheet and side panel). It

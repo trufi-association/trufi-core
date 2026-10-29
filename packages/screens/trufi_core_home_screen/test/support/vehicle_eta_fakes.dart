@@ -56,7 +56,8 @@ routing.Leg walkLeg() => routing.Leg(
 
 /// Transit leg of route [name]; [gtfsId] defaults to `1:<name>` (OTP
 /// spelling), [stopId] to `s<name>`; [stopLat]/[stopLon] place the boarding
-/// stop (null [stopId] = no `fromPlace` at all).
+/// stop (null [stopId] = no `fromPlace` at all); [directionId] is the
+/// trip's GTFS `direction_id`, unknown by default.
 routing.Leg busLeg(
   String name, {
   String? gtfsId = '',
@@ -64,6 +65,7 @@ routing.Leg busLeg(
   String? stopId = '',
   double stopLat = -17.39,
   double stopLon = -66.15,
+  int? directionId,
 }) => routing.Leg(
   mode: 'BUS',
   startTime: etaT0.add(const Duration(minutes: 5)),
@@ -80,6 +82,7 @@ routing.Leg busLeg(
   fromPlace: stopId == null
       ? null
       : stop(stopId == '' ? 's$name' : stopId, lat: stopLat, lon: stopLon),
+  directionId: directionId,
 );
 
 routing.Itinerary itinerary(List<routing.Leg> legs) => routing.Itinerary(

@@ -83,6 +83,7 @@ class Otp28ResponseParser {
     final routeData = json['route'] as Map<String, dynamic>?;
     final tripData = json['trip'] as Map<String, dynamic>?;
     final tripPatternId = tripData?['pattern']?['code'] as String?;
+    final directionId = parseGtfsDirectionId(tripData?['directionId']);
 
     return Leg(
       mode: mode,
@@ -108,6 +109,7 @@ class Otp28ResponseParser {
         json['realtimeState'] as String?,
       ),
       tripPatternId: tripPatternId,
+      directionId: directionId,
     );
   }
 
