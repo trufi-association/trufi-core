@@ -371,10 +371,13 @@ Future<void> _pickDestination(WidgetTester tester, SearchLocation l) async {
   await tester.pumpAndSettle();
 }
 
+/// The text of the Home field that starts with [startsWith], without the
+/// left-to-right mark `formattedDisplay` puts in front of a coordinate pair
+/// (#1024): these tests check what the field says, not how bidi paints it.
 String _fieldText(WidgetTester tester, String startsWith) {
   final texts = tester
       .widgetList<Text>(find.byType(Text))
-      .map((t) => t.data ?? '')
+      .map((t) => (t.data ?? '').replaceAll('\u200E', ''))
       .where((t) => t.startsWith(startsWith))
       .toList();
   return texts.isEmpty ? '<none>' : texts.first;
