@@ -32,6 +32,7 @@ class SavedPlaceTile extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final localization = SavedPlacesLocalizations.of(context);
+    final subtitle = _subtitle(_getDisplayName(localization));
 
     return Material(
       color: colorScheme.surfaceContainerLow,
@@ -65,10 +66,10 @@ class SavedPlaceTile extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (place.address != null && place.address!.isNotEmpty) ...[
+                    if (subtitle != null) ...[
                       const SizedBox(height: 2),
                       Text(
-                        place.address!,
+                        subtitle,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -142,6 +143,19 @@ class SavedPlaceTile extends StatelessWidget {
 
   String _getDisplayName(SavedPlacesLocalizations localization) =>
       savedPlaceDisplayName(place, localization);
+
+  /// The address or, for a place saved without one (the map picker stored
+  /// none before #1003 — which is how three "Parada" rows came to look
+  /// identical), its coordinates: the label the edit sheet shows for it, so
+  /// rows saved before the change read apart from day one. No subtitle when
+  /// there is no location, or when it would only repeat the name.
+  String? _subtitle(String displayName) {
+    final address = place.address?.trim();
+    if (address != null && address.isNotEmpty) return address;
+    if (place.latitude == 0.0 && place.longitude == 0.0) return null;
+    final coordinates = formatCoordinates(place.latitude, place.longitude);
+    return coordinates == displayName ? null : coordinates;
+  }
 }
 
 /// The label a list shows for [place].

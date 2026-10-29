@@ -21,6 +21,9 @@ void main() {
     await tester.tap(find.text('Tap to select on map'));
     await tester.pumpAndSettle();
     expect(find.text('Location selected'), findsOneWidget);
+    // From the second "Prueba" on, the #1003 name notice pushes Save below
+    // the fold of the test surface; the sheet scrolls, as on a phone.
+    await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.byType(EditPlaceDialog), findsNothing, reason: 'sheet closed');

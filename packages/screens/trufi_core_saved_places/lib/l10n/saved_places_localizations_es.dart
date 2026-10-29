@@ -121,6 +121,9 @@ class SavedPlacesLocalizationsEs extends SavedPlacesLocalizations {
   }
 
   @override
+  String get placeNameInUse => 'Ya tienes un lugar con este nombre';
+
+  @override
   String get copiedToClipboard => 'Copiado';
 
   @override

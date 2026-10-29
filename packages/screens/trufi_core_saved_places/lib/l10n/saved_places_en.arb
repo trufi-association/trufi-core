@@ -56,6 +56,10 @@
       }
     }
   },
+  "placeNameInUse": "You already have a place with this name",
+  "@placeNameInUse": {
+    "description": "Soft notice under the name field of the add/edit place sheet when another saved place (Home, Work or a favourite) already has this name. Saving is still allowed (#1003)."
+  },
   "copiedToClipboard": "Copied",
   "@copiedToClipboard": {
     "description": "Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)"

@@ -948,6 +948,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  trufi_core_search_locations:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_search_locations"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_utils:
     dependency: "direct overridden"
     description:

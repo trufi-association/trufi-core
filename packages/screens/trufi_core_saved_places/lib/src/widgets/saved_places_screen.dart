@@ -40,6 +40,11 @@ class SavedPlacesScreen extends StatelessWidget {
   /// If provided, enables location picking from map.
   final OnChooseOnMap? onChooseOnMap;
 
+  /// Resolves the address of a picked point (reverse geocode) for the
+  /// place's subtitle; without it places are saved with their coordinates
+  /// as address (#1003).
+  final OnResolveAddress? onResolveAddress;
+
   /// Default latitude for new places when no location is selected.
   final double defaultLatitude;
 
@@ -53,6 +58,7 @@ class SavedPlacesScreen extends StatelessWidget {
     this.drawerBuilder,
     this.title,
     this.onChooseOnMap,
+    this.onResolveAddress,
     this.defaultLatitude = 0.0,
     this.defaultLongitude = 0.0,
   });
@@ -64,6 +70,7 @@ class SavedPlacesScreen extends StatelessWidget {
       drawerBuilder: drawerBuilder,
       title: title,
       onChooseOnMap: onChooseOnMap,
+      onResolveAddress: onResolveAddress,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
     );
@@ -87,6 +94,7 @@ class _SavedPlacesScreenContent extends StatelessWidget {
   final Widget Function(BuildContext context)? drawerBuilder;
   final String? title;
   final OnChooseOnMap? onChooseOnMap;
+  final OnResolveAddress? onResolveAddress;
   final double defaultLatitude;
   final double defaultLongitude;
 
@@ -95,6 +103,7 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     this.drawerBuilder,
     this.title,
     this.onChooseOnMap,
+    this.onResolveAddress,
     this.defaultLatitude = 0.0,
     this.defaultLongitude = 0.0,
   });
@@ -129,8 +138,10 @@ class _SavedPlacesScreenContent extends StatelessWidget {
     final place = await EditPlaceDialog.show(
       context,
       onChooseOnMap: onChooseOnMap,
+      onResolveAddress: onResolveAddress,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
+      isNameTaken: cubit.hasSameName,
     );
 
     if (place != null && context.mounted) {
@@ -146,8 +157,10 @@ class _SavedPlacesScreenContent extends StatelessWidget {
       context,
       place: place,
       onChooseOnMap: onChooseOnMap,
+      onResolveAddress: onResolveAddress,
       defaultLatitude: defaultLatitude,
       defaultLongitude: defaultLongitude,
+      isNameTaken: (name) => cubit.hasSameName(name, excludeId: place.id),
     );
 
     if (updatedPlace != null && context.mounted) {

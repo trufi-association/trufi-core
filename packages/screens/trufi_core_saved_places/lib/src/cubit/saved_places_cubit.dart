@@ -169,6 +169,22 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
     ].any(same);
   }
 
+  /// Whether another saved place (Home, Work or a favourite — never history)
+  /// already goes by [name], compared with [normalizeName].
+  ///
+  /// Unlike [isDuplicatePlace] this ignores where the places are: the list
+  /// shows names, so two "Parada" kilometres apart still read the same
+  /// (#1003). It feeds a soft notice, not a guard — saving stays allowed.
+  /// Pass [excludeId] when editing so a place doesn't collide with itself.
+  bool hasSameName(String name, {String? excludeId}) {
+    final normalized = normalizeName(name);
+    if (normalized.isEmpty) return false;
+    return state.allPlaces.any(
+      (other) =>
+          other.id != excludeId && normalizeName(other.name) == normalized,
+    );
+  }
+
   /// Adds a place to other places.
   Future<void> addOtherPlace(SavedPlace place) async {
     final otherPlace = place.copyWith(type: SavedPlaceType.other);

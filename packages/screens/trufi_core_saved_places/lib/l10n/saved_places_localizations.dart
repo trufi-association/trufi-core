@@ -319,6 +319,12 @@ abstract class SavedPlacesLocalizations {
   /// **'\"{placeName}\" is already saved at that location'**
   String placeAlreadySaved(String placeName);
 
+  /// Soft notice under the name field of the add/edit place sheet when another saved place (Home, Work or a favourite) already has this name. Saving is still allowed (#1003).
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a place with this name'**
+  String get placeNameInUse;
+
   /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
   ///
   /// In en, this message translates to:
