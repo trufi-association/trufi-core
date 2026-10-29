@@ -23,13 +23,13 @@ class ModeLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final perc = legLength.abs() / 10;
-    final minWidth = isEnd ? 24.0 : 41.0;
+    final minWidth = RouteLeg.minWidth(isEnd: isEnd);
     return SizedBox(
       width: perc > 1
           ? maxWidth
           : (maxWidth * perc) >= minWidth
-              ? (maxWidth * perc)
-              : minWidth,
+          ? (maxWidth * perc)
+          : minWidth,
       height: 30,
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
@@ -68,8 +68,8 @@ class WaitLeg extends StatelessWidget {
       width: perc > 1
           ? maxWidth
           : (maxWidth * perc) >= 24
-              ? (maxWidth * perc)
-              : 24,
+          ? (maxWidth * perc)
+          : 24,
       height: 30,
       child: IconTransport(
         bacgroundColor: TransportMode.walk.backgroundColor,
@@ -105,15 +105,23 @@ class RouteLeg extends StatelessWidget {
     required this.isEnd,
   });
 
+  /// Narrowest chip: the 22 px icon plus its 1 + 1 px margins and, unless
+  /// it is the last leg, the 15 px arrow with its 2 px padding. 24 px was
+  /// not enough for a chip with an arrow: every leg after the first threw
+  /// "overflowed by 17 pixels" in debug and painted its arrow over the next
+  /// chip in release (trufi-core#1041).
+  static double minWidth({required bool isEnd}) => isEnd ? 24 : 41;
+
   @override
   Widget build(BuildContext context) {
     final perc = legLength.abs() / 10;
+    final min = minWidth(isEnd: isEnd);
     return SizedBox(
       width: perc > 1
           ? maxWidth
-          : (maxWidth * perc) >= 24
-              ? (maxWidth * perc)
-              : 24,
+          : (maxWidth * perc) >= min
+          ? (maxWidth * perc)
+          : min,
       height: 30,
       child: ClipRRect(
         child: IconTransport(
