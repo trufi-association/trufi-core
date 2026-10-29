@@ -32,6 +32,7 @@ library;
 // Models
 export 'src/models/saved_place.dart';
 export 'src/models/saved_place_icons.dart';
+export 'src/models/saved_place_label.dart';
 export 'src/models/saved_route.dart';
 
 // Services

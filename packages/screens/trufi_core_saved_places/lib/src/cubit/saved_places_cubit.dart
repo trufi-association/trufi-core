@@ -3,7 +3,9 @@ import 'dart:math' as math;
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../l10n/saved_places_localizations.dart';
 import '../models/saved_place.dart';
+import '../models/saved_place_label.dart';
 import '../repository/saved_places_repository.dart';
 import '../repository/saved_places_repository_impl.dart';
 
@@ -176,13 +178,24 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   /// shows names, so two "Parada" kilometres apart still read the same
   /// (#1003). It feeds a soft notice, not a guard — saving stays allowed.
   /// Pass [excludeId] when editing so a place doesn't collide with itself.
-  bool hasSameName(String name, {String? excludeId}) {
+  bool hasSameName(
+    String name, {
+    String? excludeId,
+    SavedPlacesLocalizations? localization,
+  }) {
     final normalized = normalizeName(name);
     if (normalized.isEmpty) return false;
-    return state.allPlaces.any(
-      (other) =>
-          other.id != excludeId && normalizeName(other.name) == normalized,
-    );
+    return state.allPlaces.any((other) {
+      if (other.id == excludeId) return false;
+      if (normalizeName(other.name) == normalized) return true;
+      // Home and Work are listed under the label of the current UI
+      // language, whatever language they were created in (#1019): a Home
+      // stored as "Home" shows as "Casa" in Spanish, so a new "Casa" would
+      // read as a duplicate in the list.
+      if (localization == null) return false;
+      return normalizeName(savedPlaceDisplayName(other, localization)) ==
+          normalized;
+    });
   }
 
   /// Adds a place to other places.
