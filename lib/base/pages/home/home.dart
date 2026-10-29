@@ -31,12 +31,18 @@ class HomePage extends StatefulWidget {
   final MapChooseLocationProvider mapChooseLocationProvider;
   final AsyncExecutor asyncExecutor;
 
+  /// Optional widget rendered after the last itinerary of a plan and under
+  /// the legs of the itinerary details, e.g. a notice that the times are
+  /// estimates (trufi-arequipa#56). The app owns its text and localization.
+  final WidgetBuilder? itinerariesFooterBuilder;
+
   const HomePage({
     super.key,
     required this.drawerBuilder,
     required this.mapRouteProvider,
     required this.mapChooseLocationProvider,
     required this.asyncExecutor,
+    this.itinerariesFooterBuilder,
   });
 
   @override
@@ -155,6 +161,8 @@ class _HomePageState extends State<HomePage>
                       panel: panelCubit.state.panel == null
                           ? routePlannerCubit.state.plan != null
                               ? CustomItinerary(
+                                  footerBuilder:
+                                      widget.itinerariesFooterBuilder,
                                   moveTo: (center) {
                                     final callResize = scrollController
                                                 .currentState?.panelHeight !=

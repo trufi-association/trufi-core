@@ -118,6 +118,7 @@ abstract class DefaultValues {
     required String urlShareApp,
     required String urlFeedback,
     required String emailContact,
+    WidgetBuilder? itinerariesFooterBuilder,
     UrlSocialMedia? urlSocialMedia,
     ITrufiMapProvider? trufiMapProvider,
     Uri? shareBaseUri,
@@ -154,6 +155,7 @@ abstract class DefaultValues {
                   mapChooseLocationProvider:
                       mapCollectionSelected.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
+                  itinerariesFooterBuilder: itinerariesFooterBuilder,
                 ),
               );
             },

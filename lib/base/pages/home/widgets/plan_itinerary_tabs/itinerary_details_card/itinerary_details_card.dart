@@ -18,11 +18,17 @@ class ItineraryDetailsCard extends StatefulWidget {
   final void Function() onBackPressed;
   final bool Function(TrufiLatLng) moveTo;
 
+  /// Drawn once under the legs, e.g. the app's notice that times are
+  /// estimates (trufi-arequipa#56): the details replace the list when a
+  /// card is opened, so the notice has to be here too.
+  final WidgetBuilder? footerBuilder;
+
   const ItineraryDetailsCard({
     super.key,
     required this.itinerary,
     required this.onBackPressed,
     required this.moveTo,
+    this.footerBuilder,
   });
 
   @override
@@ -197,6 +203,7 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
                 );
               },
             ),
+            if (widget.footerBuilder != null) widget.footerBuilder!(context),
           ],
         ),
       ),
