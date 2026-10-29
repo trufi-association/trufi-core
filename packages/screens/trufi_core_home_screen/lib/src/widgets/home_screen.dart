@@ -753,6 +753,22 @@ class _HomeScreenState extends State<HomeScreen>
     _clearRouteFromMap();
   }
 
+  /// Whether the search bar carries the route-settings (tune) button.
+  ///
+  /// The sheet it opens holds two things: a selector between engines and the
+  /// current engine's preferences. With a single engine that has nothing to
+  /// configure (an offline-only app on the local Trufi planner) both are
+  /// empty and the button only leads to an "Apply" with no effect
+  /// (trufi-sanaa#23), so the bar is built without it. No rebuild is needed
+  /// when the engine changes: that can only happen with several engines,
+  /// where the selector alone keeps the button.
+  bool get _showRoutingSettings {
+    final manager = _routingEngineManager;
+    if (manager == null) return false;
+    return manager.hasMultipleEngines ||
+        manager.currentEngine.hasConfigurablePreferences;
+  }
+
   Future<void> _onRoutingSettings() async {
     final shouldRefetch = await showRoutingSettingsSheet(context);
     if (shouldRefetch == true) {
@@ -1757,7 +1773,9 @@ class _HomeScreenState extends State<HomeScreen>
                                   onSwap: _onSwapLocations,
                                   onReset: _onReset,
                                   onClearLocation: _onClearLocation,
-                                  onRoutingSettings: _onRoutingSettings,
+                                  onRoutingSettings: _showRoutingSettings
+                                      ? _onRoutingSettings
+                                      : null,
                                   onMenuPressed: widget.onMenuPressed,
                                 ),
                                 // Departure time chip (visible when
@@ -2190,7 +2208,9 @@ class _HomeScreenState extends State<HomeScreen>
                       onSwap: _onSwapLocations,
                       onReset: _onReset,
                       onClearLocation: _onClearLocation,
-                      onRoutingSettings: _onRoutingSettings,
+                      onRoutingSettings: _showRoutingSettings
+                          ? _onRoutingSettings
+                          : null,
                       onMenuPressed: widget.onMenuPressed,
                     ),
                     // Departure time chip — same guard as the mobile

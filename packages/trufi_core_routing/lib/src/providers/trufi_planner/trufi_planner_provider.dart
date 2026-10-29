@@ -93,6 +93,13 @@ class TrufiPlannerProvider extends IRoutingProvider {
   Widget? buildPreferencesUI(BuildContext context) =>
       _TrufiPlannerInfo(isLocal: config.isLocal);
 
+  /// The panel above is informational: nothing in it changes how routes are
+  /// searched, so an app with this as its only engine hides the home
+  /// screen's route-settings button (trufi-sanaa#23). The panel still shows
+  /// in the sheet of multi-engine apps, where the user opens it to switch.
+  @override
+  bool get hasConfigurablePreferences => false;
+
   @override
   void resetPreferences() {}
 

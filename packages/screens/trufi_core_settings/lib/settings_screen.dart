@@ -188,6 +188,15 @@ class _SettingsContentState extends State<_SettingsContent>
 
   @override
   Widget build(BuildContext context) {
+    // The routing and map cards only offer a choice between engines: with a
+    // single engine registered (trufi-sanaa: one offline planner, one
+    // offline map) they would show one pre-selected tile and nothing to do,
+    // so they are left out together with their spacer (trufi-sanaa#23).
+    final hasRoutingChoice = routing.RoutingEngineManager.watch(
+      context,
+    ).hasMultipleEngines;
+    final hasMapChoice = MapEngineManager.watch(context).hasMultipleEngines;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
@@ -204,14 +213,18 @@ class _SettingsContentState extends State<_SettingsContent>
           const SizedBox(height: 16),
 
           // Routing settings card (before maps)
-          _buildAnimatedItem(index: 2, child: const _RoutingSettingsCard()),
+          if (hasRoutingChoice) ...[
+            _buildAnimatedItem(index: 2, child: const _RoutingSettingsCard()),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
+          ],
 
           // Map settings card
-          _buildAnimatedItem(index: 3, child: const _MapSettingsCard()),
+          if (hasMapChoice) ...[
+            _buildAnimatedItem(index: 3, child: const _MapSettingsCard()),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
+          ],
 
           // Privacy settings card
           _buildAnimatedItem(index: 4, child: const _PrivacySettingsCard()),
@@ -342,11 +355,6 @@ class _MapSettingsCardState extends State<_MapSettingsCard> {
     final settingsL10n = SettingsLocalizations.of(context);
     final mapEngineManager = MapEngineManager.watch(context);
 
-    // If no engines configured, don't show this card
-    if (mapEngineManager.engines.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     // Filter engines based on online/offline selection
     final offlineEngines = mapEngineManager.engines
         .asMap()
@@ -421,11 +429,6 @@ class _RoutingSettingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
     final routingEngineManager = routing.RoutingEngineManager.watch(context);
-
-    // Only show if multiple routing engines available
-    if (!routingEngineManager.hasMultipleEngines) {
-      return const SizedBox.shrink();
-    }
 
     return _SettingsCard(
       icon: Icons.route_rounded,
