@@ -79,10 +79,9 @@ class _TransportListState extends State<TransportList> {
                 controller: null,
                 autofocus: true,
                 autocorrect: false,
-                onChanged: (onChanged) {
-                  routeTransportsCubit.filterTransports(
-                    onChanged.trim().toLowerCase(),
-                  );
+                onChanged: (query) {
+                  // the cubit trims, lowercases and folds accents
+                  routeTransportsCubit.filterTransports(query);
                 },
                 style: const TextStyle(
                   color: Colors.white,

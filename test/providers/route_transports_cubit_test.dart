@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trufi_core/base/models/transit_route/transit_info.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/providers/transit_route/repository/local_repository.dart';
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
@@ -42,6 +43,18 @@ class _FakeRemote implements RouteTransportsRemoteRepository {
 
 TransitRoute _route(String code) =>
     TransitRoute(id: code, name: code, code: code);
+
+TransitRoute _namedRoute(String code, {String? longName, String? agency}) =>
+    TransitRoute(
+      id: code,
+      name: code,
+      code: code,
+      route: TransitInfo(
+        shortName: code,
+        longName: longName,
+        agency: agency == null ? null : Agency(name: agency),
+      ),
+    );
 
 Iterable<String> _codes(Iterable<TransitRoute> routes) =>
     routes.map((r) => r.code);
@@ -227,5 +240,62 @@ void main() {
     expect(cubit.state.isLoading, isFalse);
     expect(_codes(cubit.state.transports), ['new-a']);
     await cubit.close();
+  });
+
+  group('filterTransports (trufi-core#1039)', () {
+    late RouteTransportsCubit cubit;
+    setUp(() async {
+      final routes = [
+        _namedRoute('C9',
+            longName: 'El Golf → Feria Altiplano', agency: 'Emarsistran'),
+        _namedRoute('4D', longName: 'Cayma → Enace', agency: 'Albotran'),
+        _namedRoute('AJ', agency: 'Transportes Arequipa'),
+        _namedRoute('UN', longName: 'Unión → Umacollo', agency: 'Sindicato Unión'),
+      ];
+      cubit = RouteTransportsCubit(
+        'http://unused',
+        localRepository: _FakeLocal(routes),
+        routeTransportsRepository: _FakeRemote(() async => routes),
+      );
+      await _settle();
+    });
+    tearDown(() => cubit.close());
+
+    test('matches the code regardless of case', () {
+      cubit.filterTransports('c9');
+      expect(_codes(cubit.state.filterTransports), ['C9']);
+      cubit.filterTransports('C9');
+      expect(_codes(cubit.state.filterTransports), ['C9']);
+    });
+
+    test('matches the operator name', () {
+      cubit.filterTransports('EMARSISTRAN');
+      expect(_codes(cubit.state.filterTransports), ['C9']);
+      cubit.filterTransports('arequipa');
+      expect(_codes(cubit.state.filterTransports), ['AJ']);
+    });
+
+    test('ignores accents on both sides: "union" finds "Unión"', () {
+      cubit.filterTransports('union');
+      expect(_codes(cubit.state.filterTransports), ['UN']);
+      cubit.filterTransports('Unión');
+      expect(_codes(cubit.state.filterTransports), ['UN']);
+    });
+
+    test('matches the long name and trims the query', () {
+      cubit.filterTransports('  altiplano ');
+      expect(_codes(cubit.state.filterTransports), ['C9']);
+    });
+
+    test('an empty or blank query shows everything', () {
+      cubit.filterTransports('zzz');
+      expect(cubit.state.filterTransports, isEmpty);
+      cubit.filterTransports('   ');
+      // the background refresh re-sorts the list by operator, hence unordered
+      expect(
+        _codes(cubit.state.filterTransports),
+        unorderedEquals(['C9', '4D', 'AJ', 'UN']),
+      );
+    });
   });
 }
