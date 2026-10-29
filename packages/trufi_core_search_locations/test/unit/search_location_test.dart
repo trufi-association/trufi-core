@@ -155,4 +155,60 @@ void main() {
       );
     });
   });
+
+  group('formattedDisplay under RTL (#1024)', () {
+    const pair = SearchLocation(
+      id: 'coordinates:-17.3937,-66.1568',
+      displayName: '-17.3937, -66.1568',
+      latitude: -17.3937,
+      longitude: -66.1568,
+    );
+
+    test('a coordinate pair is prefixed with a left-to-right mark', () {
+      expect(pair.isCoordinatePair, isTrue);
+      expect(pair.formattedDisplay, '\u200E-17.3937, -66.1568');
+      const withAddress = SearchLocation(
+        id: 'coordinates:-17.3937,-66.1568',
+        displayName: '-17.3937, -66.1568',
+        address: 'Cochabamba',
+        latitude: -17.3937,
+        longitude: -66.1568,
+      );
+      expect(
+        withAddress.formattedDisplay,
+        '\u200E-17.3937, -66.1568, Cochabamba',
+      );
+    });
+
+    test('a pair carried as the address gets the mark too', () {
+      const picked = SearchLocation(
+        id: 'map:1',
+        displayName: 'الموقع المحدد',
+        address: '-17.3937, -66.1568',
+        latitude: -17.3937,
+        longitude: -66.1568,
+      );
+      expect(
+        picked.formattedDisplay,
+        'الموقع المحدد, \u200E-17.3937, -66.1568',
+      );
+      expect(picked.isCoordinatePair, isFalse);
+    });
+
+    test('the bare displayName is untouched (copy and share stay clean)', () {
+      expect(pair.displayName, '-17.3937, -66.1568');
+      expect(pair.displayName.contains('\u200E'), isFalse);
+    });
+
+    test('an ordinary name gets no mark', () {
+      const street = SearchLocation(
+        id: 's1',
+        displayName: 'Avenida Heroínas',
+        latitude: -17.39,
+        longitude: -66.16,
+      );
+      expect(street.isCoordinatePair, isFalse);
+      expect(street.formattedDisplay, 'Avenida Heroínas');
+    });
+  });
 }
