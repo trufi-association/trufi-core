@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
@@ -37,32 +39,69 @@ class TileTransport extends StatelessWidget {
                           borderRadius: const BorderRadius.horizontal(
                               left: Radius.circular(5)),
                         ),
-                        child: Row(
-                          children: [
-                            Text(
-                              patternOtp.route?.shortName ?? '',
-                              style: TextStyle(
-                                color: getContrastColor(
-                                  patternOtp.route?.backgroundColor ??
-                                      Colors.white,
-                                ),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                        // A long route_short_name (the Arequipa feed carries
+                        // the operator's sub-brand, up to 32 characters) used
+                        // to push the terminal out of the row. The code now
+                        // yields only what the terminal needs (the terminal
+                        // never takes more than 45 % of the row) and keeps at
+                        // least 55 %; both texts end in an ellipsis
+                        // (trufi-arequipa#27).
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final textStyle = TextStyle(
+                              color: getContrastColor(
+                                patternOtp.route?.backgroundColor ??
+                                    Colors.white,
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              patternOtp.route?.longNameLast ?? '',
-                              style: TextStyle(
-                                color: getContrastColor(
-                                  patternOtp.route?.backgroundColor ??
-                                      Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            );
+                            final code = patternOtp.route?.shortName ?? '';
+                            final terminal =
+                                patternOtp.route?.longNameLast ?? '';
+                            final width = constraints.maxWidth;
+                            // Measure with the style the Text will render
+                            // with (the theme's default merged in: Material 3
+                            // adds letterSpacing) and the real scale factor.
+                            final renderStyle = DefaultTextStyle.of(context)
+                                .style
+                                .merge(textStyle);
+                            final scale =
+                                MediaQuery.of(context).textScaler.scale(16) /
+                                    16;
+                            final terminalWidth = math.min(
+                              calculateTextWidth(terminal, renderStyle) * scale,
+                              width * 0.45,
+                            );
+                            final codeMax = math.max(
+                              width * 0.55,
+                              width - 8 - terminalWidth,
+                            );
+                            return Row(
+                              children: [
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: codeMax,
+                                  ),
+                                  child: Text(
+                                    code,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textStyle,
+                                  ),
                                 ),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    terminal,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textStyle,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),

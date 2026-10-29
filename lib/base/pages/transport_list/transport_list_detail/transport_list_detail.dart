@@ -124,9 +124,16 @@ class _TransportListDetailState extends State<TransportListDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (transitRoute?.route?.mode != null)
-                Text(
-                  '${transitRoute!.route!.mode!.getTranslate(localization)} - ${transitRoute!.route?.shortName ?? ''}',
-                  style: const TextStyle(fontSize: 18),
+                // The only place the whole code is shown: shrink it rather
+                // than cut it (trufi-arequipa#27).
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${transitRoute!.route!.mode!.getTranslate(localization)} - ${transitRoute!.route?.shortName ?? ''}',
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ),
               Row(
                 children: [
@@ -240,7 +247,8 @@ class _TransportListDetailState extends State<TransportListDetail> {
                         if (state.isGeometryLoading)
                           const LinearProgressIndicator(),
                         Expanded(
-                          child: widget.mapTransportProvider.mapTransportBuilder(
+                          child:
+                              widget.mapTransportProvider.mapTransportBuilder(
                             context,
                             transitRoute,
                           ),
