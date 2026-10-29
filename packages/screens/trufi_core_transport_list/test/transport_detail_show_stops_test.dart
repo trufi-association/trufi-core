@@ -261,10 +261,8 @@ void main() {
       expect(engine.lastLayers.single.lines.single.position, hasLength(3));
     });
 
-    testWidgets('phone, long name without "A → B" (Sana\'a uses "⟵"): no '
-        'terminal labels at all — the stop names never fill in', (
-      tester,
-    ) async {
+    testWidgets('phone, Sana\'a\'s "⟵" long name: the card shows the two '
+        'terminals and never the stop names', (tester) async {
       await _pumpDetail(
         tester,
         showStops: false,
@@ -274,6 +272,13 @@ void main() {
 
       // The identity in the top bar is the whole long name.
       expect(find.text('الحثيلي ⟵ باب اليمن'), findsOneWidget);
+      // The summary card splits the Arabic name into its terminals (#1022).
+      expect(find.text('الحثيلي'), findsOneWidget, reason: 'origin terminal');
+      expect(
+        find.text('باب اليمن'),
+        findsOneWidget,
+        reason: 'destination terminal',
+      );
       for (final stop in _stops) {
         expect(find.text(stop.name), findsNothing, reason: stop.name);
       }
