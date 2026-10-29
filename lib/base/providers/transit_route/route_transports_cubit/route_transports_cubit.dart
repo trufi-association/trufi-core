@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,53 +11,78 @@ import '../services/route_transports_service.dart';
 part 'route_transports_state.dart';
 
 class RouteTransportsCubit extends Cubit<RouteTransportsState> {
-  final RouteTransportsLocalRepository localRepository =
-      RouteTransportsHiveLocalRepository();
-  final RouteTransportsServices routeTransportsRepository;
+  final RouteTransportsLocalRepository localRepository;
+  final RouteTransportsRemoteRepository routeTransportsRepository;
 
-  RouteTransportsCubit(String otpEndpoint)
-      : routeTransportsRepository = RouteTransportsServices(otpEndpoint),
+  /// The fetch in flight, shared by a background refresh and a refresh the
+  /// user asks for meanwhile: one request, each caller keeps its semantics.
+  Future<List<TransitRoute>>? _inFlight;
+
+  /// The query the list is filtered with, reapplied when the list changes.
+  String _query = '';
+
+  RouteTransportsCubit(
+    String otpEndpoint, {
+    RouteTransportsLocalRepository? localRepository,
+    RouteTransportsRemoteRepository? routeTransportsRepository,
+  })  : localRepository =
+            localRepository ?? RouteTransportsHiveLocalRepository(),
+        routeTransportsRepository =
+            routeTransportsRepository ?? RouteTransportsServices(otpEndpoint),
         super(const RouteTransportsState()) {
     load().catchError((error) {});
   }
 
+  /// Shows the cached list at once and, when there is one, fetches the feed
+  /// again in the background so a server update reaches installed apps
+  /// without the refresh button (trufi-arequipa#74). Offline or on error the
+  /// cached list simply stays.
   Future<void> load() async {
     if (state.transports.isNotEmpty) return;
     await localRepository.loadRepository();
-    final transports = await localRepository.getTransports();
-    emit(state.copyWith(transports: transports, filterTransports: transports));
-    if (state.transports.isNotEmpty) return;
-    await refresh();
+    final cached = await localRepository.getTransports();
+    emit(state.copyWith(transports: cached, filterTransports: cached));
+    if (cached.isEmpty) {
+      await refresh();
+      return;
+    }
+    await refresh(silent: true);
   }
 
-  Future<void> refresh() async {
-    emit(state.copyWith(isLoading: true));
+  /// Fetches the patterns from the server. With [silent] the loading overlay
+  /// is not shown and a failure is swallowed (the current list is kept).
+  /// A list equal to the one shown changes nothing: no emit, no cache write
+  /// (the Hive box is append-only, a frame per write).
+  Future<void> refresh({bool silent = false}) async {
+    if (!silent) emit(state.copyWith(isLoading: true));
     try {
-      final transports = await routeTransportsRepository.fetchPatterns();
-      sortTransitRoutesByAgencyNameAndShortName(transports);
-      // transports.sort((a, b) {
-      //   int res = -1;
-      //   final aShortName = int.tryParse(a.route?.shortName ?? '');
-      //   final bShortName = int.tryParse(b.route?.shortName ?? '');
-      //   if (aShortName != null && bShortName != null) {
-      //     res = aShortName.compareTo(bShortName);
-      //   } else if (aShortName == null && bShortName == null) {
-      //     res = a.route?.shortName?.compareTo(b.route?.shortName ?? '') ?? 1;
-      //   } else if (aShortName != null) {
-      //     res = 1;
-      //   }
-      //   return res;
-      // });
+      // Sorted once, inside the shared future: two awaiters get the same
+      // list, and List.sort is not stable (the two directions of a route
+      // tie), so sorting per caller could reorder a list already emitted.
+      final fetch =
+          _inFlight ??= routeTransportsRepository.fetchPatterns().then((list) {
+        sortTransitRoutesByAgencyNameAndShortName(list);
+        return list;
+      }).whenComplete(() => _inFlight = null);
+      final transports = await fetch;
+      if (listEquals(transports, state.transports)) {
+        if (!silent) emit(state.copyWith(isLoading: false));
+        return;
+      }
       emit(state.copyWith(
         transports: transports,
-        filterTransports: transports,
+        filterTransports: _filtered(transports, _query),
         isLoading: false,
       ));
+      await localRepository.saveTransports(transports);
     } catch (e) {
+      if (silent) {
+        debugPrint('RouteTransportsCubit: background refresh failed: $e');
+        return;
+      }
       emit(state.copyWith(isLoading: false));
       rethrow;
     }
-    await localRepository.saveTransports(state.transports);
   }
 
   void sortTransitRoutesByAgencyNameAndShortName(List<TransitRoute> routes) {
@@ -87,6 +112,7 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     emit(
       state.copyWith(
         transports: newPatterns,
+        filterTransports: _filtered(newPatterns, _query),
         isGeometryLoading: false,
       ),
     );
@@ -116,24 +142,16 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
   }
 
   void filterTransports(String query) {
-    if (query == "") {
-      emit(
-        state.copyWith(
-          filterTransports: state.transports,
-        ),
-      );
-    } else {
-      final newFilterTransports = state.transports
-          .where((element) =>
-              "${element.name.toLowerCase()} ${element.route!.longNameData.toLowerCase()}"
-                  .contains(query))
-          .toList();
+    _query = query;
+    emit(state.copyWith(filterTransports: _filtered(state.transports, query)));
+  }
 
-      emit(
-        state.copyWith(
-          filterTransports: newFilterTransports,
-        ),
-      );
-    }
+  List<TransitRoute> _filtered(List<TransitRoute> transports, String query) {
+    if (query == "") return transports;
+    return transports
+        .where((element) =>
+            "${element.name.toLowerCase()} ${element.route?.longNameData.toLowerCase() ?? ''}"
+                .contains(query))
+        .toList();
   }
 }
