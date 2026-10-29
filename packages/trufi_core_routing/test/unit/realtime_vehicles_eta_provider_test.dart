@@ -249,22 +249,26 @@ void main() {
 
     test('uses the snapshot loader and never reads latest', () async {
       var loads = 0;
+      Set<String>? askedFor;
       final snapshot = await _provider(
         const [],
         latestThrows: true,
-        loader: () async {
+        loader: ({Set<String>? routeIds}) async {
           loads++;
+          askedFor = routeIds;
           return [_vehicle('L', '1:1132')];
         },
       ).fetchEtas(_request({'1132'}));
       expect(loads, 1);
+      // #1017: the loader is told which routes the request is about.
+      expect(askedFor, {'1132'});
       expect(snapshot.etaForRoute('1132')?.vehicleId, 'L');
     });
 
     test('wraps loader failures in VehicleEtaException', () {
       final provider = _provider(
         const [],
-        loader: () async => throw StateError('otp down'),
+        loader: ({Set<String>? routeIds}) async => throw StateError('otp down'),
       );
       expect(
         provider.fetchEtas(_request({'1132'})),
