@@ -44,9 +44,11 @@ class Itinerary extends Equatable {
       walkTime:
           Duration(seconds: int.tryParse(json[_walkTime].toString()) ?? 0),
       walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
+      // a provider that sends no count is read as a direct trip, not as a
+      // made-up "5 transfers" (trufi-arequipa#29)
       transfers: int.tryParse(json[_transfers].toString()) ??
           json[_transfersGraphql] ??
-          5,
+          0,
     );
   }
 

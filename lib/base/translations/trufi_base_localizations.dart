@@ -397,6 +397,12 @@ abstract class TrufiBaseLocalization {
   /// **'{value} h'**
   String instructionDurationHours(Object value);
 
+  /// No description provided for @itineraryTransfers.
+  ///
+  /// In pt, this message translates to:
+  /// **'{count, plural, =0{Direto} =1{1 transferência} other{{count} transferências}}'**
+  String itineraryTransfers(num count);
+
   /// Itinerary leg duration
   ///
   /// In pt, this message translates to:

@@ -164,6 +164,18 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   }
 
   @override
+  String itineraryTransfers(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transferências',
+      one: '1 transferência',
+      zero: 'Direto',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String instructionDurationMinutes(Object value) {
     return '$value min';
   }
