@@ -55,6 +55,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  # Lets `flutter gen-l10n` (tools/generate_translations.sh) run on this
+  # line; the generated classes live in lib/, nothing synthetic is used.
+  generate: true
 
   # To add assets to your package, add an assets section, like this:
   assets:
