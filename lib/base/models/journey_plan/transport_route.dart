@@ -52,15 +52,13 @@ class RouteInfo extends Equatable {
       };
 
   Color get primaryColor {
-    return color != null
-        ? Color(int.tryParse('0xFF$color')!)
-        : mode?.color ?? Colors.black;
+    return parseRouteColor(color) ?? mode?.color ?? Colors.black;
   }
 
+  /// The feed's colour, or the mode's when the feed gives none or one that
+  /// would vanish on white (trufi-arequipa#77, see [parseRouteColor]).
   Color get backgroundColor {
-    return color != null
-        ? Color(int.tryParse('0xFF$color')!)
-        : mode?.backgroundColor ?? Colors.black;
+    return parseRouteColor(color) ?? mode?.backgroundColor ?? Colors.black;
   }
 
   @override

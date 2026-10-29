@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/utils/colors/route_color.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 
 class TransitInfo extends Equatable {
@@ -61,10 +62,10 @@ class TransitInfo extends Equatable {
     return mode?.color ?? Colors.white;
   }
 
+  /// The feed's colour, or the mode's when the feed gives none or one that
+  /// would vanish on white (trufi-arequipa#77, see [parseRouteColor]).
   Color get backgroundColor {
-    return color != null
-        ? Color(int.tryParse('0xFF$color')!)
-        : mode?.backgroundColor ?? Colors.black;
+    return parseRouteColor(color) ?? mode?.backgroundColor ?? Colors.black;
   }
 
   @override
