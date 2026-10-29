@@ -117,6 +117,12 @@ class RoutePlannerState extends Equatable {
   List<Object?> get props => [
     fromPlace,
     toPlace,
+    // TrufiLocation equality ignores the address on purpose (a favourite
+    // saved without one is still that place), so a place that only gained
+    // its address (#1023) would read as the same state and never reach the
+    // field; the address is part of what this state shows.
+    fromPlace?.address,
+    toPlace?.address,
     plan,
     selectedItinerary,
     isLoading,

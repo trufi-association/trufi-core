@@ -25,6 +25,7 @@ import 'poi_compact_card.dart';
 import 'live_vehicles_settings_section.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
+import '../services/coordinate_address.dart';
 import '../services/share_route_service.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
@@ -728,12 +729,50 @@ class _HomeScreenState extends State<HomeScreen>
     final cubit = context.read<RoutePlannerCubit>();
     await cubit.setFromPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
+    unawaited(_completeCoordinateAddress(location));
   }
 
   Future<void> _onDestinationSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
     await cubit.setToPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
+    unawaited(_completeCoordinateAddress(location));
+  }
+
+  /// A "Go to lat, lon" row chosen before its reverse geocode answered pops
+  /// without an address (#1023). Resolve it here, after the plan request is
+  /// on its way, and store it on whichever field still holds that same bare
+  /// pair (origin, destination, or both after a swap); the plan is untouched
+  /// (setFromPlace/setToPlace only emit the place).
+  Future<void> _completeCoordinateAddress(SearchLocation location) async {
+    if (!isBareCoordinateLocation(location)) return;
+    // _showSearchScreen already read the cubit: no SearchLocation pops in an
+    // app without one.
+    final geocoder = context.read<SearchLocationsCubit>();
+    final address = await resolveCoordinateAddress(
+      geocoder,
+      location.latitude,
+      location.longitude,
+    );
+    if (address == null || !mounted) return;
+    final cubit = context.read<RoutePlannerCubit>();
+    bool stillBare(TrufiLocation? place) =>
+        place != null &&
+        place.description == location.displayName &&
+        place.latitude == location.latitude &&
+        place.longitude == location.longitude &&
+        (place.address == null || place.address!.isEmpty);
+    TrufiLocation resolved(TrufiLocation place) => TrufiLocation(
+      description: place.description,
+      latitude: place.latitude,
+      longitude: place.longitude,
+      address: address,
+    );
+    // The user moved on, or something else filled the address: nothing to do.
+    final from = cubit.state.fromPlace;
+    if (stillBare(from)) await cubit.setFromPlace(resolved(from!));
+    final to = cubit.state.toPlace;
+    if (stillBare(to)) await cubit.setToPlace(resolved(to!));
   }
 
   Future<void> _onSwapLocations() async {
@@ -781,6 +820,18 @@ class _HomeScreenState extends State<HomeScreen>
       _fetchPlanIfReady();
     }
   }
+
+  /// True when [a] and [b] differ in nothing but the places' addresses
+  /// (TrufiLocation equality already ignores the address).
+  static bool _onlyAddressesChanged(RoutePlannerState a, RoutePlannerState b) =>
+      a.fromPlace == b.fromPlace &&
+      a.toPlace == b.toPlace &&
+      a.plan == b.plan &&
+      a.selectedItinerary == b.selectedItinerary &&
+      a.isLoading == b.isLoading &&
+      a.error == b.error &&
+      a.timeMode == b.timeMode &&
+      a.dateTime == b.dateTime;
 
   void _fetchPlanIfReady() {
     final cubit = context.read<RoutePlannerCubit>();
@@ -1630,6 +1681,12 @@ class _HomeScreenState extends State<HomeScreen>
       value: _realtimeVehiclesProvider,
       child: Scaffold(
         body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
+          // A place that only gained its address (#1023) changes what the
+          // fields show, not what the map or the sheet show: the side effects
+          // below re-fit the camera and re-expand the sheet on every emit
+          // that carries a plan, so skip them for that one.
+          listenWhen: (previous, current) =>
+              !_onlyAddressesChanged(previous, current),
           listener: (context, state) {
             _updateLocationMarkers(state);
             _updateRouteOnMap(state.selectedItinerary);
