@@ -349,6 +349,8 @@
     "selectYourPointInterest": "Points of Interest",
     "openingHoursServiceActive": "Service active",
     "openingHoursCurrentlyOutService": "Currently out of service!",
+    "openingHoursDepartures": "Partenze",
+    "openingHoursNoMoreDeparturesToday": "Nessun'altra partenza oggi",
     "commonOpenAlways": "Open 24/7",
     "commonClosed": "Closed",
     "weekdayMO": "Monday",

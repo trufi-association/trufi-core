@@ -352,6 +352,8 @@
     "selectYourPointInterest": "Interessenspunkte",
     "openingHoursServiceActive": "Dienst aktiv",
     "openingHoursCurrentlyOutService": "Derzeit außer Betrieb!",
+    "openingHoursDepartures": "Abfahrten",
+    "openingHoursNoMoreDeparturesToday": "Keine weiteren Abfahrten heute",
     "commonClosed": "Geschlossen",
     "commonOpenAlways": "Durchgängig geöffnet",
     "weekdayMO": "Montag",

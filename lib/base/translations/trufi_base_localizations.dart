@@ -601,6 +601,18 @@ abstract class TrufiBaseLocalization {
   /// **'Currently out of service!'**
   String get openingHoursCurrentlyOutService;
 
+  /// No description provided for @openingHoursDepartures.
+  ///
+  /// In pt, this message translates to:
+  /// **'Partidas'**
+  String get openingHoursDepartures;
+
+  /// No description provided for @openingHoursNoMoreDeparturesToday.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sem mais partidas hoje'**
+  String get openingHoursNoMoreDeparturesToday;
+
   /// No description provided for @commonOpenAlways.
   ///
   /// In pt, this message translates to:

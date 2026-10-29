@@ -1,5 +1,13 @@
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
+/// Parser for the OSM-style `opening_hours` strings of the per-route
+/// schedules (`transportOpeningHours`, `transportFrecuency`).
+///
+/// Every weekday maps to a list of tokens. A token is either a service
+/// window — `05:00-17:30`, the line runs continuously — or a single
+/// departure — `17:30`, one bus leaves at that time. Lines with a handful
+/// of fixed departures per day (several in Jilotepec) use the latter:
+/// `Mo-Su 17:30`, `Mo-Fr 05:00,07:10`, `Mo-Sa 05:30-18:50; Su 08:00`.
 class SimpleOpeningHours {
   final String inp;
   final Map<String, List<String>> openingHours = {
@@ -12,6 +20,18 @@ class SimpleOpeningHours {
     "su": [],
     "ph": [],
   };
+
+  static const List<String> _weekdayKeys = [
+    "mo",
+    "tu",
+    "we",
+    "th",
+    "fr",
+    "sa",
+    "su",
+  ];
+
+  static final RegExp _departureToken = RegExp(r'^([01]?\d|2[0-3]):[0-5]\d$');
 
   SimpleOpeningHours(this.inp) {
     parse(inp);
@@ -31,37 +51,77 @@ class SimpleOpeningHours {
     return openingHours[key]!;
   }
 
-  /// Returns if the OpeningHours match on given Date
-  bool isOpenOn(DateTime date) {
-    int testday = date.weekday - 1;
-    List<String> times = [];
-    times = openingHours.values.toList()[testday];
-    bool isOpen = false;
-    for (var time in times) {
-      //TODO: times like 09:00+ are not supported here
-      final timedata = time.split('-');
-      if (timedata.length > 1) {
-        final timeStart = formatTimeString(timedata[0]);
-        final timeEnd = formatTimeString(timedata[1]);
-        DateTime openTime = DateTime.parse("2016-01-01 $timeStart:00");
-        DateTime closeTime = DateTime.parse("2016-01-01 $timeEnd:00");
-        DateTime currentDateTime =
-            DateTime.parse("2016-01-01 ${durationToString(date)}");
-        bool isDiferentDay = openTime.isAfter(closeTime);
+  /// Whether [token] is a single departure (`17:30`) rather than a service
+  /// window (`05:00-17:30`) or an open-ended time (`09:00+`).
+  static bool isDeparture(String token) => _departureToken.hasMatch(token);
 
-        if (isDiferentDay) {
-          closeTime = DateTime.parse("2016-01-02 $timeEnd:00");
-        }
-        bool isAdte = isDiferentDay
-            ? currentDateTime.isAfter(openTime) ||
-                currentDateTime
-                    .isBefore(DateTime.parse("2016-01-01 $timeEnd:00"))
-            : currentDateTime.isAfter(openTime);
-        isOpen = isAdte && currentDateTime.isBefore(closeTime);
-      }
+  /// The service windows of the day [dayKey] (`mo` … `su`, `ph`),
+  /// e.g. `["05:00-17:30"]`.
+  List<String> rangesOf(String dayKey) => (openingHours[dayKey] ?? const [])
+      .where((token) => !isDeparture(token))
+      .toList();
+
+  /// The single departures of the day [dayKey], zero-padded and sorted,
+  /// e.g. `["05:00", "07:10"]`.
+  List<String> departuresOf(String dayKey) => (openingHours[dayKey] ?? const [])
+      .where(isDeparture)
+      .map(formatTimeString)
+      .toList()
+    ..sort();
+
+  /// The service windows of the weekday of [date].
+  List<String> rangesOn(DateTime date) => rangesOf(_dayKey(date));
+
+  /// The single departures of the weekday of [date].
+  List<String> departuresOn(DateTime date) => departuresOf(_dayKey(date));
+
+  /// The first departure of the weekday of [date] at or after its time of
+  /// day, or null when every departure of that day has already left.
+  String? nextDepartureOn(DateTime date) {
+    final now = _timeOfDay(date);
+    for (final departure in departuresOn(date)) {
+      if (!_parseTime(departure).isBefore(now)) return departure;
     }
-    return isOpen;
+    return null;
   }
+
+  /// Whether [date] falls inside one of the service windows of its weekday.
+  bool isWithinServiceWindowOn(DateTime date) =>
+      rangesOn(date).any((range) => _isWithinRange(range, date));
+
+  /// Whether the line is in service at [date]: inside a service window, or
+  /// with a departure still ahead that day.
+  bool isOpenOn(DateTime date) =>
+      isWithinServiceWindowOn(date) || nextDepartureOn(date) != null;
+
+  bool _isWithinRange(String range, DateTime date) {
+    //TODO: times like 09:00+ are not supported here
+    final timedata = range.split('-');
+    if (timedata.length != 2) return false;
+    final timeStart = formatTimeString(timedata[0]);
+    final timeEnd = formatTimeString(timedata[1]);
+    final openTime = DateTime.parse("2016-01-01 $timeStart:00");
+    DateTime closeTime = DateTime.parse("2016-01-01 $timeEnd:00");
+    final currentDateTime = _timeOfDay(date);
+    final isDiferentDay = openTime.isAfter(closeTime);
+
+    if (isDiferentDay) {
+      closeTime = DateTime.parse("2016-01-02 $timeEnd:00");
+    }
+    final isAfterOpening = isDiferentDay
+        ? currentDateTime.isAfter(openTime) ||
+            currentDateTime.isBefore(DateTime.parse("2016-01-01 $timeEnd:00"))
+        : currentDateTime.isAfter(openTime);
+    return isAfterOpening && currentDateTime.isBefore(closeTime);
+  }
+
+  String _dayKey(DateTime date) => _weekdayKeys[date.weekday - 1];
+
+  DateTime _parseTime(String time) =>
+      DateTime.parse("2016-01-01 ${formatTimeString(time)}:00");
+
+  DateTime _timeOfDay(DateTime date) =>
+      DateTime.parse("2016-01-01 ${durationToString(date)}");
 
   String formatTimeString(String timeString) {
     List<String> timeParts = timeString.split(":");
@@ -263,6 +323,10 @@ class SimpleOpeningHours {
     if (RegExp(r'[0-9]{1,2}:[0-9]{2}\-[0-9]{1,2}:[0-9]{2}').hasMatch(inp)) {
       return true;
     }
+    //e.g. 17:30 — a single departure
+    if (isDeparture(inp)) {
+      return true;
+    }
     //off
     if (RegExp(r'off').hasMatch(inp)) {
       return true;
@@ -286,17 +350,14 @@ class SimpleOpeningHours {
     return false;
   }
 
+  /// The end of the last service window of the weekday of [date]; null when
+  /// that day only has single departures, or nothing at all.
   String? getClosingTimeOfDay(DateTime date) {
-    int weekdayIndex = date.weekday - 1; // DateTime.weekday: 1=Monday → 0-based
-    final keys = ["mo", "tu", "we", "th", "fr", "sa", "su"];
-    final key = keys[weekdayIndex];
-
-    final times = openingHours[key];
-    if (times != null && times.isEmpty) return null;
+    final ranges = rangesOn(date);
+    if (ranges.isEmpty) return null;
 
     // Obtener el último horario del día
-    final lastTimeRange = times!.last;
-    final parts = lastTimeRange.split('-');
+    final parts = ranges.last.split('-');
 
     if (parts.length != 2) return null;
 

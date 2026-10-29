@@ -201,14 +201,8 @@ class Leg extends Equatable {
   }
 
   SimpleOpeningHours? get getOpeningHours {
-    SimpleOpeningHours? openingHours;
-    String? id = routeId?.split(':').last;
-    if (routeId != null && transportOpeningHours.containsKey(id)) {
-      openingHours = SimpleOpeningHours(
-        transportOpeningHours[id]!,
-      );
-    }
-    return openingHours;
+    final schedule = transportScheduleOf(routeId?.split(':').last);
+    return schedule != null ? SimpleOpeningHours(schedule) : null;
   }
 
   @override
