@@ -1479,7 +1479,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget? _buildMapLayerExtras() {
     final sections = <Widget>[];
-    if (widget.config.poiLayersManager != null) {
+    // Only once the manager has categories: before that the section draws
+    // nothing (trufi-core#1042) and would leave a stray separator here, or a
+    // blank sheet when it is the only section. The manager notifies when the
+    // manifest lands and _onPOISelectionChanged rebuilds the screen.
+    final poi = widget.config.poiLayersManager;
+    if (poi != null && poi.categories.isNotEmpty) {
       sections.add(const POILayersSettingsSection());
     }
     if (_realtimeVehiclesProvider != null) {

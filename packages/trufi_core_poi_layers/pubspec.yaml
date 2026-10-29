@@ -30,6 +30,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # the settings-section test provides the manager the way the apps do
+  provider: ^6.1.5+1
 
 flutter:
   generate: true
