@@ -105,512 +105,512 @@ abstract class TrufiBaseLocalization {
 
   /// Text of dialog that explains that access to location services was denied
   ///
-  /// In en, this message translates to:
-  /// **'Please make sure your device has GPS and the Location settings are activated.'**
+  /// In pt, this message translates to:
+  /// **'Certifique-se de que seu dispositivo tenha GPS e que as configurações de localização estejam ativadas.'**
   String get alertLocationServicesDeniedMessage;
 
   /// Title of dialog that explains that access to location services was denied
   ///
-  /// In en, this message translates to:
-  /// **'No location'**
+  /// In pt, this message translates to:
+  /// **'Nenhuma localização'**
   String get alertLocationServicesDeniedTitle;
 
   /// Accept button of the App Review Dialog used on Android
   ///
-  /// In en, this message translates to:
-  /// **'Write review'**
+  /// In pt, this message translates to:
+  /// **'Escrever avaliação'**
   String get appReviewDialogButtonAccept;
 
   /// Decline button of the App Review Dialog used on Android
   ///
-  /// In en, this message translates to:
-  /// **'Not now'**
+  /// In pt, this message translates to:
+  /// **'Agora não'**
   String get appReviewDialogButtonDecline;
 
   /// Content of the App Review Dialog used on Android
   ///
-  /// In en, this message translates to:
-  /// **'Support us with a review on the Google Play Store.'**
+  /// In pt, this message translates to:
+  /// **'Apoie-nos com uma análise na Loja do Google Play.'**
   String get appReviewDialogContent;
 
   /// Title of the App Review Dialog used on Android
   ///
-  /// In en, this message translates to:
-  /// **'Enjoying Trufi?'**
+  /// In pt, this message translates to:
+  /// **'Gostando da Trufi?'**
   String get appReviewDialogTitle;
 
   /// Page subtitle when choosing a location on the map
   ///
-  /// In en, this message translates to:
-  /// **'Pan & zoom map under pin'**
+  /// In pt, this message translates to:
+  /// **'Amplia e move o mapa para centralizar o marcador'**
   String get chooseLocationPageSubtitle;
 
   /// Page title when choosing a location on the map
   ///
-  /// In en, this message translates to:
-  /// **'Choose a point'**
+  /// In pt, this message translates to:
+  /// **'Escolha um ponto no mapa'**
   String get chooseLocationPageTitle;
 
   /// Cancel button label
   ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
+  /// In pt, this message translates to:
+  /// **'Cancelar'**
   String get commonCancel;
 
   /// General Confirm location label
   ///
-  /// In en, this message translates to:
-  /// **'Confirm location'**
+  /// In pt, this message translates to:
+  /// **'Confirmar localização'**
   String get commonConfirmLocation;
 
   /// Destination field label
   ///
-  /// In en, this message translates to:
-  /// **'Destination'**
+  /// In pt, this message translates to:
+  /// **'Endereço de destino'**
   String get commonDestination;
 
   /// General Edit label
   ///
-  /// In en, this message translates to:
-  /// **'Edit'**
+  /// In pt, this message translates to:
+  /// **'Editar'**
   String get commonEdit;
 
   /// Message when an error has occured
   ///
-  /// In en, this message translates to:
-  /// **'Error'**
+  /// In pt, this message translates to:
+  /// **'Erro'**
   String get commonError;
 
   /// General from station  label
   ///
-  /// In en, this message translates to:
-  /// **'from station'**
+  /// In pt, this message translates to:
+  /// **'Da estação'**
   String get commonFromStation;
 
   /// General from stop  label
   ///
-  /// In en, this message translates to:
-  /// **'from stop'**
+  /// In pt, this message translates to:
+  /// **'Da parada'**
   String get commonFromStop;
 
   /// General Leave when it suits you label
   ///
-  /// In en, this message translates to:
-  /// **'Leave when it suits you'**
+  /// In pt, this message translates to:
+  /// **'Saia quando for melhor para você'**
   String get commonItineraryNoTransitLegs;
 
   /// General Leaves at  label
   ///
-  /// In en, this message translates to:
-  /// **'Leaves'**
+  /// In pt, this message translates to:
+  /// **'Sair'**
   String get commonLeavesAt;
 
   /// General Loading label
   ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
+  /// In pt, this message translates to:
+  /// **'Carregando...'**
   String get commonLoading;
 
   /// Message when internet connection is lost
   ///
-  /// In en, this message translates to:
-  /// **'No internet connection.'**
+  /// In pt, this message translates to:
+  /// **'Sem conexão de internet'**
   String get commonNoInternet;
 
   /// Message that is displayed when no results were found for the search term that was provided
   ///
-  /// In en, this message translates to:
-  /// **'No results'**
+  /// In pt, this message translates to:
+  /// **'Sem resultados'**
   String get commonNoResults;
 
   /// OK button label
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'OK'**
   String get commonOK;
 
   /// Origin field label
   ///
-  /// In en, this message translates to:
-  /// **'Origin'**
+  /// In pt, this message translates to:
+  /// **'Origem'**
   String get commonOrigin;
 
   /// General Remove label
   ///
-  /// In en, this message translates to:
-  /// **'Remove'**
+  /// In pt, this message translates to:
+  /// **'Remover'**
   String get commonRemove;
 
   /// General Save label
   ///
-  /// In en, this message translates to:
-  /// **'Save'**
+  /// In pt, this message translates to:
+  /// **'Salvar'**
   String get commonSave;
 
   /// General Tomorrow label
   ///
-  /// In en, this message translates to:
-  /// **'Tomorrow'**
+  /// In pt, this message translates to:
+  /// **'Amanhã'**
   String get commonTomorrow;
 
   /// Message when an unknown error has occured
   ///
-  /// In en, this message translates to:
-  /// **'Unknown error'**
+  /// In pt, this message translates to:
+  /// **'Erro desconhecido'**
   String get commonUnknownError;
 
   /// General Unkown place label
   ///
-  /// In en, this message translates to:
-  /// **'Unkown place'**
+  /// In pt, this message translates to:
+  /// **'Local desconhecido'**
   String get commonUnkownPlace;
 
   /// General wait label
   ///
-  /// In en, this message translates to:
-  /// **'Wait'**
+  /// In pt, this message translates to:
+  /// **'Aguarde'**
   String get commonWait;
 
   /// General Walk label
   ///
-  /// In en, this message translates to:
-  /// **'Walk'**
+  /// In pt, this message translates to:
+  /// **'Caminhe'**
   String get commonWalk;
 
   /// Search option that allows to use the current user location
   ///
-  /// In en, this message translates to:
-  /// **'Your location'**
+  /// In pt, this message translates to:
+  /// **'Sua localização'**
   String get commonYourLocation;
 
   /// Message that is displayed when a trip could not be planned, because the specified destination is ambiguous
   ///
-  /// In en, this message translates to:
-  /// **'The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.'**
+  /// In pt, this message translates to:
+  /// **'O planejador de viagens não tem certeza do local para o qual deseja ir. Selecione uma das opções a seguir ou seja mais específico.'**
   String get errorAmbiguousDestination;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin is ambiguous
   ///
-  /// In en, this message translates to:
-  /// **'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.'**
+  /// In pt, this message translates to:
+  /// **'O planejador de viagens não tem certeza do local de onde você deseja começar sua viagem. Selecione uma das opções a seguir ou seja mais específico.'**
   String get errorAmbiguousOrigin;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous
   ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
+  /// In pt, this message translates to:
+  /// **'Tanto a origem quanto o destino são ambíguos. Selecione entre as seguintes opções ou seja mais específico.'**
   String get errorAmbiguousOriginDestination;
 
   /// Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible
   ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are not wheelchair accessible'**
+  /// In pt, this message translates to:
+  /// **'Tanto a origem quanto o destino não são acessíveis para pessoa em cadeira de rodas.'**
   String get errorNoBarrierFree;
 
   /// Message when internet connection is lost
   ///
-  /// In en, this message translates to:
-  /// **'No connect with server.'**
+  /// In pt, this message translates to:
+  /// **'Sem conexão com o servidor.'**
   String get errorNoConnectServer;
 
   /// Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time
   ///
-  /// In en, this message translates to:
-  /// **'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.'**
+  /// In pt, this message translates to:
+  /// **'Não há horários de trânsito disponíveis. A data pode ser anterior à atual ou muito longe no futuro ou pode não haver serviço de trânsito para sua viagem no momento escolhido.'**
   String get errorNoTransitTimes;
 
   /// Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries
   ///
-  /// In en, this message translates to:
-  /// **'Trip is not possible. You might be trying to plan a trip outside the map data boundary.'**
+  /// In pt, this message translates to:
+  /// **'Essa viagem não é possível. Você pode estar tentando planejar uma viagem fora do limite de dados do mapa.'**
   String get errorOutOfBoundary;
 
   /// Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible
   ///
-  /// In en, this message translates to:
-  /// **'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).'**
+  /// In pt, this message translates to:
+  /// **'Essa viagem não é possível. Seu ponto de partida ou de chegada pode não ser acessível com segurança (por exemplo, você pode estar partindo de uma rua residencial conectada apenas a uma rodovia).'**
   String get errorPathNotFound;
 
   /// Message that is displayed when a trip could not be planned, because the request had errors
   ///
-  /// In en, this message translates to:
-  /// **'The request has errors that the server is not willing or able to process.'**
+  /// In pt, this message translates to:
+  /// **'A solicitação tem erros que o servidor não pode ou não foi capaz de processar.'**
   String get errorServerCanNotHandleRequest;
 
   /// Message that is displayed when a trip could not be planned, because the server is taking too long to respond
   ///
-  /// In en, this message translates to:
-  /// **'The trip planner is taking way too long to process your request. Please try again later.'**
+  /// In pt, this message translates to:
+  /// **'O planejador de viagens está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.'**
   String get errorServerTimeout;
 
   /// Message that is displayed when the trip planning server was not available
   ///
-  /// In en, this message translates to:
-  /// **'We\'re sorry. The trip planner is temporarily unavailable. Please try again later.'**
+  /// In pt, this message translates to:
+  /// **'Sentimos muito. O planeador de viagens está temporariamente indisponível. Por favor, tente novamente mais tarde.'**
   String get errorServerUnavailable;
 
   /// Message that is displayed when a trip could not be planned, because origin and destination are too close to each other
   ///
-  /// In en, this message translates to:
-  /// **'Origin is within a trivial distance of the destination.'**
+  /// In pt, this message translates to:
+  /// **'Origem é desconhecida. Você pode ser um pouco mais descritivo?'**
   String get errorTrivialDistance;
 
   /// Message that is displayed when a trip could not be planned, because the destination was not found
   ///
-  /// In en, this message translates to:
-  /// **'Destination is unknown. Can you be a bit more descriptive?'**
+  /// In pt, this message translates to:
+  /// **'O destino é desconhecido. Você pode ser um pouco mais descritivo?'**
   String get errorUnknownDestination;
 
   /// Message that is displayed when a trip could not be planned, because the origin was not found
   ///
-  /// In en, this message translates to:
-  /// **'Origin is unknown. Can you be a bit more descriptive?'**
+  /// In pt, this message translates to:
+  /// **'A origem é desconhecida. Você pode ser um pouco mais descritivo?'**
   String get errorUnknownOrigin;
 
   /// Message that is displayed when a trip could not be planned, because both origin and destination were not found
   ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are unknown. Can you be a bit more descriptive?'**
+  /// In pt, this message translates to:
+  /// **'Tanto a origem quanto o destino são desconhecidos. Você pode ser um pouco mais descritivo?'**
   String get errorUnknownOriginDestination;
 
   /// Follow us on (socialMedia)
   ///
-  /// In en, this message translates to:
-  /// **'Follow us on {value}'**
+  /// In pt, this message translates to:
+  /// **'Siga-nos no {value}'**
   String followOnSocialMedia(Object value);
 
   /// Itinerary leg distance (km)
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'{value} km'**
   String instructionDistanceKm(Object value);
 
   /// Itinerary leg distance (m)
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'{value} m'**
   String instructionDistanceMeters(Object value);
 
   /// Itinerary leg duration in hours
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'{value} h'**
   String instructionDurationHours(Object value);
 
-  /// Number of transfers of an itinerary, shown next to its distance in the results list (trufi-arequipa#29)
+  /// No description provided for @itineraryTransfers.
   ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{Direct} =1{1 transfer} other{{count} transfers}}'**
-  String itineraryTransfers(int count);
+  /// In pt, this message translates to:
+  /// **'{count, plural, =0{Direto} =1{1 transferência} other{{count} transferências}}'**
+  String itineraryTransfers(num count);
 
   /// Itinerary leg duration
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'{value} min'**
   String instructionDurationMinutes(Object value);
 
   /// Vehicle name (Bike)
   ///
-  /// In en, this message translates to:
-  /// **'Bike'**
+  /// In pt, this message translates to:
+  /// **'Bicicleta'**
   String get instructionVehicleBike;
 
   /// Vehicle name (Bus)
   ///
-  /// In en, this message translates to:
-  /// **'Bus'**
+  /// In pt, this message translates to:
+  /// **'Ônibus'**
   String get instructionVehicleBus;
 
   /// Vehicle name (Car)
   ///
-  /// In en, this message translates to:
-  /// **'Car'**
+  /// In pt, this message translates to:
+  /// **'Carro'**
   String get instructionVehicleCar;
 
   /// Vehicle name (Carpool)
   ///
-  /// In en, this message translates to:
-  /// **'Carpool'**
+  /// In pt, this message translates to:
+  /// **'Carona'**
   String get instructionVehicleCarpool;
 
   /// Vehicle name (Commuter train)
   ///
-  /// In en, this message translates to:
-  /// **'Commuter train'**
+  /// In pt, this message translates to:
+  /// **'Trem suburbano'**
   String get instructionVehicleCommuterTrain;
 
   /// Vehicle name (Gondola)
   ///
-  /// In en, this message translates to:
-  /// **'Gondola'**
+  /// In pt, this message translates to:
+  /// **'Gôndola'**
   String get instructionVehicleGondola;
 
   /// Vehicle name (Light Rail Train)
   ///
-  /// In en, this message translates to:
-  /// **'Light Rail Train'**
+  /// In pt, this message translates to:
+  /// **'(VLT) Veículo Leve sobre trilhos'**
   String get instructionVehicleLightRail;
 
   /// Vehicle name (Metro)
   ///
-  /// In en, this message translates to:
-  /// **'Metro'**
+  /// In pt, this message translates to:
+  /// **'Metrô'**
   String get instructionVehicleMetro;
 
-  /// Vehicle name (Microbus)
+  /// Vehicle name (Micro)
   ///
-  /// In en, this message translates to:
-  /// **'Microbus'**
+  /// In pt, this message translates to:
+  /// **'Micro ônibus'**
   String get instructionVehicleMicro;
 
   /// Vehicle name (Minibus)
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Minibus'**
   String get instructionVehicleMinibus;
 
   /// Vehicle name (Trufi)
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Trufi'**
   String get instructionVehicleTrufi;
 
   /// No description provided for @instructionVehicleWalk.
   ///
-  /// In en, this message translates to:
-  /// **'Walk'**
+  /// In pt, this message translates to:
+  /// **'A pé'**
   String get instructionVehicleWalk;
 
   /// Menu item that shows the map/planned trip
   ///
-  /// In en, this message translates to:
-  /// **'Route planner'**
+  /// In pt, this message translates to:
+  /// **'Planejador de rotas'**
   String get menuConnections;
 
   /// No description provided for @menuSocialMedia.
   ///
-  /// In en, this message translates to:
-  /// **'Social media'**
+  /// In pt, this message translates to:
+  /// **'Mídia social'**
   String get menuSocialMedia;
 
   /// Menu item that shows the bus list page
   ///
-  /// In en, this message translates to:
-  /// **'Show routes'**
+  /// In pt, this message translates to:
+  /// **'Mostrar rotas'**
   String get menuTransportList;
 
   /// Message when no route could be found after a route search
   ///
-  /// In en, this message translates to:
-  /// **'Sorry, we could not find a route. What do you want to do?'**
+  /// In pt, this message translates to:
+  /// **'Desculpe, não conseguimos encontrar uma rota. O que você quer fazer?'**
   String get noRouteError;
 
   /// Button label to try another destination when no route could be found
   ///
-  /// In en, this message translates to:
-  /// **'Try another destination'**
+  /// In pt, this message translates to:
+  /// **'Tente outro destino'**
   String get noRouteErrorActionCancel;
 
   /// Button label to report a missing route when no route could be found
   ///
-  /// In en, this message translates to:
-  /// **'Report a missing route'**
+  /// In pt, this message translates to:
+  /// **'Relatar uma rota ausente'**
   String get noRouteErrorActionReportMissingRoute;
 
   /// Button label to show the car route when no route could be found
   ///
-  /// In en, this message translates to:
-  /// **'Show route by car'**
+  /// In pt, this message translates to:
+  /// **'Mostrar rota de carro'**
   String get noRouteErrorActionShowCarRoute;
 
   /// No description provided for @notShowAgain.
   ///
-  /// In en, this message translates to:
-  /// **'Do not show again'**
+  /// In pt, this message translates to:
+  /// **'Não mostre novamente'**
   String get notShowAgain;
 
   /// Website menu item
   ///
-  /// In en, this message translates to:
-  /// **'Read our blog'**
+  /// In pt, this message translates to:
+  /// **'Leia nosso blog'**
   String get readOurBlog;
 
   /// Message that is displayed when the response of the trip planning request could not be received
   ///
-  /// In en, this message translates to:
-  /// **'Failed to load plan.'**
+  /// In pt, this message translates to:
+  /// **'Falha ao carregar o plano'**
   String get searchFailLoadingPlan;
 
   /// Placeholder text for the destination field (in search state)
   ///
-  /// In en, this message translates to:
-  /// **'Choose destination'**
+  /// In pt, this message translates to:
+  /// **'Escolha o destino'**
   String get searchHintDestination;
 
   /// Placeholder text for the origin field (in search state)
   ///
-  /// In en, this message translates to:
-  /// **'Choose starting point'**
+  /// In pt, this message translates to:
+  /// **'Escolha a origem'**
   String get searchHintOrigin;
 
   /// Placeholder text for the destination field (in map-visible state)
   ///
-  /// In en, this message translates to:
-  /// **'Select destination'**
+  /// In pt, this message translates to:
+  /// **'Selecione o destino'**
   String get searchPleaseSelectDestination;
 
   /// Placeholder text for the origin field (in map-visible state)
   ///
-  /// In en, this message translates to:
-  /// **'Select origin'**
+  /// In pt, this message translates to:
+  /// **'Selecione a origem'**
   String get searchPleaseSelectOrigin;
 
   /// Text with URL that is used when sharing the app.
   ///
-  /// In en, this message translates to:
-  /// **'Download {appTitle}, the public transport app for {cityName}, at {url}'**
+  /// In pt, this message translates to:
+  /// **'Baixe {appTitle}, o aplicativo de transporte público para {cityName}, em {url}'**
   String shareAppText(Object url, Object appTitle, Object cityName);
 
   /// General Show on map tilers label
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Show on map'**
   String get commonShowMap;
 
   /// General Map Settings label
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Map Settings'**
   String get commonMapSettings;
 
   /// Label for the Map types
   ///
-  /// In en, this message translates to:
+  /// In pt, this message translates to:
   /// **'Map Type'**
   String get mapTypeLabel;
 
   /// No description provided for @selectYourPointInterest.
   ///
-  /// In en, this message translates to:
-  /// **'Points of Interest'**
+  /// In pt, this message translates to:
+  /// **'Pontos de Interesse'**
   String get selectYourPointInterest;
 
   /// No description provided for @themeModeDark.
   ///
-  /// In en, this message translates to:
-  /// **'Dark Theme'**
+  /// In pt, this message translates to:
+  /// **'Tema escuro'**
   String get themeModeDark;
 
   /// No description provided for @themeModeLight.
   ///
-  /// In en, this message translates to:
-  /// **'Light theme'**
+  /// In pt, this message translates to:
+  /// **'Tema claro'**
   String get themeModeLight;
 
   /// No description provided for @themeModeSystem.
   ///
-  /// In en, this message translates to:
-  /// **'System Default'**
+  /// In pt, this message translates to:
+  /// **'Sistema padrão'**
   String get themeModeSystem;
 }
 

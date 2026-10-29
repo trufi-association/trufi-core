@@ -164,7 +164,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   }
 
   @override
-  String itineraryTransfers(int count) {
+  String itineraryTransfers(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
