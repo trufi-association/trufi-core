@@ -18,6 +18,7 @@ export './src/models/trufi_place.dart';
 export './src/models/journey_plan.dart';
 export './src/models/vehicle_position.dart';
 export './src/models/realtime_vehicles_provider.dart';
+export './src/models/vehicle_eta.dart';
 
 // Map interfaces
 export './src/map/map_engine.dart';

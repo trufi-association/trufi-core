@@ -26,6 +26,7 @@ library;
 
 // Models
 export 'src/models/route_planner_state.dart';
+export 'src/models/vehicle_eta_state.dart';
 
 // Repository
 export 'src/repository/home_screen_repository.dart';
@@ -37,9 +38,12 @@ export 'src/services/saved_route_snapshot.dart';
 
 // Cubit (State Management)
 export 'src/cubit/route_planner_cubit.dart';
+export 'src/cubit/vehicle_eta_cubit.dart';
 
 // Widgets
 export 'src/widgets/home_screen.dart';
+export 'src/widgets/eta_badge.dart';
+export 'src/widgets/eta_refresh_button.dart';
 export 'src/widgets/live_vehicle_info_panel.dart';
 export 'src/widgets/poi_compact_card.dart';
 export 'src/widgets/itinerary_card.dart';

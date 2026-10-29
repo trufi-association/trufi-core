@@ -14,6 +14,7 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 import '../l10n/home_screen_localizations.dart';
 import 'config/home_screen_config.dart';
 import 'cubit/route_planner_cubit.dart';
+import 'cubit/vehicle_eta_cubit.dart';
 import 'repository/home_screen_repository.dart';
 import 'repository/home_screen_repository_impl.dart';
 import 'services/request_plan_service.dart';
@@ -138,6 +139,15 @@ class HomeScreenTrufiScreen extends TrufiScreen {
         serviceHoursLookup: _findServiceHoursLookup(context),
       )..initialize(),
     ),
+    // Live ETA badges (#1004) exist only when the deploy wires a telemetry
+    // source; without it no cubit is created and the UI stays as before.
+    if (config.vehicleEtaProvider != null)
+      BlocProvider<VehicleEtaCubit>(
+        create: (_) => VehicleEtaCubit(
+          provider: config.vehicleEtaProvider!,
+          cooldown: config.etaRefreshCooldown,
+        ),
+      ),
     if (config.poiLayersManager != null)
       ChangeNotifierProvider<POILayersManager>.value(
         value: config.poiLayersManager!,

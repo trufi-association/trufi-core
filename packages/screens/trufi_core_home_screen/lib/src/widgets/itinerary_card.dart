@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
+import '../cubit/vehicle_eta_cubit.dart';
+import '../models/vehicle_eta_state.dart';
+import 'eta_badge.dart';
 import 'segmented_route_chip.dart';
 
 /// Card displaying a single itinerary option with modern design.
@@ -261,7 +264,10 @@ class ItineraryCard extends StatelessWidget {
             label: '${transferCount - 1}',
             theme: theme,
           ),
-        const Spacer(),
+        // Live ETA badge (#1004), right-aligned. Without a provider the
+        // widget is a shrunk box inside `Expanded` — exactly a `Spacer` —
+        // so the layout stays as it was.
+        Expanded(child: _ItineraryEtaBadge(itinerary: itinerary)),
         // Details button
         if (onDetailsTap != null)
           TextButton.icon(
@@ -503,6 +509,46 @@ class _InfoChip extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// ETA badge for the itinerary's first boarding vehicle (multi-leg rides:
+/// the initial bus only, #1004). Renders nothing when no [VehicleEtaCubit]
+/// is provided (feature off) or when the itinerary has no identifiable
+/// transit route (walk-only, or a leg without a route id).
+class _ItineraryEtaBadge extends StatelessWidget {
+  const _ItineraryEtaBadge({required this.itinerary});
+
+  final routing.Itinerary itinerary;
+
+  /// Keeps the badge clear of the transfer chip when the row gets tight.
+  static const _leadingGap = EdgeInsets.only(left: 8);
+
+  @override
+  Widget build(BuildContext context) {
+    // `read`, not `watch`: the BlocBuilder scopes rebuilds to the badge.
+    final cubit = context.read<VehicleEtaCubit?>();
+    if (cubit == null) return const SizedBox.shrink();
+    final routeKey = etaRouteKeyForItinerary(itinerary);
+    if (routeKey == null) return const SizedBox.shrink();
+    return BlocBuilder<VehicleEtaCubit, VehicleEtaState>(
+      bloc: cubit,
+      builder: (context, state) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: _leadingGap,
+              child: EtaBadge(
+                status: state.status,
+                eta: state.etaFor(routeKey),
+                fetchedAt: state.fetchedAt,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

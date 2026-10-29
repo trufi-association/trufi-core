@@ -496,4 +496,28 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
   String routeAlreadySaved(String routeName) {
     return 'Diese Route ist bereits als \"$routeName\" gespeichert';
   }
+
+  @override
+  String etaArrivesIn(int minutes) {
+    return 'Kommt in ~$minutes Min.';
+  }
+
+  @override
+  String get etaUnavailable => 'Live-Ankunft nicht verfügbar';
+
+  @override
+  String get etaLoading => 'Live-Ankunft wird geprüft…';
+
+  @override
+  String get etaRefresh => 'Aktualisieren';
+
+  @override
+  String etaRefreshCooldown(int seconds) {
+    return 'Aktualisierung in $seconds s möglich';
+  }
+
+  @override
+  String etaUpdated(String time) {
+    return 'Aktualisiert $time';
+  }
 }

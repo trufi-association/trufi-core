@@ -222,6 +222,72 @@ Widget _buildMapTypeButton(MapEngineManager mapEngineManager) {
 
 This will add POI layers configuration to the map type settings modal, allowing users to toggle POI categories alongside map type selection.
 
+## Optional: Live vehicle ETA
+
+Itinerary cards can show when the next vehicle of the ride's **first bus**
+reaches its boarding stop ("Arrives in ~4 min"), fed by any
+`VehicleEtaProvider` from `trufi_core_interfaces`. The feature is off unless
+you hand the config a provider; then no cubit, badge or refresh button exists.
+
+```dart
+HomeScreenConfig(
+  // Any VehicleEtaProvider; null (default) hides the feature entirely.
+  vehicleEtaProvider: etaProvider,
+  // Minimum gap between two manual refreshes (issue #1004: 10–15 s).
+  etaRefreshCooldown: const Duration(seconds: 12),
+)
+```
+
+### What the rider sees
+
+| State | Badge on the card |
+|---|---|
+| Source answered for the route | `Arrives in ~N min` (N rounded up, never 0); tooltip "Updated HH:MM" |
+| Request in flight, first time | spinner + `Checking live ETA…` |
+| Request in flight, refresh | the previous estimate, dimmed |
+| Source answered nothing for the route, or failed | `Live ETA unavailable` |
+| Walk-only itinerary, or a leg without a route id | nothing |
+
+A refresh button sits in the results header (sheet and side panel). It
+re-asks the telemetry source **without re-planning**; while the cooldown
+runs it is disabled and its tooltip counts down ("Refresh available in 7 s").
+A new plan always fetches; clearing the plan clears the badges.
+
+**First boarding vehicle only:** on a multi-leg ride the badge is for the
+initial bus — the one the rider is waiting for. Connections are not
+estimated.
+
+### Providers
+
+`RealtimeVehiclesEtaProvider` ships in `trufi_core_routing` (see its README
+for the parameters); any other backend implements `VehicleEtaProvider`:
+
+```dart
+// From an OTP 2.x GTFS-RT feed — works today wherever live positions exist.
+final otp28 = Otp28RoutingProvider(
+  endpoint: 'https://otp.example.com',
+  liveVehiclesEnabled: true,
+);
+final etaProvider = RealtimeVehiclesEtaProvider(
+  vehicles: otp28.realtimeVehiclesProvider!,
+  snapshotLoader: otp28.realtimeVehiclesProvider!.fetchOnce, // fresh per request
+);
+
+// From any other telemetry service: implement the interface.
+class CityEtaProvider implements VehicleEtaProvider {
+  @override
+  Future<VehicleEtaSnapshot> fetchEtas(VehicleEtaRequest request) async {
+    // Ask the backend for request.routeIds around request.origin and map
+    // its answer to VehicleEta entries; throw VehicleEtaException on failure.
+    throw UnimplementedError();
+  }
+}
+```
+
+Route ids are matched feed-agnostically, so OTP vehicles (`1:1132`) answer
+for a bundled-GTFS plan (`1132`) and vice versa. Nothing is persisted: the
+cubit reloads from the restored plan on start.
+
 ## Dependencies
 
 - `trufi_core_interfaces` - Core interfaces and models

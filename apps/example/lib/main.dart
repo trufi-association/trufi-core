@@ -16,6 +16,7 @@ import 'package:trufi_core_routing/trufi_core_routing.dart'
         IRoutingProvider,
         Otp28RoutingProvider,
         Otp15RoutingProvider,
+        RealtimeVehiclesEtaProvider,
         TrufiPlannerProvider,
         TrufiPlannerConfig;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
@@ -67,6 +68,15 @@ const _facebookUrl = 'https://facebook.com/trufiapp';
 const _xTwitterUrl = 'https://x.com/trufiapp';
 const _instagramUrl = 'https://instagram.com/trufiapp';
 
+// Online routing via OTP 2.8 (dev server by default, local via dart-define).
+// Hoisted out of the list because its GTFS-RT feed also powers the live ETA
+// badges below; `liveVehiclesEnabled` surfaces the "Live buses" toggle too.
+final Otp28RoutingProvider _otp28 = Otp28RoutingProvider(
+  endpoint: _otp28Endpoint,
+  displayName: 'OTP 2.8.1',
+  liveVehiclesEnabled: true,
+);
+
 // Routing engines (similar to map engines)
 final List<IRoutingProvider> _routingEngines = [
   // Offline routing via GTFS (mobile) / online via server (web)
@@ -87,7 +97,7 @@ final List<IRoutingProvider> _routingEngines = [
     ),
   // Online routing via OTP (dev servers by default, local via dart-define)
   if (!_singleEngine) ...[
-    Otp28RoutingProvider(endpoint: _otp28Endpoint, displayName: 'OTP 2.8.1'),
+    _otp28,
     Otp15RoutingProvider(endpoint: _otp15Endpoint, displayName: 'OTP 1.5.0'),
   ],
 ];
@@ -338,6 +348,13 @@ void main() {
             appName: _appName,
             deepLinkScheme: _deepLinkScheme,
             poiLayersManager: POILayersManager(assetsBasePath: 'assets/pois'),
+            // Live ETA badges (#1004) derived from the OTP 2.8 GTFS-RT feed:
+            // one snapshot per plan/refresh, no background polling. Any other
+            // `VehicleEtaProvider` (a city's telemetry API) plugs in here.
+            vehicleEtaProvider: RealtimeVehiclesEtaProvider(
+              vehicles: _otp28.realtimeVehiclesProvider!,
+              snapshotLoader: _otp28.realtimeVehiclesProvider!.fetchOnce,
+            ),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(

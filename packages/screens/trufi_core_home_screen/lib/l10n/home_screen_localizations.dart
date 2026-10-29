@@ -918,6 +918,42 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'This route is already saved as \"{routeName}\"'**
   String routeAlreadySaved(String routeName);
+
+  /// Badge on an itinerary card: minutes until the next vehicle of its first bus reaches its boarding stop
+  ///
+  /// In en, this message translates to:
+  /// **'Arrives in ~{minutes} min'**
+  String etaArrivesIn(int minutes);
+
+  /// Badge fallback when the telemetry source has no vehicle for the route
+  ///
+  /// In en, this message translates to:
+  /// **'Live ETA unavailable'**
+  String get etaUnavailable;
+
+  /// Badge while the ETA request is in flight
+  ///
+  /// In en, this message translates to:
+  /// **'Checking live ETA…'**
+  String get etaLoading;
+
+  /// Tooltip/label of the manual ETA refresh button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get etaRefresh;
+
+  /// Tooltip of the refresh button while the throttle cooldown runs
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh available in {seconds} s'**
+  String etaRefreshCooldown(int seconds);
+
+  /// Tooltip on the ETA badge with the time of the last successful update
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {time}'**
+  String etaUpdated(String time);
 }
 
 class _HomeScreenLocalizationsDelegate

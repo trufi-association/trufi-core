@@ -31,6 +31,17 @@ const _query = '''
 }
 ''';
 
+/// Thrown by [OtpVehiclePositionsProvider.fetchOnce] when OTP answers with
+/// GraphQL errors or no data. Network failures propagate untouched.
+class OtpVehiclePositionsException implements Exception {
+  const OtpVehiclePositionsException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => 'OtpVehiclePositionsException: $message';
+}
+
 /// OTP-backed implementation of [RealtimeVehiclesProvider]. Polls the OTP
 /// GraphQL endpoint periodically for GTFS-Realtime vehicle positions.
 ///
@@ -71,7 +82,12 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
     debugPrint(
       '[RealtimeVehicles] polling $_graphqlEndpoint every $pollInterval',
     );
-    _client = GraphQLClientFactory.create(_graphqlEndpoint, timeout: requestTimeout);
+    // `??=`: a client created lazily by [fetchOnce] is reused, not orphaned
+    // with its open HTTP connection pool.
+    _client ??= GraphQLClientFactory.create(
+      _graphqlEndpoint,
+      timeout: requestTimeout,
+    );
     await _tick();
     _timer = Timer.periodic(pollInterval, (_) => _tick());
   }
@@ -85,54 +101,82 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
   Future<void> dispose() async {
     stop();
     await _controller.close();
+    // HttpLink.dispose closes the http.Client it was given.
+    await _client?.link.dispose();
+    _client = null;
+  }
+
+  /// Runs ONE vehicle-positions query without touching the polling timer:
+  /// creates the GraphQL client lazily, updates [latest], emits on
+  /// [positionsStream] and returns the parsed fleet. Lets on-demand
+  /// consumers (the ETA badges of #1004) take a fresh snapshot while the
+  /// "Live buses" layer is off, with no background polling.
+  ///
+  /// Throws [OtpVehiclePositionsException] on GraphQL errors or null data;
+  /// network errors propagate untouched. The polling path ([start]) keeps
+  /// its swallow-and-log behaviour through [_tick]. Logs `snapshot: N
+  /// vehicles`, so a `tick:` line in the log always means the poller.
+  Future<List<VehiclePosition>> fetchOnce() async {
+    final positions = await _fetchPositions();
+    debugPrint('[RealtimeVehicles] snapshot: ${positions.length} vehicles');
+    return positions;
+  }
+
+  /// The query itself, shared by [fetchOnce] and the poller's [_tick].
+  Future<List<VehiclePosition>> _fetchPositions() async {
+    final client = _client ??= GraphQLClientFactory.create(
+      _graphqlEndpoint,
+      timeout: requestTimeout,
+    );
+    final result = await client.query(
+      WatchQueryOptions(
+        document: parseString(_query),
+        fetchResults: true,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      throw OtpVehiclePositionsException(
+        'query exception: ${result.exception}',
+      );
+    }
+    if (result.data == null) {
+      throw const OtpVehiclePositionsException('query returned null data');
+    }
+
+    final routes = result.data!['routes'] as List<dynamic>? ?? const [];
+    final positions = <VehiclePosition>[];
+
+    for (final route in routes) {
+      final routeMap = route as Map<String, dynamic>;
+      final routeId = routeMap['gtfsId'] as String?;
+      final routeColor = routeMap['color'] as String?;
+      final patterns = routeMap['patterns'] as List<dynamic>? ?? const [];
+      for (final pattern in patterns) {
+        final patternMap = pattern as Map<String, dynamic>;
+        final vehicles =
+            patternMap['vehiclePositions'] as List<dynamic>? ?? const [];
+        for (final v in vehicles) {
+          final position = _parseVehicle(
+            v as Map<String, dynamic>,
+            routeId,
+            routeColor,
+          );
+          if (position != null) positions.add(position);
+        }
+      }
+    }
+
+    _latest = positions;
+    if (!_controller.isClosed) _controller.add(positions);
+    return positions;
   }
 
   Future<void> _tick() async {
-    final client = _client;
-    if (client == null) return;
+    if (_client == null) return;
     try {
-      final result = await client.query(
-        WatchQueryOptions(
-          document: parseString(_query),
-          fetchResults: true,
-          fetchPolicy: FetchPolicy.networkOnly,
-        ),
-      );
-
-      if (result.hasException) {
-        debugPrint('[RealtimeVehicles] query exception: ${result.exception}');
-        return;
-      }
-      if (result.data == null) {
-        debugPrint('[RealtimeVehicles] query returned null data');
-        return;
-      }
-
-      final routes = result.data!['routes'] as List<dynamic>? ?? const [];
-      final positions = <VehiclePosition>[];
-
-      for (final route in routes) {
-        final routeMap = route as Map<String, dynamic>;
-        final routeId = routeMap['gtfsId'] as String?;
-        final routeColor = routeMap['color'] as String?;
-        final patterns = routeMap['patterns'] as List<dynamic>? ?? const [];
-        for (final pattern in patterns) {
-          final patternMap = pattern as Map<String, dynamic>;
-          final vehicles =
-              patternMap['vehiclePositions'] as List<dynamic>? ?? const [];
-          for (final v in vehicles) {
-            final position = _parseVehicle(
-              v as Map<String, dynamic>,
-              routeId,
-              routeColor,
-            );
-            if (position != null) positions.add(position);
-          }
-        }
-      }
-
-      _latest = positions;
-      _controller.add(positions);
+      final positions = await _fetchPositions();
       debugPrint('[RealtimeVehicles] tick: ${positions.length} vehicles');
     } catch (e, st) {
       debugPrint('[RealtimeVehicles] tick error: $e\n$st');
