@@ -16,6 +16,10 @@ abstract class PlannerRoutingClient {
   /// [maxTransfers] is the most bus changes an itinerary may have (default
   /// 1, see [GtfsRoutingService.findRoutes]); itineraries with two or more
   /// are only searched for when none with fewer exists.
+  ///
+  /// [directsHideTransfers] (default true) returns one-transfer itineraries
+  /// only when no direct line exists; false lists them after the direct
+  /// ones (see [GtfsRoutingService.findRoutes]).
   Future<List<RoutingPath>> findRoutes({
     required LatLng origin,
     required LatLng destination,
@@ -23,6 +27,7 @@ abstract class PlannerRoutingClient {
     int maxResults = 5,
     int maxStopCandidates = 150,
     int maxTransfers = 1,
+    bool directsHideTransfers = true,
   });
 
   /// Get all transit routes.

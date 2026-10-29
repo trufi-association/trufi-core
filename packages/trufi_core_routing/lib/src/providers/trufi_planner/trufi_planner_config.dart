@@ -75,7 +75,37 @@ class TrufiPlannerConfig {
   /// direct phase scales superlinearly with the pool). Raise it further if
   /// your city has extremely dense overlapping stops, lower it to trade
   /// coverage for speed.
+  ///
+  /// The pool silently shortens [maxWalkingDistance] wherever more than
+  /// this many stops lie within the radius: a line whose nearest stop is
+  /// farther than the N-th stop cannot be boarded at all, even directly
+  /// (trufi-sanaa#21: 1 381 m to the line, 150th stop at 1 188 m, 1 500 m
+  /// radius). Measured on 300 random endpoints: 150 truncates a 1 500 m
+  /// radius at 59 % of Sana'a's endpoints (6.2 k stops ~20 m apart; no stop
+  /// has more than 520 neighbours within 1 500 m, so 600 is "every stop in
+  /// range" there at 1.2 → 2.0 ms per query) and an 800 m radius at 51 % of
+  /// Cochabamba's (23.7 k stops; 600 costs 7.7 → 11.5 ms per query there,
+  /// 7.5 → 24 ms at 1 500 m). A city sets it to the size of its densest
+  /// walking circle; the default stays at 150 for the dense feeds.
   final int maxStopCandidates;
+
+  /// Return one-transfer itineraries only when no direct line exists
+  /// (default: true).
+  ///
+  /// The planner answers with the fewest transfers that reach the
+  /// destination: a direct line hides every one-transfer option (one fare
+  /// per ride — a transfer next to a direct line is a worse deal). With this
+  /// off the one-transfer options follow the direct ones in the list —
+  /// same rows, nothing extra searched, so no cost — for cities whose
+  /// riders expect the alternatives (trufi-sanaa#16: on that feed 32 % of
+  /// random trips get a single row from the planner and 75 % end up as a
+  /// single card in the app; 18 % and 58 % with this off). Itineraries
+  /// with two or more transfers are still searched only when nothing
+  /// shorter exists ([maxTransfers]). Remote mode sends it in the `/plan`
+  /// request; it takes effect there once trufi-server-planner's handler
+  /// reads it (today's handler ignores unknown keys, so no server fails on
+  /// it and none honours it yet).
+  final bool directsHideTransfers;
 
   /// Most bus changes an itinerary may have (default: 1, i.e. two buses).
   ///
@@ -152,6 +182,7 @@ class TrufiPlannerConfig {
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
     this.maxStopCandidates = 150,
+    this.directsHideTransfers = true,
     this.transferRadiusMeters = 100,
     this.sameNameRouteLimit = 3,
     this.persistIndex = true,
@@ -178,6 +209,7 @@ class TrufiPlannerConfig {
     this.walkSpeed = 1.2,
     this.maxTransfers = 1,
     this.maxStopCandidates = 150,
+    this.directsHideTransfers = true,
   }) : assert(maxTransfers >= 0, 'maxTransfers must be >= 0'),
        gtfsAsset = null,
        transferRadiusMeters = 100,

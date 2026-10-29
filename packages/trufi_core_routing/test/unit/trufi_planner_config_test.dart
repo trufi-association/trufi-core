@@ -58,6 +58,31 @@ void main() {
     });
   });
 
+  group('TrufiPlannerConfig directsHideTransfers (trufi-sanaa#16)', () {
+    test('local mode hides transfers behind a direct line by default', () {
+      const config = TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip');
+      expect(config.directsHideTransfers, isTrue);
+    });
+
+    test('local mode can list the one-transfer options after the directs', () {
+      const config = TrufiPlannerConfig.local(
+        gtfsAsset: 'assets/gtfs.zip',
+        directsHideTransfers: false,
+      );
+      expect(config.directsHideTransfers, isFalse);
+    });
+
+    test('remote mode exposes it too (sent in the /plan request)', () {
+      const config = TrufiPlannerConfig.remote(serverUrl: 'https://p.example');
+      expect(config.directsHideTransfers, isTrue);
+      const custom = TrufiPlannerConfig.remote(
+        serverUrl: 'https://p.example',
+        directsHideTransfers: false,
+      );
+      expect(custom.directsHideTransfers, isFalse);
+    });
+  });
+
   group('TrufiPlannerConfig persisted index (#993)', () {
     test('local mode persists by default and can opt out', () {
       const on = TrufiPlannerConfig.local(gtfsAsset: 'assets/gtfs.zip');
