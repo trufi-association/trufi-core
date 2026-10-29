@@ -180,6 +180,12 @@ abstract class SearchLocationsLocalizations {
   /// In en, this message translates to:
   /// **'To'**
   String get destinationFieldLabel;
+
+  /// Row offered when the typed query is a decimal latitude/longitude pair (trufi-sanaa#22); the placeholder is the pair as shown, e.g. "15.29483, 44.22437"
+  ///
+  /// In en, this message translates to:
+  /// **'Go to {coordinates}'**
+  String goToCoordinates(String coordinates);
 }
 
 class _SearchLocationsLocalizationsDelegate

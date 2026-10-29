@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' show Bidi;
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/search_locations_localizations.dart';
 import '../models/search_location.dart';
 import '../services/search_location_service.dart';
+import '../utils/coordinate_parser.dart';
 
 /// Configuration for [LocationSearchScreen].
 ///
@@ -43,6 +45,12 @@ class LocationSearchScreenConfiguration {
   /// Icon builder for places. Returns icon based on location id.
   final IconData Function(String id)? placeIconBuilder;
 
+  /// Whether a decimal latitude/longitude pair typed or pasted into the
+  /// field is offered as a "Go to `<lat>`, `<lon>`" row above the results
+  /// (trufi-sanaa#22). On by default; off, such a query is searched as
+  /// plain text, exactly as before.
+  final bool coordinateSearch;
+
   const LocationSearchScreenConfiguration({
     this.originHintText,
     this.destinationHintText,
@@ -54,6 +62,7 @@ class LocationSearchScreenConfiguration {
     this.yourLocationIcon = Icons.gps_fixed,
     this.chooseOnMapIcon = Icons.map,
     this.placeIconBuilder,
+    this.coordinateSearch = true,
   });
 }
 
@@ -115,6 +124,13 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
   bool _isSearching = false;
   List<SearchLocation> _loadedPlaces = [];
   bool _isLoadingYourLocation = false;
+
+  // Coordinates typed or pasted into the field (trufi-sanaa#22): parsed
+  // locally on every keystroke — no network, no index — and offered as a
+  // "Go to <lat>, <lon>" row above the text results. When the service has
+  // a reverse geocoder it fills the row's address after the debounce;
+  // nothing waits on it, so the row works with no network at all.
+  SearchLocation? _coordinateResult;
 
   // Street → corners drill-down (#745): while non-null, the whole body
   // becomes a dedicated sub-screen — "← <street>" as the title, a filter
@@ -194,12 +210,63 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
     _debounce?.cancel();
     // Editing the query means the user moved on from the corners list.
     _exitDrillDown();
+    final coordinates = widget.configuration.coordinateSearch
+        ? CoordinateParser.parse(query)
+        : null;
+    final next = coordinates == null ? null : _coordinateLocation(coordinates);
+    // The field's own setState already rebuilt the screen; only a row that
+    // changed needs another. [SearchLocation] compares by id, which carries
+    // the pair, so the same pair retyped (a trailing space, say) keeps its
+    // row — reverse-geocoded address included — instead of blinking.
+    if (next != _coordinateResult) {
+      setState(() => _coordinateResult = next);
+    }
     if (query.trim().isEmpty) {
       _performSearch(query);
       return;
     }
     _debounce = Timer(const Duration(milliseconds: 300), () {
       _performSearch(query);
+      if (coordinates != null) _resolveCoordinateAddress(query, coordinates);
+    });
+  }
+
+  /// The "Go to" row's location: the pair as the name — so the origin or
+  /// destination field reads "15.29483, 44.22437" — the parsed values
+  /// untouched, and the reverse-geocoded address once it is known.
+  SearchLocation _coordinateLocation(
+    ParsedCoordinates coordinates, {
+    String? address,
+  }) {
+    return SearchLocation(
+      id: 'coordinates:${coordinates.latitude},${coordinates.longitude}',
+      displayName: coordinates.label,
+      address: address,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+    );
+  }
+
+  /// Best effort, after the debounce: asks the service what is at the
+  /// point and puts the answer under the row. An offline service answers
+  /// null (or throws) and the row simply keeps no address. An answer for a
+  /// query the user has since edited is dropped.
+  Future<void> _resolveCoordinateAddress(
+    String query,
+    ParsedCoordinates coordinates,
+  ) async {
+    SearchLocation? place;
+    try {
+      place = await widget.searchService
+          .reverse(coordinates.latitude, coordinates.longitude)
+          .timeout(const Duration(seconds: 8));
+    } catch (_) {
+      place = null;
+    }
+    if (place == null || !mounted || _query != query) return;
+    final address = place.formattedDisplay;
+    setState(() {
+      _coordinateResult = _coordinateLocation(coordinates, address: address);
     });
   }
 
@@ -483,6 +550,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                   setState(() {
                     _query = '';
                     _searchResults = [];
+                    _coordinateResult = null;
                   });
                 },
                 onBack: () => Navigator.pop(context),
@@ -572,16 +640,48 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                       title: config.searchResultsTitle ?? l10n.searchResults,
                     ),
                     const SizedBox(height: 8),
-                    if (_isSearching)
-                      const Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      )
-                    else if (_searchResults.isEmpty)
-                      _EmptySearchResults(
-                        text: config.noResultsText ?? l10n.noResultsFound,
-                      )
-                    else
+                    // "Go to <lat>, <lon>" (trufi-sanaa#22): offered the
+                    // moment the query reads as a coordinate pair, above
+                    // and regardless of the text search. Long-press copies
+                    // the bare pair (the location's name), not the wording.
+                    if (_coordinateResult != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _ModernLocationTile(
+                          location: _coordinateResult!,
+                          // An LRM in front of the pair keeps it reading
+                          // left to right inside a right-to-left wording
+                          // (UAX #9: with ", " between two numbers in an
+                          // RTL paragraph the comma flips and a leading
+                          // minus hangs on the wrong side). Display only:
+                          // the popped location and the copied text are
+                          // the bare pair.
+                          displayNameOverride: l10n.goToCoordinates(
+                            '${Bidi.LRM}${_coordinateResult!.displayName}',
+                          ),
+                          icon: Icons.pin_drop_rounded,
+                          iconColor: colorScheme.primary,
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            Navigator.pop(context, _coordinateResult);
+                          },
+                        ),
+                      ),
+                    // With a coordinates row on screen the text search is
+                    // a bonus: no spinner while it runs and no "No results
+                    // found" when it comes back empty — the row is a result.
+                    if (_isSearching) ...[
+                      if (_coordinateResult == null)
+                        const Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                    ] else if (_searchResults.isEmpty) ...[
+                      if (_coordinateResult == null)
+                        _EmptySearchResults(
+                          text: config.noResultsText ?? l10n.noResultsFound,
+                        ),
+                    ] else
                       ...List.generate(_searchResults.length, (index) {
                         final location = _searchResults[index];
                         final canDrill =

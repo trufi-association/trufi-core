@@ -12,5 +12,6 @@
   "searchCornersHint": "Kreuzungen suchen...",
   "copiedToClipboard": "Kopiert",
   "originFieldLabel": "Von",
-  "destinationFieldLabel": "Nach"
+  "destinationFieldLabel": "Nach",
+  "goToCoordinates": "Gehe zu {coordinates}"
 }

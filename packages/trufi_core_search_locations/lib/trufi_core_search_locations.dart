@@ -8,6 +8,8 @@
 /// - **SearchLocation**: Data model for a searchable location
 /// - **SearchLocationState**: State model holding origin and destination
 /// - **SearchLocationBarConfiguration**: Styling and text configuration
+/// - **CoordinateParser**: recognises a decimal latitude/longitude pair
+///   typed into the search field (the "Go to 15.29483, 44.22437" row)
 ///
 /// ## Usage
 ///
@@ -52,6 +54,9 @@ export 'src/services/photon_search_service.dart';
 export 'src/services/offline_search_data_service.dart';
 export 'src/services/composite_search_location_service.dart';
 export 'src/services/nominatim_search_service.dart';
+
+// Utils
+export 'src/utils/coordinate_parser.dart';
 
 // Saved Places - Repository
 export 'src/saved_places/repository/search_locations_repository.dart';
