@@ -139,15 +139,15 @@ class HomeScreenTrufiScreen extends TrufiScreen {
         serviceHoursLookup: _findServiceHoursLookup(context),
       )..initialize(),
     ),
-    // Live ETA badges (#1004) exist only when the deploy wires a telemetry
-    // source; without it no cubit is created and the UI stays as before.
-    if (config.vehicleEtaProvider != null)
-      BlocProvider<VehicleEtaCubit>(
-        create: (_) => VehicleEtaCubit(
-          provider: config.vehicleEtaProvider!,
-          cooldown: config.etaRefreshCooldown,
-        ),
+    // Live ETA badges (#1004): the cubit follows the selected routing
+    // engine's telemetry (#1018), with the config's provider as a legacy
+    // override; without any source it stays idle and nothing is drawn.
+    BlocProvider<VehicleEtaCubit>(
+      create: (_) => VehicleEtaCubit(
+        provider: config.vehicleEtaProvider,
+        cooldown: config.etaRefreshCooldown,
       ),
+    ),
     if (config.poiLayersManager != null)
       ChangeNotifierProvider<POILayersManager>.value(
         value: config.poiLayersManager!,

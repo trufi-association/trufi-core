@@ -84,13 +84,38 @@ VehicleEtaRequest? buildVehicleEtaRequest(
 /// newer plan's badges. The clock is injectable for tests.
 class VehicleEtaCubit extends Cubit<VehicleEtaState> {
   VehicleEtaCubit({
-    required this.provider,
+    VehicleEtaProvider? provider,
     this.cooldown = defaultEtaRefreshCooldown,
     DateTime Function()? now,
-  }) : _now = now ?? DateTime.now,
+  }) : _provider = provider,
+       _now = now ?? DateTime.now,
        super(const VehicleEtaState());
 
-  final VehicleEtaProvider provider;
+  VehicleEtaProvider? _provider;
+
+  /// The telemetry source in use, if any. Without one the cubit stays idle
+  /// and the badges hide (#1018): the home hands it the selected engine's
+  /// provider and swaps it on engine change ([useProvider]).
+  VehicleEtaProvider? get provider => _provider;
+
+  routing.Plan? _lastPlan;
+  TrufiLatLng? _lastOrigin;
+
+  /// Switches the telemetry source. Null clears the estimates and hides the
+  /// badges; a new source starts from a blank state — the previous engine's
+  /// estimates are dropped rather than shown as "stale" while it answers —
+  /// and re-asks for the last plan so the badges follow the engine the
+  /// rider just picked. That plan may have been computed by the engine just
+  /// left; the home screen accepts the extra snapshot (`_rewireVehicleEta`).
+  void useProvider(VehicleEtaProvider? next) {
+    if (identical(next, _provider)) return;
+    _provider = next;
+    _reset();
+    final plan = _lastPlan;
+    final origin = _lastOrigin;
+    if (next == null || plan == null || origin == null) return;
+    loadForPlan(plan, origin);
+  }
 
   /// Minimum gap between two requests started by the user.
   final Duration cooldown;
@@ -105,9 +130,11 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
   /// Asks the provider for the first boarding vehicle of every itinerary of
   /// [plan] at [origin]. Walk-only plans reset the cubit without a request.
   Future<void> loadForPlan(routing.Plan plan, TrufiLatLng origin) {
+    _lastPlan = plan;
+    _lastOrigin = origin;
     final request = buildVehicleEtaRequest(plan, origin);
-    if (request == null) {
-      clear();
+    if (request == null || _provider == null) {
+      _reset();
       return Future.value();
     }
     return _fetch(request);
@@ -124,12 +151,25 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
 
   /// Forgets the plan and its estimates; any in-flight answer is dropped.
   void clear() {
+    _lastPlan = null;
+    _lastOrigin = null;
+    _reset();
+  }
+
+  /// Drops the estimates and any in-flight reply; keeps the last plan so a
+  /// later source ([useProvider]) can ask for it again.
+  void _reset() {
     _requestId++;
     _lastRequest = null;
     emit(const VehicleEtaState());
   }
 
   Future<void> _fetch(VehicleEtaRequest request) async {
+    final provider = _provider;
+    if (provider == null) {
+      _reset();
+      return;
+    }
     final id = ++_requestId;
     _lastRequest = request;
     // The gate is armed when the request STARTS, so a slow backend cannot

@@ -10,6 +10,7 @@ import '../../models/plan.dart';
 import '../../models/routing_location.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
+import '../../services/realtime_vehicles_eta_provider.dart';
 import '../../services/vehicle_positions_service.dart';
 import '../otp_2_4/otp_2_4_pattern_queries.dart' as pattern_queries;
 import '../routing_provider.dart';
@@ -90,6 +91,21 @@ class Otp28RoutingProvider extends IRoutingProvider {
     return _realtimeVehiclesProvider ??= OtpVehiclePositionsProvider(
       endpoint: endpoint,
       pollInterval: liveVehiclesPollInterval,
+    );
+  }
+
+  RealtimeVehiclesEtaProvider? _vehicleEtaProvider;
+
+  /// Live ETAs derived from this server's GTFS-RT positions: one snapshot per
+  /// plan or refresh over [realtimeVehiclesProvider] (#1018). Null when live
+  /// vehicles are disabled for this engine.
+  @override
+  VehicleEtaProvider? get vehicleEtaProvider {
+    final vehicles = realtimeVehiclesProvider;
+    if (vehicles == null) return null;
+    return _vehicleEtaProvider ??= RealtimeVehiclesEtaProvider(
+      vehicles: vehicles,
+      snapshotLoader: vehicles.fetchOnce,
     );
   }
 

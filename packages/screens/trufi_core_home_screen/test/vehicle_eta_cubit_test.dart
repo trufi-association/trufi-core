@@ -214,6 +214,130 @@ void main() {
     });
   });
 
+  group('useProvider (#1018: the source follows the routing engine)', () {
+    test(
+      'without a source a plan leaves the cubit idle (badges hidden)',
+      () async {
+        final bare = VehicleEtaCubit(now: () => now);
+        addTearDown(bare.close);
+
+        await bare.loadForPlan(threeRidesPlan(), etaOrigin);
+
+        expect(bare.provider, isNull);
+        expect(bare.state, const VehicleEtaState());
+        expect(bare.state.hasRequest, isFalse);
+      },
+    );
+
+    test('a source handed later re-asks for the last plan', () async {
+      final bare = VehicleEtaCubit(now: () => now);
+      addTearDown(bare.close);
+      await bare.loadForPlan(threeRidesPlan(), etaOrigin);
+      provider.answer = (_) => [eta('1:A', 240)];
+
+      bare.useProvider(provider);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(provider.calls, 1);
+      expect(bare.state.status, VehicleEtaStatus.ready);
+      expect(bare.state.etaFor('1:A')?.eta, const Duration(seconds: 240));
+    });
+
+    test(
+      'null hides the estimates; the same source again is a no-op',
+      () async {
+        provider.answer = (_) => [eta('1:A', 240)];
+        await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+        expect(cubit.state.status, VehicleEtaStatus.ready);
+
+        cubit.useProvider(null);
+
+        expect(cubit.state, const VehicleEtaState(), reason: 'idle = hidden');
+        expect(cubit.provider, isNull);
+
+        cubit.useProvider(null);
+        expect(provider.calls, 1, reason: 'nothing to re-ask without a source');
+
+        cubit.useProvider(provider);
+        await Future<void>.delayed(Duration.zero);
+        expect(provider.calls, 2, reason: 'the engine came back: ask again');
+        expect(cubit.state.status, VehicleEtaStatus.ready);
+
+        cubit.useProvider(provider);
+        expect(provider.calls, 2, reason: 'identical source: no request');
+      },
+    );
+
+    test('a new source supersedes the old one, even mid-flight', () async {
+      final slow = FakeVehicleEtaProvider()..gate = Completer();
+      final fast = FakeVehicleEtaProvider()..answer = (_) => [eta('1:A', 120)];
+      final c = VehicleEtaCubit(provider: slow, now: () => now);
+      addTearDown(c.close);
+      final pending = c.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(c.state.status, VehicleEtaStatus.loading);
+
+      c.useProvider(fast);
+      await Future<void>.delayed(Duration.zero);
+      expect(fast.calls, 1);
+      expect(c.state.etaFor('1:A')?.eta, const Duration(seconds: 120));
+
+      slow.gate!.complete(
+        VehicleEtaSnapshot(etas: [eta('1:A', 900)], fetchedAt: etaT0),
+      );
+      await pending;
+      expect(
+        c.state.etaFor('1:A')?.eta,
+        const Duration(seconds: 120),
+        reason: 'the previous engine answer must not overwrite the new one',
+      );
+    });
+
+    test('a new source starts from a blank state', () async {
+      final a = FakeVehicleEtaProvider()..answer = (_) => [eta('1:A', 240)];
+      final b = FakeVehicleEtaProvider()..gate = Completer();
+      final c = VehicleEtaCubit(provider: a, now: () => now);
+      addTearDown(c.close);
+      await c.loadForPlan(threeRidesPlan(), etaOrigin);
+      expect(c.state.status, VehicleEtaStatus.ready);
+
+      c.useProvider(b);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(b.calls, 1);
+      expect(c.state.status, VehicleEtaStatus.loading);
+      expect(c.state.hasRequest, isTrue);
+      expect(
+        c.state.etaFor('1:A'),
+        isNull,
+        reason:
+            'the estimate of the engine just left must not survive the '
+            'switch as "stale" while the new source answers',
+      );
+      expect(c.state.fetchedAt, isNull);
+      expect(
+        EtaBadge.kindFor(c.state.status, c.state.etaFor('1:A')),
+        EtaBadgeKind.loading,
+        reason: 'the badge spins instead of dimming the old value',
+      );
+
+      b.gate!.complete(VehicleEtaSnapshot.empty(now));
+      await Future<void>.delayed(Duration.zero);
+      expect(c.state.status, VehicleEtaStatus.unavailable);
+    });
+
+    test('clear forgets the plan: a later source has nothing to ask', () async {
+      await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
+      cubit.clear();
+      final other = FakeVehicleEtaProvider();
+
+      cubit.useProvider(other);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(other.calls, 0);
+      expect(cubit.state, const VehicleEtaState());
+    });
+  });
+
   group('buildVehicleEtaRequest', () {
     test('falls back to route.id and skips legs without any id', () {
       final plan = routing.Plan(

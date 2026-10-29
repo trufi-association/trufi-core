@@ -62,12 +62,16 @@ class HomeScreenConfig {
   /// cards (#1004): `RealtimeVehiclesEtaProvider` over a GTFS-RT feed, or
   /// any other `VehicleEtaProvider`.
   ///
-  /// Null (default) hides the feature entirely: no cubit is created, no
-  /// badge and no refresh button are rendered.
+  /// Null (default): the badges follow the selected routing engine's
+  /// [IRoutingProvider.vehicleEtaProvider] (#1018) — an engine without one
+  /// draws no badge and no refresh button. Set it only to force one
+  /// telemetry source for every engine (legacy override: it wins over the
+  /// engine's own provider).
   final VehicleEtaProvider? vehicleEtaProvider;
 
   /// Minimum gap between two user-triggered ETA requests (issue #1004 asks
-  /// for a 10–15 s client-side throttle). Only used with [vehicleEtaProvider].
+  /// for a 10–15 s client-side throttle). Applies to whichever source is in
+  /// use: this override or the selected engine's.
   final Duration etaRefreshCooldown;
 
   const HomeScreenConfig({

@@ -150,6 +150,11 @@ abstract class IRoutingProvider {
   ///
   /// Default: null (no live vehicles).
   RealtimeVehiclesProvider? get realtimeVehiclesProvider => null;
+
+  /// Telemetry source for the live ETA badges (#1004), when this engine has
+  /// one: the home asks the *selected* engine, so an engine without
+  /// telemetry shows no badge at all (#1018). Default: none.
+  VehicleEtaProvider? get vehicleEtaProvider => null;
 }
 
 /// Option for routing provider selection UI.
