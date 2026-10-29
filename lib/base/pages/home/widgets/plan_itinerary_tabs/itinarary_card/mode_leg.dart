@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -6,30 +8,24 @@ import 'package:trufi_core/base/utils/text/outlined_text.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class ModeLeg extends StatelessWidget {
-  final double maxWidth;
+  /// Width the summary row allotted to this leg; never drawn narrower than
+  /// [IconTransport.minWidth].
+  final double width;
   final Leg leg;
-  final double legLength;
   final bool isEnd;
 
   const ModeLeg({
     super.key,
     required this.leg,
-    required this.legLength,
-    required this.maxWidth,
+    required this.width,
     required this.isEnd,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final perc = legLength.abs() / 10;
-    final minWidth = RouteLeg.minWidth(isEnd: isEnd);
     return SizedBox(
-      width: perc > 1
-          ? maxWidth
-          : (maxWidth * perc) >= minWidth
-          ? (maxWidth * perc)
-          : minWidth,
+      width: math.max(width, IconTransport.minWidth(isEnd: isEnd)),
       height: 30,
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
@@ -90,38 +86,27 @@ class WaitLeg extends StatelessWidget {
 }
 
 class RouteLeg extends StatelessWidget {
-  final double maxWidth;
+  /// Width the summary row allotted to this leg; never drawn narrower than
+  /// [IconTransport.minWidth].
+  final double width;
   final Leg leg;
-  final double legLength;
+  // TODO Implement a boolean to configure if the backend has a server or not
+  // Implement for otpServer without route color configuration
   final Color? forcedColor;
   final bool isEnd;
 
   const RouteLeg({
     super.key,
     required this.leg,
-    required this.legLength,
-    required this.maxWidth,
+    required this.width,
     this.forcedColor,
     required this.isEnd,
   });
 
-  /// Narrowest chip: the 22 px icon plus its 1 + 1 px margins and, unless
-  /// it is the last leg, the 15 px arrow with its 2 px padding. 24 px was
-  /// not enough for a chip with an arrow: every leg after the first threw
-  /// "overflowed by 17 pixels" in debug and painted its arrow over the next
-  /// chip in release (trufi-core#1041).
-  static double minWidth({required bool isEnd}) => isEnd ? 24 : 41;
-
   @override
   Widget build(BuildContext context) {
-    final perc = legLength.abs() / 10;
-    final min = minWidth(isEnd: isEnd);
     return SizedBox(
-      width: perc > 1
-          ? maxWidth
-          : (maxWidth * perc) >= min
-          ? (maxWidth * perc)
-          : min,
+      width: math.max(width, IconTransport.minWidth(isEnd: isEnd)),
       height: 30,
       child: ClipRRect(
         child: IconTransport(
