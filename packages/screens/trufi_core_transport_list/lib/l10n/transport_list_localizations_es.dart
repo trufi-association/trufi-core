@@ -162,6 +162,11 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
       'Centro de la ciudad (ubicación no disponible)';
 
   @override
+  String nearbyAnchorAlongStreet(String street) {
+    return 'A lo largo de $street';
+  }
+
+  @override
   String get nearbyUseMyLocation => 'Usar mi ubicación';
 
   @override

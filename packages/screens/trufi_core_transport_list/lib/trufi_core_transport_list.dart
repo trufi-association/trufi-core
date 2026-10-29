@@ -28,6 +28,7 @@ export 'src/widgets/route_count_indicator.dart';
 // Nearby lines (#1006): offline discovery by distance radius
 export 'src/nearby/nearby_radius.dart';
 export 'src/nearby/nearby_line.dart';
+export 'src/nearby/nearby_street_anchor.dart';
 export 'src/nearby/nearby_geometry.dart';
 export 'src/nearby/nearby_lines_service.dart';
 export 'src/nearby/nearby_lines_data_source.dart';

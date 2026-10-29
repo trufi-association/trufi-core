@@ -172,6 +172,16 @@
   "@nearbyAnchorDefault": {
     "description": "Anchor row label when no fix and no pin exist and the app's default center is used"
   },
+  "nearbyAnchorAlongStreet": "Along {street}",
+  "@nearbyAnchorAlongStreet": {
+    "description": "Anchor row label when the search covers every corner of a street picked in the location search (lines along the street)",
+    "placeholders": {
+      "street": {
+        "type": "String",
+        "example": "Avenida Heroínas"
+      }
+    }
+  },
   "nearbyUseMyLocation": "Use my location",
   "@nearbyUseMyLocation": {
     "description": "Button that re-centres the search on the device position"

@@ -39,6 +39,11 @@ class SearchLocationsLocalizationsEn extends SearchLocationsLocalizations {
   String get searchCornersHint => 'Search corners...';
 
   @override
+  String linesAlongStreet(String street) {
+    return 'Lines along $street';
+  }
+
+  @override
   String get copiedToClipboard => 'Copied';
 
   @override

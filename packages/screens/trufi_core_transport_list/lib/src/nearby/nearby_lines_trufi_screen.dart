@@ -19,6 +19,7 @@ import 'nearby_line.dart';
 import 'nearby_lines_cubit.dart';
 import 'nearby_lines_data_source.dart';
 import 'nearby_radius.dart';
+import 'nearby_street_anchor.dart';
 import 'widgets/nearby_header_card.dart';
 import 'widgets/nearby_lines_sheet.dart';
 import 'widgets/nearby_map_layers.dart';
@@ -37,6 +38,10 @@ typedef NearbyLineDetailsCallback =
 /// `TrufiPlannerProvider` with `TrufiPlannerConfig.local` among the
 /// `RoutingEngineManager` engines (or a [dataSourceBuilder]). Without one the
 /// screen explains that the offline planner is missing instead of failing.
+///
+/// [showAlongStreet] opens the same screen on the lines along a street
+/// (trufi-sanaa#20): the host app wires it to the search screen's
+/// `onLinesAlongStreet` callback.
 class NearbyLinesTrufiScreen extends TrufiScreen {
   NearbyLinesTrufiScreen({
     this.dataSourceBuilder,
@@ -55,17 +60,40 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
   final NearbyRadius initialRadius;
   final LocationService _locationService;
 
+  /// Route of the screen; [showAlongStreet] pushes it.
+  static const String routePath = '/nearby';
+
   @override
   String get id => 'nearby_lines';
 
   @override
-  String get path => '/nearby';
+  String get path => routePath;
+
+  /// Pushes the screen on the lines along [street] (trufi-sanaa#20): the
+  /// street travels as the route's `extra`, so a drawer visit (no extra)
+  /// keeps locating the rider as before. [context] must be under the app's
+  /// `GoRouter` — the search screen's is.
+  static void showAlongStreet(BuildContext context, NearbyStreetAnchor street) {
+    context.push(routePath, extra: street);
+  }
 
   @override
   Widget Function(BuildContext context) get builder =>
-      (_) => _NearbyLinesScreenWidget(
+      (context) => _NearbyLinesScreenWidget(
         onLineDetails: onLineDetails ?? showNearbyLineDetails,
+        initialStreet: _streetExtra(context),
       );
+
+  /// The street passed by [showAlongStreet]; null on a drawer visit and
+  /// when the screen is not hosted by `GoRouter` (package examples, tests).
+  static NearbyStreetAnchor? _streetExtra(BuildContext context) {
+    try {
+      final extra = GoRouterState.of(context).extra;
+      return extra is NearbyStreetAnchor ? extra : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
@@ -193,9 +221,15 @@ void showNearbyLineDetails(BuildContext context, NearbyLine line) {
 }
 
 class _NearbyLinesScreenWidget extends StatefulWidget {
-  const _NearbyLinesScreenWidget({required this.onLineDetails});
+  const _NearbyLinesScreenWidget({
+    required this.onLineDetails,
+    this.initialStreet,
+  });
 
   final NearbyLineDetailsCallback onLineDetails;
+
+  /// Anchors this visit on a street instead of locating the rider.
+  final NearbyStreetAnchor? initialStreet;
 
   @override
   State<_NearbyLinesScreenWidget> createState() =>
@@ -241,9 +275,17 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   @override
   void initState() {
     super.initState();
-    // The cubit is app-scoped: every visit re-locates and re-queries.
+    // The cubit is app-scoped: every visit re-locates and re-queries (or
+    // re-anchors on the street it was opened for).
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<NearbyLinesCubit>().start();
+      if (!mounted) return;
+      final cubit = context.read<NearbyLinesCubit>();
+      final street = widget.initialStreet;
+      if (street != null) {
+        cubit.startAlongStreet(street);
+      } else {
+        cubit.start();
+      }
     });
   }
 
@@ -262,15 +304,17 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     _camera = _initialCamera;
   }
 
-  /// Camera side effects: fit the ring when the anchor or radius moves, the
-  /// selected line when one is highlighted, the ring again when cleared.
+  /// Camera side effects: fit the search area when the anchor or radius
+  /// moves, the selected line when one is highlighted, the area again when
+  /// cleared.
   void _onStateChanged(NearbyLinesState state) {
     final previous = _lastState;
     _lastState = state;
     final anchor = state.anchor;
     if (anchor == null) return;
 
-    final anchorChanged = previous?.anchor != anchor;
+    final anchorChanged =
+        previous?.anchor != anchor || previous?.street != state.street;
     final radiusChanged = previous?.radius != state.radius;
     final selectionChanged = previous?.selectedLineKey != state.selectedLineKey;
 
@@ -281,11 +325,16 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       return;
     }
     if (anchorChanged || radiusChanged || selectionChanged || _fitPending) {
-      _fitTo(
-        NearbyGeometry.circlePolygon(anchor, state.radius.meters),
-        fallbackTarget: anchor,
-      );
+      _fitTo(_searchArea(state, anchor), fallbackTarget: anchor);
     }
+  }
+
+  /// What the camera frames without a highlighted line: the selected ring,
+  /// or every corner of the street (a one-corner street is a ring again).
+  static List<LatLng> _searchArea(NearbyLinesState state, LatLng anchor) {
+    final corners = state.street?.corners;
+    if (corners != null && corners.length > 1) return corners;
+    return NearbyGeometry.circlePolygon(anchor, state.radius.meters);
   }
 
   void _fitTo(List<LatLng> points, {required LatLng fallbackTarget}) {
@@ -315,7 +364,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       if (!mounted) return;
       final points = state.selectedGeometry.length > 1
           ? state.selectedGeometry
-          : NearbyGeometry.circlePolygon(anchor, state.radius.meters);
+          : _searchArea(state, anchor);
       _fitTo(points, fallbackTarget: anchor);
     });
   }

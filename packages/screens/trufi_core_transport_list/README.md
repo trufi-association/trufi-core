@@ -110,6 +110,46 @@ request when merely denied; no dialogs). Permanently denied, services off or
 no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
 long-press the map to move the pin anywhere, "Use my location" re-anchors.
 
+### Lines along a street
+
+The same screen answers "which lines run along this street?"
+(trufi-sanaa#20). The feed relates routes to geometries, not to streets, so
+the answer is built from what the offline search index knows about a street:
+its corners. `NearbyLinesTrufiScreen.showAlongStreet(context, street)` pushes
+`/nearby` with a `NearbyStreetAnchor` (name + corner points) as the route's
+`extra`; the cubit runs the nearby query from every corner and keeps each
+line once, at its nearest corner (`NearbyLinesResult.union`). The rows are
+ordered by how many corners each line passes within 100 m of, most first:
+on a street every line that crosses it is 0 m from the corner it crosses
+at, so the order — not the distance — is what tells the lines running along
+the street from the ones merely crossing it (a crossing line is still
+listed: the rider can board it at that corner). The header reads "Along
+<street> · <municipality>" (the `subtitle`, when the index carries one —
+Cochabamba has one "Avenida Circunvalación" per municipality; a long press
+shows the whole text), the map shows a dot per corner instead of the rings
+and the pin, the chips filter by the distance to the nearest corner. A
+long-press or "Use my location" leaves the street again.
+
+The search screen offers the row when the host app wires it:
+
+```dart
+HomeScreenTrufiScreen(
+  onLinesAlongStreet: (context, street, corners) =>
+      NearbyLinesTrufiScreen.showAlongStreet(
+        context,
+        NearbyStreetAnchor(
+          name: street.displayName,
+          subtitle: street.address,
+          corners: [for (final c in corners) LatLng(c.latitude, c.longitude)],
+        ),
+      ),
+)
+```
+
+It needs an `OfflineSearchDataService` with a `search.json` that carries
+`streetJunctions` (the `osm-search-data-export` json-compact output): a city
+whose offline search has no streets (POI-only) never shows the row.
+
 ### Route detail
 
 The chevron of a row opens `TransportDetailScreen` with details built from

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../l10n/transport_list_localizations.dart';
 import '../nearby_lines_cubit.dart';
+import '../nearby_street_anchor.dart';
 
 /// Floating header of the nearby-lines screen, in the shape of the route
 /// detail's top bar: a 44 px menu button, the title card (screen title over
@@ -44,17 +45,33 @@ class NearbyHeaderCard extends StatelessWidget {
     NearbyAnchorSource.device: Icons.my_location_rounded,
     NearbyAnchorSource.pin: Icons.push_pin_rounded,
     NearbyAnchorSource.fallback: Icons.location_searching_rounded,
+    NearbyAnchorSource.street: Icons.signpost_rounded,
   };
 
   static final Map<
     NearbyAnchorSource,
-    String Function(TransportListLocalizations)
+    String Function(TransportListLocalizations, NearbyLinesState)
   >
   _anchorLabels = {
-    NearbyAnchorSource.device: (l10n) => l10n.nearbyAnchorYourLocation,
-    NearbyAnchorSource.pin: (l10n) => l10n.nearbyAnchorPinned,
-    NearbyAnchorSource.fallback: (l10n) => l10n.nearbyAnchorDefault,
+    NearbyAnchorSource.device: (l10n, _) => l10n.nearbyAnchorYourLocation,
+    NearbyAnchorSource.pin: (l10n, _) => l10n.nearbyAnchorPinned,
+    NearbyAnchorSource.fallback: (l10n, _) => l10n.nearbyAnchorDefault,
+    NearbyAnchorSource.street: (l10n, state) =>
+        _streetLabel(l10n, state.street),
   };
+
+  /// "Along `<street>` · `<municipality>`": the subtitle tells same-named
+  /// streets apart (Cochabamba's index has one "Avenida Circunvalación"
+  /// per municipality); omitted when the index carries none.
+  static String _streetLabel(
+    TransportListLocalizations l10n,
+    NearbyStreetAnchor? street,
+  ) {
+    final label = l10n.nearbyAnchorAlongStreet(street?.name ?? '');
+    final subtitle = street?.subtitle;
+    if (subtitle == null || subtitle.isEmpty) return label;
+    return '$label · $subtitle';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +79,7 @@ class NearbyHeaderCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = TransportListLocalizations.of(context);
     final showHint = showsHint(state);
+    final anchorLabel = _anchorLabels[state.anchorSource]!(l10n, state);
 
     return Row(
       children: [
@@ -105,13 +123,19 @@ class NearbyHeaderCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Expanded(
-                        child: Text(
-                          _anchorLabels[state.anchorSource]!(l10n),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
+                        // A long street name ellipsizes; the tooltip (long
+                        // press) is the only place on this screen that
+                        // shows it whole.
+                        child: Tooltip(
+                          message: anchorLabel,
+                          child: Text(
+                            anchorLabel,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

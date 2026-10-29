@@ -8,7 +8,7 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart' show MapsLocalizations;
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart'
-    show SearchLocationsLocalizations;
+    show LinesAlongStreetCallback, SearchLocationsLocalizations;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/home_screen_localizations.dart';
@@ -42,6 +42,11 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   /// Provides the route code to allow navigation to route details screen.
   final void Function(BuildContext context, String routeCode)? onRouteTap;
 
+  /// Handler of the "Lines along `<street>`" row in the search screen's
+  /// corners list (trufi-sanaa#20), typically
+  /// `NearbyLinesTrufiScreen.showAlongStreet`. Null hides the row.
+  final LinesAlongStreetCallback? onLinesAlongStreet;
+
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
   static Future<void> init() async {
@@ -54,6 +59,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     this.onItineraryDetails,
     this.onStartNavigation,
     this.onRouteTap,
+    this.onLinesAlongStreet,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
   }
@@ -96,6 +102,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       onItineraryDetails: onItineraryDetails,
       onStartNavigation: onStartNavigation,
       onRouteTap: onRouteTap,
+      onLinesAlongStreet: onLinesAlongStreet,
     );
   };
 

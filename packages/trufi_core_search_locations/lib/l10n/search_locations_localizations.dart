@@ -163,6 +163,12 @@ abstract class SearchLocationsLocalizations {
   /// **'Search corners...'**
   String get searchCornersHint;
 
+  /// Action row on top of a street's corners list that opens the public transport lines running along that street (every corner searched at once)
+  ///
+  /// In en, this message translates to:
+  /// **'Lines along {street}'**
+  String linesAlongStreet(String street);
+
   /// Short confirmation shown after a place or stop name was copied to the clipboard (long-press on the name, or the copy button)
   ///
   /// In en, this message translates to:

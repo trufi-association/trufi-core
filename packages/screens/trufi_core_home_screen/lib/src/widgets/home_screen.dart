@@ -55,6 +55,10 @@ class HomeScreen extends StatefulWidget {
   /// Provides the route code to allow navigation to route details screen.
   final void Function(BuildContext context, String routeCode)? onRouteTap;
 
+  /// Handler of the "Lines along `<street>`" row in the search screen's
+  /// corners list (trufi-sanaa#20); null hides the row.
+  final LinesAlongStreetCallback? onLinesAlongStreet;
+
   const HomeScreen({
     super.key,
     required this.onMenuPressed,
@@ -62,6 +66,7 @@ class HomeScreen extends StatefulWidget {
     this.onItineraryDetails,
     this.onStartNavigation,
     this.onRouteTap,
+    this.onLinesAlongStreet,
   });
 
   @override
@@ -630,6 +635,7 @@ class _HomeScreenState extends State<HomeScreen>
           searchService: searchLocationsCubit.searchLocationService,
           myPlaces: widget.config.myPlaces,
           myPlacesProvider: myPlacesProvider,
+          onLinesAlongStreet: widget.onLinesAlongStreet,
           configuration: LocationSearchScreenConfiguration(
             originHintText: l10n.searchOrigin,
             destinationHintText: l10n.searchDestination,
