@@ -62,7 +62,16 @@ class TransportListTrufiScreen extends TrufiScreen {
   /// nothing.
   final String? shareBaseUrl;
 
-  TransportListTrufiScreen({this.dataProviderBuilder, this.shareBaseUrl});
+  /// [TransportDetailScreen.showStops] for the `/routes/:id` detail:
+  /// `false` keeps the stops out of it (timeline, count, map dots) for
+  /// feeds whose stops are synthetic (trufi-sanaa#18).
+  final bool showStops;
+
+  TransportListTrufiScreen({
+    this.dataProviderBuilder,
+    this.shareBaseUrl,
+    this.showStops = true,
+  });
 
   @override
   String get id => 'transport_list';
@@ -103,6 +112,7 @@ class TransportListTrufiScreen extends TrufiScreen {
         return TransportDetailScreen(
           routeCode: routeId,
           getRouteDetails: getDetails,
+          showStops: showStops,
         );
       },
     ),

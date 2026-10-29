@@ -46,6 +46,15 @@ const _otp15Endpoint = String.fromEnvironment(
 // (trufi-sanaa#23):
 //   flutter run --dart-define=SINGLE_ENGINE=true
 const _singleEngine = bool.fromEnvironment('SINGLE_ENGINE');
+
+// Route detail without stops (trufi-sanaa#18): a city whose feed carries
+// synthetic stops passes `showStops: false`. The example keeps the default
+// and exposes the switch for manual checks:
+//   flutter run --dart-define=ROUTE_DETAIL_SHOW_STOPS=false
+const _routeDetailShowStops = bool.fromEnvironment(
+  'ROUTE_DETAIL_SHOW_STOPS',
+  defaultValue: true,
+);
 const _photonUrl = 'https://photon.trufi.app';
 const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 const _appName = 'Trufi App';
@@ -359,10 +368,10 @@ void main() {
         ),
         SavedPlacesTrufiScreen(),
         SavedRoutesTrufiScreen(),
-        TransportListTrufiScreen(),
+        TransportListTrufiScreen(showStops: _routeDetailShowStops),
         // Offline nearby lines (#1006): needs the local TrufiPlannerProvider
         // above; on web (remote planner only) it shows the unavailable state.
-        NearbyLinesTrufiScreen(),
+        NearbyLinesTrufiScreen(showStops: _routeDetailShowStops),
         FaresTrufiScreen(
           config: FaresConfig(
             currency: 'Bs.',

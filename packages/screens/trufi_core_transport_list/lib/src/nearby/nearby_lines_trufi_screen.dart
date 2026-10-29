@@ -46,6 +46,7 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
   NearbyLinesTrufiScreen({
     this.dataSourceBuilder,
     this.onLineDetails,
+    this.showStops = true,
     this.initialRadius = NearbyRadius.m300,
     LocationService? locationService,
   }) : _locationService = locationService ?? LocationService();
@@ -56,6 +57,12 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
   /// Replaces the default detail navigation, e.g. to route through
   /// `/routes/:id` with the code the app's list provider understands.
   final NearbyLineDetailsCallback? onLineDetails;
+
+  /// [TransportDetailScreen.showStops] for the default detail navigation
+  /// ([showNearbyLineDetails]): `false` for feeds whose stops are
+  /// synthetic (trufi-sanaa#18). Not applied when [onLineDetails] is
+  /// given — that callback decides what it opens.
+  final bool showStops;
 
   final NearbyRadius initialRadius;
   final LocationService _locationService;
@@ -80,7 +87,10 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
   @override
   Widget Function(BuildContext context) get builder =>
       (context) => _NearbyLinesScreenWidget(
-        onLineDetails: onLineDetails ?? showNearbyLineDetails,
+        onLineDetails:
+            onLineDetails ??
+            (context, line) =>
+                showNearbyLineDetails(context, line, showStops: showStops),
         initialStreet: _streetExtra(context),
       );
 
@@ -195,7 +205,12 @@ TransportRouteDetails nearbyLineToRouteDetails(
 
 /// Default [NearbyLineDetailsCallback]: pushes the route detail over the
 /// nearby screen (pageless route, URL unchanged — like the home map picker).
-void showNearbyLineDetails(BuildContext context, NearbyLine line) {
+/// [showStops] is [TransportDetailScreen.showStops].
+void showNearbyLineDetails(
+  BuildContext context,
+  NearbyLine line, {
+  bool showStops = true,
+}) {
   final geometry = context.read<NearbyLinesCubit>().dataSource?.geometryOf(
     line,
   );
@@ -215,6 +230,7 @@ void showNearbyLineDetails(BuildContext context, NearbyLine line) {
       builder: (_) => TransportDetailScreen(
         routeCode: line.detailCode,
         getRouteDetails: (_) async => details,
+        showStops: showStops,
       ),
     ),
   );

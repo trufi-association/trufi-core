@@ -120,6 +120,7 @@ Future<_FakeEngine> _pumpScreen(
   bool withDataSource = true,
   bool locationGranted = false,
   NearbyLineDetailsCallback? onLineDetails,
+  bool showStops = true,
 }) async {
   mockGeolocator(granted: locationGranted);
   final engine = _FakeEngine();
@@ -130,6 +131,7 @@ Future<_FakeEngine> _pumpScreen(
   final screen = NearbyLinesTrufiScreen(
     dataSourceBuilder: withDataSource ? (_) => _FakeDataSource() : null,
     onLineDetails: onLineDetails,
+    showStops: showStops,
   );
   addTearDown(screen.dispose);
   await tester.pumpWidget(
@@ -206,6 +208,20 @@ Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   await tester.tap(find.text('open'));
   await tester.pumpAndSettle();
   return (engine: engine, source: source);
+}
+
+/// Pumps the screen with the default detail navigation and taps the first
+/// row's chevron; returns the [TransportDetailScreen] it pushed.
+Future<TransportDetailScreen> openDetailViaChevron(
+  WidgetTester tester, {
+  required bool showStops,
+}) async {
+  await _pumpScreen(tester, showStops: showStops);
+  await tester.tap(find.byTooltip('Line details').first);
+  await tester.pumpAndSettle();
+  return tester.widget<TransportDetailScreen>(
+    find.byType(TransportDetailScreen),
+  );
 }
 
 void main() {
@@ -291,6 +307,24 @@ void main() {
     await tester.tap(find.byTooltip('Line details').first);
     await tester.pumpAndSettle();
     expect(opened.map((l) => l.displayName), ['201']);
+  });
+
+  // One test per value: a second pumpWidget would update the same
+  // MaterialApp/Navigator in place and leave the first pushed detail on top.
+  testWidgets('the default chevron navigation opens the detail with stops '
+      'shown (the default)', (tester) async {
+    expect(
+      (await openDetailViaChevron(tester, showStops: true)).showStops,
+      isTrue,
+    );
+  });
+
+  testWidgets("the default chevron navigation forwards the screen's "
+      'showStops: false (trufi-sanaa#18)', (tester) async {
+    expect(
+      (await openDetailViaChevron(tester, showStops: false)).showStops,
+      isFalse,
+    );
   });
 
   testWidgets('radius chips filter the rows and restyle the rings', (
