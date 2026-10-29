@@ -170,6 +170,20 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
   return SimpleMenuItem(
       buildIcon: (context) => const Icon(Icons.share),
       name: (context) {
+        final items = <SocialMediaItem>[
+          if (defaultUrls.urlFacebook != null)
+            FacebookSocialMedia(defaultUrls.urlFacebook!),
+          if (defaultUrls.urlInstagram != null)
+            InstagramSocialMedia(defaultUrls.urlInstagram!),
+          if (defaultUrls.urlTwitter != null)
+            TwitterSocialMedia(defaultUrls.urlTwitter!),
+          if (defaultUrls.urlTiktok != null)
+            TiktokSocialMedia(defaultUrls.urlTiktok!),
+          if (defaultUrls.urlWebSite != null)
+            WebSiteSocialMedia(defaultUrls.urlWebSite!),
+          if (defaultUrls.urlYoutube != null)
+            YoutubeSocialMedia(defaultUrls.urlYoutube!),
+        ];
         return DropdownButton<SocialMediaItem>(
           icon: Row(
             children: [
@@ -180,25 +194,16 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
               const Icon(Icons.arrow_drop_down),
             ],
           ),
-          selectedItemBuilder: (_) => [],
+          // The label lives in [icon]; the selected item is never drawn. The
+          // builder still has to return one widget per item: DropdownButton
+          // asserts on the length in debug builds (#72 in trufi-arequipa).
+          selectedItemBuilder: (_) =>
+              List<Widget>.filled(items.length, const SizedBox.shrink()),
           underline: Container(),
           onChanged: (SocialMediaItem? value) {
             value?.onClick(context, true);
           },
-          items: <SocialMediaItem>[
-            if (defaultUrls.urlFacebook != null)
-              FacebookSocialMedia(defaultUrls.urlFacebook!),
-            if (defaultUrls.urlInstagram != null)
-              InstagramSocialMedia(defaultUrls.urlInstagram!),
-            if (defaultUrls.urlTwitter != null)
-              TwitterSocialMedia(defaultUrls.urlTwitter!),
-            if (defaultUrls.urlTiktok != null)
-              TiktokSocialMedia(defaultUrls.urlTiktok!),
-            if (defaultUrls.urlWebSite != null)
-              WebSiteSocialMedia(defaultUrls.urlWebSite!),
-            if (defaultUrls.urlYoutube != null)
-              YoutubeSocialMedia(defaultUrls.urlYoutube!),
-          ].map((SocialMediaItem value) {
+          items: items.map((SocialMediaItem value) {
             return DropdownMenuItem<SocialMediaItem>(
               value: value,
               child: Row(
