@@ -274,65 +274,76 @@ class _TransportListContentState extends State<TransportListContent>
           // as before; it sits on the end side of the text direction
           // (right in LTR, left in RTL) on its own. `interactive` is
           // explicit because the Material default is off on Android.
-          child: Scrollbar(
-            controller: _scrollController,
-            thumbVisibility: true,
-            interactive: true,
-            child: ListView.builder(
+          child: ScrollConfiguration(
+            // Material adds its own Scrollbar around every vertical
+            // scrollable on desktop platforms (web with a mouse included),
+            // which painted a second thumb on top of this one (#1020).
+            // Opting out keeps the rest of the platform behaviour
+            // (overscroll, physics) because the behaviour is copied.
+            behavior: ScrollConfiguration.of(
+              context,
+            ).copyWith(scrollbars: false),
+            child: Scrollbar(
               controller: _scrollController,
-              // Giving the list its own controller drops the implicit
-              // `AlwaysScrollableScrollPhysics` a primary list gets, and a
-              // list shorter than the screen (one route, a narrow filter)
-              // would no longer pull-to-refresh. Keep it explicit.
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              itemCount: listItems.length,
-              itemBuilder: (context, index) {
-                final item = listItems[index];
+              thumbVisibility: true,
+              interactive: true,
+              child: ListView.builder(
+                controller: _scrollController,
+                // Giving the list its own controller drops the implicit
+                // `AlwaysScrollableScrollPhysics` a primary list gets, and a
+                // list shorter than the screen (one route, a narrow filter)
+                // would no longer pull-to-refresh. Keep it explicit.
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                itemCount: listItems.length,
+                itemBuilder: (context, index) {
+                  final item = listItems[index];
 
-                // Staggered animation
-                final animation = Tween<double>(begin: 0, end: 1).animate(
-                  CurvedAnimation(
-                    parent: _listAnimationController,
-                    curve: Interval(
-                      (index / listItems.length) * 0.5,
-                      ((index + 1) / listItems.length) * 0.5 + 0.5,
-                      curve: Curves.easeOutCubic,
+                  // Staggered animation
+                  final animation = Tween<double>(begin: 0, end: 1).animate(
+                    CurvedAnimation(
+                      parent: _listAnimationController,
+                      curve: Interval(
+                        (index / listItems.length) * 0.5,
+                        ((index + 1) / listItems.length) * 0.5 + 0.5,
+                        curve: Curves.easeOutCubic,
+                      ),
                     ),
-                  ),
-                );
+                  );
 
-                return AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 20 * (1 - animation.value)),
-                      child: Opacity(opacity: animation.value, child: child),
-                    );
-                  },
-                  child: item.isHeader
-                      ? _AgencyHeader(
-                          name: item.headerName!,
-                          routeCount: item.headerRouteCount!,
-                          onQrTap:
-                              item.headerAgency != null &&
-                                  widget.onShowOperatorQr != null
-                              ? () =>
-                                    widget.onShowOperatorQr!(item.headerAgency!)
-                              : null,
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: TransportTile(
-                            route: item.route!,
-                            onTap: () {
-                              HapticFeedback.selectionClick();
-                              widget.onRouteTap(item.route!);
-                            },
+                  return AnimatedBuilder(
+                    animation: animation,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 20 * (1 - animation.value)),
+                        child: Opacity(opacity: animation.value, child: child),
+                      );
+                    },
+                    child: item.isHeader
+                        ? _AgencyHeader(
+                            name: item.headerName!,
+                            routeCount: item.headerRouteCount!,
+                            onQrTap:
+                                item.headerAgency != null &&
+                                    widget.onShowOperatorQr != null
+                                ? () => widget.onShowOperatorQr!(
+                                    item.headerAgency!,
+                                  )
+                                : null,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: TransportTile(
+                              route: item.route!,
+                              onTap: () {
+                                HapticFeedback.selectionClick();
+                                widget.onRouteTap(item.route!);
+                              },
+                            ),
                           ),
-                        ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),
