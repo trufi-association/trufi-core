@@ -200,6 +200,13 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
                     children: [
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
+                        // The drag handlers would otherwise give this region
+                        // scrollUp/scrollDown semantics actions: a screen
+                        // reader "scroll" on the header moved the sheet by a
+                        // few pixels and snapped it straight back (a no-op
+                        // flicker). Resizing stays reachable through the
+                        // content's own scroll semantics.
+                        excludeFromSemantics: true,
                         onVerticalDragUpdate: _onHandleDragUpdate,
                         onVerticalDragEnd: _onHandleDragEnd,
                         child: Column(

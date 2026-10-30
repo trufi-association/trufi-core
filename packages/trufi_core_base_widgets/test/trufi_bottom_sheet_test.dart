@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 
@@ -152,6 +153,73 @@ void main() {
 
     // 0.5 → 0.9 of 600 px: the header moved up by ~240 px.
     expect(tester.getTopLeft(find.text('Header')).dy, closeTo(before - 240, 2));
+  });
+
+  testWidgets('a button inside the header still receives its tap', (
+    tester,
+  ) async {
+    final controller = DraggableScrollableController();
+    addTearDown(controller.dispose);
+    var taps = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Stack(
+            children: [
+              TrufiBottomSheet(
+                controller: controller,
+                initialChildSize: 0.5,
+                minChildSize: 0.2,
+                maxChildSize: 0.9,
+                snap: true,
+                snapSizes: const [0.2, 0.5],
+                header: TextButton(
+                  onPressed: () => taps++,
+                  child: const Text('Button'),
+                ),
+                child: const SizedBox(height: 2000),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Button'));
+    await tester.pumpAndSettle();
+
+    expect(taps, 1);
+    expect(controller.size, closeTo(0.5, 0.001));
+  });
+
+  testWidgets('the handle region exposes no scroll semantics actions', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    final controller = DraggableScrollableController();
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(host(controller: controller));
+    await tester.pumpAndSettle();
+
+    // The drag handlers must not surface as scrollUp/scrollDown on the
+    // header's node or any of its ancestors: a screen reader "scroll" there
+    // only wobbled the sheet. The content's scrollable keeps its own.
+    for (
+      SemanticsNode? node = tester.getSemantics(find.text('Header'));
+      node != null;
+      node = node.parent
+    ) {
+      final data = node.getSemanticsData();
+      expect(
+        data.hasAction(SemanticsAction.scrollUp) ||
+            data.hasAction(SemanticsAction.scrollDown),
+        isFalse,
+        reason: 'node ${node.id} "${data.label}" carries a scroll action',
+      );
+    }
+    // Before the end-of-test check, which runs ahead of tearDowns.
+    semantics.dispose();
   });
 
   testWidgets('no header: the sheet renders and the content still drags it', (
