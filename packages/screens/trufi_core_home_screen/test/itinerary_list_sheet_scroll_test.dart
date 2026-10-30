@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
@@ -219,6 +220,83 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(controller.offset, 0);
+    expect(selectedCard, findsOneWidget);
+  });
+
+  // The host above is a plain SingleChildScrollView; the results sheet is a
+  // DraggableScrollableSheet, whose scroll position also resizes the sheet
+  // and snaps. Pin that the reveal only scrolls the content there.
+  testWidgets('inside the real results sheet at the mid snap: the card tapped '
+      'while cut off comes back whole, the sheet keeps its size, and the '
+      'header still resizes it', (tester) async {
+    tester.view.physicalSize = const Size(1080, 2424);
+    tester.view.devicePixelRatio = 2.625;
+    addTearDown(tester.view.reset);
+    final cubit = await planCubit();
+    addTearDown(cubit.close);
+    final sheet = DraggableScrollableController();
+    addTearDown(sheet.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: HomeScreenLocalizations.localizationsDelegates,
+        supportedLocales: HomeScreenLocalizations.supportedLocales,
+        home: Scaffold(
+          body: BlocProvider.value(
+            value: cubit,
+            child: Stack(
+              children: [
+                TrufiBottomSheet(
+                  controller: sheet,
+                  initialChildSize: 0.35,
+                  minChildSize: 0.25,
+                  maxChildSize: 0.85,
+                  snap: true,
+                  snapSizes: const [0.25, 0.35],
+                  header: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text('6 routes found'),
+                  ),
+                  child: const ItineraryList(shrinkWrap: true),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(sheet.size, closeTo(0.35, 0.001));
+    // The sheet's own scrollable (the cards carry horizontal ones).
+    final sheetViewport = find.ancestor(
+      of: find.byType(ItineraryList),
+      matching: find.byType(SingleChildScrollView),
+    );
+    final sheetRect = tester.getRect(sheetViewport);
+    final second = find.byWidgetPredicate(
+      (w) => w is ItineraryCard && w.itinerary == itineraries[1],
+    );
+    expect(tester.getRect(second).top, lessThan(sheetRect.bottom));
+    expect(tester.getRect(second).bottom, greaterThan(sheetRect.bottom));
+
+    await tester.tapAt(tester.getTopLeft(second) + const Offset(40, 12));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
+    expect(sheet.size, closeTo(0.35, 0.001));
+
+    await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+    await tester.pumpAndSettle();
+    final card = tester.getRect(selectedCard);
+    expect(card.top, greaterThanOrEqualTo(sheetRect.top));
+    expect(card.bottom, lessThanOrEqualTo(sheetRect.bottom));
+    // The reveal scrolled the content, not the sheet: no resize, no snap.
+    expect(sheet.size, closeTo(0.35, 0.001));
+    expect(find.text('6 routes found'), findsOneWidget);
+
+    // From that state (content scrolled, sheet below its max) the header
+    // grows the sheet; a plain release snaps to the nearest size.
+    await tester.drag(find.text('6 routes found'), const Offset(0, -300));
+    await tester.pumpAndSettle();
+    expect(sheet.size, closeTo(0.85, 0.001));
     expect(selectedCard, findsOneWidget);
   });
 }
