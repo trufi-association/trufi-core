@@ -82,10 +82,15 @@ void main() {
     RoutePlannerCubit cubit, {
     required double height,
     required ScrollController controller,
+    TextDirection direction = TextDirection.ltr,
   }) {
     return MaterialApp(
       localizationsDelegates: HomeScreenLocalizations.localizationsDelegates,
       supportedLocales: HomeScreenLocalizations.supportedLocales,
+      // No Arabic in core's delegates: RTL comes from the directionality
+      // alone (what a city with its own language adds on top).
+      builder: (context, child) =>
+          Directionality(textDirection: direction, child: child!),
       home: Scaffold(
         body: BlocProvider.value(
           value: cubit,
@@ -114,13 +119,14 @@ void main() {
   Future<(RoutePlannerCubit, ScrollController)> pump(
     WidgetTester tester, {
     required double height,
+    TextDirection direction = TextDirection.ltr,
   }) async {
     final cubit = await planCubit();
     addTearDown(cubit.close);
     final controller = ScrollController();
     addTearDown(controller.dispose);
     await tester.pumpWidget(
-      host(cubit, height: height, controller: controller),
+      host(cubit, height: height, controller: controller, direction: direction),
     );
     await tester.pumpAndSettle();
     return (cubit, controller);
@@ -170,30 +176,39 @@ void main() {
     expect(card.bottom, lessThanOrEqualTo(host.bottom));
   });
 
-  testWidgets("a card tapped while cut off (the sheet's mid snap) comes back "
-      'whole', (tester) async {
-    final (cubit, controller) = await pump(tester, height: 260);
-    final second = find.byWidgetPredicate(
-      (w) => w is ItineraryCard && w.itinerary == itineraries[1],
+  for (final direction in TextDirection.values) {
+    testWidgets(
+      "a card tapped while cut off (the sheet's mid snap) comes back whole "
+      '($direction)',
+      (tester) async {
+        final (cubit, controller) = await pump(
+          tester,
+          height: 260,
+          direction: direction,
+        );
+        final second = find.byWidgetPredicate(
+          (w) => w is ItineraryCard && w.itinerary == itineraries[1],
+        );
+        final host = tester.getRect(viewport);
+        expect(tester.getRect(second).bottom, greaterThan(host.bottom));
+        expect(tester.getRect(second).top, lessThan(host.bottom));
+
+        // Tap the visible top strip of the second card.
+        await tester.tapAt(tester.getTopLeft(second) + const Offset(40, 12));
+        await tester.pumpAndSettle();
+        expect(cubit.state.selectedItinerary, itineraries[1]);
+        expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
+        expect(controller.offset, 0);
+
+        await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+        await tester.pumpAndSettle();
+
+        final card = tester.getRect(selectedCard);
+        expect(card.top, greaterThanOrEqualTo(host.top));
+        expect(card.bottom, lessThanOrEqualTo(host.bottom));
+      },
     );
-    final host = tester.getRect(viewport);
-    expect(tester.getRect(second).bottom, greaterThan(host.bottom));
-    expect(tester.getRect(second).top, lessThan(host.bottom));
-
-    // Tap the visible top strip of the second card.
-    await tester.tapAt(tester.getTopLeft(second) + const Offset(40, 12));
-    await tester.pumpAndSettle();
-    expect(cubit.state.selectedItinerary, itineraries[1]);
-    expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
-    expect(controller.offset, 0);
-
-    await tester.tap(find.byIcon(Icons.arrow_back_rounded));
-    await tester.pumpAndSettle();
-
-    final card = tester.getRect(selectedCard);
-    expect(card.top, greaterThanOrEqualTo(host.top));
-    expect(card.bottom, lessThanOrEqualTo(host.bottom));
-  });
+  }
 
   testWidgets('a card already in view does not move the list', (tester) async {
     final (_, controller) = await pump(tester, height: 400);
