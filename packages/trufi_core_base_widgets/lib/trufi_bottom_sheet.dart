@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart' show kMinFlingVelocity;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -6,7 +7,8 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 ///
 /// This widget wraps [DraggableScrollableSheet] and provides:
 /// - Rounded top corners with shadow
-/// - A visual drag handle (grabber)
+/// - A visual drag handle (grabber) that resizes the sheet
+/// - An optional pinned [header] below the grabber
 /// - Height change callback for integrating with map camera adjustments
 ///
 /// Use [builder] when your content needs to manage its own scrolling (e.g., ListView).
@@ -24,6 +26,11 @@ class TrufiBottomSheet extends StatefulWidget {
   /// Will be wrapped in a SingleChildScrollView automatically.
   /// Use [builder] instead if your content already handles scrolling.
   final Widget? child;
+
+  /// Content pinned between the grabber and the scrolling area: it never
+  /// scrolls away with [child]/[builder], and dragging it resizes the sheet
+  /// just like dragging the grabber (#1055).
+  final Widget? header;
 
   /// Callback triggered when the sheet height changes.
   /// Useful for adjusting map padding dynamically.
@@ -51,6 +58,7 @@ class TrufiBottomSheet extends StatefulWidget {
     super.key,
     this.builder,
     this.child,
+    this.header,
     this.onHeightChanged,
     this.initialChildSize = 0.52,
     this.minChildSize = 0.18,
@@ -63,12 +71,48 @@ class TrufiBottomSheet extends StatefulWidget {
          'Either builder or child must be provided',
        );
 
+  /// Where a handle drag released at [size] (a fraction of the parent) with
+  /// [velocity] (logical pixels per second, positive = the sheet growing)
+  /// settles, given the sorted [snapSizes]. Flutter's own rule for the
+  /// sheet's content (`_SnappingSimulation`): a fling picks the next snap in
+  /// its direction, a plain release (below [kMinFlingVelocity]) the nearest.
+  @visibleForTesting
+  static double snapTargetFor(
+    double size,
+    double velocity,
+    List<double> snapSizes,
+  ) {
+    final nextIndex = snapSizes.indexWhere((s) => s >= size);
+    if (nextIndex == -1) return snapSizes.last;
+    if (nextIndex == 0) return snapSizes.first;
+    final next = snapSizes[nextIndex];
+    if (next == size) return size;
+    final previous = snapSizes[nextIndex - 1];
+    if (velocity.abs() < kMinFlingVelocity) {
+      return size - previous < next - size ? previous : next;
+    }
+    return velocity < 0 ? previous : next;
+  }
+
   @override
   State<TrufiBottomSheet> createState() => _TrufiBottomSheetState();
 }
 
 class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
   double _lastHeight = 0;
+
+  /// Created only when the host passes no controller: the handle drag needs
+  /// one to move the sheet.
+  DraggableScrollableController? _ownController;
+
+  DraggableScrollableController get _controller =>
+      widget.controller ?? (_ownController ??= DraggableScrollableController());
+
+  @override
+  void dispose() {
+    _ownController?.dispose();
+    super.dispose();
+  }
 
   void _onHeightChanged(double height) {
     if ((height - _lastHeight).abs() < 1.0) return; // Ignore tiny changes
@@ -80,6 +124,44 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
     });
   }
 
+  /// The grabber and the header sit outside the sheet's scrollable, and a
+  /// [DraggableScrollableSheet] only resizes through that scrollable's
+  /// position — so a drag on them drives the controller by hand.
+  void _onHandleDragUpdate(DragUpdateDetails details) {
+    final controller = _controller;
+    if (!controller.isAttached) return;
+    final parentHeight = controller.sizeToPixels(1.0);
+    if (parentHeight <= 0) return;
+    final size = (controller.size - details.primaryDelta! / parentHeight).clamp(
+      widget.minChildSize,
+      widget.maxChildSize,
+    );
+    controller.jumpTo(size);
+  }
+
+  void _onHandleDragEnd(DragEndDetails details) {
+    final controller = _controller;
+    if (!controller.isAttached || !widget.snap) return;
+    final sizes = <double>{
+      widget.minChildSize,
+      ...?widget.snapSizes,
+      widget.maxChildSize,
+    }.toList()..sort();
+    // The finger's velocity is along the screen's y axis (down = positive);
+    // the sheet grows when the finger moves up.
+    final target = TrufiBottomSheet.snapTargetFor(
+      controller.size,
+      -(details.primaryVelocity ?? 0),
+      sizes,
+    );
+    if (target == controller.size) return;
+    controller.animateTo(
+      target,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -87,7 +169,7 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
     return SafeArea(
       bottom: false,
       child: DraggableScrollableSheet(
-        controller: widget.controller,
+        controller: _controller,
         initialChildSize: widget.initialChildSize,
         minChildSize: widget.minChildSize,
         maxChildSize: widget.maxChildSize,
@@ -116,7 +198,18 @@ class _TrufiBottomSheetState extends State<TrufiBottomSheet> {
                   ),
                   child: Column(
                     children: [
-                      const _SheetGrabber(),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onVerticalDragUpdate: _onHandleDragUpdate,
+                        onVerticalDragEnd: _onHandleDragEnd,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const _SheetGrabber(),
+                            if (widget.header != null) widget.header!,
+                          ],
+                        ),
+                      ),
                       Expanded(
                         child: widget.builder != null
                             ? widget.builder!(context, scrollController)
