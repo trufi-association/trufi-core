@@ -58,12 +58,19 @@ class _ItineraryListState extends State<ItineraryList> {
   routing.Itinerary? _detailItinerary;
   bool _hasAutoShownDetail = false;
 
+  /// One stable key per row, so the list can find the selected card's render
+  /// box when it has to bring it back into view (#1055).
+  final Map<int, GlobalKey> _cardKeys = {};
+
+  GlobalKey _cardKey(int index) => _cardKeys.putIfAbsent(index, GlobalKey.new);
+
   void _showDetails(routing.Itinerary itinerary) {
     HapticFeedback.selectionClick();
     setState(() {
       _detailItinerary = itinerary;
     });
     widget.onDetailStateChanged?.call(true);
+    _scrollHostToTop();
   }
 
   void _hideDetails() {
@@ -72,6 +79,62 @@ class _ItineraryListState extends State<ItineraryList> {
       _detailItinerary = null;
     });
     widget.onDetailStateChanged?.call(false);
+    _revealSelectedCard();
+  }
+
+  /// In parent-scrollable mode the list and the detail share the host's
+  /// scroll offset (the results sheet): a detail opened from a scrolled
+  /// list would start past its own header (back, duration, Go). Jump the
+  /// host to the top before the detail lays out (#1055).
+  void _scrollHostToTop() {
+    if (!widget.shrinkWrap) return;
+    final position = Scrollable.maybeOf(context)?.position;
+    if (position == null || !position.hasPixels) return;
+    if (position.pixels != 0) position.jumpTo(0);
+  }
+
+  /// Once the list is back, scroll just enough for the selected card to be
+  /// fully inside the viewport (#1055): after a detail the host sits
+  /// wherever the detail left it — at the sheet's mid snap that is the
+  /// first card, while the map draws whichever one the rider picked.
+  void _revealSelectedCard() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final index = _selectedRowIndex(context.read<RoutePlannerCubit>().state);
+      final cardContext = index == null
+          ? null
+          : _cardKeys[index]?.currentContext;
+      if (cardContext == null || !cardContext.mounted) return;
+      const duration = Duration(milliseconds: 200);
+      Scrollable.ensureVisible(
+        cardContext,
+        duration: duration,
+        curve: Curves.easeOutCubic,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      ).then((_) {
+        if (!cardContext.mounted) return;
+        Scrollable.ensureVisible(
+          cardContext,
+          duration: duration,
+          curve: Curves.easeOutCubic,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+        );
+      });
+    });
+  }
+
+  /// The row that wears [RoutePlannerState.selectedItinerary]: its group's
+  /// index when the plan is grouped, else the itinerary's own index.
+  int? _selectedRowIndex(RoutePlannerState state) {
+    final selected = state.selectedItinerary;
+    if (selected == null) return null;
+    final groups = state.plan?.groupedItineraries;
+    if (groups != null && groups.isNotEmpty) {
+      final index = groups.indexWhere((g) => g.alternatives.contains(selected));
+      return index == -1 ? null : index;
+    }
+    final index = state.plan?.itineraries?.indexOf(selected) ?? -1;
+    return index == -1 ? null : index;
   }
 
   @override
@@ -251,6 +314,7 @@ class _ItineraryListState extends State<ItineraryList> {
           child: Column(
             children: [
               ItineraryCard(
+                key: _cardKey(groupIndex),
                 itinerary: face,
                 isSelected: containsSelection,
                 slotRoutes: group.slotRoutes,
@@ -310,6 +374,7 @@ class _ItineraryListState extends State<ItineraryList> {
             );
           },
           child: ItineraryCard(
+            key: _cardKey(itemIndex),
             itinerary: itinerary,
             isSelected: isSelected,
             onTap: () {

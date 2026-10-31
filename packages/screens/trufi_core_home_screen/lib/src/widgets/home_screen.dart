@@ -2041,46 +2041,41 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  /// The sheet's pinned header (#1055): the summary row stays put while the
+  /// list or the detail scroll under it, and dragging it resizes the sheet.
+  Widget _buildBottomSheetHeader(RoutePlannerState state, ThemeData theme) {
+    return GestureDetector(
+      onTap: _toggleSheet,
+      behavior: HitTestBehavior.opaque,
+      child: _buildSummaryRow(state, theme),
+    );
+  }
+
   Widget _buildBottomSheetContent(RoutePlannerState state, ThemeData theme) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Summary row when collapsed
-        GestureDetector(
-          onTap: _toggleSheet,
-          behavior: HitTestBehavior.opaque,
-          child: _buildSummaryRow(state, theme),
-        ),
-        // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
-        ItineraryList(
-          shrinkWrap: true,
-          showDetailOnLoad: _showDetailOnLoad,
-          onDetailStateChanged: (isShowing) {
-            if (!isShowing) {
-              _showDetailOnLoad = false;
+    // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
+    return ItineraryList(
+      shrinkWrap: true,
+      showDetailOnLoad: _showDetailOnLoad,
+      onDetailStateChanged: (isShowing) {
+        if (!isShowing) {
+          _showDetailOnLoad = false;
+        }
+      },
+      onItineraryDetails: widget.onItineraryDetails,
+      onRouteTap: widget.onRouteTap != null
+          ? (routeCode) => widget.onRouteTap!(context, routeCode)
+          : null,
+      onStartNavigation: widget.onStartNavigation != null
+          ? (context, itinerary, locationService) {
+              // Clear the home screen's location marker before starting navigation
+              // to avoid duplicate markers on the navigation screen
+              setState(() {
+                _myLocationMarkers = const [];
+              });
+              widget.onStartNavigation!(context, itinerary, locationService);
             }
-          },
-          onItineraryDetails: widget.onItineraryDetails,
-          onRouteTap: widget.onRouteTap != null
-              ? (routeCode) => widget.onRouteTap!(context, routeCode)
-              : null,
-          onStartNavigation: widget.onStartNavigation != null
-              ? (context, itinerary, locationService) {
-                  // Clear the home screen's location marker before starting navigation
-                  // to avoid duplicate markers on the navigation screen
-                  setState(() {
-                    _myLocationMarkers = const [];
-                  });
-                  widget.onStartNavigation!(
-                    context,
-                    itinerary,
-                    locationService,
-                  );
-                }
-              : null,
-          locationService: _locationService,
-        ),
-      ],
+          : null,
+      locationService: _locationService,
     );
   }
 
@@ -2744,6 +2739,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         );
       },
+      header: _buildBottomSheetHeader(state, theme),
       child: _buildBottomSheetContent(state, theme),
     );
   }
