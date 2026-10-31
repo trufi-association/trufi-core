@@ -74,6 +74,17 @@ class HomeScreenConfig {
   /// use: this override or the selected engine's.
   final Duration etaRefreshCooldown;
 
+  /// Whether the itinerary detail lists each transit leg's intermediate
+  /// stops: the "`N` stops" toggle under the leg and the expandable list
+  /// behind it. `false` keeps the line, the boarding and alighting places,
+  /// the duration, the agency and the route drawing, and drops only those
+  /// two rows.
+  ///
+  /// Same name and default as `TransportDetailScreen.showStops` (#1014): a
+  /// city whose feed carries no real stops (Sana'a's are OSM way nodes
+  /// placed along each line, trufi-sanaa#18) turns both off together.
+  final bool showStops;
+
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
     this.searchService,
@@ -87,5 +98,6 @@ class HomeScreenConfig {
     this.liveVehiclesInitiallyEnabled = false,
     this.vehicleEtaProvider,
     this.etaRefreshCooldown = defaultEtaRefreshCooldown,
+    this.showStops = true,
   });
 }

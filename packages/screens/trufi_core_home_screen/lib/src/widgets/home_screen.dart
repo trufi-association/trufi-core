@@ -2055,6 +2055,7 @@ class _HomeScreenState extends State<HomeScreen>
     // Itinerary list - shrinkWrap: true because it's inside a scrollable bottom sheet
     return ItineraryList(
       shrinkWrap: true,
+      showStops: widget.config.showStops,
       showDetailOnLoad: _showDetailOnLoad,
       onDetailStateChanged: (isShowing) {
         if (!isShowing) {
@@ -2380,6 +2381,7 @@ class _HomeScreenState extends State<HomeScreen>
                   Flexible(
                     flex: 1,
                     child: ItineraryList(
+                      showStops: widget.config.showStops,
                       showDetailOnLoad: _showDetailOnLoad,
                       onDetailStateChanged: (isShowing) {
                         if (!isShowing) {
@@ -2409,6 +2411,7 @@ class _HomeScreenState extends State<HomeScreen>
                 else
                   Expanded(
                     child: ItineraryList(
+                      showStops: widget.config.showStops,
                       showDetailOnLoad: _showDetailOnLoad,
                       onDetailStateChanged: (isShowing) {
                         if (!isShowing) {

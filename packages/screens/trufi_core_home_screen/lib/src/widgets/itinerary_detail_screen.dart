@@ -46,6 +46,12 @@ class ItineraryDetailContent extends StatelessWidget {
   /// detail does not know what it does; null renders nothing.
   final Widget? headerAction;
 
+  /// Whether each transit leg lists its intermediate stops: the "`N` stops"
+  /// toggle and the expandable list behind it. `false` drops only those rows
+  /// (#1057, trufi-sanaa#18: feeds whose stops are synthetic way nodes);
+  /// mirrors `TransportDetailScreen.showStops` (#1014).
+  final bool showStops;
+
   const ItineraryDetailContent({
     super.key,
     required this.itinerary,
@@ -56,6 +62,7 @@ class ItineraryDetailContent extends StatelessWidget {
     this.alternatives,
     this.onSelectAlternative,
     this.headerAction,
+    this.showStops = true,
   });
 
   @override
@@ -95,6 +102,7 @@ class ItineraryDetailContent extends StatelessWidget {
           itinerary: itinerary,
           l10n: l10n,
           onRouteTap: onRouteTap,
+          showStops: showStops,
         ),
       ],
     );
@@ -554,11 +562,13 @@ class _VerticalTimeline extends StatelessWidget {
   final routing.Itinerary itinerary;
   final HomeScreenLocalizations l10n;
   final void Function(String routeCode)? onRouteTap;
+  final bool showStops;
 
   const _VerticalTimeline({
     required this.itinerary,
     required this.l10n,
     this.onRouteTap,
+    this.showStops = true,
   });
 
   @override
@@ -588,6 +598,7 @@ class _VerticalTimeline extends StatelessWidget {
               l10n: l10n,
               lineColor: _getLegColor(legs[i], colorScheme),
               onRouteTap: onRouteTap,
+              showStops: showStops,
             ),
 
             // Destination / Transfer
@@ -824,11 +835,15 @@ class _LegItem extends StatefulWidget {
   final Color lineColor;
   final void Function(String routeCode)? onRouteTap;
 
+  /// [ItineraryDetailContent.showStops].
+  final bool showStops;
+
   const _LegItem({
     required this.leg,
     required this.l10n,
     required this.lineColor,
     this.onRouteTap,
+    this.showStops = true,
   });
 
   @override
@@ -861,8 +876,12 @@ class _LegItemState extends State<_LegItem> {
     final leg = widget.leg;
     final isWalk = leg.transportMode == routing.TransportMode.walk;
     final isBike = leg.transportMode == routing.TransportMode.bicycle;
+    // One gate for the count row and the list: a feed without real stops
+    // hands synthetic places the rider should never see (#1057).
     final hasStops =
-        leg.intermediatePlaces != null && leg.intermediatePlaces!.isNotEmpty;
+        widget.showStops &&
+        leg.intermediatePlaces != null &&
+        leg.intermediatePlaces!.isNotEmpty;
     final stopsCount = leg.intermediatePlaces?.length ?? 0;
 
     // IntrinsicHeight + stretch lets the timeline line grow with the
@@ -1304,11 +1323,15 @@ class ItineraryDetailScreen extends StatelessWidget {
   final VoidCallback? onStartNavigation;
   final void Function(String routeCode)? onRouteTap;
 
+  /// [ItineraryDetailContent.showStops].
+  final bool showStops;
+
   const ItineraryDetailScreen({
     super.key,
     required this.itinerary,
     this.onStartNavigation,
     this.onRouteTap,
+    this.showStops = true,
   });
 
   /// Shows the itinerary detail screen with a slide transition.
@@ -1317,6 +1340,7 @@ class ItineraryDetailScreen extends StatelessWidget {
     required routing.Itinerary itinerary,
     VoidCallback? onStartNavigation,
     void Function(String routeCode)? onRouteTap,
+    bool showStops = true,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
@@ -1325,6 +1349,7 @@ class ItineraryDetailScreen extends StatelessWidget {
               itinerary: itinerary,
               onStartNavigation: onStartNavigation,
               onRouteTap: onRouteTap,
+              showStops: showStops,
             ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
@@ -1433,6 +1458,7 @@ class ItineraryDetailScreen extends StatelessWidget {
           itinerary: itinerary,
           l10n: l10n,
           onRouteTap: onRouteTap,
+          showStops: showStops,
         ),
       ),
     );

@@ -39,6 +39,9 @@ class ItineraryList extends StatefulWidget {
   /// Callback when detail view state changes (shown/hidden).
   final void Function(bool isShowingDetail)? onDetailStateChanged;
 
+  /// [ItineraryDetailContent.showStops] of the inline detail (#1057).
+  final bool showStops;
+
   const ItineraryList({
     super.key,
     this.onItineraryDetails,
@@ -48,6 +51,7 @@ class ItineraryList extends StatefulWidget {
     this.shrinkWrap = false,
     this.showDetailOnLoad = false,
     this.onDetailStateChanged,
+    this.showStops = true,
   });
 
   @override
@@ -246,6 +250,7 @@ class _ItineraryListState extends State<ItineraryList> {
     return ItineraryDetailContent(
       itinerary: itinerary,
       shrinkWrap: widget.shrinkWrap,
+      showStops: widget.showStops,
       onBack: _hideDetails,
       headerAction: from != null && to != null
           ? SaveRouteButton(
