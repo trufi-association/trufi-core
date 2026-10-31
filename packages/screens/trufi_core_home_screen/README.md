@@ -288,6 +288,32 @@ Route ids are matched feed-agnostically, so OTP vehicles (`1:1132`) answer
 for a bundled-GTFS plan (`1132`) and vice versa. Nothing is persisted: the
 cubit reloads from the restored plan on start.
 
+## Optional: itinerary detail without stops
+
+Cities with no stops mapped get a feed whose stops are synthetic — way nodes
+the GTFS builder places along each shape — and every transit leg of the
+itinerary detail would list them as real: a "`N` stops" toggle under the leg
+and, when tapped, the names of nodes nobody waits at (trufi-sanaa#18,
+#1057). Pass `showStops: false` to keep them out, next to the same switch of
+the route detail (#1014):
+
+```dart
+HomeScreenTrufiScreen(
+  config: HomeScreenConfig(showStops: false),
+),
+TransportListTrufiScreen(showStops: false),
+NearbyLinesTrufiScreen(showStops: false),
+```
+
+The leg keeps its badge and line name, the boarding and alighting places on
+the timeline, the duration, the operating hours, the agency and the route
+drawing on the map; only the count row and the expandable list go. It
+applies to the inline detail of the results sheet and of the wide side panel
+and to the full-screen `ItineraryDetailScreen`; an app that opens its own
+detail through `onItineraryDetails` passes the same `showStops` to
+`ItineraryDetailContent` / `ItineraryDetailScreen` itself. The navigation
+screen still counts `intermediatePlaces` ("N stops remaining", #1059).
+
 ## Dependencies
 
 - `trufi_core_interfaces` - Core interfaces and models
