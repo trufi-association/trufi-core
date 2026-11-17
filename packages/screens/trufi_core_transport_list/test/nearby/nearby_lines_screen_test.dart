@@ -237,7 +237,7 @@ void main() {
     // Header row: the title once (the sheet no longer repeats it), the
     // anchor line with its hint, the locate and close buttons.
     expect(find.text('Nearby lines'), findsOneWidget);
-    expect(find.text('City center (location unavailable)'), findsOneWidget);
+    expect(find.text('City center (no location)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
     expect(find.byTooltip('Use my location'), findsOneWidget);
     expect(find.byTooltip('Close'), findsOneWidget);
@@ -413,7 +413,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.byType(NearbyRadiusPill), findsNothing);
-    expect(find.text('City center (location unavailable)'), findsOneWidget);
+    expect(find.text('City center (no location)'), findsOneWidget);
   });
 
   group('lines along a street (trufi-sanaa#20)', () {
@@ -595,7 +595,7 @@ void main() {
 
         expect(find.byType(AlertDialog), findsNothing);
         expect(find.byType(SnackBar), findsNothing);
-        expect(find.text('City center (location unavailable)'), findsOneWidget);
+        expect(find.text('City center (no location)'), findsOneWidget);
         expect(find.text('Long-press the map to move the pin'), findsOneWidget);
         expect(settingsOpened(calls), isEmpty);
       });
@@ -733,7 +733,7 @@ void main() {
         requestPermission: [GeoPermission.denied, GeoPermission.whileInUse],
       );
       final engine = await _pumpScreen(tester, mockLocation: false);
-      expect(find.text('City center (location unavailable)'), findsOneWidget);
+      expect(find.text('City center (no location)'), findsOneWidget);
 
       await tapUseMyLocation(tester);
       expect(find.text('Your location'), findsOneWidget);

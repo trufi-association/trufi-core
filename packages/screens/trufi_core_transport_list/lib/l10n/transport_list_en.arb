@@ -168,9 +168,9 @@
   "@nearbyAnchorPinned": {
     "description": "Anchor row label when the search is centred on a pin the user placed on the map"
   },
-  "nearbyAnchorDefault": "City center (location unavailable)",
+  "nearbyAnchorDefault": "City center (no location)",
   "@nearbyAnchorDefault": {
-    "description": "Anchor row label when no fix and no pin exist and the app's default center is used. Keep it short: the header card gives it two lines of about 20 characters each on a 360 dp phone"
+    "description": "Anchor row label when no fix and no pin exist and the app's default center is used. Keep it short: the header card gives it two lines of at most 20 characters each on a 360 dp phone"
   },
   "nearbyAnchorAlongStreet": "Along {street}",
   "@nearbyAnchorAlongStreet": {

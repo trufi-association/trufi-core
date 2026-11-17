@@ -124,7 +124,7 @@ void main() {
   ) async {
     final fallback = state(source: NearbyAnchorSource.fallback);
     await _pumpHeader(tester, fallback);
-    expect(find.text('City center (location unavailable)'), findsOneWidget);
+    expect(find.text('City center (no location)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
     expect(find.byIcon(Icons.location_searching_rounded), findsOneWidget);
     // The fallback label may take a second line: the reserve counts it.
@@ -182,13 +182,13 @@ void main() {
   group('the anchor label wraps instead of ending in an ellipsis '
       '(trufi-app#79)', () {
     // The test font is a 1 em square per glyph, about twice as wide as
-    // Roboto, so a real 360 dp phone cannot be reproduced here; a 532 px
-    // view leaves the label 300 px, where every language's fallback label
+    // Roboto, so a real 360 dp phone cannot be reproduced here; a 502 px
+    // view leaves the label 270 px, where every language's fallback label
     // needs exactly its two lines.
     for (final locale in TransportListLocalizations.supportedLocales) {
       testWidgets('$locale: the fallback label takes its second line and '
           'is shown whole, with the hint under it', (tester) async {
-        _usePhone(tester, 532);
+        _usePhone(tester, 502);
         final l10n = lookupTransportListLocalizations(locale);
         final fallback = state(source: NearbyAnchorSource.fallback);
         await _pumpHeader(tester, fallback, locale: locale);
@@ -216,7 +216,7 @@ void main() {
 
     testWidgets('a short label keeps its single line and the card its '
         'height', (tester) async {
-      _usePhone(tester, 532);
+      _usePhone(tester, 502);
       await _pumpHeader(tester, state());
       expect(_paragraph(tester, 'Your location').size.height, _line);
       expect(tester.getSize(_titleCard()).height, NearbyHeaderCard.cardHeight);
@@ -246,21 +246,44 @@ void main() {
       );
     });
 
-    // What two lines hold on a 360 dp phone was measured with Roboto: the
-    // text box is 128 px, about 21 characters a line. A translation over
-    // this budget ends in an ellipsis again; the test font cannot tell.
-    test('every language keeps the fallback label within two lines of a '
-        '360 dp phone', () {
+    // The translators' budget, the one figure the template ARB states for
+    // this label: two lines of at most 20 characters each. On a 360 dp
+    // phone the text box is 128 px and Roboto fits about 22 characters in
+    // it, so 20 leaves room for a wider system font or a larger text
+    // size. The test font cannot show a real phone's line breaks; this
+    // wraps the words the way the phone does and counts the lines.
+    test('every language keeps the fallback label within two lines of 20 '
+        'characters', () {
+      const lineBudget = 20;
+      int linesOf(String label) {
+        var lines = 1;
+        var used = 0; // characters on the current line
+        for (final word in label.split(' ')) {
+          if (used > 0 && used + 1 + word.length > lineBudget) {
+            lines++;
+            used = 0;
+          }
+          used += (used > 0 ? 1 : 0) + word.length;
+          // A word longer than a line is broken mid-word.
+          while (used > lineBudget) {
+            lines++;
+            used -= lineBudget;
+          }
+        }
+        return lines;
+      }
+
+      // The budget tells the labels this fix replaced from the ones it
+      // keeps: each of the old ones needed a third line.
+      expect(linesOf('City center (location unavailable)'), 3);
+      expect(linesOf('Centro de la ciudad (ubicación no disponible)'), 3);
+      expect(linesOf('Stadtzentrum (Standort nicht verfügbar)'), 3);
+
       for (final locale in TransportListLocalizations.supportedLocales) {
         final label = lookupTransportListLocalizations(
           locale,
         ).nearbyAnchorDefault;
-        expect(label.length, lessThanOrEqualTo(36), reason: '$locale: $label');
-        final longestWord = label
-            .split(' ')
-            .map((word) => word.length)
-            .reduce((a, b) => a > b ? a : b);
-        expect(longestWord, lessThanOrEqualTo(18), reason: '$locale: $label');
+        expect(linesOf(label), lessThanOrEqualTo(2), reason: '$locale: $label');
       }
     });
   });
