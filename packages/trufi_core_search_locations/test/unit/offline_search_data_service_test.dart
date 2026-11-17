@@ -344,6 +344,68 @@ void main() {
       expect(refs, ['exact', 'prefix', 'contains']);
     });
 
+    test('the street named exactly like the query comes first, even with '
+        'an alternative name and fewer corners than a longer-named '
+        'sibling', () async {
+      final index = indexOf({
+        'longer': ('Camino a Lagunas Entrando por Tirani', 'Cercado', 4),
+        'exact': ('Camino a Lagunas', 'Cercado', 3),
+        'other': ('Calle Lagunas', 'Cercado', 9),
+      });
+      // Its alternative name is what kept it from being "the query itself".
+      (index['streets'] as Map)['exact'] = [
+        'Camino a Lagunas',
+        ['Circuito Tunari'],
+        [-66.15, -17.39],
+        'Cercado',
+      ];
+
+      expect(await refsFor('camino a lagunas', index), ['exact', 'longer']);
+      // Typed without the accent or in capitals, it is the same name.
+      expect(await refsFor('CAMINO A LAGUNAS', index), ['exact', 'longer']);
+    });
+
+    test('a street only also known by that name follows the one named so, '
+        'and precedes the names that merely start with it', () async {
+      final index = indexOf({
+        'starts': ('Calle Algarrobos', 'Sacaba', 20),
+        'named': ('Calle Algarrobo', 'Sacaba', 3),
+        'aka': ('Calle A. Virreira', 'Cercado', 8),
+        'aka2': ('Pasaje Los Pinos', 'Cercado', 12),
+      });
+      for (final ref in ['aka', 'aka2']) {
+        final row = (index['streets'] as Map)[ref] as List;
+        (index['streets'] as Map)[ref] = [
+          row[0],
+          ['Calle Algarrobo'],
+          row[2],
+          row[3],
+        ];
+      }
+
+      // Named so; also known so (more corners first); starting with it.
+      expect(await refsFor('calle algarrobo', index), [
+        'named',
+        'aka2',
+        'aka',
+        'starts',
+      ]);
+    });
+
+    test('several streets named exactly like the query are still ordered '
+        'by their corners', () async {
+      final refs = await refsFor(
+        'calle sucre',
+        indexOf({
+          'few': ('Calle Sucre', 'Cliza', 4),
+          'many': ('Calle Sucre', 'Quillacollo', 12),
+          'longer': ('Calle Sucre Norte', 'Cercado', 30),
+        }),
+      );
+
+      expect(refs, ['many', 'few', 'longer']);
+    });
+
     test('a street without coordinates takes no slot of the limit', () async {
       final index = indexOf({
         for (var i = 1; i <= 11; i++) 's$i': ('Calle Aroma', 'Town $i', i),
