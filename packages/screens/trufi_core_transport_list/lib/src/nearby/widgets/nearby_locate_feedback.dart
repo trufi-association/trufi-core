@@ -53,6 +53,10 @@ void showNearbyLocateFailure(
 /// The home screen's location dialog: an error-tinted glyph beside the
 /// title, the explanation, "Cancel" and "Open settings". Without
 /// [openSettings] there is nothing to cancel: a single "Close".
+///
+/// Title and message scroll: with a large font size on a small phone the
+/// message is taller than the room above the buttons, and a dialog that
+/// does not scroll cuts it there with no way to read the rest.
 void _showSettingsDialog(
   BuildContext context, {
   required IconData icon,
@@ -67,6 +71,7 @@ void _showSettingsDialog(
   showDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(
+      scrollable: true,
       title: Row(
         children: [
           Icon(icon, color: colorScheme.error),

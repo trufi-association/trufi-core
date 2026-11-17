@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_transport_list/src/nearby/widgets/nearby_locate_feedback.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
@@ -14,6 +15,7 @@ Future<void> _pumpAndShow(
   NearbyLocateFailure failure, {
   Locale? locale,
   bool? canOpenSettings,
+  double textScale = 1.0,
 }) async {
   final service = LocationService();
   addTearDown(service.dispose);
@@ -22,6 +24,13 @@ Future<void> _pumpAndShow(
       locale: locale,
       localizationsDelegates: TransportListLocalizations.localizationsDelegates,
       supportedLocales: TransportListLocalizations.supportedLocales,
+      // The device's font size setting.
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: TextScaler.linear(textScale)),
+        child: child!,
+      ),
       home: Scaffold(
         body: Builder(
           builder: (context) => TextButton(
@@ -95,6 +104,67 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  group('a small phone with the largest font size (360x640, scale 2.0): '
+      'the whole message can be read and the action stays in reach', () {
+    for (final locale in TransportListLocalizations.supportedLocales) {
+      for (final failure in dialogFailures) {
+        testWidgets('$locale ${failure.name}', (tester) async {
+          tester.view.physicalSize = const Size(360, 640);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          mockGeolocator();
+          await _pumpAndShow(tester, failure, locale: locale, textScale: 2.0);
+
+          final l10n = lookupTransportListLocalizations(locale);
+          final message = failure == NearbyLocateFailure.serviceDisabled
+              ? l10n.nearbyLocationDisabledMessage
+              : l10n.nearbyLocationPermissionDeniedForever;
+
+          // Laid out at its full height: nothing is cut off.
+          final paragraph = tester.renderObject<RenderParagraph>(
+            find.text(message),
+          );
+          expect(
+            paragraph.size.height,
+            moreOrLessEquals(
+              paragraph.getMaxIntrinsicHeight(paragraph.size.width),
+              epsilon: 0.5,
+            ),
+          );
+
+          // It is taller than the room it has here, so it scrolls; pulled
+          // up, its last line shows above the buttons.
+          final scrollView = find.descendant(
+            of: find.byType(AlertDialog),
+            matching: find.byType(SingleChildScrollView),
+          );
+          expect(scrollView, findsOneWidget);
+          await tester.drag(scrollView, const Offset(0, -2000));
+          await tester.pumpAndSettle();
+          final action = tester.getRect(
+            find.widgetWithText(FilledButton, l10n.nearbyLocationOpenSettings),
+          );
+          expect(
+            tester.getRect(find.text(message)).bottom,
+            lessThanOrEqualTo(tester.getRect(scrollView).bottom + 0.5),
+          );
+          expect(tester.getRect(scrollView).bottom, lessThanOrEqualTo(640));
+
+          // The action is on screen and still works.
+          expect(action.top, greaterThanOrEqualTo(0));
+          expect(action.bottom, lessThanOrEqualTo(640));
+          expect(tester.takeException(), isNull);
+          await tester.tap(
+            find.widgetWithText(FilledButton, l10n.nearbyLocationOpenSettings),
+          );
+          await tester.pumpAndSettle();
+          expect(find.byType(AlertDialog), findsNothing);
+        });
+      }
+    }
+  });
 
   testWidgets('a second snack bar replaces the first instead of queueing '
       'behind it', (tester) async {
