@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../l10n/navigation_localizations.dart';
+import '../utils/distance_format.dart';
 
 /// Type of navigation instruction.
 enum InstructionType {
@@ -62,6 +63,11 @@ enum InstructionTextKey {
   /// "{count} stops remaining" — uses
   /// [NavigationInstruction.remainingStops].
   stopsRemaining,
+
+  /// "{value} m" / "{value} km" — uses [NavigationInstruction.distance], the
+  /// meters left to [NavigationInstruction.stopName]. What stands in for
+  /// [stopsRemaining] when `NavigationConfig.showStops` is off (#1059).
+  distanceToStop,
 }
 
 /// A navigation instruction to display to the user.
@@ -95,7 +101,7 @@ class NavigationInstruction {
   /// Stop name for transit stops.
   final String? stopName;
 
-  /// Distance in meters.
+  /// Distance in meters; feeds [InstructionTextKey.distanceToStop].
   final double? distance;
 
   /// Duration to this point.
@@ -141,14 +147,24 @@ class NavigationInstruction {
 
   /// The secondary text to render, resolving [secondaryTextKey] to a
   /// localized string when set and falling back to [secondaryText].
-  String? resolvedSecondaryText(NavigationLocalizations localizations) {
-    return _resolve(secondaryTextKey, localizations) ?? secondaryText;
+  ///
+  /// [locale] is the one a number in the text is formatted for
+  /// ([InstructionTextKey.distanceToStop]); it defaults to the locale of
+  /// [localizations]. Widgets pass their context's, like every other
+  /// distance on the card (#945).
+  String? resolvedSecondaryText(
+    NavigationLocalizations localizations, {
+    String? locale,
+  }) {
+    return _resolve(secondaryTextKey, localizations, locale: locale) ??
+        secondaryText;
   }
 
   String? _resolve(
     InstructionTextKey? key,
-    NavigationLocalizations localizations,
-  ) {
+    NavigationLocalizations localizations, {
+    String? locale,
+  }) {
     return switch (key) {
       InstructionTextKey.youHaveArrived => localizations.navArrivedShort,
       InstructionTextKey.finalDestination => localizations.navFinalDestination,
@@ -156,6 +172,14 @@ class NavigationInstruction {
       InstructionTextKey.stopsRemaining => localizations.navStopsRemaining(
         remainingStops ?? 0,
       ),
+      InstructionTextKey.distanceToStop =>
+        distance == null
+            ? null
+            : formatNavigationDistance(
+                localizations,
+                distance!,
+                locale: locale ?? localizations.localeName,
+              ),
       null => null,
     };
   }

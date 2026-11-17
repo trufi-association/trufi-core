@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../../l10n/navigation_localizations.dart';
 import '../../models/navigation_instruction.dart';
 import '../../models/navigation_state.dart';
+import '../../utils/distance_format.dart';
 
 /// Card displaying the current navigation instruction.
 class NavigationInstructionCard extends StatelessWidget {
@@ -20,6 +20,13 @@ class NavigationInstructionCard extends StatelessWidget {
   final NavigationLeg? currentLeg;
   final Duration? totalDuration;
 
+  /// [NavigationConfig.showStops]. `false` drops what is measured against
+  /// the next stop the vehicle passes — the distance to it and the "Next: …"
+  /// preview that names it; the cubit already hands an [instruction] that
+  /// names the stop where the leg ends and the distance to it (#1059). The
+  /// ETA and the progress bar stay.
+  final bool showStops;
+
   const NavigationInstructionCard({
     super.key,
     required this.instruction,
@@ -34,12 +41,17 @@ class NavigationInstructionCard extends StatelessWidget {
     this.legs = const [],
     this.currentLeg,
     this.totalDuration,
+    this.showStops = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final secondaryText = instruction.resolvedSecondaryText(
+      NavigationLocalizations.of(context),
+      locale: Localizations.localeOf(context).toString(),
+    );
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -90,15 +102,10 @@ class NavigationInstructionCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      if (instruction.resolvedSecondaryText(
-                            NavigationLocalizations.of(context),
-                          ) !=
-                          null) ...[
+                      if (secondaryText != null) ...[
                         const SizedBox(height: 4),
                         Text(
-                          instruction.resolvedSecondaryText(
-                            NavigationLocalizations.of(context),
-                          )!,
+                          secondaryText,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -113,13 +120,17 @@ class NavigationInstructionCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        _formatDistance(context, distanceToNextStop!),
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.primary,
+                      // To the next stop the vehicle passes: without the
+                      // stops it would measure to a point the rider is
+                      // never told about (#1059).
+                      if (showStops)
+                        Text(
+                          _formatDistance(context, distanceToNextStop!),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.primary,
+                          ),
                         ),
-                      ),
                       if (etaToDestination != null)
                         Text(
                           '~${_formatDuration(context, etaToDestination!)}',
@@ -134,7 +145,7 @@ class NavigationInstructionCard extends StatelessWidget {
           ),
 
           // Next instruction preview
-          if (nextInstruction != null && remainingStops > 1)
+          if (showStops && nextInstruction != null && remainingStops > 1)
             _buildNextPreview(context),
         ],
       ),
@@ -350,15 +361,10 @@ class NavigationInstructionCard extends StatelessWidget {
   /// Locale-aware distance/duration strings (#945): units and decimal
   /// separator come from the ARBs and NumberFormat, not string literals.
   String _formatDistance(BuildContext context, double meters) {
-    final l10n = NavigationLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toString();
-    if (meters < 1000) {
-      return l10n.navDistanceMeters(
-        safeNumberFormat('#,##0', locale).format(meters.round()),
-      );
-    }
-    return l10n.navDistanceKilometers(
-      safeNumberFormat('#,##0.0', locale).format(meters / 1000),
+    return formatNavigationDistance(
+      NavigationLocalizations.of(context),
+      meters,
+      locale: Localizations.localeOf(context).toString(),
     );
   }
 

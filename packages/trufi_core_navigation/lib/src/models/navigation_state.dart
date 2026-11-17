@@ -75,14 +75,25 @@ class NavigationStop extends Equatable {
   final String name;
   final LatLng position;
 
+  /// Whether the vehicle only passes this stop between boarding and
+  /// alighting (a transit leg's `intermediatePlaces`). The other stops are
+  /// where a leg ends: the origin, the boarding and alighting stops and the
+  /// destination.
+  ///
+  /// It never changes the progression — every stop counts there. It tells
+  /// `NavigationConfig.showStops: false` which stops to keep out of the
+  /// instruction text (#1059).
+  final bool isIntermediate;
+
   const NavigationStop({
     required this.id,
     required this.name,
     required this.position,
+    this.isIntermediate = false,
   });
 
   @override
-  List<Object?> get props => [id, name, position];
+  List<Object?> get props => [id, name, position, isIntermediate];
 }
 
 /// Represents a leg segment for rendering in navigation.

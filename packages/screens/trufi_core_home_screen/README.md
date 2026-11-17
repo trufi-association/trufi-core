@@ -311,8 +311,34 @@ drawing on the map; only the count row and the expandable list go. It
 applies to the inline detail of the results sheet and of the wide side panel
 and to the full-screen `ItineraryDetailScreen`; an app that opens its own
 detail through `onItineraryDetails` passes the same `showStops` to
-`ItineraryDetailContent` / `ItineraryDetailScreen` itself. The navigation
-screen still counts `intermediatePlaces` ("N stops remaining", #1059).
+`ItineraryDetailContent` / `ItineraryDetailScreen` itself.
+
+The navigation screen opened from `onStartNavigation` reads the same places
+— "`N` stops remaining" under the name of the next node — and takes the
+same switch in its `NavigationConfig` (#1059):
+
+```dart
+HomeScreenTrufiScreen(
+  config: HomeScreenConfig(showStops: false),
+  onStartNavigation: (context, itinerary, locationService) {
+    NavigationScreen.showFromItinerary(
+      context,
+      itinerary: itinerary,
+      locationService: locationService,
+      mapEngineManager: MapEngineManager.read(context),
+      config: const NavigationConfig(showStops: false),
+    );
+  },
+),
+```
+
+The instruction card then names the stop where the current leg ends — the
+boarding stop on the walk to the line, the alighting stop while riding, the
+destination on the last walk — with the distance left to it, measured from
+the rider node by node along the line; the distance to the next node and the
+"Next: …" row go as well. Only the text changes: the intermediate places
+keep driving the progression (auto-advance, ETA, progress bar, the ridden
+part of the line on the map).
 
 ## Dependencies
 
