@@ -17,6 +17,10 @@ const String nearbyPointMarkerPrefix = 'nearby-point-';
 /// the nearest ones so a dense corner does not become a wall of chips.
 const int maxNearbyPointMarkers = 40;
 
+/// Box of a line label, centred on the line's nearest point: room for the
+/// badge with its mode glyph plus the distance chip.
+const Size nearbyPointMarkerSize = Size(130, 32);
+
 /// Marker id prefix of the corner dots drawn for a street anchor.
 const String nearbyCornerMarkerPrefix = 'nearby-corner-';
 
@@ -171,7 +175,7 @@ TrufiMarker _pointMarker(
       selected: selected,
       colorScheme: colorScheme,
     ),
-    size: const Size(130, 32),
+    size: nearbyPointMarkerSize,
     layerLevel: selected ? 3 : 2,
     // The selected label always shows; the others may yield to neighbours.
     allowOverlap: selected,

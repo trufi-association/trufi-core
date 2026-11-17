@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,6 +17,9 @@ import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 /// the header card, the sheet / side panel and the map layers.
 class _FakeEngine extends ITrufiMapEngine {
   List<TrufiLayer> lastLayers = const [];
+
+  /// The camera the screen last asked the map for.
+  TrufiCameraPosition? lastCamera;
 
   @override
   String get id => 'fake';
@@ -35,6 +40,7 @@ class _FakeEngine extends ITrufiMapEngine {
     List<WidgetMarker> widgetMarkers = const [],
   }) {
     lastLayers = layers;
+    lastCamera = camera ?? initialCamera;
     return const SizedBox.expand();
   }
 }
@@ -157,6 +163,21 @@ Future<_FakeEngine> _pumpScreen(
 
 const cornerA = LatLng(-17.3925, -66.1588);
 const cornerB = LatLng(-17.3907, -66.1571);
+
+/// Horizontal screen position of [longitude] under [camera] on a map
+/// [mapWidth] logical pixels wide (web mercator, 256 px tiles, bearing 0).
+double screenX(TrufiCameraPosition camera, double longitude, double mapWidth) {
+  final worldPx = 256 * math.pow(2.0, camera.zoom);
+  return mapWidth / 2 + (longitude - camera.target.longitude) / 360 * worldPx;
+}
+
+/// Sizes the test view like a phone: the narrow layout (under 600 px).
+void usePhone(WidgetTester tester, Size size) {
+  tester.view.physicalSize = size;
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
 
 /// Hosts the real screen under a `GoRouter`, the way `TrufiApp` does, and
 /// opens it from a first route: through [NearbyLinesTrufiScreen.showAlongStreet]
@@ -378,10 +399,7 @@ void main() {
   testWidgets('narrow layout: floating header card and the bottom sheet', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(400, 800);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+    usePhone(tester, const Size(400, 800));
 
     await _pumpScreen(tester);
     expect(find.byType(TrufiBottomSheet), findsOneWidget);
@@ -390,6 +408,22 @@ void main() {
     expect(find.text('300 m (2)'), findsOneWidget);
     expect(find.textContaining('At 80 m'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('on a phone the ring keeps the whole width of the map: the '
+      'street margin does not shrink it', (tester) async {
+    // Tall enough for the width to be what limits the ring.
+    usePhone(tester, const Size(400, 1000));
+    final engine = await _pumpScreen(tester);
+
+    final camera = engine.lastCamera!;
+    final ring = engine.lastLayers.first.lines.single.position;
+    final longitudes = ring.map((p) => p.longitude);
+    expect(screenX(camera, longitudes.reduce(math.min), 400), closeTo(0, 0.5));
+    expect(
+      screenX(camera, longitudes.reduce(math.max), 400),
+      closeTo(400, 0.5),
+    );
   });
 
   testWidgets('without a local planner the screen explains instead of '
@@ -439,6 +473,49 @@ void main() {
       expect(corners.markers.map((m) => m.position), [cornerA, cornerB]);
       expect(corners.lines, isEmpty);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('on a phone the street is framed with half a line label '
+        'of margin on each side, so the dot and the label of its '
+        'outermost corners are not cut by the screen edge (#1054)', (
+      tester,
+    ) async {
+      usePhone(tester, const Size(400, 800));
+      // Runs east–west: the screen's width decides the zoom.
+      const west = LatLng(-17.3700, -66.1900);
+      const east = LatLng(-17.3705, -66.1500);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Circunvalación',
+          corners: const [west, LatLng(-17.3702, -66.1700), east],
+        ),
+      );
+      expect(find.byType(TrufiBottomSheet), findsOneWidget);
+
+      final camera = engine.lastCamera!;
+      // The line label is a 130 px box centred on its point.
+      expect(screenX(camera, west.longitude, 400), closeTo(65, 0.5));
+      expect(screenX(camera, east.longitude, 400), closeTo(400 - 65, 0.5));
+    });
+
+    testWidgets('in the side-panel layout the street margin adds to the '
+        "panel layout's own padding", (tester) async {
+      const west = LatLng(-17.3700, -66.1900);
+      const east = LatLng(-17.3705, -66.1500);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Circunvalación',
+          corners: const [west, east],
+        ),
+      );
+      expect(find.byType(TrufiBottomSheet), findsNothing);
+
+      // 800 px view, 340 px panel: a 460 px map padded 24 px all round.
+      final camera = engine.lastCamera!;
+      expect(screenX(camera, west.longitude, 460), closeTo(24 + 65, 0.5));
+      expect(screenX(camera, east.longitude, 460), closeTo(460 - 24 - 65, 0.5));
     });
 
     testWidgets('"Use my location" leaves the street for the fix', (

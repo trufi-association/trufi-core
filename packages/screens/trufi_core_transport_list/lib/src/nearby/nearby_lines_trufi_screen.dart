@@ -274,6 +274,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static const double _controlsGap = 12;
   static const double _wideFitPadding = 24;
 
+  /// Side margin of the camera fit along a street: half a line label. The
+  /// framed area ends on the street's outermost corners, and each carries
+  /// its dot and often the label of the line passing there, centred on
+  /// the corner: flush with the screen edge both were cut in half (#1054).
+  static final EdgeInsets _streetFitMargin = EdgeInsets.symmetric(
+    horizontal: nearbyPointMarkerSize.width / 2,
+  );
+
   final TrufiMapController _mapController = TrufiMapController();
   final FitCameraUtil _fitCamera = FitCameraUtil();
   final DraggableScrollableController _sheetController =
@@ -336,24 +344,48 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
 
     if (state.selectedGeometry.length > 1) {
       if (selectionChanged || anchorChanged || _fitPending) {
-        _fitTo(state.selectedGeometry, fallbackTarget: anchor);
+        _fitState(state, anchor);
       }
       return;
     }
     if (anchorChanged || radiusChanged || selectionChanged || _fitPending) {
-      _fitTo(_searchArea(state, anchor), fallbackTarget: anchor);
+      _fitState(state, anchor);
     }
   }
 
+  /// Frames the highlighted line, or the search area when there is none.
+  void _fitState(NearbyLinesState state, LatLng anchor) {
+    if (state.selectedGeometry.length > 1) {
+      _fitTo(state.selectedGeometry, fallbackTarget: anchor);
+      return;
+    }
+    _fitTo(
+      _searchArea(state, anchor),
+      fallbackTarget: anchor,
+      margin: _framesStreet(state) ? _streetFitMargin : EdgeInsets.zero,
+    );
+  }
+
+  /// Whether the search area is a street's corners rather than a ring (a
+  /// one-corner street is a ring again).
+  static bool _framesStreet(NearbyLinesState state) =>
+      (state.street?.corners.length ?? 0) > 1;
+
   /// What the camera frames without a highlighted line: the selected ring,
-  /// or every corner of the street (a one-corner street is a ring again).
+  /// or every corner of the street.
   static List<LatLng> _searchArea(NearbyLinesState state, LatLng anchor) {
-    final corners = state.street?.corners;
-    if (corners != null && corners.length > 1) return corners;
+    if (_framesStreet(state)) return state.street!.corners;
     return NearbyGeometry.circlePolygon(anchor, state.radius.meters);
   }
 
-  void _fitTo(List<LatLng> points, {required LatLng fallbackTarget}) {
+  /// [margin] is kept clear around [points] on top of what the layout
+  /// already keeps clear of the header, the sheet or the side panel.
+  void _fitTo(
+    List<LatLng> points, {
+    required LatLng fallbackTarget,
+    EdgeInsets margin = EdgeInsets.zero,
+  }) {
+    _fitCamera.updatePadding(margin);
     final fallback = TrufiCameraPosition(
       target: fallbackTarget,
       zoom: _anchorZoom,
@@ -378,10 +410,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     _fitPending = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final points = state.selectedGeometry.length > 1
-          ? state.selectedGeometry
-          : _searchArea(state, anchor);
-      _fitTo(points, fallbackTarget: anchor);
+      _fitState(state, anchor);
     });
   }
 
@@ -492,6 +521,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
         _headerPadding * 2 +
         cardHeight * textScale +
         _controlsGap;
+    // Nothing covers the map's sides on a phone; what a street needs
+    // there is added per fit (see [_streetFitMargin]).
     _fitCamera.updateViewport(
       Size(constraints.maxWidth, constraints.maxHeight),
       EdgeInsets.only(
