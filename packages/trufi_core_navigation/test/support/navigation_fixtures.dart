@@ -149,6 +149,140 @@ class SanaaTrip {
       LatLng((a.latitude + b.latitude) / 2, (a.longitude + b.longitude) / 2);
 }
 
+/// A trip on two lines (#1059): a walk to line 7, ten way nodes going east
+/// to the stop where it is left, line 12 over ten more nodes going north,
+/// and a walk to the destination.
+///
+/// With [walkAtTransfer] line 12 is boarded at another stop, ~66 m further
+/// north, and a walking leg joins the two. Without it both lines share the
+/// stop and no leg sits between them, which is how `TrufiPlannerProvider`
+/// builds a transfer at one stop.
+class TransferTrip {
+  TransferTrip({required this.walkAtTransfer});
+
+  final bool walkAtTransfer;
+
+  static const nodesPerLine = 10;
+  static const _step = 0.00025;
+
+  static const origin = LatLng(15.35, 44.1986);
+  static const boardA = LatLng(15.35, 44.2);
+
+  /// Way node [i] of line 7 (1-based), going east.
+  static LatLng nodeA(int i) => LatLng(15.35, 44.2 + _step * i);
+
+  static final alightA = nodeA(nodesPerLine + 1);
+
+  late final LatLng boardB = walkAtTransfer
+      ? LatLng(15.3506, alightA.longitude)
+      : alightA;
+
+  /// Way node [i] of line 12 (1-based), going north.
+  LatLng nodeB(int i) => LatLng(boardB.latitude + _step * i, boardB.longitude);
+
+  late final LatLng alightB = nodeB(nodesPerLine + 1);
+
+  late final LatLng destination = LatLng(
+    alightB.latitude,
+    alightB.longitude + 0.00175,
+  );
+
+  late final List<LatLng> lineA = [
+    boardA,
+    for (var i = 1; i <= nodesPerLine; i++) nodeA(i),
+    alightA,
+  ];
+
+  late final List<LatLng> lineB = [
+    boardB,
+    for (var i = 1; i <= nodesPerLine; i++) nodeB(i),
+    alightB,
+  ];
+
+  /// Walk → bus 7 → (walk) → bus 12 → walk. The stop where line 7 is left is
+  /// "Alight A" either way; without the walk it is also where line 12 is
+  /// boarded.
+  routing.Itinerary itinerary() => SanaaTrip.itineraryOf([
+    SanaaTrip.walkLeg(
+      from: SanaaTrip.place('Home', origin),
+      to: SanaaTrip.place('Board A', boardA),
+      points: [origin, boardA],
+      startMinute: 0,
+      minutes: 2,
+    ),
+    SanaaTrip.busLeg(
+      from: SanaaTrip.place('Board A', boardA),
+      to: SanaaTrip.place('Alight A', alightA),
+      points: lineA,
+      intermediatePlaces: [
+        for (var i = 1; i <= nodesPerLine; i++)
+          SanaaTrip.place('A node $i', nodeA(i)),
+      ],
+      startMinute: 2,
+      minutes: 10,
+    ),
+    if (walkAtTransfer)
+      SanaaTrip.walkLeg(
+        from: SanaaTrip.place('Alight A', alightA),
+        to: SanaaTrip.place('Board B', boardB),
+        points: [alightA, boardB],
+        startMinute: 12,
+        minutes: 1,
+      ),
+    SanaaTrip.busLeg(
+      from: SanaaTrip.place(walkAtTransfer ? 'Board B' : 'Alight A', boardB),
+      to: SanaaTrip.place('Alight B', alightB),
+      points: lineB,
+      intermediatePlaces: [
+        for (var i = 1; i <= nodesPerLine; i++)
+          SanaaTrip.place('B node $i', nodeB(i)),
+      ],
+      startMinute: 13,
+      minutes: 10,
+      shortName: '12',
+      longName: 'Line 12',
+      color: 'E53935',
+    ),
+    SanaaTrip.walkLeg(
+      from: SanaaTrip.place('Alight B', alightB),
+      to: SanaaTrip.place('University', destination),
+      points: [alightB, destination],
+      startMinute: 23,
+      minutes: 3,
+    ),
+  ]);
+
+  /// The fixes of a rider doing the whole trip, one every ~9 m: dense
+  /// enough to see at which point each text of the instruction changes.
+  late final List<LatLng> track = fixesAlong([
+    origin,
+    ...lineA,
+    ...lineB,
+    destination,
+  ]);
+}
+
+/// The points of [path] and, between each two, as many evenly spaced ones
+/// as it takes to have a fix every [stepMeters] or less.
+List<LatLng> fixesAlong(List<LatLng> path, {double stepMeters = 9}) {
+  const distance = Distance(roundResult: false);
+  final fixes = [path.first];
+  for (var i = 1; i < path.length; i++) {
+    final from = path[i - 1];
+    final to = path[i];
+    final steps = (distance(from, to) / stepMeters).ceil();
+    for (var k = 1; k <= steps; k++) {
+      fixes.add(
+        LatLng(
+          from.latitude + (to.latitude - from.latitude) * k / steps,
+          from.longitude + (to.longitude - from.longitude) * k / steps,
+        ),
+      );
+    }
+  }
+  return fixes;
+}
+
 /// A [LocationService] with the permission granted and no GPS behind it:
 /// the test moves the rider with [moveTo]. Distances are the real ones.
 class FakeLocationService extends LocationService {

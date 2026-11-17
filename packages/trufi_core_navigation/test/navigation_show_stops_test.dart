@@ -300,6 +300,186 @@ void main() {
     );
   });
 
+  group('showStops off on a trip with two lines', () {
+    NavigationRoute routeOf(TransferTrip trip) =>
+        ItineraryConverter.toNavigationRoute(trip.itinerary());
+
+    /// Rides [trip] with a fix every ~9 m and returns the names the rider
+    /// read on the instruction, in order, each one once.
+    Future<List<String>> namesRead(TransferTrip trip) async {
+      final nav = await start(showStops: false, route: routeOf(trip));
+      final names = <String>[];
+
+      for (final fix in trip.track) {
+        nav.gps.moveTo(fix);
+        final state = nav.cubit.state;
+        if (state.status != NavigationStatus.navigating) break;
+
+        final instruction = state.currentInstruction!;
+        final name = instruction.resolvedPrimaryText(en);
+        expect(name, isNot(contains('node')), reason: 'at $fix');
+        expect(
+          instruction.resolvedSecondaryText(en),
+          matches(RegExp(r'^\d+ m$')),
+          reason: 'at $fix',
+        );
+        expect(instruction.remainingStops, isNull);
+        expect(state.nextInstruction, isNull);
+        if (names.isEmpty || names.last != name) names.add(name);
+      }
+
+      expect(nav.cubit.state.status, NavigationStatus.completed);
+      return names;
+    }
+
+    /// A fix on line 7, [meters] before the stop where it is left.
+    LatLng beforeLeavingLine7(FakeLocationService gps, double meters) {
+      final first = TransferTrip.nodeA(1);
+      final second = TransferTrip.nodeA(2);
+      final metersPerDegree =
+          gps.metersAlong(first, [second]) /
+          (second.longitude - first.longitude);
+      return LatLng(
+        TransferTrip.alightA.latitude,
+        TransferTrip.alightA.longitude - meters / metersPerDegree,
+      );
+    }
+
+    test('with a walk between them the rider reads where line 7 is left, '
+        'where line 12 is boarded, where it is left and the destination, '
+        'never a way node', () async {
+      expect(await namesRead(TransferTrip(walkAtTransfer: true)), [
+        'Board A',
+        'Alight A',
+        'Board B',
+        'Alight B',
+        'University',
+      ]);
+    });
+
+    test('each of those names comes with the distance to that stop', () async {
+      final trip = TransferTrip(walkAtTransfer: true);
+      final nav = await start(showStops: false, route: routeOf(trip));
+      double? distance() => nav.cubit.state.currentInstruction!.distance;
+
+      nav.gps.moveTo(TransferTrip.boardA);
+      expect(primary(nav.cubit), 'Alight A');
+      expect(secondary(nav.cubit), '295 m');
+      expect(
+        distance(),
+        closeTo(nav.gps.metersAlong(TransferTrip.boardA, trip.lineA), 0.01),
+      );
+
+      nav.gps.moveTo(TransferTrip.alightA);
+      expect(primary(nav.cubit), 'Board B');
+      expect(secondary(nav.cubit), '67 m');
+      expect(
+        distance(),
+        closeTo(nav.gps.metersAlong(TransferTrip.alightA, [trip.boardB]), 0.01),
+      );
+
+      nav.gps.moveTo(trip.boardB);
+      expect(primary(nav.cubit), 'Alight B');
+      expect(secondary(nav.cubit), '306 m');
+      expect(
+        distance(),
+        closeTo(nav.gps.metersAlong(trip.boardB, trip.lineB), 0.01),
+      );
+
+      nav.gps.moveTo(trip.alightB);
+      expect(primary(nav.cubit), 'University');
+      expect(secondary(nav.cubit), '188 m');
+      expect(
+        distance(),
+        closeTo(nav.gps.metersAlong(trip.alightB, [trip.destination]), 0.01),
+      );
+    });
+
+    test('with a walk between them, from 50 m before the stop where line 7 '
+        'is left the instruction already names where line 12 is boarded '
+        '(the default mode moves on at the same fix)', () async {
+      final trip = TransferTrip(walkAtTransfer: true);
+      final nav = await start(showStops: false, route: routeOf(trip));
+
+      nav.gps.moveTo(beforeLeavingLine7(nav.gps, 55));
+      expect(primary(nav.cubit), 'Alight A');
+      expect(secondary(nav.cubit), '55 m');
+
+      final fix = beforeLeavingLine7(nav.gps, 45);
+      nav.gps.moveTo(fix);
+      expect(primary(nav.cubit), 'Board B');
+      // "Alight A" counts as reached, so it is measured from the rider
+      // straight to "Board B".
+      expect(secondary(nav.cubit), '81 m');
+      expect(
+        nav.cubit.state.currentInstruction!.distance,
+        closeTo(nav.gps.metersAlong(fix, [trip.boardB]), 0.01),
+      );
+      expect(nav.cubit.state.currentLeg?.routeName, '7');
+
+      final byDefault = await start(showStops: true, route: routeOf(trip));
+      byDefault.gps.moveTo(beforeLeavingLine7(byDefault.gps, 55));
+      expect(primary(byDefault.cubit), 'Alight A');
+      byDefault.gps.moveTo(beforeLeavingLine7(byDefault.gps, 45));
+      expect(primary(byDefault.cubit), 'Board B');
+    });
+
+    test('a transfer at one stop, with no walk between the lines: the '
+        'rider reads where line 7 is left, where line 12 is left and the '
+        'destination, never a way node', () async {
+      expect(await namesRead(TransferTrip(walkAtTransfer: false)), [
+        'Board A',
+        'Alight A',
+        'Alight B',
+        'University',
+      ]);
+    });
+
+    test('a transfer at one stop: from 50 m before it the instruction '
+        'already names the stop where line 12 is left, under the badge of '
+        'line 7 the rider is still on (the default mode names a way node of '
+        'line 12 from the same fix, under the same badge)', () async {
+      final trip = TransferTrip(walkAtTransfer: false);
+      final nav = await start(showStops: false, route: routeOf(trip));
+
+      nav.gps.moveTo(beforeLeavingLine7(nav.gps, 55));
+      expect(primary(nav.cubit), 'Alight A');
+      expect(secondary(nav.cubit), '55 m');
+      expect(nav.cubit.state.currentLeg?.routeName, '7');
+
+      // Within the 50 m of the stop: the progression counts it as reached,
+      // so the leg that ends next is line 12's.
+      final fix = beforeLeavingLine7(nav.gps, 45);
+      nav.gps.moveTo(fix);
+      expect(primary(nav.cubit), 'Alight B');
+      expect(secondary(nav.cubit), '331 m');
+      expect(
+        nav.cubit.state.currentInstruction!.distance,
+        closeTo(
+          nav.gps.metersAlong(fix, [
+            for (var i = 1; i <= TransferTrip.nodesPerLine; i++) trip.nodeB(i),
+            trip.alightB,
+          ]),
+          0.01,
+        ),
+      );
+      // The badge follows the leg the rider is nearest to: still line 7.
+      expect(nav.cubit.state.currentLeg?.routeName, '7');
+
+      // Past the stop, on line 12, name and badge agree again.
+      nav.gps.moveTo(trip.nodeB(3));
+      expect(primary(nav.cubit), 'Alight B');
+      expect(nav.cubit.state.currentLeg?.routeName, '12');
+
+      final byDefault = await start(showStops: true, route: routeOf(trip));
+      byDefault.gps.moveTo(beforeLeavingLine7(byDefault.gps, 55));
+      expect(primary(byDefault.cubit), 'Alight A');
+      byDefault.gps.moveTo(beforeLeavingLine7(byDefault.gps, 45));
+      expect(primary(byDefault.cubit), 'B node 1');
+      expect(byDefault.cubit.state.currentLeg?.routeName, '7');
+    });
+  });
+
   group('either way', () {
     for (final showStops in [true, false]) {
       test('showStops $showStops: starting at the destination says where '
