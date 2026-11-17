@@ -28,7 +28,10 @@ class NavigationConfig {
   /// the name of the next one, the "`N` stops remaining" count, the distance
   /// to the next one and the "Next: …" preview. `false` names the stop where
   /// the current leg ends instead — the alighting stop while riding — with
-  /// the distance left to it, and drops the other three.
+  /// the distance left to it, and drops the other three. A stop counts as
+  /// reached from [stopArrivalThreshold] (50 m) before it, so from there the
+  /// card already names the end of the next leg — the same moment the
+  /// default mode moves on to the next stop.
   ///
   /// Presentation only: the stops keep driving the progression either way
   /// (start index, auto-advance, ETA, progress bar, the ridden part of the

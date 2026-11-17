@@ -336,9 +336,12 @@ The instruction card then names the stop where the current leg ends — the
 boarding stop on the walk to the line, the alighting stop while riding, the
 destination on the last walk — with the distance left to it, measured from
 the rider node by node along the line; the distance to the next node and the
-"Next: …" row go as well. Only the text changes: the intermediate places
-keep driving the progression (auto-advance, ETA, progress bar, the ridden
-part of the line on the map).
+"Next: …" row go as well. A stop counts as reached from
+`NavigationConfig.stopArrivalThreshold` (50 m) before it, so from there the
+card already names the end of the next leg — the same moment the default
+mode moves on to the next stop. Only the text changes: the intermediate
+places keep driving the progression (auto-advance, ETA, progress bar, the
+ridden part of the line on the map).
 
 ## Dependencies
 
