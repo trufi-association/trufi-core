@@ -99,6 +99,11 @@ class NavigationCubit extends Cubit<NavigationState> {
     _locationService.removeListener(_onLocationUpdate);
     await _locationService.stopTracking();
 
+    // NavigationScreen closes the cubit right after asking it to stop: by
+    // the time the tracking has stopped there is nobody left to tell, and
+    // emitting on a closed cubit throws.
+    if (isClosed) return;
+
     emit(const NavigationState(status: NavigationStatus.idle));
   }
 
