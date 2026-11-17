@@ -159,7 +159,7 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get nearbyAnchorPinned => 'Markierter Ort';
 
   @override
-  String get nearbyAnchorDefault => 'Stadtzentrum (Standort nicht verfügbar)';
+  String get nearbyAnchorDefault => 'Stadtzentrum (kein Standort)';
 
   @override
   String nearbyAnchorAlongStreet(String street) {

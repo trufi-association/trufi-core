@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
@@ -7,11 +8,13 @@ NearbyLinesState state({
   NearbyAnchorSource source = NearbyAnchorSource.device,
   bool isLocating = false,
   bool locationDenied = false,
+  NearbyStreetAnchor? street,
 }) => NearbyLinesState(
   anchor: const LatLng(-17.39, -66.15),
   anchorSource: source,
   radius: NearbyRadius.m300,
   availability: NearbyAvailability.available,
+  street: street,
   isLocating: isLocating,
   locationDenied: locationDenied,
 );
@@ -56,6 +59,27 @@ Future<_Calls> _pumpHeader(
 Finder _titleCard() => find
     .ancestor(of: find.text('Nearby lines'), matching: find.byType(Material))
     .first;
+
+/// The title card whatever the language: the Material around the header's
+/// only [Column].
+Finder _titleCardOfAnyLocale() => find
+    .ancestor(of: find.byType(Column), matching: find.byType(Material))
+    .first;
+
+/// The laid-out paragraph of [text]: line count and truncation.
+RenderParagraph _paragraph(WidgetTester tester, String text) =>
+    tester.renderObject<RenderParagraph>(find.text(text));
+
+/// Sizes the test view like a phone of [width] logical pixels.
+void _usePhone(WidgetTester tester, double width) {
+  tester.view.physicalSize = Size(width, 800);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
+
+/// `bodySmall` line height: the anchor label and the hint.
+const double _line = 16;
 
 void main() {
   testWidgets('menu, locate and close buttons report', (tester) async {
@@ -103,14 +127,142 @@ void main() {
     expect(find.text('City center (location unavailable)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
     expect(find.byIcon(Icons.location_searching_rounded), findsOneWidget);
+    // The fallback label may take a second line: the reserve counts it.
     expect(
       NearbyHeaderCard.heightFor(fallback),
-      NearbyHeaderCard.cardHeightWithHint,
+      NearbyHeaderCard.cardHeightWithHint +
+          NearbyHeaderCard.anchorSecondLineHeight,
     );
     expect(
       tester.getSize(_titleCard()).height,
-      lessThanOrEqualTo(NearbyHeaderCard.cardHeightWithHint),
+      lessThanOrEqualTo(NearbyHeaderCard.heightFor(fallback)),
     );
+  });
+
+  test('the reserved height follows the anchor: one line for a fix or a '
+      'pin, two for the fallback label and a street, plus the hint', () {
+    final street = NearbyStreetAnchor(
+      name: 'Avenida Heroínas',
+      corners: const [LatLng(-17.3925, -66.1588), LatLng(-17.3907, -66.1571)],
+    );
+    expect(NearbyHeaderCard.heightFor(state()), 58);
+    expect(
+      NearbyHeaderCard.heightFor(state(source: NearbyAnchorSource.pin)),
+      58,
+    );
+    expect(
+      NearbyHeaderCard.heightFor(
+        state(source: NearbyAnchorSource.pin, locationDenied: true),
+      ),
+      108,
+    );
+    expect(
+      NearbyHeaderCard.heightFor(state(source: NearbyAnchorSource.fallback)),
+      124,
+    );
+    expect(
+      NearbyHeaderCard.heightFor(
+        state(source: NearbyAnchorSource.street, street: street),
+      ),
+      74,
+    );
+    // A failed fix keeps the street and adds the hint.
+    expect(
+      NearbyHeaderCard.heightFor(
+        state(
+          source: NearbyAnchorSource.street,
+          street: street,
+          locationDenied: true,
+        ),
+      ),
+      124,
+    );
+  });
+
+  group('the anchor label wraps instead of ending in an ellipsis '
+      '(trufi-app#79)', () {
+    // The test font is a 1 em square per glyph, about twice as wide as
+    // Roboto, so a real 360 dp phone cannot be reproduced here; a 532 px
+    // view leaves the label 300 px, where every language's fallback label
+    // needs exactly its two lines.
+    for (final locale in TransportListLocalizations.supportedLocales) {
+      testWidgets('$locale: the fallback label takes its second line and '
+          'is shown whole, with the hint under it', (tester) async {
+        _usePhone(tester, 532);
+        final l10n = lookupTransportListLocalizations(locale);
+        final fallback = state(source: NearbyAnchorSource.fallback);
+        await _pumpHeader(tester, fallback, locale: locale);
+
+        final label = _paragraph(tester, l10n.nearbyAnchorDefault);
+        expect(label.maxLines, 2);
+        expect(label.size.height, 2 * _line);
+        expect(label.didExceedMaxLines, isFalse);
+        // Long-press still shows it whole, as for a street name.
+        expect(find.byTooltip(l10n.nearbyAnchorDefault), findsOneWidget);
+
+        final hint = _paragraph(tester, l10n.nearbyMovePinHint);
+        expect(hint.maxLines, 3);
+        expect(hint.didExceedMaxLines, isFalse);
+        // The hint starts under the label's last line, not over it.
+        expect(
+          tester.getTopLeft(find.text(l10n.nearbyMovePinHint)).dy,
+          greaterThanOrEqualTo(
+            tester.getBottomLeft(find.text(l10n.nearbyAnchorDefault)).dy,
+          ),
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('a short label keeps its single line and the card its '
+        'height', (tester) async {
+      _usePhone(tester, 532);
+      await _pumpHeader(tester, state());
+      expect(_paragraph(tester, 'Your location').size.height, _line);
+      expect(tester.getSize(_titleCard()).height, NearbyHeaderCard.cardHeight);
+    });
+
+    testWidgets('a street name longer than two lines still ellipsizes and '
+        'keeps its tooltip', (tester) async {
+      _usePhone(tester, 360);
+      final street = NearbyStreetAnchor(
+        name: 'Avenida Circunvalación II Doctor Martín Cárdenas Hermosa',
+        subtitle: 'Cochabamba',
+        corners: const [LatLng(-17.39, -66.15), LatLng(-17.38, -66.14)],
+      );
+      final along = state(source: NearbyAnchorSource.street, street: street);
+      await _pumpHeader(tester, along);
+
+      const text =
+          'Along Avenida Circunvalación II Doctor Martín Cárdenas Hermosa '
+          '· Cochabamba';
+      final label = _paragraph(tester, text);
+      expect(label.size.height, 2 * _line);
+      expect(label.didExceedMaxLines, isTrue);
+      expect(find.byTooltip(text), findsOneWidget);
+      expect(
+        tester.getSize(_titleCard()).height,
+        lessThanOrEqualTo(NearbyHeaderCard.heightFor(along)),
+      );
+    });
+
+    // What two lines hold on a 360 dp phone was measured with Roboto: the
+    // text box is 128 px, about 21 characters a line. A translation over
+    // this budget ends in an ellipsis again; the test font cannot tell.
+    test('every language keeps the fallback label within two lines of a '
+        '360 dp phone', () {
+      for (final locale in TransportListLocalizations.supportedLocales) {
+        final label = lookupTransportListLocalizations(
+          locale,
+        ).nearbyAnchorDefault;
+        expect(label.length, lessThanOrEqualTo(36), reason: '$locale: $label');
+        final longestWord = label
+            .split(' ')
+            .map((word) => word.length)
+            .reduce((a, b) => a > b ? a : b);
+        expect(longestWord, lessThanOrEqualTo(18), reason: '$locale: $label');
+      }
+    });
   });
 
   testWidgets('a denied location on a pinned anchor also shows the hint', (
@@ -126,20 +278,19 @@ void main() {
   });
 
   for (final locale in const [Locale('en'), Locale('es'), Locale('de')]) {
-    testWidgets('$locale: no overflow on a 360 px phone with the hint', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(360, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets('$locale: no overflow on a 360 px phone with the hint, and '
+        'the card stays within the height the screen reserves', (tester) async {
+      _usePhone(tester, 360);
+      final fallback = state(source: NearbyAnchorSource.fallback);
 
-      await _pumpHeader(
-        tester,
-        state(source: NearbyAnchorSource.fallback),
-        locale: locale,
-      );
+      await _pumpHeader(tester, fallback, locale: locale);
       expect(tester.takeException(), isNull);
+      // The wide test font fills every allowed line here: two of label,
+      // three of hint — the tallest the card gets.
+      expect(
+        tester.getSize(_titleCardOfAnyLocale()).height,
+        NearbyHeaderCard.heightFor(fallback),
+      );
     });
   }
 

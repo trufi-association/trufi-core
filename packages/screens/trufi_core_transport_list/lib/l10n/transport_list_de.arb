@@ -67,7 +67,7 @@
   "menuNearbyLines": "Linien in der Nähe",
   "nearbyAnchorYourLocation": "Dein Standort",
   "nearbyAnchorPinned": "Markierter Ort",
-  "nearbyAnchorDefault": "Stadtzentrum (Standort nicht verfügbar)",
+  "nearbyAnchorDefault": "Stadtzentrum (kein Standort)",
   "nearbyAnchorAlongStreet": "Entlang {street}",
   "nearbyUseMyLocation": "Meinen Standort verwenden",
   "nearbyMovePinHint": "Halte die Karte gedrückt, um den Pin zu verschieben",
