@@ -330,8 +330,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   TrufiCameraPosition? _camera;
   bool _outOfFocus = false;
 
-  /// The fit the listener could not do yet (no viewport before the first
-  /// layout, or the anchor was already known when the screen was revisited).
+  /// A fit the next build has to run: the one a state change asked for,
+  /// the first one of a visit (no viewport before the first layout), or
+  /// the one of a revisit whose anchor was already known.
   bool _fitPending = true;
   NearbyLinesState? _lastState;
 
@@ -370,6 +371,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   /// Camera side effects: fit the search area when the anchor or radius
   /// moves, the selected line when one is highlighted, the area again when
   /// cleared.
+  ///
+  /// The fit is only asked for here and runs after the next build
+  /// ([_scheduleInitialFit]). This listener runs before the rebuild for
+  /// [state], and what the header keeps clear of the map is set on build:
+  /// fitting here framed the new state under the previous one's header.
+  /// A visit starts on the fallback header, the tallest, so with a fix
+  /// its first ring came out smaller than it then stays — 268 px instead
+  /// of 334 on a 360x640 phone.
   void _onStateChanged(NearbyLinesState state) {
     final previous = _lastState;
     _lastState = state;
@@ -382,14 +391,10 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     final selectionChanged = previous?.selectedLineKey != state.selectedLineKey;
 
     if (state.selectedGeometry.length > 1) {
-      if (selectionChanged || anchorChanged || _fitPending) {
-        _fitState(state, anchor);
-      }
+      if (selectionChanged || anchorChanged) _fitPending = true;
       return;
     }
-    if (anchorChanged || radiusChanged || selectionChanged || _fitPending) {
-      _fitState(state, anchor);
-    }
+    if (anchorChanged || radiusChanged || selectionChanged) _fitPending = true;
   }
 
   /// Frames the highlighted line, or the search area when there is none.
@@ -441,8 +446,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     });
   }
 
-  /// Called from build once the viewport is known: fits the ring if no
-  /// state change has done it yet (revisits with an unchanged anchor).
+  /// Called from build once the viewport and this state's insets are
+  /// known: runs the pending fit after the frame.
   void _scheduleInitialFit(NearbyLinesState state) {
     final anchor = state.anchor;
     if (!_fitPending || anchor == null) return;

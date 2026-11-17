@@ -149,6 +149,20 @@ double screenX(TrufiCameraPosition camera, double longitude, double mapWidth) {
   return mapWidth / 2 + (longitude - camera.target.longitude) / 360 * worldPx;
 }
 
+/// Vertical screen position of [latitude] under [camera] on a map
+/// [mapHeight] logical pixels tall (same projection as [screenX]).
+double screenY(TrufiCameraPosition camera, double latitude, double mapHeight) {
+  double mercatorY(double degrees) {
+    final radians = degrees * math.pi / 180;
+    return (1 - math.log(math.tan(radians) + 1 / math.cos(radians)) / math.pi) /
+        2;
+  }
+
+  final worldPx = 256 * math.pow(2.0, camera.zoom);
+  return mapHeight / 2 +
+      (mercatorY(latitude) - mercatorY(camera.target.latitude)) * worldPx;
+}
+
 /// Sizes the test view like a phone: the narrow layout (under 600 px).
 void usePhone(WidgetTester tester, Size size) {
   tester.view.physicalSize = size;
@@ -389,6 +403,41 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('with a fix, the first fit of a visit frames the ring under '
+      'the one-line header it then has, not under the taller fallback '
+      'header the screen starts on', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    expect(find.text('Your location'), findsOneWidget);
+
+    ({double top, double bottom}) ringEdges() {
+      final camera = engine.lastCamera!;
+      final latitudes = engine.lastLayers.first.lines.single.position.map(
+        (point) => point.latitude,
+      );
+      return (
+        top: screenY(camera, latitudes.reduce(math.max), 640),
+        bottom: screenY(camera, latitudes.reduce(math.min), 640),
+      );
+    }
+
+    // Before anything is tapped: 24 px of header margin and the 58 px
+    // card above the ring, the sheet (35 % of 640) below it — a 334 px
+    // ring. Fitted with the fallback header's reserve it was 268 px.
+    final first = ringEdges();
+    expect(first.top, closeTo(24 + NearbyHeaderCard.cardHeight, 0.5));
+    expect(first.bottom, closeTo(640 * 0.65, 0.5));
+
+    // And it is where the ring settles after any later fit.
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('300 m (2)'));
+    await tester.pumpAndSettle();
+    final settled = ringEdges();
+    expect(settled.top, closeTo(first.top, 0.5));
+    expect(settled.bottom, closeTo(first.bottom, 0.5));
+  });
+
   testWidgets('on a phone the ring keeps the whole width of the map: the '
       'street margin does not shrink it', (tester) async {
     // Tall enough for the width to be what limits the ring.
@@ -476,6 +525,34 @@ void main() {
       // The line label is a 130 px box centred on its point.
       expect(screenX(camera, west.longitude, 400), closeTo(65, 0.5));
       expect(screenX(camera, east.longitude, 400), closeTo(400 - 65, 0.5));
+    });
+
+    testWidgets('the first fit of a street visit sits under the street '
+        "header's own reserve", (tester) async {
+      usePhone(tester, const Size(400, 800));
+      // Runs north–south: the screen's height decides the zoom.
+      const north = LatLng(-17.3700, -66.1570);
+      const south = LatLng(-17.4000, -66.1572);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Ayacucho',
+          corners: const [north, LatLng(-17.3850, -66.1571), south],
+        ),
+      );
+
+      // 24 px of header margin and the two-line street card (74 px): the
+      // fallback header the visit starts on would have put it at 148.
+      final camera = engine.lastCamera!;
+      expect(
+        screenY(camera, north.latitude, 800),
+        closeTo(
+          24 +
+              NearbyHeaderCard.cardHeight +
+              NearbyHeaderCard.anchorSecondLineHeight,
+          0.5,
+        ),
+      );
     });
 
     testWidgets('in the side-panel layout the street margin adds to the '
