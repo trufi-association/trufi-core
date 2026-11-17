@@ -22,6 +22,7 @@ import 'nearby_radius.dart';
 import 'nearby_street_anchor.dart';
 import 'widgets/nearby_header_card.dart';
 import 'widgets/nearby_lines_sheet.dart';
+import 'widgets/nearby_locate_feedback.dart';
 import 'widgets/nearby_map_layers.dart';
 
 /// Opens the detail of a nearby line; the default pushes
@@ -92,6 +93,7 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
             (context, line) =>
                 showNearbyLineDetails(context, line, showStops: showStops),
         initialStreet: _streetExtra(context),
+        locationService: _locationService,
       );
 
   /// The street passed by [showAlongStreet]; null on a drawer visit and
@@ -117,7 +119,7 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
       create: (context) => NearbyLinesCubit(
         dataSource: _resolveDataSource(context),
         defaultAnchor: MapEngineManager.read(context).defaultCenter,
-        locate: () => locateDevice(_locationService),
+        locate: () => locateDeviceOrThrow(_locationService),
         initialRadius: initialRadius,
       ),
     ),
@@ -148,22 +150,54 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
 }
 
 /// Permission flow of the home screen without its dialogs: ask once when
-/// merely denied, give up on "denied forever" / services off / no fix in
-/// 10 s. Null means "use the pin fallback"; the header's hint explains it.
-Future<LatLng?> locateDevice(LocationService service) async {
+/// merely denied, then wait up to 10 s for a fix.
+///
+/// With no position it throws a [NearbyLocateException] that says why —
+/// denied, denied for good, location switched off, no fix. The cubit
+/// falls back to the pin in every case, and the "use my location" button
+/// explains the reason to the rider (trufi-app#78).
+Future<LatLng> locateDeviceOrThrow(LocationService service) async {
+  final LocationPermissionStatus status;
   try {
-    var status = await service.checkPermission();
-    if (status == LocationPermissionStatus.denied) {
-      status = await service.requestPermission();
-    }
-    if (status != LocationPermissionStatus.granted) return null;
+    final current = await service.checkPermission();
+    status = current == LocationPermissionStatus.denied
+        ? await service.requestPermission()
+        : current;
+  } catch (_) {
+    // No location plugin on this platform, or it failed to answer.
+    throw const NearbyLocateException(NearbyLocateFailure.noFix);
+  }
+  switch (status) {
+    case LocationPermissionStatus.granted:
+      break;
+    case LocationPermissionStatus.denied:
+      throw const NearbyLocateException(NearbyLocateFailure.permissionDenied);
+    case LocationPermissionStatus.deniedForever:
+      throw const NearbyLocateException(
+        NearbyLocateFailure.permissionDeniedForever,
+      );
+    case LocationPermissionStatus.serviceDisabled:
+      throw const NearbyLocateException(NearbyLocateFailure.serviceDisabled);
+  }
+  try {
     final location = await service.getCurrentLocation(
       timeout: const Duration(seconds: 10),
     );
-    if (location == null) return null;
-    return LatLng(location.latitude, location.longitude);
+    if (location != null) {
+      return LatLng(location.latitude, location.longitude);
+    }
   } catch (_) {
-    // Timeout, geolocator failure or no plugin on this platform: fall back.
+    // Timeout or geolocator failure: no fix.
+  }
+  throw const NearbyLocateException(NearbyLocateFailure.noFix);
+}
+
+/// [locateDeviceOrThrow] for callers that only want a position: null
+/// whatever the reason there is none.
+Future<LatLng?> locateDevice(LocationService service) async {
+  try {
+    return await locateDeviceOrThrow(service);
+  } on NearbyLocateException {
     return null;
   }
 }
@@ -239,10 +273,15 @@ void showNearbyLineDetails(
 class _NearbyLinesScreenWidget extends StatefulWidget {
   const _NearbyLinesScreenWidget({
     required this.onLineDetails,
+    required this.locationService,
     this.initialStreet,
   });
 
   final NearbyLineDetailsCallback onLineDetails;
+
+  /// The service the cubit locates with: its settings pages are where
+  /// the rider fixes a denied permission or a switched-off location.
+  final LocationService locationService;
 
   /// Anchors this visit on a street instead of locating the rider.
   final NearbyStreetAnchor? initialStreet;
@@ -452,6 +491,19 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     context.read<NearbyLinesCubit>().setAnchor(point);
   }
 
+  /// The "use my location" button. The locate of a visit is silent; this
+  /// one the rider asked for, so when it finds no position it says why
+  /// instead of leaving the screen as it was (trufi-app#78).
+  Future<void> _useMyLocation() async {
+    final failure = await context.read<NearbyLinesCubit>().useMyLocation();
+    if (failure == null || !mounted) return;
+    showNearbyLocateFailure(
+      context,
+      failure,
+      locationService: widget.locationService,
+    );
+  }
+
   void _tryOpenDrawer() {
     HapticFeedback.lightImpact();
     final scaffold = Scaffold.maybeOf(context);
@@ -657,13 +709,12 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 
   Widget _buildHeader(NearbyLinesState state, {required bool elevated}) {
-    final cubit = context.read<NearbyLinesCubit>();
     return NearbyHeaderCard(
       state: state,
       elevated: elevated,
       onMenu: _tryOpenDrawer,
       onClose: _close,
-      onUseMyLocation: cubit.useMyLocation,
+      onUseMyLocation: _useMyLocation,
     );
   }
 

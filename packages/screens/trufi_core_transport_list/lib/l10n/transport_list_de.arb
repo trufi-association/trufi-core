@@ -71,6 +71,13 @@
   "nearbyAnchorAlongStreet": "Entlang {street}",
   "nearbyUseMyLocation": "Meinen Standort verwenden",
   "nearbyMovePinHint": "Halte die Karte gedrückt, um den Pin zu verschieben",
+  "nearbyLocationPermissionTitle": "Standortberechtigung",
+  "nearbyLocationPermissionDeniedForever": "Die Standortberechtigung wurde dauerhaft verweigert. Aktiviere sie in den Geräteeinstellungen, um die Linien in deiner Nähe zu sehen.",
+  "nearbyLocationDisabledTitle": "Standort deaktiviert",
+  "nearbyLocationDisabledMessage": "Die Standortdienste sind auf deinem Gerät deaktiviert. Aktiviere sie, um die Linien in deiner Nähe zu sehen.",
+  "nearbyLocationOpenSettings": "Einstellungen öffnen",
+  "nearbyLocationPermissionDenied": "Standortberechtigung verweigert. Tippe erneut auf die Schaltfläche, um sie zu erlauben, oder halte die Karte gedrückt, um den Pin zu verschieben.",
+  "nearbyLocationNoFix": "Dein Standort konnte nicht ermittelt werden. Versuche es gleich noch einmal oder halte die Karte gedrückt, um den Pin zu verschieben.",
   "nearbyRadiusChip": "{meters} m ({count})",
   "@nearbyRadiusChip": {
     "placeholders": {

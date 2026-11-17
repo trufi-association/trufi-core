@@ -133,6 +133,16 @@ request when merely denied; no dialogs). Permanently denied, services off or
 no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
 long-press the map to move the pin anywhere, "Use my location" re-anchors.
 
+"Use my location" is the rider's explicit request, so when it finds no
+position it says why (trufi-app#78): a dialog with an **Open settings**
+action when the permission is permanently denied (the app's settings page)
+or location is switched off (the device's location settings) — on web,
+where geolocator has no such pages, the dialog only explains — and a snack
+bar when the system prompt was just answered "don't allow" or no fix
+arrived in time. A custom `NearbyLinesCubit.locate` callback reports its
+reason by throwing a `NearbyLocateException`; returning null still means
+"no fix".
+
 ### Lines along a street
 
 The same screen answers "which lines run along this street?"

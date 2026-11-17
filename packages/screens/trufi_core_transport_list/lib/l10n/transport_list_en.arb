@@ -190,6 +190,34 @@
   "@nearbyMovePinHint": {
     "description": "Hint under the anchor row and in the empty state explaining how to move the search point"
   },
+  "nearbyLocationPermissionTitle": "Location permission",
+  "@nearbyLocationPermissionTitle": {
+    "description": "Title of the dialog shown when 'Use my location' is tapped on the nearby lines screen and the location permission is permanently denied"
+  },
+  "nearbyLocationPermissionDeniedForever": "Location permission is permanently denied. Enable it in your device settings to see the lines near you.",
+  "@nearbyLocationPermissionDeniedForever": {
+    "description": "Body of the permanently-denied dialog of the nearby lines screen; its action opens the app's settings page"
+  },
+  "nearbyLocationDisabledTitle": "Location disabled",
+  "@nearbyLocationDisabledTitle": {
+    "description": "Title of the dialog shown when 'Use my location' is tapped on the nearby lines screen and location services are switched off"
+  },
+  "nearbyLocationDisabledMessage": "Location services are disabled on your device. Enable them to see the lines near you.",
+  "@nearbyLocationDisabledMessage": {
+    "description": "Body of the location-disabled dialog of the nearby lines screen; its action opens the device's location settings"
+  },
+  "nearbyLocationOpenSettings": "Open settings",
+  "@nearbyLocationOpenSettings": {
+    "description": "Action of the location dialogs of the nearby lines screen: opens the settings page where location can be enabled"
+  },
+  "nearbyLocationPermissionDenied": "Location permission denied. Tap the button again to allow it, or long-press the map to move the pin.",
+  "@nearbyLocationPermissionDenied": {
+    "description": "Snack bar shown when 'Use my location' is tapped and the rider answers the system permission prompt with 'don't allow'"
+  },
+  "nearbyLocationNoFix": "Couldn't get your location. Try again in a moment, or long-press the map to move the pin.",
+  "@nearbyLocationNoFix": {
+    "description": "Snack bar shown when 'Use my location' is tapped, location is allowed and on, but no position arrives in time"
+  },
   "nearbyRadiusChip": "{meters} m ({count})",
   "@nearbyRadiusChip": {
     "description": "Radius filter chip: distance bracket in meters and how many lines fall inside it",

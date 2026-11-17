@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
@@ -11,6 +10,8 @@ import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
+
+import 'geolocator_mock.dart';
 
 /// Drives the real [NearbyLinesTrufiScreen] (providers + builder) over a
 /// fake map engine and a canned data source: the wiring between the cubit,
@@ -45,37 +46,8 @@ class _FakeEngine extends ITrufiMapEngine {
   }
 }
 
-const deviceFix = LatLng(-17.40, -66.16);
-
 /// `MapEngineManager.defaultCenter` of every pump: the fallback anchor.
 const defaultCenter = LatLng(-17.39, -66.15);
-
-/// Answers geolocator's method channel in-process: without a handler the
-/// real channel never replies under the test's fake async, so the screen
-/// would spin on "locating" forever. [granted] drives the GPS path; false
-/// reports location services off (the pin fallback).
-void mockGeolocator({required bool granted}) {
-  const channel = MethodChannel('flutter.baseflow.com/geolocator');
-  final messenger =
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
-  // `LocationPermission.whileInUse` is index 2 of geolocator's enum.
-  final replies = <String, Object?>{
-    'isLocationServiceEnabled': granted,
-    'checkPermission': 2,
-    'requestPermission': 2,
-    'getCurrentPosition': {
-      'latitude': deviceFix.latitude,
-      'longitude': deviceFix.longitude,
-      'timestamp': 0,
-      'accuracy': 10.0,
-    },
-  };
-  messenger.setMockMethodCallHandler(
-    channel,
-    (call) async => replies[call.method],
-  );
-  addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
-}
 
 NearbyLine row(String name, double distance, {String? stopName}) => NearbyLine(
   lineKey: 'n:$name',
@@ -124,14 +96,19 @@ class _FakeDataSource implements NearbyLinesDataSource {
   );
 }
 
+/// [locationGranted] false is a device with location switched off (the
+/// pin fallback). A test that needs another kind of device calls
+/// [mockGeolocator] itself and passes [mockLocation] false.
 Future<_FakeEngine> _pumpScreen(
   WidgetTester tester, {
   bool withDataSource = true,
   bool locationGranted = false,
+  bool mockLocation = true,
+  Locale? locale,
   NearbyLineDetailsCallback? onLineDetails,
   bool showStops = true,
 }) async {
-  mockGeolocator(granted: locationGranted);
+  if (mockLocation) mockGeolocator(serviceEnabled: locationGranted);
   final engine = _FakeEngine();
   final manager = MapEngineManager(
     engines: [engine],
@@ -150,6 +127,7 @@ Future<_FakeEngine> _pumpScreen(
         ...screen.providers,
       ],
       child: MaterialApp(
+        locale: locale,
         localizationsDelegates: screen.localizationsDelegates,
         supportedLocales: TransportListLocalizations.supportedLocales,
         home: Scaffold(body: Builder(builder: screen.builder)),
@@ -185,8 +163,9 @@ void usePhone(WidgetTester tester, Size size) {
 Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   WidgetTester tester, {
   NearbyStreetAnchor? street,
+  bool mockLocation = true,
 }) async {
-  mockGeolocator(granted: true);
+  if (mockLocation) mockGeolocator();
   final engine = _FakeEngine();
   final source = _FakeDataSource();
   final manager = MapEngineManager(
@@ -554,6 +533,279 @@ void main() {
 
       expect(find.text('open'), findsOneWidget);
       expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
+    });
+  });
+
+  group('"Use my location" explains why there is no position '
+      '(trufi-app#78)', () {
+    const disabledTitle = 'Location disabled';
+    const disabledMessage =
+        'Location services are disabled on your device. Enable them to see '
+        'the lines near you.';
+    const permissionTitle = 'Location permission';
+    const permissionMessage =
+        'Location permission is permanently denied. Enable it in your '
+        'device settings to see the lines near you.';
+    const deniedMessage =
+        'Location permission denied. Tap the button again to allow it, or '
+        'long-press the map to move the pin.';
+    const noFixMessage =
+        "Couldn't get your location. Try again in a moment, or long-press "
+        'the map to move the pin.';
+
+    Future<void> tapUseMyLocation(WidgetTester tester) async {
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pumpAndSettle();
+    }
+
+    /// Lets the snack bar run out: its timer must not outlive the test.
+    Future<void> expireSnackBar(WidgetTester tester) async {
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+    }
+
+    Iterable<String> settingsOpened(List<String> calls) =>
+        calls.where((method) => method.startsWith('open'));
+
+    // The locate of a visit is not the rider's request: whatever the
+    // device answers, only the header and the pin say it.
+    for (final (device, mock) in <(String, List<String> Function())>[
+      (
+        'with location switched off',
+        () => mockGeolocator(serviceEnabled: false),
+      ),
+      (
+        'whose prompt is answered "don\'t allow"',
+        () => mockGeolocator(checkPermission: GeoPermission.denied),
+      ),
+      (
+        'that denied the permission for good',
+        () => mockGeolocator(
+          checkPermission: GeoPermission.denied,
+          requestPermission: [GeoPermission.deniedForever],
+        ),
+      ),
+      ('that gets no fix', () => mockGeolocator(fix: GeoFix.fails)),
+    ]) {
+      testWidgets('opening the screen on a device $device shows neither a '
+          'dialog nor a snack bar', (tester) async {
+        final calls = mock();
+        await _pumpScreen(tester, mockLocation: false);
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(SnackBar), findsNothing);
+        expect(find.text('City center (location unavailable)'), findsOneWidget);
+        expect(find.text('Long-press the map to move the pin'), findsOneWidget);
+        expect(settingsOpened(calls), isEmpty);
+      });
+    }
+
+    testWidgets('location switched off: a dialog says so and its action '
+        'opens the location settings', (tester) async {
+      final calls = mockGeolocator(serviceEnabled: false);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, disabledTitle), findsOneWidget);
+      expect(find.text(disabledMessage), findsOneWidget);
+      expect(find.byIcon(Icons.location_disabled_rounded), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      // A permission is not asked for while it could not be used.
+      expect(calls, isNot(contains('requestPermission')));
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openLocationSettings']);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('permission denied for good, the Android way (the request '
+        'comes back without a prompt): a dialog whose action opens the '
+        "app's settings", (tester) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.deniedForever],
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(find.text(permissionMessage), findsOneWidget);
+      expect(find.byIcon(Icons.location_off_rounded), findsOneWidget);
+      // Once for the visit, once for the tap.
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openAppSettings']);
+    });
+
+    testWidgets('permission denied for good, the iOS way (the check already '
+        'says so): the same dialog without asking again; "Cancel" closes it '
+        'and opens nothing', (tester) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.deniedForever,
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(calls, isNot(contains('requestPermission')));
+
+      await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), isEmpty);
+      // The rider can ask again.
+      await tapUseMyLocation(tester);
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+    });
+
+    testWidgets('the prompt answered "don\'t allow": a snack bar says the '
+        'button asks again, and no dialog piles on the prompt', (tester) async {
+      mockGeolocator(checkPermission: GeoPermission.denied);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, deniedMessage), findsOneWidget);
+      expect(find.byType(AlertDialog), findsNothing);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('the platform fails to give a position: a snack bar', (
+      tester,
+    ) async {
+      mockGeolocator(fix: GeoFix.fails);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, noFixMessage), findsOneWidget);
+      expect(find.byType(AlertDialog), findsNothing);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('no fix within 10 s: the button spins meanwhile, then the '
+        'snack bar', (tester) async {
+      mockGeolocator(fix: GeoFix.never);
+      // The visit's own locate runs into the same time limit.
+      await _pumpScreen(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(seconds: 9));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.widgetWithText(SnackBar, noFixMessage), findsOneWidget);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('on a phone the snack bar shows over the sheet', (
+      tester,
+    ) async {
+      usePhone(tester, const Size(400, 800));
+      mockGeolocator(checkPermission: GeoPermission.denied);
+      await _pumpScreen(tester, mockLocation: false);
+      expect(find.byType(TrufiBottomSheet), findsOneWidget);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, deniedMessage), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('the prompt denied on the visit and allowed on the tap: '
+        'the anchor moves to the fix and nothing else is shown', (
+      tester,
+    ) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.denied, GeoPermission.whileInUse],
+      );
+      final engine = await _pumpScreen(tester, mockLocation: false);
+      expect(find.text('City center (location unavailable)'), findsOneWidget);
+
+      await tapUseMyLocation(tester);
+      expect(find.text('Your location'), findsOneWidget);
+      expect(find.text('Long-press the map to move the pin'), findsNothing);
+      expect(engine.lastLayers.last.markers.single.position, deviceFix);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      // The tap asked the system again: that is the prompt the rider sees.
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+    });
+
+    testWidgets('with a fix nothing is shown: the anchor just moves', (
+      tester,
+    ) async {
+      final engine = await _pumpScreen(tester, locationGranted: true);
+      await tapUseMyLocation(tester);
+
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.text('Your location'), findsOneWidget);
+      expect(engine.lastLayers.last.markers.single.position, deviceFix);
+    });
+
+    testWidgets('a rider who left the screen before the answer gets no '
+        'message on the next one', (tester) async {
+      mockGeolocator(fix: GeoFix.never);
+      await _pumpRouted(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(find.text('open'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 11));
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('the messages come from the package l10n (Spanish)', (
+      tester,
+    ) async {
+      mockGeolocator(serviceEnabled: false);
+      await _pumpScreen(
+        tester,
+        mockLocation: false,
+        locale: const Locale('es'),
+      );
+      await tester.tap(find.byTooltip('Usar mi ubicación'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.widgetWithText(AlertDialog, 'Ubicación desactivada'),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Los servicios de ubicación están desactivados en tu dispositivo. '
+          'Actívalos para ver las líneas cercanas a ti.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.widgetWithText(TextButton, 'Cancelar'), findsOneWidget);
+      expect(
+        find.widgetWithText(FilledButton, 'Abrir configuración'),
+        findsOneWidget,
+      );
     });
   });
 
