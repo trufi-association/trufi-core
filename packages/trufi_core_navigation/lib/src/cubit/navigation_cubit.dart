@@ -24,6 +24,12 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     // Request location permission
     final permissionStatus = await _locationService.requestPermission();
+
+    // The rider can leave the screen while the permission is being asked,
+    // and NavigationScreen closes the cubit: nothing is left to start, and
+    // emitting on a closed cubit throws.
+    if (isClosed) return;
+
     if (permissionStatus != LocationPermissionStatus.granted) {
       emit(
         state.copyWith(
@@ -38,6 +44,11 @@ class NavigationCubit extends Cubit<NavigationState> {
     final trackingStarted = await _locationService.startTracking(
       distanceFilter: _config.locationDistanceFilter,
     );
+
+    // Same here: the tracking can take as long as the first position to
+    // start, and the screen may be gone by then. Returning also keeps the
+    // closed cubit from listening to the location service below.
+    if (isClosed) return;
 
     if (!trackingStarted) {
       emit(
