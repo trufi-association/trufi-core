@@ -41,6 +41,9 @@ class _FakeEngine extends ITrufiMapEngine {
 
 const deviceFix = LatLng(-17.40, -66.16);
 
+/// `MapEngineManager.defaultCenter` of every pump: the fallback anchor.
+const defaultCenter = LatLng(-17.39, -66.15);
+
 /// Answers geolocator's method channel in-process: without a handler the
 /// real channel never replies under the test's fake async, so the screen
 /// would spin on "locating" forever. [granted] drives the GPS path; false
@@ -126,7 +129,7 @@ Future<_FakeEngine> _pumpScreen(
   final engine = _FakeEngine();
   final manager = MapEngineManager(
     engines: [engine],
-    defaultCenter: const LatLng(-17.39, -66.15),
+    defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(
     dataSourceBuilder: withDataSource ? (_) => _FakeDataSource() : null,
@@ -167,7 +170,7 @@ Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   final source = _FakeDataSource();
   final manager = MapEngineManager(
     engines: [engine],
-    defaultCenter: const LatLng(-17.39, -66.15),
+    defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(dataSourceBuilder: (_) => source);
   addTearDown(screen.dispose);
@@ -262,14 +265,15 @@ void main() {
 
     final ids = engine.lastLayers.map((l) => l.id).toList();
     expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
-    final rings = engine.lastLayers.first;
-    expect(rings.lines.map((l) => l.id), [
-      'nearby-ring-100',
-      'nearby-ring-300',
-      'nearby-ring-500',
-    ]);
-    expect(rings.lines[1].lineWidth, 3);
-    expect(rings.lines[0].lineWidth, 1);
+    // Only the selected radius is drawn, with its label (trufi-app#80).
+    final ring = engine.lastLayers.first;
+    expect(ring.lines.map((l) => l.id), ['nearby-ring-300']);
+    expect(ring.lines.single.lineWidth, 3);
+    expect(
+      ring.lines.single.position,
+      NearbyGeometry.circlePolygon(defaultCenter, 300),
+    );
+    expect(ring.markers.map((m) => m.id), ['nearby-ring-label']);
     final points = engine.lastLayers[1];
     expect(points.markers.map((m) => m.id), [
       'nearby-point-n:201',
@@ -327,17 +331,34 @@ void main() {
     );
   });
 
-  testWidgets('radius chips filter the rows and restyle the rings', (
-    tester,
-  ) async {
+  testWidgets('radius chips filter the rows and the map draws only the ring '
+      'of the selected radius (trufi-app#80)', (tester) async {
     final engine = await _pumpScreen(tester);
-    await tester.tap(find.text('500 m (3)'));
-    await tester.pumpAndSettle();
 
-    expect(find.textContaining('At 380 m'), findsOneWidget);
-    final rings = engine.lastLayers.first;
-    expect(rings.lines[2].lineWidth, 3);
-    expect(rings.lines[1].lineWidth, 1);
+    // Every bracket in turn, ending on one that was already shown: the
+    // ring follows the chip and the other two never stay behind.
+    for (final (chip, meters) in const [
+      ('500 m (3)', 500.0),
+      ('100 m (1)', 100.0),
+      ('300 m (2)', 300.0),
+    ]) {
+      await tester.tap(find.text(chip));
+      await tester.pumpAndSettle();
+
+      final ring = engine.lastLayers.first;
+      expect(ring.id, 'nearby-rings');
+      expect(ring.lines.map((l) => l.id), ['nearby-ring-${meters.round()}']);
+      expect(
+        ring.lines.single.position,
+        NearbyGeometry.circlePolygon(defaultCenter, meters),
+      );
+      expect(ring.lines.single.lineWidth, 3);
+      expect(ring.markers.map((m) => m.id), ['nearby-ring-label']);
+      expect(
+        find.textContaining('At 380 m'),
+        meters == 500 ? findsOneWidget : findsNothing,
+      );
+    }
   });
 
   testWidgets('with a GPS fix the anchor is the device position', (
@@ -350,8 +371,8 @@ void main() {
     expect(anchorLayer.id, 'nearby-anchor');
     expect(anchorLayer.markers.single.position, deviceFix);
     expect(anchorLayer.markers.single.size, const Size(24, 24));
-    final rings = engine.lastLayers.first;
-    expect(rings.lines.first.position.first.longitude, deviceFix.longitude);
+    final ring = engine.lastLayers.first;
+    expect(ring.lines.single.position.first.longitude, deviceFix.longitude);
   });
 
   testWidgets('narrow layout: floating header card and the bottom sheet', (

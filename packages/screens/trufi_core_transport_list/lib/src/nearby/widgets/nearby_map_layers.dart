@@ -8,7 +8,6 @@ import '../../models/transport_route.dart' show gtfsRouteTypeIcon;
 import '../nearby_geometry.dart';
 import '../nearby_line.dart';
 import '../nearby_lines_cubit.dart';
-import '../nearby_radius.dart';
 
 /// Marker id prefix of the per-line "201 · 75 m" labels; the rest of the id
 /// is the [NearbyLine.lineKey], so a tap on the label toggles that line.
@@ -21,14 +20,18 @@ const int maxNearbyPointMarkers = 40;
 /// Marker id prefix of the corner dots drawn for a street anchor.
 const String nearbyCornerMarkerPrefix = 'nearby-corner-';
 
-/// Pure function of the state: radius rings and their label, the
-/// highlighted line, one label per nearby line and the anchor marker. For
-/// a street anchor the rings and the pin give way to a dot per corner: the
-/// search ran from every corner, so one ring would be a lie.
+/// Pure function of the state: the ring of the selected radius and its
+/// label, the highlighted line, one label per nearby line and the anchor
+/// marker. For a street anchor the ring and the pin give way to a dot per
+/// corner: the search ran from every corner, so one ring would be a lie.
 ///
-/// Rings are outlines, not the mock's translucent fill: no map engine reads
-/// `TrufiMarker.metersRadius` and line colors are serialised without alpha,
-/// so a filled buffer needs a maps-package change first.
+/// Only the selected radius is drawn (trufi-app#80): the other brackets
+/// are a tap away on the chips, and three concentric rings left it unclear
+/// which one the list was filtered by.
+///
+/// The ring is an outline, not the mock's translucent fill: no map engine
+/// reads `TrufiMarker.metersRadius` and line colors are serialised without
+/// alpha, so a filled buffer needs a maps-package change first.
 List<TrufiLayer> buildNearbyLayers({
   required NearbyLinesState state,
   required ColorScheme colorScheme,
@@ -67,16 +70,13 @@ List<TrufiLayer> buildNearbyLayers({
         id: 'nearby-rings',
         layerLevel: 0,
         lines: [
-          for (final radius in NearbyRadius.values)
-            TrufiLine(
-              id: 'nearby-ring-${radius.meters.round()}',
-              position: NearbyGeometry.circlePolygon(anchor, radius.meters),
-              color: radius == state.radius
-                  ? colorScheme.primary
-                  : colorScheme.outline,
-              lineWidth: radius == state.radius ? 3 : 1,
-              layerLevel: 0,
-            ),
+          TrufiLine(
+            id: 'nearby-ring-${state.radius.meters.round()}',
+            position: NearbyGeometry.circlePolygon(anchor, state.radius.meters),
+            color: colorScheme.primary,
+            lineWidth: 3,
+            layerLevel: 0,
+          ),
         ],
         markers: [
           TrufiMarker(
