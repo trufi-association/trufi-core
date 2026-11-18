@@ -158,7 +158,7 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
   String get nearbyAnchorPinned => 'Ubicación marcada';
 
   @override
-  String get nearbyAnchorDefault => 'Centro de la ciudad (sin ubicación)';
+  String get nearbyAnchorDefault => 'Centro (sin ubicación)';
 
   @override
   String nearbyAnchorAlongStreet(String street) {
