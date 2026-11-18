@@ -379,7 +379,7 @@ abstract class TransportListLocalizations {
   /// **'Pinned location'**
   String get nearbyAnchorPinned;
 
-  /// Anchor row label when no fix and no pin exist and the app's default center is used. Keep it short: the header card gives it two lines of at most 20 characters each on a 360 dp phone
+  /// Anchor row label when no fix and no pin exist and the app's default center is used. Keep it short: the header card gives it two lines of at most 18 characters each on a 360 dp phone, which leaves room for a larger system font size
   ///
   /// In en, this message translates to:
   /// **'City center (no location)'**

@@ -247,14 +247,16 @@ void main() {
     });
 
     // The translators' budget, the one figure the template ARB states for
-    // this label: two lines of at most 20 characters each. On a 360 dp
-    // phone the text box is 128 px and Roboto fits about 22 characters in
-    // it, so 20 leaves room for a wider system font or a larger text
-    // size. The test font cannot show a real phone's line breaks; this
+    // this label: two lines of at most 18 characters each. On a 360 dp
+    // phone the text box is 128 px. A label with a 19-character line
+    // ("Centro de la ciudad (sin ubicación)") still fit with Roboto at
+    // font size 1.0 but was cut at a slightly larger Android font size;
+    // with 18 per line the German label, the longest kept, stays whole up
+    // to 1.5. The test font cannot show a real phone's line breaks; this
     // wraps the words the way the phone does and counts the lines.
-    test('every language keeps the fallback label within two lines of 20 '
+    test('every language keeps the fallback label within two lines of 18 '
         'characters', () {
-      const lineBudget = 20;
+      const lineBudget = 18;
       int linesOf(String label) {
         var lines = 1;
         var used = 0; // characters on the current line
@@ -278,6 +280,8 @@ void main() {
       expect(linesOf('City center (location unavailable)'), 3);
       expect(linesOf('Centro de la ciudad (ubicación no disponible)'), 3);
       expect(linesOf('Stadtzentrum (Standort nicht verfügbar)'), 3);
+      // And the first shortening of the Spanish one, cut on a phone too.
+      expect(linesOf('Centro de la ciudad (sin ubicación)'), 3);
 
       for (final locale in TransportListLocalizations.supportedLocales) {
         final label = lookupTransportListLocalizations(
