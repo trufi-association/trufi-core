@@ -86,7 +86,8 @@ void main() {
     }
 
     test('the first position arrives afterwards: nothing is emitted on the '
-        'closed cubit and it does not listen to the location', () async {
+        'closed cubit, it does not listen to the location and the GPS is '
+        'off', () async {
       final nav = await stillStarting(
         permission: LocationPermissionStatus.granted,
       );
@@ -98,6 +99,10 @@ void main() {
       await expectLater(nav.starting, completes);
       expect(nav.cubit.state.status, NavigationStatus.initializing);
       expect(nav.gps.isListenedTo, isFalse);
+      // The screen's stop ran while the tracking was still starting, so it
+      // had nothing to stop: the tracking that started afterwards is
+      // stopped by startNavigation itself.
+      expect(nav.gps.isTracking, isFalse);
     });
 
     test('the tracking fails to start afterwards: the error is not '
@@ -169,12 +174,28 @@ class _SlowLocationService extends FakeLocationService {
   /// Whether anything listens to the location updates.
   bool get isListenedTo => hasListeners;
 
+  bool _tracking = false;
+
+  /// Like the real service: the tracking is on from the moment
+  /// [startTracking] succeeds until [stopTracking] runs, and a stop that
+  /// runs while the start is still pending has nothing to stop yet.
+  @override
+  bool get isTracking => _tracking;
+
   @override
   Future<LocationPermissionStatus> requestPermission() => permission.future;
 
   @override
-  Future<bool> startTracking({int distanceFilter = 10, Object? accuracy}) {
+  Future<bool> startTracking({
+    int distanceFilter = 10,
+    Object? accuracy,
+  }) async {
     trackingRequests++;
-    return tracking.future;
+    final started = await tracking.future;
+    if (started) _tracking = true;
+    return started;
   }
+
+  @override
+  Future<void> stopTracking() async => _tracking = false;
 }

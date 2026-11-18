@@ -48,7 +48,12 @@ class NavigationCubit extends Cubit<NavigationState> {
     // Same here: the tracking can take as long as the first position to
     // start, and the screen may be gone by then. Returning also keeps the
     // closed cubit from listening to the location service below.
-    if (isClosed) return;
+    if (isClosed) {
+      // The screen stopped the tracking while it was starting: what started
+      // after that has nobody left to stop it.
+      if (trackingStarted) await _locationService.stopTracking();
+      return;
+    }
 
     if (!trackingStarted) {
       emit(
