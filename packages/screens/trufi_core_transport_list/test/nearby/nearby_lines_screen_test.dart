@@ -917,6 +917,100 @@ void main() {
     });
   });
 
+  // Every fit runs on the build after the state change, not in the bloc
+  // listener. The first fit and the street fits are pinned above; these
+  // two pin the later ones. They fail when a radius change, a highlighted
+  // line or its clearing no longer refits, when the street margin
+  // survives the street, and when it leaks onto a highlighted line.
+  testWidgets('every later fit frames what the state shows: a new radius, '
+      'a highlighted line, the ring again once it is cleared', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    const top = 24 + NearbyHeaderCard.cardHeight; // 82
+    const bottom = 640 * 0.65; // 416: the sheet's initial 35 %
+
+    void expectRingFramed(String id) {
+      final ring = engine.lastLayers.first.lines.single;
+      expect(ring.id, id);
+      final camera = engine.lastCamera!;
+      final latitudes = ring.position.map((p) => p.latitude);
+      expect(
+        screenY(camera, latitudes.reduce(math.max), 640),
+        closeTo(top, 0.5),
+      );
+      expect(
+        screenY(camera, latitudes.reduce(math.min), 640),
+        closeTo(bottom, 0.5),
+      );
+    }
+
+    expectRingFramed('nearby-ring-300');
+
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    expectRingFramed('nearby-ring-500');
+
+    // The row is under the sheet's fold at 360x640: toggle it the way a
+    // row tap or a label tap does.
+    NearbyLinesCubit cubit() =>
+        tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
+    cubit().toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    final line = engine.lastLayers
+        .firstWhere((l) => l.id == 'nearby-selected-line')
+        .lines
+        .single
+        .position;
+    final camera = engine.lastCamera!;
+    final ys = line.map((p) => screenY(camera, p.latitude, 640)).toList();
+    final xs = line.map((p) => screenX(camera, p.longitude, 360)).toList();
+    // Inside the map the header and the sheet leave clear...
+    expect(ys.reduce(math.min), greaterThanOrEqualTo(top - 0.5));
+    expect(ys.reduce(math.max), lessThanOrEqualTo(bottom + 0.5));
+    expect(xs.reduce(math.min), greaterThanOrEqualTo(-0.5));
+    expect(xs.reduce(math.max), lessThanOrEqualTo(360 + 0.5));
+    // ...and fitted to it, with no side margin: this line is taller than
+    // the map is (in proportion), so it spans that whole height.
+    expect(
+      ys.reduce(math.max) - ys.reduce(math.min),
+      closeTo(bottom - top, 0.5),
+    );
+
+    cubit().toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expectRingFramed('nearby-ring-500');
+  });
+
+  testWidgets('leaving a street for the device position frames the ring '
+      'across the whole width again: the street margin does not stay', (
+    tester,
+  ) async {
+    // Tall enough for the width to be what limits the ring.
+    usePhone(tester, const Size(400, 1000));
+    final (:engine, :source) = await _pumpRouted(
+      tester,
+      street: NearbyStreetAnchor(
+        name: 'Avenida Heroínas',
+        corners: const [cornerA, cornerB],
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Use my location'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your location'), findsOneWidget);
+
+    final camera = engine.lastCamera!;
+    final longitudes = engine.lastLayers.first.lines.single.position.map(
+      (p) => p.longitude,
+    );
+    expect(screenX(camera, longitudes.reduce(math.min), 400), closeTo(0, 0.5));
+    expect(
+      screenX(camera, longitudes.reduce(math.max), 400),
+      closeTo(400, 0.5),
+    );
+  });
+
   test('screen identity and menu entry', () {
     final screen = NearbyLinesTrufiScreen();
     addTearDown(screen.dispose);
