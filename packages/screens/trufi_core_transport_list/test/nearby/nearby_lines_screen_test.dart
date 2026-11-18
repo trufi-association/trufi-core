@@ -825,6 +825,37 @@ void main() {
       ]);
     });
 
+    testWidgets('denied on the visit, denied again on the tap (Android 11+ '
+        'turns the second "don\'t allow" into deniedForever): the visit stays '
+        'quiet and the tap shows the dialog with "Open settings"', (
+      tester,
+    ) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.denied, GeoPermission.deniedForever],
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.text('City center (no location)'), findsOneWidget);
+
+      await tapUseMyLocation(tester);
+      // No memory between the two requests: the answer of the tap alone
+      // decides, and deniedForever is the settings dialog right away.
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(find.text(permissionMessage), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openAppSettings']);
+    });
+
     testWidgets('with a fix nothing is shown: the anchor just moves', (
       tester,
     ) async {
