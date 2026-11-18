@@ -322,6 +322,137 @@ void main() {
     expect(source.anchors, [pin]);
   });
 
+  group('useMyLocation() answers why there is no fix (trufi-app#78)', () {
+    NearbyLinesCubit failingWith(_FakeDataSource? source, Object error) =>
+        NearbyLinesCubit(
+          dataSource: source,
+          defaultAnchor: defaultAnchor,
+          locate: () async {
+            locateCalls++;
+            throw error;
+          },
+        );
+
+    test('null with a fix', () async {
+      final c = cubit(_FakeDataSource());
+      await c.start();
+      expect(await c.useMyLocation(), isNull);
+      expect(c.state.anchorSource, NearbyAnchorSource.device);
+      expect(c.state.locationDenied, isFalse);
+    });
+
+    for (final failure in NearbyLocateFailure.values) {
+      test('the reason the locate callback throws comes back '
+          '(${failure.name}), and the anchor falls back as before', () async {
+        final source = _FakeDataSource();
+        final c = failingWith(source, NearbyLocateException(failure));
+        await c.start();
+        c.setAnchor(pin);
+
+        expect(await c.useMyLocation(), failure);
+        expect(c.state.anchor, pin);
+        expect(c.state.anchorSource, NearbyAnchorSource.pin);
+        expect(c.state.locationDenied, isTrue);
+        expect(c.state.isLocating, isFalse);
+        expect(source.anchors, [defaultAnchor, pin, pin]);
+      });
+    }
+
+    test('a callback that only returns null is "no fix"', () async {
+      final c = cubit(_FakeDataSource(), located: null);
+      await c.start();
+      expect(await c.useMyLocation(), NearbyLocateFailure.noFix);
+    });
+
+    test('a callback that fails any other way is "no fix" too', () async {
+      final c = failingWith(_FakeDataSource(), StateError('no plugin'));
+      await c.start();
+      expect(await c.useMyLocation(), NearbyLocateFailure.noFix);
+      expect(c.state.locationDenied, isTrue);
+    });
+
+    test(
+      'start() stays quiet about the same failure: it only falls back',
+      () async {
+        final source = _FakeDataSource();
+        final c = failingWith(
+          source,
+          const NearbyLocateException(NearbyLocateFailure.serviceDisabled),
+        );
+        // A Future<void>: a visit has nothing to report.
+        final Future<void> visit = c.start();
+        await visit;
+
+        expect(c.state.anchor, defaultAnchor);
+        expect(c.state.anchorSource, NearbyAnchorSource.fallback);
+        expect(c.state.locationDenied, isTrue);
+        expect(c.state.lines, hasLength(3));
+      },
+    );
+
+    test('an attempt superseded by a newer one answers null: its reason is '
+        'no longer the one to show', () async {
+      var calls = 0;
+      final c = NearbyLinesCubit(
+        dataSource: _FakeDataSource(),
+        defaultAnchor: defaultAnchor,
+        locate: () async {
+          calls++;
+          if (calls == 2) {
+            // Slow, and failing once the next attempt already has a fix.
+            await Future<void>.delayed(const Duration(milliseconds: 20));
+            throw const NearbyLocateException(
+              NearbyLocateFailure.serviceDisabled,
+            );
+          }
+          return fix;
+        },
+      );
+      await c.start();
+      final slow = c.useMyLocation();
+      await Future<void>.delayed(Duration.zero);
+      final fast = c.useMyLocation();
+
+      expect(await fast, isNull);
+      expect(await slow, isNull);
+      expect(c.state.anchor, fix);
+      expect(c.state.locationDenied, isFalse);
+    });
+
+    test('without a feed there is nothing to search around a fix: null, '
+        'and the device is not asked', () async {
+      final c = failingWith(
+        null,
+        const NearbyLocateException(NearbyLocateFailure.permissionDenied),
+      );
+      expect(await c.useMyLocation(), isNull);
+      expect(locateCalls, 0);
+      expect(c.state.availability, NearbyAvailability.missing);
+    });
+
+    test(
+      'a feed that finishes loading on the tap still answers the reason',
+      () async {
+        final source = _FakeDataSource(
+          availability: NearbyAvailability.loading,
+          availabilityAfterLoad: NearbyAvailability.available,
+        );
+        final c = failingWith(
+          source,
+          const NearbyLocateException(
+            NearbyLocateFailure.permissionDeniedForever,
+          ),
+        );
+        expect(
+          await c.useMyLocation(),
+          NearbyLocateFailure.permissionDeniedForever,
+        );
+        expect(source.loadCalls, 1);
+        expect(c.state.availability, NearbyAvailability.available);
+      },
+    );
+  });
+
   group('lines along a street (trufi-sanaa#20)', () {
     const c1 = LatLng(-17.3925, -66.1588);
     const c2 = LatLng(-17.3907, -66.1571);

@@ -67,10 +67,17 @@
   "menuNearbyLines": "Líneas cercanas",
   "nearbyAnchorYourLocation": "Tu ubicación",
   "nearbyAnchorPinned": "Ubicación marcada",
-  "nearbyAnchorDefault": "Centro de la ciudad (ubicación no disponible)",
+  "nearbyAnchorDefault": "Centro (sin ubicación)",
   "nearbyAnchorAlongStreet": "A lo largo de {street}",
   "nearbyUseMyLocation": "Usar mi ubicación",
   "nearbyMovePinHint": "Mantén pulsado el mapa para mover el pin",
+  "nearbyLocationPermissionTitle": "Permiso de ubicación",
+  "nearbyLocationPermissionDeniedForever": "El permiso de ubicación fue denegado permanentemente. Habilítalo en la configuración de tu dispositivo para ver las líneas cercanas a ti.",
+  "nearbyLocationDisabledTitle": "Ubicación desactivada",
+  "nearbyLocationDisabledMessage": "Los servicios de ubicación están desactivados en tu dispositivo. Actívalos para ver las líneas cercanas a ti.",
+  "nearbyLocationOpenSettings": "Abrir configuración",
+  "nearbyLocationPermissionDenied": "Permiso de ubicación denegado. Toca el botón otra vez para permitirlo, o mantén pulsado el mapa para mover el pin.",
+  "nearbyLocationNoFix": "No se pudo obtener tu ubicación. Inténtalo de nuevo en un momento, o mantén pulsado el mapa para mover el pin.",
   "nearbyRadiusChip": "{meters} m ({count})",
   "@nearbyRadiusChip": {
     "placeholders": {

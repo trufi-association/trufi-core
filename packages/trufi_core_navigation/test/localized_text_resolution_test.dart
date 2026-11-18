@@ -91,4 +91,82 @@ void main() {
       expect(instruction.resolvedPrimaryText(de), 'Sie sind angekommen');
     });
   });
+
+  group('NavigationInstruction.resolvedSecondaryText', () {
+    test('counts the remaining stops per locale, plural-aware', () {
+      const several = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryText: '12 stops remaining',
+        secondaryTextKey: InstructionTextKey.stopsRemaining,
+        remainingStops: 12,
+      );
+      const one = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryTextKey: InstructionTextKey.stopsRemaining,
+        remainingStops: 1,
+      );
+
+      expect(several.resolvedSecondaryText(en), '12 stops remaining');
+      expect(several.resolvedSecondaryText(es), 'Quedan 12 paradas');
+      expect(several.resolvedSecondaryText(de), 'Noch 12 Haltestellen');
+      expect(one.resolvedSecondaryText(en), '1 stop remaining');
+      expect(one.resolvedSecondaryText(es), 'Queda 1 parada');
+      expect(one.resolvedSecondaryText(de), 'Noch 1 Haltestelle');
+    });
+
+    test('writes the distance to a stop in meters below a kilometer', () {
+      const instruction = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryTextKey: InstructionTextKey.distanceToStop,
+        distance: 849.6,
+      );
+
+      expect(instruction.resolvedSecondaryText(en), '850 m');
+      expect(instruction.resolvedSecondaryText(es), '850 m');
+      expect(instruction.resolvedSecondaryText(de), '850 m');
+    });
+
+    test('writes it in kilometers from there on, with the decimal '
+        'separator of the locale', () {
+      const instruction = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryTextKey: InstructionTextKey.distanceToStop,
+        distance: 12345,
+      );
+
+      expect(instruction.resolvedSecondaryText(en), '12.3 km');
+      expect(instruction.resolvedSecondaryText(es), '12,3 km');
+      expect(instruction.resolvedSecondaryText(de), '12,3 km');
+    });
+
+    test('formats the number for the given locale instead of the one of '
+        'the localizations', () {
+      const instruction = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryTextKey: InstructionTextKey.distanceToStop,
+        distance: 1500,
+      );
+
+      expect(instruction.resolvedSecondaryText(es, locale: 'es_MX'), '1.5 km');
+      // A locale intl has no number symbols for still gets a number (#945).
+      expect(instruction.resolvedSecondaryText(es, locale: 'qu'), '1.5 km');
+    });
+
+    test('falls back to secondaryText without a distance or a key', () {
+      const noDistance = NavigationInstruction(
+        type: InstructionType.rideTransport,
+        secondaryText: 'soon',
+        secondaryTextKey: InstructionTextKey.distanceToStop,
+      );
+      const noKey = NavigationInstruction(
+        type: InstructionType.walkStraight,
+        secondaryText: 'in 50m',
+      );
+      const nothing = NavigationInstruction(type: InstructionType.depart);
+
+      expect(noDistance.resolvedSecondaryText(en), 'soon');
+      expect(noKey.resolvedSecondaryText(de), 'in 50m');
+      expect(nothing.resolvedSecondaryText(en), isNull);
+    });
+  });
 }

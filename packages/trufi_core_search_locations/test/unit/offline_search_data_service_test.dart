@@ -222,6 +222,202 @@ void main() {
     });
   });
 
+  group('streets that match equally well (#1054)', () {
+    // A street as the tests need it: name, municipality, how many corners.
+    Map<String, dynamic> indexOf(
+      Map<String, (String name, String? region, int corners)> streets,
+    ) => {
+      'streets': {
+        for (final MapEntry(key: ref, value: street) in streets.entries)
+          ref: [
+            street.$1,
+            <String>[],
+            [-66.15, -17.39],
+            street.$2,
+          ],
+      },
+      // The other end of a corner does not matter here, only how many
+      // the street has.
+      'streetJunctions': {
+        for (final MapEntry(key: ref, value: street) in streets.entries)
+          if (street.$3 > 0)
+            ref: [
+              for (var i = 0; i < street.$3; i++)
+                [
+                  'other$i',
+                  [-66.15, -17.39],
+                ],
+            ],
+      },
+    };
+
+    // rootBundle caches what it loaded under a key: every index gets its
+    // own asset path.
+    var indexes = 0;
+    Future<List<String>> refsFor(
+      String query,
+      Map<String, dynamic> index,
+    ) async {
+      final asset = 'assets/search/ties-${indexes++}.json';
+      _mockAsset(asset, index);
+      final ties = OfflineSearchDataService(assetPath: asset);
+      addTearDown(ties.dispose);
+      final results = await ties.search(query);
+      return [for (final r in results) r.id.substring('street:'.length)];
+    }
+
+    test('the limit keeps the streets with more corners, wherever they sit '
+        'in the index', () async {
+      // One "Avenida Circunvalación" per municipality, the way a city's
+      // index has them; the longest one last, where the cut used to fall.
+      final refs = await refsFor(
+        'circunvalacion',
+        indexOf({
+          for (var i = 1; i <= 12; i++)
+            's$i': (
+              'Avenida Circunvalación',
+              'Town ${i.toString().padLeft(2, '0')}',
+              i,
+            ),
+        }),
+      );
+
+      expect(refs, [for (var i = 12; i >= 3; i--) 's$i']);
+    });
+
+    test('equal corners fall back to the name, then the municipality, then '
+        'the ref', () async {
+      final refs = await refsFor(
+        'circunvalacion',
+        indexOf({
+          'a': ('Avenida Circunvalación II', 'Cercado', 5),
+          'b': ('Avenida Circunvalación', 'Sacaba', 5),
+          'd': ('Avenida Circunvalación', 'Cliza', 5),
+          'c': ('Avenida Circunvalación', 'Cliza', 5),
+          'e': ('Avenida Circunvalación', null, 5),
+          // Accents and case do not split a name from its twin.
+          'f': ('AVENIDA CIRCUNVALACION', 'Punata', 5),
+        }),
+      );
+
+      expect(refs, ['e', 'c', 'd', 'f', 'b', 'a']);
+    });
+
+    test('with more matches than a stable sort covers, the ten best come '
+        'out the same for any order of the index', () async {
+      // Sixty prefix matches with 0…59 corners (7 is coprime with 60, so
+      // every count appears once and the index is not sorted by it).
+      final streets = {
+        for (var i = 0; i < 60; i++)
+          's$i': (
+            'Calle ${i.toString().padLeft(2, '0')}',
+            'Cercado',
+            i * 7 % 60,
+          ),
+      };
+      final expected = [
+        for (var corners = 59; corners >= 50; corners--)
+          streets.keys.firstWhere((ref) => streets[ref]!.$3 == corners),
+      ];
+      final reversed = Map.fromEntries(streets.entries.toList().reversed);
+      final rotated = Map.fromEntries([
+        ...streets.entries.skip(23),
+        ...streets.entries.take(23),
+      ]);
+
+      expect(await refsFor('calle', indexOf(streets)), expected);
+      expect(await refsFor('calle', indexOf(reversed)), expected);
+      expect(await refsFor('calle', indexOf(rotated)), expected);
+    });
+
+    test('the text match still decides first: corners only order equal '
+        'matches', () async {
+      final refs = await refsFor(
+        'sucre',
+        indexOf({
+          'contains': ('Calle Sucre', 'Cercado', 50),
+          'prefix': ('Sucre Norte', 'Cercado', 3),
+          'exact': ('Sucre', 'Cercado', 0),
+        }),
+      );
+
+      expect(refs, ['exact', 'prefix', 'contains']);
+    });
+
+    test('the street named exactly like the query comes first, even with '
+        'an alternative name and fewer corners than a longer-named '
+        'sibling', () async {
+      final index = indexOf({
+        'longer': ('Camino a Lagunas Entrando por Tirani', 'Cercado', 4),
+        'exact': ('Camino a Lagunas', 'Cercado', 3),
+        'other': ('Calle Lagunas', 'Cercado', 9),
+      });
+      // Its alternative name is what kept it from being "the query itself".
+      (index['streets'] as Map)['exact'] = [
+        'Camino a Lagunas',
+        ['Circuito Tunari'],
+        [-66.15, -17.39],
+        'Cercado',
+      ];
+
+      expect(await refsFor('camino a lagunas', index), ['exact', 'longer']);
+      // Typed without the accent or in capitals, it is the same name.
+      expect(await refsFor('CAMINO A LAGUNAS', index), ['exact', 'longer']);
+    });
+
+    test('a street only also known by that name follows the one named so, '
+        'and precedes the names that merely start with it', () async {
+      final index = indexOf({
+        'starts': ('Calle Algarrobos', 'Sacaba', 20),
+        'named': ('Calle Algarrobo', 'Sacaba', 3),
+        'aka': ('Calle A. Virreira', 'Cercado', 8),
+        'aka2': ('Pasaje Los Pinos', 'Cercado', 12),
+      });
+      for (final ref in ['aka', 'aka2']) {
+        final row = (index['streets'] as Map)[ref] as List;
+        (index['streets'] as Map)[ref] = [
+          row[0],
+          ['Calle Algarrobo'],
+          row[2],
+          row[3],
+        ];
+      }
+
+      // Named so; also known so (more corners first); starting with it.
+      expect(await refsFor('calle algarrobo', index), [
+        'named',
+        'aka2',
+        'aka',
+        'starts',
+      ]);
+    });
+
+    test('several streets named exactly like the query are still ordered '
+        'by their corners', () async {
+      final refs = await refsFor(
+        'calle sucre',
+        indexOf({
+          'few': ('Calle Sucre', 'Cliza', 4),
+          'many': ('Calle Sucre', 'Quillacollo', 12),
+          'longer': ('Calle Sucre Norte', 'Cercado', 30),
+        }),
+      );
+
+      expect(refs, ['many', 'few', 'longer']);
+    });
+
+    test('a street without coordinates takes no slot of the limit', () async {
+      final index = indexOf({
+        for (var i = 1; i <= 11; i++) 's$i': ('Calle Aroma', 'Town $i', i),
+      });
+      // The best-connected one has no centre: it cannot be a result.
+      (index['streets'] as Map)['s11'] = ['Calle Aroma', <String>[]];
+
+      final refs = await refsFor('aroma', index);
+      expect(refs, [for (var i = 10; i >= 1; i--) 's$i']);
+    });
+  });
+
   group('street locality (#972)', () {
     // Two municipalities side by side, plus the rows a real index may
     // carry: no region at all (three elements), an empty one, a null one.

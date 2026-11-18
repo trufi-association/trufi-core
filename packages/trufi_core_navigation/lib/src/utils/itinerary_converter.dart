@@ -13,7 +13,8 @@ class ItineraryConverter {
   /// The conversion extracts:
   /// - All geometry points from all legs
   /// - Transit leg information (route name, color, short name)
-  /// - Intermediate stops from transit legs
+  /// - Intermediate stops from transit legs (flagged
+  ///   [NavigationStop.isIntermediate])
   /// - Leg segments for proper rendering with colors and styles
   ///
   /// [originLabel], [transferLabel], [destinationLabel] and [routeLabel] are
@@ -112,6 +113,10 @@ class ItineraryConverter {
               id: 'stop-$stopIndex',
               name: place.name,
               position: LatLng(place.lat, place.lon),
+              // Passed, not a place the rider gets on or off at: with
+              // NavigationConfig.showStops off it still drives the
+              // progression but is never named (#1059).
+              isIntermediate: true,
             ),
           );
           stopIndex++;

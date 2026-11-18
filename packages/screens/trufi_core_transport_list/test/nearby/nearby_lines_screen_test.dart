@@ -1,5 +1,6 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,11 +11,16 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 
+import 'geolocator_mock.dart';
+
 /// Drives the real [NearbyLinesTrufiScreen] (providers + builder) over a
 /// fake map engine and a canned data source: the wiring between the cubit,
 /// the header card, the sheet / side panel and the map layers.
 class _FakeEngine extends ITrufiMapEngine {
   List<TrufiLayer> lastLayers = const [];
+
+  /// The camera the screen last asked the map for.
+  TrufiCameraPosition? lastCamera;
 
   @override
   String get id => 'fake';
@@ -35,38 +41,13 @@ class _FakeEngine extends ITrufiMapEngine {
     List<WidgetMarker> widgetMarkers = const [],
   }) {
     lastLayers = layers;
+    lastCamera = camera ?? initialCamera;
     return const SizedBox.expand();
   }
 }
 
-const deviceFix = LatLng(-17.40, -66.16);
-
-/// Answers geolocator's method channel in-process: without a handler the
-/// real channel never replies under the test's fake async, so the screen
-/// would spin on "locating" forever. [granted] drives the GPS path; false
-/// reports location services off (the pin fallback).
-void mockGeolocator({required bool granted}) {
-  const channel = MethodChannel('flutter.baseflow.com/geolocator');
-  final messenger =
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
-  // `LocationPermission.whileInUse` is index 2 of geolocator's enum.
-  final replies = <String, Object?>{
-    'isLocationServiceEnabled': granted,
-    'checkPermission': 2,
-    'requestPermission': 2,
-    'getCurrentPosition': {
-      'latitude': deviceFix.latitude,
-      'longitude': deviceFix.longitude,
-      'timestamp': 0,
-      'accuracy': 10.0,
-    },
-  };
-  messenger.setMockMethodCallHandler(
-    channel,
-    (call) async => replies[call.method],
-  );
-  addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
-}
+/// `MapEngineManager.defaultCenter` of every pump: the fallback anchor.
+const defaultCenter = LatLng(-17.39, -66.15);
 
 NearbyLine row(String name, double distance, {String? stopName}) => NearbyLine(
   lineKey: 'n:$name',
@@ -115,18 +96,23 @@ class _FakeDataSource implements NearbyLinesDataSource {
   );
 }
 
+/// [locationGranted] false is a device with location switched off (the
+/// pin fallback). A test that needs another kind of device calls
+/// [mockGeolocator] itself and passes [mockLocation] false.
 Future<_FakeEngine> _pumpScreen(
   WidgetTester tester, {
   bool withDataSource = true,
   bool locationGranted = false,
+  bool mockLocation = true,
+  Locale? locale,
   NearbyLineDetailsCallback? onLineDetails,
   bool showStops = true,
 }) async {
-  mockGeolocator(granted: locationGranted);
+  if (mockLocation) mockGeolocator(serviceEnabled: locationGranted);
   final engine = _FakeEngine();
   final manager = MapEngineManager(
     engines: [engine],
-    defaultCenter: const LatLng(-17.39, -66.15),
+    defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(
     dataSourceBuilder: withDataSource ? (_) => _FakeDataSource() : null,
@@ -141,6 +127,7 @@ Future<_FakeEngine> _pumpScreen(
         ...screen.providers,
       ],
       child: MaterialApp(
+        locale: locale,
         localizationsDelegates: screen.localizationsDelegates,
         supportedLocales: TransportListLocalizations.supportedLocales,
         home: Scaffold(body: Builder(builder: screen.builder)),
@@ -155,19 +142,49 @@ Future<_FakeEngine> _pumpScreen(
 const cornerA = LatLng(-17.3925, -66.1588);
 const cornerB = LatLng(-17.3907, -66.1571);
 
+/// Horizontal screen position of [longitude] under [camera] on a map
+/// [mapWidth] logical pixels wide (web mercator, 256 px tiles, bearing 0).
+double screenX(TrufiCameraPosition camera, double longitude, double mapWidth) {
+  final worldPx = 256 * math.pow(2.0, camera.zoom);
+  return mapWidth / 2 + (longitude - camera.target.longitude) / 360 * worldPx;
+}
+
+/// Vertical screen position of [latitude] under [camera] on a map
+/// [mapHeight] logical pixels tall (same projection as [screenX]).
+double screenY(TrufiCameraPosition camera, double latitude, double mapHeight) {
+  double mercatorY(double degrees) {
+    final radians = degrees * math.pi / 180;
+    return (1 - math.log(math.tan(radians) + 1 / math.cos(radians)) / math.pi) /
+        2;
+  }
+
+  final worldPx = 256 * math.pow(2.0, camera.zoom);
+  return mapHeight / 2 +
+      (mercatorY(latitude) - mercatorY(camera.target.latitude)) * worldPx;
+}
+
+/// Sizes the test view like a phone: the narrow layout (under 600 px).
+void usePhone(WidgetTester tester, Size size) {
+  tester.view.physicalSize = size;
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
+
 /// Hosts the real screen under a `GoRouter`, the way `TrufiApp` does, and
 /// opens it from a first route: through [NearbyLinesTrufiScreen.showAlongStreet]
 /// when [street] is given, as a plain `/nearby` push (a drawer visit) when not.
 Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   WidgetTester tester, {
   NearbyStreetAnchor? street,
+  bool mockLocation = true,
 }) async {
-  mockGeolocator(granted: true);
+  if (mockLocation) mockGeolocator();
   final engine = _FakeEngine();
   final source = _FakeDataSource();
   final manager = MapEngineManager(
     engines: [engine],
-    defaultCenter: const LatLng(-17.39, -66.15),
+    defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(dataSourceBuilder: (_) => source);
   addTearDown(screen.dispose);
@@ -234,7 +251,7 @@ void main() {
     // Header row: the title once (the sheet no longer repeats it), the
     // anchor line with its hint, the locate and close buttons.
     expect(find.text('Nearby lines'), findsOneWidget);
-    expect(find.text('City center (location unavailable)'), findsOneWidget);
+    expect(find.text('City center (no location)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
     expect(find.byTooltip('Use my location'), findsOneWidget);
     expect(find.byTooltip('Close'), findsOneWidget);
@@ -262,14 +279,15 @@ void main() {
 
     final ids = engine.lastLayers.map((l) => l.id).toList();
     expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
-    final rings = engine.lastLayers.first;
-    expect(rings.lines.map((l) => l.id), [
-      'nearby-ring-100',
-      'nearby-ring-300',
-      'nearby-ring-500',
-    ]);
-    expect(rings.lines[1].lineWidth, 3);
-    expect(rings.lines[0].lineWidth, 1);
+    // Only the selected radius is drawn, with its label (trufi-app#80).
+    final ring = engine.lastLayers.first;
+    expect(ring.lines.map((l) => l.id), ['nearby-ring-300']);
+    expect(ring.lines.single.lineWidth, 3);
+    expect(
+      ring.lines.single.position,
+      NearbyGeometry.circlePolygon(defaultCenter, 300),
+    );
+    expect(ring.markers.map((m) => m.id), ['nearby-ring-label']);
     final points = engine.lastLayers[1];
     expect(points.markers.map((m) => m.id), [
       'nearby-point-n:201',
@@ -327,17 +345,34 @@ void main() {
     );
   });
 
-  testWidgets('radius chips filter the rows and restyle the rings', (
-    tester,
-  ) async {
+  testWidgets('radius chips filter the rows and the map draws only the ring '
+      'of the selected radius (trufi-app#80)', (tester) async {
     final engine = await _pumpScreen(tester);
-    await tester.tap(find.text('500 m (3)'));
-    await tester.pumpAndSettle();
 
-    expect(find.textContaining('At 380 m'), findsOneWidget);
-    final rings = engine.lastLayers.first;
-    expect(rings.lines[2].lineWidth, 3);
-    expect(rings.lines[1].lineWidth, 1);
+    // Every bracket in turn, ending on one that was already shown: the
+    // ring follows the chip and the other two never stay behind.
+    for (final (chip, meters) in const [
+      ('500 m (3)', 500.0),
+      ('100 m (1)', 100.0),
+      ('300 m (2)', 300.0),
+    ]) {
+      await tester.tap(find.text(chip));
+      await tester.pumpAndSettle();
+
+      final ring = engine.lastLayers.first;
+      expect(ring.id, 'nearby-rings');
+      expect(ring.lines.map((l) => l.id), ['nearby-ring-${meters.round()}']);
+      expect(
+        ring.lines.single.position,
+        NearbyGeometry.circlePolygon(defaultCenter, meters),
+      );
+      expect(ring.lines.single.lineWidth, 3);
+      expect(ring.markers.map((m) => m.id), ['nearby-ring-label']);
+      expect(
+        find.textContaining('At 380 m'),
+        meters == 500 ? findsOneWidget : findsNothing,
+      );
+    }
   });
 
   testWidgets('with a GPS fix the anchor is the device position', (
@@ -350,17 +385,14 @@ void main() {
     expect(anchorLayer.id, 'nearby-anchor');
     expect(anchorLayer.markers.single.position, deviceFix);
     expect(anchorLayer.markers.single.size, const Size(24, 24));
-    final rings = engine.lastLayers.first;
-    expect(rings.lines.first.position.first.longitude, deviceFix.longitude);
+    final ring = engine.lastLayers.first;
+    expect(ring.lines.single.position.first.longitude, deviceFix.longitude);
   });
 
   testWidgets('narrow layout: floating header card and the bottom sheet', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(400, 800);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+    usePhone(tester, const Size(400, 800));
 
     await _pumpScreen(tester);
     expect(find.byType(TrufiBottomSheet), findsOneWidget);
@@ -371,6 +403,57 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('with a fix, the first fit of a visit frames the ring under '
+      'the one-line header it then has, not under the taller fallback '
+      'header the screen starts on', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    expect(find.text('Your location'), findsOneWidget);
+
+    ({double top, double bottom}) ringEdges() {
+      final camera = engine.lastCamera!;
+      final latitudes = engine.lastLayers.first.lines.single.position.map(
+        (point) => point.latitude,
+      );
+      return (
+        top: screenY(camera, latitudes.reduce(math.max), 640),
+        bottom: screenY(camera, latitudes.reduce(math.min), 640),
+      );
+    }
+
+    // Before anything is tapped: 24 px of header margin and the 58 px
+    // card above the ring, the sheet (35 % of 640) below it — a 334 px
+    // ring. Fitted with the fallback header's reserve it was 268 px.
+    final first = ringEdges();
+    expect(first.top, closeTo(24 + NearbyHeaderCard.cardHeight, 0.5));
+    expect(first.bottom, closeTo(640 * 0.65, 0.5));
+
+    // And it is where the ring settles after any later fit.
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('300 m (2)'));
+    await tester.pumpAndSettle();
+    final settled = ringEdges();
+    expect(settled.top, closeTo(first.top, 0.5));
+    expect(settled.bottom, closeTo(first.bottom, 0.5));
+  });
+
+  testWidgets('on a phone the ring keeps the whole width of the map: the '
+      'street margin does not shrink it', (tester) async {
+    // Tall enough for the width to be what limits the ring.
+    usePhone(tester, const Size(400, 1000));
+    final engine = await _pumpScreen(tester);
+
+    final camera = engine.lastCamera!;
+    final ring = engine.lastLayers.first.lines.single.position;
+    final longitudes = ring.map((p) => p.longitude);
+    expect(screenX(camera, longitudes.reduce(math.min), 400), closeTo(0, 0.5));
+    expect(
+      screenX(camera, longitudes.reduce(math.max), 400),
+      closeTo(400, 0.5),
+    );
+  });
+
   testWidgets('without a local planner the screen explains instead of '
       'failing', (tester) async {
     await _pumpScreen(tester, withDataSource: false);
@@ -379,7 +462,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.byType(NearbyRadiusPill), findsNothing);
-    expect(find.text('City center (location unavailable)'), findsOneWidget);
+    expect(find.text('City center (no location)'), findsOneWidget);
   });
 
   group('lines along a street (trufi-sanaa#20)', () {
@@ -420,6 +503,77 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('on a phone the street is framed with half a line label '
+        'of margin on each side, so the dot and the label of its '
+        'outermost corners are not cut by the screen edge (#1054)', (
+      tester,
+    ) async {
+      usePhone(tester, const Size(400, 800));
+      // Runs east–west: the screen's width decides the zoom.
+      const west = LatLng(-17.3700, -66.1900);
+      const east = LatLng(-17.3705, -66.1500);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Circunvalación',
+          corners: const [west, LatLng(-17.3702, -66.1700), east],
+        ),
+      );
+      expect(find.byType(TrufiBottomSheet), findsOneWidget);
+
+      final camera = engine.lastCamera!;
+      // The line label is a 130 px box centred on its point.
+      expect(screenX(camera, west.longitude, 400), closeTo(65, 0.5));
+      expect(screenX(camera, east.longitude, 400), closeTo(400 - 65, 0.5));
+    });
+
+    testWidgets('the first fit of a street visit sits under the street '
+        "header's own reserve", (tester) async {
+      usePhone(tester, const Size(400, 800));
+      // Runs north–south: the screen's height decides the zoom.
+      const north = LatLng(-17.3700, -66.1570);
+      const south = LatLng(-17.4000, -66.1572);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Ayacucho',
+          corners: const [north, LatLng(-17.3850, -66.1571), south],
+        ),
+      );
+
+      // 24 px of header margin and the two-line street card (74 px): the
+      // fallback header the visit starts on would have put it at 148.
+      final camera = engine.lastCamera!;
+      expect(
+        screenY(camera, north.latitude, 800),
+        closeTo(
+          24 +
+              NearbyHeaderCard.cardHeight +
+              NearbyHeaderCard.anchorSecondLineHeight,
+          0.5,
+        ),
+      );
+    });
+
+    testWidgets('in the side-panel layout the street margin adds to the '
+        "panel layout's own padding", (tester) async {
+      const west = LatLng(-17.3700, -66.1900);
+      const east = LatLng(-17.3705, -66.1500);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: NearbyStreetAnchor(
+          name: 'Avenida Circunvalación',
+          corners: const [west, east],
+        ),
+      );
+      expect(find.byType(TrufiBottomSheet), findsNothing);
+
+      // 800 px view, 340 px panel: a 460 px map padded 24 px all round.
+      final camera = engine.lastCamera!;
+      expect(screenX(camera, west.longitude, 460), closeTo(24 + 65, 0.5));
+      expect(screenX(camera, east.longitude, 460), closeTo(460 - 24 - 65, 0.5));
+    });
+
     testWidgets('"Use my location" leaves the street for the fix', (
       tester,
     ) async {
@@ -457,6 +611,404 @@ void main() {
       expect(find.text('open'), findsOneWidget);
       expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
     });
+  });
+
+  group('"Use my location" explains why there is no position '
+      '(trufi-app#78)', () {
+    const disabledTitle = 'Location disabled';
+    const disabledMessage =
+        'Location services are disabled on your device. Enable them to see '
+        'the lines near you.';
+    const permissionTitle = 'Location permission';
+    const permissionMessage =
+        'Location permission is permanently denied. Enable it in your '
+        'device settings to see the lines near you.';
+    const deniedMessage =
+        'Location permission denied. Tap the button again to allow it, or '
+        'long-press the map to move the pin.';
+    const noFixMessage =
+        "Couldn't get your location. Try again in a moment, or long-press "
+        'the map to move the pin.';
+
+    Future<void> tapUseMyLocation(WidgetTester tester) async {
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pumpAndSettle();
+    }
+
+    /// Lets the snack bar run out: its timer must not outlive the test.
+    Future<void> expireSnackBar(WidgetTester tester) async {
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+    }
+
+    Iterable<String> settingsOpened(List<String> calls) =>
+        calls.where((method) => method.startsWith('open'));
+
+    // The locate of a visit is not the rider's request: whatever the
+    // device answers, only the header and the pin say it.
+    for (final (device, mock) in <(String, List<String> Function())>[
+      (
+        'with location switched off',
+        () => mockGeolocator(serviceEnabled: false),
+      ),
+      (
+        'whose prompt is answered "don\'t allow"',
+        () => mockGeolocator(checkPermission: GeoPermission.denied),
+      ),
+      (
+        'that denied the permission for good',
+        () => mockGeolocator(
+          checkPermission: GeoPermission.denied,
+          requestPermission: [GeoPermission.deniedForever],
+        ),
+      ),
+      ('that gets no fix', () => mockGeolocator(fix: GeoFix.fails)),
+    ]) {
+      testWidgets('opening the screen on a device $device shows neither a '
+          'dialog nor a snack bar', (tester) async {
+        final calls = mock();
+        await _pumpScreen(tester, mockLocation: false);
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(SnackBar), findsNothing);
+        expect(find.text('City center (no location)'), findsOneWidget);
+        expect(find.text('Long-press the map to move the pin'), findsOneWidget);
+        expect(settingsOpened(calls), isEmpty);
+      });
+    }
+
+    testWidgets('location switched off: a dialog says so and its action '
+        'opens the location settings', (tester) async {
+      final calls = mockGeolocator(serviceEnabled: false);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, disabledTitle), findsOneWidget);
+      expect(find.text(disabledMessage), findsOneWidget);
+      expect(find.byIcon(Icons.location_disabled_rounded), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      // A permission is not asked for while it could not be used.
+      expect(calls, isNot(contains('requestPermission')));
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openLocationSettings']);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('permission denied for good, the Android way (the request '
+        'comes back without a prompt): a dialog whose action opens the '
+        "app's settings", (tester) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.deniedForever],
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(find.text(permissionMessage), findsOneWidget);
+      expect(find.byIcon(Icons.location_off_rounded), findsOneWidget);
+      // Once for the visit, once for the tap.
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openAppSettings']);
+    });
+
+    testWidgets('permission denied for good, the iOS way (the check already '
+        'says so): the same dialog without asking again; "Cancel" closes it '
+        'and opens nothing', (tester) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.deniedForever,
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(calls, isNot(contains('requestPermission')));
+
+      await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), isEmpty);
+      // The rider can ask again.
+      await tapUseMyLocation(tester);
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+    });
+
+    testWidgets('the prompt answered "don\'t allow": a snack bar says the '
+        'button asks again, and no dialog piles on the prompt', (tester) async {
+      mockGeolocator(checkPermission: GeoPermission.denied);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, deniedMessage), findsOneWidget);
+      expect(find.byType(AlertDialog), findsNothing);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('the platform fails to give a position: a snack bar', (
+      tester,
+    ) async {
+      mockGeolocator(fix: GeoFix.fails);
+      await _pumpScreen(tester, mockLocation: false);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, noFixMessage), findsOneWidget);
+      expect(find.byType(AlertDialog), findsNothing);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('no fix within 10 s: the button spins meanwhile, then the '
+        'snack bar', (tester) async {
+      mockGeolocator(fix: GeoFix.never);
+      // The visit's own locate runs into the same time limit.
+      await _pumpScreen(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(seconds: 9));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.widgetWithText(SnackBar, noFixMessage), findsOneWidget);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('on a phone the snack bar shows over the sheet', (
+      tester,
+    ) async {
+      usePhone(tester, const Size(400, 800));
+      mockGeolocator(checkPermission: GeoPermission.denied);
+      await _pumpScreen(tester, mockLocation: false);
+      expect(find.byType(TrufiBottomSheet), findsOneWidget);
+      await tapUseMyLocation(tester);
+
+      expect(find.widgetWithText(SnackBar, deniedMessage), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await expireSnackBar(tester);
+    });
+
+    testWidgets('the prompt denied on the visit and allowed on the tap: '
+        'the anchor moves to the fix and nothing else is shown', (
+      tester,
+    ) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.denied, GeoPermission.whileInUse],
+      );
+      final engine = await _pumpScreen(tester, mockLocation: false);
+      expect(find.text('City center (no location)'), findsOneWidget);
+
+      await tapUseMyLocation(tester);
+      expect(find.text('Your location'), findsOneWidget);
+      expect(find.text('Long-press the map to move the pin'), findsNothing);
+      expect(engine.lastLayers.last.markers.single.position, deviceFix);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      // The tap asked the system again: that is the prompt the rider sees.
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+    });
+
+    testWidgets('denied on the visit, denied again on the tap (Android 11+ '
+        'turns the second "don\'t allow" into deniedForever): the visit stays '
+        'quiet and the tap shows the dialog with "Open settings"', (
+      tester,
+    ) async {
+      final calls = mockGeolocator(
+        checkPermission: GeoPermission.denied,
+        requestPermission: [GeoPermission.denied, GeoPermission.deniedForever],
+      );
+      await _pumpScreen(tester, mockLocation: false);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.text('City center (no location)'), findsOneWidget);
+
+      await tapUseMyLocation(tester);
+      // No memory between the two requests: the answer of the tap alone
+      // decides, and deniedForever is the settings dialog right away.
+      expect(find.widgetWithText(AlertDialog, permissionTitle), findsOneWidget);
+      expect(find.text(permissionMessage), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(calls.where((method) => method == 'requestPermission'), [
+        'requestPermission',
+        'requestPermission',
+      ]);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Open settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(settingsOpened(calls), ['openAppSettings']);
+    });
+
+    testWidgets('with a fix nothing is shown: the anchor just moves', (
+      tester,
+    ) async {
+      final engine = await _pumpScreen(tester, locationGranted: true);
+      await tapUseMyLocation(tester);
+
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.text('Your location'), findsOneWidget);
+      expect(engine.lastLayers.last.markers.single.position, deviceFix);
+    });
+
+    testWidgets('a rider who left the screen before the answer gets no '
+        'message on the next one', (tester) async {
+      mockGeolocator(fix: GeoFix.never);
+      await _pumpRouted(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(find.text('open'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 11));
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('the messages come from the package l10n (Spanish)', (
+      tester,
+    ) async {
+      mockGeolocator(serviceEnabled: false);
+      await _pumpScreen(
+        tester,
+        mockLocation: false,
+        locale: const Locale('es'),
+      );
+      await tester.tap(find.byTooltip('Usar mi ubicación'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.widgetWithText(AlertDialog, 'Ubicación desactivada'),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Los servicios de ubicación están desactivados en tu dispositivo. '
+          'Actívalos para ver las líneas cercanas a ti.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.widgetWithText(TextButton, 'Cancelar'), findsOneWidget);
+      expect(
+        find.widgetWithText(FilledButton, 'Abrir configuración'),
+        findsOneWidget,
+      );
+    });
+  });
+
+  // Every fit runs on the build after the state change, not in the bloc
+  // listener. The first fit and the street fits are pinned above; these
+  // two pin the later ones. They fail when a radius change, a highlighted
+  // line or its clearing no longer refits, when the street margin
+  // survives the street, and when it leaks onto a highlighted line.
+  testWidgets('every later fit frames what the state shows: a new radius, '
+      'a highlighted line, the ring again once it is cleared', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    const top = 24 + NearbyHeaderCard.cardHeight; // 82
+    const bottom = 640 * 0.65; // 416: the sheet's initial 35 %
+
+    void expectRingFramed(String id) {
+      final ring = engine.lastLayers.first.lines.single;
+      expect(ring.id, id);
+      final camera = engine.lastCamera!;
+      final latitudes = ring.position.map((p) => p.latitude);
+      expect(
+        screenY(camera, latitudes.reduce(math.max), 640),
+        closeTo(top, 0.5),
+      );
+      expect(
+        screenY(camera, latitudes.reduce(math.min), 640),
+        closeTo(bottom, 0.5),
+      );
+    }
+
+    expectRingFramed('nearby-ring-300');
+
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    expectRingFramed('nearby-ring-500');
+
+    // The row is under the sheet's fold at 360x640: toggle it the way a
+    // row tap or a label tap does.
+    NearbyLinesCubit cubit() =>
+        tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
+    cubit().toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    final line = engine.lastLayers
+        .firstWhere((l) => l.id == 'nearby-selected-line')
+        .lines
+        .single
+        .position;
+    final camera = engine.lastCamera!;
+    final ys = line.map((p) => screenY(camera, p.latitude, 640)).toList();
+    final xs = line.map((p) => screenX(camera, p.longitude, 360)).toList();
+    // Inside the map the header and the sheet leave clear...
+    expect(ys.reduce(math.min), greaterThanOrEqualTo(top - 0.5));
+    expect(ys.reduce(math.max), lessThanOrEqualTo(bottom + 0.5));
+    expect(xs.reduce(math.min), greaterThanOrEqualTo(-0.5));
+    expect(xs.reduce(math.max), lessThanOrEqualTo(360 + 0.5));
+    // ...and fitted to it, with no side margin: this line is taller than
+    // the map is (in proportion), so it spans that whole height.
+    expect(
+      ys.reduce(math.max) - ys.reduce(math.min),
+      closeTo(bottom - top, 0.5),
+    );
+
+    cubit().toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expectRingFramed('nearby-ring-500');
+  });
+
+  testWidgets('leaving a street for the device position frames the ring '
+      'across the whole width again: the street margin does not stay', (
+    tester,
+  ) async {
+    // Tall enough for the width to be what limits the ring.
+    usePhone(tester, const Size(400, 1000));
+    final (:engine, :source) = await _pumpRouted(
+      tester,
+      street: NearbyStreetAnchor(
+        name: 'Avenida Heroínas',
+        corners: const [cornerA, cornerB],
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Use my location'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your location'), findsOneWidget);
+
+    final camera = engine.lastCamera!;
+    final longitudes = engine.lastLayers.first.lines.single.position.map(
+      (p) => p.longitude,
+    );
+    expect(screenX(camera, longitudes.reduce(math.min), 400), closeTo(0, 0.5));
+    expect(
+      screenX(camera, longitudes.reduce(math.max), 400),
+      closeTo(400, 0.5),
+    );
   });
 
   test('screen identity and menu entry', () {

@@ -9,6 +9,10 @@ import '../nearby_street_anchor.dart';
 /// detail's top bar: a 44 px menu button, the title card (screen title over
 /// the anchor line, plus the pin hint when the device position is not in
 /// use) and 44 px buttons for "use my location" and close.
+///
+/// Three buttons leave the card's text about 128 px on a 360 dp phone, so
+/// the anchor label wraps to a second line and the hint to a third rather
+/// than ending in an ellipsis (trufi-app#79).
 class NearbyHeaderCard extends StatelessWidget {
   const NearbyHeaderCard({
     super.key,
@@ -28,18 +32,32 @@ class NearbyHeaderCard extends StatelessWidget {
   /// (phone); flat on `surface` when the row heads the side panel (wide).
   final bool elevated;
 
-  /// Title card height: `titleMedium` (24) + 2 + `bodySmall` anchor line
-  /// (16) + 2 × 8 padding; the pin hint adds 2 + up to two `bodySmall`
-  /// lines. The screen reserves this much map for the camera fit.
+  /// Title card height: `titleMedium` (24) + 2 + one `bodySmall` anchor
+  /// line (16) + 2 × 8 padding; the pin hint adds 2 + up to three
+  /// `bodySmall` lines.
   static const double cardHeight = 58;
-  static const double cardHeightWithHint = 92;
+  static const double cardHeightWithHint = 108;
+
+  /// What the second line of a wrapped anchor label adds (`bodySmall`).
+  static const double anchorSecondLineHeight = 16;
 
   /// The pin hint shows whenever the search is not anchored to a GPS fix.
   static bool showsHint(NearbyLinesState state) =>
       state.locationDenied || state.anchorSource == NearbyAnchorSource.fallback;
 
+  /// Whether the anchor label may need its second line on a phone: the
+  /// fallback label is a sentence in every language and a street label is
+  /// as long as the street's name. "Your location" and "Pinned location"
+  /// fit one line.
+  static bool anchorMayWrap(NearbyLinesState state) =>
+      state.anchorSource == NearbyAnchorSource.fallback ||
+      state.anchorSource == NearbyAnchorSource.street;
+
+  /// The tallest the title card gets for [state] at text scale 1.0; the
+  /// screen reserves this much map for the camera fit and the controls.
   static double heightFor(NearbyLinesState state) =>
-      showsHint(state) ? cardHeightWithHint : cardHeight;
+      (showsHint(state) ? cardHeightWithHint : cardHeight) +
+      (anchorMayWrap(state) ? anchorSecondLineHeight : 0);
 
   static const Map<NearbyAnchorSource, IconData> _anchorIcons = {
     NearbyAnchorSource.device: Icons.my_location_rounded,
@@ -115,15 +133,23 @@ class NearbyHeaderCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Row(
+                    // The glyph stays on the first line of a wrapped label
+                    // (14 px in a 16 px line).
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        _anchorIcons[state.anchorSource],
-                        size: 14,
-                        color: colorScheme.primary,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Icon(
+                          _anchorIcons[state.anchorSource],
+                          size: 14,
+                          color: colorScheme.primary,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
-                        // A long street name ellipsizes; the tooltip (long
+                        // Two lines hold the fallback label of every
+                        // language on a 360 dp phone. A street name longer
+                        // than that still ellipsizes; the tooltip (long
                         // press) is the only place on this screen that
                         // shows it whole.
                         child: Tooltip(
@@ -133,7 +159,7 @@ class NearbyHeaderCard extends StatelessWidget {
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: colorScheme.onSurfaceVariant,
                             ),
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -150,7 +176,9 @@ class NearbyHeaderCard extends StatelessWidget {
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
-                        maxLines: 2,
+                        // The Spanish and German hints need three lines
+                        // on a 360 dp phone.
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

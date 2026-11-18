@@ -10,10 +10,14 @@ class NavigationBottomPanel extends StatelessWidget {
   final NavigationState state;
   final VoidCallback onExitNavigation;
 
+  /// [NavigationInstructionCard.showStops] of the instruction card (#1059).
+  final bool showStops;
+
   const NavigationBottomPanel({
     super.key,
     required this.state,
     required this.onExitNavigation,
+    this.showStops = true,
   });
 
   @override
@@ -41,6 +45,7 @@ class NavigationBottomPanel extends StatelessWidget {
               legs: state.route?.legs ?? [],
               currentLeg: state.currentLeg,
               totalDuration: state.etaToDestination,
+              showStops: showStops,
             ),
 
           // Exit navigation button

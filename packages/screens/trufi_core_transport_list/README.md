@@ -85,8 +85,8 @@ the same `showStops` when embedded directly.
 
 `NearbyLinesTrufiScreen` (`/nearby`, drawer order 2) lists the lines passing
 within **100 / 300 / 500 m** of the rider's position or of a pin placed on the
-map, with the three radii drawn as rings, a label at the closest stop or point
-of every line, and the full route highlighted when a row is tapped. The whole
+map, with the selected radius drawn as a ring, a label at the closest stop or
+point of every line, and the full route highlighted when a row is tapped. The whole
 query runs on the device against the planner's already-loaded GTFS — no
 network call anywhere (#1006).
 
@@ -133,6 +133,16 @@ request when merely denied; no dialogs). Permanently denied, services off or
 no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
 long-press the map to move the pin anywhere, "Use my location" re-anchors.
 
+"Use my location" is the rider's explicit request, so when it finds no
+position it says why (trufi-app#78): a dialog with an **Open settings**
+action when the permission is permanently denied (the app's settings page)
+or location is switched off (the device's location settings) — on web,
+where geolocator has no such pages, the dialog only explains — and a snack
+bar when the system prompt was just answered "don't allow" or no fix
+arrived in time. A custom `NearbyLinesCubit.locate` callback reports its
+reason by throwing a `NearbyLocateException`; returning null still means
+"no fix".
+
 ### Lines along a street
 
 The same screen answers "which lines run along this street?"
@@ -149,7 +159,7 @@ the street from the ones merely crossing it (a crossing line is still
 listed: the rider can board it at that corner). The header reads "Along
 <street> · <municipality>" (the `subtitle`, when the index carries one —
 Cochabamba has one "Avenida Circunvalación" per municipality; a long press
-shows the whole text), the map shows a dot per corner instead of the rings
+shows the whole text), the map shows a dot per corner instead of the ring
 and the pin, the chips filter by the distance to the nearest corner. A
 long-press or "Use my location" leaves the street again.
 
@@ -189,7 +199,8 @@ NearbyLinesTrufiScreen(
 
 ### Limits
 
-- The rings are outlines; no map engine renders a translucent buffer yet
-  (`TrufiMarker.metersRadius` is not consumed and line colors carry no alpha).
+- Only the selected radius is drawn, as an outline; no map engine renders a
+  translucent buffer yet (`TrufiMarker.metersRadius` is not consumed and line
+  colors carry no alpha).
 - One row per logical line: the headsign shown is the closest pattern's.
 - At most 40 line labels are drawn on the map; the list is complete.

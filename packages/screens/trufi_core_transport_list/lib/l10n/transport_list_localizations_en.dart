@@ -164,7 +164,7 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   String get nearbyAnchorPinned => 'Pinned location';
 
   @override
-  String get nearbyAnchorDefault => 'City center (location unavailable)';
+  String get nearbyAnchorDefault => 'City center (no location)';
 
   @override
   String nearbyAnchorAlongStreet(String street) {
@@ -176,6 +176,31 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get nearbyMovePinHint => 'Long-press the map to move the pin';
+
+  @override
+  String get nearbyLocationPermissionTitle => 'Location permission';
+
+  @override
+  String get nearbyLocationPermissionDeniedForever =>
+      'Location permission is permanently denied. Enable it in your device settings to see the lines near you.';
+
+  @override
+  String get nearbyLocationDisabledTitle => 'Location disabled';
+
+  @override
+  String get nearbyLocationDisabledMessage =>
+      'Location services are disabled on your device. Enable them to see the lines near you.';
+
+  @override
+  String get nearbyLocationOpenSettings => 'Open settings';
+
+  @override
+  String get nearbyLocationPermissionDenied =>
+      'Location permission denied. Tap the button again to allow it, or long-press the map to move the pin.';
+
+  @override
+  String get nearbyLocationNoFix =>
+      'Couldn\'t get your location. Try again in a moment, or long-press the map to move the pin.';
 
   @override
   String nearbyRadiusChip(int meters, int count) {

@@ -379,10 +379,10 @@ abstract class TransportListLocalizations {
   /// **'Pinned location'**
   String get nearbyAnchorPinned;
 
-  /// Anchor row label when no fix and no pin exist and the app's default center is used
+  /// Anchor row label when no fix and no pin exist and the app's default center is used. Keep it short: the header card gives it two lines of at most 18 characters each on a 360 dp phone, which leaves room for a larger system font size
   ///
   /// In en, this message translates to:
-  /// **'City center (location unavailable)'**
+  /// **'City center (no location)'**
   String get nearbyAnchorDefault;
 
   /// Anchor row label when the search covers every corner of a street picked in the location search (lines along the street)
@@ -402,6 +402,48 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Long-press the map to move the pin'**
   String get nearbyMovePinHint;
+
+  /// Title of the dialog shown when 'Use my location' is tapped on the nearby lines screen and the location permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission'**
+  String get nearbyLocationPermissionTitle;
+
+  /// Body of the permanently-denied dialog of the nearby lines screen; its action opens the app's settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission is permanently denied. Enable it in your device settings to see the lines near you.'**
+  String get nearbyLocationPermissionDeniedForever;
+
+  /// Title of the dialog shown when 'Use my location' is tapped on the nearby lines screen and location services are switched off
+  ///
+  /// In en, this message translates to:
+  /// **'Location disabled'**
+  String get nearbyLocationDisabledTitle;
+
+  /// Body of the location-disabled dialog of the nearby lines screen; its action opens the device's location settings
+  ///
+  /// In en, this message translates to:
+  /// **'Location services are disabled on your device. Enable them to see the lines near you.'**
+  String get nearbyLocationDisabledMessage;
+
+  /// Action of the location dialogs of the nearby lines screen: opens the settings page where location can be enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get nearbyLocationOpenSettings;
+
+  /// Snack bar shown when 'Use my location' is tapped and the rider answers the system permission prompt with 'don't allow'
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission denied. Tap the button again to allow it, or long-press the map to move the pin.'**
+  String get nearbyLocationPermissionDenied;
+
+  /// Snack bar shown when 'Use my location' is tapped, location is allowed and on, but no position arrives in time
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t get your location. Try again in a moment, or long-press the map to move the pin.'**
+  String get nearbyLocationNoFix;
 
   /// Radius filter chip: distance bracket in meters and how many lines fall inside it
   ///

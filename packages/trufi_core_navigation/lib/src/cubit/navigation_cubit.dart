@@ -24,6 +24,12 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     // Request location permission
     final permissionStatus = await _locationService.requestPermission();
+
+    // The rider can leave the screen while the permission is being asked,
+    // and NavigationScreen closes the cubit: nothing is left to start, and
+    // emitting on a closed cubit throws.
+    if (isClosed) return;
+
     if (permissionStatus != LocationPermissionStatus.granted) {
       emit(
         state.copyWith(
@@ -38,6 +44,16 @@ class NavigationCubit extends Cubit<NavigationState> {
     final trackingStarted = await _locationService.startTracking(
       distanceFilter: _config.locationDistanceFilter,
     );
+
+    // Same here: the tracking can take as long as the first position to
+    // start, and the screen may be gone by then. Returning also keeps the
+    // closed cubit from listening to the location service below.
+    if (isClosed) {
+      // The screen stopped the tracking while it was starting: what started
+      // after that has nobody left to stop it.
+      if (trackingStarted) await _locationService.stopTracking();
+      return;
+    }
 
     if (!trackingStarted) {
       emit(
@@ -62,8 +78,12 @@ class NavigationCubit extends Cubit<NavigationState> {
     final remainingStops = totalStops - startStopIndex - 1;
 
     // Build initial instruction
-    final instruction = _buildTransitInstruction(route, startStopIndex);
-    final nextInstruction = remainingStops > 0
+    final instruction = _buildTransitInstruction(
+      route,
+      startStopIndex,
+      location: currentLocation,
+    );
+    final nextInstruction = remainingStops > 0 && _config.showStops
         ? _buildNextStopPreview(route, startStopIndex + 1)
         : null;
 
@@ -98,6 +118,11 @@ class NavigationCubit extends Cubit<NavigationState> {
   Future<void> stopNavigation() async {
     _locationService.removeListener(_onLocationUpdate);
     await _locationService.stopTracking();
+
+    // NavigationScreen closes the cubit right after asking it to stop: by
+    // the time the tracking has stopped there is nobody left to tell, and
+    // emitting on a closed cubit throws.
+    if (isClosed) return;
 
     emit(const NavigationState(status: NavigationStatus.idle));
   }
@@ -257,8 +282,12 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     final remainingStops = route.stops.length - stopIndex - 1;
 
-    final instruction = _buildTransitInstruction(route, stopIndex);
-    final nextInstruction = remainingStops > 0
+    final instruction = _buildTransitInstruction(
+      route,
+      stopIndex,
+      location: state.currentLocation,
+    );
+    final nextInstruction = remainingStops > 0 && _config.showStops
         ? _buildNextStopPreview(route, stopIndex + 1)
         : null;
 
@@ -335,6 +364,16 @@ class NavigationCubit extends Cubit<NavigationState> {
         distanceToNextStop: distanceToNext,
         etaToNextStop: Duration(seconds: etaSeconds.round()),
         etaToDestination: etaToDestination,
+        // Without the stops the instruction carries a distance, which moves
+        // with every fix and not only when a stop is reached (#1059). With
+        // them it is left as it is (null keeps the current one).
+        currentInstruction: _config.showStops
+            ? null
+            : _buildTransitInstruction(
+                state.route!,
+                state.currentStopIndex,
+                location: location,
+              ),
       ),
     );
   }
@@ -421,10 +460,14 @@ class NavigationCubit extends Cubit<NavigationState> {
     return nearestIndex;
   }
 
+  /// The instruction for a rider past the stop at [stopIndex]. [location] is
+  /// only read when [NavigationConfig.showStops] is off, to measure the
+  /// distance the instruction then carries.
   NavigationInstruction _buildTransitInstruction(
     NavigationRoute route,
-    int stopIndex,
-  ) {
+    int stopIndex, {
+    LocationResult? location,
+  }) {
     final stops = route.stops;
     final remainingStops = stops.length - stopIndex - 1;
 
@@ -436,6 +479,37 @@ class NavigationCubit extends Cubit<NavigationState> {
         primaryText: 'Exit at ${stops.last.name}',
         primaryTextKey: InstructionTextKey.exitAtStop,
         stopName: stops.last.name,
+        routeColor: route.backgroundColor != null
+            ? Color(route.backgroundColor!)
+            : null,
+        routeShortName: route.shortName,
+      );
+    }
+
+    if (!_config.showStops) {
+      // The stops the vehicle only passes keep driving the progression, but
+      // the rider reads about the stop where this leg ends and how far it
+      // is, never about them or how many are left (#1059).
+      final legEndIndex = _legEndStopIndex(stops, stopIndex);
+      final legEnd = stops[legEndIndex];
+      final distance = _distanceAlongStops(
+        stops,
+        stopIndex,
+        legEndIndex,
+        location,
+      );
+
+      return NavigationInstruction(
+        type: InstructionType.rideTransport,
+        primaryText: legEnd.name,
+        // English fallback; widgets render the localized navDistanceMeters /
+        // navDistanceKilometers via secondaryTextKey.
+        secondaryText: distance < 1000
+            ? '${distance.round()} m'
+            : '${(distance / 1000).toStringAsFixed(1)} km',
+        secondaryTextKey: InstructionTextKey.distanceToStop,
+        distance: distance,
+        stopName: legEnd.name,
         routeColor: route.backgroundColor != null
             ? Color(route.backgroundColor!)
             : null,
@@ -460,6 +534,47 @@ class NavigationCubit extends Cubit<NavigationState> {
           : null,
       routeShortName: route.shortName,
     );
+  }
+
+  /// Index of the stop where the leg a rider past [stopIndex] is on ends: the
+  /// first later stop that is not [NavigationStop.isIntermediate] — the
+  /// boarding stop on the walk to it, the alighting stop while riding, the
+  /// destination on the last leg. Falls back to the last stop.
+  int _legEndStopIndex(List<NavigationStop> stops, int stopIndex) {
+    for (int i = stopIndex + 1; i < stops.length; i++) {
+      if (!stops[i].isIntermediate) return i;
+    }
+    return stops.length - 1;
+  }
+
+  /// Meters left to `stops[targetIndex]` for a rider past [stopIndex]: from
+  /// [location] to the next stop and then stop by stop, which follows the
+  /// line instead of cutting straight to the target. Before the first fix
+  /// it is measured from the stop at [stopIndex].
+  double _distanceAlongStops(
+    List<NavigationStop> stops,
+    int stopIndex,
+    int targetIndex,
+    LocationResult? location,
+  ) {
+    double latitude = location?.latitude ?? stops[stopIndex].position.latitude;
+    double longitude =
+        location?.longitude ?? stops[stopIndex].position.longitude;
+    double meters = 0;
+
+    for (int i = stopIndex + 1; i <= targetIndex; i++) {
+      final position = stops[i].position;
+      meters += _locationService.distanceBetween(
+        latitude,
+        longitude,
+        position.latitude,
+        position.longitude,
+      );
+      latitude = position.latitude;
+      longitude = position.longitude;
+    }
+
+    return meters;
   }
 
   NavigationInstruction _buildNextStopPreview(

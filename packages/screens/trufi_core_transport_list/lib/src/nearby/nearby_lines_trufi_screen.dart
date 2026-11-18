@@ -22,6 +22,7 @@ import 'nearby_radius.dart';
 import 'nearby_street_anchor.dart';
 import 'widgets/nearby_header_card.dart';
 import 'widgets/nearby_lines_sheet.dart';
+import 'widgets/nearby_locate_feedback.dart';
 import 'widgets/nearby_map_layers.dart';
 
 /// Opens the detail of a nearby line; the default pushes
@@ -92,6 +93,7 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
             (context, line) =>
                 showNearbyLineDetails(context, line, showStops: showStops),
         initialStreet: _streetExtra(context),
+        locationService: _locationService,
       );
 
   /// The street passed by [showAlongStreet]; null on a drawer visit and
@@ -117,7 +119,7 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
       create: (context) => NearbyLinesCubit(
         dataSource: _resolveDataSource(context),
         defaultAnchor: MapEngineManager.read(context).defaultCenter,
-        locate: () => locateDevice(_locationService),
+        locate: () => locateDeviceOrThrow(_locationService),
         initialRadius: initialRadius,
       ),
     ),
@@ -148,22 +150,54 @@ class NearbyLinesTrufiScreen extends TrufiScreen {
 }
 
 /// Permission flow of the home screen without its dialogs: ask once when
-/// merely denied, give up on "denied forever" / services off / no fix in
-/// 10 s. Null means "use the pin fallback"; the header's hint explains it.
-Future<LatLng?> locateDevice(LocationService service) async {
+/// merely denied, then wait up to 10 s for a fix.
+///
+/// With no position it throws a [NearbyLocateException] that says why —
+/// denied, denied for good, location switched off, no fix. The cubit
+/// falls back to the pin in every case, and the "use my location" button
+/// explains the reason to the rider (trufi-app#78).
+Future<LatLng> locateDeviceOrThrow(LocationService service) async {
+  final LocationPermissionStatus status;
   try {
-    var status = await service.checkPermission();
-    if (status == LocationPermissionStatus.denied) {
-      status = await service.requestPermission();
-    }
-    if (status != LocationPermissionStatus.granted) return null;
+    final current = await service.checkPermission();
+    status = current == LocationPermissionStatus.denied
+        ? await service.requestPermission()
+        : current;
+  } catch (_) {
+    // No location plugin on this platform, or it failed to answer.
+    throw const NearbyLocateException(NearbyLocateFailure.noFix);
+  }
+  switch (status) {
+    case LocationPermissionStatus.granted:
+      break;
+    case LocationPermissionStatus.denied:
+      throw const NearbyLocateException(NearbyLocateFailure.permissionDenied);
+    case LocationPermissionStatus.deniedForever:
+      throw const NearbyLocateException(
+        NearbyLocateFailure.permissionDeniedForever,
+      );
+    case LocationPermissionStatus.serviceDisabled:
+      throw const NearbyLocateException(NearbyLocateFailure.serviceDisabled);
+  }
+  try {
     final location = await service.getCurrentLocation(
       timeout: const Duration(seconds: 10),
     );
-    if (location == null) return null;
-    return LatLng(location.latitude, location.longitude);
+    if (location != null) {
+      return LatLng(location.latitude, location.longitude);
+    }
   } catch (_) {
-    // Timeout, geolocator failure or no plugin on this platform: fall back.
+    // Timeout or geolocator failure: no fix.
+  }
+  throw const NearbyLocateException(NearbyLocateFailure.noFix);
+}
+
+/// [locateDeviceOrThrow] for callers that only want a position: null
+/// whatever the reason there is none.
+Future<LatLng?> locateDevice(LocationService service) async {
+  try {
+    return await locateDeviceOrThrow(service);
+  } on NearbyLocateException {
     return null;
   }
 }
@@ -239,10 +273,15 @@ void showNearbyLineDetails(
 class _NearbyLinesScreenWidget extends StatefulWidget {
   const _NearbyLinesScreenWidget({
     required this.onLineDetails,
+    required this.locationService,
     this.initialStreet,
   });
 
   final NearbyLineDetailsCallback onLineDetails;
+
+  /// The service the cubit locates with: its settings pages are where
+  /// the rider fixes a denied permission or a switched-off location.
+  final LocationService locationService;
 
   /// Anchors this visit on a street instead of locating the rider.
   final NearbyStreetAnchor? initialStreet;
@@ -274,6 +313,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static const double _controlsGap = 12;
   static const double _wideFitPadding = 24;
 
+  /// Side margin of the camera fit along a street: half a line label. The
+  /// framed area ends on the street's outermost corners, and each carries
+  /// its dot and often the label of the line passing there, centred on
+  /// the corner: flush with the screen edge both were cut in half (#1054).
+  static final EdgeInsets _streetFitMargin = EdgeInsets.symmetric(
+    horizontal: nearbyPointMarkerSize.width / 2,
+  );
+
   final TrufiMapController _mapController = TrufiMapController();
   final FitCameraUtil _fitCamera = FitCameraUtil();
   final DraggableScrollableController _sheetController =
@@ -283,8 +330,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   TrufiCameraPosition? _camera;
   bool _outOfFocus = false;
 
-  /// The fit the listener could not do yet (no viewport before the first
-  /// layout, or the anchor was already known when the screen was revisited).
+  /// A fit the next build has to run: the one a state change asked for,
+  /// the first one of a visit (no viewport before the first layout), or
+  /// the one of a revisit whose anchor was already known.
   bool _fitPending = true;
   NearbyLinesState? _lastState;
 
@@ -323,6 +371,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   /// Camera side effects: fit the search area when the anchor or radius
   /// moves, the selected line when one is highlighted, the area again when
   /// cleared.
+  ///
+  /// The fit is only asked for here and runs after the next build
+  /// ([_scheduleInitialFit]). This listener runs before the rebuild for
+  /// [state], and what the header keeps clear of the map is set on build:
+  /// fitting here framed the new state under the previous one's header.
+  /// A visit starts on the fallback header, the tallest, so with a fix
+  /// its first ring came out smaller than it then stays — 268 px instead
+  /// of 334 on a 360x640 phone.
   void _onStateChanged(NearbyLinesState state) {
     final previous = _lastState;
     _lastState = state;
@@ -335,25 +391,45 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     final selectionChanged = previous?.selectedLineKey != state.selectedLineKey;
 
     if (state.selectedGeometry.length > 1) {
-      if (selectionChanged || anchorChanged || _fitPending) {
-        _fitTo(state.selectedGeometry, fallbackTarget: anchor);
-      }
+      if (selectionChanged || anchorChanged) _fitPending = true;
       return;
     }
-    if (anchorChanged || radiusChanged || selectionChanged || _fitPending) {
-      _fitTo(_searchArea(state, anchor), fallbackTarget: anchor);
-    }
+    if (anchorChanged || radiusChanged || selectionChanged) _fitPending = true;
   }
 
+  /// Frames the highlighted line, or the search area when there is none.
+  void _fitState(NearbyLinesState state, LatLng anchor) {
+    if (state.selectedGeometry.length > 1) {
+      _fitTo(state.selectedGeometry, fallbackTarget: anchor);
+      return;
+    }
+    _fitTo(
+      _searchArea(state, anchor),
+      fallbackTarget: anchor,
+      margin: _framesStreet(state) ? _streetFitMargin : EdgeInsets.zero,
+    );
+  }
+
+  /// Whether the search area is a street's corners rather than a ring (a
+  /// one-corner street is a ring again).
+  static bool _framesStreet(NearbyLinesState state) =>
+      (state.street?.corners.length ?? 0) > 1;
+
   /// What the camera frames without a highlighted line: the selected ring,
-  /// or every corner of the street (a one-corner street is a ring again).
+  /// or every corner of the street.
   static List<LatLng> _searchArea(NearbyLinesState state, LatLng anchor) {
-    final corners = state.street?.corners;
-    if (corners != null && corners.length > 1) return corners;
+    if (_framesStreet(state)) return state.street!.corners;
     return NearbyGeometry.circlePolygon(anchor, state.radius.meters);
   }
 
-  void _fitTo(List<LatLng> points, {required LatLng fallbackTarget}) {
+  /// [margin] is kept clear around [points] on top of what the layout
+  /// already keeps clear of the header, the sheet or the side panel.
+  void _fitTo(
+    List<LatLng> points, {
+    required LatLng fallbackTarget,
+    EdgeInsets margin = EdgeInsets.zero,
+  }) {
+    _fitCamera.updatePadding(margin);
     final fallback = TrufiCameraPosition(
       target: fallbackTarget,
       zoom: _anchorZoom,
@@ -370,18 +446,15 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     });
   }
 
-  /// Called from build once the viewport is known: fits the ring if no
-  /// state change has done it yet (revisits with an unchanged anchor).
+  /// Called from build once the viewport and this state's insets are
+  /// known: runs the pending fit after the frame.
   void _scheduleInitialFit(NearbyLinesState state) {
     final anchor = state.anchor;
     if (!_fitPending || anchor == null) return;
     _fitPending = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final points = state.selectedGeometry.length > 1
-          ? state.selectedGeometry
-          : _searchArea(state, anchor);
-      _fitTo(points, fallbackTarget: anchor);
+      _fitState(state, anchor);
     });
   }
 
@@ -421,6 +494,19 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   void _onMapLongPress(LatLng point) {
     HapticFeedback.mediumImpact();
     context.read<NearbyLinesCubit>().setAnchor(point);
+  }
+
+  /// The "use my location" button. The locate of a visit is silent; this
+  /// one the rider asked for, so when it finds no position it says why
+  /// instead of leaving the screen as it was (trufi-app#78).
+  Future<void> _useMyLocation() async {
+    final failure = await context.read<NearbyLinesCubit>().useMyLocation();
+    if (failure == null || !mounted) return;
+    showNearbyLocateFailure(
+      context,
+      failure,
+      locationService: widget.locationService,
+    );
   }
 
   void _tryOpenDrawer() {
@@ -492,6 +578,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
         _headerPadding * 2 +
         cardHeight * textScale +
         _controlsGap;
+    // Nothing covers the map's sides on a phone; what a street needs
+    // there is added per fit (see [_streetFitMargin]).
     _fitCamera.updateViewport(
       Size(constraints.maxWidth, constraints.maxHeight),
       EdgeInsets.only(
@@ -626,13 +714,12 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 
   Widget _buildHeader(NearbyLinesState state, {required bool elevated}) {
-    final cubit = context.read<NearbyLinesCubit>();
     return NearbyHeaderCard(
       state: state,
       elevated: elevated,
       onMenu: _tryOpenDrawer,
       onClose: _close,
-      onUseMyLocation: cubit.useMyLocation,
+      onUseMyLocation: _useMyLocation,
     );
   }
 

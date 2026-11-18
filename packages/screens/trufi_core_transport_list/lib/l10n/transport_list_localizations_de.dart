@@ -159,7 +159,7 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   String get nearbyAnchorPinned => 'Markierter Ort';
 
   @override
-  String get nearbyAnchorDefault => 'Stadtzentrum (Standort nicht verfügbar)';
+  String get nearbyAnchorDefault => 'Stadtzentrum (kein Standort)';
 
   @override
   String nearbyAnchorAlongStreet(String street) {
@@ -172,6 +172,31 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   @override
   String get nearbyMovePinHint =>
       'Halte die Karte gedrückt, um den Pin zu verschieben';
+
+  @override
+  String get nearbyLocationPermissionTitle => 'Standortberechtigung';
+
+  @override
+  String get nearbyLocationPermissionDeniedForever =>
+      'Die Standortberechtigung wurde dauerhaft verweigert. Aktiviere sie in den Geräteeinstellungen, um die Linien in deiner Nähe zu sehen.';
+
+  @override
+  String get nearbyLocationDisabledTitle => 'Standort deaktiviert';
+
+  @override
+  String get nearbyLocationDisabledMessage =>
+      'Die Standortdienste sind auf deinem Gerät deaktiviert. Aktiviere sie, um die Linien in deiner Nähe zu sehen.';
+
+  @override
+  String get nearbyLocationOpenSettings => 'Einstellungen öffnen';
+
+  @override
+  String get nearbyLocationPermissionDenied =>
+      'Standortberechtigung verweigert. Tippe erneut auf die Schaltfläche, um sie zu erlauben, oder halte die Karte gedrückt, um den Pin zu verschieben.';
+
+  @override
+  String get nearbyLocationNoFix =>
+      'Dein Standort konnte nicht ermittelt werden. Versuche es gleich noch einmal oder halte die Karte gedrückt, um den Pin zu verschieben.';
 
   @override
   String nearbyRadiusChip(int meters, int count) {

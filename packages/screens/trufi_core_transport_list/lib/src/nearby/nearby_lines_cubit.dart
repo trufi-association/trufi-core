@@ -23,8 +23,38 @@ enum NearbyAnchorSource {
   street,
 }
 
-/// Resolves the device position; null when permission is denied, location
-/// services are off, or no fix arrives in time.
+/// Why a locate attempt produced no position (trufi-app#78).
+enum NearbyLocateFailure {
+  /// The rider answered the system's permission prompt with "don't
+  /// allow"; the next attempt asks again.
+  permissionDenied,
+
+  /// Denied for good: the system no longer shows its prompt (Android after
+  /// a second "don't allow", iOS after the first), so only the app's
+  /// settings page can grant the permission.
+  permissionDeniedForever,
+
+  /// Location is switched off on the device.
+  serviceDisabled,
+
+  /// Location is allowed and on, but no fix arrived in time (or the
+  /// platform could not be asked at all).
+  noFix,
+}
+
+/// Thrown by a [NearbyLocateCallback] to say why there is no position.
+class NearbyLocateException implements Exception {
+  const NearbyLocateException(this.failure);
+
+  final NearbyLocateFailure failure;
+
+  @override
+  String toString() => 'NearbyLocateException(${failure.name})';
+}
+
+/// Resolves the device position. When there is none it returns null or,
+/// so that the rider can be told why, throws a [NearbyLocateException]: a
+/// plain null and any other error count as [NearbyLocateFailure.noFix].
 typedef NearbyLocateCallback = Future<LatLng?> Function();
 
 class NearbyLinesState extends Equatable {
@@ -179,11 +209,17 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
     for (final radius in NearbyRadius.values) radius: 0,
   };
 
-  /// Runs on every screen visit: load the feed, locate, query.
+  /// Runs on every screen visit: load the feed, locate, query. A visit
+  /// without a fix is quiet — the header says so and the pin stands in;
+  /// only [useMyLocation] reports the reason.
   Future<void> start() async {
+    await _startAndLocate();
+  }
+
+  Future<NearbyLocateFailure?> _startAndLocate() async {
     final token = ++_startToken;
-    if (!await _loadFeed(token)) return;
-    await _locateAndQuery(token);
+    if (!await _loadFeed(token)) return null;
+    return _locateAndQuery(token);
   }
 
   /// The lines along [street] (trufi-sanaa#20): the union of the nearby
@@ -248,12 +284,17 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
   }
 
   /// Re-anchors on a fresh fix; a pin set earlier survives a failed fix.
-  Future<void> useMyLocation() async {
+  ///
+  /// This is the rider's explicit request, so unlike [start] it answers
+  /// why there is no fix, for the screen to explain (trufi-app#78). Null
+  /// when the anchor moved to the fix, when a newer visit superseded this
+  /// attempt, and when there is no feed to search around a fix anyway.
+  Future<NearbyLocateFailure?> useMyLocation() {
     final source = dataSource;
     if (source == null || source.availability != NearbyAvailability.available) {
-      return start();
+      return _startAndLocate();
     }
-    await _locateAndQuery(++_startToken);
+    return _locateAndQuery(++_startToken);
   }
 
   /// Map long-press: the pin becomes the anchor (and a street is left).
@@ -309,15 +350,19 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
     await start();
   }
 
-  Future<void> _locateAndQuery(int token) async {
+  /// Null with a fix, and for an attempt a newer one superseded.
+  Future<NearbyLocateFailure?> _locateAndQuery(int token) async {
     emit(state.copyWith(isLocating: true));
     LatLng? point;
+    var failure = NearbyLocateFailure.noFix;
     try {
       point = await locate();
+    } on NearbyLocateException catch (e) {
+      failure = e.failure;
     } catch (_) {
       point = null;
     }
-    if (token != _startToken || isClosed) return;
+    if (token != _startToken || isClosed) return null;
 
     if (point != null) {
       emit(
@@ -329,19 +374,21 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
           clearStreet: true,
         ),
       );
-    } else {
-      emit(
-        state.copyWith(
-          anchor: state.anchor ?? defaultAnchor,
-          anchorSource: state.anchor == null
-              ? NearbyAnchorSource.fallback
-              : state.anchorSource,
-          locationDenied: true,
-          isLocating: false,
-        ),
-      );
+      _query();
+      return null;
     }
+    emit(
+      state.copyWith(
+        anchor: state.anchor ?? defaultAnchor,
+        anchorSource: state.anchor == null
+            ? NearbyAnchorSource.fallback
+            : state.anchorSource,
+        locationDenied: true,
+        isLocating: false,
+      ),
+    );
     _query();
+    return failure;
   }
 
   void _query() {

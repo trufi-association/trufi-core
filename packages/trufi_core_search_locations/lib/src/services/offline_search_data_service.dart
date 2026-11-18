@@ -46,6 +46,11 @@ class OfflineSearchDataService
 
   /// Upper bound on results per category, so a two-letter query doesn't
   /// return thousands of rows.
+  ///
+  /// Which streets make the cut is a total order — the street named like
+  /// the query, then the best text match, then the street with more
+  /// corners, then name, municipality and ref — so it depends neither on
+  /// the index's order nor on the sort (#1054).
   final int limitPerCategory;
 
   /// Word used between two streets in this language ("y" in Spanish,
@@ -199,6 +204,15 @@ class _Street {
   final String? region;
   final String normalized;
 
+  /// [name] alone, normalized: tells the street named exactly like the
+  /// query, and orders streets that match equally well.
+  late final String normalizedName = _normalize(name);
+
+  /// [alternativeNames], normalized one by one.
+  late final List<String> normalizedAlternativeNames = [
+    for (final alternative in alternativeNames) _normalize(alternative),
+  ];
+
   _Street({
     required this.ref,
     required this.name,
@@ -272,23 +286,56 @@ class _SearchData {
   Iterable<_Street> _matchingStreets(String normalizedQuery) => streets.values
       .where((s) => s.normalized.contains(normalizedQuery));
 
+  /// The [limit] best streets for [q]: by [_rankOf], then by
+  /// [_compareTied].
   List<SearchLocation> findStreets(String q, int limit) {
-    final matches = _matchingStreets(q).toList()
-      ..sort((a, b) => _rank(a.normalized, q).compareTo(_rank(b.normalized, q)));
+    final matches = [
+      for (final street in _matchingStreets(q))
+        if (street.latitude != null && street.longitude != null)
+          (street: street, rank: _rankOf(street, q)),
+    ];
+    matches.sort((a, b) {
+      final byRank = a.rank.compareTo(b.rank);
+      return byRank != 0 ? byRank : _compareTied(a.street, b.street);
+    });
     return matches
-        .where((s) => s.latitude != null && s.longitude != null)
         .take(limit)
         .map(
-          (s) => SearchLocation(
-            id: 'street:${s.ref}',
-            displayName: s.name,
-            address: s.region,
-            latitude: s.latitude!,
-            longitude: s.longitude!,
+          (m) => SearchLocation(
+            id: 'street:${m.street.ref}',
+            displayName: m.street.name,
+            address: m.street.region,
+            latitude: m.street.latitude!,
+            longitude: m.street.longitude!,
           ),
         )
         .toList();
   }
+
+  /// Order of two streets that match the query equally well (#1054).
+  ///
+  /// Ties are the rule, not the exception: every "Avenida …" is a prefix
+  /// match for "avenida", and a city has one "Avenida Circunvalación" per
+  /// municipality. `List.sort` is not stable, so without a tie-break the
+  /// rows that survive the limit were whatever the sort left first — for
+  /// a short query, an arbitrary ten out of hundreds.
+  ///
+  /// The street with more corners goes first: it is the longer, better
+  /// connected one — the avenue a rider most likely means rather than its
+  /// three-block namesake two towns away — and the one whose corners and
+  /// lines are worth opening. Name, municipality and ref then make the
+  /// order total, so equal data always gives equal results.
+  int _compareTied(_Street a, _Street b) {
+    final byCorners = _cornerCount(b).compareTo(_cornerCount(a));
+    if (byCorners != 0) return byCorners;
+    final byName = a.normalizedName.compareTo(b.normalizedName);
+    if (byName != 0) return byName;
+    final byRegion = (a.region ?? '').compareTo(b.region ?? '');
+    if (byRegion != 0) return byRegion;
+    return a.ref.compareTo(b.ref);
+  }
+
+  int _cornerCount(_Street street) => junctions[street.ref]?.length ?? 0;
 
   /// Junctions between a street matching [a] and one matching [b].
   List<SearchLocation> findJunctions(String a, String b, int limit) {
@@ -331,6 +378,23 @@ class _SearchData {
             longitude: junction.$3,
           ),
     ];
+  }
+
+  /// How well [street] answers [q], lower first: its name is the query;
+  /// one of its alternative names is; then [_rank] over all its names.
+  ///
+  /// A street is searched by its name and its alternative names joined,
+  /// and that text is never the query itself once there is an alternative
+  /// name. Ranked on it alone, "Camino a Lagunas" (also "Circuito Tunari")
+  /// was one more prefix match beside "Camino a Lagunas Entrando por
+  /// Tirani", and with corners breaking ties it lost the first row to it
+  /// (#1054). So the exact cases are read name by name — and a street
+  /// only also known by the query's name comes after the ones named so,
+  /// however many corners it has.
+  int _rankOf(_Street street, String q) {
+    if (street.normalizedName == q) return 0;
+    if (street.normalizedAlternativeNames.contains(q)) return 1;
+    return 2 + _rank(street.normalized, q);
   }
 
   /// Exact match first, then prefix, then anything containing the query.

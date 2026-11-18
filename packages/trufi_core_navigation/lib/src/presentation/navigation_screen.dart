@@ -229,6 +229,7 @@ class _NavigationScreenState extends State<NavigationScreen>
       case NavigationStatus.paused:
         return NavigationBottomPanel(
           state: state,
+          showStops: widget.config.showStops,
           onExitNavigation: () => _exitNavigation(context),
         );
 
