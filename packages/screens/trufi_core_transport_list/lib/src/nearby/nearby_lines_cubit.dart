@@ -205,15 +205,43 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
   /// with an older token belongs to a superseded visit and is dropped.
   int _startToken = 0;
 
+  /// The anchor the current street replaced — a pin, an earlier fix, the
+  /// default centre — for a menu visit to go back to (#1054). Null when
+  /// the street came first.
+  ({LatLng anchor, NearbyAnchorSource source})? _anchorBeforeStreet;
+
   static Map<NearbyRadius, int> get _zeroCounts => {
     for (final radius in NearbyRadius.values) radius: 0,
   };
 
-  /// Runs on every screen visit: load the feed, locate, query. A visit
-  /// without a fix is quiet — the header says so and the pin stands in;
-  /// only [useMyLocation] reports the reason.
+  /// Runs on every screen visit from the menu: load the feed, locate,
+  /// query. A visit without a fix is quiet — the header says so and the
+  /// pin stands in; only [useMyLocation] reports the reason.
+  ///
+  /// A menu visit is about the rider's surroundings, so it leaves the
+  /// street a search opened the screen on (#1054): the anchor goes back to
+  /// what the street replaced, else the default centre, until a fix lands
+  /// — and for good without one.
   Future<void> start() async {
+    _leaveStreet();
     await _startAndLocate();
+  }
+
+  void _leaveStreet() {
+    if (state.anchorSource != NearbyAnchorSource.street) return;
+    final before = _anchorBeforeStreet;
+    emit(
+      state.copyWith(
+        anchor: before?.anchor ?? defaultAnchor,
+        anchorSource: before?.source ?? NearbyAnchorSource.fallback,
+        clearStreet: true,
+        clearSelection: true,
+        // The street's rows lie along the street, not around this anchor:
+        // the visit lists nothing until it queries, as a first one does.
+        lines: const [],
+        counts: const {},
+      ),
+    );
   }
 
   Future<NearbyLocateFailure?> _startAndLocate() async {
@@ -224,9 +252,17 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
 
   /// The lines along [street] (trufi-sanaa#20): the union of the nearby
   /// lines of its corners, each line once at its nearest corner. Replaces a
-  /// fix or a pin; a long-press or [useMyLocation] leaves the street again.
+  /// fix or a pin; a long-press, [useMyLocation] or a menu visit ([start])
+  /// leaves the street again.
   Future<void> startAlongStreet(NearbyStreetAnchor street) async {
     final token = ++_startToken;
+    // A street opened over another street keeps what the first replaced.
+    if (state.anchorSource != NearbyAnchorSource.street) {
+      final anchor = state.anchor;
+      _anchorBeforeStreet = anchor == null
+          ? null
+          : (anchor: anchor, source: state.anchorSource);
+    }
     emit(
       state.copyWith(
         anchor: street.center ?? state.anchor ?? defaultAnchor,
@@ -345,6 +381,12 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
         state.anchor != null) {
       emit(state.copyWith(availability: NearbyAvailability.available));
       _query();
+      return;
+    }
+    // A retry is not a menu visit: it stays on the street ([start] leaves it).
+    final street = state.street;
+    if (street != null) {
+      await startAlongStreet(street);
       return;
     }
     await start();

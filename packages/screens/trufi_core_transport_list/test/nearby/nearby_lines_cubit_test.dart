@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_planner/trufi_core_planner.dart' show GtfsRouteType;
@@ -557,6 +559,136 @@ void main() {
       expect(locateCalls, 1);
       expect(c.state.anchorSource, NearbyAnchorSource.device);
       expect(c.state.street, isNull);
+    });
+
+    group('a menu visit leaves the street even without a fix (#1054)', () {
+      LatLng? located;
+      NearbyLinesCubit relocating(_FakeDataSource? source) => NearbyLinesCubit(
+        dataSource: source,
+        defaultAnchor: defaultAnchor,
+        locate: () async => located,
+      );
+      setUp(() => located = null);
+
+      test('to the default centre when the street came first', () async {
+        final source = streetSource();
+        final c = relocating(source);
+        await c.startAlongStreet(street);
+        c.toggleLine('n:201');
+        source.anchors.clear();
+
+        await c.start();
+        expect(c.state.street, isNull);
+        expect(c.state.anchor, defaultAnchor);
+        expect(c.state.anchorSource, NearbyAnchorSource.fallback);
+        expect(c.state.locationDenied, isTrue);
+        expect(c.state.hasSelection, isFalse);
+        expect(source.anchors, [defaultAnchor]);
+        expect(c.state.lines.map((l) => l.displayName), ['201', 'X10', '18']);
+        expect(c.state.counts, expectedCounts);
+      });
+
+      test('to the pin the street replaced, through a second street', () async {
+        located = fix;
+        final source = streetSource();
+        final c = relocating(source);
+        await c.start();
+        c.setAnchor(pin);
+        located = null;
+        await c.startAlongStreet(street);
+        await c.startAlongStreet(
+          NearbyStreetAnchor(name: 'Calle Jordán', corners: const [c2]),
+        );
+        source.anchors.clear();
+
+        await c.start();
+        expect(c.state.street, isNull);
+        expect(c.state.anchor, pin);
+        expect(c.state.anchorSource, NearbyAnchorSource.pin);
+        expect(c.state.locationDenied, isTrue);
+        expect(source.anchors, [pin]);
+      });
+
+      test(
+        'to the earlier fix, labelled as such, when there is no new one',
+        () async {
+          located = fix;
+          final source = streetSource();
+          final c = relocating(source);
+          await c.start();
+          located = null;
+          await c.startAlongStreet(street);
+
+          await c.start();
+          expect(c.state.street, isNull);
+          expect(c.state.anchor, fix);
+          expect(c.state.anchorSource, NearbyAnchorSource.device);
+          expect(c.state.locationDenied, isTrue);
+        },
+      );
+
+      test('a street left by a long-press is not gone back to', () async {
+        located = fix;
+        final source = streetSource();
+        final c = relocating(source);
+        await c.start();
+        await c.startAlongStreet(street);
+        c.setAnchor(pin);
+        located = null;
+
+        await c.start();
+        expect(c.state.anchor, pin);
+        expect(c.state.anchorSource, NearbyAnchorSource.pin);
+      });
+
+      test(
+        'while it locates, the street and its rows are already gone',
+        () async {
+          final pending = Completer<LatLng?>();
+          final source = streetSource();
+          final c = NearbyLinesCubit(
+            dataSource: source,
+            defaultAnchor: defaultAnchor,
+            locate: () => pending.future,
+          );
+          await c.startAlongStreet(street);
+          c.toggleLine('n:201');
+
+          final visit = c.start();
+          await Future<void>.delayed(Duration.zero);
+          expect(c.state.isLocating, isTrue);
+          expect(c.state.street, isNull);
+          expect(c.state.anchor, defaultAnchor);
+          expect(c.state.anchorSource, NearbyAnchorSource.fallback);
+          expect(c.state.lines, isEmpty);
+          expect(c.state.hasSelection, isFalse);
+          expect(c.state.selectedGeometry, isEmpty);
+
+          pending.complete(fix);
+          await visit;
+          expect(c.state.anchor, fix);
+          expect(c.state.anchorSource, NearbyAnchorSource.device);
+          expect(c.state.lines, hasLength(3));
+        },
+      );
+
+      test('refresh() is not a menu visit: a feed that has to load again '
+          'keeps the street', () async {
+        located = fix;
+        final source = streetSource()
+          ..availability = NearbyAvailability.loading
+          ..availabilityAfterLoad = NearbyAvailability.missing;
+        final c = relocating(source);
+        await c.startAlongStreet(street);
+        expect(c.state.availability, NearbyAvailability.missing);
+
+        source.availabilityAfterLoad = NearbyAvailability.available;
+        await c.refresh();
+        expect(c.state.availability, NearbyAvailability.available);
+        expect(c.state.anchorSource, NearbyAnchorSource.street);
+        expect(c.state.street, street);
+        expect(source.anchors, [c1, c2]);
+      });
     });
 
     test('without a source the street is reported unavailable', () async {
