@@ -389,6 +389,7 @@ void main() {
     );
     final empty = find.text('No lines within 100 m. Try a larger radius.');
     expect(empty, findsOneWidget);
+    expect(find.byType(RouteCountIndicator), findsNothing);
     expect(find.textContaining('At 380 m'), findsOneWidget);
     expect(
       tester.getTopLeft(empty).dy,
@@ -720,6 +721,58 @@ void main() {
       await tester.pumpAndSettle();
       expect(host.controller.offset, 0);
       expect(find.text('Línea L30'), findsNothing);
+    });
+
+    testWidgets('a list too short for the row shows the row\'s top (the '
+        'sheet at its min snap, over a navigation bar)', (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final lines = manyLines();
+      final states = ValueNotifier(state(lines: lines));
+      addTearDown(states.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates:
+              TransportListLocalizations.localizationsDelegates,
+          supportedLocales: TransportListLocalizations.supportedLocales,
+          home: Scaffold(
+            body: Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: 66,
+                child: ValueListenableBuilder<NearbyLinesState>(
+                  valueListenable: states,
+                  builder: (context, s, _) => MediaQuery(
+                    data: MediaQuery.of(
+                      context,
+                    ).copyWith(padding: const EdgeInsets.only(bottom: 48)),
+                    child: NearbyLinesSheet(
+                      state: s,
+                      onRadiusChanged: (_) {},
+                      onLineTap: (_) {},
+                      onLineDetails: (_) {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      // A row the list has built (inside its cache extent), then one it
+      // has to hop to: both rest with their top on the top edge.
+      for (final key in ['L1', 'L10']) {
+        states.value = state(lines: lines, selectedLineKey: 'n:$key');
+        await tester.pumpAndSettle();
+        expect(
+          _row(tester, 'Línea $key').top,
+          closeTo(_viewport(tester).top, 0.5),
+          reason: key,
+        );
+      }
     });
 
     testWidgets('a highlight beyond the radius scrolls to its row at the '
