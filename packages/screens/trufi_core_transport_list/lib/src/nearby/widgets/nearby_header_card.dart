@@ -58,7 +58,8 @@ class NearbyHeaderCard extends StatelessWidget {
       state.anchorSource == NearbyAnchorSource.street;
 
   /// The tallest the title card gets for [state] at text scale 1.0; the
-  /// screen reserves this much map for the camera fit and the controls.
+  /// screen reserves this much map for the camera fit. The map controls do
+  /// not use it: on phones they hang under the card's real height.
   static double heightFor(NearbyLinesState state) =>
       (showsHint(state) ? cardHeightWithHint : cardHeight) +
       (anchorMayWrap(state) ? anchorSecondLineHeight : 0);
