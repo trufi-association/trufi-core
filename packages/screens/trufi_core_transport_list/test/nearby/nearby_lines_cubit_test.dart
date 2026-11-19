@@ -627,6 +627,36 @@ void main() {
         },
       );
 
+      test('a pin the rider had without a fix comes back with its hint, '
+          'already while the visit locates', () async {
+        Completer<LatLng?>? pending;
+        final source = streetSource();
+        final c = NearbyLinesCubit(
+          dataSource: source,
+          defaultAnchor: defaultAnchor,
+          locate: () => pending?.future ?? Future<LatLng?>.value(),
+        );
+        await c.start();
+        c.setAnchor(pin);
+        // A revisit without a fix: the pin, with the hint.
+        await c.start();
+        expect(c.state.locationDenied, isTrue);
+        await c.startAlongStreet(street);
+
+        pending = Completer<LatLng?>();
+        final visit = c.start();
+        await Future<void>.delayed(Duration.zero);
+        expect(c.state.isLocating, isTrue);
+        expect(c.state.anchor, pin);
+        expect(c.state.locationDenied, isTrue);
+        expect(NearbyHeaderCard.showsHint(c.state), isTrue);
+
+        pending.complete(null);
+        await visit;
+        expect(c.state.anchorSource, NearbyAnchorSource.pin);
+        expect(c.state.locationDenied, isTrue);
+      });
+
       test('a street left by a long-press is not gone back to', () async {
         located = fix;
         final source = streetSource();

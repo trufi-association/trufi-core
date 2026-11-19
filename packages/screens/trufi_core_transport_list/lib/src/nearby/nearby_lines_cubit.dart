@@ -207,8 +207,12 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
 
   /// The anchor the current street replaced — a pin, an earlier fix, the
   /// default centre — for a menu visit to go back to (#1054). Null when
-  /// the street came first.
-  ({LatLng anchor, NearbyAnchorSource source})? _anchorBeforeStreet;
+  /// the street came first. [NearbyLinesState.locationDenied] comes back
+  /// with it: a pin the rider had without a fix keeps its hint while the
+  /// visit locates, and the header keeps the height the camera fit is
+  /// framed under.
+  ({LatLng anchor, NearbyAnchorSource source, bool locationDenied})?
+  _anchorBeforeStreet;
 
   static Map<NearbyRadius, int> get _zeroCounts => {
     for (final radius in NearbyRadius.values) radius: 0,
@@ -234,6 +238,7 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
       state.copyWith(
         anchor: before?.anchor ?? defaultAnchor,
         anchorSource: before?.source ?? NearbyAnchorSource.fallback,
+        locationDenied: before?.locationDenied ?? false,
         clearStreet: true,
         clearSelection: true,
         // The street's rows lie along the street, not around this anchor:
@@ -261,7 +266,11 @@ class NearbyLinesCubit extends Cubit<NearbyLinesState> {
       final anchor = state.anchor;
       _anchorBeforeStreet = anchor == null
           ? null
-          : (anchor: anchor, source: state.anchorSource);
+          : (
+              anchor: anchor,
+              source: state.anchorSource,
+              locationDenied: state.locationDenied,
+            );
     }
     emit(
       state.copyWith(
