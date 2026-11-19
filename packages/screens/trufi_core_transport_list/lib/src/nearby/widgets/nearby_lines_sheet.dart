@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderAbstractViewport;
 import 'package:flutter/services.dart';
@@ -106,6 +108,11 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
   /// Bumped by every reveal, so an older one still in flight gives way.
   int _revealToken = 0;
 
+  /// What the system bars cover at the bottom of the list: the phone sheet
+  /// runs under the navigation bar, while the side panel's SafeArea has
+  /// already taken it out. Read on build.
+  double _bottomInset = 0;
+
   GlobalKey _rowKey(String lineKey) =>
       _rowKeys.putIfAbsent(lineKey, GlobalKey.new);
 
@@ -164,19 +171,21 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
     if (index == -1) return;
 
     final rowContext = _rowKeys[selected]?.currentContext;
-    if (rowContext != null) {
-      await Scrollable.ensureVisible(
-        rowContext,
-        duration: _revealDuration,
-        curve: Curves.easeOutCubic,
-        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+    final row = rowContext?.findRenderObject();
+    if (rowContext != null && row is RenderBox && row.hasSize) {
+      final viewport = RenderAbstractViewport.maybeOf(row);
+      final position = Scrollable.maybeOf(rowContext)?.position;
+      if (viewport == null || position == null) return;
+      final target = _scrollTarget(
+        position,
+        top: viewport.getOffsetToReveal(row, 0).offset,
+        height: row.size.height,
       );
-      if (!rowContext.mounted || token != _revealToken) return;
-      await Scrollable.ensureVisible(
-        rowContext,
+      if (target == null) return;
+      await position.animateTo(
+        target,
         duration: _revealDuration,
         curve: Curves.easeOutCubic,
-        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
       );
       return;
     }
@@ -194,10 +203,33 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
     return _reveal(token, hopsLeft - 1);
   }
 
-  /// The scroll offset that brings row [index] to the viewport's edge on
-  /// its side, measured from the built row nearest to it: the rows share
-  /// one height (a one-line title and a one-line subtitle). Null when no
-  /// row is built.
+  /// The offset that makes a row whole between the viewport's top edge and
+  /// its bottom edge less [_bottomInset], with as little scrolling as
+  /// possible: a row below rests just above that line, a row above on the
+  /// top edge, and a row taller than the room shows its top. Null when the
+  /// row already is whole. [top] is the offset that puts the row's top on
+  /// the viewport's top edge.
+  double? _scrollTarget(
+    ScrollPosition position, {
+    required double top,
+    required double height,
+  }) {
+    final bottom = math.min(
+      top + height - position.viewportDimension + _bottomInset,
+      top,
+    );
+    final pixels = position.pixels;
+    final target = pixels > top
+        ? top
+        : pixels < bottom
+        ? bottom
+        : null;
+    return target?.clamp(position.minScrollExtent, position.maxScrollExtent);
+  }
+
+  /// The offset that brings row [index] in, measured from the built row
+  /// nearest to it: the rows share one height (a one-line title and a
+  /// one-line subtitle). Null when no row is built.
   (ScrollPosition, double)? _hopToward(int index) {
     BuildContext? anchorContext;
     RenderBox? anchorBox;
@@ -222,21 +254,15 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
     final top =
         viewport.getOffsetToReveal(anchorBox, 0).offset +
         (index - anchorIndex) * (height + _rowGap);
-    // Below the viewport: its bottom on the bottom edge; above: its top on
-    // the top edge.
-    final offset = index > anchorIndex
-        ? top + height - position.viewportDimension
-        : top;
-    return (
-      position,
-      offset.clamp(position.minScrollExtent, position.maxScrollExtent),
-    );
+    final target = _scrollTarget(position, top: top, height: height);
+    return target == null ? null : (position, target);
   }
 
   @override
   Widget build(BuildContext context) {
     final state = widget.state;
     final l10n = TransportListLocalizations.of(context);
+    _bottomInset = MediaQuery.paddingOf(context).bottom;
     final available = state.availability == NearbyAvailability.available;
     final visible = state.visibleLines;
     // Like the routes list: the count only heads an actual list of rows.
@@ -337,7 +363,8 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
         ),
       if (rows.isNotEmpty)
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          // Room for the last row to clear the navigation bar too.
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 24 + _bottomInset),
           sliver: SliverList.separated(
             itemCount: rows.length,
             itemBuilder: (context, index) {

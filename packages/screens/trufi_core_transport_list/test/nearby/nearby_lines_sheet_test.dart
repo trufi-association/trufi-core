@@ -145,6 +145,7 @@ Future<_ScrollHost> _pumpScrolling(
   WidgetTester tester,
   NearbyLinesState initial, {
   bool settle = true,
+  double bottomInset = 0,
 }) async {
   tester.view.physicalSize = const Size(360, 640);
   tester.view.devicePixelRatio = 1.0;
@@ -160,12 +161,19 @@ Future<_ScrollHost> _pumpScrolling(
       home: Scaffold(
         body: ValueListenableBuilder<NearbyLinesState>(
           valueListenable: host.states,
-          builder: (context, state, _) => NearbyLinesSheet(
-            state: state,
-            scrollController: host.controller,
-            onRadiusChanged: (_) {},
-            onLineTap: (_) {},
-            onLineDetails: (_) {},
+          // The phone sheet runs under the navigation bar: its MediaQuery
+          // keeps the bottom padding.
+          builder: (context, state, _) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(padding: EdgeInsets.only(bottom: bottomInset)),
+            child: NearbyLinesSheet(
+              state: state,
+              scrollController: host.controller,
+              onRadiusChanged: (_) {},
+              onLineTap: (_) {},
+              onLineDetails: (_) {},
+            ),
           ),
         ),
       ),
@@ -484,6 +492,47 @@ void main() {
       );
       expect(selectedRows(tester), ['L30']);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('under a navigation bar the row stops above it, the last '
+        'row too', (tester) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: lines),
+        bottomInset: 48,
+      );
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L30');
+      await tester.pumpAndSettle();
+      final clear = _viewport(tester).bottom - 48;
+      expect(_row(tester, 'Línea L30').bottom, closeTo(clear, 0.5));
+
+      // The list leaves room under the last row for the bar.
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L39');
+      await tester.pumpAndSettle();
+      expect(_row(tester, 'Línea L39').bottom, closeTo(clear, 0.5));
+      expect(
+        host.controller.offset,
+        lessThan(host.controller.position.maxScrollExtent),
+      );
+
+      // A row whole on screen but behind the bar comes up above it.
+      host.controller.jumpTo(0);
+      await tester.pumpAndSettle();
+      host.states.value = state(lines: lines);
+      await tester.pumpAndSettle();
+      var behind = -1;
+      for (var i = 0; i < lines.length; i++) {
+        final row = _row(tester, 'Línea L$i');
+        if (row.bottom > clear && row.bottom <= _viewport(tester).bottom) {
+          behind = i;
+          break;
+        }
+      }
+      expect(behind, isNot(-1));
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L$behind');
+      await tester.pumpAndSettle();
+      expect(_row(tester, 'Línea L$behind').bottom, closeTo(clear, 0.5));
     });
 
     testWidgets('a row above the viewport comes down to the top edge', (

@@ -1177,8 +1177,15 @@ void main() {
   });
 
   testWidgets('a line highlighted from the map comes whole into the phone '
-      'sheet, which keeps its size', (tester) async {
+      'sheet, above the navigation bar, and the sheet keeps its size', (
+    tester,
+  ) async {
     usePhone(tester, const Size(360, 640));
+    // A three-button navigation bar: the sheet runs under it.
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
     await _pumpScreen(tester, locationGranted: true);
     await tester.tap(find.text('500 m (3)'));
     await tester.pumpAndSettle();
@@ -1194,7 +1201,7 @@ void main() {
       final viewport = tester.getRect(list);
       final rect = row(title);
       return rect.top >= viewport.top - 0.5 &&
-          rect.bottom <= viewport.bottom + 0.5;
+          rect.bottom <= viewport.bottom - 48 + 0.5;
     }
 
     // At the mid snap the farthest row is below the fold.
