@@ -919,6 +919,24 @@ void main() {
       await expireSnackBar(tester);
     });
 
+    testWidgets('while locating, a second tap on the control does not start '
+        'another locate', (tester) async {
+      final calls = mockGeolocator(fix: GeoFix.never);
+      await _pumpScreen(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      final asked = calls.length;
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(calls.length, asked);
+
+      await tester.pump(const Duration(seconds: 10));
+      await tester.pumpAndSettle();
+      await expireSnackBar(tester);
+    });
+
     testWidgets('on a phone the snack bar shows over the sheet', (
       tester,
     ) async {
@@ -1140,6 +1158,56 @@ void main() {
     expect(find.text('Highlighted: 201'), findsOneWidget);
     expect(engine.lastCamera!.zoom, riderCamera.zoom);
     expect(engine.lastCamera!.target, riderCamera.target);
+  });
+
+  testWidgets('with a line highlighted, a new radius and a moved pin still '
+      'frame the search area: only the highlight keeps the camera', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    const top = 24 + NearbyHeaderCard.cardHeight; // 82
+    const bottom = 640 * 0.65; // 416
+
+    void expectRingFramed(String id, LatLng center) {
+      final ring = engine.lastLayers
+          .firstWhere((l) => l.id == 'nearby-rings')
+          .lines
+          .single;
+      expect(ring.id, id);
+      final camera = engine.lastCamera!;
+      final latitudes = ring.position.map((p) => p.latitude);
+      expect(
+        screenY(camera, latitudes.reduce(math.max), 640),
+        closeTo(top, 0.5),
+      );
+      expect(
+        screenY(camera, latitudes.reduce(math.min), 640),
+        closeTo(bottom, 0.5),
+      );
+      expect(camera.target.longitude, closeTo(center.longitude, 1e-9));
+    }
+
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expectRingFramed('nearby-ring-500', deviceFix);
+
+    // A long press on the map moves the pin; line 201 is still near it.
+    await tester.longPressAt(const Offset(60, 300));
+    await tester.pumpAndSettle();
+    expect(find.text('Pinned location'), findsOneWidget);
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expectRingFramed('nearby-ring-500', _FakeEngine.longPressPoint);
+    // Anchored on the pin, not the device position: the outlined control.
+    expect(find.byIcon(Icons.my_location_outlined), findsOneWidget);
   });
 
   testWidgets('leaving a street for the device position frames the ring '
