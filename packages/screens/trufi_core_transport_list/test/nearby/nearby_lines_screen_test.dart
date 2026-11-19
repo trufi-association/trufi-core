@@ -284,6 +284,15 @@ Future<TransportDetailScreen> openDetailViaChevron(
   );
 }
 
+/// Taps a radius pill. The pills are one line that scrolls sideways (the
+/// test font is wider than a real one, so the last pill can start out of
+/// view), as a rider would: bring it in, then tap it.
+Future<void> tapPill(WidgetTester tester, String label) async {
+  await tester.ensureVisible(find.text(label));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(label));
+}
+
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
@@ -402,7 +411,7 @@ void main() {
       ('100 m (1)', 100.0),
       ('300 m (2)', 300.0),
     ]) {
-      await tester.tap(find.text(chip));
+      await tapPill(tester, chip);
       await tester.pumpAndSettle();
 
       final ring = engine.lastLayers.first;
@@ -559,9 +568,9 @@ void main() {
     expect(first.bottom, closeTo(640 * 0.65, 0.5));
 
     // And it is where the ring settles after any later fit.
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
-    await tester.tap(find.text('300 m (2)'));
+    await tapPill(tester, '300 m (2)');
     await tester.pumpAndSettle();
     final settled = ringEdges();
     expect(settled.top, closeTo(first.top, 0.5));
@@ -1112,7 +1121,7 @@ void main() {
 
     expectRingFramed('nearby-ring-300');
 
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
     expectRingFramed('nearby-ring-500');
 
@@ -1180,17 +1189,16 @@ void main() {
       'sheet, above the navigation bar, and the sheet keeps its size', (
     tester,
   ) async {
-    // A current phone's height: on a 640 px one the mid snap leaves less
-    // room above a 48 px bar than a row, under the pinned pills, and the
-    // row shows its top instead (the sheet tests cover that rule).
-    usePhone(tester, const Size(360, 800));
+    // A small phone: one line of pinned pills leaves room for the row at
+    // the mid snap, above a 48 px bar.
+    usePhone(tester, const Size(360, 640));
     // A three-button navigation bar: the sheet runs under it.
     tester.view.padding = const FakeViewPadding(bottom: 48);
     tester.view.viewPadding = const FakeViewPadding(bottom: 48);
     addTearDown(tester.view.resetPadding);
     addTearDown(tester.view.resetViewPadding);
     await _pumpScreen(tester, locationGranted: true);
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
 
     final list = find.byType(CustomScrollView);
@@ -1224,12 +1232,12 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('the count and the radius pills are pinned in the phone sheet: '
-      'a reveal leaves them in view, and dragging them opens the sheet the '
-      'scrolled list no longer does', (tester) async {
+  testWidgets('the radius pills are pinned in the phone sheet: a reveal '
+      'leaves them in view, and dragging them opens the sheet the scrolled '
+      'list no longer does', (tester) async {
     usePhone(tester, const Size(360, 800));
     await _pumpScreen(tester, locationGranted: true);
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
 
     final header = find.byType(NearbyLinesHeader);
@@ -1240,8 +1248,10 @@ void main() {
       tester.getRect(header).bottom,
       lessThanOrEqualTo(tester.getTopLeft(list).dy + 0.5),
     );
+    // One line of pills; the count stays at the top of the list.
+    expect(tester.getRect(header).height, lessThan(60));
     expect(
-      find.descendant(of: header, matching: find.byType(RouteCountIndicator)),
+      find.descendant(of: list, matching: find.byType(RouteCountIndicator)),
       findsOneWidget,
     );
     final headerTop = tester.getTopLeft(header).dy;
@@ -1259,10 +1269,10 @@ void main() {
     // The list scrolled to the row; the pills stayed where they were.
     expect(listPosition().pixels, greaterThan(0));
     expect(tester.getTopLeft(header).dy, headerTop);
-    expect(find.text('100 m (1)'), findsOneWidget);
+    expect(find.text('500 m (3)'), findsOneWidget);
 
     // A drag on the rows scrolls the list, so the pills are the handle.
-    await tester.drag(find.text('100 m (1)'), const Offset(0, -300));
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, -300));
     await tester.pumpAndSettle();
     expect(tester.getTopLeft(header).dy, lessThan(headerTop - 200));
     expect(tester.takeException(), isNull);
@@ -1274,7 +1284,7 @@ void main() {
   ) async {
     usePhone(tester, const Size(360, 800));
     final engine = await _pumpScreen(tester, locationGranted: true);
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
     final list = find.byType(CustomScrollView);
     bool whole(String title) {
@@ -1338,8 +1348,7 @@ void main() {
   // measured on the whole screen came out a few pixels short: the pills
   // ended under the navigation bar, and without a bottom inset (no
   // navigation bar under the app, as on the iPhone SE) the sheet's column
-  // overflowed. 720 px tall: the test font wraps the pills, and on 640 the
-  // min would hit its cap.
+  // overflowed.
   for (final bottom in [48.0, 0.0]) {
     testWidgets('under a status bar, the collapsed phone sheet keeps the '
         'pinned pills whole above the bottom inset ($bottom px)', (
@@ -1354,16 +1363,59 @@ void main() {
 
       await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
       await tester.pumpAndSettle();
-      expect(
-        tester.getRect(find.byType(NearbyLinesHeader)).bottom,
-        closeTo(720 - bottom, 0.5),
-      );
+      final pills = tester.getRect(find.byType(NearbyLinesHeader));
+      expect(pills.bottom, lessThanOrEqualTo(720 - bottom + 0.5));
+      // Collapsed: the sheet went down past the mid snap.
+      expect(pills.top, greaterThan(24 + (720 - 24) * (1 - 0.35)));
       expect(tester.takeException(), isNull);
     });
   }
 
-  testWidgets('the side panel pins the count and the radius pills above its '
-      'rows too', (tester) async {
+  testWidgets('the collapsed sheet follows the pinned pills when the text '
+      'size changes: one line at 2x, whole above the bar, and back', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _pumpScreen(tester, locationGranted: true);
+    // The route count pill at the top of the list overflows 360 px at this
+    // size with the test font, on main too (see the 1.5x test above). Pin
+    // that the one exception kept is that one, not the sheet's column.
+    expect(
+      tester.takeException().toString(),
+      allOf(contains('A RenderFlex overflowed by'), contains('on the right')),
+    );
+
+    final header = find.byType(NearbyLinesHeader);
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, 400));
+    await tester.pumpAndSettle();
+    final large = tester.getRect(header);
+    // One line of pills (a pill is about 36 px at this size).
+    expect(large.height, lessThan(80));
+    expect(large.bottom, closeTo(640 - 48, 0.5));
+
+    // Back to the default size: the min shrinks with the pills. A sheet
+    // already collapsed keeps its size until the next drag (a lower min
+    // does not move it), so the pills only have to stay whole.
+    tester.platformDispatcher.textScaleFactorTestValue = 1.0;
+    await tester.pumpAndSettle();
+    final small = tester.getRect(header);
+    expect(small.height, lessThan(large.height));
+    expect(small.bottom, lessThanOrEqualTo(640 - 48 + 0.5));
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, 200));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(header).bottom, closeTo(640 - 48, 0.5));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the side panel pins the radius pills above its rows too', (
+    tester,
+  ) async {
     await _pumpScreen(tester, locationGranted: true);
     expect(find.byType(TrufiBottomSheet), findsNothing);
     final header = find.byType(NearbyLinesHeader);
@@ -1415,7 +1467,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(highlightedRows(tester), ['201']);
 
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
     expect(highlightedRows(tester), ['201']);
     expectRingFramed('nearby-ring-500', deviceFix);

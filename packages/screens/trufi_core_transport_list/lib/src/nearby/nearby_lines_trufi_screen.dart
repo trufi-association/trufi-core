@@ -339,8 +339,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
 
-  /// Height of the count and radius pills pinned in the phone sheet's
-  /// header, as last laid out (0 until then).
+  /// Height of the radius pills pinned in the phone sheet's header, as
+  /// last laid out (0 until then).
   double _sheetHeaderHeight = 0;
 
   TrufiCameraPosition? _initialCamera;
@@ -623,8 +623,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
           maxChildSize: _sheetMaxSize,
           snap: true,
           // The min and the max snap implicitly. The list stays the same
-          // instance on every build: a new one makes the sheet snap again
-          // (DraggableScrollableSheet.didUpdateWidget), which would stop a
+          // instance on every build: on a new one the sheet runs
+          // goBallistic(0) on its positions after the frame
+          // (DraggableScrollableSheet.didUpdateWidget), which stops a
           // reveal under way in the list.
           snapSizes: const [_sheetInitialSize],
           // Pinned like the home screen's results summary (#1055): the
@@ -762,7 +763,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     setState(() => _sheetHeaderHeight = height);
   }
 
-  /// The count and the radius pills, pinned above the rows in both layouts.
+  /// The radius pills, pinned above the rows in both layouts.
   Widget _buildListHeader(NearbyLinesState state) {
     return NearbyLinesHeader(
       state: state,

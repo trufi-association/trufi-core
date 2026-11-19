@@ -199,6 +199,15 @@ void expectRowWhole(WidgetTester tester, String title) {
   expect(row.bottom, lessThanOrEqualTo(viewport.bottom + 0.5), reason: title);
 }
 
+/// Taps a radius pill. The pills are one line that scrolls sideways (the
+/// test font is wider than a real one, so the last pill can start out of
+/// view), as a rider would: bring it in, then tap it.
+Future<void> tapPill(WidgetTester tester, String label) async {
+  await tester.ensureVisible(find.text(label));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(label));
+}
+
 void main() {
   testWidgets('chips carry cumulative counts and rows follow the radius', (
     tester,
@@ -293,8 +302,8 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('without its header the list starts at the GTFS note: the '
-      'screen pins the count and the pills outside it', (tester) async {
+  testWidgets('without its header the list starts at the count: the screen '
+      'pins the radius pills outside it', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         localizationsDelegates:
@@ -313,9 +322,15 @@ void main() {
     );
     await tester.pump();
     expect(find.byType(NearbyLinesHeader), findsNothing);
-    expect(find.byType(RouteCountIndicator), findsNothing);
     expect(find.byType(NearbyRadiusPill), findsNothing);
-    expect(find.text('Based on GTFS routes and schedules'), findsOneWidget);
+    // The count stays in the list, above the note.
+    expect(find.text('2 lines within 300 m'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byType(RouteCountIndicator)).dy,
+      lessThan(
+        tester.getTopLeft(find.text('Based on GTFS routes and schedules')).dy,
+      ),
+    );
     expect(find.byType(NearbyLineTile), findsNWidgets(2));
   });
 
@@ -327,7 +342,7 @@ void main() {
 
   testWidgets('tapping a chip reports the radius', (tester) async {
     final calls = await _pumpSheet(tester, state());
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pump();
     expect(calls.radii, [NearbyRadius.m500]);
   });
@@ -371,7 +386,11 @@ void main() {
     );
     expect(
       tester.getSemantics(find.text('Línea 201')),
-      isSemantics(isSelected: false, hasTapAction: true),
+      isSemantics(
+        hasSelectedState: true,
+        isSelected: false,
+        hasTapAction: true,
+      ),
     );
     semantics.dispose();
   });
@@ -557,23 +576,27 @@ void main() {
         lessThan(host.controller.position.maxScrollExtent),
       );
 
-      // A row whole on screen but behind the bar comes up above it.
+      // A row whole on screen but behind the bar comes up above it: the
+      // list is put where L6 ends 10 px above the viewport's bottom edge,
+      // inside the 48 px the bar covers.
       host.controller.jumpTo(0);
       await tester.pumpAndSettle();
       host.states.value = state(lines: lines);
       await tester.pumpAndSettle();
-      var behind = -1;
-      for (var i = 0; i < lines.length; i++) {
-        final row = _row(tester, 'Línea L$i');
-        if (row.bottom > clear && row.bottom <= _viewport(tester).bottom) {
-          behind = i;
-          break;
-        }
-      }
-      expect(behind, isNot(-1));
-      host.states.value = state(lines: lines, selectedLineKey: 'n:L$behind');
+      final l6 = tester.getRect(
+        find.ancestor(
+          of: find.text('Línea L6', skipOffstage: false),
+          matching: find.byType(NearbyLineTile, skipOffstage: false),
+        ),
+      );
+      host.controller.jumpTo(l6.bottom - _viewport(tester).bottom + 10);
       await tester.pumpAndSettle();
-      expect(_row(tester, 'Línea L$behind').bottom, closeTo(clear, 0.5));
+      final behind = _row(tester, 'Línea L6');
+      expect(behind.bottom, greaterThan(clear));
+      expect(behind.bottom, lessThanOrEqualTo(_viewport(tester).bottom));
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L6');
+      await tester.pumpAndSettle();
+      expect(_row(tester, 'Línea L6').bottom, closeTo(clear, 0.5));
     });
 
     testWidgets('a row above the viewport comes down to the top edge', (

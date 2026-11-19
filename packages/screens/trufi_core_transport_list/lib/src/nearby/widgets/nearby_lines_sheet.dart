@@ -34,11 +34,11 @@ extension NearbyRadiusLabel on NearbyRadius {
 }
 
 /// Content of the nearby-lines sheet (phone) or side panel (wide), in the
-/// routes list's language: the count pill and the radius pills (the
-/// [NearbyLinesHeader], which the screen pins outside the list, see
-/// [showHeader]), the GTFS note and the rows for the selected radius (or
-/// the matching loading / empty / error state). The screen title lives in
-/// the floating header, not here.
+/// routes list's language: the radius pills (the [NearbyLinesHeader],
+/// which the screen pins outside the list, see [showHeader]), the count
+/// pill, the GTFS note and the rows for the selected radius (or the
+/// matching loading / empty / error state). The screen title lives in the
+/// floating header, not here.
 ///
 /// The highlighted line is the row with the primary border, like the home
 /// screen's selected itinerary card, and the list keeps it in view the way
@@ -66,11 +66,13 @@ class NearbyLinesSheet extends StatefulWidget {
   /// The draggable sheet's controller; null in the side panel.
   final ScrollController? scrollController;
 
-  /// Whether the list opens with the [NearbyLinesHeader] (the count and the
-  /// radius pills). The screen pins that header outside the list instead,
-  /// as the phone sheet's header and at the top of the side panel, and
-  /// passes false.
+  /// Whether the list opens with the [NearbyLinesHeader] (the radius
+  /// pills). The screen pins that header outside the list instead, as the
+  /// phone sheet's header and at the top of the side panel, and passes
+  /// false.
   final bool showHeader;
+
+  /// A tap on a radius pill; only used with [showHeader].
   final ValueChanged<NearbyRadius> onRadiusChanged;
 
   /// A tap on a row: highlights its line, or clears the highlight when the
@@ -278,6 +280,13 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
     final l10n = TransportListLocalizations.of(context);
     _bottomInset = MediaQuery.paddingOf(context).bottom;
     final available = state.availability == NearbyAvailability.available;
+    final visible = state.visibleLines;
+    // Like the routes list: the count only heads an actual list of rows.
+    final showCount =
+        available &&
+        state.errorMessage == null &&
+        !state.isLoading &&
+        visible.isNotEmpty;
 
     // A drag by the rider takes over: a reveal still under way (a hop
     // toward a row not built yet) gives way instead of cancelling it.
@@ -295,6 +304,16 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
               child: NearbyLinesHeader(
                 state: state,
                 onRadiusChanged: widget.onRadiusChanged,
+              ),
+            ),
+          if (showCount)
+            SliverToBoxAdapter(
+              child: RouteCountIndicator(
+                icon: Icons.radar_rounded,
+                label: l10n.nearbyLinesInRadius(
+                  visible.length,
+                  state.radius.meters.round(),
+                ),
               ),
             ),
           if (available)
@@ -401,12 +420,13 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
   );
 }
 
-/// The top of the nearby list: the count pill ("55 lines within 300 m")
-/// and the radius pills. The screen pins it outside the scrolling rows,
-/// the way the home screen pins its results summary (#1055): a reveal
-/// moves the list without the rider, and the pills must not go with it.
-/// On a phone it is the sheet's header, so dragging it resizes the sheet
-/// even when the list below is scrolled.
+/// The radius pills, pinned above the scrolling rows the way the home
+/// screen pins its results summary (#1055): a reveal moves the list
+/// without the rider, and the pills must not go with it. On a phone they
+/// are the sheet's header, so dragging them resizes the sheet even when the
+/// list below is scrolled. One line at any text size (it scrolls sideways
+/// instead of wrapping), so the header stays short and the mid snap keeps
+/// room for the highlighted row under it. Empty without a feed.
 class NearbyLinesHeader extends StatelessWidget {
   const NearbyLinesHeader({
     super.key,
@@ -419,34 +439,13 @@ class NearbyLinesHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = TransportListLocalizations.of(context);
-    final available = state.availability == NearbyAvailability.available;
-    final visible = state.visibleLines;
-    // Like the routes list: the count only heads an actual list of rows.
-    final showCount =
-        available &&
-        state.errorMessage == null &&
-        !state.isLoading &&
-        visible.isNotEmpty;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (showCount)
-          RouteCountIndicator(
-            icon: Icons.radar_rounded,
-            label: l10n.nearbyLinesInRadius(
-              visible.length,
-              state.radius.meters.round(),
-            ),
-          ),
-        if (available)
-          _RadiusChips(
-            radius: state.radius,
-            counts: state.counts,
-            onRadiusChanged: onRadiusChanged,
-          ),
-      ],
+    if (state.availability != NearbyAvailability.available) {
+      return const SizedBox.shrink();
+    }
+    return _RadiusChips(
+      radius: state.radius,
+      counts: state.counts,
+      onRadiusChanged: onRadiusChanged,
     );
   }
 }
@@ -465,13 +464,13 @@ class _RadiusChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = TransportListLocalizations.of(context);
-    return Padding(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+      child: Row(
         children: [
-          for (final candidate in NearbyRadius.values)
+          for (final (index, candidate) in NearbyRadius.values.indexed) ...[
+            if (index > 0) const SizedBox(width: 8),
             NearbyRadiusPill(
               label: candidate.chipLabel(l10n, counts[candidate] ?? 0),
               selected: candidate == radius,
@@ -480,6 +479,7 @@ class _RadiusChips extends StatelessWidget {
                 onRadiusChanged(candidate);
               },
             ),
+          ],
         ],
       ),
     );
