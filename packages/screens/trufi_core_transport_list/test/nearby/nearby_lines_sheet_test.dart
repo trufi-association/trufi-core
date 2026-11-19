@@ -336,6 +336,20 @@ void main() {
     expect(calls.taps.map((l) => l.displayName), ['201']);
   });
 
+  testWidgets('a screen reader hears which row is highlighted', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await _pumpSheet(tester, state(selectedLineKey: 'n:X10'));
+    expect(
+      tester.getSemantics(find.text('Línea X10')),
+      containsSemantics(isSelected: true, hasTapAction: true),
+    );
+    expect(
+      tester.getSemantics(find.text('Línea 201')),
+      containsSemantics(isSelected: false, hasTapAction: true),
+    );
+    semantics.dispose();
+  });
+
   testWidgets('a highlight beyond the radius gets its row after the others, '
       'with the plain distance, and the count stays the radius\'s', (
     tester,

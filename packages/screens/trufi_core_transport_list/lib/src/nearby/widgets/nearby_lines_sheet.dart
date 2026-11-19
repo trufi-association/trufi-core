@@ -596,144 +596,153 @@ class NearbyLineTile extends StatelessWidget {
       height: 1.3,
     );
 
-    return Material(
-      color: isSelected
-          ? colorScheme.primaryContainer.withValues(alpha: 0.3)
-          : colorScheme.surface,
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
+    // The highlight is said, not only drawn: with the banner gone the
+    // row is the only place a screen reader can learn it.
+    return Semantics(
+      selected: isSelected,
+      child: Material(
+        color: isSelected
+            ? colorScheme.primaryContainer.withValues(alpha: 0.3)
+            : colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isSelected
-                  ? colorScheme.primary
-                  : colorScheme.outlineVariant.withValues(alpha: 0.5),
-              width: isSelected ? 2 : 1,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onTap();
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSelected
+                    ? colorScheme.primary
+                    : colorScheme.outlineVariant.withValues(alpha: 0.5),
+                width: isSelected ? 2 : 1,
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              // Color accent bar
-              Container(
-                width: 4,
-                height: 72,
-                decoration: BoxDecoration(
-                  color: lineColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
+            child: Row(
+              children: [
+                // Color accent bar
+                Container(
+                  width: 4,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: lineColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      bottomLeft: Radius.circular(16),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  // 2 on the right: the chevron brings its own 6 of tap area.
-                  padding: const EdgeInsets.fromLTRB(12, 12, 2, 12),
-                  child: Row(
-                    children: [
-                      RouteBadge(
-                        label: line.displayName,
-                        color: lineColor,
-                        textColor: line.textColor,
-                        // 16 like the icon the routes list gets from
-                        // its provider, so the two lists match.
-                        icon: Icon(gtfsRouteTypeIcon(line.routeType), size: 16),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              _title(line),
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurface,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.directions_walk_rounded,
-                                  size: 14,
-                                  color: colorScheme.onSurfaceVariant
-                                      .withValues(alpha: 0.7),
-                                ),
-                                const SizedBox(width: 4),
-                                // One text so a tight column trims the
-                                // place first and the walk never overflows.
-                                Expanded(
-                                  child: Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: distance,
-                                          style: subtitleStyle?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: isInsideRadius
-                                                ? colorScheme.primary
-                                                : colorScheme.onSurfaceVariant,
-                                          ),
-                                        ),
-                                        if (place != null)
-                                          TextSpan(text: ' · $place'),
-                                      ],
-                                    ),
-                                    style: subtitleStyle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                Expanded(
+                  child: Padding(
+                    // 2 on the right: the chevron brings its own 6 of tap area.
+                    padding: const EdgeInsets.fromLTRB(12, 12, 2, 12),
+                    child: Row(
+                      children: [
+                        RouteBadge(
+                          label: line.displayName,
+                          color: lineColor,
+                          textColor: line.textColor,
+                          // 16 like the icon the routes list gets from
+                          // its provider, so the two lists match.
+                          icon: Icon(
+                            gtfsRouteTypeIcon(line.routeType),
+                            size: 16,
+                          ),
                         ),
-                      ),
-                      // Chevron: opens the detail (the rest of the tile
-                      // toggles the highlight).
-                      Tooltip(
-                        message: l10n.nearbyOpenDetails,
-                        child: InkResponse(
-                          onTap: () {
-                            HapticFeedback.lightImpact();
-                            onDetails();
-                          },
-                          radius: 22,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: colorScheme.surfaceContainerHighest
-                                    .withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(8),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                _title(line),
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              child: Icon(
-                                Icons.chevron_right_rounded,
-                                color: colorScheme.onSurfaceVariant,
-                                size: 20,
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.directions_walk_rounded,
+                                    size: 14,
+                                    color: colorScheme.onSurfaceVariant
+                                        .withValues(alpha: 0.7),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  // One text so a tight column trims the
+                                  // place first and the walk never overflows.
+                                  Expanded(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: distance,
+                                            style: subtitleStyle?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: isInsideRadius
+                                                  ? colorScheme.primary
+                                                  : colorScheme
+                                                        .onSurfaceVariant,
+                                            ),
+                                          ),
+                                          if (place != null)
+                                            TextSpan(text: ' · $place'),
+                                        ],
+                                      ),
+                                      style: subtitleStyle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Chevron: opens the detail (the rest of the tile
+                        // toggles the highlight).
+                        Tooltip(
+                          message: l10n.nearbyOpenDetails,
+                          child: InkResponse(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              onDetails();
+                            },
+                            radius: 22,
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surfaceContainerHighest
+                                      .withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: colorScheme.onSurfaceVariant,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
