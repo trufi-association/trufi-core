@@ -22,6 +22,9 @@ class _FakeEngine extends ITrufiMapEngine {
   /// The camera the screen last asked the map for.
   TrufiCameraPosition? lastCamera;
 
+  /// What the map calls when the rider pans or zooms.
+  ValueChanged<TrufiCameraPosition>? onCameraChanged;
+
   @override
   String get id => 'fake';
   @override
@@ -42,6 +45,7 @@ class _FakeEngine extends ITrufiMapEngine {
   }) {
     lastLayers = layers;
     lastCamera = camera ?? initialCamera;
+    this.onCameraChanged = onCameraChanged;
     return const SizedBox.expand();
   }
 }
@@ -919,11 +923,11 @@ void main() {
 
   // Every fit runs on the build after the state change, not in the bloc
   // listener. The first fit and the street fits are pinned above; these
-  // two pin the later ones. They fail when a radius change, a highlighted
-  // line or its clearing no longer refits, when the street margin
-  // survives the street, and when it leaks onto a highlighted line.
-  testWidgets('every later fit frames what the state shows: a new radius, '
-      'a highlighted line, the ring again once it is cleared', (tester) async {
+  // two pin the later ones. They fail when a radius change no longer
+  // refits, when highlighting a line or clearing it moves the camera, and
+  // when the street margin survives the street.
+  testWidgets('a new radius refits the ring; highlighting a line and '
+      'clearing it leave the camera where it is', (tester) async {
     usePhone(tester, const Size(360, 640));
     final engine = await _pumpScreen(tester, locationGranted: true);
     const top = 24 + NearbyHeaderCard.cardHeight; // 82
@@ -954,32 +958,60 @@ void main() {
     // row tap or a label tap does.
     NearbyLinesCubit cubit() =>
         tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
-    cubit().toggleLine('n:201');
-    await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
-    final line = engine.lastLayers
-        .firstWhere((l) => l.id == 'nearby-selected-line')
-        .lines
-        .single
-        .position;
-    final camera = engine.lastCamera!;
-    final ys = line.map((p) => screenY(camera, p.latitude, 640)).toList();
-    final xs = line.map((p) => screenX(camera, p.longitude, 360)).toList();
-    // Inside the map the header and the sheet leave clear...
-    expect(ys.reduce(math.min), greaterThanOrEqualTo(top - 0.5));
-    expect(ys.reduce(math.max), lessThanOrEqualTo(bottom + 0.5));
-    expect(xs.reduce(math.min), greaterThanOrEqualTo(-0.5));
-    expect(xs.reduce(math.max), lessThanOrEqualTo(360 + 0.5));
-    // ...and fitted to it, with no side margin: this line is taller than
-    // the map is (in proportion), so it spans that whole height.
-    expect(
-      ys.reduce(math.max) - ys.reduce(math.min),
-      closeTo(bottom - top, 0.5),
-    );
+    // The camera the 500 m fit left: the zoom and the target do not move.
+    final ringCamera = engine.lastCamera!;
+    void expectCameraKept() {
+      final camera = engine.lastCamera!;
+      expect(camera.zoom, ringCamera.zoom);
+      expect(camera.target, ringCamera.target);
+    }
 
     cubit().toggleLine('n:201');
     await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    // The route is drawn (it runs far past the ring) but not framed.
+    expect(
+      engine.lastLayers.map((l) => l.id),
+      contains('nearby-selected-line'),
+    );
+    expectCameraKept();
+
+    // Another line, then none: still the same camera.
+    cubit().toggleLine('n:X10');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: X10'), findsOneWidget);
+    expectCameraKept();
+    cubit().toggleLine('n:X10');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: X10'), findsNothing);
+    expectCameraKept();
     expectRingFramed('nearby-ring-500');
+  });
+
+  testWidgets('a line tapped after the rider zoomed in keeps that zoom and '
+      'that view (the camera used to zoom out to the whole route)', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+
+    // The rider zooms in on a corner of the ring.
+    final riderCamera = TrufiCameraPosition(
+      target: const LatLng(-17.3895, -66.1490),
+      zoom: 17.5,
+    );
+    engine.onCameraChanged!(riderCamera);
+    await tester.pump();
+
+    // A tap on a row and a tap on a map label: both go through toggleLine.
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(engine.lastCamera!.zoom, riderCamera.zoom);
+    expect(engine.lastCamera!.target, riderCamera.target);
   });
 
   testWidgets('leaving a street for the device position frames the ring '

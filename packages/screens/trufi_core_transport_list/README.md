@@ -88,7 +88,8 @@ within **100 / 300 / 500 m** of the rider's position or of a pin placed on the
 map, with the selected radius drawn as a ring, a label at the closest stop or
 point of every line, and the full route highlighted when a row is tapped. The whole
 query runs on the device against the planner's already-loaded GTFS — no
-network call anywhere (#1006).
+network call anywhere (#1006). Highlighting a line draws it without moving
+the camera: the map is framed only when the anchor or the radius changes.
 
 ```dart
 screens: [

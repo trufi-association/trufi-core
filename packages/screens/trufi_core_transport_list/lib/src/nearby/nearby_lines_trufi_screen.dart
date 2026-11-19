@@ -369,8 +369,10 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 
   /// Camera side effects: fit the search area when the anchor or radius
-  /// moves, the selected line when one is highlighted, the area again when
-  /// cleared.
+  /// moves. Highlighting a line, or clearing it, leaves the camera where
+  /// the rider has it: the line's label is already inside the framed ring,
+  /// and zooming out to the whole route took the rider away from the
+  /// streets they were looking at.
   ///
   /// The fit is only asked for here and runs after the next build
   /// ([_scheduleInitialFit]). This listener runs before the rebuild for
@@ -388,21 +390,11 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     final anchorChanged =
         previous?.anchor != anchor || previous?.street != state.street;
     final radiusChanged = previous?.radius != state.radius;
-    final selectionChanged = previous?.selectedLineKey != state.selectedLineKey;
-
-    if (state.selectedGeometry.length > 1) {
-      if (selectionChanged || anchorChanged) _fitPending = true;
-      return;
-    }
-    if (anchorChanged || radiusChanged || selectionChanged) _fitPending = true;
+    if (anchorChanged || radiusChanged) _fitPending = true;
   }
 
-  /// Frames the highlighted line, or the search area when there is none.
+  /// Frames the search area: the ring, or the street's corners.
   void _fitState(NearbyLinesState state, LatLng anchor) {
-    if (state.selectedGeometry.length > 1) {
-      _fitTo(state.selectedGeometry, fallbackTarget: anchor);
-      return;
-    }
     _fitTo(
       _searchArea(state, anchor),
       fallbackTarget: anchor,
@@ -415,8 +407,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static bool _framesStreet(NearbyLinesState state) =>
       (state.street?.corners.length ?? 0) > 1;
 
-  /// What the camera frames without a highlighted line: the selected ring,
-  /// or every corner of the street.
+  /// What the camera frames: the selected ring, or every corner of the
+  /// street.
   static List<LatLng> _searchArea(NearbyLinesState state, LatLng anchor) {
     if (_framesStreet(state)) return state.street!.corners;
     return NearbyGeometry.circlePolygon(anchor, state.radius.meters);
