@@ -272,32 +272,40 @@ class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
         !state.isLoading &&
         visible.isNotEmpty;
 
-    return CustomScrollView(
-      controller: widget.scrollController,
-      primary: widget.scrollController == null ? false : null,
-      slivers: [
-        if (showCount)
-          SliverToBoxAdapter(
-            child: RouteCountIndicator(
-              icon: Icons.radar_rounded,
-              label: l10n.nearbyLinesInRadius(
-                visible.length,
-                state.radius.meters.round(),
+    // A drag by the rider takes over: a reveal still under way (a hop
+    // toward a row not built yet) gives way instead of cancelling it.
+    return NotificationListener<ScrollStartNotification>(
+      onNotification: (notification) {
+        if (notification.dragDetails != null) _revealToken++;
+        return false;
+      },
+      child: CustomScrollView(
+        controller: widget.scrollController,
+        primary: widget.scrollController == null ? false : null,
+        slivers: [
+          if (showCount)
+            SliverToBoxAdapter(
+              child: RouteCountIndicator(
+                icon: Icons.radar_rounded,
+                label: l10n.nearbyLinesInRadius(
+                  visible.length,
+                  state.radius.meters.round(),
+                ),
               ),
             ),
-          ),
-        if (available) ...[
-          SliverToBoxAdapter(
-            child: _RadiusChips(
-              radius: state.radius,
-              counts: state.counts,
-              onRadiusChanged: widget.onRadiusChanged,
+          if (available) ...[
+            SliverToBoxAdapter(
+              child: _RadiusChips(
+                radius: state.radius,
+                counts: state.counts,
+                onRadiusChanged: widget.onRadiusChanged,
+              ),
             ),
-          ),
-          SliverToBoxAdapter(child: _InfoRow(text: l10n.nearbyFooterNote)),
+            SliverToBoxAdapter(child: _InfoRow(text: l10n.nearbyFooterNote)),
+          ],
+          ..._buildBody(l10n),
         ],
-        ..._buildBody(l10n),
-      ],
+      ),
     );
   }
 

@@ -687,6 +687,27 @@ void main() {
       expect(selectedRows(tester, onScreen: false), isEmpty);
     });
 
+    testWidgets('a drag by the rider during a reveal wins: the list stays '
+        'where the rider takes it', (tester) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(tester, state(lines: lines));
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L30');
+      // The reveal starts its hop toward the row, not built yet.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 60));
+      // The rider grabs the list and pulls it back toward the pills.
+      final gesture = await tester.startGesture(const Offset(180, 300));
+      for (var i = 0; i < 25; i++) {
+        await gesture.moveBy(const Offset(0, 20));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      expect(host.controller.offset, 0);
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(host.controller.offset, 0);
+      expect(find.text('Línea L30'), findsNothing);
+    });
+
     testWidgets('a highlight beyond the radius scrolls to its row at the '
         'end', (tester) async {
       final lines = [
