@@ -1413,6 +1413,29 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  for (final direction in TextDirection.values) {
+    testWidgets('the pinned pills start at the sheet\'s leading edge, like '
+        'the count under them (${direction.name})', (tester) async {
+      // Wide enough for the three pills with room to spare (the narrow
+      // layout runs up to 600), so a centred strip would show.
+      usePhone(tester, const Size(590, 800));
+      await _pumpScreen(
+        tester,
+        locationGranted: true,
+        textDirection: direction,
+      );
+      final first = tester.getRect(find.byType(NearbyRadiusPill).first);
+      final count = tester.getRect(find.byType(RouteCountIndicator));
+      if (direction == TextDirection.ltr) {
+        expect(first.left, 16);
+        expect(count.left, 0);
+      } else {
+        expect(first.right, 590 - 16);
+        expect(count.right, 590);
+      }
+    });
+  }
+
   testWidgets('the side panel pins the radius pills above its rows too', (
     tester,
   ) async {

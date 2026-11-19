@@ -442,10 +442,15 @@ class NearbyLinesHeader extends StatelessWidget {
     if (state.availability != NearbyAvailability.available) {
       return const SizedBox.shrink();
     }
-    return _RadiusChips(
-      radius: state.radius,
-      counts: state.counts,
-      onRadiusChanged: onRadiusChanged,
+    // The whole width: a sideways scroll view takes its content's width,
+    // and the sheet's header column would centre it.
+    return SizedBox(
+      width: double.infinity,
+      child: _RadiusChips(
+        radius: state.radius,
+        counts: state.counts,
+        onRadiusChanged: onRadiusChanged,
+      ),
     );
   }
 }
