@@ -696,7 +696,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       state: state,
       elevated: elevated,
       onMenu: _tryOpenDrawer,
+      // A street visit is pushed from the search screen: back, not menu.
+      onBack: widget.initialStreet == null ? null : _back,
     );
+  }
+
+  void _back() {
+    HapticFeedback.lightImpact();
+    Navigator.of(context).maybePop();
   }
 
   Widget _buildControls(MapEngineManager manager, NearbyLinesState state) {

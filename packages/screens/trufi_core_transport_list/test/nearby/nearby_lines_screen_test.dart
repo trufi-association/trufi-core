@@ -725,6 +725,24 @@ void main() {
       expect(find.text('open'), findsOneWidget);
       expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
     });
+
+    testWidgets('the street visit leads with a back button: iOS has no '
+        'system back, and the app shell drawer takes the edge swipe', (
+      tester,
+    ) async {
+      await _pumpRouted(tester, street: street);
+      expect(find.byTooltip('Open navigation menu'), findsNothing);
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.text('open'), findsOneWidget);
+      expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
+    });
+
+    testWidgets('a drawer visit keeps the menu button', (tester) async {
+      await _pumpRouted(tester);
+      expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+      expect(find.byTooltip('Back'), findsNothing);
+    });
   });
 
   group('"Use my location" explains why there is no position '

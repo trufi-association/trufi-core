@@ -18,11 +18,19 @@ class NearbyHeaderCard extends StatelessWidget {
     super.key,
     required this.state,
     required this.onMenu,
+    this.onBack,
     this.elevated = true,
   });
 
   final NearbyLinesState state;
   final VoidCallback onMenu;
+
+  /// When set, the leading button goes back instead of opening the drawer:
+  /// a visit pushed over another screen (a street opened from the search
+  /// screen). iOS has no system back button and the app shell's drawer
+  /// takes the edge swipe (flutter/flutter#47959), so on iOS this is the
+  /// only way back; the drawer still opens with that swipe.
+  final VoidCallback? onBack;
 
   /// Translucent, rounded and shadowed pieces when floating over the map
   /// (phone); flat on `surface` when the row heads the side panel (wide).
@@ -98,10 +106,12 @@ class NearbyHeaderCard extends StatelessWidget {
     return Row(
       children: [
         _MapBarButton(
-          icon: Icons.menu_rounded,
-          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          icon: onBack == null ? Icons.menu_rounded : Icons.arrow_back_rounded,
+          tooltip: onBack == null
+              ? MaterialLocalizations.of(context).openAppDrawerTooltip
+              : MaterialLocalizations.of(context).backButtonTooltip,
           elevated: elevated,
-          onTap: onMenu,
+          onTap: onBack ?? onMenu,
         ),
         const SizedBox(width: 12),
         Expanded(
