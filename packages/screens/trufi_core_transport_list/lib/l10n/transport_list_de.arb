@@ -164,6 +164,5 @@
   "nearbyLoadingData": "Offline-Daten werden geladen…",
   "nearbyFooterNote": "Basierend auf GTFS-Linien und -Fahrplänen",
   "nearbyOpenDetails": "Liniendetails",
-  "nearbyClearSelection": "Hervorhebung entfernen",
-  "nearbyClose": "Schließen"
+  "nearbyClearSelection": "Hervorhebung entfernen"
 }

@@ -534,12 +534,6 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Clear highlight'**
   String get nearbyClearSelection;
-
-  /// Tooltip of the close button of the nearby lines screen
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get nearbyClose;
 }
 
 class _TransportListLocalizationsDelegate

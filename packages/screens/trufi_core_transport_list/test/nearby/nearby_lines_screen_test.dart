@@ -17,6 +17,8 @@ import 'geolocator_mock.dart';
 /// fake map engine and a canned data source: the wiring between the cubit,
 /// the header card, the sheet / side panel and the map layers.
 class _FakeEngine extends ITrufiMapEngine {
+  _FakeEngine({this.id = 'fake'});
+
   List<TrufiLayer> lastLayers = const [];
 
   /// The camera the screen last asked the map for.
@@ -25,8 +27,11 @@ class _FakeEngine extends ITrufiMapEngine {
   /// What the map calls when the rider pans or zooms.
   ValueChanged<TrufiCameraPosition>? onCameraChanged;
 
+  /// Where a long press anywhere on this map lands.
+  static const longPressPoint = LatLng(-17.38, -66.14);
+
   @override
-  String get id => 'fake';
+  final String id;
   @override
   String get name => 'Fake';
   @override
@@ -46,7 +51,13 @@ class _FakeEngine extends ITrufiMapEngine {
     lastLayers = layers;
     lastCamera = camera ?? initialCamera;
     this.onCameraChanged = onCameraChanged;
-    return const SizedBox.expand();
+    // Hit-testable like a real map: what the controls column leaves
+    // uncovered must still reach it.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => onMapLongClick?.call(longPressPoint),
+      child: const SizedBox.expand(),
+    );
   }
 }
 
@@ -111,11 +122,16 @@ Future<_FakeEngine> _pumpScreen(
   Locale? locale,
   NearbyLineDetailsCallback? onLineDetails,
   bool showStops = true,
+  int engines = 1,
 }) async {
   if (mockLocation) mockGeolocator(serviceEnabled: locationGranted);
   final engine = _FakeEngine();
+  // A second engine makes the screen show the map type switcher.
   final manager = MapEngineManager(
-    engines: [engine],
+    engines: [
+      engine,
+      for (var i = 1; i < engines; i++) _FakeEngine(id: 'fake-$i'),
+    ],
     defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(
@@ -231,6 +247,11 @@ Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   return (engine: engine, source: source);
 }
 
+/// The header's title card: the Material that holds the screen title.
+Finder _titleCard() => find
+    .ancestor(of: find.text('Nearby lines'), matching: find.byType(Material))
+    .first;
+
 /// Pumps the screen with the default detail navigation and taps the first
 /// row's chevron; returns the [TransportDetailScreen] it pushed.
 Future<TransportDetailScreen> openDetailViaChevron(
@@ -252,26 +273,29 @@ void main() {
       'map layers of the fallback anchor', (tester) async {
     final engine = await _pumpScreen(tester);
 
-    // Header row: the title once (the sheet no longer repeats it), the
-    // anchor line with its hint, the locate and close buttons.
+    // Header row: the menu button, the title once (the sheet no longer
+    // repeats it), the anchor line with its hint. No close button.
     expect(find.text('Nearby lines'), findsOneWidget);
     expect(find.text('City center (no location)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
-    expect(find.byTooltip('Use my location'), findsOneWidget);
-    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byTooltip('Close'), findsNothing);
     expect(find.byType(TrufiBottomSheet), findsNothing);
     // The panel insets the flat header like the route detail (12 px):
-    // the buttons are not glued to the panel's edges. The panel is
-    // 340 px wide under 900 px.
+    // the menu button and the card are not glued to the panel's edges.
+    // The panel is 340 px wide under 900 px.
     final menuTopLeft = tester.getTopLeft(
       find.byTooltip('Open navigation menu'),
     );
     expect(menuTopLeft.dx, greaterThanOrEqualTo(12));
     expect(menuTopLeft.dy, greaterThanOrEqualTo(12));
-    expect(
-      tester.getTopRight(find.byTooltip('Close')).dx,
-      lessThanOrEqualTo(340 - 12),
-    );
+    expect(tester.getTopRight(_titleCard()).dx, 340 - 12);
+    // "Use my location" is a map control: top right of the map, 16 px in,
+    // outlined while the search is not on the device position.
+    final locate = find.byTooltip('Use my location');
+    expect(locate, findsOneWidget);
+    expect(tester.getTopRight(locate).dx, 800 - 16);
+    expect(tester.getTopLeft(locate).dx, greaterThan(340));
+    expect(find.byIcon(Icons.my_location_outlined), findsOneWidget);
     expect(find.text('2 lines within 300 m'), findsOneWidget);
 
     expect(find.text('100 m (1)'), findsOneWidget);
@@ -385,6 +409,16 @@ void main() {
     final engine = await _pumpScreen(tester, locationGranted: true);
     expect(find.text('Your location'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsNothing);
+    // The locate control is filled, like the home screen's while tracking
+    // (the card's anchor glyph is the other filled one).
+    expect(
+      find.descendant(
+        of: find.byTooltip('Use my location'),
+        matching: find.byIcon(Icons.my_location_rounded),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.my_location_outlined), findsNothing);
     final anchorLayer = engine.lastLayers.last;
     expect(anchorLayer.id, 'nearby-anchor');
     expect(anchorLayer.markers.single.position, deviceFix);
@@ -405,6 +439,64 @@ void main() {
     expect(find.text('300 m (2)'), findsOneWidget);
     expect(find.textContaining('At 80 m'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('on a phone the card spans the width the menu button leaves '
+      'and "Use my location" heads the map controls under it, 16 px from '
+      'the edge like the home screen', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, engines: 2);
+
+    final card = tester.getRect(_titleCard());
+    expect(card.left, 12 + 44 + 12);
+    expect(card.right, 360 - 12);
+    expect(find.byTooltip('Close'), findsNothing);
+
+    // Layers, then locate, in one right-aligned column under the card.
+    final layers = tester.getRect(find.byTooltip('Change map type'));
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    expect(layers.top, closeTo(card.bottom + 12, 0.5));
+    expect(layers.right, 360 - 16);
+    expect(locate.right, 360 - 16);
+    expect(locate.top, closeTo(layers.bottom + 8, 0.5));
+    expect(locate.size, const Size(48, 48));
+    expect(layers.size, locate.size);
+  });
+
+  testWidgets('the map controls follow the card when its text grows', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _pumpScreen(tester);
+
+    final card = tester.getRect(_titleCard());
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    expect(locate.top, closeTo(card.bottom + 12, 0.5));
+    // The test font is twice as wide as Roboto: at 1.5 a row of the sheet
+    // overflows 360 px, on main too (the header's own overflow tests are in
+    // nearby_header_card_test.dart). Clear it so it does not fail the test.
+    tester.takeException();
+  });
+
+  testWidgets('the controls column does not cover the map beside it: a '
+      'long press there still moves the pin', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester);
+    expect(find.text('Pinned location'), findsNothing);
+
+    // Same height as the locate control, well left of it: the column spans
+    // the screen's width there, but only its buttons take hits.
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    await tester.longPressAt(Offset(60, locate.center.dy));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Pinned location'), findsOneWidget);
+    expect(
+      engine.lastLayers.last.markers.single.position,
+      _FakeEngine.longPressPoint,
+    );
   });
 
   testWidgets('with a fix, the first fit of a visit frames the ring under '
@@ -604,12 +696,12 @@ void main() {
       expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
     });
 
-    testWidgets('closing the street visit returns to the caller', (
-      tester,
-    ) async {
+    testWidgets('with no close button, system back still returns from the '
+        'street visit to the caller', (tester) async {
       await _pumpRouted(tester, street: street);
+      expect(find.byTooltip('Close'), findsNothing);
 
-      await tester.tap(find.byTooltip('Close'));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
 
       expect(find.text('open'), findsOneWidget);
@@ -879,7 +971,7 @@ void main() {
 
       await tester.tap(find.byTooltip('Use my location'));
       await tester.pump();
-      await tester.tap(find.byTooltip('Close'));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.text('open'), findsOneWidget);
 

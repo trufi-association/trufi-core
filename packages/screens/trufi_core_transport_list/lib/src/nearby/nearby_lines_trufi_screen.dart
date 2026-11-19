@@ -309,6 +309,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static const double _sheetMaxSize = 0.85;
   static const double _controlsTopInset = 12;
 
+  /// The map controls' distance from the right edge (the home screen's).
+  static const double _controlsRight = 16;
+
   /// Room between the header card and the map controls on phones.
   static const double _controlsGap = 12;
   static const double _wideFitPadding = 24;
@@ -507,20 +510,6 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     if (scaffold?.hasDrawer ?? false) scaffold!.openDrawer();
   }
 
-  void _close() {
-    HapticFeedback.lightImpact();
-    try {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
-    } catch (_) {
-      // Not hosted under GoRouter (embedded usage): plain navigator pop.
-      Navigator.of(context).maybePop();
-    }
-  }
-
   double _sidePanelWidth(double screenWidth) {
     if (screenWidth >= 1200) return 420;
     if (screenWidth >= 900) return 380;
@@ -556,20 +545,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     BoxConstraints constraints,
   ) {
     final viewPadding = MediaQuery.viewPaddingOf(context);
-    final cardHeight = NearbyHeaderCard.heightFor(state);
-    final headerReserve = _headerPadding * 2 + cardHeight;
-    // The card's figures assume text scale 1.0; a larger setting grows
-    // its title and anchor lines, so the controls follow the scaled card
-    // (clamped so an extreme setting cannot push them off the map) and
-    // keep a gap. The camera fit keeps the unscaled reserve.
-    final textScale = MediaQuery.textScalerOf(
-      context,
-    ).scale(1.0).clamp(1.0, 1.6).toDouble();
-    final controlsTop =
-        viewPadding.top +
-        _headerPadding * 2 +
-        cardHeight * textScale +
-        _controlsGap;
+    final headerReserve =
+        _headerPadding * 2 + NearbyHeaderCard.heightFor(state);
     // Nothing covers the map's sides on a phone; what a street needs
     // there is added per fit (see [_streetFitMargin]).
     _fitCamera.updateViewport(
@@ -594,17 +571,23 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
             bottom: false,
             child: Padding(
               padding: const EdgeInsets.all(_headerPadding),
-              child: _buildHeader(state, elevated: true),
+              // The controls hang under the card whatever height its text
+              // takes (a long label, a larger font size), right-aligned
+              // 16 px from the edge like the home screen's.
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildHeader(state, elevated: true),
+                  const SizedBox(height: _controlsGap),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: _controlsRight - _headerPadding,
+                    ),
+                    child: _buildControls(manager, state),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          top: controlsTop,
-          right: 16,
-          child: _MapControls(
-            manager: manager,
-            outOfFocus: _outOfFocus,
-            onReFit: _reFitCamera,
           ),
         ),
         TrufiBottomSheet(
@@ -669,12 +652,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
               Positioned.fill(child: _buildMap(context, manager, state)),
               Positioned(
                 top: viewPadding.top + _controlsTopInset,
-                right: 16,
-                child: _MapControls(
-                  manager: manager,
-                  outOfFocus: _outOfFocus,
-                  onReFit: _reFitCamera,
-                ),
+                right: _controlsRight,
+                child: _buildControls(manager, state),
               ),
             ],
           ),
@@ -710,7 +689,16 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       state: state,
       elevated: elevated,
       onMenu: _tryOpenDrawer,
-      onClose: _close,
+    );
+  }
+
+  Widget _buildControls(MapEngineManager manager, NearbyLinesState state) {
+    return _MapControls(
+      manager: manager,
+      outOfFocus: _outOfFocus,
+      onReFit: _reFitCamera,
+      isLocating: state.isLocating,
+      anchoredOnDevice: state.anchorSource == NearbyAnchorSource.device,
       onUseMyLocation: _useMyLocation,
     );
   }
@@ -729,22 +717,34 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 }
 
-/// Map type switcher (when the app ships several engines) and the re-fit
-/// button that appears once the rider pans away from the search area.
+/// The map's control column, in the home screen's order and style: the map
+/// type switcher (when the app ships several engines), "use my location",
+/// and the re-fit button that appears once the rider pans away from the
+/// search area.
 class _MapControls extends StatelessWidget {
   const _MapControls({
     required this.manager,
     required this.outOfFocus,
     required this.onReFit,
+    required this.isLocating,
+    required this.anchoredOnDevice,
+    required this.onUseMyLocation,
   });
 
   final MapEngineManager manager;
   final bool outOfFocus;
   final VoidCallback onReFit;
 
+  /// The locate button spins and ignores taps meanwhile.
+  final bool isLocating;
+
+  /// The search is anchored on the device position: filled glyph, as the
+  /// home screen's button while it tracks the rider.
+  final bool anchoredOnDevice;
+  final VoidCallback onUseMyLocation;
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final l10n = TransportListLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -760,35 +760,91 @@ class _MapControls extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
+        _MapControlButton(
+          icon: anchoredOnDevice
+              ? Icons.my_location_rounded
+              : Icons.my_location_outlined,
+          tooltip: l10n.nearbyUseMyLocation,
+          onPressed: onUseMyLocation,
+          isLoading: isLocating,
+        ),
+        const SizedBox(height: 8),
         AnimatedOpacity(
           opacity: outOfFocus ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 200),
           child: AnimatedScale(
             scale: outOfFocus ? 1.0 : 0.8,
             duration: const Duration(milliseconds: 200),
-            child: Material(
-              color: colorScheme.surface.withValues(alpha: 0.95),
-              borderRadius: BorderRadius.circular(12),
-              elevation: 2,
-              shadowColor: Colors.black26,
-              child: InkWell(
-                onTap: outOfFocus ? onReFit : null,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.crop_free_rounded,
-                    size: 22,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
+            child: _MapControlButton(
+              icon: Icons.crop_free_rounded,
+              onPressed: outOfFocus ? onReFit : null,
             ),
           ),
         ),
       ],
     );
+  }
+}
+
+/// The home screen's 48 px map control: card colour, 12 px corners,
+/// elevation 4 and a `primary` glyph — the same size as [MapTypeButton]
+/// above it.
+class _MapControlButton extends StatelessWidget {
+  const _MapControlButton({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip,
+    this.isLoading = false,
+  });
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final String? tooltip;
+
+  /// Shows a spinner instead of [icon] and ignores taps.
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final enabled = onPressed != null && !isLoading;
+    final button = Material(
+      color: theme.cardColor,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 4,
+      shadowColor: Colors.black.withValues(alpha: 0.2),
+      child: InkWell(
+        onTap: enabled
+            ? () {
+                HapticFeedback.lightImpact();
+                onPressed!();
+              }
+            : null,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          child: isLoading
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: theme.colorScheme.primary,
+                  ),
+                )
+              : Icon(
+                  icon,
+                  size: 22,
+                  color: onPressed != null
+                      ? theme.colorScheme.primary
+                      : theme.disabledColor,
+                ),
+        ),
+      ),
+    );
+    final message = tooltip;
+    return message == null ? button : Tooltip(message: message, child: button);
   }
 }

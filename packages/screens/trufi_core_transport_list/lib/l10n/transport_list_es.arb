@@ -164,6 +164,5 @@
   "nearbyLoadingData": "Cargando datos sin conexión…",
   "nearbyFooterNote": "Basado en rutas y horarios GTFS",
   "nearbyOpenDetails": "Detalles de la línea",
-  "nearbyClearSelection": "Quitar resaltado",
-  "nearbyClose": "Cerrar"
+  "nearbyClearSelection": "Quitar resaltado"
 }

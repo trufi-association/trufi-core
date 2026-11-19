@@ -339,9 +339,5 @@
   "nearbyClearSelection": "Clear highlight",
   "@nearbyClearSelection": {
     "description": "Tooltip of the button that removes the highlighted route from the map"
-  },
-  "nearbyClose": "Close",
-  "@nearbyClose": {
-    "description": "Tooltip of the close button of the nearby lines screen"
   }
 }

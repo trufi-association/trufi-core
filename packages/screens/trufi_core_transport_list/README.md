@@ -133,6 +133,10 @@ On every visit the screen asks for the device position (one permission
 request when merely denied; no dialogs). Permanently denied, services off or
 no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
 long-press the map to move the pin anywhere, "Use my location" re-anchors.
+That button is a map control under the map type switcher, as on the home
+screen; the header holds only the drawer button and the title card, which
+takes the rest of the width. There is no close button: the drawer leads
+elsewhere, and a street visit (below) returns with system back.
 
 "Use my location" is the rider's explicit request, so when it finds no
 position it says why (trufi-app#78): a dialog with an **Open settings**

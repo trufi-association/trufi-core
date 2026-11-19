@@ -266,7 +266,4 @@ class TransportListLocalizationsEs extends TransportListLocalizations {
 
   @override
   String get nearbyClearSelection => 'Quitar resaltado';
-
-  @override
-  String get nearbyClose => 'Cerrar';
 }

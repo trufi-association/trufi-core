@@ -272,7 +272,4 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get nearbyClearSelection => 'Clear highlight';
-
-  @override
-  String get nearbyClose => 'Close';
 }
