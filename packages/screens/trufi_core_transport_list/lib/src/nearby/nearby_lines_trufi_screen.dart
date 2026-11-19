@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderProxyBox;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -304,10 +305,22 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   /// is what the camera fit keeps clear of the ring on phones.
   static const double _headerPadding = 12;
 
+  /// The lowest the collapsed sheet goes; it grows past this to keep the
+  /// grabber and the pinned header above the navigation bar
+  /// ([_sheetMinSizeFor]).
   static const double _sheetMinSize = 0.14;
+
+  /// The highest the collapsed sheet goes, below the mid snap.
+  static const double _sheetMinCap = 0.3;
+
+  /// [TrufiBottomSheet]'s grabber: 4 px with 12 above and 8 below.
+  static const double _sheetGrabberHeight = 24;
   static const double _sheetInitialSize = 0.35;
   static const double _sheetMaxSize = 0.85;
   static const double _controlsTopInset = 12;
+
+  /// The map controls' distance from the right edge (the home screen's).
+  static const double _controlsRight = 16;
 
   /// Room between the header card and the map controls on phones.
   static const double _controlsGap = 12;
@@ -325,6 +338,10 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   final FitCameraUtil _fitCamera = FitCameraUtil();
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
+
+  /// Height of the radius pills pinned in the phone sheet's header, as
+  /// last laid out (0 until then).
+  double _sheetHeaderHeight = 0;
 
   TrufiCameraPosition? _initialCamera;
   TrufiCameraPosition? _camera;
@@ -369,8 +386,10 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 
   /// Camera side effects: fit the search area when the anchor or radius
-  /// moves, the selected line when one is highlighted, the area again when
-  /// cleared.
+  /// moves. Highlighting a line, or clearing it, leaves the camera where
+  /// the rider has it: the line's label is already inside the framed ring,
+  /// and zooming out to the whole route took the rider away from the
+  /// streets they were looking at.
   ///
   /// The fit is only asked for here and runs after the next build
   /// ([_scheduleInitialFit]). This listener runs before the rebuild for
@@ -388,21 +407,11 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     final anchorChanged =
         previous?.anchor != anchor || previous?.street != state.street;
     final radiusChanged = previous?.radius != state.radius;
-    final selectionChanged = previous?.selectedLineKey != state.selectedLineKey;
-
-    if (state.selectedGeometry.length > 1) {
-      if (selectionChanged || anchorChanged) _fitPending = true;
-      return;
-    }
-    if (anchorChanged || radiusChanged || selectionChanged) _fitPending = true;
+    if (anchorChanged || radiusChanged) _fitPending = true;
   }
 
-  /// Frames the highlighted line, or the search area when there is none.
+  /// Frames the search area: the ring, or the street's corners.
   void _fitState(NearbyLinesState state, LatLng anchor) {
-    if (state.selectedGeometry.length > 1) {
-      _fitTo(state.selectedGeometry, fallbackTarget: anchor);
-      return;
-    }
     _fitTo(
       _searchArea(state, anchor),
       fallbackTarget: anchor,
@@ -415,8 +424,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   static bool _framesStreet(NearbyLinesState state) =>
       (state.street?.corners.length ?? 0) > 1;
 
-  /// What the camera frames without a highlighted line: the selected ring,
-  /// or every corner of the street.
+  /// What the camera frames: the selected ring, or every corner of the
+  /// street.
   static List<LatLng> _searchArea(NearbyLinesState state, LatLng anchor) {
     if (_framesStreet(state)) return state.street!.corners;
     return NearbyGeometry.circlePolygon(anchor, state.radius.meters);
@@ -515,20 +524,6 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     if (scaffold?.hasDrawer ?? false) scaffold!.openDrawer();
   }
 
-  void _close() {
-    HapticFeedback.lightImpact();
-    try {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
-    } catch (_) {
-      // Not hosted under GoRouter (embedded usage): plain navigator pop.
-      Navigator.of(context).maybePop();
-    }
-  }
-
   double _sidePanelWidth(double screenWidth) {
     if (screenWidth >= 1200) return 420;
     if (screenWidth >= 900) return 380;
@@ -564,20 +559,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     BoxConstraints constraints,
   ) {
     final viewPadding = MediaQuery.viewPaddingOf(context);
-    final cardHeight = NearbyHeaderCard.heightFor(state);
-    final headerReserve = _headerPadding * 2 + cardHeight;
-    // The card's figures assume text scale 1.0; a larger setting grows
-    // its title and anchor lines, so the controls follow the scaled card
-    // (clamped so an extreme setting cannot push them off the map) and
-    // keep a gap. The camera fit keeps the unscaled reserve.
-    final textScale = MediaQuery.textScalerOf(
-      context,
-    ).scale(1.0).clamp(1.0, 1.6).toDouble();
-    final controlsTop =
-        viewPadding.top +
-        _headerPadding * 2 +
-        cardHeight * textScale +
-        _controlsGap;
+    final headerReserve =
+        _headerPadding * 2 + NearbyHeaderCard.heightFor(state);
     // Nothing covers the map's sides on a phone; what a street needs
     // there is added per fit (see [_streetFitMargin]).
     _fitCamera.updateViewport(
@@ -602,26 +585,57 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
             bottom: false,
             child: Padding(
               padding: const EdgeInsets.all(_headerPadding),
-              child: _buildHeader(state, elevated: true),
+              // The controls hang under the card whatever height its text
+              // takes (a long label, a larger font size), right-aligned
+              // 16 px from the edge like the home screen's.
+              child: Column(
+                // The controls stay on the physical right in every
+                // language, like the home screen's (`Positioned(right:
+                // 16)`) and this screen's side-panel layout. Without this,
+                // `end` is the left edge in Arabic and the 4 px below lands
+                // on the wrong side. Only this column's alignment: the
+                // header row keeps the app's direction.
+                textDirection: TextDirection.ltr,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildHeader(state, elevated: true),
+                  const SizedBox(height: _controlsGap),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: _controlsRight - _headerPadding,
+                    ),
+                    child: _buildControls(manager, state),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          top: controlsTop,
-          right: 16,
-          child: _MapControls(
-            manager: manager,
-            outOfFocus: _outOfFocus,
-            onReFit: _reFitCamera,
           ),
         ),
         TrufiBottomSheet(
           controller: _sheetController,
           initialChildSize: _sheetInitialSize,
-          minChildSize: _sheetMinSize,
+          minChildSize: _sheetMinSizeFor(
+            // The sheet's sizes are fractions of what TrufiBottomSheet's
+            // SafeArea leaves under the status bar, not of the screen.
+            constraints.maxHeight - MediaQuery.paddingOf(context).top,
+            viewPadding.bottom,
+          ),
           maxChildSize: _sheetMaxSize,
           snap: true,
-          snapSizes: const [_sheetMinSize, _sheetInitialSize, _sheetMaxSize],
+          // The min and the max snap implicitly. The list stays the same
+          // instance on every build: on a new one the sheet runs
+          // goBallistic(0) on its positions after the frame
+          // (DraggableScrollableSheet.didUpdateWidget), which stops a
+          // reveal under way in the list.
+          snapSizes: const [_sheetInitialSize],
+          // Pinned like the home screen's results summary (#1055): the
+          // pills stay in view while the list scrolls, and dragging them
+          // resizes the sheet even when the list is scrolled (after a
+          // reveal) and swallows the drags on the rows.
+          header: _MeasureHeight(
+            onChanged: _onSheetHeaderHeight,
+            child: _buildListHeader(state),
+          ),
           builder: (context, scrollController) =>
               _buildSheet(state, scrollController),
         ),
@@ -665,6 +679,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
                     padding: const EdgeInsets.all(_headerPadding),
                     child: _buildHeader(state, elevated: false),
                   ),
+                  _buildListHeader(state),
                   Expanded(child: _buildSheet(state, null)),
                 ],
               ),
@@ -677,12 +692,8 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
               Positioned.fill(child: _buildMap(context, manager, state)),
               Positioned(
                 top: viewPadding.top + _controlsTopInset,
-                right: 16,
-                child: _MapControls(
-                  manager: manager,
-                  outOfFocus: _outOfFocus,
-                  onReFit: _reFitCamera,
-                ),
+                right: _controlsRight,
+                child: _buildControls(manager, state),
               ),
             ],
           ),
@@ -718,8 +729,45 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       state: state,
       elevated: elevated,
       onMenu: _tryOpenDrawer,
-      onClose: _close,
+      // A street visit is pushed from the search screen: back, not menu.
+      onBack: widget.initialStreet == null ? null : _back,
+    );
+  }
+
+  void _back() {
+    HapticFeedback.lightImpact();
+    Navigator.of(context).maybePop();
+  }
+
+  Widget _buildControls(MapEngineManager manager, NearbyLinesState state) {
+    return _MapControls(
+      manager: manager,
+      outOfFocus: _outOfFocus,
+      onReFit: _reFitCamera,
+      isLocating: state.isLocating,
+      anchoredOnDevice: state.anchorSource == NearbyAnchorSource.device,
       onUseMyLocation: _useMyLocation,
+    );
+  }
+
+  /// The collapsed sheet's size: the grabber and the pinned header whole
+  /// above the navigation bar, which the sheet runs under. [sheetHeight] is
+  /// the height the sheet's fractions apply to.
+  double _sheetMinSizeFor(double sheetHeight, double bottomInset) {
+    final needed = _sheetGrabberHeight + _sheetHeaderHeight + bottomInset;
+    return (needed / sheetHeight).clamp(_sheetMinSize, _sheetMinCap);
+  }
+
+  void _onSheetHeaderHeight(double height) {
+    if (!mounted || height == _sheetHeaderHeight) return;
+    setState(() => _sheetHeaderHeight = height);
+  }
+
+  /// The radius pills, pinned above the rows in both layouts.
+  Widget _buildListHeader(NearbyLinesState state) {
+    return NearbyLinesHeader(
+      state: state,
+      onRadiusChanged: context.read<NearbyLinesCubit>().setRadius,
     );
   }
 
@@ -731,28 +779,40 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       onRadiusChanged: cubit.setRadius,
       onLineTap: (line) => cubit.toggleLine(line.lineKey),
       onLineDetails: (line) => widget.onLineDetails(context, line),
-      onClearSelection: cubit.clearSelection,
       onRetry: cubit.refresh,
+      showHeader: false,
     );
   }
 }
 
-/// Map type switcher (when the app ships several engines) and the re-fit
-/// button that appears once the rider pans away from the search area.
+/// The map's control column, in the home screen's order and style: the map
+/// type switcher (when the app ships several engines), "use my location",
+/// and the re-fit button that appears once the rider pans away from the
+/// search area.
 class _MapControls extends StatelessWidget {
   const _MapControls({
     required this.manager,
     required this.outOfFocus,
     required this.onReFit,
+    required this.isLocating,
+    required this.anchoredOnDevice,
+    required this.onUseMyLocation,
   });
 
   final MapEngineManager manager;
   final bool outOfFocus;
   final VoidCallback onReFit;
 
+  /// The locate button spins and ignores taps meanwhile.
+  final bool isLocating;
+
+  /// The search is anchored on the device position: filled glyph, as the
+  /// home screen's button while it tracks the rider.
+  final bool anchoredOnDevice;
+  final VoidCallback onUseMyLocation;
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final l10n = TransportListLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -768,35 +828,127 @@ class _MapControls extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
+        _MapControlButton(
+          icon: anchoredOnDevice
+              ? Icons.my_location_rounded
+              : Icons.my_location_outlined,
+          tooltip: l10n.nearbyUseMyLocation,
+          onPressed: onUseMyLocation,
+          isLoading: isLocating,
+        ),
+        const SizedBox(height: 8),
         AnimatedOpacity(
           opacity: outOfFocus ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 200),
           child: AnimatedScale(
             scale: outOfFocus ? 1.0 : 0.8,
             duration: const Duration(milliseconds: 200),
-            child: Material(
-              color: colorScheme.surface.withValues(alpha: 0.95),
-              borderRadius: BorderRadius.circular(12),
-              elevation: 2,
-              shadowColor: Colors.black26,
-              child: InkWell(
-                onTap: outOfFocus ? onReFit : null,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.crop_free_rounded,
-                    size: 22,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
+            child: _MapControlButton(
+              icon: Icons.crop_free_rounded,
+              onPressed: outOfFocus ? onReFit : null,
             ),
           ),
         ),
       ],
     );
+  }
+}
+
+/// The home screen's 48 px map control: card colour, 12 px corners,
+/// elevation 4 and a `primary` glyph — the same size as [MapTypeButton]
+/// above it.
+class _MapControlButton extends StatelessWidget {
+  const _MapControlButton({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip,
+    this.isLoading = false,
+  });
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final String? tooltip;
+
+  /// Shows a spinner instead of [icon] and ignores taps.
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final enabled = onPressed != null && !isLoading;
+    final button = Material(
+      color: theme.cardColor,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 4,
+      shadowColor: Colors.black.withValues(alpha: 0.2),
+      child: InkWell(
+        onTap: enabled
+            ? () {
+                HapticFeedback.lightImpact();
+                onPressed!();
+              }
+            : null,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          child: isLoading
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: theme.colorScheme.primary,
+                  ),
+                )
+              : Icon(
+                  icon,
+                  size: 22,
+                  color: onPressed != null
+                      ? theme.colorScheme.primary
+                      : theme.disabledColor,
+                ),
+        ),
+      ),
+    );
+    final message = tooltip;
+    return message == null ? button : Tooltip(message: message, child: button);
+  }
+}
+
+/// Reports its child's height after each layout that changes it.
+class _MeasureHeight extends SingleChildRenderObjectWidget {
+  const _MeasureHeight({required this.onChanged, required super.child});
+
+  final ValueChanged<double> onChanged;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderMeasureHeight(onChanged);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderMeasureHeight renderObject,
+  ) {
+    renderObject.onChanged = onChanged;
+  }
+}
+
+class _RenderMeasureHeight extends RenderProxyBox {
+  _RenderMeasureHeight(this.onChanged);
+
+  ValueChanged<double> onChanged;
+  double? _reported;
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    final height = size.height;
+    if (height == _reported) return;
+    _reported = height;
+    // Not during layout: the callback rebuilds the screen.
+    WidgetsBinding.instance.addPostFrameCallback((_) => onChanged(height));
   }
 }

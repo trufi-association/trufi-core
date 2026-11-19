@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../l10n/transport_list_localizations.dart';
 import '../nearby_lines_cubit.dart';
 import '../nearby_street_anchor.dart';
 
-/// Floating header of the nearby-lines screen, in the shape of the route
-/// detail's top bar: a 44 px menu button, the title card (screen title over
-/// the anchor line, plus the pin hint when the device position is not in
-/// use) and 44 px buttons for "use my location" and close.
+/// Floating header of the nearby-lines screen: a 44 px menu button (back on
+/// a street visit, see [onBack]) and the title card (screen title over the
+/// anchor line, plus the pin hint when the device position is not in use)
+/// across the rest of the width.
 ///
-/// Three buttons leave the card's text about 128 px on a 360 dp phone, so
-/// the anchor label wraps to a second line and the hint to a third rather
-/// than ending in an ellipsis (trufi-app#79).
+/// "Use my location" is a map control under the layers button, as on the
+/// home screen, and there is no close button: the card keeps about 236 px
+/// of text on a 360 dp phone. A long anchor label still wraps to a second
+/// line and the hint to a third rather than ending in an ellipsis
+/// (trufi-app#79).
 class NearbyHeaderCard extends StatelessWidget {
   const NearbyHeaderCard({
     super.key,
     required this.state,
     required this.onMenu,
-    required this.onClose,
-    required this.onUseMyLocation,
+    this.onBack,
     this.elevated = true,
   });
 
   final NearbyLinesState state;
   final VoidCallback onMenu;
-  final VoidCallback onClose;
-  final VoidCallback onUseMyLocation;
+
+  /// When set, the leading button goes back instead of opening the drawer:
+  /// a visit pushed over another screen (a street opened from the search
+  /// screen). iOS has no system back button and the app shell's drawer
+  /// takes the edge swipe (flutter/flutter#47959), so on iOS this is the
+  /// only way back; the drawer still opens with that swipe.
+  final VoidCallback? onBack;
 
   /// Translucent, rounded and shadowed pieces when floating over the map
   /// (phone); flat on `surface` when the row heads the side panel (wide).
@@ -54,7 +59,8 @@ class NearbyHeaderCard extends StatelessWidget {
       state.anchorSource == NearbyAnchorSource.street;
 
   /// The tallest the title card gets for [state] at text scale 1.0; the
-  /// screen reserves this much map for the camera fit and the controls.
+  /// screen reserves this much map for the camera fit. The map controls do
+  /// not use it: on phones they hang under the card's real height.
   static double heightFor(NearbyLinesState state) =>
       (showsHint(state) ? cardHeightWithHint : cardHeight) +
       (anchorMayWrap(state) ? anchorSecondLineHeight : 0);
@@ -102,10 +108,12 @@ class NearbyHeaderCard extends StatelessWidget {
     return Row(
       children: [
         _MapBarButton(
-          icon: Icons.menu_rounded,
-          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          icon: onBack == null ? Icons.menu_rounded : Icons.arrow_back_rounded,
+          tooltip: onBack == null
+              ? MaterialLocalizations.of(context).openAppDrawerTooltip
+              : MaterialLocalizations.of(context).backButtonTooltip,
           elevated: elevated,
-          onTap: onMenu,
+          onTap: onBack ?? onMenu,
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -188,35 +196,6 @@ class NearbyHeaderCard extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12),
-        _MapBarButton(
-          icon: Icons.my_location_rounded,
-          tooltip: l10n.nearbyUseMyLocation,
-          elevated: elevated,
-          onTap: state.isLocating
-              ? null
-              : () {
-                  HapticFeedback.lightImpact();
-                  onUseMyLocation();
-                },
-          child: state.isLocating
-              ? SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: colorScheme.onSurface,
-                  ),
-                )
-              : null,
-        ),
-        const SizedBox(width: 8),
-        _MapBarButton(
-          icon: Icons.close_rounded,
-          tooltip: l10n.nearbyClose,
-          elevated: elevated,
-          onTap: onClose,
-        ),
       ],
     );
   }
@@ -231,16 +210,12 @@ class _MapBarButton extends StatelessWidget {
     required this.tooltip,
     required this.elevated,
     required this.onTap,
-    this.child,
   });
 
   final IconData icon;
   final String tooltip;
   final bool elevated;
-  final VoidCallback? onTap;
-
-  /// Replaces the icon (a progress spinner while locating).
-  final Widget? child;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +236,7 @@ class _MapBarButton extends StatelessWidget {
             width: 44,
             height: 44,
             alignment: Alignment.center,
-            child: child ?? Icon(icon, size: 22, color: colorScheme.onSurface),
+            child: Icon(icon, size: 22, color: colorScheme.onSurface),
           ),
         ),
       ),

@@ -239,11 +239,6 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
   }
 
   @override
-  String nearbySelectedLine(String name) {
-    return 'Highlighted: $name';
-  }
-
-  @override
   String nearbyEmptyTitle(int meters) {
     return 'No lines pass within $meters m';
   }
@@ -269,10 +264,4 @@ class TransportListLocalizationsEn extends TransportListLocalizations {
 
   @override
   String get nearbyOpenDetails => 'Line details';
-
-  @override
-  String get nearbyClearSelection => 'Clear highlight';
-
-  @override
-  String get nearbyClose => 'Close';
 }

@@ -235,11 +235,6 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
   }
 
   @override
-  String nearbySelectedLine(String name) {
-    return 'Hervorgehoben: $name';
-  }
-
-  @override
   String nearbyEmptyTitle(int meters) {
     return 'Keine Linien im Umkreis von $meters m';
   }
@@ -265,10 +260,4 @@ class TransportListLocalizationsDe extends TransportListLocalizations {
 
   @override
   String get nearbyOpenDetails => 'Liniendetails';
-
-  @override
-  String get nearbyClearSelection => 'Hervorhebung entfernen';
-
-  @override
-  String get nearbyClose => 'Schließen';
 }

@@ -28,6 +28,8 @@ abstract class NearbyLinesDataSource {
   /// (available or missing). Never throws.
   Future<void> ensureLoaded();
 
+  /// One row per [NearbyLine.lineKey]: the list keys its rows by it, so
+  /// two rows with one key break the sheet.
   NearbyLinesResult findNearby(
     LatLng anchor, {
     double maxRadiusMeters = NearbyRadius.maxMeters,

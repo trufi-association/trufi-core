@@ -88,7 +88,17 @@ within **100 / 300 / 500 m** of the rider's position or of a pin placed on the
 map, with the selected radius drawn as a ring, a label at the closest stop or
 point of every line, and the full route highlighted when a row is tapped. The whole
 query runs on the device against the planner's already-loaded GTFS — no
-network call anywhere (#1006).
+network call anywhere (#1006). Highlighting a line draws it without moving
+the camera: the map is framed only when the anchor or the radius changes.
+The highlight shows in the list itself, as the row with the primary border
+(no banner above the list), and the list keeps that row in view like the
+home screen's results sheet: it scrolls just enough for the row to be
+whole when a label is tapped on the map, after a new query, and when the
+screen comes back to the front. A highlighted line beyond the selected
+radius gets its row after the others. The radius pills are pinned above
+the rows, on one line, like the home screen's results summary: on a phone
+they are the sheet's header, so they stay in view while the list scrolls
+and dragging them resizes the sheet.
 
 ```dart
 screens: [
@@ -132,6 +142,12 @@ On every visit the screen asks for the device position (one permission
 request when merely denied; no dialogs). Permanently denied, services off or
 no fix within 10 s fall back to `MapEngineManager.defaultCenter` with a hint:
 long-press the map to move the pin anywhere, "Use my location" re-anchors.
+That button is a map control under the map type switcher, as on the home
+screen; the header holds only the drawer button and the title card, which
+takes the rest of the width. There is no close button: the drawer leads
+elsewhere. A street visit (below) is pushed over the search screen, so its
+header leads with a back button instead of the menu: iOS has no system back,
+and the app shell's drawer takes the edge swipe.
 
 "Use my location" is the rider's explicit request, so when it finds no
 position it says why (trufi-app#78): a dialog with an **Open settings**

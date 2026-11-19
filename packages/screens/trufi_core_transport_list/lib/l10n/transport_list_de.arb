@@ -135,14 +135,6 @@
       }
     }
   },
-  "nearbySelectedLine": "Hervorgehoben: {name}",
-  "@nearbySelectedLine": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "nearbyEmptyTitle": "Keine Linien im Umkreis von {meters} m",
   "@nearbyEmptyTitle": {
     "placeholders": {
@@ -163,7 +155,5 @@
   "nearbyUnavailableHint": "Füge den Routing-Engines einen lokalen TrufiPlannerProvider mit gebündeltem GTFS hinzu.",
   "nearbyLoadingData": "Offline-Daten werden geladen…",
   "nearbyFooterNote": "Basierend auf GTFS-Linien und -Fahrplänen",
-  "nearbyOpenDetails": "Liniendetails",
-  "nearbyClearSelection": "Hervorhebung entfernen",
-  "nearbyClose": "Schließen"
+  "nearbyOpenDetails": "Liniendetails"
 }

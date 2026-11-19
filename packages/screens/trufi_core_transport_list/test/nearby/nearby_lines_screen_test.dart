@@ -17,13 +17,21 @@ import 'geolocator_mock.dart';
 /// fake map engine and a canned data source: the wiring between the cubit,
 /// the header card, the sheet / side panel and the map layers.
 class _FakeEngine extends ITrufiMapEngine {
+  _FakeEngine({this.id = 'fake'});
+
   List<TrufiLayer> lastLayers = const [];
 
   /// The camera the screen last asked the map for.
   TrufiCameraPosition? lastCamera;
 
+  /// What the map calls when the rider pans or zooms.
+  ValueChanged<TrufiCameraPosition>? onCameraChanged;
+
+  /// Where a long press anywhere on this map lands.
+  static const longPressPoint = LatLng(-17.38, -66.14);
+
   @override
-  String get id => 'fake';
+  final String id;
   @override
   String get name => 'Fake';
   @override
@@ -42,7 +50,14 @@ class _FakeEngine extends ITrufiMapEngine {
   }) {
     lastLayers = layers;
     lastCamera = camera ?? initialCamera;
-    return const SizedBox.expand();
+    this.onCameraChanged = onCameraChanged;
+    // Hit-testable like a real map: what the controls column leaves
+    // uncovered must still reach it.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => onMapLongClick?.call(longPressPoint),
+      child: const SizedBox.expand(),
+    );
   }
 }
 
@@ -107,11 +122,17 @@ Future<_FakeEngine> _pumpScreen(
   Locale? locale,
   NearbyLineDetailsCallback? onLineDetails,
   bool showStops = true,
+  int engines = 1,
+  TextDirection? textDirection,
 }) async {
   if (mockLocation) mockGeolocator(serviceEnabled: locationGranted);
   final engine = _FakeEngine();
+  // A second engine makes the screen show the map type switcher.
   final manager = MapEngineManager(
-    engines: [engine],
+    engines: [
+      engine,
+      for (var i = 1; i < engines; i++) _FakeEngine(id: 'fake-$i'),
+    ],
     defaultCenter: defaultCenter,
   );
   final screen = NearbyLinesTrufiScreen(
@@ -130,6 +151,11 @@ Future<_FakeEngine> _pumpScreen(
         locale: locale,
         localizationsDelegates: screen.localizationsDelegates,
         supportedLocales: TransportListLocalizations.supportedLocales,
+        // What GlobalWidgetsLocalizations gives an Arabic app (trufi-sanaa).
+        builder: textDirection == null
+            ? null
+            : (context, child) =>
+                  Directionality(textDirection: textDirection, child: child!),
         home: Scaffold(body: Builder(builder: screen.builder)),
       ),
     ),
@@ -227,6 +253,23 @@ Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   return (engine: engine, source: source);
 }
 
+/// The header's title card: the Material that holds the screen title.
+Finder _titleCard() => find
+    .ancestor(of: find.text('Nearby lines'), matching: find.byType(Material))
+    .first;
+
+/// Short names of the rows that wear the highlight, among the rows on
+/// screen (or among every built row with [onScreen] false): the list is
+/// where a highlight shows, there is no banner above it.
+List<String> highlightedRows(WidgetTester tester, {bool onScreen = true}) =>
+    tester
+        .widgetList<NearbyLineTile>(
+          find.byType(NearbyLineTile, skipOffstage: onScreen),
+        )
+        .where((tile) => tile.isSelected)
+        .map((tile) => tile.line.displayName)
+        .toList();
+
 /// Pumps the screen with the default detail navigation and taps the first
 /// row's chevron; returns the [TransportDetailScreen] it pushed.
 Future<TransportDetailScreen> openDetailViaChevron(
@@ -241,6 +284,15 @@ Future<TransportDetailScreen> openDetailViaChevron(
   );
 }
 
+/// Taps a radius pill. The pills are one line that scrolls sideways (the
+/// test font is wider than a real one, so the last pill can start out of
+/// view), as a rider would: bring it in, then tap it.
+Future<void> tapPill(WidgetTester tester, String label) async {
+  await tester.ensureVisible(find.text(label));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(label));
+}
+
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
@@ -248,26 +300,29 @@ void main() {
       'map layers of the fallback anchor', (tester) async {
     final engine = await _pumpScreen(tester);
 
-    // Header row: the title once (the sheet no longer repeats it), the
-    // anchor line with its hint, the locate and close buttons.
+    // Header row: the menu button, the title once (the sheet no longer
+    // repeats it), the anchor line with its hint. No close button.
     expect(find.text('Nearby lines'), findsOneWidget);
     expect(find.text('City center (no location)'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsOneWidget);
-    expect(find.byTooltip('Use my location'), findsOneWidget);
-    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byTooltip('Close'), findsNothing);
     expect(find.byType(TrufiBottomSheet), findsNothing);
     // The panel insets the flat header like the route detail (12 px):
-    // the buttons are not glued to the panel's edges. The panel is
-    // 340 px wide under 900 px.
+    // the menu button and the card are not glued to the panel's edges.
+    // The panel is 340 px wide under 900 px.
     final menuTopLeft = tester.getTopLeft(
       find.byTooltip('Open navigation menu'),
     );
     expect(menuTopLeft.dx, greaterThanOrEqualTo(12));
     expect(menuTopLeft.dy, greaterThanOrEqualTo(12));
-    expect(
-      tester.getTopRight(find.byTooltip('Close')).dx,
-      lessThanOrEqualTo(340 - 12),
-    );
+    expect(tester.getTopRight(_titleCard()).dx, 340 - 12);
+    // "Use my location" is a map control: top right of the map, 16 px in,
+    // outlined while the search is not on the device position.
+    final locate = find.byTooltip('Use my location');
+    expect(locate, findsOneWidget);
+    expect(tester.getTopRight(locate).dx, 800 - 16);
+    expect(tester.getTopLeft(locate).dx, greaterThan(340));
+    expect(find.byIcon(Icons.my_location_outlined), findsOneWidget);
     expect(find.text('2 lines within 300 m'), findsOneWidget);
 
     expect(find.text('100 m (1)'), findsOneWidget);
@@ -309,7 +364,7 @@ void main() {
 
     await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     final ids = engine.lastLayers.map((l) => l.id).toList();
     expect(ids, contains('nearby-selected-line'));
     final selected = engine.lastLayers.firstWhere(
@@ -320,7 +375,7 @@ void main() {
 
     await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsNothing);
+    expect(highlightedRows(tester, onScreen: false), isEmpty);
 
     await tester.tap(find.byTooltip('Line details').first);
     await tester.pumpAndSettle();
@@ -356,7 +411,7 @@ void main() {
       ('100 m (1)', 100.0),
       ('300 m (2)', 300.0),
     ]) {
-      await tester.tap(find.text(chip));
+      await tapPill(tester, chip);
       await tester.pumpAndSettle();
 
       final ring = engine.lastLayers.first;
@@ -381,6 +436,16 @@ void main() {
     final engine = await _pumpScreen(tester, locationGranted: true);
     expect(find.text('Your location'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsNothing);
+    // The locate control is filled, like the home screen's while tracking
+    // (the card's anchor glyph is the other filled one).
+    expect(
+      find.descendant(
+        of: find.byTooltip('Use my location'),
+        matching: find.byIcon(Icons.my_location_rounded),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.my_location_outlined), findsNothing);
     final anchorLayer = engine.lastLayers.last;
     expect(anchorLayer.id, 'nearby-anchor');
     expect(anchorLayer.markers.single.position, deviceFix);
@@ -401,6 +466,80 @@ void main() {
     expect(find.text('300 m (2)'), findsOneWidget);
     expect(find.textContaining('At 80 m'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('on a phone the card spans the width the menu button leaves '
+      'and "Use my location" heads the map controls under it, 16 px from '
+      'the edge like the home screen', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, engines: 2);
+
+    final card = tester.getRect(_titleCard());
+    expect(card.left, 12 + 44 + 12);
+    expect(card.right, 360 - 12);
+    expect(find.byTooltip('Close'), findsNothing);
+
+    // Layers, then locate, in one right-aligned column under the card.
+    final layers = tester.getRect(find.byTooltip('Change map type'));
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    expect(layers.top, closeTo(card.bottom + 12, 0.5));
+    expect(layers.right, 360 - 16);
+    expect(locate.right, 360 - 16);
+    expect(locate.top, closeTo(layers.bottom + 8, 0.5));
+    expect(locate.size, const Size(48, 48));
+    expect(layers.size, locate.size);
+  });
+
+  testWidgets('right to left (Arabic in trufi-sanaa): the header mirrors, '
+      'the map controls stay on the right 16 px in, as on the home screen', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, engines: 2, textDirection: TextDirection.rtl);
+
+    expect(tester.getRect(find.byTooltip('Open navigation menu')).right, 348);
+    expect(tester.getRect(find.byTooltip('Change map type')).right, 360 - 16);
+    expect(tester.getRect(find.byTooltip('Use my location')).right, 360 - 16);
+  });
+
+  testWidgets('the map controls follow the card when its text grows', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _pumpScreen(tester);
+
+    final card = tester.getRect(_titleCard());
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    expect(locate.top, closeTo(card.bottom + 12, 0.5));
+    // The test font is twice as wide as Roboto: at 1.5 the sheet's route
+    // count pill overflows 360 px by 88 px, on main too (the header's own
+    // overflow tests are in nearby_header_card_test.dart). Only the first
+    // exception is kept, so pin that it is this one and not a new one.
+    expect(
+      tester.takeException().toString(),
+      contains('A RenderFlex overflowed by 88 pixels on the right'),
+    );
+  });
+
+  testWidgets('the controls column does not cover the map beside it: a '
+      'long press there still moves the pin', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester);
+    expect(find.text('Pinned location'), findsNothing);
+
+    // Same height as the locate control, well left of it: the column spans
+    // the screen's width there, but only its buttons take hits.
+    final locate = tester.getRect(find.byTooltip('Use my location'));
+    await tester.longPressAt(Offset(60, locate.center.dy));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Pinned location'), findsOneWidget);
+    expect(
+      engine.lastLayers.last.markers.single.position,
+      _FakeEngine.longPressPoint,
+    );
   });
 
   testWidgets('with a fix, the first fit of a visit frames the ring under '
@@ -429,9 +568,9 @@ void main() {
     expect(first.bottom, closeTo(640 * 0.65, 0.5));
 
     // And it is where the ring settles after any later fit.
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
-    await tester.tap(find.text('300 m (2)'));
+    await tapPill(tester, '300 m (2)');
     await tester.pumpAndSettle();
     final settled = ringEdges();
     expect(settled.top, closeTo(first.top, 0.5));
@@ -600,16 +739,34 @@ void main() {
       expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
     });
 
-    testWidgets('closing the street visit returns to the caller', (
-      tester,
-    ) async {
+    testWidgets('with no close button, system back still returns from the '
+        'street visit to the caller', (tester) async {
       await _pumpRouted(tester, street: street);
+      expect(find.byTooltip('Close'), findsNothing);
 
-      await tester.tap(find.byTooltip('Close'));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
 
       expect(find.text('open'), findsOneWidget);
       expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
+    });
+
+    testWidgets('the street visit leads with a back button: iOS has no '
+        'system back, and the app shell drawer takes the edge swipe', (
+      tester,
+    ) async {
+      await _pumpRouted(tester, street: street);
+      expect(find.byTooltip('Open navigation menu'), findsNothing);
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.text('open'), findsOneWidget);
+      expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
+    });
+
+    testWidgets('a drawer visit keeps the menu button', (tester) async {
+      await _pumpRouted(tester);
+      expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+      expect(find.byTooltip('Back'), findsNothing);
     });
   });
 
@@ -787,6 +944,24 @@ void main() {
       await expireSnackBar(tester);
     });
 
+    testWidgets('while locating, a second tap on the control does not start '
+        'another locate', (tester) async {
+      final calls = mockGeolocator(fix: GeoFix.never);
+      await _pumpScreen(tester, mockLocation: false);
+
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      final asked = calls.length;
+      await tester.tap(find.byTooltip('Use my location'));
+      await tester.pump();
+      expect(calls.length, asked);
+
+      await tester.pump(const Duration(seconds: 10));
+      await tester.pumpAndSettle();
+      await expireSnackBar(tester);
+    });
+
     testWidgets('on a phone the snack bar shows over the sheet', (
       tester,
     ) async {
@@ -875,7 +1050,7 @@ void main() {
 
       await tester.tap(find.byTooltip('Use my location'));
       await tester.pump();
-      await tester.tap(find.byTooltip('Close'));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.text('open'), findsOneWidget);
 
@@ -919,11 +1094,11 @@ void main() {
 
   // Every fit runs on the build after the state change, not in the bloc
   // listener. The first fit and the street fits are pinned above; these
-  // two pin the later ones. They fail when a radius change, a highlighted
-  // line or its clearing no longer refits, when the street margin
-  // survives the street, and when it leaks onto a highlighted line.
-  testWidgets('every later fit frames what the state shows: a new radius, '
-      'a highlighted line, the ring again once it is cleared', (tester) async {
+  // two pin the later ones. They fail when a radius change no longer
+  // refits, when highlighting a line or clearing it moves the camera, and
+  // when the street margin survives the street.
+  testWidgets('a new radius refits the ring; highlighting a line and '
+      'clearing it leave the camera where it is', (tester) async {
     usePhone(tester, const Size(360, 640));
     final engine = await _pumpScreen(tester, locationGranted: true);
     const top = 24 + NearbyHeaderCard.cardHeight; // 82
@@ -946,7 +1121,7 @@ void main() {
 
     expectRingFramed('nearby-ring-300');
 
-    await tester.tap(find.text('500 m (3)'));
+    await tapPill(tester, '500 m (3)');
     await tester.pumpAndSettle();
     expectRingFramed('nearby-ring-500');
 
@@ -954,32 +1129,422 @@ void main() {
     // row tap or a label tap does.
     NearbyLinesCubit cubit() =>
         tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
-    cubit().toggleLine('n:201');
-    await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
-    final line = engine.lastLayers
-        .firstWhere((l) => l.id == 'nearby-selected-line')
-        .lines
-        .single
-        .position;
-    final camera = engine.lastCamera!;
-    final ys = line.map((p) => screenY(camera, p.latitude, 640)).toList();
-    final xs = line.map((p) => screenX(camera, p.longitude, 360)).toList();
-    // Inside the map the header and the sheet leave clear...
-    expect(ys.reduce(math.min), greaterThanOrEqualTo(top - 0.5));
-    expect(ys.reduce(math.max), lessThanOrEqualTo(bottom + 0.5));
-    expect(xs.reduce(math.min), greaterThanOrEqualTo(-0.5));
-    expect(xs.reduce(math.max), lessThanOrEqualTo(360 + 0.5));
-    // ...and fitted to it, with no side margin: this line is taller than
-    // the map is (in proportion), so it spans that whole height.
-    expect(
-      ys.reduce(math.max) - ys.reduce(math.min),
-      closeTo(bottom - top, 0.5),
-    );
+    // The camera the 500 m fit left: the zoom and the target do not move.
+    final ringCamera = engine.lastCamera!;
+    void expectCameraKept() {
+      final camera = engine.lastCamera!;
+      expect(camera.zoom, ringCamera.zoom);
+      expect(camera.target, ringCamera.target);
+    }
 
     cubit().toggleLine('n:201');
     await tester.pumpAndSettle();
+    expect(highlightedRows(tester), ['201']);
+    // The route is drawn (it runs far past the ring) but not framed.
+    expect(
+      engine.lastLayers.map((l) => l.id),
+      contains('nearby-selected-line'),
+    );
+    expectCameraKept();
+
+    // Another line, then none: still the same camera.
+    cubit().toggleLine('n:X10');
+    await tester.pumpAndSettle();
+    expect(highlightedRows(tester), ['X10']);
+    expectCameraKept();
+    cubit().toggleLine('n:X10');
+    await tester.pumpAndSettle();
+    expect(highlightedRows(tester, onScreen: false), isEmpty);
+    expectCameraKept();
     expectRingFramed('nearby-ring-500');
+  });
+
+  testWidgets('a line tapped after the rider zoomed in keeps that zoom and '
+      'that view (the camera used to zoom out to the whole route)', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+
+    // The rider zooms in on a corner of the ring.
+    final riderCamera = TrufiCameraPosition(
+      target: const LatLng(-17.3895, -66.1490),
+      zoom: 17.5,
+    );
+    engine.onCameraChanged!(riderCamera);
+    await tester.pump();
+
+    // A tap on a row and a tap on a map label: both go through toggleLine.
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(highlightedRows(tester), ['201']);
+    expect(engine.lastCamera!.zoom, riderCamera.zoom);
+    expect(engine.lastCamera!.target, riderCamera.target);
+  });
+
+  testWidgets('a line highlighted from the map comes whole into the phone '
+      'sheet, above the navigation bar, and the sheet keeps its size', (
+    tester,
+  ) async {
+    // A small phone: one line of pinned pills leaves room for the row at
+    // the mid snap, above a 48 px bar.
+    usePhone(tester, const Size(360, 640));
+    // A three-button navigation bar: the sheet runs under it.
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    await _pumpScreen(tester, locationGranted: true);
+    await tapPill(tester, '500 m (3)');
+    await tester.pumpAndSettle();
+
+    final list = find.byType(CustomScrollView);
+    Rect row(String title) => tester.getRect(
+      find.ancestor(
+        of: find.text(title, skipOffstage: false),
+        matching: find.byType(NearbyLineTile, skipOffstage: false),
+      ),
+    );
+    bool whole(String title) {
+      final viewport = tester.getRect(list);
+      final rect = row(title);
+      return rect.top >= viewport.top - 0.5 &&
+          rect.bottom <= viewport.bottom - 48 + 0.5;
+    }
+
+    // At the mid snap the farthest row is below the fold.
+    expect(whole('Line 18'), isFalse);
+    final sheetTop = tester.getTopLeft(list).dy;
+
+    // What a tap on its label on the map does.
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pumpAndSettle();
+    expect(whole('Line 18'), isTrue);
+    expect(highlightedRows(tester), ['18']);
+    // The list scrolled inside the sheet; the sheet did not grow.
+    expect(tester.getTopLeft(list).dy, sheetTop);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the radius pills are pinned in the phone sheet: a reveal '
+      'leaves them in view, and dragging them opens the sheet the scrolled '
+      'list no longer does', (tester) async {
+    usePhone(tester, const Size(360, 800));
+    await _pumpScreen(tester, locationGranted: true);
+    await tapPill(tester, '500 m (3)');
+    await tester.pumpAndSettle();
+
+    final header = find.byType(NearbyLinesHeader);
+    final list = find.byType(CustomScrollView);
+    // Above the rows, not among them.
+    expect(find.descendant(of: list, matching: header), findsNothing);
+    expect(
+      tester.getRect(header).bottom,
+      lessThanOrEqualTo(tester.getTopLeft(list).dy + 0.5),
+    );
+    // One line of pills; the count stays at the top of the list.
+    expect(tester.getRect(header).height, lessThan(60));
+    expect(
+      find.descendant(of: list, matching: find.byType(RouteCountIndicator)),
+      findsOneWidget,
+    );
+    final headerTop = tester.getTopLeft(header).dy;
+    ScrollPosition listPosition() => tester
+        .state<ScrollableState>(
+          find.descendant(of: list, matching: find.byType(Scrollable)).first,
+        )
+        .position;
+
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pumpAndSettle();
+    // The list scrolled to the row; the pills stayed where they were.
+    expect(listPosition().pixels, greaterThan(0));
+    expect(tester.getTopLeft(header).dy, headerTop);
+    expect(find.text('500 m (3)'), findsOneWidget);
+
+    // A drag on the rows scrolls the list, so the pills are the handle.
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, -300));
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(header).dy, lessThan(headerTop - 200));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a sideways drag on the pinned pills scrolls them and leaves '
+      'the sheet where it is; an upward drag on them still opens it', (
+    tester,
+  ) async {
+    // The test font is wide enough for the pills to overflow 360 px.
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, locationGranted: true);
+    final header = find.byType(NearbyLinesHeader);
+    ScrollPosition strip() => tester
+        .state<ScrollableState>(
+          find.descendant(of: header, matching: find.byType(Scrollable)),
+        )
+        .position;
+    NearbyLinesCubit cubit() =>
+        tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
+    expect(strip().maxScrollExtent, greaterThan(0));
+    final headerTop = tester.getTopLeft(header).dy;
+
+    await tester.dragFrom(
+      tester.getCenter(find.text('100 m (1)')),
+      const Offset(-150, 0),
+    );
+    await tester.pumpAndSettle();
+    expect(strip().pixels, greaterThan(0));
+    expect(tester.getTopLeft(header).dy, headerTop);
+    expect(cubit().state.radius, NearbyRadius.m300);
+
+    // The last pill came in with the rider's drag: a plain tap reaches it.
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    expect(cubit().state.radius, NearbyRadius.m500);
+
+    await tester.dragFrom(
+      tester.getCenter(find.text('500 m (3)')),
+      const Offset(0, -300),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(header).dy, lessThan(headerTop - 200));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a rebuild of the screen during a reveal does not stop it (the '
+      'sheet keeps the same snap sizes, a new list would snap it again)', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 800));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    await tapPill(tester, '500 m (3)');
+    await tester.pumpAndSettle();
+    final list = find.byType(CustomScrollView);
+    bool whole(String title) {
+      final viewport = tester.getRect(list);
+      final rect = tester.getRect(
+        find.ancestor(
+          of: find.text(title, skipOffstage: false),
+          matching: find.byType(NearbyLineTile, skipOffstage: false),
+        ),
+      );
+      return rect.top >= viewport.top - 0.5 &&
+          rect.bottom <= viewport.bottom + 0.5;
+    }
+
+    expect(whole('Line 18'), isFalse);
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    // The rider pans the map meanwhile: the recenter control shows up and
+    // the screen rebuilds while the list is still on its way.
+    engine.onCameraChanged!(
+      TrufiCameraPosition(target: const LatLng(-17.30, -66.10), zoom: 12),
+    );
+    await tester.pumpAndSettle();
+    final recenter = tester.widget<AnimatedOpacity>(
+      find.ancestor(
+        of: find.byIcon(Icons.crop_free_rounded),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    );
+    expect(recenter.opacity, 1);
+    expect(whole('Line 18'), isTrue);
+  });
+
+  testWidgets('the collapsed phone sheet keeps the pinned pills whole above '
+      'the navigation bar', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    await _pumpScreen(tester, locationGranted: true);
+
+    final header = find.byType(NearbyLinesHeader);
+    // Down to the min snap, by the pills.
+    await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
+    await tester.pumpAndSettle();
+    final pills = tester.getRect(header);
+    expect(pills.bottom, lessThanOrEqualTo(640 - 48 + 0.5));
+    // Collapsed: the sheet went down, to just the grabber and the pills.
+    expect(pills.top, greaterThan(640 * (1 - 0.35)));
+    expect(pills.bottom, closeTo(640 - 48, 0.5));
+    expect(tester.takeException(), isNull);
+  });
+
+  // A status bar takes its height off the sheet (TrufiBottomSheet's
+  // SafeArea): the sheet's sizes are fractions of what is left. A min
+  // measured on the whole screen came out a few pixels short: the pills
+  // ended under the navigation bar, and without a bottom inset (no
+  // navigation bar under the app, as on the iPhone SE) the sheet's column
+  // overflowed. Without a bottom inset the floor (0.14) already covers one
+  // line of pills on a phone-sized screen, so that case runs on a short
+  // window (a split-screen half), where the min is above the floor.
+  for (final (bottom, height) in [(48.0, 720.0), (0.0, 380.0)]) {
+    testWidgets('under a status bar, the collapsed phone sheet keeps the '
+        'pinned pills whole above the bottom inset ($bottom px, $height '
+        'px tall)', (tester) async {
+      usePhone(tester, Size(360, height));
+      tester.view.padding = FakeViewPadding(top: 24, bottom: bottom);
+      tester.view.viewPadding = FakeViewPadding(top: 24, bottom: bottom);
+      addTearDown(tester.view.resetPadding);
+      addTearDown(tester.view.resetViewPadding);
+      await _pumpScreen(tester, locationGranted: true);
+
+      await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
+      await tester.pumpAndSettle();
+      final pills = tester.getRect(find.byType(NearbyLinesHeader));
+      expect(pills.bottom, closeTo(height - bottom, 0.5));
+      // Collapsed: the sheet went down past the mid snap.
+      expect(pills.top, greaterThan(24 + (height - 24) * (1 - 0.35)));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('the collapsed sheet follows the pinned pills when the text '
+      'size changes: one line at 2x, whole above the bar, and back', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _pumpScreen(tester, locationGranted: true);
+    // The route count pill at the top of the list overflows 360 px at this
+    // size with the test font, on main too (see the 1.5x test above). Pin
+    // that the one exception kept is that one, not the sheet's column.
+    expect(
+      tester.takeException().toString(),
+      allOf(contains('A RenderFlex overflowed by'), contains('on the right')),
+    );
+
+    final header = find.byType(NearbyLinesHeader);
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, 400));
+    await tester.pumpAndSettle();
+    final large = tester.getRect(header);
+    // One line of pills: about 44 px at 2x, two lines would be about 90.
+    expect(large.height, lessThan(80));
+    expect(large.bottom, closeTo(640 - 48, 0.5));
+
+    // Back to the default size: the min shrinks with the pills. A sheet
+    // already collapsed keeps its size until the next drag (a lower min
+    // does not move it), so the pills only have to stay whole.
+    tester.platformDispatcher.textScaleFactorTestValue = 1.0;
+    await tester.pumpAndSettle();
+    final small = tester.getRect(header);
+    expect(small.height, lessThan(large.height));
+    expect(small.bottom, lessThanOrEqualTo(640 - 48 + 0.5));
+    await tester.dragFrom(tester.getCenter(header), const Offset(0, 200));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(header).bottom, closeTo(640 - 48, 0.5));
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final direction in TextDirection.values) {
+    testWidgets('the pinned pills start at the sheet\'s leading edge, like '
+        'the count under them (${direction.name})', (tester) async {
+      // Wide enough for the three pills with room to spare (the narrow
+      // layout runs up to 600), so a centred strip would show.
+      usePhone(tester, const Size(590, 800));
+      await _pumpScreen(
+        tester,
+        locationGranted: true,
+        textDirection: direction,
+      );
+      final first = tester.getRect(find.byType(NearbyRadiusPill).first);
+      final count = tester.getRect(find.byType(RouteCountIndicator));
+      if (direction == TextDirection.ltr) {
+        expect(first.left, 16);
+        expect(count.left, 0);
+      } else {
+        expect(first.right, 590 - 16);
+        expect(count.right, 590);
+      }
+    });
+  }
+
+  testWidgets('the side panel pins the radius pills above its rows too', (
+    tester,
+  ) async {
+    await _pumpScreen(tester, locationGranted: true);
+    expect(find.byType(TrufiBottomSheet), findsNothing);
+    final header = find.byType(NearbyLinesHeader);
+    final list = find.byType(CustomScrollView);
+    expect(header, findsOneWidget);
+    expect(find.descendant(of: list, matching: header), findsNothing);
+    expect(
+      tester.getRect(header).bottom,
+      lessThanOrEqualTo(tester.getTopLeft(list).dy + 0.5),
+    );
+    expect(
+      find.descendant(of: list, matching: find.byType(NearbyRadiusPill)),
+      findsNothing,
+    );
+  });
+
+  testWidgets('with a line highlighted, a new radius and a moved pin still '
+      'frame the search area: only the highlight keeps the camera', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    const top = 24 + NearbyHeaderCard.cardHeight; // 82
+    const bottom = 640 * 0.65; // 416
+
+    void expectRingFramed(String id, LatLng center) {
+      final ring = engine.lastLayers
+          .firstWhere((l) => l.id == 'nearby-rings')
+          .lines
+          .single;
+      expect(ring.id, id);
+      final camera = engine.lastCamera!;
+      final latitudes = ring.position.map((p) => p.latitude);
+      expect(
+        screenY(camera, latitudes.reduce(math.max), 640),
+        closeTo(top, 0.5),
+      );
+      expect(
+        screenY(camera, latitudes.reduce(math.min), 640),
+        closeTo(bottom, 0.5),
+      );
+      expect(camera.target.longitude, closeTo(center.longitude, 1e-9));
+    }
+
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:201');
+    await tester.pumpAndSettle();
+    expect(highlightedRows(tester), ['201']);
+
+    await tapPill(tester, '500 m (3)');
+    await tester.pumpAndSettle();
+    expect(highlightedRows(tester), ['201']);
+    expectRingFramed('nearby-ring-500', deviceFix);
+
+    // A long press on the map moves the pin; line 201 is still near it.
+    await tester.longPressAt(const Offset(60, 300));
+    await tester.pumpAndSettle();
+    expect(find.text('Pinned location'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
+    expectRingFramed('nearby-ring-500', _FakeEngine.longPressPoint);
+    // Anchored on the pin, not the device position: the outlined control.
+    expect(find.byIcon(Icons.my_location_outlined), findsOneWidget);
   });
 
   testWidgets('leaving a street for the device position frames the ring '

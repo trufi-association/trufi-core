@@ -21,8 +21,6 @@ NearbyLinesState state({
 
 class _Calls {
   int menus = 0;
-  int closes = 0;
-  int locates = 0;
 }
 
 Future<_Calls> _pumpHeader(
@@ -44,8 +42,6 @@ Future<_Calls> _pumpHeader(
             state: state,
             elevated: elevated,
             onMenu: () => calls.menus++,
-            onClose: () => calls.closes++,
-            onUseMyLocation: () => calls.locates++,
           ),
         ),
       ),
@@ -82,15 +78,29 @@ void _usePhone(WidgetTester tester, double width) {
 const double _line = 16;
 
 void main() {
-  testWidgets('menu, locate and close buttons report', (tester) async {
+  testWidgets('the menu button reports; "use my location" and close are '
+      'not in the header (the first is a map control, the second is gone)', (
+    tester,
+  ) async {
     final calls = await _pumpHeader(tester, state());
     await tester.tap(find.byTooltip('Open navigation menu'));
-    await tester.tap(find.byTooltip('Use my location'));
-    await tester.tap(find.byTooltip('Close'));
     await tester.pump();
     expect(calls.menus, 1);
-    expect(calls.locates, 1);
-    expect(calls.closes, 1);
+    expect(find.byTooltip('Use my location'), findsNothing);
+    expect(find.byTooltip('Close'), findsNothing);
+    expect(find.byIcon(Icons.close_rounded), findsNothing);
+  });
+
+  testWidgets('the title card takes every pixel the menu button leaves', (
+    tester,
+  ) async {
+    _usePhone(tester, 360);
+    await _pumpHeader(tester, state());
+    // 12 px of page margin each side, the 44 px menu button and its 12 px
+    // gap: a 280 px card ending at the right margin.
+    final card = tester.getRect(_titleCard());
+    expect(card.left, 12 + 44 + 12);
+    expect(card.right, 360 - 12);
   });
 
   testWidgets('GPS anchor: title, "Your location" and no pin hint', (
@@ -100,23 +110,13 @@ void main() {
     expect(find.text('Nearby lines'), findsOneWidget);
     expect(find.text('Your location'), findsOneWidget);
     expect(find.text('Long-press the map to move the pin'), findsNothing);
-    // The anchor glyph in the card and the locate button.
-    expect(find.byIcon(Icons.my_location_rounded), findsNWidgets(2));
+    // The anchor glyph in the card; the locate button is not here.
+    expect(find.byIcon(Icons.my_location_rounded), findsOneWidget);
     expect(NearbyHeaderCard.heightFor(state()), NearbyHeaderCard.cardHeight);
     expect(
       tester.getSize(_titleCard()).height,
       lessThanOrEqualTo(NearbyHeaderCard.cardHeight),
     );
-  });
-
-  testWidgets('while locating the button spins and ignores taps', (
-    tester,
-  ) async {
-    final calls = await _pumpHeader(tester, state(isLocating: true));
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    await tester.tap(find.byTooltip('Use my location'));
-    await tester.pump();
-    expect(calls.locates, 0);
   });
 
   testWidgets('fallback anchor: the pin hint under the anchor line', (
@@ -182,13 +182,13 @@ void main() {
   group('the anchor label wraps instead of ending in an ellipsis '
       '(trufi-app#79)', () {
     // The test font is a 1 em square per glyph, about twice as wide as
-    // Roboto, so a real 360 dp phone cannot be reproduced here; a 502 px
+    // Roboto, so a real 360 dp phone cannot be reproduced here; a 394 px
     // view leaves the label 270 px, where every language's fallback label
     // needs exactly its two lines.
     for (final locale in TransportListLocalizations.supportedLocales) {
       testWidgets('$locale: the fallback label takes its second line and '
           'is shown whole, with the hint under it', (tester) async {
-        _usePhone(tester, 502);
+        _usePhone(tester, 394);
         final l10n = lookupTransportListLocalizations(locale);
         final fallback = state(source: NearbyAnchorSource.fallback);
         await _pumpHeader(tester, fallback, locale: locale);
@@ -216,7 +216,7 @@ void main() {
 
     testWidgets('a short label keeps its single line and the card its '
         'height', (tester) async {
-      _usePhone(tester, 502);
+      _usePhone(tester, 394);
       await _pumpHeader(tester, state());
       expect(_paragraph(tester, 'Your location').size.height, _line);
       expect(tester.getSize(_titleCard()).height, NearbyHeaderCard.cardHeight);
@@ -247,8 +247,10 @@ void main() {
     });
 
     // The translators' budget, the one figure the template ARB states for
-    // this label: two lines of at most 18 characters each. On a 360 dp
-    // phone the text box is 128 px. A label with a 19-character line
+    // this label: two lines of at most 18 characters each. It was set when
+    // the text box was 128 px on a 360 dp phone (the header also held the
+    // locate and close buttons); the box is 236 px now, so the budget
+    // leaves room to spare. A label with a 19-character line
     // ("Centro de la ciudad (sin ubicación)") still fit with Roboto at
     // font size 1.0 but was cut at a slightly larger Android font size;
     // with 18 per line the German label, the longest kept, stays whole up
@@ -312,6 +314,19 @@ void main() {
 
       await _pumpHeader(tester, fallback, locale: locale);
       expect(tester.takeException(), isNull);
+      expect(
+        tester.getSize(_titleCardOfAnyLocale()).height,
+        lessThanOrEqualTo(NearbyHeaderCard.heightFor(fallback)),
+      );
+    });
+
+    testWidgets('$locale: on a 300 px phone the card fills every allowed '
+        'line and reaches exactly the reserved height', (tester) async {
+      _usePhone(tester, 300);
+      final fallback = state(source: NearbyAnchorSource.fallback);
+
+      await _pumpHeader(tester, fallback, locale: locale);
+      expect(tester.takeException(), isNull);
       // The wide test font fills every allowed line here: two of label,
       // three of hint — the tallest the card gets.
       expect(
@@ -325,9 +340,9 @@ void main() {
     tester,
   ) async {
     final calls = await _pumpHeader(tester, state(), elevated: false);
-    await tester.tap(find.byTooltip('Close'));
+    await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pump();
-    expect(calls.closes, 1);
+    expect(calls.menus, 1);
     expect(find.text('Nearby lines'), findsOneWidget);
   });
 }
