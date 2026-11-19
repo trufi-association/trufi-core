@@ -1437,7 +1437,7 @@ void main() {
     await tester.dragFrom(tester.getCenter(header), const Offset(0, 400));
     await tester.pumpAndSettle();
     final large = tester.getRect(header);
-    // One line of pills (a pill is about 36 px at this size).
+    // One line of pills: about 44 px at 2x, two lines would be about 90.
     expect(large.height, lessThan(80));
     expect(large.bottom, closeTo(640 - 48, 0.5));
 

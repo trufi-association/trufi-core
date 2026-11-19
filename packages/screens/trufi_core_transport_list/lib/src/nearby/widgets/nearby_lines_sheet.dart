@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show mapEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderAbstractViewport;
 import 'package:flutter/services.dart';
@@ -455,7 +456,7 @@ class NearbyLinesHeader extends StatelessWidget {
   }
 }
 
-class _RadiusChips extends StatelessWidget {
+class _RadiusChips extends StatefulWidget {
   const _RadiusChips({
     required this.radius,
     required this.counts,
@@ -465,6 +466,59 @@ class _RadiusChips extends StatelessWidget {
   final NearbyRadius radius;
   final Map<NearbyRadius, int> counts;
   final ValueChanged<NearbyRadius> onRadiusChanged;
+
+  @override
+  State<_RadiusChips> createState() => _RadiusChipsState();
+}
+
+class _RadiusChipsState extends State<_RadiusChips> {
+  /// One stable key per bracket (a key moving between pills would rebuild
+  /// the tapped one and cut its ripple), to find the selected pill.
+  final Map<NearbyRadius, GlobalKey> _pillKeys = {
+    for (final radius in NearbyRadius.values) radius: GlobalKey(),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _showSelected(Duration.zero);
+  }
+
+  @override
+  void didUpdateWidget(_RadiusChips oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The counts come with each query and widen the pills.
+    if (widget.radius != oldWidget.radius ||
+        !mapEquals(widget.counts, oldWidget.counts)) {
+      _showSelected(const Duration(milliseconds: 200));
+    }
+  }
+
+  /// The strip opens at its start, so at a large text size the selected
+  /// pill can start out of view (a revisit on 500 m, the phone / side-panel
+  /// swap), or half in (a tap on its visible part): scroll the strip, and
+  /// only the strip, just enough for it to be whole.
+  void _showSelected(Duration duration) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final pillContext = _pillKeys[widget.radius]?.currentContext;
+      if (!mounted || pillContext == null) return;
+      final pill = pillContext.findRenderObject();
+      final position = Scrollable.maybeOf(pillContext)?.position;
+      if (pill == null || position == null) return;
+      for (final policy in [
+        ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+        ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      ]) {
+        if (!mounted) return;
+        await position.ensureVisible(
+          pill,
+          duration: duration,
+          curve: Curves.easeOutCubic,
+          alignmentPolicy: policy,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -477,11 +531,12 @@ class _RadiusChips extends StatelessWidget {
           for (final (index, candidate) in NearbyRadius.values.indexed) ...[
             if (index > 0) const SizedBox(width: 8),
             NearbyRadiusPill(
-              label: candidate.chipLabel(l10n, counts[candidate] ?? 0),
-              selected: candidate == radius,
+              key: _pillKeys[candidate],
+              label: candidate.chipLabel(l10n, widget.counts[candidate] ?? 0),
+              selected: candidate == widget.radius,
               onTap: () {
                 HapticFeedback.selectionClick();
-                onRadiusChanged(candidate);
+                widget.onRadiusChanged(candidate);
               },
             ),
           ],

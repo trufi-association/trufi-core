@@ -340,6 +340,67 @@ void main() {
     expect(find.textContaining('Stop Av. Blanco Galindo'), findsOneWidget);
   });
 
+  for (final direction in TextDirection.values) {
+    testWidgets('the selected pill is brought whole into view when the pills '
+        'do not fit (${direction.name})', (tester) async {
+      // 360 px: the test font is wide enough for the last pill to start
+      // out of view.
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      Future<void> pump(
+        NearbyRadius radius, [
+        Map<NearbyRadius, int> pillCounts = counts,
+      ]) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates:
+                TransportListLocalizations.localizationsDelegates,
+            supportedLocales: TransportListLocalizations.supportedLocales,
+            builder: (context, child) =>
+                Directionality(textDirection: direction, child: child!),
+            home: Scaffold(
+              body: NearbyLinesSheet(
+                state: state(radius: radius).copyWith(counts: pillCounts),
+                onRadiusChanged: (_) {},
+                onLineTap: (_) {},
+                onLineDetails: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+      }
+
+      void expectWhole(String label) {
+        final pill = tester.getRect(
+          find.ancestor(
+            of: find.text(label),
+            matching: find.byType(NearbyRadiusPill),
+          ),
+        );
+        expect(pill.left, greaterThanOrEqualTo(-0.5), reason: label);
+        expect(pill.right, lessThanOrEqualTo(360.5), reason: label);
+      }
+
+      // Built on the last bracket (a revisit, the phone / panel swap).
+      await pump(NearbyRadius.m500);
+      expectWhole('500 m (3)');
+      // A query's counts widen the pills: the selected one stays whole.
+      const more = {
+        NearbyRadius.m100: 1,
+        NearbyRadius.m300: 20,
+        NearbyRadius.m500: 300,
+      };
+      await pump(NearbyRadius.m500, more);
+      expectWhole('500 m (300)');
+      // Then a radius set from elsewhere: the strip follows it back.
+      await pump(NearbyRadius.m100, more);
+      expectWhole('100 m (1)');
+    });
+  }
+
   testWidgets('tapping a chip reports the radius', (tester) async {
     final calls = await _pumpSheet(tester, state());
     await tapPill(tester, '500 m (3)');
