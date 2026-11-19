@@ -575,6 +575,13 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
               // takes (a long label, a larger font size), right-aligned
               // 16 px from the edge like the home screen's.
               child: Column(
+                // The controls stay on the physical right in every
+                // language, like the home screen's (`Positioned(right:
+                // 16)`) and this screen's side-panel layout. Without this,
+                // `end` is the left edge in Arabic and the 4 px below lands
+                // on the wrong side. Only this column's alignment: the
+                // header row keeps the app's direction.
+                textDirection: TextDirection.ltr,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildHeader(state, elevated: true),

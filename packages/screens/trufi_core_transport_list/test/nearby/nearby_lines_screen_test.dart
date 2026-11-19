@@ -123,6 +123,7 @@ Future<_FakeEngine> _pumpScreen(
   NearbyLineDetailsCallback? onLineDetails,
   bool showStops = true,
   int engines = 1,
+  TextDirection? textDirection,
 }) async {
   if (mockLocation) mockGeolocator(serviceEnabled: locationGranted);
   final engine = _FakeEngine();
@@ -150,6 +151,11 @@ Future<_FakeEngine> _pumpScreen(
         locale: locale,
         localizationsDelegates: screen.localizationsDelegates,
         supportedLocales: TransportListLocalizations.supportedLocales,
+        // What GlobalWidgetsLocalizations gives an Arabic app (trufi-sanaa).
+        builder: textDirection == null
+            ? null
+            : (context, child) =>
+                  Directionality(textDirection: textDirection, child: child!),
         home: Scaffold(body: Builder(builder: screen.builder)),
       ),
     ),
@@ -461,6 +467,18 @@ void main() {
     expect(locate.top, closeTo(layers.bottom + 8, 0.5));
     expect(locate.size, const Size(48, 48));
     expect(layers.size, locate.size);
+  });
+
+  testWidgets('right to left (Arabic in trufi-sanaa): the header mirrors, '
+      'the map controls stay on the right 16 px in, as on the home screen', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, engines: 2, textDirection: TextDirection.rtl);
+
+    expect(tester.getRect(find.byTooltip('Open navigation menu')).right, 348);
+    expect(tester.getRect(find.byTooltip('Change map type')).right, 360 - 16);
+    expect(tester.getRect(find.byTooltip('Use my location')).right, 360 - 16);
   });
 
   testWidgets('the map controls follow the card when its text grows', (
