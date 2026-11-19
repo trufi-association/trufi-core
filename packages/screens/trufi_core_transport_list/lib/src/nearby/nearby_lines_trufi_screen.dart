@@ -615,7 +615,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
           controller: _sheetController,
           initialChildSize: _sheetInitialSize,
           minChildSize: _sheetMinSizeFor(
-            constraints.maxHeight,
+            // The sheet's sizes are fractions of what TrufiBottomSheet's
+            // SafeArea leaves under the status bar, not of the screen.
+            constraints.maxHeight - MediaQuery.paddingOf(context).top,
             viewPadding.bottom,
           ),
           maxChildSize: _sheetMaxSize,
@@ -748,10 +750,11 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   }
 
   /// The collapsed sheet's size: the grabber and the pinned header whole
-  /// above the navigation bar, which the sheet runs under.
-  double _sheetMinSizeFor(double maxHeight, double bottomInset) {
+  /// above the navigation bar, which the sheet runs under. [sheetHeight] is
+  /// the height the sheet's fractions apply to.
+  double _sheetMinSizeFor(double sheetHeight, double bottomInset) {
     final needed = _sheetGrabberHeight + _sheetHeaderHeight + bottomInset;
-    return (needed / maxHeight).clamp(_sheetMinSize, _sheetMinCap);
+    return (needed / sheetHeight).clamp(_sheetMinSize, _sheetMinCap);
   }
 
   void _onSheetHeaderHeight(double height) {

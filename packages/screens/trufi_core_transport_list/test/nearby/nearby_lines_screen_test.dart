@@ -1333,6 +1333,35 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  // A status bar takes its height off the sheet (TrufiBottomSheet's
+  // SafeArea): the sheet's sizes are fractions of what is left. A min
+  // measured on the whole screen came out a few pixels short: the pills
+  // ended under the navigation bar, and without a bottom inset (no
+  // navigation bar under the app, as on the iPhone SE) the sheet's column
+  // overflowed. 720 px tall: the test font wraps the pills, and on 640 the
+  // min would hit its cap.
+  for (final bottom in [48.0, 0.0]) {
+    testWidgets('under a status bar, the collapsed phone sheet keeps the '
+        'pinned pills whole above the bottom inset ($bottom px)', (
+      tester,
+    ) async {
+      usePhone(tester, const Size(360, 720));
+      tester.view.padding = FakeViewPadding(top: 24, bottom: bottom);
+      tester.view.viewPadding = FakeViewPadding(top: 24, bottom: bottom);
+      addTearDown(tester.view.resetPadding);
+      addTearDown(tester.view.resetViewPadding);
+      await _pumpScreen(tester, locationGranted: true);
+
+      await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
+      await tester.pumpAndSettle();
+      expect(
+        tester.getRect(find.byType(NearbyLinesHeader)).bottom,
+        closeTo(720 - bottom, 0.5),
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('the side panel pins the count and the radius pills above its '
       'rows too', (tester) async {
     await _pumpScreen(tester, locationGranted: true);
