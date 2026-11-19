@@ -481,12 +481,6 @@ abstract class TransportListLocalizations {
   /// **'To {headsign}'**
   String nearbyTowards(String headsign);
 
-  /// Banner over the list naming the line whose route is highlighted on the map
-  ///
-  /// In en, this message translates to:
-  /// **'Highlighted: {name}'**
-  String nearbySelectedLine(String name);
-
   /// Empty state when no line passes within the widest search radius
   ///
   /// In en, this message translates to:
@@ -528,12 +522,6 @@ abstract class TransportListLocalizations {
   /// In en, this message translates to:
   /// **'Line details'**
   String get nearbyOpenDetails;
-
-  /// Tooltip of the button that removes the highlighted route from the map
-  ///
-  /// In en, this message translates to:
-  /// **'Clear highlight'**
-  String get nearbyClearSelection;
 }
 
 class _TransportListLocalizationsDelegate

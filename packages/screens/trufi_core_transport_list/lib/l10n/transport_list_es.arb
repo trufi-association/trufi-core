@@ -135,14 +135,6 @@
       }
     }
   },
-  "nearbySelectedLine": "Resaltada: {name}",
-  "@nearbySelectedLine": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "nearbyEmptyTitle": "Ninguna línea pasa a menos de {meters} m",
   "@nearbyEmptyTitle": {
     "placeholders": {
@@ -163,6 +155,5 @@
   "nearbyUnavailableHint": "Añade a los motores de rutas un TrufiPlannerProvider local con un GTFS incluido en la app.",
   "nearbyLoadingData": "Cargando datos sin conexión…",
   "nearbyFooterNote": "Basado en rutas y horarios GTFS",
-  "nearbyOpenDetails": "Detalles de la línea",
-  "nearbyClearSelection": "Quitar resaltado"
+  "nearbyOpenDetails": "Detalles de la línea"
 }

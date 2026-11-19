@@ -258,6 +258,18 @@ Finder _titleCard() => find
     .ancestor(of: find.text('Nearby lines'), matching: find.byType(Material))
     .first;
 
+/// Short names of the rows that wear the highlight, among the rows on
+/// screen (or among every built row with [onScreen] false): the list is
+/// where a highlight shows, there is no banner above it.
+List<String> highlightedRows(WidgetTester tester, {bool onScreen = true}) =>
+    tester
+        .widgetList<NearbyLineTile>(
+          find.byType(NearbyLineTile, skipOffstage: onScreen),
+        )
+        .where((tile) => tile.isSelected)
+        .map((tile) => tile.line.displayName)
+        .toList();
+
 /// Pumps the screen with the default detail navigation and taps the first
 /// row's chevron; returns the [TransportDetailScreen] it pushed.
 Future<TransportDetailScreen> openDetailViaChevron(
@@ -343,7 +355,7 @@ void main() {
 
     await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     final ids = engine.lastLayers.map((l) => l.id).toList();
     expect(ids, contains('nearby-selected-line'));
     final selected = engine.lastLayers.firstWhere(
@@ -354,7 +366,7 @@ void main() {
 
     await tester.tap(find.textContaining('At 80 m'));
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsNothing);
+    expect(highlightedRows(tester, onScreen: false), isEmpty);
 
     await tester.tap(find.byTooltip('Line details').first);
     await tester.pumpAndSettle();
@@ -1118,7 +1130,7 @@ void main() {
 
     cubit().toggleLine('n:201');
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     // The route is drawn (it runs far past the ring) but not framed.
     expect(
       engine.lastLayers.map((l) => l.id),
@@ -1129,11 +1141,11 @@ void main() {
     // Another line, then none: still the same camera.
     cubit().toggleLine('n:X10');
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: X10'), findsOneWidget);
+    expect(highlightedRows(tester), ['X10']);
     expectCameraKept();
     cubit().toggleLine('n:X10');
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: X10'), findsNothing);
+    expect(highlightedRows(tester, onScreen: false), isEmpty);
     expectCameraKept();
     expectRingFramed('nearby-ring-500');
   });
@@ -1159,9 +1171,47 @@ void main() {
         .read<NearbyLinesCubit>()
         .toggleLine('n:201');
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     expect(engine.lastCamera!.zoom, riderCamera.zoom);
     expect(engine.lastCamera!.target, riderCamera.target);
+  });
+
+  testWidgets('a line highlighted from the map comes whole into the phone '
+      'sheet, which keeps its size', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, locationGranted: true);
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+
+    final list = find.byType(CustomScrollView);
+    Rect row(String title) => tester.getRect(
+      find.ancestor(
+        of: find.text(title, skipOffstage: false),
+        matching: find.byType(NearbyLineTile, skipOffstage: false),
+      ),
+    );
+    bool whole(String title) {
+      final viewport = tester.getRect(list);
+      final rect = row(title);
+      return rect.top >= viewport.top - 0.5 &&
+          rect.bottom <= viewport.bottom + 0.5;
+    }
+
+    // At the mid snap the farthest row is below the fold.
+    expect(whole('Line 18'), isFalse);
+    final sheetTop = tester.getTopLeft(list).dy;
+
+    // What a tap on its label on the map does.
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pumpAndSettle();
+    expect(whole('Line 18'), isTrue);
+    expect(highlightedRows(tester), ['18']);
+    // The list scrolled inside the sheet; the sheet did not grow.
+    expect(tester.getTopLeft(list).dy, sheetTop);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('with a line highlighted, a new radius and a moved pin still '
@@ -1197,18 +1247,18 @@ void main() {
         .read<NearbyLinesCubit>()
         .toggleLine('n:201');
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
 
     await tester.tap(find.text('500 m (3)'));
     await tester.pumpAndSettle();
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     expectRingFramed('nearby-ring-500', deviceFix);
 
     // A long press on the map moves the pin; line 201 is still near it.
     await tester.longPressAt(const Offset(60, 300));
     await tester.pumpAndSettle();
     expect(find.text('Pinned location'), findsOneWidget);
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    expect(highlightedRows(tester), ['201']);
     expectRingFramed('nearby-ring-500', _FakeEngine.longPressPoint);
     // Anchored on the pin, not the device position: the outlined control.
     expect(find.byIcon(Icons.my_location_outlined), findsOneWidget);

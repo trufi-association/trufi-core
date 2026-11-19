@@ -78,7 +78,6 @@ class _Calls {
   final radii = <NearbyRadius>[];
   final taps = <NearbyLine>[];
   final details = <NearbyLine>[];
-  int clears = 0;
   int retries = 0;
 }
 
@@ -94,7 +93,6 @@ Future<_Calls> _pumpSheet(WidgetTester tester, NearbyLinesState state) async {
           onRadiusChanged: calls.radii.add,
           onLineTap: calls.taps.add,
           onLineDetails: calls.details.add,
-          onClearSelection: () => calls.clears++,
           onRetry: () => calls.retries++,
         ),
       ),
@@ -102,6 +100,95 @@ Future<_Calls> _pumpSheet(WidgetTester tester, NearbyLinesState state) async {
   );
   await tester.pump();
   return calls;
+}
+
+/// Short names of the rows that wear the highlight, among the rows on
+/// screen (or among every built row with [onScreen] false).
+List<String> selectedRows(WidgetTester tester, {bool onScreen = true}) => tester
+    .widgetList<NearbyLineTile>(
+      find.byType(NearbyLineTile, skipOffstage: onScreen),
+    )
+    .where((tile) => tile.isSelected)
+    .map((tile) => tile.line.displayName)
+    .toList();
+
+/// Forty lines 7 m apart, all within 300 m: a list far longer than a phone
+/// viewport, so most rows are not built until the list scrolls to them.
+List<NearbyLine> manyLines() => [
+  for (var i = 0; i < 40; i++)
+    NearbyLine(
+      lineKey: 'n:L$i',
+      routeId: 'r$i',
+      patternId: i,
+      shortName: 'L$i',
+      longName: 'Línea L$i',
+      routeType: GtfsRouteType.bus,
+      distanceMeters: 10.0 + i * 7,
+      kind: NearbyMatchKind.stop,
+      stopId: 'S$i',
+      stopName: 'Parada $i',
+      nearestPoint: const LatLng(-17.3893, -66.15),
+    ),
+];
+
+/// The sheet on a 360x640 phone, fed from a notifier so a test can emit new
+/// states the way the cubit does, with the controller the draggable sheet
+/// would pass.
+class _ScrollHost {
+  _ScrollHost(NearbyLinesState initial) : states = ValueNotifier(initial);
+
+  final ValueNotifier<NearbyLinesState> states;
+  final ScrollController controller = ScrollController();
+}
+
+Future<_ScrollHost> _pumpScrolling(
+  WidgetTester tester,
+  NearbyLinesState initial, {
+  bool settle = true,
+}) async {
+  tester.view.physicalSize = const Size(360, 640);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+  final host = _ScrollHost(initial);
+  addTearDown(host.states.dispose);
+  addTearDown(host.controller.dispose);
+  await tester.pumpWidget(
+    MaterialApp(
+      localizationsDelegates: TransportListLocalizations.localizationsDelegates,
+      supportedLocales: TransportListLocalizations.supportedLocales,
+      home: Scaffold(
+        body: ValueListenableBuilder<NearbyLinesState>(
+          valueListenable: host.states,
+          builder: (context, state, _) => NearbyLinesSheet(
+            state: state,
+            scrollController: host.controller,
+            onRadiusChanged: (_) {},
+            onLineTap: (_) {},
+            onLineDetails: (_) {},
+          ),
+        ),
+      ),
+    ),
+  );
+  // A loading state spins forever: one frame is all it needs.
+  settle ? await tester.pumpAndSettle() : await tester.pump();
+  return host;
+}
+
+Rect _viewport(WidgetTester tester) =>
+    tester.getRect(find.byType(CustomScrollView));
+
+Rect _row(WidgetTester tester, String title) => tester.getRect(
+  find.ancestor(of: find.text(title), matching: find.byType(NearbyLineTile)),
+);
+
+/// The row is whole inside the list's viewport.
+void expectRowWhole(WidgetTester tester, String title) {
+  final viewport = _viewport(tester);
+  final row = _row(tester, title);
+  expect(row.top, greaterThanOrEqualTo(viewport.top - 0.5), reason: title);
+  expect(row.bottom, lessThanOrEqualTo(viewport.bottom + 0.5), reason: title);
 }
 
 void main() {
@@ -163,8 +250,9 @@ void main() {
     expect(find.text('1 line within 300 m'), findsOneWidget);
   });
 
-  testWidgets('phone width: a selected row, a long place and the chip do '
-      'not overflow', (tester) async {
+  testWidgets('phone width: a selected row and a long place do not overflow', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(360, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -191,10 +279,9 @@ void main() {
         selectedLineKey: 'n:huay',
       ),
     );
-    expect(find.byTooltip('Clear highlight'), findsOneWidget);
-    expect(find.text('Highlighted: HUAY'), findsOneWidget);
-    // The chip's avatar and the row's badge both carry the short name.
-    expect(find.text('HUAY'), findsNWidgets(2));
+    // No banner over the list: the row's badge is the only short name.
+    expect(find.text('HUAY'), findsOneWidget);
+    expect(selectedRows(tester), ['HUAY']);
     expect(tester.takeException(), isNull);
   });
 
@@ -225,15 +312,67 @@ void main() {
     expect(calls.details.map((l) => l.displayName), ['201']);
   });
 
-  testWidgets('the highlighted line gets a banner whose × clears it', (
+  testWidgets('the highlighted line is its row, with no banner over the list; '
+      'a tap on it reports the toggle that clears it', (tester) async {
+    final calls = await _pumpSheet(tester, state(selectedLineKey: 'n:201'));
+    expect(selectedRows(tester), ['201']);
+    expect(find.textContaining('Highlighted'), findsNothing);
+    expect(find.byIcon(Icons.close_rounded), findsNothing);
+    // The list opens with the count pill, as without a highlight.
+    final count = tester.getTopLeft(find.byType(RouteCountIndicator));
+    final firstRow = tester.getTopLeft(find.byType(NearbyLineTile).first);
+    expect(count.dy, lessThan(firstRow.dy));
+
+    await tester.tap(find.textContaining('At 80 m'));
+    await tester.pump();
+    expect(calls.taps.map((l) => l.displayName), ['201']);
+  });
+
+  testWidgets('a highlight beyond the radius gets its row after the others, '
+      'with the plain distance, and the count stays the radius\'s', (
     tester,
   ) async {
-    final calls = await _pumpSheet(tester, state(selectedLineKey: 'n:201'));
-    expect(find.text('Highlighted: 201'), findsOneWidget);
+    await _pumpSheet(tester, state(selectedLineKey: 'n:18'));
+    expect(find.text('2 lines within 300 m'), findsOneWidget);
+    final tiles = tester
+        .widgetList<NearbyLineTile>(find.byType(NearbyLineTile))
+        .toList();
+    expect(tiles.map((t) => t.line.displayName), ['201', 'X10', '18']);
+    expect(tiles.map((t) => t.isInsideRadius), [true, true, false]);
+    expect(selectedRows(tester), ['18']);
+    expect(
+      NearbyLinesSheet.rowsOf(
+        state(selectedLineKey: 'n:18'),
+      ).map((l) => l.displayName),
+      ['201', 'X10', '18'],
+    );
+    // Within the radius it is just one of the rows.
+    expect(
+      NearbyLinesSheet.rowsOf(
+        state(selectedLineKey: 'n:X10'),
+      ).map((l) => l.displayName),
+      ['201', 'X10'],
+    );
+  });
 
-    await tester.tap(find.byTooltip('Clear highlight'));
-    await tester.pump();
-    expect(calls.clears, 1);
+  testWidgets('nothing within the radius but a highlight beyond: the empty '
+      'message, then its row', (tester) async {
+    await _pumpSheet(
+      tester,
+      state(
+        lines: [rows.last],
+        radius: NearbyRadius.m100,
+        selectedLineKey: 'n:18',
+      ),
+    );
+    final empty = find.text('No lines within 100 m. Try a larger radius.');
+    expect(empty, findsOneWidget);
+    expect(find.textContaining('At 380 m'), findsOneWidget);
+    expect(
+      tester.getTopLeft(empty).dy,
+      lessThan(tester.getTopLeft(find.byType(NearbyLineTile)).dy),
+    );
+    expect(selectedRows(tester), ['18']);
   });
 
   testWidgets('no line within 500 m shows the empty state and the pin hint', (
@@ -326,5 +465,212 @@ void main() {
     expect(find.textContaining('Pasa a 133 m'), findsOneWidget);
     expect(find.textContaining('Hacia Av. Humberto Asin'), findsOneWidget);
     expect(find.text('Basado en rutas y horarios GTFS'), findsOneWidget);
+  });
+
+  group('the list keeps the highlighted row in view', () {
+    testWidgets('a highlight set from the map brings in a row the lazy list '
+        'had not built, just to the bottom edge', (tester) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(tester, state(lines: lines));
+      expect(find.text('Línea L30', skipOffstage: false), findsNothing);
+
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L30');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L30');
+      // Just enough: it came from below, so it rests on the bottom edge.
+      expect(
+        _row(tester, 'Línea L30').bottom,
+        closeTo(_viewport(tester).bottom, 0.5),
+      );
+      expect(selectedRows(tester), ['L30']);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('a row above the viewport comes down to the top edge', (
+      tester,
+    ) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: lines, selectedLineKey: 'n:L35'),
+      );
+      expectRowWhole(tester, 'Línea L35');
+
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L3');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L3');
+      expect(_row(tester, 'Línea L3').top, closeTo(_viewport(tester).top, 0.5));
+    });
+
+    testWidgets('a row already whole on screen does not move the list', (
+      tester,
+    ) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(tester, state(lines: lines));
+      expectRowWhole(tester, 'Línea L1');
+
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L1');
+      await tester.pumpAndSettle();
+      expect(host.controller.offset, 0);
+      expect(selectedRows(tester), ['L1']);
+    });
+
+    testWidgets('a row cut by the bottom edge scrolls just enough to be '
+        'whole', (tester) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(tester, state(lines: lines));
+      final viewport = _viewport(tester);
+      // The first row the bottom edge cuts.
+      var cut = -1;
+      for (var i = 0; i < lines.length; i++) {
+        final row = _row(tester, 'Línea L$i');
+        if (row.bottom > viewport.bottom) {
+          cut = i;
+          break;
+        }
+      }
+      expect(cut, greaterThan(0));
+
+      host.states.value = state(lines: lines, selectedLineKey: 'n:L$cut');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L$cut');
+      expect(host.controller.offset, greaterThan(0));
+      expect(host.controller.offset, lessThan(100));
+    });
+
+    testWidgets('a radius change keeps the scroll: the rider is at the pills', (
+      tester,
+    ) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: lines, selectedLineKey: 'n:L30'),
+      );
+      host.controller.jumpTo(0);
+      await tester.pumpAndSettle();
+
+      host.states.value = state(
+        lines: lines,
+        radius: NearbyRadius.m500,
+        selectedLineKey: 'n:L30',
+      );
+      await tester.pumpAndSettle();
+      expect(host.controller.offset, 0);
+    });
+
+    testWidgets('new rows that keep the highlight (a moved pin, a revisit) '
+        'bring it back into view', (tester) async {
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: manyLines(), selectedLineKey: 'n:L30'),
+      );
+      host.controller.jumpTo(0);
+      await tester.pumpAndSettle();
+      expect(find.text('Línea L30'), findsNothing);
+
+      // What the cubit emits for a new query: loading, then the rows (a
+      // state equal to the current one is never emitted).
+      host.states.value = state(
+        lines: host.states.value.lines,
+        isLoading: true,
+        selectedLineKey: 'n:L30',
+      );
+      await tester.pump();
+      host.states.value = state(lines: manyLines(), selectedLineKey: 'n:L30');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L30');
+    });
+
+    testWidgets('a list built with a highlight (a revisit, the phone and '
+        'side-panel swap) opens on it', (tester) async {
+      await _pumpScrolling(
+        tester,
+        state(lines: manyLines(), selectedLineKey: 'n:L33'),
+      );
+      expectRowWhole(tester, 'Línea L33');
+    });
+
+    testWidgets('a list built while the query runs reveals the row once it '
+        'arrives', (tester) async {
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: const [], isLoading: true, selectedLineKey: 'n:L33'),
+        settle: false,
+      );
+      host.states.value = state(lines: manyLines(), selectedLineKey: 'n:L33');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L33');
+    });
+
+    testWidgets('back from a screen pushed on top (a line\'s detail), the '
+        'list returns to the highlighted row', (tester) async {
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: manyLines(), selectedLineKey: 'n:L30'),
+      );
+      // The rider scrolls up and opens another line's detail.
+      host.controller.jumpTo(0);
+      await tester.pumpAndSettle();
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.push(MaterialPageRoute<void>(builder: (_) => const Scaffold()));
+      await tester.pumpAndSettle();
+      expect(host.controller.offset, 0);
+
+      navigator.pop();
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea L30');
+    });
+
+    testWidgets('clearing the highlight leaves the list where it is', (
+      tester,
+    ) async {
+      final lines = manyLines();
+      final host = await _pumpScrolling(
+        tester,
+        state(lines: lines, selectedLineKey: 'n:L30'),
+      );
+      final offset = host.controller.offset;
+      expect(offset, greaterThan(0));
+
+      host.states.value = state(lines: lines);
+      await tester.pumpAndSettle();
+      expect(host.controller.offset, offset);
+      expect(selectedRows(tester, onScreen: false), isEmpty);
+    });
+
+    testWidgets('a highlight beyond the radius scrolls to its row at the '
+        'end', (tester) async {
+      final lines = [
+        ...manyLines(),
+        const NearbyLine(
+          lineKey: 'n:far',
+          routeId: 'far',
+          patternId: 0,
+          shortName: 'FAR',
+          longName: 'Línea lejana',
+          routeType: GtfsRouteType.bus,
+          distanceMeters: 450,
+          kind: NearbyMatchKind.stop,
+          stopId: 'F1',
+          stopName: 'Lejos',
+          nearestPoint: LatLng(-17.386, -66.15),
+        ),
+      ];
+      final host = await _pumpScrolling(tester, state(lines: lines));
+      host.states.value = state(lines: lines, selectedLineKey: 'n:far');
+      await tester.pumpAndSettle();
+      expectRowWhole(tester, 'Línea lejana');
+      expect(
+        tester
+            .widget<NearbyLineTile>(
+              find.ancestor(
+                of: find.text('Línea lejana'),
+                matching: find.byType(NearbyLineTile),
+              ),
+            )
+            .isInsideRadius,
+        isFalse,
+      );
+    });
   });
 }

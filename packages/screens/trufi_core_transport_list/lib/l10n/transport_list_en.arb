@@ -286,16 +286,6 @@
       }
     }
   },
-  "nearbySelectedLine": "Highlighted: {name}",
-  "@nearbySelectedLine": {
-    "description": "Banner over the list naming the line whose route is highlighted on the map",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "example": "201"
-      }
-    }
-  },
   "nearbyEmptyTitle": "No lines pass within {meters} m",
   "@nearbyEmptyTitle": {
     "description": "Empty state when no line passes within the widest search radius",
@@ -335,9 +325,5 @@
   "nearbyOpenDetails": "Line details",
   "@nearbyOpenDetails": {
     "description": "Tooltip of the chevron that opens the route detail of a nearby line"
-  },
-  "nearbyClearSelection": "Clear highlight",
-  "@nearbyClearSelection": {
-    "description": "Tooltip of the button that removes the highlighted route from the map"
   }
 }

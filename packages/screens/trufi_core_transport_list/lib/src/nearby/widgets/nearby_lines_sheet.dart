@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderAbstractViewport;
 import 'package:flutter/services.dart';
 import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart'
-    show RouteBadge, RouteBadgeVariant;
+    show RouteBadge;
 import 'package:trufi_core_utils/trufi_core_utils.dart' show safeNumberFormat;
 
 import '../../../l10n/transport_list_localizations.dart';
@@ -31,11 +32,20 @@ extension NearbyRadiusLabel on NearbyRadius {
 }
 
 /// Content of the nearby-lines sheet (phone) or side panel (wide), in the
-/// routes list's language: the highlight chip, the count pill, the radius
-/// pills, the GTFS note and the rows for the selected radius (or the
-/// matching loading / empty / error state). The screen title and the close
-/// action live in the floating header, not here.
-class NearbyLinesSheet extends StatelessWidget {
+/// routes list's language: the count pill, the radius pills, the GTFS note
+/// and the rows for the selected radius (or the matching loading / empty /
+/// error state). The screen title lives in the floating header, not here.
+///
+/// The highlighted line is the row with the primary border, like the home
+/// screen's selected itinerary card, and the list keeps it in view the way
+/// the home screen's results sheet does (#1055): it scrolls just enough for
+/// the row to be whole when the highlight changes (a label tapped on the
+/// map), when a new query keeps it (a moved pin, a revisit), when the list
+/// is built with it already set (a revisit, the phone / side-panel swap)
+/// and when the screen comes back to the front (after a line's detail).
+/// A highlighted line beyond the selected radius gets its row after the
+/// others, so the list always shows what the map highlights.
+class NearbyLinesSheet extends StatefulWidget {
   const NearbyLinesSheet({
     super.key,
     required this.state,
@@ -43,7 +53,6 @@ class NearbyLinesSheet extends StatelessWidget {
     required this.onRadiusChanged,
     required this.onLineTap,
     required this.onLineDetails,
-    this.onClearSelection,
     this.onRetry,
   });
 
@@ -52,17 +61,182 @@ class NearbyLinesSheet extends StatelessWidget {
   /// The draggable sheet's controller; null in the side panel.
   final ScrollController? scrollController;
   final ValueChanged<NearbyRadius> onRadiusChanged;
+
+  /// A tap on a row: highlights its line, or clears the highlight when the
+  /// row already wears it.
   final ValueChanged<NearbyLine> onLineTap;
   final ValueChanged<NearbyLine> onLineDetails;
-  final VoidCallback? onClearSelection;
 
   /// Re-runs the query after an error; null hides the retry button.
   final VoidCallback? onRetry;
 
+  /// The rows the list shows: the lines within the radius and, after them,
+  /// the highlighted line when it lies beyond (a label tapped outside the
+  /// ring, or a radius narrowed under it). Nearest first, so the extra row
+  /// keeps the order.
+  static List<NearbyLine> rowsOf(NearbyLinesState state) {
+    final visible = state.visibleLines;
+    final selected = state.selectedLine;
+    if (selected == null || selected.isWithin(state.radius)) return visible;
+    return [...visible, selected];
+  }
+
+  @override
+  State<NearbyLinesSheet> createState() => _NearbyLinesSheetState();
+}
+
+class _NearbyLinesSheetState extends State<NearbyLinesSheet> {
+  /// The home screen's reveal: short, decelerating (#1055).
+  static const Duration _revealDuration = Duration(milliseconds: 200);
+
+  /// A row not built yet is reached in a few hops at most (see [_reveal]).
+  static const int _revealHops = 4;
+  static const double _rowGap = 12;
+
+  /// One stable key per line, to find the highlighted row's render box.
+  final Map<String, GlobalKey> _rowKeys = {};
+
+  /// The rows of the last build (empty while a state replaces the list),
+  /// to know where a row that is not built yet sits.
+  List<NearbyLine> _rows = const [];
+
+  /// Whether this screen's route was on top the last time it was checked.
+  bool? _routeWasCurrent;
+
+  /// Bumped by every reveal, so an older one still in flight gives way.
+  int _revealToken = 0;
+
+  GlobalKey _rowKey(String lineKey) =>
+      _rowKeys.putIfAbsent(lineKey, GlobalKey.new);
+
+  @override
+  void initState() {
+    super.initState();
+    // Built with a highlight already set: a revisit (the cubit outlives
+    // the screen) or the swap between the phone sheet and the side panel.
+    if (widget.state.selectedLineKey != null) _scheduleReveal();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Back from a screen pushed on top (a line's detail): the list may
+    // have been scrolled away from the highlighted row meanwhile.
+    final isCurrent = ModalRoute.isCurrentOf(context) ?? true;
+    if (_routeWasCurrent == false &&
+        isCurrent &&
+        widget.state.selectedLineKey != null) {
+      _scheduleReveal();
+    }
+    _routeWasCurrent = isCurrent;
+  }
+
+  @override
+  void didUpdateWidget(NearbyLinesSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final selected = widget.state.selectedLineKey;
+    if (selected == null) return;
+    // A new highlight, or new rows that kept it (a new query). A radius
+    // change keeps the rows and the scroll: the rider is at the pills.
+    if (selected != oldWidget.state.selectedLineKey ||
+        !identical(widget.state.lines, oldWidget.state.lines)) {
+      _scheduleReveal();
+    }
+  }
+
+  void _scheduleReveal() {
+    final token = ++_revealToken;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _reveal(token, _revealHops),
+    );
+  }
+
+  /// Scrolls just enough for the highlighted row to be whole inside the
+  /// viewport: the home screen's rule for its selected card (#1055). The
+  /// list is lazy, so a row far from the viewport has no render box yet:
+  /// the list first moves to where the row must be, measured from the
+  /// nearest row that is built, and tries again once it is laid out.
+  Future<void> _reveal(int token, int hopsLeft) async {
+    if (!mounted || token != _revealToken) return;
+    final selected = widget.state.selectedLineKey;
+    if (selected == null) return;
+    final index = _rows.indexWhere((line) => line.lineKey == selected);
+    if (index == -1) return;
+
+    final rowContext = _rowKeys[selected]?.currentContext;
+    if (rowContext != null) {
+      await Scrollable.ensureVisible(
+        rowContext,
+        duration: _revealDuration,
+        curve: Curves.easeOutCubic,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
+      if (!rowContext.mounted || token != _revealToken) return;
+      await Scrollable.ensureVisible(
+        rowContext,
+        duration: _revealDuration,
+        curve: Curves.easeOutCubic,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      );
+      return;
+    }
+
+    if (hopsLeft == 0) return;
+    final hop = _hopToward(index);
+    if (hop == null) return;
+    final (position, offset) = hop;
+    await position.animateTo(
+      offset,
+      duration: _revealDuration,
+      curve: Curves.easeOutCubic,
+    );
+    await WidgetsBinding.instance.endOfFrame;
+    return _reveal(token, hopsLeft - 1);
+  }
+
+  /// The scroll offset that brings row [index] to the viewport's edge on
+  /// its side, measured from the built row nearest to it: the rows share
+  /// one height (a one-line title and a one-line subtitle). Null when no
+  /// row is built.
+  (ScrollPosition, double)? _hopToward(int index) {
+    BuildContext? anchorContext;
+    RenderBox? anchorBox;
+    var anchorIndex = -1;
+    for (var i = 0; i < _rows.length; i++) {
+      final context = _rowKeys[_rows[i].lineKey]?.currentContext;
+      final box = context?.findRenderObject();
+      if (box is! RenderBox || !box.hasSize) continue;
+      if (anchorBox == null ||
+          (i - index).abs() < (anchorIndex - index).abs()) {
+        anchorContext = context;
+        anchorBox = box;
+        anchorIndex = i;
+      }
+    }
+    if (anchorContext == null || anchorBox == null) return null;
+    final viewport = RenderAbstractViewport.maybeOf(anchorBox);
+    final position = Scrollable.maybeOf(anchorContext)?.position;
+    if (viewport == null || position == null) return null;
+
+    final height = anchorBox.size.height;
+    final top =
+        viewport.getOffsetToReveal(anchorBox, 0).offset +
+        (index - anchorIndex) * (height + _rowGap);
+    // Below the viewport: its bottom on the bottom edge; above: its top on
+    // the top edge.
+    final offset = index > anchorIndex
+        ? top + height - position.viewportDimension
+        : top;
+    return (
+      position,
+      offset.clamp(position.minScrollExtent, position.maxScrollExtent),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = widget.state;
     final l10n = TransportListLocalizations.of(context);
-    final selected = state.selectedLine;
     final available = state.availability == NearbyAvailability.available;
     final visible = state.visibleLines;
     // Like the routes list: the count only heads an actual list of rows.
@@ -73,13 +247,9 @@ class NearbyLinesSheet extends StatelessWidget {
         visible.isNotEmpty;
 
     return CustomScrollView(
-      controller: scrollController,
-      primary: scrollController == null ? false : null,
+      controller: widget.scrollController,
+      primary: widget.scrollController == null ? false : null,
       slivers: [
-        if (selected != null)
-          SliverToBoxAdapter(
-            child: _SelectionBanner(line: selected, onClear: onClearSelection),
-          ),
         if (showCount)
           SliverToBoxAdapter(
             child: RouteCountIndicator(
@@ -95,79 +265,98 @@ class NearbyLinesSheet extends StatelessWidget {
             child: _RadiusChips(
               radius: state.radius,
               counts: state.counts,
-              onRadiusChanged: onRadiusChanged,
+              onRadiusChanged: widget.onRadiusChanged,
             ),
           ),
           SliverToBoxAdapter(child: _InfoRow(text: l10n.nearbyFooterNote)),
         ],
-        _buildBody(context, l10n),
+        ..._buildBody(l10n),
       ],
     );
   }
 
   /// First matching state wins; the order is the order a rider can hit them.
-  Widget _buildBody(BuildContext context, TransportListLocalizations l10n) {
+  /// Also records the rows shown, for [_reveal].
+  List<Widget> _buildBody(TransportListLocalizations l10n) {
+    final state = widget.state;
+    _rows = const [];
     if (state.isLoading && state.availability == NearbyAvailability.loading) {
-      return _boxed(TransportLoadingState(message: l10n.nearbyLoadingData));
+      return [_boxed(TransportLoadingState(message: l10n.nearbyLoadingData))];
     }
     if (state.availability == NearbyAvailability.missing) {
-      return _boxed(
-        TransportEmptyState(
-          icon: Icons.cloud_off_rounded,
-          title: l10n.nearbyUnavailableTitle,
-          hint: l10n.nearbyUnavailableHint,
+      return [
+        _boxed(
+          TransportEmptyState(
+            icon: Icons.cloud_off_rounded,
+            title: l10n.nearbyUnavailableTitle,
+            hint: l10n.nearbyUnavailableHint,
+          ),
         ),
-      );
+      ];
     }
     final error = state.errorMessage;
     if (error != null) {
-      return _boxed(
-        TransportLoadErrorState(
-          message: l10n.errorLoadingRoutes,
-          hint: error,
-          retryLabel: l10n.retry,
-          onRetry: onRetry,
+      return [
+        _boxed(
+          TransportLoadErrorState(
+            message: l10n.errorLoadingRoutes,
+            hint: error,
+            retryLabel: l10n.retry,
+            onRetry: widget.onRetry,
+          ),
         ),
-      );
+      ];
     }
     if (state.isLoading) {
-      return _boxed(TransportLoadingState(message: l10n.nearbyLoadingData));
+      return [_boxed(TransportLoadingState(message: l10n.nearbyLoadingData))];
     }
     if (state.lines.isEmpty) {
-      return _boxed(
-        TransportEmptyState(
-          icon: Icons.near_me_disabled_rounded,
-          title: l10n.nearbyEmptyTitle(NearbyRadius.maxMeters.round()),
-          hint: l10n.nearbyMovePinHint,
+      return [
+        _boxed(
+          TransportEmptyState(
+            icon: Icons.near_me_disabled_rounded,
+            title: l10n.nearbyEmptyTitle(NearbyRadius.maxMeters.round()),
+            hint: l10n.nearbyMovePinHint,
+          ),
         ),
-      );
+      ];
     }
-    final visible = state.visibleLines;
-    if (visible.isEmpty) {
-      return _boxed(
-        TransportEmptyState(
-          icon: Icons.radar_rounded,
-          title: l10n.nearbyEmptyInRadius(state.radius.meters.round()),
+    final rows = _rows = NearbyLinesSheet.rowsOf(state);
+    // Keys of lines a new query dropped would only pile up.
+    final shown = {for (final line in rows) line.lineKey};
+    _rowKeys.removeWhere((lineKey, _) => !shown.contains(lineKey));
+    return [
+      // Nothing within the radius: say so, above the highlighted line's
+      // row when the highlight lies beyond.
+      if (state.visibleLines.isEmpty)
+        _boxed(
+          TransportEmptyState(
+            icon: Icons.radar_rounded,
+            title: l10n.nearbyEmptyInRadius(state.radius.meters.round()),
+          ),
         ),
-      );
-    }
-    return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      sliver: SliverList.separated(
-        itemCount: visible.length,
-        itemBuilder: (context, index) {
-          final line = visible[index];
-          return NearbyLineTile(
-            line: line,
-            isSelected: line.lineKey == state.selectedLineKey,
-            isInsideRadius: true,
-            onTap: () => onLineTap(line),
-            onDetails: () => onLineDetails(line),
-          );
-        },
-        separatorBuilder: (_, _) => const SizedBox(height: 12),
-      ),
-    );
+      if (rows.isNotEmpty)
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          sliver: SliverList.separated(
+            itemCount: rows.length,
+            itemBuilder: (context, index) {
+              final line = rows[index];
+              return KeyedSubtree(
+                key: _rowKey(line.lineKey),
+                child: NearbyLineTile(
+                  line: line,
+                  isSelected: line.lineKey == state.selectedLineKey,
+                  isInsideRadius: line.isWithin(state.radius),
+                  onTap: () => widget.onLineTap(line),
+                  onDetails: () => widget.onLineDetails(line),
+                ),
+              );
+            },
+            separatorBuilder: (_, _) => const SizedBox(height: _rowGap),
+          ),
+        ),
+    ];
   }
 
   /// A state widget as a sliver, with room above and below: the states are
@@ -179,88 +368,6 @@ class NearbyLinesSheet extends StatelessWidget {
       child: child,
     ),
   );
-}
-
-/// The highlighted line in the shape of the routes list's active-filter
-/// chip (`secondaryContainer`, radius 20, × to clear), with the line's
-/// badge in front of "Highlighted: 201". Hand-built rather than an
-/// [InputChip]: a chip sizes its avatar to the label's height, and the
-/// 24 px badge trips that assertion. The × gets a 40 px target, which
-/// is what sets the chip's height.
-class _SelectionBanner extends StatelessWidget {
-  const _SelectionBanner({required this.line, required this.onClear});
-
-  final NearbyLine line;
-  final VoidCallback? onClear;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final l10n = TransportListLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-      child: Row(
-        children: [
-          Flexible(
-            child: Material(
-              color: colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(20),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    RouteBadge(
-                      variant: RouteBadgeVariant.chip,
-                      label: line.displayName,
-                      color: line.color ?? colorScheme.primary,
-                      textColor: line.textColor,
-                      icon: Icon(gtfsRouteTypeIcon(line.routeType)),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        l10n.nearbySelectedLine(line.displayName),
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSecondaryContainer,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Tooltip(
-                      message: l10n.nearbyClearSelection,
-                      child: InkResponse(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          onClear?.call();
-                        },
-                        radius: 20,
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Center(
-                            child: Icon(
-                              Icons.close_rounded,
-                              size: 18,
-                              color: colorScheme.onSecondaryContainer,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _RadiusChips extends StatelessWidget {

@@ -90,6 +90,12 @@ point of every line, and the full route highlighted when a row is tapped. The wh
 query runs on the device against the planner's already-loaded GTFS — no
 network call anywhere (#1006). Highlighting a line draws it without moving
 the camera: the map is framed only when the anchor or the radius changes.
+The highlight shows in the list itself, as the row with the primary border
+(no banner above the list), and the list keeps that row in view like the
+home screen's results sheet: it scrolls just enough for the row to be
+whole when a label is tapped on the map, after a new query, and when the
+screen comes back to the front. A highlighted line beyond the selected
+radius gets its row after the others.
 
 ```dart
 screens: [

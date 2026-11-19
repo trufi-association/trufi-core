@@ -725,7 +725,6 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       onRadiusChanged: cubit.setRadius,
       onLineTap: (line) => cubit.toggleLine(line.lineKey),
       onLineDetails: (line) => widget.onLineDetails(context, line),
-      onClearSelection: cubit.clearSelection,
       onRetry: cubit.refresh,
     );
   }
