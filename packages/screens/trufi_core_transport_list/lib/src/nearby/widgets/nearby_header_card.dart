@@ -4,15 +4,16 @@ import '../../../l10n/transport_list_localizations.dart';
 import '../nearby_lines_cubit.dart';
 import '../nearby_street_anchor.dart';
 
-/// Floating header of the nearby-lines screen: a 44 px menu button and the
-/// title card (screen title over the anchor line, plus the pin hint when
-/// the device position is not in use) across the rest of the width.
+/// Floating header of the nearby-lines screen: a 44 px menu button (back on
+/// a street visit, see [onBack]) and the title card (screen title over the
+/// anchor line, plus the pin hint when the device position is not in use)
+/// across the rest of the width.
 ///
 /// "Use my location" is a map control under the layers button, as on the
-/// home screen, and the screen is left through the drawer or system back:
-/// the card keeps about 236 px of text on a 360 dp phone. A long anchor
-/// label still wraps to a second line and the hint to a third rather than
-/// ending in an ellipsis (trufi-app#79).
+/// home screen, and there is no close button: the card keeps about 236 px
+/// of text on a 360 dp phone. A long anchor label still wraps to a second
+/// line and the hint to a third rather than ending in an ellipsis
+/// (trufi-app#79).
 class NearbyHeaderCard extends StatelessWidget {
   const NearbyHeaderCard({
     super.key,
