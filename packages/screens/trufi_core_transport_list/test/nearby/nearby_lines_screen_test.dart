@@ -492,10 +492,14 @@ void main() {
     final card = tester.getRect(_titleCard());
     final locate = tester.getRect(find.byTooltip('Use my location'));
     expect(locate.top, closeTo(card.bottom + 12, 0.5));
-    // The test font is twice as wide as Roboto: at 1.5 a row of the sheet
-    // overflows 360 px, on main too (the header's own overflow tests are in
-    // nearby_header_card_test.dart). Clear it so it does not fail the test.
-    tester.takeException();
+    // The test font is twice as wide as Roboto: at 1.5 the sheet's route
+    // count pill overflows 360 px by 88 px, on main too (the header's own
+    // overflow tests are in nearby_header_card_test.dart). Only the first
+    // exception is kept, so pin that it is this one and not a new one.
+    expect(
+      tester.takeException().toString(),
+      contains('A RenderFlex overflowed by 88 pixels on the right'),
+    );
   });
 
   testWidgets('the controls column does not cover the map beside it: a '
