@@ -1278,6 +1278,47 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('a sideways drag on the pinned pills scrolls them and leaves '
+      'the sheet where it is; an upward drag on them still opens it', (
+    tester,
+  ) async {
+    // The test font is wide enough for the pills to overflow 360 px.
+    usePhone(tester, const Size(360, 640));
+    await _pumpScreen(tester, locationGranted: true);
+    final header = find.byType(NearbyLinesHeader);
+    ScrollPosition strip() => tester
+        .state<ScrollableState>(
+          find.descendant(of: header, matching: find.byType(Scrollable)),
+        )
+        .position;
+    NearbyLinesCubit cubit() =>
+        tester.element(find.byType(NearbyHeaderCard)).read<NearbyLinesCubit>();
+    expect(strip().maxScrollExtent, greaterThan(0));
+    final headerTop = tester.getTopLeft(header).dy;
+
+    await tester.dragFrom(
+      tester.getCenter(find.text('100 m (1)')),
+      const Offset(-150, 0),
+    );
+    await tester.pumpAndSettle();
+    expect(strip().pixels, greaterThan(0));
+    expect(tester.getTopLeft(header).dy, headerTop);
+    expect(cubit().state.radius, NearbyRadius.m300);
+
+    // The last pill came in with the rider's drag: a plain tap reaches it.
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    expect(cubit().state.radius, NearbyRadius.m500);
+
+    await tester.dragFrom(
+      tester.getCenter(find.text('500 m (3)')),
+      const Offset(0, -300),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(header).dy, lessThan(headerTop - 200));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('a rebuild of the screen during a reveal does not stop it (the '
       'sheet keeps the same snap sizes, a new list would snap it again)', (
     tester,
@@ -1348,13 +1389,14 @@ void main() {
   // measured on the whole screen came out a few pixels short: the pills
   // ended under the navigation bar, and without a bottom inset (no
   // navigation bar under the app, as on the iPhone SE) the sheet's column
-  // overflowed.
-  for (final bottom in [48.0, 0.0]) {
+  // overflowed. Without a bottom inset the floor (0.14) already covers one
+  // line of pills on a phone-sized screen, so that case runs on a short
+  // window (a split-screen half), where the min is above the floor.
+  for (final (bottom, height) in [(48.0, 720.0), (0.0, 380.0)]) {
     testWidgets('under a status bar, the collapsed phone sheet keeps the '
-        'pinned pills whole above the bottom inset ($bottom px)', (
-      tester,
-    ) async {
-      usePhone(tester, const Size(360, 720));
+        'pinned pills whole above the bottom inset ($bottom px, $height '
+        'px tall)', (tester) async {
+      usePhone(tester, Size(360, height));
       tester.view.padding = FakeViewPadding(top: 24, bottom: bottom);
       tester.view.viewPadding = FakeViewPadding(top: 24, bottom: bottom);
       addTearDown(tester.view.resetPadding);
@@ -1364,9 +1406,9 @@ void main() {
       await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
       await tester.pumpAndSettle();
       final pills = tester.getRect(find.byType(NearbyLinesHeader));
-      expect(pills.bottom, lessThanOrEqualTo(720 - bottom + 0.5));
+      expect(pills.bottom, closeTo(height - bottom, 0.5));
       // Collapsed: the sheet went down past the mid snap.
-      expect(pills.top, greaterThan(24 + (720 - 24) * (1 - 0.35)));
+      expect(pills.top, greaterThan(24 + (height - 24) * (1 - 0.35)));
       expect(tester.takeException(), isNull);
     });
   }
