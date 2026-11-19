@@ -1180,7 +1180,10 @@ void main() {
       'sheet, above the navigation bar, and the sheet keeps its size', (
     tester,
   ) async {
-    usePhone(tester, const Size(360, 640));
+    // A current phone's height: on a 640 px one the mid snap leaves less
+    // room above a 48 px bar than a row, under the pinned pills, and the
+    // row shows its top instead (the sheet tests cover that rule).
+    usePhone(tester, const Size(360, 800));
     // A three-button navigation bar: the sheet runs under it.
     tester.view.padding = const FakeViewPadding(bottom: 48);
     tester.view.viewPadding = const FakeViewPadding(bottom: 48);
@@ -1219,6 +1222,133 @@ void main() {
     // The list scrolled inside the sheet; the sheet did not grow.
     expect(tester.getTopLeft(list).dy, sheetTop);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the count and the radius pills are pinned in the phone sheet: '
+      'a reveal leaves them in view, and dragging them opens the sheet the '
+      'scrolled list no longer does', (tester) async {
+    usePhone(tester, const Size(360, 800));
+    await _pumpScreen(tester, locationGranted: true);
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+
+    final header = find.byType(NearbyLinesHeader);
+    final list = find.byType(CustomScrollView);
+    // Above the rows, not among them.
+    expect(find.descendant(of: list, matching: header), findsNothing);
+    expect(
+      tester.getRect(header).bottom,
+      lessThanOrEqualTo(tester.getTopLeft(list).dy + 0.5),
+    );
+    expect(
+      find.descendant(of: header, matching: find.byType(RouteCountIndicator)),
+      findsOneWidget,
+    );
+    final headerTop = tester.getTopLeft(header).dy;
+    ScrollPosition listPosition() => tester
+        .state<ScrollableState>(
+          find.descendant(of: list, matching: find.byType(Scrollable)).first,
+        )
+        .position;
+
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pumpAndSettle();
+    // The list scrolled to the row; the pills stayed where they were.
+    expect(listPosition().pixels, greaterThan(0));
+    expect(tester.getTopLeft(header).dy, headerTop);
+    expect(find.text('100 m (1)'), findsOneWidget);
+
+    // A drag on the rows scrolls the list, so the pills are the handle.
+    await tester.drag(find.text('100 m (1)'), const Offset(0, -300));
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(header).dy, lessThan(headerTop - 200));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a rebuild of the screen during a reveal does not stop it (the '
+      'sheet keeps the same snap sizes, a new list would snap it again)', (
+    tester,
+  ) async {
+    usePhone(tester, const Size(360, 800));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+    await tester.tap(find.text('500 m (3)'));
+    await tester.pumpAndSettle();
+    final list = find.byType(CustomScrollView);
+    bool whole(String title) {
+      final viewport = tester.getRect(list);
+      final rect = tester.getRect(
+        find.ancestor(
+          of: find.text(title, skipOffstage: false),
+          matching: find.byType(NearbyLineTile, skipOffstage: false),
+        ),
+      );
+      return rect.top >= viewport.top - 0.5 &&
+          rect.bottom <= viewport.bottom + 0.5;
+    }
+
+    expect(whole('Line 18'), isFalse);
+    tester
+        .element(find.byType(NearbyHeaderCard))
+        .read<NearbyLinesCubit>()
+        .toggleLine('n:18');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    // The rider pans the map meanwhile: the recenter control shows up and
+    // the screen rebuilds while the list is still on its way.
+    engine.onCameraChanged!(
+      TrufiCameraPosition(target: const LatLng(-17.30, -66.10), zoom: 12),
+    );
+    await tester.pumpAndSettle();
+    final recenter = tester.widget<AnimatedOpacity>(
+      find.ancestor(
+        of: find.byIcon(Icons.crop_free_rounded),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    );
+    expect(recenter.opacity, 1);
+    expect(whole('Line 18'), isTrue);
+  });
+
+  testWidgets('the collapsed phone sheet keeps the pinned pills whole above '
+      'the navigation bar', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+    await _pumpScreen(tester, locationGranted: true);
+
+    final header = find.byType(NearbyLinesHeader);
+    // Down to the min snap, by the pills.
+    await tester.drag(find.text('100 m (1)'), const Offset(0, 400));
+    await tester.pumpAndSettle();
+    final pills = tester.getRect(header);
+    expect(pills.bottom, lessThanOrEqualTo(640 - 48 + 0.5));
+    // Collapsed: the sheet went down, to just the grabber and the pills.
+    expect(pills.top, greaterThan(640 * (1 - 0.35)));
+    expect(pills.bottom, closeTo(640 - 48, 0.5));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the side panel pins the count and the radius pills above its '
+      'rows too', (tester) async {
+    await _pumpScreen(tester, locationGranted: true);
+    expect(find.byType(TrufiBottomSheet), findsNothing);
+    final header = find.byType(NearbyLinesHeader);
+    final list = find.byType(CustomScrollView);
+    expect(header, findsOneWidget);
+    expect(find.descendant(of: list, matching: header), findsNothing);
+    expect(
+      tester.getRect(header).bottom,
+      lessThanOrEqualTo(tester.getTopLeft(list).dy + 0.5),
+    );
+    expect(
+      find.descendant(of: list, matching: find.byType(NearbyRadiusPill)),
+      findsNothing,
+    );
   });
 
   testWidgets('with a line highlighted, a new radius and a moved pin still '

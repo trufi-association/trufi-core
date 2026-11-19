@@ -293,6 +293,32 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('without its header the list starts at the GTFS note: the '
+      'screen pins the count and the pills outside it', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates:
+            TransportListLocalizations.localizationsDelegates,
+        supportedLocales: TransportListLocalizations.supportedLocales,
+        home: Scaffold(
+          body: NearbyLinesSheet(
+            state: state(),
+            showHeader: false,
+            onRadiusChanged: (_) {},
+            onLineTap: (_) {},
+            onLineDetails: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(NearbyLinesHeader), findsNothing);
+    expect(find.byType(RouteCountIndicator), findsNothing);
+    expect(find.byType(NearbyRadiusPill), findsNothing);
+    expect(find.text('Based on GTFS routes and schedules'), findsOneWidget);
+    expect(find.byType(NearbyLineTile), findsNWidgets(2));
+  });
+
   testWidgets('a wider radius shows the farther rows', (tester) async {
     await _pumpSheet(tester, state(radius: NearbyRadius.m500));
     expect(find.textContaining('At 380 m'), findsOneWidget);
@@ -341,11 +367,11 @@ void main() {
     await _pumpSheet(tester, state(selectedLineKey: 'n:X10'));
     expect(
       tester.getSemantics(find.text('Línea X10')),
-      containsSemantics(isSelected: true, hasTapAction: true),
+      isSemantics(isSelected: true, hasTapAction: true),
     );
     expect(
       tester.getSemantics(find.text('Línea 201')),
-      containsSemantics(isSelected: false, hasTapAction: true),
+      isSemantics(isSelected: false, hasTapAction: true),
     );
     semantics.dispose();
   });

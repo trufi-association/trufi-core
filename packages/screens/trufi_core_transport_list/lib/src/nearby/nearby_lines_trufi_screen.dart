@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderProxyBox;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -304,7 +305,16 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   /// is what the camera fit keeps clear of the ring on phones.
   static const double _headerPadding = 12;
 
+  /// The lowest the collapsed sheet goes; it grows past this to keep the
+  /// grabber and the pinned header above the navigation bar
+  /// ([_sheetMinSizeFor]).
   static const double _sheetMinSize = 0.14;
+
+  /// The highest the collapsed sheet goes, below the mid snap.
+  static const double _sheetMinCap = 0.3;
+
+  /// [TrufiBottomSheet]'s grabber: 4 px with 12 above and 8 below.
+  static const double _sheetGrabberHeight = 24;
   static const double _sheetInitialSize = 0.35;
   static const double _sheetMaxSize = 0.85;
   static const double _controlsTopInset = 12;
@@ -328,6 +338,10 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   final FitCameraUtil _fitCamera = FitCameraUtil();
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
+
+  /// Height of the count and radius pills pinned in the phone sheet's
+  /// header, as last laid out (0 until then).
+  double _sheetHeaderHeight = 0;
 
   TrufiCameraPosition? _initialCamera;
   TrufiCameraPosition? _camera;
@@ -600,10 +614,25 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
         TrufiBottomSheet(
           controller: _sheetController,
           initialChildSize: _sheetInitialSize,
-          minChildSize: _sheetMinSize,
+          minChildSize: _sheetMinSizeFor(
+            constraints.maxHeight,
+            viewPadding.bottom,
+          ),
           maxChildSize: _sheetMaxSize,
           snap: true,
-          snapSizes: const [_sheetMinSize, _sheetInitialSize, _sheetMaxSize],
+          // The min and the max snap implicitly. The list stays the same
+          // instance on every build: a new one makes the sheet snap again
+          // (DraggableScrollableSheet.didUpdateWidget), which would stop a
+          // reveal under way in the list.
+          snapSizes: const [_sheetInitialSize],
+          // Pinned like the home screen's results summary (#1055): the
+          // pills stay in view while the list scrolls, and dragging them
+          // resizes the sheet even when the list is scrolled (after a
+          // reveal) and swallows the drags on the rows.
+          header: _MeasureHeight(
+            onChanged: _onSheetHeaderHeight,
+            child: _buildListHeader(state),
+          ),
           builder: (context, scrollController) =>
               _buildSheet(state, scrollController),
         ),
@@ -647,6 +676,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
                     padding: const EdgeInsets.all(_headerPadding),
                     child: _buildHeader(state, elevated: false),
                   ),
+                  _buildListHeader(state),
                   Expanded(child: _buildSheet(state, null)),
                 ],
               ),
@@ -717,6 +747,26 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     );
   }
 
+  /// The collapsed sheet's size: the grabber and the pinned header whole
+  /// above the navigation bar, which the sheet runs under.
+  double _sheetMinSizeFor(double maxHeight, double bottomInset) {
+    final needed = _sheetGrabberHeight + _sheetHeaderHeight + bottomInset;
+    return (needed / maxHeight).clamp(_sheetMinSize, _sheetMinCap);
+  }
+
+  void _onSheetHeaderHeight(double height) {
+    if (!mounted || height == _sheetHeaderHeight) return;
+    setState(() => _sheetHeaderHeight = height);
+  }
+
+  /// The count and the radius pills, pinned above the rows in both layouts.
+  Widget _buildListHeader(NearbyLinesState state) {
+    return NearbyLinesHeader(
+      state: state,
+      onRadiusChanged: context.read<NearbyLinesCubit>().setRadius,
+    );
+  }
+
   Widget _buildSheet(NearbyLinesState state, ScrollController? controller) {
     final cubit = context.read<NearbyLinesCubit>();
     return NearbyLinesSheet(
@@ -726,6 +776,7 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
       onLineTap: (line) => cubit.toggleLine(line.lineKey),
       onLineDetails: (line) => widget.onLineDetails(context, line),
       onRetry: cubit.refresh,
+      showHeader: false,
     );
   }
 }
@@ -859,5 +910,41 @@ class _MapControlButton extends StatelessWidget {
     );
     final message = tooltip;
     return message == null ? button : Tooltip(message: message, child: button);
+  }
+}
+
+/// Reports its child's height after each layout that changes it.
+class _MeasureHeight extends SingleChildRenderObjectWidget {
+  const _MeasureHeight({required this.onChanged, required super.child});
+
+  final ValueChanged<double> onChanged;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderMeasureHeight(onChanged);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderMeasureHeight renderObject,
+  ) {
+    renderObject.onChanged = onChanged;
+  }
+}
+
+class _RenderMeasureHeight extends RenderProxyBox {
+  _RenderMeasureHeight(this.onChanged);
+
+  ValueChanged<double> onChanged;
+  double? _reported;
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    final height = size.height;
+    if (height == _reported) return;
+    _reported = height;
+    // Not during layout: the callback rebuilds the screen.
+    WidgetsBinding.instance.addPostFrameCallback((_) => onChanged(height));
   }
 }

@@ -95,7 +95,10 @@ The highlight shows in the list itself, as the row with the primary border
 home screen's results sheet: it scrolls just enough for the row to be
 whole when a label is tapped on the map, after a new query, and when the
 screen comes back to the front. A highlighted line beyond the selected
-radius gets its row after the others.
+radius gets its row after the others. The count and the radius pills are
+pinned above the rows, like the home screen's results summary: on a phone
+they are the sheet's header, so they stay in view while the list scrolls
+and dragging them resizes the sheet.
 
 ```dart
 screens: [
