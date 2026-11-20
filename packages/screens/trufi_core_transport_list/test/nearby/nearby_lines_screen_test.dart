@@ -610,6 +610,34 @@ void main() {
     expect(ringTop(), closeTo(24 + NearbyHeaderCard.cardHeightWithHint, 0.5));
   });
 
+  testWidgets('the card getting shorter again at the same anchor frames the '
+      'ring for it too', (tester) async {
+    usePhone(tester, const Size(360, 640));
+    final engine = await _pumpScreen(tester, locationGranted: true);
+
+    double ringTop() {
+      final latitudes = engine.lastLayers.first.lines.single.position.map(
+        (point) => point.latitude,
+      );
+      return screenY(engine.lastCamera!, latitudes.reduce(math.max), 640);
+    }
+
+    mockGeolocator(serviceEnabled: false);
+    await tester.tap(find.byTooltip('Use my location'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(ringTop(), closeTo(24 + NearbyHeaderCard.cardHeightWithHint, 0.5));
+
+    // Location back on and the same fix: the hint goes, the anchor stays.
+    mockGeolocator(serviceEnabled: true);
+    await tester.tap(find.byTooltip('Use my location'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your location'), findsOneWidget);
+    expect(find.textContaining('Long-press'), findsNothing);
+    expect(ringTop(), closeTo(24 + NearbyHeaderCard.cardHeight, 0.5));
+  });
+
   testWidgets('on the side panel the card is not over the map: the pin hint '
       'coming leaves the camera where the rider has it', (tester) async {
     final engine = await _pumpScreen(tester, locationGranted: true);
