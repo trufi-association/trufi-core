@@ -367,7 +367,9 @@ void _navigateToSection(BuildContext context, String path) {
 /// menu over one of Home's own screens (a route without a page: the
 /// search, an itinerary, a navigation in progress) goes back to that
 /// screen, as the item does on Home itself; a street visit (opened with an
-/// `extra` from the search) closes the search too. Pushing `/` instead
+/// `extra` from the search) closes the search too: any `extra` on the page
+/// over Home counts as such a visit, and today only the street visit
+/// navigates with one. Pushing `/` instead
 /// would mount a second Home (two maps, two planner listeners, and a Back
 /// that lands on the other Home). The shell's routes have no `onExit`, so
 /// no page refuses the pop.

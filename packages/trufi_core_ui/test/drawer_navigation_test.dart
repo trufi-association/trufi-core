@@ -64,6 +64,12 @@ class _SectionState extends State<_Section> {
           ),
           child: const Text('open a detail'),
         ),
+        // Like a line's page through `/routes/:id` (an app's onLineDetails):
+        // a page over the section.
+        TextButton(
+          onPressed: () => context.push('/routes'),
+          child: const Text('open a page'),
+        ),
       ],
     ),
   );
@@ -258,6 +264,37 @@ void main() {
 
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
+      _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('from plain Nearby lines opened over one of Home\'s own '
+        'screens goes back to that screen: only an extra makes a street '
+        'visit', (tester) async {
+      final appRouter = await _pump(tester);
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+      await _tapDrawerItem(tester, 'Nearby lines');
+      expect(find.text('plain'), findsOneWidget);
+
+      await _tapDrawerItem(tester, 'Home');
+      expect(find.text('lines along a street'), findsOneWidget);
+      expect(find.text('plain', skipOffstage: false), findsNothing);
+      expect(_homes(), 1);
+      expect(appRouter.router.routeInformationProvider.value.uri.path, '/');
+    });
+
+    testWidgets('over a page pushed on a street visit (a line through '
+        '/routes/:id) closes the search too', (tester) async {
+      final appRouter = await _pump(tester);
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('lines along a street'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('open a page'));
+      await tester.pumpAndSettle();
+      expect(find.text('plain'), findsOneWidget);
+
+      await _tapDrawerItem(tester, 'Home');
       _expectHomeAlone(appRouter);
     });
 
