@@ -331,7 +331,10 @@ void _navigateToSection(BuildContext context, String path) {
   final router = GoRouter.of(context);
   final currentPath = router.routeInformationProvider.value.uri.path;
 
-  if (currentPath == path) return;
+  // A section opened with an `extra` is a visit for that context (Nearby
+  // lines along a street, pushed from the search), not the section itself:
+  // its menu item opens the plain section in its place.
+  if (currentPath == path && router.state.extra == null) return;
 
   if (currentPath == '/') {
     router.push(path);

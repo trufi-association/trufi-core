@@ -200,6 +200,7 @@ void usePhone(WidgetTester tester, Size size) {
 /// Hosts the real screen under a `GoRouter`, the way `TrufiApp` does, and
 /// opens it from a first route: through [NearbyLinesTrufiScreen.showAlongStreet]
 /// when [street] is given, as a plain `/nearby` push (a drawer visit) when not.
+/// Back on the first route, `open from menu` is always the plain push.
 Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
   WidgetTester tester, {
   NearbyStreetAnchor? street,
@@ -219,11 +220,19 @@ Future<({_FakeEngine engine, _FakeDataSource source})> _pumpRouted(
       GoRoute(
         path: '/',
         builder: (context, _) => Scaffold(
-          body: TextButton(
-            onPressed: () => street == null
-                ? context.push(NearbyLinesTrufiScreen.routePath)
-                : NearbyLinesTrufiScreen.showAlongStreet(context, street),
-            child: const Text('open'),
+          body: Column(
+            children: [
+              TextButton(
+                onPressed: () => street == null
+                    ? context.push(NearbyLinesTrufiScreen.routePath)
+                    : NearbyLinesTrufiScreen.showAlongStreet(context, street),
+                child: const Text('open'),
+              ),
+              TextButton(
+                onPressed: () => context.push(NearbyLinesTrufiScreen.routePath),
+                child: const Text('open from menu'),
+              ),
+            ],
           ),
         ),
       ),
@@ -767,6 +776,32 @@ void main() {
       await _pumpRouted(tester);
       expect(find.byTooltip('Open navigation menu'), findsOneWidget);
       expect(find.byTooltip('Back'), findsNothing);
+    });
+
+    testWidgets('with location off, a drawer visit after a street visit is '
+        'about the rider again, not the last street (#1054)', (tester) async {
+      mockGeolocator(serviceEnabled: false);
+      final (:engine, :source) = await _pumpRouted(
+        tester,
+        street: street,
+        mockLocation: false,
+      );
+      expect(find.text('Along Avenida Heroínas · Cercado'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      source.anchors.clear();
+      await tester.tap(find.text('open from menu'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Along Avenida Heroínas'), findsNothing);
+      expect(find.text('City center (no location)'), findsOneWidget);
+      expect(find.text('Long-press the map to move the pin'), findsOneWidget);
+      expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+      expect(source.anchors, [defaultCenter]);
+      final ids = engine.lastLayers.map((l) => l.id).toList();
+      expect(ids, ['nearby-rings', 'nearby-points', 'nearby-anchor']);
+      expect(engine.lastLayers.last.markers.single.position, defaultCenter);
     });
   });
 
