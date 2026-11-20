@@ -56,7 +56,8 @@ class NavigationBottomPanel extends StatelessWidget {
               child: FilledButton.icon(
                 onPressed: () async {
                   HapticFeedback.lightImpact();
-                  if (await showNavigationExitConfirmation(context)) {
+                  if (await showNavigationExitConfirmation(context) &&
+                      context.mounted) {
                     onExitNavigation();
                   }
                 },
@@ -82,10 +83,19 @@ class NavigationBottomPanel extends StatelessWidget {
 /// button, and of a back or an external link while the navigation runs
 /// (#1065). True when they chose to exit; dismissing the dialog keeps the
 /// navigation.
+///
+/// The dialog goes on the navigation's own navigator, not the app's root
+/// one. In an app with a shell (go_router's `ShellRoute`), closing a dialog
+/// on the root navigator makes the framework tell Android that it no longer
+/// handles back, since the root navigator cannot pop: the next back, after
+/// a Cancel, then closed the app and the navigation with it. On the
+/// navigation's navigator the question also goes with the screen when a
+/// link replaces it, instead of staying behind.
 Future<bool> showNavigationExitConfirmation(BuildContext context) async {
   final loc = NavigationLocalizations.of(context);
   final exit = await showDialog<bool>(
     context: context,
+    useRootNavigator: false,
     builder: (context) => AlertDialog(
       title: Text(loc.navExitConfirmTitle),
       content: Text(loc.navExitConfirmMessage),

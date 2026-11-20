@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
@@ -122,9 +123,9 @@ void main() {
       expect(wakelock.toggles, [true]);
     });
 
-    testWidgets('also while paused (the app went to the background)', (
-      tester,
-    ) async {
+    // No code path pauses today (the background only lowers the GPS rate,
+    // setBackgroundMode); pauseNavigation is public API, so it stays held.
+    testWidgets('also while paused', (tester) async {
       await startNavigation(tester, _CountingLocationService());
       // The cubit is provided under the screen: read it from the panel.
       tester
@@ -260,7 +261,7 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('the screen takes its question with it when it closes', (
+    testWidgets('once the screen closed, a link goes without asking', (
       tester,
     ) async {
       final confirmations = LeaveConfirmations();
@@ -280,6 +281,96 @@ void main() {
 
       expect(question, findsNothing);
       expect(await answer, isTrue);
+    });
+  });
+
+  // An app's screens live in a nested navigator (go_router's ShellRoute in
+  // TrufiApp), the navigation with them. On Android (predictive back, an app
+  // targeting SDK 36) the framework tells the system whether it handles the
+  // next back; when it says no, the system closes the app.
+  group('in a nested navigator, as under the app shell', () {
+    late List<bool> handlesBack;
+
+    setUp(() {
+      handlesBack = [];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (call) async {
+            if (call.method == 'SystemNavigator.setFrameworkHandlesBack') {
+              handlesBack.add(call.arguments as bool);
+            }
+            return null;
+          });
+    });
+
+    tearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null),
+    );
+
+    Future<void> startNested(
+      WidgetTester tester, {
+      LeaveConfirmations? confirmations,
+    }) async {
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      final app = MaterialApp(
+        locale: const Locale('en'),
+        localizationsDelegates: NavigationLocalizations.localizationsDelegates,
+        supportedLocales: const [Locale('en')],
+        home: Navigator(
+          onGenerateRoute: (_) => MaterialPageRoute<void>(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => NavigationScreen.showFromItinerary(
+                  context,
+                  itinerary: SanaaTrip.itinerary(),
+                  locationService: _CountingLocationService(),
+                  mapEngineManager: FakeMapEngineManager(),
+                ),
+                child: const Text('Start'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(
+        confirmations == null
+            ? app
+            : RepositoryProvider<LeaveConfirmations>.value(
+                value: confirmations,
+                child: app,
+              ),
+      );
+      await tester.tap(find.text('Start'));
+      await tester.pumpAndSettle();
+      expect(navigation, findsOneWidget);
+      expect(handlesBack.last, isTrue);
+    }
+
+    testWidgets('after Cancel the app still handles the next back', (
+      tester,
+    ) async {
+      await startNested(tester);
+
+      await tester.tap(find.text('Exit Navigation'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(navigation, findsOneWidget);
+      expect(handlesBack.last, isTrue);
+    });
+
+    testWidgets("also after Cancel on a link's question", (tester) async {
+      final confirmations = LeaveConfirmations();
+      await startNested(tester, confirmations: confirmations);
+
+      final answer = confirmations.confirm();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(await answer, isFalse);
+      expect(handlesBack.last, isTrue);
     });
   });
 }
