@@ -50,7 +50,22 @@ class _SectionState extends State<_Section> {
 
   @override
   Widget build(BuildContext context) => Center(
-    child: Text(widget.extra == null ? 'plain' : 'for ${widget.extra}'),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(widget.extra == null ? 'plain' : 'for ${widget.extra}'),
+        // Like a line's detail: a page-less route over the section.
+        TextButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) =>
+                  const Scaffold(body: Center(child: Text('a detail'))),
+            ),
+          ),
+          child: const Text('open a detail'),
+        ),
+      ],
+    ),
   );
 }
 
@@ -221,6 +236,31 @@ void main() {
       _expectHomeAlone(appRouter);
     });
 
+    testWidgets('from a section opened over one of Home\'s own screens goes '
+        'back to that screen: a navigation in progress is not ended', (
+      tester,
+    ) async {
+      final appRouter = await _pump(tester);
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+      await _tapDrawerItem(tester, 'Nearby lines');
+      await _tapDrawerItem(tester, 'Routes');
+      await tester.tap(find.text('open a detail'));
+      await tester.pumpAndSettle();
+      expect(find.text('a detail'), findsOneWidget);
+
+      await _tapDrawerItem(tester, 'Home');
+      expect(find.text('lines along a street'), findsOneWidget);
+      expect(find.text('a detail', skipOffstage: false), findsNothing);
+      expect(find.text('plain', skipOffstage: false), findsNothing);
+      expect(_homes(), 1);
+      expect(appRouter.router.routeInformationProvider.value.uri.path, '/');
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      _expectHomeAlone(appRouter);
+    });
+
     testWidgets('deep-linked into a section, opens Home in its place', (
       tester,
     ) async {
@@ -242,6 +282,21 @@ void main() {
       await tester.pumpAndSettle();
       await _tapDrawerItem(tester, 'Home');
       _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('over one of Home\'s own screens does nothing also with the '
+        'plan in the web URL (a query on Home\'s location)', (tester) async {
+      final appRouter = await _pump(tester, initialRoute: '/?from_lat=1');
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+
+      await _tapDrawerItem(tester, 'Home');
+      expect(find.text('lines along a street'), findsOneWidget);
+      expect(_homes(), 1);
+      expect(
+        appRouter.router.routeInformationProvider.value.uri.toString(),
+        '/?from_lat=1',
+      );
     });
   });
 }

@@ -363,19 +363,32 @@ void _navigateToSection(BuildContext context, String path) {
 }
 
 /// Home is the bottom of the stack ([_navigateToSection] keeps it there),
-/// so from a section its item goes back to it, closing whatever is over
-/// it: the section, or a street visit and the search it was opened from
-/// (a route without a page over Home). Pushing `/` instead would
-/// mount a second Home (two maps, two planner listeners, and a Back that
-/// lands on the other Home). The shell's routes have no `onExit`, so no page
-/// refuses the pop.
+/// so from a section its item goes back to it. A section opened from the
+/// menu over one of Home's own screens (a route without a page: the
+/// search, an itinerary, a navigation in progress) goes back to that
+/// screen, as the item does on Home itself; a street visit (opened with an
+/// `extra` from the search) closes the search too. Pushing `/` instead
+/// would mount a second Home (two maps, two planner listeners, and a Back
+/// that lands on the other Home). The shell's routes have no `onExit`, so
+/// no page refuses the pop.
 void _backToHome(GoRouter router) {
-  final shell = router.routerDelegate.currentConfiguration.matches
+  ShellRouteMatch? shellMatch() => router
+      .routerDelegate
+      .currentConfiguration
+      .matches
       .whereType<ShellRouteMatch>()
       .firstOrNull;
+  final shell = shellMatch();
   final navigator = shell?.navigatorKey.currentState;
   if (navigator != null && shell!.matches.first.matchedLocation == '/') {
-    navigator.popUntil((route) => route.isFirst);
+    final overHome = shell.matches.length > 1 ? shell.matches[1] : null;
+    final visit =
+        overHome is ImperativeRouteMatch && overHome.matches.extra != null;
+    // Each page popped leaves the configuration right away (go_router's
+    // onPopPage), so the match count says when Home is the last page.
+    navigator.popUntil(
+      (route) => route.isFirst || (!visit && shellMatch()!.matches.length == 1),
+    );
     return;
   }
   // Deep-linked into a section: there is no Home under it to go back to.
