@@ -657,6 +657,44 @@ void main() {
         expect(c.state.locationDenied, isTrue);
       });
 
+      test('the hint comes back only where it was: a fix or a pin set with '
+          'location on comes back without it, a fix that failed since with '
+          'it', () async {
+        var pending = Completer<LatLng?>()..complete(fix);
+        final c = NearbyLinesCubit(
+          dataSource: streetSource(),
+          defaultAnchor: defaultAnchor,
+          locate: () => pending.future,
+        );
+        Future<void> menuVisit(LatLng? answer) async {
+          pending = Completer<LatLng?>()..complete(answer);
+          await c.start();
+        }
+
+        Future<void> leaveTheStreet(NearbyAnchorSource was, bool hint) async {
+          await c.startAlongStreet(street);
+          pending = Completer<LatLng?>();
+          final visit = c.start();
+          await Future<void>.delayed(Duration.zero);
+          expect(c.state.isLocating, isTrue);
+          expect(c.state.anchorSource, was);
+          expect(c.state.locationDenied, hint, reason: '${was.name} restored');
+          expect(NearbyHeaderCard.showsHint(c.state), hint);
+          pending.complete(fix);
+          await visit;
+        }
+
+        await menuVisit(fix);
+        await leaveTheStreet(NearbyAnchorSource.device, false);
+        c.setAnchor(pin);
+        await leaveTheStreet(NearbyAnchorSource.pin, false);
+        // A revisit without a fix: "Your location" (the old one) + hint.
+        await menuVisit(null);
+        expect(c.state.anchorSource, NearbyAnchorSource.device);
+        expect(c.state.locationDenied, isTrue);
+        await leaveTheStreet(NearbyAnchorSource.device, true);
+      });
+
       test('a street left by a long-press is not gone back to', () async {
         located = fix;
         final source = streetSource();
