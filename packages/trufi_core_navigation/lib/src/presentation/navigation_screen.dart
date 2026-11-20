@@ -255,6 +255,10 @@ class _NavigationScreenState extends State<NavigationScreen>
   /// navigation runs.
   Future<bool> _confirmLeave() async {
     if (!mounted || !_isRunning(_cubit.state.status)) return true;
+    // The question goes on this screen's navigator, which an app's menu
+    // covers: a link can come while the menu is open over the navigation
+    // (an edge swipe), so close it first.
+    Scaffold.maybeOf(context)?.closeDrawer();
     return showNavigationExitConfirmation(context);
   }
 

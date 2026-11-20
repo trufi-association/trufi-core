@@ -373,6 +373,58 @@ void main() {
       expect(handlesBack.last, isTrue);
     });
   });
+
+  testWidgets("a link's question closes the app's menu open over the "
+      'navigation, which would cover it', (tester) async {
+    // Like the app shell: a menu over a nested navigator that holds the
+    // navigation.
+    final shell = GlobalKey<ScaffoldState>();
+    final confirmations = LeaveConfirmations();
+    await tester.pumpWidget(
+      RepositoryProvider<LeaveConfirmations>.value(
+        value: confirmations,
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates:
+              NavigationLocalizations.localizationsDelegates,
+          supportedLocales: const [Locale('en')],
+          home: Scaffold(
+            key: shell,
+            drawer: const Drawer(child: Text('menu')),
+            body: Navigator(
+              onGenerateRoute: (_) => MaterialPageRoute<void>(
+                builder: (context) => TextButton(
+                  onPressed: () => NavigationScreen.showFromItinerary(
+                    context,
+                    itinerary: SanaaTrip.itinerary(),
+                    locationService: _CountingLocationService(),
+                    mapEngineManager: FakeMapEngineManager(),
+                  ),
+                  child: const Text('Start'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Start'));
+    await tester.pumpAndSettle();
+    shell.currentState!.openDrawer();
+    await tester.pumpAndSettle();
+    expect(find.text('menu'), findsOneWidget);
+
+    final answer = confirmations.confirm();
+    await tester.pumpAndSettle();
+
+    expect(shell.currentState!.isDrawerOpen, isFalse);
+    expect(find.text('menu'), findsNothing);
+    // On top, where the rider can answer it.
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(await answer, isFalse);
+    expect(navigation, findsOneWidget);
+  });
 }
 
 /// A [FakeLocationService] that counts the stops of the tracking and can
