@@ -331,6 +331,15 @@ void _navigateToSection(BuildContext context, String path) {
   final router = GoRouter.of(context);
   final currentPath = router.routeInformationProvider.value.uri.path;
 
+  if (path == '/') {
+    // Already on Home, also under one of its own screens (the search, an
+    // itinerary, a navigation in progress, which the drawer marks as Home
+    // too): nothing to do. Closing them would end a navigation without
+    // its confirmation.
+    if (currentPath != '/') _backToHome(router);
+    return;
+  }
+
   // A section opened with an `extra` is a visit for that context (Nearby
   // lines along a street, pushed from the search), not the section itself:
   // its menu item opens the plain section in its place.
@@ -351,6 +360,41 @@ void _navigateToSection(BuildContext context, String path) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (context.mounted) router.push(path);
   });
+}
+
+/// Home is the bottom of the stack ([_navigateToSection] keeps it there),
+/// so from a section its item goes back to it. A section opened from the
+/// menu over one of Home's own screens (a route without a page: the
+/// search, an itinerary, a navigation in progress) goes back to that
+/// screen, as the item does on Home itself; a street visit (opened with an
+/// `extra` from the search) closes the search too: any `extra` on the page
+/// over Home counts as such a visit, and today only the street visit
+/// navigates with one. Pushing `/` instead
+/// would mount a second Home (two maps, two planner listeners, and a Back
+/// that lands on the other Home). The shell's routes have no `onExit`, so
+/// no page refuses the pop.
+void _backToHome(GoRouter router) {
+  ShellRouteMatch? shellMatch() => router
+      .routerDelegate
+      .currentConfiguration
+      .matches
+      .whereType<ShellRouteMatch>()
+      .firstOrNull;
+  final shell = shellMatch();
+  final navigator = shell?.navigatorKey.currentState;
+  if (navigator != null && shell!.matches.first.matchedLocation == '/') {
+    final overHome = shell.matches.length > 1 ? shell.matches[1] : null;
+    final visit =
+        overHome is ImperativeRouteMatch && overHome.matches.extra != null;
+    // Each page popped leaves the configuration right away (go_router's
+    // onPopPage), so the match count says when Home is the last page.
+    navigator.popUntil(
+      (route) => route.isFirst || (!visit && shellMatch()!.matches.length == 1),
+    );
+    return;
+  }
+  // Deep-linked into a section: there is no Home under it to go back to.
+  router.go('/');
 }
 
 /// Modern drawer header with layered design
