@@ -50,6 +50,13 @@ class NavigationScreen extends StatefulWidget {
   });
 
   /// Show the navigation screen.
+  ///
+  /// Push it from a context under the app's screens, as the home screen's
+  /// `onStartNavigation` does (in `TrufiApp`, the shell's navigator). An
+  /// external link asks the exit question first and, on Exit, replaces those
+  /// screens and the navigation with them (#1065). A navigation pushed on
+  /// the root navigator, above the shell, outlives the link: the rider's
+  /// Exit would not end it.
   static Future<void> show(
     BuildContext context, {
     required NavigationRoute route,
@@ -143,10 +150,17 @@ class _NavigationScreenState extends State<NavigationScreen>
   late final NavigationCubit _cubit;
   late final nav.NavigationLayer _navLayerBuilder;
 
+  /// Where the app collects the questions an external link asks before it
+  /// replaces the screens, the navigation with them (#1065). Null in an app
+  /// that does not provide one.
+  LeaveConfirmations? _leaveConfirmations;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _leaveConfirmations = LeaveConfirmations.maybeOf(context)
+      ?..add(_confirmLeave);
 
     if (widget.config.keepScreenOn) {
       WakelockPlus.enable();
@@ -163,6 +177,7 @@ class _NavigationScreenState extends State<NavigationScreen>
 
   @override
   void dispose() {
+    _leaveConfirmations?.remove(_confirmLeave);
     WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable();
     _cubit.stopNavigation();
@@ -195,28 +210,63 @@ class _NavigationScreenState extends State<NavigationScreen>
             ),
           ];
 
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            body: Stack(
-              children: [
-                // Map with declarative layers
-                Positioned.fill(
-                  child: widget.mapBuilder(context, state, navLayers),
-                ),
+          // A back (button or gesture) asks first while the navigation runs,
+          // as the exit button does (#1065). Before the first location,
+          // after arrival and on the error panel there is nothing to lose,
+          // and their own buttons close without asking.
+          return PopScope(
+            canPop: !_isRunning(state.status),
+            onPopInvokedWithResult: (didPop, _) {
+              if (!didPop) _askAndExit();
+            },
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              body: Stack(
+                children: [
+                  // Map with declarative layers
+                  Positioned.fill(
+                    child: widget.mapBuilder(context, state, navLayers),
+                  ),
 
-                // Bottom panel
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: _buildBottomPanel(context, state),
-                ),
-              ],
+                  // Bottom panel
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: _buildBottomPanel(context, state),
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
     );
+  }
+
+  /// Whether ending the navigation needs the rider's word: while it runs,
+  /// the states whose panel has the exit button that asks first.
+  static bool _isRunning(NavigationStatus status) =>
+      status == NavigationStatus.navigating ||
+      status == NavigationStatus.paused;
+
+  /// The exit button's question for a back that [PopScope] held.
+  Future<void> _askAndExit() async {
+    if (await showNavigationExitConfirmation(context) && mounted) {
+      _exitNavigation(context);
+    }
+  }
+
+  /// The question an external link asks before it replaces the screens,
+  /// this one with them ([LeaveConfirmations]): the exit button's, while the
+  /// navigation runs.
+  Future<bool> _confirmLeave() async {
+    if (!mounted || !_isRunning(_cubit.state.status)) return true;
+    // The question goes on this screen's navigator, which an app's menu
+    // covers: a link can come while the menu is open over the navigation
+    // (an edge swipe), so close it first.
+    Scaffold.maybeOf(context)?.closeDrawer();
+    return showNavigationExitConfirmation(context);
   }
 
   Widget _buildBottomPanel(BuildContext context, NavigationState state) {

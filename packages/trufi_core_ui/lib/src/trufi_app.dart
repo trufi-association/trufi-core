@@ -57,6 +57,9 @@ class _TrufiAppState extends State<TrufiApp> {
   late final SharedRouteNotifier _sharedRouteNotifier;
   DeepLinkService? _deepLinkService;
 
+  /// What an external link asks before it replaces the screens (#1065).
+  final _leaveConfirmations = LeaveConfirmations();
+
   /// The initial route from the URL (captured before MaterialApp consumes it)
   String? _initialRoute;
 
@@ -111,7 +114,12 @@ class _TrufiAppState extends State<TrufiApp> {
   /// (e.g. `trufi://routes?operator=X` → `/routes?operator=X`), but only
   /// when it targets a registered screen — unknown links stay ignored
   /// instead of surfacing the router's error page.
-  void _goToDeepLinkLocation(String location) {
+  ///
+  /// The location always names a section (roots resolve to none), so going
+  /// there replaces Home and every screen opened over it. A screen the rider
+  /// must not lose without being asked, a navigation in progress, asks first
+  /// through [LeaveConfirmations]; a no drops the link (#1065).
+  Future<void> _goToDeepLinkLocation(String location) async {
     final path = Uri.parse(location).path;
     final known = widget.config.screens.any(
       (screen) => path == screen.path || path.startsWith('${screen.path}/'),
@@ -120,6 +128,7 @@ class _TrufiAppState extends State<TrufiApp> {
       debugPrint('TrufiApp: Ignoring deep link to unregistered path: $path');
       return;
     }
+    if (!await _leaveConfirmations.confirm() || !mounted) return;
     _router.router.go(location);
   }
 
@@ -152,6 +161,7 @@ class _TrufiAppState extends State<TrufiApp> {
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
         ChangeNotifierProvider.value(value: _sharedRouteNotifier),
+        Provider<LeaveConfirmations>.value(value: _leaveConfirmations),
         ...?widget.config.overlayManager?.providers,
         ...widget.config.providers,
         ...screenProviders,
