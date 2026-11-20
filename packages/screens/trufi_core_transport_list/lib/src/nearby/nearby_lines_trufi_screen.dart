@@ -353,6 +353,11 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
   bool _fitPending = true;
   NearbyLinesState? _lastState;
 
+  /// How much of the map's top the last phone fit kept clear of the title
+  /// card (null before the first one). The side panel's card is not over
+  /// the map, so its fits do not set it.
+  double? _fittedHeaderReserve;
+
   @override
   void initState() {
     super.initState();
@@ -561,6 +566,14 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
     final viewPadding = MediaQuery.viewPaddingOf(context);
     final headerReserve =
         _headerPadding * 2 + NearbyHeaderCard.heightFor(state);
+    // The card changed height since the last fit without the anchor
+    // moving: the pin hint came with a locate that failed on an anchor
+    // that stays ("Use my location" with location off, a revisit without
+    // a fix). Frame again, or the top of the ring, where its distance
+    // label is, sits under the taller card.
+    if (_fittedHeaderReserve != null && _fittedHeaderReserve != headerReserve) {
+      _fitPending = true;
+    }
     // Nothing covers the map's sides on a phone; what a street needs
     // there is added per fit (see [_streetFitMargin]).
     _fitCamera.updateViewport(
@@ -572,6 +585,9 @@ class _NearbyLinesScreenWidgetState extends State<_NearbyLinesScreenWidget> {
         right: viewPadding.right,
       ),
     );
+    if (_fitPending && state.anchor != null) {
+      _fittedHeaderReserve = headerReserve;
+    }
     _scheduleInitialFit(state);
 
     return Stack(
