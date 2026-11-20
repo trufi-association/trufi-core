@@ -329,6 +329,10 @@ class AppDrawer extends StatelessWidget {
 /// so the system back button always returns to home.
 void _navigateToSection(BuildContext context, String path) {
   final router = GoRouter.of(context);
+  if (path == '/') {
+    _backToHome(router);
+    return;
+  }
   final currentPath = router.routeInformationProvider.value.uri.path;
 
   // A section opened with an `extra` is a visit for that context (Nearby
@@ -351,6 +355,25 @@ void _navigateToSection(BuildContext context, String path) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (context.mounted) router.push(path);
   });
+}
+
+/// Home is the bottom of the stack ([_navigateToSection] keeps it there),
+/// so its item goes back to it, closing whatever is over it: a section, or
+/// the search and a street visit opened from it. Pushing `/` instead would
+/// mount a second Home (two maps, two planner listeners, and a Back that
+/// lands on the other Home). The shell's routes have no `onExit`, so no page
+/// refuses the pop.
+void _backToHome(GoRouter router) {
+  final shell = router.routerDelegate.currentConfiguration.matches
+      .whereType<ShellRouteMatch>()
+      .firstOrNull;
+  final navigator = shell?.navigatorKey.currentState;
+  if (navigator != null && shell!.matches.first.matchedLocation == '/') {
+    navigator.popUntil((route) => route.isFirst);
+    return;
+  }
+  // Deep-linked into a section: there is no Home under it to go back to.
+  router.go('/');
 }
 
 /// Modern drawer header with layered design

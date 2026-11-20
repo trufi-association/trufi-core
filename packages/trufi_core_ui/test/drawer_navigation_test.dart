@@ -54,21 +54,49 @@ class _SectionState extends State<_Section> {
   );
 }
 
-Future<AppRouter> _pump(WidgetTester tester) async {
+/// Like the home screen's search: a page-less route over Home, from which
+/// a street opens Nearby lines.
+class _Search extends StatelessWidget {
+  const _Search();
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: Center(
+      child: TextButton(
+        onPressed: () => context.push('/nearby', extra: 'a street'),
+        child: const Text('lines along a street'),
+      ),
+    ),
+  );
+}
+
+Future<AppRouter> _pump(WidgetTester tester, {String? initialRoute}) async {
   _visits.clear();
   final appRouter = AppRouter(
+    initialRoute: initialRoute,
     screens: [
       _Screen(
         '/',
         'Home',
         body: (context) => Center(
-          child: TextButton(
-            onPressed: () => context.push('/nearby', extra: 'a street'),
-            child: const Text('open for a street'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () => context.push('/nearby', extra: 'a street'),
+                child: const Text('open for a street'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const _Search()),
+                ),
+                child: const Text('open the search'),
+              ),
+            ],
           ),
         ),
       ),
       _Screen('/nearby', 'Nearby lines'),
+      _Screen('/routes', 'Routes'),
     ],
   );
   await tester.pumpWidget(
@@ -95,37 +123,115 @@ Future<void> _tapDrawerItem(WidgetTester tester, String title) async {
   await tester.pumpAndSettle();
 }
 
-/// The drawer item of the section on screen does nothing, unless the
-/// section was opened for a context (an `extra`): then it opens the plain
-/// section in its place (trufi-core#1054, Nearby lines along a street).
+/// How many Home screens are mounted, the covered ones too.
+int _homes() =>
+    find.text('open for a street', skipOffstage: false).evaluate().length;
+
+/// Home is the only screen left: on screen, alone, and Back has nothing
+/// to pop back to.
+void _expectHomeAlone(AppRouter appRouter) {
+  expect(_homes(), 1);
+  expect(find.text('open for a street'), findsOneWidget);
+  expect(find.text('plain', skipOffstage: false), findsNothing);
+  expect(find.text('for a street', skipOffstage: false), findsNothing);
+  expect(find.text('lines along a street', skipOffstage: false), findsNothing);
+  expect(appRouter.router.canPop(), isFalse);
+  expect(appRouter.router.routeInformationProvider.value.uri.path, '/');
+}
+
 void main() {
-  testWidgets('over a visit opened with an extra, the section\'s own item '
-      'opens the plain section in its place', (tester) async {
-    await _pump(tester);
-    await tester.tap(find.text('open for a street'));
-    await tester.pumpAndSettle();
-    expect(find.text('for a street'), findsOneWidget);
+  /// The drawer item of the section on screen does nothing, unless the
+  /// section was opened for a context (an `extra`): then it opens the plain
+  /// section in its place (trufi-core#1054, Nearby lines along a street).
+  group('a section\'s own item', () {
+    testWidgets('over a visit opened with an extra, opens the plain section '
+        'in its place', (tester) async {
+      await _pump(tester);
+      await tester.tap(find.text('open for a street'));
+      await tester.pumpAndSettle();
+      expect(find.text('for a street'), findsOneWidget);
 
-    await _tapDrawerItem(tester, 'Nearby lines');
-    expect(find.text('plain'), findsOneWidget);
-    expect(find.text('for a street'), findsNothing);
-    expect(_visits, ['for a street', 'plain']);
+      await _tapDrawerItem(tester, 'Nearby lines');
+      expect(find.text('plain'), findsOneWidget);
+      expect(find.text('for a street'), findsNothing);
+      expect(_visits, ['for a street', 'plain']);
 
-    // In its place: back goes home, not to the street.
-    await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
-    expect(find.text('open for a street'), findsOneWidget);
+      // In its place: back goes home, not to the street.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('open for a street'), findsOneWidget);
+    });
+
+    testWidgets('on the plain section still does nothing', (tester) async {
+      await _pump(tester);
+      await _tapDrawerItem(tester, 'Nearby lines');
+      expect(_visits, ['plain']);
+
+      await _tapDrawerItem(tester, 'Nearby lines');
+      expect(find.text('plain'), findsOneWidget);
+      expect(_visits, ['plain']);
+    });
   });
 
-  testWidgets('on the plain section its own item still does nothing', (
-    tester,
-  ) async {
-    await _pump(tester);
-    await _tapDrawerItem(tester, 'Nearby lines');
-    expect(_visits, ['plain']);
+  /// Home is the bottom of the stack: its item goes back to it instead of
+  /// stacking a second one (two maps, two planner listeners, and a Back
+  /// that lands on the other Home).
+  group('the Home item', () {
+    testWidgets('from a section goes back to the Home under it', (
+      tester,
+    ) async {
+      final appRouter = await _pump(tester);
+      await _tapDrawerItem(tester, 'Nearby lines');
+      await _tapDrawerItem(tester, 'Routes');
+      expect(_homes(), 1);
 
-    await _tapDrawerItem(tester, 'Nearby lines');
-    expect(find.text('plain'), findsOneWidget);
-    expect(_visits, ['plain']);
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('over a street visit opened from the search closes the '
+        'search too', (tester) async {
+      final appRouter = await _pump(tester);
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('lines along a street'));
+      await tester.pumpAndSettle();
+      expect(find.text('for a street'), findsOneWidget);
+
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('over the search on Home closes the search', (tester) async {
+      final appRouter = await _pump(tester);
+      await tester.tap(find.text('open the search'));
+      await tester.pumpAndSettle();
+
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('deep-linked into a section, opens Home in its place', (
+      tester,
+    ) async {
+      final appRouter = await _pump(tester, initialRoute: '/nearby');
+      expect(find.text('plain'), findsOneWidget);
+      expect(_homes(), 0);
+
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+    });
+
+    testWidgets('on Home does nothing, also when Home was opened with an '
+        'extra', (tester) async {
+      final appRouter = await _pump(tester);
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+
+      appRouter.router.go('/', extra: 'a context');
+      await tester.pumpAndSettle();
+      await _tapDrawerItem(tester, 'Home');
+      _expectHomeAlone(appRouter);
+    });
   });
 }
