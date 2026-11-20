@@ -282,6 +282,28 @@ void main() {
       expect(question, findsNothing);
       expect(await answer, isTrue);
     });
+
+    // The app keeps its LeaveConfirmations for its whole life: a question
+    // left in it would hold the closed screen, one more per navigation.
+    testWidgets('the screen removes its question when it closes', (
+      tester,
+    ) async {
+      final confirmations = _CountingConfirmations();
+      await startNavigation(
+        tester,
+        _CountingLocationService(),
+        confirmations: confirmations,
+      );
+      expect(confirmations.questions, 1);
+
+      await tester.tap(find.text('Exit Navigation'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Exit'));
+      await tester.pumpAndSettle();
+
+      expect(navigation, findsNothing);
+      expect(confirmations.questions, 0);
+    });
   });
 
   // An app's screens live in a nested navigator (go_router's ShellRoute in
@@ -443,6 +465,23 @@ class _CountingLocationService extends FakeLocationService {
 
   @override
   Future<void> stopTracking() async => stops++;
+}
+
+/// A [LeaveConfirmations] that counts the questions it holds.
+class _CountingConfirmations extends LeaveConfirmations {
+  int questions = 0;
+
+  @override
+  void add(Future<bool> Function() question) {
+    questions++;
+    super.add(question);
+  }
+
+  @override
+  void remove(Future<bool> Function() question) {
+    questions--;
+    super.remove(question);
+  }
 }
 
 /// A wakelock that records what it is told. `wakelock_plus` only exports

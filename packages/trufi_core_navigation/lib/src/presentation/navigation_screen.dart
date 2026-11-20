@@ -50,6 +50,13 @@ class NavigationScreen extends StatefulWidget {
   });
 
   /// Show the navigation screen.
+  ///
+  /// Push it from a context under the app's screens, as the home screen's
+  /// `onStartNavigation` does (in `TrufiApp`, the shell's navigator). An
+  /// external link asks the exit question first and, on Exit, replaces those
+  /// screens and the navigation with them (#1065). A navigation pushed on
+  /// the root navigator, above the shell, outlives the link: the rider's
+  /// Exit would not end it.
   static Future<void> show(
     BuildContext context, {
     required NavigationRoute route,

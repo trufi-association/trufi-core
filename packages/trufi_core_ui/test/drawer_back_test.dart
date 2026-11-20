@@ -85,7 +85,9 @@ Future<void> _openDrawer(WidgetTester tester) async {
   expect(find.byType(Drawer), findsOneWidget);
 }
 
-/// The system back: what Android's back button or back gesture sends.
+/// The system back as the router gets it: Android's back button, or a back
+/// gesture over a route without a predictive-back transition (a section's
+/// page has one, and takes the gesture before the router).
 Future<void> _back(WidgetTester tester) async {
   await tester.binding.handlePopRoute();
   await tester.pumpAndSettle();
