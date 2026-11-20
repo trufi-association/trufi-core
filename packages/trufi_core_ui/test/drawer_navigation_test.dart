@@ -202,12 +202,22 @@ void main() {
       _expectHomeAlone(appRouter);
     });
 
-    testWidgets('over the search on Home closes the search', (tester) async {
+    testWidgets('over one of Home\'s own screens does nothing: it does not '
+        'close them (a navigation in progress has its own confirmation)', (
+      tester,
+    ) async {
       final appRouter = await _pump(tester);
       await tester.tap(find.text('open the search'));
       await tester.pumpAndSettle();
 
       await _tapDrawerItem(tester, 'Home');
+      expect(find.text('lines along a street'), findsOneWidget);
+      expect(_homes(), 1);
+      expect(appRouter.router.routeInformationProvider.value.uri.path, '/');
+
+      // Its own back still returns to Home.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
       _expectHomeAlone(appRouter);
     });
 
