@@ -213,7 +213,7 @@ class AppShell extends StatelessWidget {
         footerExtra: drawerFooterExtra,
         logo: logo,
       ),
-      body: child,
+      body: _CloseDrawerOnBack(child: child),
     );
   }
 
@@ -225,6 +225,33 @@ class AppShell extends StatelessWidget {
     }
     return appName;
   }
+}
+
+/// A back (button or gesture) with the menu open closes the menu (#1065).
+///
+/// go_router hands the back to the shell's navigator first, which is under
+/// the menu: without this, it closed the screen behind the open menu (a
+/// navigation in progress, a search, a section) and left the menu open.
+class _CloseDrawerOnBack extends StatefulWidget {
+  final Widget child;
+
+  const _CloseDrawerOnBack({required this.child});
+
+  @override
+  State<_CloseDrawerOnBack> createState() => _CloseDrawerOnBackState();
+}
+
+class _CloseDrawerOnBackState extends State<_CloseDrawerOnBack> {
+  Future<bool> _onBack() async {
+    final scaffold = Scaffold.maybeOf(context);
+    if (scaffold == null || !scaffold.isDrawerOpen) return false;
+    scaffold.closeDrawer();
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      BackButtonListener(onBackButtonPressed: _onBack, child: widget.child);
 }
 
 /// Modern navigation drawer with Material 3 design

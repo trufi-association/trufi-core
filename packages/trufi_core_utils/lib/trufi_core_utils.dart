@@ -17,3 +17,6 @@ export 'src/number_format.dart';
 
 // Clipboard
 export 'src/clipboard.dart';
+
+// Screens that ask before being replaced from outside them
+export 'src/leave_confirmations.dart';

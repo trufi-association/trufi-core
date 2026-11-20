@@ -54,9 +54,11 @@ class NavigationBottomPanel extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
-                onPressed: () {
+                onPressed: () async {
                   HapticFeedback.lightImpact();
-                  _showExitConfirmation(context);
+                  if (await showNavigationExitConfirmation(context)) {
+                    onExitNavigation();
+                  }
                 },
                 icon: const Icon(Icons.close_rounded, size: 18),
                 label: Text(
@@ -74,30 +76,32 @@ class NavigationBottomPanel extends StatelessWidget {
       ),
     );
   }
+}
 
-  void _showExitConfirmation(BuildContext context) {
-    final loc = NavigationLocalizations.of(context);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(loc.navExitConfirmTitle),
-        content: Text(loc.navExitConfirmMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(loc.navCancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-              onExitNavigation();
-            },
-            child: Text(loc.navExit),
-          ),
-        ],
-      ),
-    );
-  }
+/// Asks the rider whether to end the navigation: the question of the exit
+/// button, and of a back or an external link while the navigation runs
+/// (#1065). True when they chose to exit; dismissing the dialog keeps the
+/// navigation.
+Future<bool> showNavigationExitConfirmation(BuildContext context) async {
+  final loc = NavigationLocalizations.of(context);
+  final exit = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(loc.navExitConfirmTitle),
+      content: Text(loc.navExitConfirmMessage),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(loc.navCancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(loc.navExit),
+        ),
+      ],
+    ),
+  );
+  return exit ?? false;
 }
 
 /// Panel shown when navigation is completed.
