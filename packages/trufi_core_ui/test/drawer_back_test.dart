@@ -130,9 +130,12 @@ void main() {
     expect(find.text('home'), findsOneWidget);
   });
 
-  testWidgets('over Home alone, back closes the menu (unchanged)', (
-    tester,
-  ) async {
+  // Only when the back reaches the app. On Android with predictive back (an
+  // app targeting SDK 36) the system keeps this one and leaves the app, the
+  // same on main: nothing under the menu can pop, so Flutter tells the
+  // system it does not handle back (flutter/flutter#145290 is that family).
+  testWidgets('over Home alone, a back the app receives closes the menu '
+      '(unchanged)', (tester) async {
     await _pump(tester);
     await _openDrawer(tester);
 

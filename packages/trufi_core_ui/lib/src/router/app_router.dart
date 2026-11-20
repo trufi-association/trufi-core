@@ -232,6 +232,8 @@ class AppShell extends StatelessWidget {
 /// go_router hands the back to the shell's navigator first, which is under
 /// the menu: without this, it closed the screen behind the open menu (a
 /// navigation in progress, a search, a section) and left the menu open.
+/// Over Home alone the back may never reach the app: with Android's
+/// predictive back the system keeps it while nothing can pop.
 class _CloseDrawerOnBack extends StatefulWidget {
   final Widget child;
 
