@@ -92,4 +92,64 @@ void main() {
       '(already true today)', () {
     expect(liveVehiclesForTrip(all, itinerary([walkLeg()])), all);
   });
+
+  test('a transit leg without fromPlace matches by route only: a bus '
+      'heading away, of the opposite direction, is kept '
+      '(already true today)', () {
+    final noBoardingPoint = itinerary([
+      walkLeg(),
+      busLeg('1132', stopId: null, directionId: 0),
+    ]);
+
+    final kept = liveVehiclesForTrip(all, noBoardingPoint);
+
+    // V1 heads to A, V2 is of the other direction, V3 heads away: all 1132.
+    // V4, V5 and V6 are other routes and stay out.
+    expect(ids(kept), ['V1', 'V2', 'V3']);
+  });
+
+  test('the same route on two legs is the union of both: a bus heading to '
+      'B but away from A is kept (already true today)', () {
+    // On the A-B line, nearer B: heading to B means driving away from A.
+    const between = TrufiLatLng(
+      -12.0464 - 0.0136 * 0.7,
+      -77.0428 + 0.0128 * 0.7,
+    );
+    final headingToB = VehiclePosition(
+      vehicleId: 'VB',
+      position: between,
+      routeId: '1132',
+      heading: bearing(between, stopB.lat, stopB.lon),
+      speed: 8,
+    );
+    final legA = busLeg(
+      '1132',
+      stopId: 'A',
+      stopLat: stopA.lat,
+      stopLon: stopA.lon,
+    );
+    final legB = busLeg(
+      '1132',
+      stopId: 'B',
+      stopLat: stopB.lat,
+      stopLon: stopB.lon,
+    );
+
+    // Guard: with only leg A the bus is dropped, so the union is what keeps
+    // it with both legs.
+    expect(
+      liveVehiclesForTrip([headingToB], itinerary([walkLeg(), legA])),
+      isEmpty,
+    );
+    expect(
+      ids(liveVehiclesForTrip([headingToB], itinerary([walkLeg(), legB]))),
+      ['VB'],
+    );
+    expect(
+      ids(
+        liveVehiclesForTrip([headingToB], itinerary([walkLeg(), legA, legB])),
+      ),
+      ['VB'],
+    );
+  });
 }

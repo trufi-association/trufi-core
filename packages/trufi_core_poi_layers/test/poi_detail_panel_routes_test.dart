@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
@@ -37,6 +38,22 @@ Widget host(POI poi) => MaterialApp(
     ),
   ),
 );
+
+List<String> mockClipboard() {
+  final copied = <String>[];
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+    if (call.method == 'Clipboard.setData') {
+      copied.add((call.arguments as Map)['text'] as String);
+    }
+    return null;
+  });
+  addTearDown(
+    () => messenger.setMockMethodCallHandler(SystemChannels.platform, null),
+  );
+  return copied;
+}
 
 Set<String> texts(WidgetTester tester) => tester
     .widgetList<Text>(find.byType(Text))
@@ -92,4 +109,17 @@ void main() {
       expect(texts(tester), without);
     },
   );
+
+  testWidgets('long-press on the routes row copies the routes '
+      '(already true today)', (tester) async {
+    final copied = mockClipboard();
+    await tester.pumpWidget(
+      host(poi({'phone': '+51 1 5550000', 'routes': 'Rutas: 1132, 1481'})),
+    );
+
+    await tester.longPress(find.text('Rutas: 1132, 1481'));
+    await tester.pump();
+
+    expect(copied, ['Rutas: 1132, 1481']);
+  });
 }
