@@ -13,9 +13,17 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 /// `minPlausibleSpeedMps`), one within `headingIgnoredWithinMeters` of the
 /// stop, and one without heading: a bus stopped just past the stop stays on
 /// the map until it moves on. With 48 buses on two routes the rider could
-/// not tell which one was theirs (trufi-lima#7). It reuses the ETA rule
-/// (#1016) so the map and the "next bus" badge agree. A transit leg without
-/// `fromPlace` matches by route only.
+/// not tell which one was theirs (trufi-lima#7).
+///
+/// The rule compares the heading with the straight-line bearing to the stop,
+/// so a bus still before the stop whose road points away at that moment (a
+/// corner, a one-way loop) can disappear until it turns. Measuring progress
+/// along the route's shape is the follow-up (trufi-lima#7).
+///
+/// The "next bus" badge (#1016) uses the same heading/direction test; it
+/// additionally looks at the first ride only and drops stale
+/// (`defaultMaxVehicleAge`, 5 min) and far (`defaultMaxDistanceMeters`,
+/// 10 km) vehicles. A transit leg without `fromPlace` matches by route only.
 List<VehiclePosition> liveVehiclesForTrip(
   List<VehiclePosition> vehicles,
   routing.Itinerary? itinerary,
