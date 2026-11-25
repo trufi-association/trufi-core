@@ -12,7 +12,8 @@ import '../../l10n/home_screen_localizations.dart';
 /// without pumping the whole home screen (which needs a map engine).
 ///
 /// Copying (trufi-sanaa#9) is at parity with [POIDetailPanel]: a copy button
-/// next to the close button, plus long-press on the name and on the address.
+/// next to the close button, plus long-press on the name, the address and the
+/// routes.
 class POICompactCard extends StatelessWidget {
   final POI poi;
   final VoidCallback onClose;
@@ -145,26 +146,30 @@ class POICompactCard extends StatelessWidget {
               ),
             ),
           if (poi.routes != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.directions_bus_outlined,
-                    size: 14,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      poi.routes!,
-                      style: theme.textTheme.bodySmall,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onLongPress: () => copy(poi.routes!),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.directions_bus_outlined,
+                      size: 14,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        poi.routes!,
+                        style: theme.textTheme.bodySmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           // Action buttons
