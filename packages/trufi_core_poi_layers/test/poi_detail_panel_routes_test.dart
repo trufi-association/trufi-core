@@ -111,7 +111,7 @@ void main() {
   );
 
   testWidgets('long-press on the routes row copies the routes '
-      '(already true today)', (tester) async {
+      '(via _InfoRow, as the other rows)', (tester) async {
     final copied = mockClipboard();
     await tester.pumpWidget(
       host(poi({'phone': '+51 1 5550000', 'routes': 'Rutas: 1132, 1481'})),
