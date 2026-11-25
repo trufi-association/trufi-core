@@ -4,8 +4,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 
 /// trufi-lima#6: a bus stop's POI card showed only its name; the routes
-/// that serve it ("Rutas: 1132, 1481") sit in the feature's `description`
-/// property and were never shown. The narrow detail panel must render it.
+/// that serve it ("Rutas: 1132, 1481") are never shown. The narrow detail
+/// panel must render the feature's `routes` property. It is `routes`, not
+/// `description`: other cities' POIs carry OSM `description` on hundreds of
+/// features, and showing it would change their cards.
 const category = POICategoryConfig(
   name: 'transport',
   displayName: 'Transport',
@@ -42,36 +44,52 @@ Set<String> texts(WidgetTester tester) => tester
     .toSet();
 
 void main() {
-  testWidgets('the description is shown, and only it is added', (tester) async {
+  testWidgets('the routes are shown, and only they are added', (tester) async {
     await tester.pumpWidget(host(poi({'phone': '+51 1 5550000'})));
     final without = texts(tester);
 
     await tester.pumpWidget(
-      host(poi({'phone': '+51 1 5550000', 'description': 'Rutas: 1132, 1481'})),
+      host(poi({'phone': '+51 1 5550000', 'routes': 'Rutas: 1132, 1481'})),
     );
-
     expect(find.text('Rutas: 1132, 1481'), findsOneWidget);
     expect(texts(tester).difference(without), {'Rutas: 1132, 1481'});
   });
 
-  testWidgets('no description: no routes row (already true today)', (
-    tester,
-  ) async {
+  testWidgets('no routes: no routes row (already true today)', (tester) async {
     await tester.pumpWidget(host(poi({'phone': '+51 1 5550000'})));
 
     expect(find.textContaining('Rutas'), findsNothing);
   });
 
-  testWidgets('an empty description renders nothing (already true today)', (
+  testWidgets('empty routes render nothing (already true today)', (
     tester,
   ) async {
     await tester.pumpWidget(host(poi({'phone': '+51 1 5550000'})));
     final without = texts(tester);
 
     await tester.pumpWidget(
-      host(poi({'phone': '+51 1 5550000', 'description': ''})),
+      host(poi({'phone': '+51 1 5550000', 'routes': ''})),
     );
     expect(texts(tester), without);
     expect(find.text(''), findsNothing);
   });
+
+  testWidgets(
+    'a description without routes is not shown (already true today)',
+    (tester) async {
+      await tester.pumpWidget(host(poi({'phone': '+51 1 5550000'})));
+      final without = texts(tester);
+
+      await tester.pumpWidget(
+        host(
+          poi({
+            'phone': '+51 1 5550000',
+            'description': 'Farmacia de turno 24 h',
+          }),
+        ),
+      );
+      expect(find.text('Farmacia de turno 24 h'), findsNothing);
+      expect(texts(tester), without);
+    },
+  );
 }
