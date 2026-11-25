@@ -309,6 +309,9 @@ class POI extends Equatable {
   /// The routes that serve a stop, written by the app's stop-layer generator
   /// (trufi-lima#6). Not the OSM `description`, which other cities' POIs carry
   /// on hundreds of features.
+  ///
+  /// A display-ready string, labelled and localized by the app (e.g.
+  /// "Rutas: 1132, 1481"); any non-string or empty value is ignored.
   String? get routes {
     final value = properties['routes'];
     return value is String && value.isNotEmpty ? value : null;
