@@ -9,9 +9,13 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 /// A vehicle is kept when a transit leg has its route and
 /// [routing.RealtimeVehiclesEtaProvider.headsTowards] its boarding stop, so
 /// buses of the opposite direction or already past the stop are dropped.
-/// With 48 buses on two routes the rider could not tell which one was theirs
-/// (trufi-lima#7). It reuses the ETA rule (#1016) so the map and the "next
-/// bus" badge agree. A transit leg without `fromPlace` matches by route only.
+/// The ETA rule also keeps a bus that is (nearly) stopped (below
+/// `minPlausibleSpeedMps`), one within `headingIgnoredWithinMeters` of the
+/// stop, and one without heading: a bus stopped just past the stop stays on
+/// the map until it moves on. With 48 buses on two routes the rider could
+/// not tell which one was theirs (trufi-lima#7). It reuses the ETA rule
+/// (#1016) so the map and the "next bus" badge agree. A transit leg without
+/// `fromPlace` matches by route only.
 List<VehiclePosition> liveVehiclesForTrip(
   List<VehiclePosition> vehicles,
   routing.Itinerary? itinerary,
