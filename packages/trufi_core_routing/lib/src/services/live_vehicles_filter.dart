@@ -29,6 +29,25 @@ import 'realtime_vehicles_eta_provider.dart';
 List<VehiclePosition> liveVehiclesForTrip(
   List<VehiclePosition> vehicles,
   Itinerary? itinerary,
+) => _vehiclesOfTripRoutes(vehicles, itinerary, _canBoard);
+
+/// Vehicles to draw while the rider rides [itinerary] (navigation): those on
+/// a route the trip uses, wherever they are.
+///
+/// Unlike [liveVehiclesForTrip] it never looks at the boarding stop, so the
+/// rider's own bus and the buses ahead of it stay visible after boarding.
+/// When a vehicle and the leg both carry a GTFS `direction_id`, a vehicle on
+/// the other direction is dropped. All [vehicles] are returned when there is
+/// no itinerary or it has no transit leg with a route id.
+List<VehiclePosition> liveVehiclesOnTrip(
+  List<VehiclePosition> vehicles,
+  Itinerary? itinerary,
+) => _vehiclesOfTripRoutes(vehicles, itinerary, _sameDirection);
+
+List<VehiclePosition> _vehiclesOfTripRoutes(
+  List<VehiclePosition> vehicles,
+  Itinerary? itinerary,
+  bool Function(VehiclePosition vehicle, Leg leg) keep,
 ) {
   final legsByRoute = <String, List<Leg>>{};
   for (final leg in itinerary?.legs ?? const <Leg>[]) {
@@ -47,9 +66,15 @@ List<VehiclePosition> liveVehiclesForTrip(
   return vehicles
       .where((v) {
         final legs = legsByRoute[stripGtfsFeedPrefix(v.routeId ?? '')];
-        return legs != null && legs.any((leg) => _canBoard(v, leg));
+        return legs != null && legs.any((leg) => keep(v, leg));
       })
       .toList(growable: false);
+}
+
+bool _sameDirection(VehiclePosition vehicle, Leg leg) {
+  final want = leg.directionId;
+  final have = vehicle.directionId;
+  return want == null || have == null || want == have;
 }
 
 bool _canBoard(VehiclePosition vehicle, Leg leg) {

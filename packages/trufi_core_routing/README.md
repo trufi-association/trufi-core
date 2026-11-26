@@ -123,11 +123,24 @@ A vehicle known to be stopped, or without a heading, is kept whatever it
 points at, and route geometry is still ignored (straight-line distance): a
 feed with neither signal gets the previous behaviour, the soonest vehicle
 wherever it goes. When every reporting vehicle of a route is filtered out
-the route is absent from the snapshot and the badge reads "Live ETA
-unavailable".
+the route is absent from the snapshot's estimates; the snapshot still
+lists it in `routesWithVehicles` if it had vehicles, so its badge reads "No
+buses nearby right now".
 
 ### Your own provider
 
 Implement `VehicleEtaProvider.fetchEtas` for any other backend (SIRI, a city
-API, ...). Return an empty snapshot when nothing is reporting and throw
-`VehicleEtaException` when the source cannot answer.
+API, ...). Throw `VehicleEtaException` when the source cannot answer. When
+it answers, fill `VehicleEtaSnapshot.routesWithVehicles` with the requested
+routes that have at least one vehicle in its data, even if none heads to the
+stop:
+
+- a route in the set and without an estimate shows "No buses nearby right
+  now";
+- a route missing from the set, or an empty set (nothing reporting), has no
+  data: its badge is hidden, and so is the live dot on its chip;
+- `null` (the default) means the source cannot tell, and every route without
+  an estimate shows "No buses nearby right now".
+
+`VehicleEtaSnapshot.empty(fetchedAt, routesWithVehicles: ...)` takes the same
+parameter.

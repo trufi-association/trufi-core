@@ -188,8 +188,6 @@ class Otp15RoutingProvider extends IRoutingProvider {
       }
 
       return Otp15ResponseParser.parsePlan(json);
-    } on TimeoutException {
-      throw RoutingNetworkException('Request timeout');
     } on FormatException catch (e) {
       throw Otp15Exception('Invalid response format: ${e.message}');
     } on http.ClientException catch (e) {

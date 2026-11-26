@@ -69,25 +69,30 @@ class VehicleEtaState extends Equatable {
   /// Status of one route: a route the answer has no estimate for is
   /// [VehicleEtaStatus.noLiveData] when the source reported no vehicle of it
   /// and [VehicleEtaStatus.noneNearby] otherwise (also when it cannot tell).
+  /// While a refresh loads, a route already known to have no vehicles stays
+  /// [VehicleEtaStatus.noLiveData] instead of flashing the loading state.
   VehicleEtaStatus statusFor(String routeGtfsId) {
-    final answered =
-        status == VehicleEtaStatus.ready ||
-        status == VehicleEtaStatus.noneNearby ||
-        status == VehicleEtaStatus.noLiveData;
-    if (!answered || etaFor(routeGtfsId) != null) return status;
+    if (etaFor(routeGtfsId) != null) return status;
     final routes = routesWithVehicles;
-    final hasVehicles =
-        routes == null || routes.contains(stripGtfsFeedPrefix(routeGtfsId));
-    return hasVehicles
-        ? VehicleEtaStatus.noneNearby
-        : VehicleEtaStatus.noLiveData;
+    final knownWithoutVehicles =
+        routes != null && !routes.contains(stripGtfsFeedPrefix(routeGtfsId));
+    return switch (status) {
+      VehicleEtaStatus.loading =>
+        knownWithoutVehicles ? VehicleEtaStatus.noLiveData : status,
+      VehicleEtaStatus.ready ||
+      VehicleEtaStatus.noneNearby ||
+      VehicleEtaStatus.noLiveData =>
+        knownWithoutVehicles
+            ? VehicleEtaStatus.noLiveData
+            : VehicleEtaStatus.noneNearby,
+      _ => status,
+    };
   }
 
   /// Whether the last answer reported vehicles for [routeGtfsId].
   bool hasLiveDataFor(String routeGtfsId) =>
       etaFor(routeGtfsId) != null ||
-      (routesWithVehicles?.contains(stripGtfsFeedPrefix(routeGtfsId)) ??
-          false);
+      (routesWithVehicles?.contains(stripGtfsFeedPrefix(routeGtfsId)) ?? false);
 
   /// Estimate for [routeGtfsId] with either spelling of the id (`1:1132`
   /// from OTP, `1132` from a bundled GTFS), or null.

@@ -170,10 +170,10 @@ class Otp24RoutingProvider extends IRoutingProvider {
         );
       }
       final link = result.exception!.linkException;
-      if (link == null || isLinkConnectivityFailure(link)) {
-        throw RoutingNetworkException('${link?.originalException ?? link}');
+      if (link != null && isLinkConnectivityFailure(link)) {
+        throw RoutingNetworkException('${link.originalException ?? link}');
       }
-      throw Otp24Exception('Server error: ${link.originalException ?? link}');
+      throw Otp24Exception('Server error: ${link?.originalException ?? link}');
     }
 
     if (result.source?.isEager ?? false) {

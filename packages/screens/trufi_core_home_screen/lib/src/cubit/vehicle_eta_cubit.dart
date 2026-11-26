@@ -181,6 +181,7 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
         fetchedAt: state.fetchedAt,
         nextAllowedAt: _now().add(cooldown),
         hasRequest: true,
+        routesWithVehicles: state.routesWithVehicles,
       ),
     );
     final VehicleEtaSnapshot snapshot;

@@ -322,7 +322,9 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       emit(
         state.copyWith(
           isLoading: false,
-          error: e is routing.RoutingNetworkException
+          error:
+              e is routing.RoutingNetworkException ||
+                  routing.isConnectivityFailure(e)
               ? networkErrorKey
               : genericErrorKey,
         ),

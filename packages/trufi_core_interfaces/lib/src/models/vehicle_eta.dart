@@ -152,8 +152,16 @@ class VehicleEtaSnapshot extends Equatable {
   }) : _routesWithVehicles = routesWithVehicles;
 
   /// Snapshot with no estimates (the source answered, nothing matched).
-  factory VehicleEtaSnapshot.empty(DateTime fetchedAt, {String? source}) =>
-      VehicleEtaSnapshot(etas: const [], fetchedAt: fetchedAt, source: source);
+  factory VehicleEtaSnapshot.empty(
+    DateTime fetchedAt, {
+    String? source,
+    Set<String>? routesWithVehicles,
+  }) => VehicleEtaSnapshot(
+    etas: const [],
+    fetchedAt: fetchedAt,
+    source: source,
+    routesWithVehicles: routesWithVehicles,
+  );
 
   final List<VehicleEta> etas;
   final DateTime fetchedAt;

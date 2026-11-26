@@ -102,7 +102,8 @@ class NavigationScreen extends StatefulWidget {
   /// Show the navigation screen from an OTP itinerary.
   ///
   /// With [liveVehicles] the map also draws the live buses of the itinerary's
-  /// routes that can still board (`liveVehiclesForTrip`); without it, none.
+  /// routes (`liveVehiclesOnTrip`: the rider's own bus and the ones ahead
+  /// stay visible); without it, none.
   /// The home screen provides its source, null while the live layer is off,
   /// as a `RealtimeVehiclesProvider?` above the `context` it hands to
   /// `onStartNavigation`.
@@ -142,11 +143,9 @@ class NavigationScreen extends StatefulWidget {
       config: config,
       modeIcon: modeIcon,
       mapBuilder: (ctx, state, navigationLayers) {
-        Widget buildMap(List<TrufiLayer> layers) =>
-            mapEngineManager.currentEngine.buildMap(
-              initialCamera: initialCamera,
-              layers: layers,
-            );
+        Widget buildMap(List<TrufiLayer> layers) => mapEngineManager
+            .currentEngine
+            .buildMap(initialCamera: initialCamera, layers: layers);
         if (liveVehicles == null || !_ridesTransit(itinerary)) {
           return buildMap(navigationLayers);
         }
@@ -156,7 +155,7 @@ class NavigationScreen extends StatefulWidget {
           builder: (context, snapshot) => buildMap([
             ...navigationLayers,
             buildVehiclePositionsLayer(
-              vehicles: routing.liveVehiclesForTrip(
+              vehicles: routing.liveVehiclesOnTrip(
                 snapshot.data ?? const [],
                 itinerary,
               ),
@@ -168,7 +167,7 @@ class NavigationScreen extends StatefulWidget {
   }
 
   /// Whether [itinerary] has a transit leg with a route id; without one
-  /// `liveVehiclesForTrip` keeps every vehicle, which no ride has to show.
+  /// `liveVehiclesOnTrip` keeps every vehicle, which no ride has to show.
   static bool _ridesTransit(routing.Itinerary itinerary) => itinerary.legs.any(
     (leg) => leg.transitLeg && (leg.route?.gtfsId?.isNotEmpty ?? false),
   );

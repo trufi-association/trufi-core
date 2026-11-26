@@ -543,6 +543,9 @@ class _HomeScreenState extends State<HomeScreen>
         if (location != null) {
           final position = LatLng(location.latitude, location.longitude);
           _updateMyLocationMarkers(position, location.accuracy);
+          if (!_isInServiceArea(location.latitude, location.longitude)) {
+            _showOutsideServiceAreaMessage();
+          }
         }
       }
     }
@@ -1234,9 +1237,23 @@ class _HomeScreenState extends State<HomeScreen>
     return true;
   }
 
-  void _showOutsideServiceAreaMessage() {
+  /// Fits the camera to the service area through [_moveCameraTracked], so
+  /// [_currentCamera] follows the move.
+  void _showServiceArea() {
     final area = widget.config.serviceArea;
-    if (area == null) return;
+    final baseCamera = _currentCamera ?? _initialCamera;
+    if (area == null || baseCamera == null) return;
+    _moveCameraTracked(
+      TrufiCameraFit.fitBoundsOnCamera(
+        camera: baseCamera,
+        bounds: area,
+        padding: const EdgeInsets.all(40),
+      ),
+    );
+  }
+
+  void _showOutsideServiceAreaMessage() {
+    if (widget.config.serviceArea == null) return;
     final l10n = HomeScreenLocalizations.of(context);
     final name = widget.config.serviceAreaName;
     final messenger = ScaffoldMessenger.of(context);
@@ -1252,13 +1269,7 @@ class _HomeScreenState extends State<HomeScreen>
           label: name == null
               ? l10n.showServiceAreaUnnamed
               : l10n.showServiceArea(name),
-          onPressed: () {
-            _cameraTarget = null;
-            _mapController?.fitBounds(
-              area,
-              padding: const EdgeInsets.all(40),
-            );
-          },
+          onPressed: _showServiceArea,
         ),
       ),
     );
@@ -1713,7 +1724,10 @@ class _HomeScreenState extends State<HomeScreen>
     if (_realtimeVehiclesProvider != null &&
         _liveVehiclesEnabled.value &&
         _liveVehicles.isNotEmpty) {
-      final toShow = routing.liveVehiclesForTrip(_liveVehicles, _liveFilterItinerary);
+      final toShow = routing.liveVehiclesForTrip(
+        _liveVehicles,
+        _liveFilterItinerary,
+      );
       if (toShow.isNotEmpty) {
         layers.add(buildVehiclePositionsLayer(vehicles: toShow));
       }

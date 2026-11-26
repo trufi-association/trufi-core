@@ -455,6 +455,7 @@ class _ItineraryListState extends State<ItineraryList> {
           Text(
             switch (state.error) {
               noRoutesErrorKey => l10n.noRoutesFound,
+              tooCloseErrorKey => l10n.originDestinationTooClose,
               networkErrorKey => l10n.errorNoConnection,
               genericErrorKey => l10n.errorPlanFailed,
               final other => other ?? l10n.errorNoRoutes,

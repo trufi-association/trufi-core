@@ -10,16 +10,18 @@ import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     show RealtimeVehiclesProvider, TrufiLatLng, VehiclePosition;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'support/navigation_fixtures.dart';
 
 /// trufi-lima#10: in navigation mode no live bus was ever drawn (the layer
 /// only knew the route and the rider). With a live-vehicles source the screen
-/// draws the buses of the ride leg's route that can still board (the home
-/// screen's `liveVehiclesForTrip` rule, trufi-lima#7); without one nothing
-/// changes. Driven through `NavigationScreen.showFromItinerary`, the call an
-/// app makes, over a map engine that records the layers it is handed.
+/// draws the buses of the ride leg's route, the rider's own and the ones ahead
+/// included (`liveVehiclesOnTrip`; the home's boarding-stop filter of
+/// trufi-lima#7 does not apply while riding); without one nothing changes.
+/// Driven through `NavigationScreen.showFromItinerary`, the call an app
+/// makes, over a map engine that records the layers it is handed.
 class _FakeRealtime implements RealtimeVehiclesProvider {
   _FakeRealtime(this._latest);
   List<VehiclePosition> _latest;
@@ -108,6 +110,7 @@ void main() {
   Future<_RecordingMapManager> startNavigation(
     WidgetTester tester, {
     RealtimeVehiclesProvider? liveVehicles,
+    routing.Itinerary? itinerary,
   }) async {
     final maps = _RecordingMapManager();
     await tester.pumpWidget(
@@ -120,7 +123,7 @@ void main() {
             builder: (context) => TextButton(
               onPressed: () => NavigationScreen.showFromItinerary(
                 context,
-                itinerary: SanaaTrip.itinerary(),
+                itinerary: itinerary ?? SanaaTrip.itinerary(),
                 locationService: FakeLocationService(initial: SanaaTrip.origin),
                 mapEngineManager: maps,
                 liveVehicles: liveVehicles,
@@ -142,12 +145,35 @@ void main() {
         if (marker.id.startsWith('vehicle-')) marker.id,
   ];
 
-  testWidgets('with a source: only the buses of the leg\'s route that can '
-      'still board are drawn', (tester) async {
+  testWidgets('with a source: the buses of the leg\'s route are drawn, '
+      'wherever they head', (tester) async {
     final realtime = _FakeRealtime([comingOn7, leavingOn7, otherLine]);
     final maps = await startNavigation(tester, liveVehicles: realtime);
 
-    expect(drawnVehicles(maps), ['vehicle-coming']);
+    expect(drawnVehicles(maps), ['vehicle-coming', 'vehicle-leaving']);
+  });
+
+  testWidgets('a known opposite direction is not drawn, an unknown one is', (
+    tester,
+  ) async {
+    final base = SanaaTrip.itinerary();
+    final withDirection = SanaaTrip.itineraryOf([
+      for (final leg in base.legs)
+        leg.transitLeg ? leg.copyWith(directionId: 0) : leg,
+    ]);
+    final realtime = _FakeRealtime([
+      comingOn7.copyWith(vehicleId: 'same', directionId: 0),
+      comingOn7.copyWith(vehicleId: 'opposite', directionId: 1),
+      comingOn7.copyWith(vehicleId: 'unknown'),
+    ]);
+
+    final maps = await startNavigation(
+      tester,
+      liveVehicles: realtime,
+      itinerary: withDirection,
+    );
+
+    expect(drawnVehicles(maps), ['vehicle-same', 'vehicle-unknown']);
   });
 
   testWidgets('a later snapshot redraws the buses', (tester) async {

@@ -267,7 +267,9 @@ HomeScreenConfig(
 The split between the two empty cases needs `VehicleEtaSnapshot.routesWithVehicles`
 (`RealtimeVehiclesEtaProvider` fills it). A source that leaves it unset gets
 `No buses nearby right now` for a route it has no estimate for. The live dot
-on a route chip carries the tooltip "Live".
+on a route chip carries the tooltip "Live"; once an answer reported
+`routesWithVehicles` it follows that set, so a route whose only vehicle is
+older than `maxVehicleAge` has neither badge nor dot.
 
 A refresh button sits in the results header (sheet and side panel). It
 re-asks the telemetry source **without re-planning**; while the cooldown
