@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,7 @@ import '../../models/routing_location.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
 import '../../models/transport_mode.dart';
+import '../routing_network_exception.dart';
 import '../routing_provider.dart';
 import 'otp_15_preferences.dart';
 import 'otp_1_5_response_parser.dart';
@@ -187,11 +189,13 @@ class Otp15RoutingProvider extends IRoutingProvider {
 
       return Otp15ResponseParser.parsePlan(json);
     } on TimeoutException {
-      throw Otp15Exception('Request timeout');
+      throw RoutingNetworkException('Request timeout');
     } on FormatException catch (e) {
       throw Otp15Exception('Invalid response format: ${e.message}');
     } on http.ClientException catch (e) {
-      throw Otp15Exception('Network error: ${e.message}');
+      throw RoutingNetworkException(e.message);
+    } on SocketException catch (e) {
+      throw RoutingNetworkException(e.message);
     }
   }
 

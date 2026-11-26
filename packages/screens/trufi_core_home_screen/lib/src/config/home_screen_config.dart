@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     show VehicleEtaProvider;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
-import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart'
+    hide LatLngBounds;
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 import '../models/vehicle_eta_state.dart' show defaultEtaRefreshCooldown;
@@ -85,6 +86,15 @@ class HomeScreenConfig {
   /// placed along each line, trufi-sanaa#18) turns both off together.
   final bool showStops;
 
+  /// Area the app serves. When set, "my location" does not move the camera to
+  /// a fix outside it and offers to show this area instead (trufi-lima#12).
+  /// Null (default): any location is centred.
+  final LatLngBounds? serviceArea;
+
+  /// City or region name used in the outside-the-area message; without it the
+  /// message reads "the service area".
+  final String? serviceAreaName;
+
   const HomeScreenConfig({
     this.chooseLocationZoom = 16.0,
     this.searchService,
@@ -99,5 +109,7 @@ class HomeScreenConfig {
     this.vehicleEtaProvider,
     this.etaRefreshCooldown = defaultEtaRefreshCooldown,
     this.showStops = true,
+    this.serviceArea,
+    this.serviceAreaName,
   });
 }

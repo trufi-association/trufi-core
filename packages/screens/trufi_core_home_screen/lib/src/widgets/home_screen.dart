@@ -28,7 +28,6 @@ import '../cubit/vehicle_eta_cubit.dart';
 import '../models/route_planner_state.dart';
 import '../services/coordinate_address.dart';
 import '../services/share_route_service.dart';
-import '../utils/live_vehicles_filter.dart';
 import 'eta_refresh_button.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
@@ -1216,17 +1215,62 @@ class _HomeScreenState extends State<HomeScreen>
     _mapController?.moveCamera(position);
   }
 
+  bool _isInServiceArea(double latitude, double longitude) {
+    final area = widget.config.serviceArea;
+    if (area == null) return true;
+    return latitude >= area.southWest.latitude &&
+        latitude <= area.northEast.latitude &&
+        longitude >= area.southWest.longitude &&
+        longitude <= area.northEast.longitude;
+  }
+
+  /// Centres the camera on a fix; false, without moving, when the fix lies
+  /// outside the configured service area.
+  bool _centerOnFix(double latitude, double longitude) {
+    if (!_isInServiceArea(latitude, longitude)) return false;
+    _moveCameraTracked(
+      TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
+    );
+    return true;
+  }
+
+  void _showOutsideServiceAreaMessage() {
+    final area = widget.config.serviceArea;
+    if (area == null) return;
+    final l10n = HomeScreenLocalizations.of(context);
+    final name = widget.config.serviceAreaName;
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          name == null
+              ? l10n.outsideServiceAreaUnnamed
+              : l10n.outsideServiceArea(name),
+        ),
+        action: SnackBarAction(
+          label: name == null
+              ? l10n.showServiceAreaUnnamed
+              : l10n.showServiceArea(name),
+          onPressed: () {
+            _cameraTarget = null;
+            _mapController?.fitBounds(
+              area,
+              padding: const EdgeInsets.all(40),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   Future<void> _onMyLocationPressed() async {
     // If already tracking, just center the map on current location
     if (_locationService.isTracking) {
       final location = _locationService.currentLocation;
-      if (location != null) {
-        _moveCameraTracked(
-          TrufiCameraPosition(
-            target: LatLng(location.latitude, location.longitude),
-            zoom: 16,
-          ),
-        );
+      if (location != null &&
+          !_centerOnFix(location.latitude, location.longitude)) {
+        _showOutsideServiceAreaMessage();
       }
       return;
     }
@@ -1234,6 +1278,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (_isLocating) return;
 
     setState(() => _isLocating = true);
+    var outsideServiceArea = false;
 
     try {
       // Check permission first
@@ -1249,11 +1294,9 @@ class _HomeScreenState extends State<HomeScreen>
         // immediate feedback while the accurate fix is still being acquired.
         final lastKnown = await _locationService.getLastKnownLocation();
         if (lastKnown != null && mounted) {
-          _moveCameraTracked(
-            TrufiCameraPosition(
-              target: LatLng(lastKnown.latitude, lastKnown.longitude),
-              zoom: 16,
-            ),
+          outsideServiceArea = !_centerOnFix(
+            lastKnown.latitude,
+            lastKnown.longitude,
           );
         }
 
@@ -1264,11 +1307,9 @@ class _HomeScreenState extends State<HomeScreen>
         if (started && mounted) {
           final location = _locationService.currentLocation;
           if (location != null) {
-            _moveCameraTracked(
-              TrufiCameraPosition(
-                target: LatLng(location.latitude, location.longitude),
-                zoom: 16,
-              ),
+            outsideServiceArea = !_centerOnFix(
+              location.latitude,
+              location.longitude,
             );
           }
         }
@@ -1286,6 +1327,7 @@ class _HomeScreenState extends State<HomeScreen>
     } finally {
       if (mounted) {
         setState(() => _isLocating = false);
+        if (outsideServiceArea) _showOutsideServiceAreaMessage();
       }
     }
   }
@@ -1671,7 +1713,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (_realtimeVehiclesProvider != null &&
         _liveVehiclesEnabled.value &&
         _liveVehicles.isNotEmpty) {
-      final toShow = liveVehiclesForTrip(_liveVehicles, _liveFilterItinerary);
+      final toShow = routing.liveVehiclesForTrip(_liveVehicles, _liveFilterItinerary);
       if (toShow.isNotEmpty) {
         layers.add(buildVehiclePositionsLayer(vehicles: toShow));
       }
@@ -2219,6 +2261,8 @@ class _HomeScreenState extends State<HomeScreen>
   String _resolveError(String? error, HomeScreenLocalizations l10n) {
     if (error == noRoutesErrorKey) return l10n.noRoutesFoundShort;
     if (error == tooCloseErrorKey) return l10n.originDestinationTooClose;
+    if (error == networkErrorKey) return l10n.errorNoConnection;
+    if (error == genericErrorKey) return l10n.errorPlanFailed;
     return error ?? l10n.errorNoRoutes;
   }
 
@@ -2226,6 +2270,8 @@ class _HomeScreenState extends State<HomeScreen>
   String _resolveErrorLong(String? error, HomeScreenLocalizations l10n) {
     if (error == noRoutesErrorKey) return l10n.noRoutesFound;
     if (error == tooCloseErrorKey) return l10n.originDestinationTooClose;
+    if (error == networkErrorKey) return l10n.errorNoConnection;
+    if (error == genericErrorKey) return l10n.errorPlanFailed;
     return error ?? l10n.errorNoRoutes;
   }
 

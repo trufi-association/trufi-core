@@ -1,13 +1,15 @@
-import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
-    hide ITrufiMapEngine;
-import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+
+import '../models/itinerary.dart';
+import '../models/leg.dart';
+import 'realtime_vehicles_eta_provider.dart';
 
 /// Vehicles to draw for the selected [itinerary]: those that can still
 /// board the trip, or all [vehicles] when there is no itinerary or it has no
 /// transit leg with a route id.
 ///
 /// A vehicle is kept when a transit leg has its route and
-/// [routing.RealtimeVehiclesEtaProvider.headsTowards] its boarding stop, so
+/// [RealtimeVehiclesEtaProvider.headsTowards] its boarding stop, so
 /// buses of the opposite direction or already past the stop are dropped.
 /// The ETA rule also keeps a bus that is (nearly) stopped (below
 /// `minPlausibleSpeedMps`), one within `headingIgnoredWithinMeters` of the
@@ -26,10 +28,10 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 /// 10 km) vehicles. A transit leg without `fromPlace` matches by route only.
 List<VehiclePosition> liveVehiclesForTrip(
   List<VehiclePosition> vehicles,
-  routing.Itinerary? itinerary,
+  Itinerary? itinerary,
 ) {
-  final legsByRoute = <String, List<routing.Leg>>{};
-  for (final leg in itinerary?.legs ?? const <routing.Leg>[]) {
+  final legsByRoute = <String, List<Leg>>{};
+  for (final leg in itinerary?.legs ?? const <Leg>[]) {
     if (!leg.transitLeg) continue;
     final id = leg.route?.gtfsId;
     if (id != null && id.isNotEmpty) {
@@ -50,10 +52,10 @@ List<VehiclePosition> liveVehiclesForTrip(
       .toList(growable: false);
 }
 
-bool _canBoard(VehiclePosition vehicle, routing.Leg leg) {
+bool _canBoard(VehiclePosition vehicle, Leg leg) {
   final from = leg.fromPlace;
   if (from == null) return true;
-  return routing.RealtimeVehiclesEtaProvider.headsTowards(
+  return RealtimeVehiclesEtaProvider.headsTowards(
     vehicle,
     TrufiLatLng(from.lat, from.lon),
     leg.directionId,

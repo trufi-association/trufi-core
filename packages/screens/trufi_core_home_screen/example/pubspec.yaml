@@ -39,6 +39,8 @@ dependency_overrides:
     path: ../../../trufi_core_interfaces
   trufi_core_maps:
     path: ../../../trufi_core_maps
+  trufi_core_navigation:
+    path: ../../../trufi_core_navigation
   trufi_core_poi_layers:
     path: ../../../trufi_core_poi_layers
   trufi_core_routing:

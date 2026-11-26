@@ -98,7 +98,11 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
     final positions = await _loadPositions(request);
     final now = _now();
     final etas = <VehicleEta>[];
+    final routesWithVehicles = <String>{};
     for (final routeId in request.routeIds) {
+      if (_hasFreshVehicle(routeId, positions, now)) {
+        routesWithVehicles.add(routeId);
+      }
       final best = _bestEtaForRoute(
         routeId,
         positions,
@@ -108,7 +112,30 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
       );
       if (best != null) etas.add(best);
     }
-    return VehicleEtaSnapshot(etas: etas, fetchedAt: now, source: source);
+    return VehicleEtaSnapshot(
+      etas: etas,
+      fetchedAt: now,
+      source: source,
+      routesWithVehicles: routesWithVehicles,
+    );
+  }
+
+  /// Whether any vehicle of [routeId] reported within [maxVehicleAge],
+  /// wherever it is and whichever way it heads.
+  bool _hasFreshVehicle(
+    String routeId,
+    List<VehiclePosition> positions,
+    DateTime now,
+  ) {
+    final want = stripGtfsFeedPrefix(routeId);
+    return positions.any((vehicle) {
+      final vehicleRoute = vehicle.routeId;
+      if (vehicleRoute == null || stripGtfsFeedPrefix(vehicleRoute) != want) {
+        return false;
+      }
+      final reportedAt = vehicle.timestamp;
+      return reportedAt == null || now.difference(reportedAt) <= maxVehicleAge;
+    });
   }
 
   Future<List<VehiclePosition>> _loadPositions(

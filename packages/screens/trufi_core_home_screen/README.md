@@ -222,6 +222,20 @@ Widget _buildMapTypeButton(MapEngineManager mapEngineManager) {
 
 This will add POI layers configuration to the map type settings modal, allowing users to toggle POI categories alongside map type selection.
 
+## Optional: Service area
+
+```dart
+HomeScreenConfig(
+  serviceArea: LatLngBounds(LatLng(-12.35, -77.20), LatLng(-11.80, -76.80)),
+  serviceAreaName: 'Lima',
+)
+```
+
+With a `serviceArea`, "my location" does not move the camera to a fix outside
+it: a SnackBar says "You are outside Lima" and its action "See Lima" fits the
+camera to the area. Without `serviceAreaName` the texts read "the service
+area". Without `serviceArea` nothing changes.
+
 ## Optional: Live vehicle ETA
 
 Itinerary cards can show when the next vehicle of the ride's **first bus**
@@ -245,8 +259,15 @@ HomeScreenConfig(
 | Source answered for the route | `Arrives in ~N min` (N rounded up, never 0); tooltip "Updated HH:MM" |
 | Request in flight, first time | spinner + `Checking live ETA…` |
 | Request in flight, refresh | the previous estimate, dimmed |
-| Source answered nothing for the route (no vehicle reporting, or every reporting bus goes the other way — #1016), or failed | `Live ETA unavailable` |
+| The route has vehicles in the snapshot but none heads to the stop (#1016) | `No buses nearby right now` |
+| The snapshot has no vehicle of the route (no GPS) | nothing, and no live dot on its chip |
+| The source failed | `Live ETA unavailable` |
 | Walk-only itinerary, or a leg without a route id | nothing |
+
+The split between the two empty cases needs `VehicleEtaSnapshot.routesWithVehicles`
+(`RealtimeVehiclesEtaProvider` fills it). A source that leaves it unset gets
+`No buses nearby right now` for a route it has no estimate for. The live dot
+on a route chip carries the tooltip "Live".
 
 A refresh button sits in the results header (sheet and side panel). It
 re-asks the telemetry source **without re-planning**; while the cooldown
@@ -330,6 +351,21 @@ HomeScreenTrufiScreen(
     );
   },
 ),
+```
+
+The navigation also draws the live buses of the itinerary's routes that can
+still board (the same rule as the home map) when given a source; the home
+provides its own, `null` while its live layer is off, as a
+`RealtimeVehiclesProvider?` above the `context` of `onStartNavigation`:
+
+```dart
+NavigationScreen.showFromItinerary(
+  context,
+  itinerary: itinerary,
+  locationService: locationService,
+  mapEngineManager: MapEngineManager.read(context),
+  liveVehicles: context.read<RealtimeVehiclesProvider?>(),
+);
 ```
 
 The instruction card then names the stop where the current leg ends — the

@@ -199,16 +199,31 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
     }
     if (isClosed || id != _requestId) return;
     final etas = snapshot.bestEtaByRoute;
+    final routesWithVehicles = snapshot.knowsRoutesWithVehicles
+        ? {
+            ...snapshot.routesWithVehicles.map(stripGtfsFeedPrefix),
+            ...etas.keys,
+          }
+        : null;
     emit(
       VehicleEtaState(
-        status: etas.isEmpty
-            ? VehicleEtaStatus.unavailable
-            : VehicleEtaStatus.ready,
+        status: _answeredStatus(etas, routesWithVehicles),
         etasByRoute: etas,
         fetchedAt: snapshot.fetchedAt,
         nextAllowedAt: state.nextAllowedAt,
         hasRequest: true,
+        routesWithVehicles: routesWithVehicles,
       ),
     );
+  }
+
+  VehicleEtaStatus _answeredStatus(
+    Map<String, VehicleEta> etas,
+    Set<String>? routesWithVehicles,
+  ) {
+    if (etas.isNotEmpty) return VehicleEtaStatus.ready;
+    return routesWithVehicles != null && routesWithVehicles.isEmpty
+        ? VehicleEtaStatus.noLiveData
+        : VehicleEtaStatus.noneNearby;
   }
 }

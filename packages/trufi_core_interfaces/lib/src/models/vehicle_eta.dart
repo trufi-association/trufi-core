@@ -148,7 +148,8 @@ class VehicleEtaSnapshot extends Equatable {
     required this.etas,
     required this.fetchedAt,
     this.source,
-  });
+    Set<String>? routesWithVehicles,
+  }) : _routesWithVehicles = routesWithVehicles;
 
   /// Snapshot with no estimates (the source answered, nothing matched).
   factory VehicleEtaSnapshot.empty(DateTime fetchedAt, {String? source}) =>
@@ -161,8 +162,18 @@ class VehicleEtaSnapshot extends Equatable {
   /// (e.g. `realtime_vehicles`), for diagnostics only.
   final String? source;
 
+  final Set<String>? _routesWithVehicles;
+
+  /// Whether the source says which routes have vehicles reporting.
+  bool get knowsRoutesWithVehicles => _routesWithVehicles != null;
+
+  /// Requested routes with at least one vehicle in the source's data, even
+  /// when none of them heads to the stop (so [etas] has nothing for them).
+  /// Empty when the source does not report it; see [knowsRoutesWithVehicles].
+  Set<String> get routesWithVehicles => _routesWithVehicles ?? const {};
+
   @override
-  List<Object?> get props => [etas, fetchedAt, source];
+  List<Object?> get props => [etas, fetchedAt, source, _routesWithVehicles];
 }
 
 /// Convenience queries on top of [VehicleEtaSnapshot.etas]. All route

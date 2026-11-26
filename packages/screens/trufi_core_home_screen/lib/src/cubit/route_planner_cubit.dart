@@ -12,6 +12,13 @@ import '../services/request_plan_service.dart';
 /// Error key emitted when no routes are found (UI resolves to localized string).
 const String noRoutesErrorKey = 'no_routes_found';
 
+/// Error key emitted when the routing server could not be reached.
+const String networkErrorKey = 'network_error';
+
+/// Error key emitted for any other planning failure; the raw error text is
+/// never shown to the rider.
+const String genericErrorKey = 'plan_failed';
+
 /// Error key emitted when origin and destination are within
 /// [minPlanningDistanceMeters] of each other.
 const String tooCloseErrorKey = 'origin_destination_too_close';
@@ -312,7 +319,14 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(isLoading: false, error: e.toString()));
+      emit(
+        state.copyWith(
+          isLoading: false,
+          error: e is routing.RoutingNetworkException
+              ? networkErrorKey
+              : genericErrorKey,
+        ),
+      );
     }
   }
 

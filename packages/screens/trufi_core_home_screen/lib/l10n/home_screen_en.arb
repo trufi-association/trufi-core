@@ -724,5 +724,59 @@
         "example": "10:32"
       }
     }
+  },
+  "errorNoConnection": "No internet connection. Check your connection and try again.",
+  "@errorNoConnection": {
+    "description": "Error panel text when the route search could not reach the server"
+  },
+  "errorPlanFailed": "We couldn't search for routes. Please try again.",
+  "@errorPlanFailed": {
+    "description": "Error panel text for any route search failure other than no connection"
+  },
+  "etaNoneNearby": "No buses nearby right now",
+  "@etaNoneNearby": {
+    "description": "Badge when the route has vehicles in the live data but none is heading to the stop"
+  },
+  "liveDataTooltip": "Live",
+  "@liveDataTooltip": {
+    "description": "Tooltip on the dot that marks a route with live vehicle data"
+  },
+  "liveVehicleHeadsign": "Towards {headsign}",
+  "@liveVehicleHeadsign": {
+    "description": "Destination row in the vehicle info panel",
+    "placeholders": {
+      "headsign": {
+        "type": "String",
+        "example": "MINKA"
+      }
+    }
+  },
+  "outsideServiceArea": "You are outside {name}",
+  "@outsideServiceArea": {
+    "description": "Message when the device location is outside the service area",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Lima"
+      }
+    }
+  },
+  "showServiceArea": "See {name}",
+  "@showServiceArea": {
+    "description": "Action that moves the map to the service area",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Lima"
+      }
+    }
+  },
+  "outsideServiceAreaUnnamed": "You are outside the service area",
+  "@outsideServiceAreaUnnamed": {
+    "description": "Message when the device location is outside the service area and the app has no area name"
+  },
+  "showServiceAreaUnnamed": "See the service area",
+  "@showServiceAreaUnnamed": {
+    "description": "Action that moves the map to the service area when the app has no area name"
   }
 }

@@ -212,7 +212,7 @@ void main() {
           to: TestConfig.destinationLocation,
           dateTime: fixedDate,
         ),
-        throwsA(isA<Otp15Exception>()),
+        throwsA(isA<RoutingNetworkException>()),
       );
     });
 

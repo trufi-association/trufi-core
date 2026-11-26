@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core_home_screen/src/utils/live_vehicles_filter.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show liveVehiclesForTrip;
 
 import 'support/vehicle_eta_fakes.dart';
 

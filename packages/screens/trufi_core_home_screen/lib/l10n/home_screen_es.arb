@@ -147,5 +147,14 @@
   "etaLoading": "Consultando ETA en vivo…",
   "etaRefresh": "Actualizar",
   "etaRefreshCooldown": "Actualización disponible en {seconds} s",
-  "etaUpdated": "Actualizado {time}"
+  "etaUpdated": "Actualizado {time}",
+  "errorNoConnection": "Sin conexión a internet. Revisa tu conexión e inténtalo de nuevo.",
+  "errorPlanFailed": "No pudimos buscar rutas. Inténtalo de nuevo.",
+  "etaNoneNearby": "Sin buses cerca ahora",
+  "liveDataTooltip": "En vivo",
+  "liveVehicleHeadsign": "Hacia {headsign}",
+  "outsideServiceArea": "Estás fuera de {name}",
+  "showServiceArea": "Ver {name}",
+  "outsideServiceAreaUnnamed": "Estás fuera del área de servicio",
+  "showServiceAreaUnnamed": "Ver el área de servicio"
 }

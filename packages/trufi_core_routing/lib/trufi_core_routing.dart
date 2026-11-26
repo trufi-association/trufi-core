@@ -35,6 +35,7 @@ export 'src/utils/polyline_decoder.dart';
 // ROUTING PROVIDERS - Common
 // ============================================
 export 'src/routing_engine_manager.dart';
+export 'src/providers/routing_network_exception.dart';
 export 'src/providers/routing_provider.dart';
 
 // ============================================
@@ -67,6 +68,7 @@ export 'src/services/vehicle_positions_service.dart';
 export 'src/services/realtime_vehicles_eta_provider.dart';
 export 'src/services/itinerary_grouper.dart';
 export 'src/services/itinerary_filters.dart';
+export 'src/services/live_vehicles_filter.dart';
 
 // ============================================
 // Widgets
