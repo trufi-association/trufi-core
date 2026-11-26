@@ -94,8 +94,8 @@ void main() {
   testWidgets('Spanish texts: "Estás fuera de Lima" / "Ver Lima"', (
     tester,
   ) async {
-    tester.platformDispatcher.localeTestValue = const Locale('es');
-    addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+    tester.platformDispatcher.localesTestValue = const [Locale('es')];
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
     await pressMyLocation(tester, laPaz);
 
     expect(find.text('Estás fuera de Lima'), findsOneWidget);
