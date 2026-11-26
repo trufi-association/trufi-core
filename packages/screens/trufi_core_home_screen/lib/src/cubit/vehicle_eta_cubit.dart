@@ -171,6 +171,9 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
       return;
     }
     final id = ++_requestId;
+    // Only a refresh (the same request) may reuse what the last answer knew
+    // about vehicles; a new plan asks about other routes.
+    final isRefresh = request == _lastRequest;
     _lastRequest = request;
     // The gate is armed when the request STARTS, so a slow backend cannot
     // be hammered by taps while it is still answering.
@@ -181,6 +184,7 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
         fetchedAt: state.fetchedAt,
         nextAllowedAt: _now().add(cooldown),
         hasRequest: true,
+        routesWithVehicles: isRefresh ? state.routesWithVehicles : null,
       ),
     );
     final VehicleEtaSnapshot snapshot;
@@ -199,16 +203,31 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
     }
     if (isClosed || id != _requestId) return;
     final etas = snapshot.bestEtaByRoute;
+    final routesWithVehicles = snapshot.knowsRoutesWithVehicles
+        ? {
+            ...snapshot.routesWithVehicles.map(stripGtfsFeedPrefix),
+            ...etas.keys,
+          }
+        : null;
     emit(
       VehicleEtaState(
-        status: etas.isEmpty
-            ? VehicleEtaStatus.unavailable
-            : VehicleEtaStatus.ready,
+        status: _answeredStatus(etas, routesWithVehicles),
         etasByRoute: etas,
         fetchedAt: snapshot.fetchedAt,
         nextAllowedAt: state.nextAllowedAt,
         hasRequest: true,
+        routesWithVehicles: routesWithVehicles,
       ),
     );
+  }
+
+  VehicleEtaStatus _answeredStatus(
+    Map<String, VehicleEta> etas,
+    Set<String>? routesWithVehicles,
+  ) {
+    if (etas.isNotEmpty) return VehicleEtaStatus.ready;
+    return routesWithVehicles != null && routesWithVehicles.isEmpty
+        ? VehicleEtaStatus.noLiveData
+        : VehicleEtaStatus.noneNearby;
   }
 }

@@ -1,13 +1,15 @@
-import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
-    hide ITrufiMapEngine;
-import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+
+import '../models/itinerary.dart';
+import '../models/leg.dart';
+import 'realtime_vehicles_eta_provider.dart';
 
 /// Vehicles to draw for the selected [itinerary]: those that can still
 /// board the trip, or all [vehicles] when there is no itinerary or it has no
 /// transit leg with a route id.
 ///
 /// A vehicle is kept when a transit leg has its route and
-/// [routing.RealtimeVehiclesEtaProvider.headsTowards] its boarding stop, so
+/// [RealtimeVehiclesEtaProvider.headsTowards] its boarding stop, so
 /// buses of the opposite direction or already past the stop are dropped.
 /// The ETA rule also keeps a bus that is (nearly) stopped (below
 /// `minPlausibleSpeedMps`), one within `headingIgnoredWithinMeters` of the
@@ -26,10 +28,29 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 /// 10 km) vehicles. A transit leg without `fromPlace` matches by route only.
 List<VehiclePosition> liveVehiclesForTrip(
   List<VehiclePosition> vehicles,
-  routing.Itinerary? itinerary,
+  Itinerary? itinerary,
+) => _vehiclesOfTripRoutes(vehicles, itinerary, _canBoard);
+
+/// Vehicles to draw while the rider rides [itinerary] (navigation): those on
+/// a route the trip uses, wherever they are.
+///
+/// Unlike [liveVehiclesForTrip] it never looks at the boarding stop, so the
+/// rider's own bus and the buses ahead of it stay visible after boarding.
+/// When a vehicle and the leg both carry a GTFS `direction_id`, a vehicle on
+/// the other direction is dropped. All [vehicles] are returned when there is
+/// no itinerary or it has no transit leg with a route id.
+List<VehiclePosition> liveVehiclesOnTrip(
+  List<VehiclePosition> vehicles,
+  Itinerary? itinerary,
+) => _vehiclesOfTripRoutes(vehicles, itinerary, _sameDirection);
+
+List<VehiclePosition> _vehiclesOfTripRoutes(
+  List<VehiclePosition> vehicles,
+  Itinerary? itinerary,
+  bool Function(VehiclePosition vehicle, Leg leg) keep,
 ) {
-  final legsByRoute = <String, List<routing.Leg>>{};
-  for (final leg in itinerary?.legs ?? const <routing.Leg>[]) {
+  final legsByRoute = <String, List<Leg>>{};
+  for (final leg in itinerary?.legs ?? const <Leg>[]) {
     if (!leg.transitLeg) continue;
     final id = leg.route?.gtfsId;
     if (id != null && id.isNotEmpty) {
@@ -45,15 +66,21 @@ List<VehiclePosition> liveVehiclesForTrip(
   return vehicles
       .where((v) {
         final legs = legsByRoute[stripGtfsFeedPrefix(v.routeId ?? '')];
-        return legs != null && legs.any((leg) => _canBoard(v, leg));
+        return legs != null && legs.any((leg) => keep(v, leg));
       })
       .toList(growable: false);
 }
 
-bool _canBoard(VehiclePosition vehicle, routing.Leg leg) {
+bool _sameDirection(VehiclePosition vehicle, Leg leg) {
+  final want = leg.directionId;
+  final have = vehicle.directionId;
+  return want == null || have == null || want == have;
+}
+
+bool _canBoard(VehiclePosition vehicle, Leg leg) {
   final from = leg.fromPlace;
   if (from == null) return true;
-  return routing.RealtimeVehiclesEtaProvider.headsTowards(
+  return RealtimeVehiclesEtaProvider.headsTowards(
     vehicle,
     TrufiLatLng(from.lat, from.lon),
     leg.directionId,

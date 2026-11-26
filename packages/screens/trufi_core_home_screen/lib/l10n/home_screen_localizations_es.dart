@@ -520,4 +520,38 @@ class HomeScreenLocalizationsEs extends HomeScreenLocalizations {
   String etaUpdated(String time) {
     return 'Actualizado $time';
   }
+
+  @override
+  String get errorNoConnection =>
+      'Sin conexión a internet. Revisa tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get errorPlanFailed => 'No pudimos buscar rutas. Inténtalo de nuevo.';
+
+  @override
+  String get etaNoneNearby => 'Sin buses cerca ahora';
+
+  @override
+  String get liveDataTooltip => 'En vivo';
+
+  @override
+  String liveVehicleHeadsign(String headsign) {
+    return 'Hacia $headsign';
+  }
+
+  @override
+  String outsideServiceArea(String name) {
+    return 'Estás fuera de $name';
+  }
+
+  @override
+  String showServiceArea(String name) {
+    return 'Ver $name';
+  }
+
+  @override
+  String get outsideServiceAreaUnnamed => 'Estás fuera del área de servicio';
+
+  @override
+  String get showServiceAreaUnnamed => 'Ver el área de servicio';
 }

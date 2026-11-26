@@ -13,6 +13,7 @@ import '../../models/transit_route.dart';
 import '../../services/realtime_vehicles_eta_provider.dart';
 import '../../services/vehicle_positions_service.dart';
 import '../otp_2_4/otp_2_4_pattern_queries.dart' as pattern_queries;
+import '../routing_network_exception.dart';
 import '../routing_provider.dart';
 import 'otp_28_preferences.dart';
 import 'otp_2_8_queries.dart';
@@ -221,10 +222,11 @@ class Otp28RoutingProvider extends IRoutingProvider {
 
       if (exception.linkException != null) {
         final linkEx = exception.linkException!;
-        final originalException = linkEx.originalException;
-        throw Otp28Exception(
-          'Network error: ${originalException ?? linkEx.toString()}',
-        );
+        final detail = linkEx.originalException ?? linkEx.toString();
+        if (isLinkConnectivityFailure(linkEx)) {
+          throw RoutingNetworkException('$detail');
+        }
+        throw Otp28Exception('Server error: $detail');
       }
 
       throw Otp28Exception('Unknown error: $exception');

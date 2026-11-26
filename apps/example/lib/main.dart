@@ -7,6 +7,8 @@ import 'package:trufi_core_about/trufi_core_about.dart';
 import 'package:trufi_core_fares/trufi_core_fares.dart';
 import 'package:trufi_core_feedback/trufi_core_feedback.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
+    show RealtimeVehiclesProvider;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
@@ -360,6 +362,7 @@ void main() {
               itinerary: itinerary,
               locationService: locationService,
               mapEngineManager: MapEngineManager.read(context),
+              liveVehicles: context.read<RealtimeVehiclesProvider?>(),
             );
           },
           onRouteTap: (context, routeCode) {

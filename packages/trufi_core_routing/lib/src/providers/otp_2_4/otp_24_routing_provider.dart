@@ -9,6 +9,7 @@ import '../../models/plan.dart';
 import '../../models/routing_location.dart';
 import '../../models/stop.dart';
 import '../../models/transit_route.dart';
+import '../routing_network_exception.dart';
 import '../routing_provider.dart';
 import 'otp_24_preferences.dart';
 import 'otp_2_4_pattern_queries.dart' as pattern_queries;
@@ -168,7 +169,11 @@ class Otp24RoutingProvider extends IRoutingProvider {
           'Bad request: ${result.exception!.graphqlErrors.first.message}',
         );
       }
-      throw Otp24Exception('No internet connection');
+      final link = result.exception!.linkException;
+      if (link != null && isLinkConnectivityFailure(link)) {
+        throw RoutingNetworkException('${link.originalException ?? link}');
+      }
+      throw Otp24Exception('Server error: ${link?.originalException ?? link}');
     }
 
     if (result.source?.isEager ?? false) {

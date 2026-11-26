@@ -1036,6 +1036,7 @@ class _LegItemState extends State<_LegItem> {
                 leg: leg,
                 color: widget.lineColor,
                 size: 12,
+                tooltip: HomeScreenLocalizations.of(context).liveDataTooltip,
               ),
             );
           },

@@ -954,6 +954,60 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Updated {time}'**
   String etaUpdated(String time);
+
+  /// Error panel text when the route search could not reach the server
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your connection and try again.'**
+  String get errorNoConnection;
+
+  /// Error panel text for any route search failure other than no connection
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t search for routes. Please try again.'**
+  String get errorPlanFailed;
+
+  /// Badge when the route has vehicles in the live data but none is heading to the stop
+  ///
+  /// In en, this message translates to:
+  /// **'No buses nearby right now'**
+  String get etaNoneNearby;
+
+  /// Tooltip on the dot that marks a route with live vehicle data
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get liveDataTooltip;
+
+  /// Destination row in the vehicle info panel
+  ///
+  /// In en, this message translates to:
+  /// **'Towards {headsign}'**
+  String liveVehicleHeadsign(String headsign);
+
+  /// Message when the device location is outside the service area
+  ///
+  /// In en, this message translates to:
+  /// **'You are outside {name}'**
+  String outsideServiceArea(String name);
+
+  /// Action that moves the map to the service area
+  ///
+  /// In en, this message translates to:
+  /// **'See {name}'**
+  String showServiceArea(String name);
+
+  /// Message when the device location is outside the service area and the app has no area name
+  ///
+  /// In en, this message translates to:
+  /// **'You are outside the service area'**
+  String get outsideServiceAreaUnnamed;
+
+  /// Action that moves the map to the service area when the app has no area name
+  ///
+  /// In en, this message translates to:
+  /// **'See the service area'**
+  String get showServiceAreaUnnamed;
 }
 
 class _HomeScreenLocalizationsDelegate

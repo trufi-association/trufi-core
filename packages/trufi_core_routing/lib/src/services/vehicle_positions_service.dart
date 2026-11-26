@@ -56,6 +56,7 @@ const _query = '''
     color
     patterns {
       code
+      headsign
       vehiclePositions {
         vehicleId
         label
@@ -228,6 +229,7 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       final patterns = routeMap['patterns'] as List<dynamic>? ?? const [];
       for (final pattern in patterns) {
         final patternMap = pattern as Map<String, dynamic>;
+        final headsign = patternMap['headsign'] as String?;
         final vehicles =
             patternMap['vehiclePositions'] as List<dynamic>? ?? const [];
         for (final v in vehicles) {
@@ -235,6 +237,7 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
             v as Map<String, dynamic>,
             routeId,
             routeColor,
+            headsign,
           );
           if (position != null) positions.add(position);
         }
@@ -305,6 +308,7 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
     Map<String, dynamic> json,
     String? routeId,
     String? routeColor,
+    String? headsign,
   ) {
     final lat = (json['lat'] as num?)?.toDouble();
     final lon = (json['lon'] as num?)?.toDouble();
@@ -322,6 +326,7 @@ class OtpVehiclePositionsProvider implements RealtimeVehiclesProvider {
       routeColor: routeColor,
       tripId: trip?['gtfsId'] as String?,
       directionId: parseGtfsDirectionId(trip?['directionId']),
+      headsign: (headsign?.isEmpty ?? true) ? null : headsign,
       timestamp: parseVehicleTimestamp(json),
     );
   }

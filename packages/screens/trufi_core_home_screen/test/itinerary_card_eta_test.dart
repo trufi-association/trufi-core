@@ -69,7 +69,7 @@ void main() {
     );
   });
 
-  testWidgets('a route the source has nothing for shows the fallback', (
+  testWidgets('a route the source has nothing for says none is nearby', (
     tester,
   ) async {
     final provider = FakeVehicleEtaProvider()
@@ -83,7 +83,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Live ETA unavailable'), findsOneWidget);
+    expect(find.text('No buses nearby right now'), findsOneWidget);
   });
 
   testWidgets('a walk-only itinerary never shows a badge', (tester) async {

@@ -36,6 +36,16 @@ class LiveVehicleInfoPanel extends StatelessWidget {
     final route = displayRoute(vehicle.routeId);
 
     final details = <Widget>[];
+    final headsign = vehicle.headsign;
+    if (headsign != null && headsign.isNotEmpty) {
+      details.add(
+        _row(
+          theme,
+          Icons.arrow_right_alt_rounded,
+          l10n.liveVehicleHeadsign(headsign),
+        ),
+      );
+    }
     if (vehicle.speed != null) {
       // GTFS-RT speeds are meters/second on the wire.
       final kmh = (vehicle.speed! * 3.6).round();

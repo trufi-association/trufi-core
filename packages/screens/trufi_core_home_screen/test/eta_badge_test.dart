@@ -38,8 +38,8 @@ void main() {
       reason: 'the source answered but not for this route',
     );
     expect(
-      EtaBadge.kindFor(VehicleEtaStatus.unavailable, null),
-      EtaBadgeKind.unavailable,
+      EtaBadge.kindFor(VehicleEtaStatus.noneNearby, null),
+      EtaBadgeKind.noneNearby,
     );
     expect(
       EtaBadge.kindFor(VehicleEtaStatus.error, null),
@@ -99,11 +99,11 @@ void main() {
     }
   });
 
-  testWidgets('unavailable shows the fallback without a tooltip', (
+  testWidgets('a failed source shows the fallback without a tooltip', (
     tester,
   ) async {
     await tester.pumpWidget(
-      host(const EtaBadge(status: VehicleEtaStatus.unavailable)),
+      host(const EtaBadge(status: VehicleEtaStatus.error)),
     );
 
     expect(find.text('Live ETA unavailable'), findsOneWidget);

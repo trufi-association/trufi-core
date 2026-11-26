@@ -35,6 +35,10 @@ String stripGtfsFeedPrefix(String gtfsId) {
   return colon >= 0 ? gtfsId.substring(colon + 1) : gtfsId;
 }
 
+/// Reports older than this are stale: the vehicle is no longer where the
+/// feed says it is.
+const Duration realtimeMaxVehicleAge = Duration(minutes: 5);
+
 /// Convenience queries computed on top of [RealtimeVehiclesProvider.latest].
 /// All route matching is feed-prefix agnostic — see [stripGtfsFeedPrefix].
 extension RealtimeVehiclesProviderQueries on RealtimeVehiclesProvider {
@@ -58,10 +62,21 @@ extension RealtimeVehiclesProviderQueries on RealtimeVehiclesProvider {
         .toList(growable: false);
   }
 
-  bool hasDataForRoute(String routeGtfsId) {
+  /// Whether any vehicle of the route reported within [maxAge] of [now]
+  /// (the clock by default). A vehicle with no timestamp counts as fresh.
+  bool hasDataForRoute(
+    String routeGtfsId, {
+    Duration maxAge = realtimeMaxVehicleAge,
+    DateTime? now,
+  }) {
     final want = stripGtfsFeedPrefix(routeGtfsId);
-    return latest.any(
-      (v) => v.routeId != null && stripGtfsFeedPrefix(v.routeId!) == want,
-    );
+    final clock = now ?? DateTime.now();
+    return latest.any((v) {
+      if (v.routeId == null || stripGtfsFeedPrefix(v.routeId!) != want) {
+        return false;
+      }
+      final reportedAt = v.timestamp;
+      return reportedAt == null || clock.difference(reportedAt) <= maxAge;
+    });
   }
 }

@@ -68,9 +68,9 @@ void main() {
       expect(state.error, isNull);
     });
 
-    test('an empty answer is "unavailable", not an error', () async {
+    test('an empty answer is "none nearby", not an error', () async {
       await cubit.loadForPlan(threeRidesPlan(), etaOrigin);
-      expect(cubit.state.status, VehicleEtaStatus.unavailable);
+      expect(cubit.state.status, VehicleEtaStatus.noneNearby);
       expect(cubit.state.etasByRoute, isEmpty);
       expect(cubit.state.hasRequest, isTrue);
     });
@@ -181,7 +181,7 @@ void main() {
 
       provider.gate!.complete(VehicleEtaSnapshot.empty(now));
       await refresh;
-      expect(cubit.state.status, VehicleEtaStatus.unavailable);
+      expect(cubit.state.status, VehicleEtaStatus.noneNearby);
       expect(cubit.state.etasByRoute, isEmpty);
       expect(cubit.state.fetchedAt, now);
     });
@@ -322,7 +322,7 @@ void main() {
 
       b.gate!.complete(VehicleEtaSnapshot.empty(now));
       await Future<void>.delayed(Duration.zero);
-      expect(c.state.status, VehicleEtaStatus.unavailable);
+      expect(c.state.status, VehicleEtaStatus.noneNearby);
     });
 
     test('clear forgets the plan: a later source has nothing to ask', () async {

@@ -17,8 +17,12 @@ enum VehicleEtaStatus {
   /// The source answered with at least one estimate.
   ready,
 
-  /// The source answered but no vehicle of the plan's routes is reporting.
-  unavailable,
+  /// The source answered; vehicles of the plan's routes exist (or the source
+  /// cannot tell) but none heads to the stop.
+  noneNearby,
+
+  /// The source answered and has no vehicle of the plan's routes at all.
+  noLiveData,
 
   /// The source could not be reached or answered garbage.
   error,
@@ -34,6 +38,7 @@ class VehicleEtaState extends Equatable {
     this.nextAllowedAt,
     this.error,
     this.hasRequest = false,
+    this.routesWithVehicles,
   });
 
   final VehicleEtaStatus status;
@@ -56,6 +61,33 @@ class VehicleEtaState extends Equatable {
   /// True once a plan with at least one identifiable transit route has been
   /// loaded — only then does a refresh button make sense.
   final bool hasRequest;
+
+  /// Prefix-stripped ids of the routes that had vehicles in the last answer,
+  /// or null when the source does not say.
+  final Set<String>? routesWithVehicles;
+
+  /// Status of one route: a route the answer has no estimate for is
+  /// [VehicleEtaStatus.noLiveData] when the source reported no vehicle of it
+  /// and [VehicleEtaStatus.noneNearby] otherwise (also when it cannot tell).
+  /// While a refresh loads, a route already known to have no vehicles stays
+  /// [VehicleEtaStatus.noLiveData] instead of flashing the loading state.
+  VehicleEtaStatus statusFor(String routeGtfsId) {
+    if (etaFor(routeGtfsId) != null) return status;
+    final routes = routesWithVehicles;
+    final knownWithoutVehicles =
+        routes != null && !routes.contains(stripGtfsFeedPrefix(routeGtfsId));
+    return switch (status) {
+      VehicleEtaStatus.loading =>
+        knownWithoutVehicles ? VehicleEtaStatus.noLiveData : status,
+      VehicleEtaStatus.ready ||
+      VehicleEtaStatus.noneNearby ||
+      VehicleEtaStatus.noLiveData =>
+        knownWithoutVehicles
+            ? VehicleEtaStatus.noLiveData
+            : VehicleEtaStatus.noneNearby,
+      _ => status,
+    };
+  }
 
   /// Estimate for [routeGtfsId] with either spelling of the id (`1:1132`
   /// from OTP, `1132` from a bundled GTFS), or null.
@@ -85,6 +117,7 @@ class VehicleEtaState extends Equatable {
     DateTime? nextAllowedAt,
     String? error,
     bool? hasRequest,
+    Set<String>? routesWithVehicles,
   }) {
     return VehicleEtaState(
       status: status ?? this.status,
@@ -93,6 +126,7 @@ class VehicleEtaState extends Equatable {
       nextAllowedAt: nextAllowedAt ?? this.nextAllowedAt,
       error: error ?? this.error,
       hasRequest: hasRequest ?? this.hasRequest,
+      routesWithVehicles: routesWithVehicles ?? this.routesWithVehicles,
     );
   }
 
@@ -104,5 +138,6 @@ class VehicleEtaState extends Equatable {
     nextAllowedAt,
     error,
     hasRequest,
+    routesWithVehicles,
   ];
 }

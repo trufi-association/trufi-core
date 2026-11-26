@@ -420,6 +420,7 @@ class _LegChip extends StatelessWidget {
               leg: leg,
               color: textColor,
               size: 10,
+              tooltip: HomeScreenLocalizations.of(context).liveDataTooltip,
             ),
           ],
         ],
@@ -541,7 +542,7 @@ class _ItineraryEtaBadge extends StatelessWidget {
             child: Padding(
               padding: _leadingGap,
               child: EtaBadge(
-                status: state.status,
+                status: state.statusFor(routeKey),
                 eta: state.etaFor(routeKey),
                 fetchedAt: state.fetchedAt,
               ),

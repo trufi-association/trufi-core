@@ -16,6 +16,10 @@ class VehiclePosition extends Equatable {
 
   /// GTFS `direction_id` of the trip the vehicle is on, when the feed says.
   final int? directionId;
+
+  /// Destination the trip's pattern announces (GTFS `trip_headsign`), when
+  /// the feed has one.
+  final String? headsign;
   final DateTime? timestamp;
 
   const VehiclePosition({
@@ -28,6 +32,7 @@ class VehiclePosition extends Equatable {
     this.routeColor,
     this.tripId,
     this.directionId,
+    this.headsign,
     this.timestamp,
   });
 
@@ -41,6 +46,7 @@ class VehiclePosition extends Equatable {
     String? routeColor,
     String? tripId,
     int? directionId,
+    String? headsign,
     DateTime? timestamp,
   }) {
     return VehiclePosition(
@@ -53,6 +59,7 @@ class VehiclePosition extends Equatable {
       routeColor: routeColor ?? this.routeColor,
       tripId: tripId ?? this.tripId,
       directionId: directionId ?? this.directionId,
+      headsign: headsign ?? this.headsign,
       timestamp: timestamp ?? this.timestamp,
     );
   }
@@ -68,6 +75,7 @@ class VehiclePosition extends Equatable {
     routeColor,
     tripId,
     directionId,
+    headsign,
     timestamp,
   ];
 

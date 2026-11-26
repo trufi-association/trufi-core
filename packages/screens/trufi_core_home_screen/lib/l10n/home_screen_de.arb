@@ -147,5 +147,14 @@
   "etaLoading": "Live-Ankunft wird geprüft…",
   "etaRefresh": "Aktualisieren",
   "etaRefreshCooldown": "Aktualisierung in {seconds} s möglich",
-  "etaUpdated": "Aktualisiert {time}"
+  "etaUpdated": "Aktualisiert {time}",
+  "errorNoConnection": "Keine Internetverbindung. Prüfe deine Verbindung und versuche es erneut.",
+  "errorPlanFailed": "Die Routensuche ist fehlgeschlagen. Bitte versuche es erneut.",
+  "etaNoneNearby": "Gerade keine Busse in der Nähe",
+  "liveDataTooltip": "Live",
+  "liveVehicleHeadsign": "Richtung {headsign}",
+  "outsideServiceArea": "Du bist außerhalb von {name}",
+  "showServiceArea": "{name} anzeigen",
+  "outsideServiceAreaUnnamed": "Du bist außerhalb des Servicegebiets",
+  "showServiceAreaUnnamed": "Servicegebiet anzeigen"
 }

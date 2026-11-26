@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
+    show RealtimeVehiclesProvider, VehiclePosition;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
@@ -98,6 +100,13 @@ class NavigationScreen extends StatefulWidget {
   }
 
   /// Show the navigation screen from an OTP itinerary.
+  ///
+  /// With [liveVehicles] the map also draws the live buses of the itinerary's
+  /// routes (`liveVehiclesOnTrip`: the rider's own bus and the ones ahead
+  /// stay visible); without it, none.
+  /// The home screen provides its source, null while the live layer is off,
+  /// as a `RealtimeVehiclesProvider?` above the `context` it hands to
+  /// `onStartNavigation`.
   static Future<void> showFromItinerary(
     BuildContext context, {
     required routing.Itinerary itinerary,
@@ -105,6 +114,7 @@ class NavigationScreen extends StatefulWidget {
     required MapEngineManager mapEngineManager,
     NavigationConfig config = const NavigationConfig(),
     Widget? modeIcon,
+    RealtimeVehiclesProvider? liveVehicles,
   }) {
     final l10n = NavigationLocalizations.of(context);
     final route = ItineraryConverter.toNavigationRoute(
@@ -133,13 +143,34 @@ class NavigationScreen extends StatefulWidget {
       config: config,
       modeIcon: modeIcon,
       mapBuilder: (ctx, state, navigationLayers) {
-        return mapEngineManager.currentEngine.buildMap(
-          initialCamera: initialCamera,
-          layers: navigationLayers,
+        Widget buildMap(List<TrufiLayer> layers) => mapEngineManager
+            .currentEngine
+            .buildMap(initialCamera: initialCamera, layers: layers);
+        if (liveVehicles == null || !_ridesTransit(itinerary)) {
+          return buildMap(navigationLayers);
+        }
+        return StreamBuilder<List<VehiclePosition>>(
+          stream: liveVehicles.positionsStream,
+          initialData: liveVehicles.latest,
+          builder: (context, snapshot) => buildMap([
+            ...navigationLayers,
+            buildVehiclePositionsLayer(
+              vehicles: routing.liveVehiclesOnTrip(
+                snapshot.data ?? const [],
+                itinerary,
+              ),
+            ),
+          ]),
         );
       },
     );
   }
+
+  /// Whether [itinerary] has a transit leg with a route id; without one
+  /// `liveVehiclesOnTrip` keeps every vehicle, which no ride has to show.
+  static bool _ridesTransit(routing.Itinerary itinerary) => itinerary.legs.any(
+    (leg) => leg.transitLeg && (leg.route?.gtfsId?.isNotEmpty ?? false),
+  );
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();

@@ -20,7 +20,10 @@ enum EtaBadgeKind {
   /// An estimate exists but a refresh is in flight: shown dimmed.
   stale,
 
-  /// The source answered (or failed) and has nothing for this route.
+  /// The route has vehicles but none heads to the stop.
+  noneNearby,
+
+  /// The source failed or answered without an estimate for this route.
   unavailable,
 }
 
@@ -29,8 +32,9 @@ typedef _LabelBuilder =
     String Function(HomeScreenLocalizations l10n, VehicleEta? eta);
 
 /// Small outlined pill with the next-vehicle estimate of one route
-/// ("Arrives in ~4 min"), its loading state or the "Live ETA unavailable"
-/// fallback (#1004). Presentational: feed it the cubit status and the
+/// ("Arrives in ~4 min"), its loading state, "No buses nearby right now" or
+/// the "Live ETA unavailable" fallback (#1004). A route without live data
+/// shows nothing. Presentational: feed it the cubit status and the
 /// route's estimate; it never reads a cubit itself. Not interactive, so no
 /// haptics.
 class EtaBadge extends StatelessWidget {
@@ -63,22 +67,32 @@ class EtaBadge extends StatelessWidget {
     EtaBadgeKind.stale,
   };
 
-  /// Pure visual dispatch: idle hides; an estimate is shown (dimmed while a
-  /// refresh loads); otherwise the first load spins and anything else —
-  /// answered-but-empty or failed — reads as unavailable.
+  /// Pure visual dispatch: idle and no live data hide; an estimate is shown
+  /// (dimmed while a refresh loads); otherwise the first load spins, "none
+  /// nearby" says so and anything else reads as unavailable.
   static EtaBadgeKind kindFor(VehicleEtaStatus status, VehicleEta? eta) {
-    if (status == VehicleEtaStatus.idle) return EtaBadgeKind.hidden;
+    if (status == VehicleEtaStatus.idle ||
+        status == VehicleEtaStatus.noLiveData) {
+      return EtaBadgeKind.hidden;
+    }
     if (eta != null) {
       return status == VehicleEtaStatus.loading
           ? EtaBadgeKind.stale
           : EtaBadgeKind.ready;
     }
     if (status == VehicleEtaStatus.loading) return EtaBadgeKind.loading;
+    if (status == VehicleEtaStatus.noneNearby) return EtaBadgeKind.noneNearby;
     return EtaBadgeKind.unavailable;
   }
 
   static Widget _liveIcon(ColorScheme scheme) =>
       Icon(Icons.sensors_rounded, size: _iconSize, color: scheme.primary);
+
+  static Widget _noLiveIcon(ColorScheme scheme) => Icon(
+    Icons.sensors_off_rounded,
+    size: _iconSize,
+    color: scheme.onSurfaceVariant,
+  );
 
   static final Map<EtaBadgeKind, _LeadingBuilder> _leadingByKind = {
     EtaBadgeKind.ready: _liveIcon,
@@ -91,11 +105,8 @@ class EtaBadge extends StatelessWidget {
         color: scheme.primary,
       ),
     ),
-    EtaBadgeKind.unavailable: (scheme) => Icon(
-      Icons.sensors_off_rounded,
-      size: _iconSize,
-      color: scheme.onSurfaceVariant,
-    ),
+    EtaBadgeKind.noneNearby: _noLiveIcon,
+    EtaBadgeKind.unavailable: _noLiveIcon,
   };
 
   // `eta!` is safe: kindFor only yields ready/stale when eta != null.
@@ -106,6 +117,7 @@ class EtaBadge extends StatelessWidget {
     EtaBadgeKind.ready: _arrivesIn,
     EtaBadgeKind.stale: _arrivesIn,
     EtaBadgeKind.loading: (l10n, _) => l10n.etaLoading,
+    EtaBadgeKind.noneNearby: (l10n, _) => l10n.etaNoneNearby,
     EtaBadgeKind.unavailable: (l10n, _) => l10n.etaUnavailable,
   };
 
