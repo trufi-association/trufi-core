@@ -20,16 +20,13 @@ class LiveBusBadge extends StatefulWidget {
 
   /// Builder that returns [LiveBusBadge] only when the provider actually has
   /// data for the given route, otherwise a [SizedBox.shrink]. A [tooltip]
-  /// explains the dot on long press / hover. A non-null [isLive] replaces the
-  /// provider's own answer, for callers that know better (e.g. one that
-  /// discards stale reports).
+  /// explains the dot on long press / hover.
   static Widget whenLive({
     required RealtimeVehiclesProvider? provider,
     required routing.Leg leg,
     Color color = const Color(0xFF22C55E),
     double size = 14,
     String? tooltip,
-    bool? isLive,
   }) {
     if (provider == null || !leg.transitLeg) {
       return const SizedBox.shrink();
@@ -44,7 +41,6 @@ class LiveBusBadge extends StatefulWidget {
       color: color,
       size: size,
       tooltip: tooltip,
-      isLive: isLive,
     );
   }
 
@@ -127,7 +123,6 @@ class _ReactiveLiveBusBadge extends StatefulWidget {
     required this.color,
     required this.size,
     required this.tooltip,
-    required this.isLive,
   });
 
   final RealtimeVehiclesProvider provider;
@@ -135,7 +130,6 @@ class _ReactiveLiveBusBadge extends StatefulWidget {
   final Color color;
   final double size;
   final String? tooltip;
-  final bool? isLive;
 
   @override
   State<_ReactiveLiveBusBadge> createState() => _ReactiveLiveBusBadgeState();
@@ -165,7 +159,7 @@ class _ReactiveLiveBusBadgeState extends State<_ReactiveLiveBusBadge> {
 
   @override
   Widget build(BuildContext context) {
-    if (!(widget.isLive ?? _live)) return const SizedBox.shrink();
+    if (!_live) return const SizedBox.shrink();
     final badge = LiveBusBadge(
       provider: widget.provider,
       routeGtfsId: widget.routeGtfsId,

@@ -267,9 +267,8 @@ HomeScreenConfig(
 The split between the two empty cases needs `VehicleEtaSnapshot.routesWithVehicles`
 (`RealtimeVehiclesEtaProvider` fills it). A source that leaves it unset gets
 `No buses nearby right now` for a route it has no estimate for. The live dot
-on a route chip carries the tooltip "Live"; once an answer reported
-`routesWithVehicles` it follows that set, so a route whose only vehicle is
-older than `maxVehicleAge` has neither badge nor dot.
+on a route chip carries the tooltip "Live" and follows the live stream:
+only vehicles that reported within the last 5 minutes light it.
 
 A refresh button sits in the results header (sheet and side panel). It
 re-asks the telemetry source **without re-planning**; while the cooldown
@@ -355,8 +354,9 @@ HomeScreenTrufiScreen(
 ),
 ```
 
-The navigation also draws the live buses of the itinerary's routes that can
-still board (the same rule as the home map) when given a source; the home
+The navigation also draws the live buses of the trip by route and direction
+(`liveVehiclesOnTrip`), including the rider's own bus and those ahead, when
+given a source; the home
 provides its own, `null` while its live layer is off, as a
 `RealtimeVehiclesProvider?` above the `context` of `onStartNavigation`:
 

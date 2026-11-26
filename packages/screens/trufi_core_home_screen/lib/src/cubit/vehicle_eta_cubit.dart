@@ -171,6 +171,9 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
       return;
     }
     final id = ++_requestId;
+    // Only a refresh (the same request) may reuse what the last answer knew
+    // about vehicles; a new plan asks about other routes.
+    final isRefresh = request == _lastRequest;
     _lastRequest = request;
     // The gate is armed when the request STARTS, so a slow backend cannot
     // be hammered by taps while it is still answering.
@@ -181,7 +184,7 @@ class VehicleEtaCubit extends Cubit<VehicleEtaState> {
         fetchedAt: state.fetchedAt,
         nextAllowedAt: _now().add(cooldown),
         hasRequest: true,
-        routesWithVehicles: state.routesWithVehicles,
+        routesWithVehicles: isRefresh ? state.routesWithVehicles : null,
       ),
     );
     final VehicleEtaSnapshot snapshot;

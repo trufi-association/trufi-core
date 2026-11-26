@@ -248,6 +248,7 @@ Future<MapMoves> pumpHome(
   RoutePlannerCubit cubit, {
   HomeScreenConfig config = const HomeScreenConfig(),
   LatLng defaultCenter = const LatLng(-12.0464, -77.0428),
+  double defaultZoom = 14,
 }) async {
   tester.view.physicalSize = const Size(1080, 2424);
   tester.view.devicePixelRatio = 2.625;
@@ -257,7 +258,7 @@ Future<MapMoves> pumpHome(
   final manager = MapEngineManager(
     engines: [_RecordingEngine(moves)],
     defaultCenter: defaultCenter,
-    defaultZoom: 14,
+    defaultZoom: defaultZoom,
   );
   await tester.pumpWidget(
     MultiProvider(

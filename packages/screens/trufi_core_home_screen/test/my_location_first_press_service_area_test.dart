@@ -84,4 +84,28 @@ void main() {
     expect(target.latitude, inInclusiveRange(-12.35, -11.80));
     expect(target.longitude, inInclusiveRange(-77.20, -76.80));
   });
+
+  // The 1080x2424 harness at 2.625 is a 411x923 logical map; with 40 px of
+  // padding Lima's 0.4 deg of longitude is the limiting side: zoom 10.19.
+  for (final startZoom in [4.0, 16.0]) {
+    testWidgets('"See Lima" from zoom ${startZoom.toInt()} fits the bounds', (
+      tester,
+    ) async {
+      mockGeolocatorWithFix(laPaz);
+      final moves = await pumpHome(
+        tester,
+        await newCubit(),
+        config: config,
+        defaultZoom: startZoom,
+      );
+
+      await tester.tap(find.byType(SnackBarAction));
+      await tester.pumpAndSettle();
+
+      final camera = moves.moves.single;
+      expect(camera.zoom, inInclusiveRange(10.1, 10.3));
+      expect(camera.target.latitude, closeTo(-12.075, 0.01));
+      expect(camera.target.longitude, closeTo(-77.0, 0.01));
+    });
+  }
 }

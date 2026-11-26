@@ -45,7 +45,7 @@ class RealtimeVehiclesEtaProvider implements VehicleEtaProvider {
 
   /// Reports older than this are stale: the vehicle is no longer where the
   /// feed says it is.
-  static const Duration defaultMaxVehicleAge = Duration(minutes: 5);
+  static const Duration defaultMaxVehicleAge = realtimeMaxVehicleAge;
 
   /// Reported speeds (m/s on the GTFS-RT wire) outside this window are
   /// treated as noise: below ~3.6 km/h the bus is stopped at a light or the

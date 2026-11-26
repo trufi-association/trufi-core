@@ -89,11 +89,6 @@ class VehicleEtaState extends Equatable {
     };
   }
 
-  /// Whether the last answer reported vehicles for [routeGtfsId].
-  bool hasLiveDataFor(String routeGtfsId) =>
-      etaFor(routeGtfsId) != null ||
-      (routesWithVehicles?.contains(stripGtfsFeedPrefix(routeGtfsId)) ?? false);
-
   /// Estimate for [routeGtfsId] with either spelling of the id (`1:1132`
   /// from OTP, `1132` from a bundled GTFS), or null.
   VehicleEta? etaFor(String routeGtfsId) =>

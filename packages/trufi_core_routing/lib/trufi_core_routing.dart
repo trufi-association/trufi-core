@@ -35,7 +35,8 @@ export 'src/utils/polyline_decoder.dart';
 // ROUTING PROVIDERS - Common
 // ============================================
 export 'src/routing_engine_manager.dart';
-export 'src/providers/routing_network_exception.dart';
+export 'src/providers/routing_network_exception.dart'
+    show RoutingNetworkException, isConnectivityFailure;
 export 'src/providers/routing_provider.dart';
 
 // ============================================

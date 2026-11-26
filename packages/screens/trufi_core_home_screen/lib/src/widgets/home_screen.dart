@@ -87,6 +87,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   TrufiMapController? _mapController;
   FitCameraUtil? _fitCameraUtil;
+
+  /// Logical size of the map area, kept for fits that bypass [_fitCameraUtil].
+  Size? _mapViewportSize;
   bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
@@ -1245,7 +1248,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (area == null || baseCamera == null) return;
     _moveCameraTracked(
       TrufiCameraFit.fitBoundsOnCamera(
-        camera: baseCamera,
+        camera: baseCamera.copyWith(viewportSize: _mapViewportSize),
         bounds: area,
         padding: const EdgeInsets.all(40),
       ),
@@ -1816,8 +1819,9 @@ class _HomeScreenState extends State<HomeScreen>
                 final mapWidth = isWideScreen
                     ? constraints.maxWidth - sidePanelWidth
                     : constraints.maxWidth;
+                _mapViewportSize = Size(mapWidth, constraints.maxHeight);
                 _fitCameraUtil?.updateViewport(
-                  Size(mapWidth, constraints.maxHeight),
+                  _mapViewportSize!,
                   MediaQuery.of(context).viewPadding,
                 );
 

@@ -415,39 +415,15 @@ class _LegChip extends StatelessWidget {
           ],
           if (realtime != null) ...[
             const SizedBox(width: 6),
-            _buildLiveDot(context, realtime, leg, textColor),
+            LiveBusBadge.whenLive(
+              provider: realtime,
+              leg: leg,
+              color: textColor,
+              size: 10,
+              tooltip: HomeScreenLocalizations.of(context).liveDataTooltip,
+            ),
           ],
         ],
-      ),
-    );
-  }
-
-  /// The dot follows the ETA state's per-route knowledge (which honours
-  /// `maxVehicleAge`) once an answer reported it; before that, and for a
-  /// source that does not report it, the provider's own data decides.
-  Widget _buildLiveDot(
-    BuildContext context,
-    RealtimeVehiclesProvider realtime,
-    routing.Leg leg,
-    Color color,
-  ) {
-    final tooltip = HomeScreenLocalizations.of(context).liveDataTooltip;
-    Widget dot(bool? isLive) => LiveBusBadge.whenLive(
-      provider: realtime,
-      leg: leg,
-      color: color,
-      size: 10,
-      tooltip: tooltip,
-      isLive: isLive,
-    );
-    final etaCubit = context.read<VehicleEtaCubit?>();
-    if (etaCubit == null) return dot(null);
-    return BlocBuilder<VehicleEtaCubit, VehicleEtaState>(
-      bloc: etaCubit,
-      builder: (context, state) => dot(
-        state.routesWithVehicles == null
-            ? null
-            : state.hasLiveDataFor(leg.route?.gtfsId ?? ''),
       ),
     );
   }
