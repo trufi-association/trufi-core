@@ -28,6 +28,7 @@ import '../cubit/vehicle_eta_cubit.dart';
 import '../models/route_planner_state.dart';
 import '../services/coordinate_address.dart';
 import '../services/share_route_service.dart';
+import '../utils/live_vehicles_filter.dart';
 import 'eta_refresh_button.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
@@ -126,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
   final ValueNotifier<bool> _liveVehiclesEnabled = ValueNotifier<bool>(false);
   final StorageService _liveVehiclesStorage = SharedPreferencesStorage();
   List<VehiclePosition> _liveVehicles = const [];
-  Set<String> _selectedTransitRouteIds = const {};
+  routing.Itinerary? _liveFilterItinerary;
   StreamSubscription<List<VehiclePosition>>? _liveVehiclesSub;
 
   routing.RoutingEngineManager? _routingEngineManager;
@@ -902,7 +903,7 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       _routeMarkers = const [];
       _routeLines = const [];
-      _selectedTransitRouteIds = const {};
+      _liveFilterItinerary = null;
     });
   }
 
@@ -1107,17 +1108,10 @@ class _HomeScreenState extends State<HomeScreen>
       );
     }
 
-    final routeIds = <String>{};
-    for (final leg in itinerary.legs) {
-      if (!leg.transitLeg) continue;
-      final id = leg.route?.gtfsId;
-      if (id != null && id.isNotEmpty) routeIds.add(id);
-    }
-
     setState(() {
       _routeMarkers = markers;
       _routeLines = lines;
-      _selectedTransitRouteIds = routeIds;
+      _liveFilterItinerary = itinerary;
     });
   }
 
@@ -1677,22 +1671,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (_realtimeVehiclesProvider != null &&
         _liveVehiclesEnabled.value &&
         _liveVehicles.isNotEmpty) {
-      // Feed-agnostic matching: itinerary legs may come from a bundled-GTFS
-      // planner (`1132`) while vehicles come from OTP (`1:1132`) — strict
-      // equality here made every bus vanish the moment a search was active
-      // in hybrid deploys (Lima pilot regression, caught by Sam).
-      final selected = _selectedTransitRouteIds
-          .map(stripGtfsFeedPrefix)
-          .toSet();
-      final toShow = selected.isEmpty
-          ? _liveVehicles
-          : _liveVehicles
-                .where(
-                  (v) =>
-                      v.routeId != null &&
-                      selected.contains(stripGtfsFeedPrefix(v.routeId!)),
-                )
-                .toList(growable: false);
+      final toShow = liveVehiclesForTrip(_liveVehicles, _liveFilterItinerary);
       if (toShow.isNotEmpty) {
         layers.add(buildVehiclePositionsLayer(vehicles: toShow));
       }

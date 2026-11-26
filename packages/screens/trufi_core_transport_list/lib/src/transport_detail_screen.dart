@@ -905,6 +905,16 @@ class _StopsSheetContentState extends State<_StopsSheetContent> {
               );
             }, childCount: stops.length),
           ),
+
+        // Room for the system navigation bar so the last stop scrolls clear
+        // of it (trufi-lima#3). Not after the empty state, which already
+        // fills the view.
+        if (stops.isNotEmpty)
+          SliverPadding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.viewPaddingOf(context).bottom,
+            ),
+          ),
       ],
     );
   }

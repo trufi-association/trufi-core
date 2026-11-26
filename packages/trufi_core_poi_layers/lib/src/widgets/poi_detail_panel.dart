@@ -121,6 +121,13 @@ class POIDetailPanel extends StatelessWidget {
             _InfoRow(icon: Icons.phone_outlined, text: poi.phone!),
             const SizedBox(height: 8),
           ],
+          if (poi.routes != null) ...[
+            _InfoRow(
+              icon: Icons.directions_bus_outlined,
+              text: poi.routes!,
+            ),
+            const SizedBox(height: 8),
+          ],
 
           const SizedBox(height: 8),
 
