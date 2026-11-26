@@ -1230,10 +1230,13 @@ class _HomeScreenState extends State<HomeScreen>
         longitude <= area.northEast.longitude;
   }
 
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _outsideAreaNotice;
+
   /// Centres the camera on a fix; false, without moving, when the fix lies
   /// outside the configured service area.
   bool _centerOnFix(double latitude, double longitude) {
     if (!_isInServiceArea(latitude, longitude)) return false;
+    _outsideAreaNotice?.close();
     _moveCameraTracked(
       TrufiCameraPosition(target: LatLng(latitude, longitude), zoom: 16),
     );
@@ -1261,8 +1264,10 @@ class _HomeScreenState extends State<HomeScreen>
     final name = widget.config.serviceAreaName;
     final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
+    final notice = messenger.showSnackBar(
       SnackBar(
+        // A SnackBar with an action persists by default.
+        persist: false,
         content: Text(
           name == null
               ? l10n.outsideServiceAreaUnnamed
@@ -1276,6 +1281,10 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
     );
+    _outsideAreaNotice = notice;
+    notice.closed.then((_) {
+      if (_outsideAreaNotice == notice) _outsideAreaNotice = null;
+    });
   }
 
   Future<void> _onMyLocationPressed() async {
