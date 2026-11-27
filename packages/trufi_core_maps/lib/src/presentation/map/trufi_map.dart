@@ -136,9 +136,9 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   // fingerprint is unchanged is not sent again (trufi-lima#16).
   final Map<String, int> _sentFingerprints = {};
 
-  // Bumped on every style load; a send that started under an older style
-  // must not record its fingerprint (the new style's sources are empty).
-  int _styleGeneration = 0;
+  // Bumped on every style load and image retry; a send that started before
+  // either must not record its fingerprint (sources or icons were reset).
+  int _sendGeneration = 0;
 
   static const int _maxConcurrentImageLoads = 5;
 
@@ -538,7 +538,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
 
     final fingerprint = _layerFingerprint(layer);
     if (_sentFingerprints[layer.id] == fingerprint) return;
-    final styleGeneration = _styleGeneration;
+    final sendGeneration = _sendGeneration;
 
     final geojson = await _buildGeoJsonForLayer(layer, ctl);
 
@@ -548,7 +548,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       await SchedulerBinding.instance.endOfFrame;
     }
     await ctl.setGeoJsonSource(layer.id, geojson);
-    if (styleGeneration == _styleGeneration) {
+    if (sendGeneration == _sendGeneration) {
       _sentFingerprints[layer.id] = fingerprint;
     }
   }
@@ -777,7 +777,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
         _loadedImages.clear();
         _sourceInit.clear();
         _sentFingerprints.clear();
-        _styleGeneration++;
+        _sendGeneration++;
         _scheduleSync();
         // Retry sync after a delay to handle race conditions in profile/release
         // where widget-to-image rasterization may fail on first attempt
@@ -788,6 +788,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
             // Unchanged layers must re-render the icons that failed to
             // rasterize the first time.
             _sentFingerprints.clear();
+            _sendGeneration++;
             _scheduleSync();
           }
         });

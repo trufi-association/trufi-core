@@ -205,13 +205,19 @@ class NavigationCubit extends Cubit<NavigationState> {
       _startPendingInsideArea = false;
       final route = state.route;
       if (route != null && route.stops.isNotEmpty) {
-        emit(
-          _stateAtStop(
-            route,
-            _findNearestStopIndex(route.stops, location),
-            location,
-          ),
+        // A fix on the edge of the area is far from the trip: keep the first
+        // stop and let forward progress take over.
+        final nearest = _findNearestStopIndex(route.stops, location);
+        final nearestStop = route.stops[nearest];
+        final distance = _locationService.distanceBetween(
+          location.latitude,
+          location.longitude,
+          nearestStop.position.latitude,
+          nearestStop.position.longitude,
         );
+        if (distance <= _config.offRouteThreshold) {
+          emit(_stateAtStop(route, nearest, location));
+        }
       }
     }
 

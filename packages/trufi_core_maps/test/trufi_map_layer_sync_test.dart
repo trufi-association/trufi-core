@@ -335,6 +335,33 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('the 1 s retry during a send in flight: the stale send does '
+        'not record its fingerprint, so the layer and its images are sent '
+        'again', (tester) async {
+      final h = _Harness(tester);
+      await tester.pumpWidget(h._build([_stops(count: 3)]));
+      await tester.pump();
+      h.platform.gate = Completer<void>();
+      h.platform.onMapStyleLoadedPlatform(null);
+      await tester.pump();
+      await tester.pump();
+      expect(h.platform.sentCount('stops'), 1, reason: 'send in flight');
+      final imagesBefore = h.platform.addedImages.length;
+
+      await tester.pump(const Duration(seconds: 2)); // the retry fires
+      final gate = h.platform.gate!;
+      h.platform.gate = null;
+      gate.complete();
+      await tester.pumpAndSettle();
+
+      expect(
+        h.platform.sentCount('stops'),
+        2,
+        reason: 'the retry reset the icons: the layer must be re-rasterized',
+      );
+      expect(h.platform.addedImages.length - imagesBefore, 1);
+    });
+
     testWidgets('same content, new onTap/buildPanel: the picking index returns '
         'the new marker without a new send', (tester) async {
       final h = _Harness(tester);
