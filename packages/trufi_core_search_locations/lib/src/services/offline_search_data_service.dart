@@ -52,11 +52,11 @@ class OfflineSearchDataService
   /// the index's order nor on the sort (#1054): the streets with a word equal
   /// to each query word, then those where a query word only starts a word
   /// ("1" in "Calle 100"), then those that only contain it ("ica" in
-  /// "Arica"); inside each, the type class ([streetTypeRanks]), then — with a [focus] — the street named
-  /// like the query before one only known by it and the nearest one, or
-  /// without it the best text match, the street named like the query before
-  /// one only known by it, and the one with more corners; name, municipality
-  /// and ref close the tie.
+  /// "Arica"); inside each, the type class ([streetTypeRanks]), then — with a
+  /// [focus] — the street named like the query before one only known by it
+  /// and the nearest one, or without it the best text match, the street named
+  /// like the query before one only known by it, and the one with more
+  /// corners; name, municipality and ref close the tie.
   final int limitPerCategory;
 
   /// Word used between two streets in this language ("y" in Spanish,
@@ -70,13 +70,13 @@ class OfflineSearchDataService
   /// first), then the one with more corners.
   final LatLng? focus;
 
-  /// Street types by class, as normalized prefixes (no accents, lowercase):
-  /// index 0 is listed first, the last class last. A name with no listed
-  /// type counts as the class at index 1 (where "calle" sits in the default).
-  /// Prefixes must be normalized, or they never match (asserted). A query
+  /// Street types by class, in any case and with or without accents: index 0
+  /// is listed first, the last class last. A name with no listed type counts
+  /// as the class at index 1 (where "calle" sits in the default). A query
   /// that starts with a type ("avenida grau") finds the streets of that
   /// class, and also the names that contain every word of it, the type as a
-  /// whole word ("Avenida Calle 26" for "calle 26").
+  /// whole word ("Avenida Calle 26" for "calle 26"). A query of only a type
+  /// ("av") finds every street of that class.
   /// Defaults to Spanish; another language simply never matches a type.
   final List<List<String>> streetTypeRanks;
 
@@ -277,24 +277,24 @@ int? _wordMatch(List<String> queryWords, List<String> nameWords) {
 
 /// Reads the type at the start of a normalized name or query.
 class _StreetTypes {
-  /// Class of a name whose type is not listed: the one of "calle".
+  /// Class of a name whose type is not listed: the class at index 1.
   static const untypedClass = 1;
 
-  /// (prefix, class), longest prefix first so "via expresa" beats "via".
+  /// (normalized prefix, class), longest prefix first so "via expresa" beats
+  /// "via".
   final List<(String, int)> _prefixes;
 
   _StreetTypes(List<List<String>> ranks)
-    : assert(
-        ranks.every((types) => types.every((p) => p == _normalize(p))),
-        'streetTypeRanks must be normalized: lowercase, no accents',
-      ),
-      _prefixes = [
+    : _prefixes = [
         for (var i = 0; i < ranks.length; i++)
-          for (final prefix in ranks[i]) (prefix, i),
+          for (final prefix in ranks[i]) (_normalize(prefix), i),
       ]..sort((a, b) => b.$1.length.compareTo(a.$1.length));
 
   _ParsedName parse(String normalized) {
     for (final (prefix, typeClass) in _prefixes) {
+      if (normalized == prefix) {
+        return _ParsedName(normalized, typeClass, '');
+      }
       if (normalized.startsWith('$prefix ')) {
         return _ParsedName(
           normalized,
@@ -335,11 +335,12 @@ class _Query {
   /// Cheap test that leaves out most streets before any word is compared:
   /// every match contains each query word as text.
   bool canMatch(_Street street) =>
-      parsed.words.every(street.normalized.contains);
+      parsed.baseWords.every(street.normalized.contains);
 
   /// How [name] answers the query: [wholeWordMatch], [prefixMatch],
   /// [substringMatch], or null.
   int? matchGroup(_ParsedName name) {
+    if (parsed.baseWords.isEmpty) return _matchWithoutWords(name);
     final sameClass = !isTyped || name.typeClass == parsed.typeClass;
     var best = sameClass ? _wordMatch(parsed.baseWords, name.baseWords) : null;
     if (best != wholeWordMatch) {
@@ -351,6 +352,18 @@ class _Query {
       return substringMatch;
     }
     return null;
+  }
+
+  /// A query with no word after its type. Only a type ("av") matches its
+  /// whole class, and still any name with that word ("Circunvalación" is a
+  /// type and a name); only punctuation ("-") is plain text in the name.
+  int? _matchWithoutWords(_ParsedName name) {
+    if (parsed.base.isEmpty) {
+      if (name.typeClass == parsed.typeClass) return wholeWordMatch;
+      final byWord = _wordMatch(parsed.words, name.words);
+      if (byWord != null) return byWord;
+    }
+    return name.normalized.contains(normalized) ? substringMatch : null;
   }
 
   /// The query against every word of the name, type included. A typed query

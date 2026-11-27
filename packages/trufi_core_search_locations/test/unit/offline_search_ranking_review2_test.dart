@@ -140,25 +140,22 @@ void main() {
     });
   });
 
-  group('R8: street type prefixes must be normalized', () {
-    test('an accented prefix fails visibly', () async {
+  group('R8: street type prefixes are normalized', () {
+    test('capitalized and accented keys still match', () async {
       final service = _serviceFor(
-        {'a': _S('Calle Sucre')},
+        {
+          'j': _S('Jirón Sucre', corners: 10),
+          'a': _S('Avenida Sucre'),
+        },
         ranks: const [
           ['Avenida'],
-          ['calle'],
+          ['Calle'],
+          ['Jirón'],
         ],
       );
-      await expectLater(
-        service.search('sucre'),
-        throwsA(
-          isA<SearchLocationException>().having(
-            (e) => e.originalError,
-            'originalError',
-            isA<AssertionError>(),
-          ),
-        ),
-      );
+      final results = await service.search('sucre');
+      final names = [for (final r in results) r.displayName];
+      expect(names, ['Avenida Sucre', 'Jirón Sucre']);
     });
   });
 }
