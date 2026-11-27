@@ -174,12 +174,17 @@ void main() {
       'av': _S('Avenida Sucre', region: 'E', corners: 1),
     };
 
-    test('class order first, then corners within the class', () async {
+    test('class order first, then the #1054 order within the class',
+        () async {
+      // An untyped name is class 1, like calle and jirón. Inside the class
+      // the #1054 rules still hold: the street named exactly like the
+      // query ("Sucre") before the ones that only contain it, and corners
+      // between those.
       expect(await _refsFor('sucre', sucre), [
         'av',
+        'untyped',
         'calle',
         'jiron',
-        'untyped',
         'pasaje',
       ]);
     });
