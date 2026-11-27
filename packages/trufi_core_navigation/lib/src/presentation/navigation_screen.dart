@@ -129,8 +129,15 @@ class NavigationScreen extends StatefulWidget {
         ? route.geometry.first
         : const LatLng(0, 0);
 
+    // Outside the service area the fix is no place to start the map on.
+    final startsOnFix =
+        currentLocation != null &&
+        config.isInServiceArea(
+          currentLocation.latitude,
+          currentLocation.longitude,
+        );
     final initialCamera = TrufiCameraPosition(
-      target: currentLocation != null
+      target: startsOnFix
           ? LatLng(currentLocation.latitude, currentLocation.longitude)
           : fallbackCenter,
       zoom: 16,
@@ -311,6 +318,7 @@ class _NavigationScreenState extends State<NavigationScreen>
         return NavigationBottomPanel(
           state: state,
           showStops: widget.config.showStops,
+          outsideAreaMessage: _outsideAreaMessage(context, state),
           onExitNavigation: () => _exitNavigation(context),
         );
 
@@ -336,6 +344,20 @@ class _NavigationScreenState extends State<NavigationScreen>
               : null,
         );
     }
+  }
+
+  /// The notice for a rider outside the configured service area, else null.
+  String? _outsideAreaMessage(BuildContext context, NavigationState state) {
+    final location = state.currentLocation;
+    if (location == null ||
+        widget.config.isInServiceArea(location.latitude, location.longitude)) {
+      return null;
+    }
+    final l10n = NavigationLocalizations.of(context);
+    final name = widget.config.serviceAreaName;
+    return name == null
+        ? l10n.navOutsideServiceAreaUnnamed
+        : l10n.navOutsideServiceArea(name);
   }
 
   Widget _buildLoadingPanel(BuildContext context) {

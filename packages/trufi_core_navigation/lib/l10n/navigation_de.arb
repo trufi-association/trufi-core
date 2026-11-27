@@ -10,6 +10,8 @@
   "navSettings": "Einstellungen",
   "navArrived": "Sie sind angekommen!",
   "navOffRoute": "Sie scheinen von der Route abgekommen zu sein",
+  "navOutsideServiceArea": "Sie sind außerhalb von {name}",
+  "navOutsideServiceAreaUnnamed": "Sie sind außerhalb des Servicegebiets",
   "navWeakGps": "GPS-Signal ist schwach",
   "navNext": "Nächste: ",
   "navError": "Ein Fehler ist aufgetreten",

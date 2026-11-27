@@ -88,8 +88,6 @@ class _HomeScreenState extends State<HomeScreen>
   TrufiMapController? _mapController;
   FitCameraUtil? _fitCameraUtil;
 
-  /// Logical size of the map area, kept for fits that bypass [_fitCameraUtil].
-  Size? _mapViewportSize;
   bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
@@ -1243,20 +1241,12 @@ class _HomeScreenState extends State<HomeScreen>
     return true;
   }
 
-  /// Fits the camera to the service area through [_moveCameraTracked], so
-  /// [_currentCamera] follows the move.
-  void _showServiceArea() {
-    final area = widget.config.serviceArea;
-    final baseCamera = _currentCamera ?? _initialCamera;
-    if (area == null || baseCamera == null) return;
-    _moveCameraTracked(
-      TrufiCameraFit.fitBoundsOnCamera(
-        camera: baseCamera.copyWith(viewportSize: _mapViewportSize),
-        bounds: area,
-        padding: const EdgeInsets.all(40),
-      ),
-    );
-  }
+  /// Returns the camera to the startup view through [_moveCameraTracked], so
+  /// [_currentCamera] follows the move. Fitting the whole area zoomed out past
+  /// the offline tiles and left the map empty (trufi-lima#12). [_initialCamera]
+  /// holds the startup view, so a home disposed while its SnackBar was up
+  /// reads nothing from its context.
+  void _showServiceArea() => _moveCameraTracked(_initialCamera!);
 
   void _showOutsideServiceAreaMessage() {
     if (widget.config.serviceArea == null) return;
@@ -1828,9 +1818,8 @@ class _HomeScreenState extends State<HomeScreen>
                 final mapWidth = isWideScreen
                     ? constraints.maxWidth - sidePanelWidth
                     : constraints.maxWidth;
-                _mapViewportSize = Size(mapWidth, constraints.maxHeight);
                 _fitCameraUtil?.updateViewport(
-                  _mapViewportSize!,
+                  Size(mapWidth, constraints.maxHeight),
                   MediaQuery.of(context).viewPadding,
                 );
 

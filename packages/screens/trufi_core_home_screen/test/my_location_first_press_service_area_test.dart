@@ -85,27 +85,34 @@ void main() {
     expect(target.longitude, inInclusiveRange(-77.20, -76.80));
   });
 
-  // The 1080x2424 harness at 2.625 is a 411x923 logical map; with 40 px of
-  // padding Lima's 0.4 deg of longitude is the limiting side: zoom 10.19.
+  // trufi-lima#12 reopened: fitting the whole service area (zoom ~10 in the
+  // harness, ~8.5 on a phone) left the map beige where the offline tiles end.
+  // "See Lima" goes back to the startup camera, whatever zoom the map is at.
+  const startCenter = LatLng(-12.10, -76.95);
+  // Where the user has panned to before tapping "See Lima".
+  const pannedTo = TrufiCameraPosition(target: LatLng(-12.30, -77.15), zoom: 10);
   for (final startZoom in [4.0, 16.0]) {
-    testWidgets('"See Lima" from zoom ${startZoom.toInt()} fits the bounds', (
-      tester,
-    ) async {
+    testWidgets('"See Lima" from zoom ${startZoom.toInt()} goes to the '
+        'startup camera (defaultCenter, defaultZoom)', (tester) async {
       mockGeolocatorWithFix(laPaz);
       final moves = await pumpHome(
         tester,
         await newCubit(),
         config: config,
+        defaultCenter: startCenter,
         defaultZoom: startZoom,
       );
+      moves.onCameraChanged!(pannedTo);
+      await tester.pump();
 
       await tester.tap(find.byType(SnackBarAction));
       await tester.pumpAndSettle();
 
+      expect(moves.fits, isEmpty, reason: 'no fit of the service area');
       final camera = moves.moves.single;
-      expect(camera.zoom, inInclusiveRange(10.1, 10.3));
-      expect(camera.target.latitude, closeTo(-12.075, 0.01));
-      expect(camera.target.longitude, closeTo(-77.0, 0.01));
+      expect(camera.target.latitude, closeTo(startCenter.latitude, 1e-9));
+      expect(camera.target.longitude, closeTo(startCenter.longitude, 1e-9));
+      expect(camera.zoom, closeTo(startZoom, 1e-9));
     });
   }
 }

@@ -163,6 +163,18 @@ abstract class NavigationLocalizations {
   /// **'You appear to be off the route'**
   String get navOffRoute;
 
+  /// Notice in navigation when the rider is outside the area the app serves
+  ///
+  /// In en, this message translates to:
+  /// **'You are outside {name}'**
+  String navOutsideServiceArea(String name);
+
+  /// Same notice when the service area has no name
+  ///
+  /// In en, this message translates to:
+  /// **'You are outside the service area'**
+  String get navOutsideServiceAreaUnnamed;
+
   /// Warning when GPS signal is weak
   ///
   /// In en, this message translates to:

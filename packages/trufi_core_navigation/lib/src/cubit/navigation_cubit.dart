@@ -11,6 +11,10 @@ class NavigationCubit extends Cubit<NavigationState> {
   final LocationService _locationService;
   final NavigationConfig _config;
 
+  /// The trip started with the rider outside the service area, so its first
+  /// stop stands in for the one nearest the GPS until a fix inside arrives.
+  bool _startPendingInsideArea = false;
+
   NavigationCubit({
     required LocationService locationService,
     NavigationConfig config = const NavigationConfig(),
@@ -68,35 +72,23 @@ class NavigationCubit extends Cubit<NavigationState> {
     // Get initial location
     final currentLocation = _locationService.currentLocation;
 
-    // Find nearest stop to start from
+    // Find nearest stop to start from. From outside the service area that is
+    // a far stop of the trip (trufi-lima#12): start at the first one instead
+    // and look again on the first fix inside.
+    _startPendingInsideArea = _isOutsideServiceArea(currentLocation);
     int startStopIndex = 0;
-    if (currentLocation != null && route.stops.isNotEmpty) {
+    if (currentLocation != null &&
+        route.stops.isNotEmpty &&
+        !_startPendingInsideArea) {
       startStopIndex = _findNearestStopIndex(route.stops, currentLocation);
     }
 
-    final totalStops = route.stops.length;
-    final remainingStops = totalStops - startStopIndex - 1;
-
-    // Build initial instruction
-    final instruction = _buildTransitInstruction(
-      route,
-      startStopIndex,
-      location: currentLocation,
-    );
-    final nextInstruction = remainingStops > 0 && _config.showStops
-        ? _buildNextStopPreview(route, startStopIndex + 1)
-        : null;
-
     emit(
-      state.copyWith(
+      _stateAtStop(route, startStopIndex, currentLocation).copyWith(
         status: NavigationStatus.navigating,
         segmentType: NavigationSegmentType.transit,
         route: route,
-        currentStopIndex: startStopIndex,
-        totalStops: totalStops,
-        remainingStops: remainingStops,
-        currentInstruction: instruction,
-        nextInstruction: nextInstruction,
+        totalStops: route.stops.length,
         currentLocation: currentLocation,
         isMapFollowingUser: true,
         // No etaToDestination seed: NavigationState derives the initial ETA
@@ -209,6 +201,26 @@ class NavigationCubit extends Cubit<NavigationState> {
 
     if (state.status != NavigationStatus.navigating) return;
 
+    if (_startPendingInsideArea && !_isOutsideServiceArea(location)) {
+      _startPendingInsideArea = false;
+      final route = state.route;
+      if (route != null && route.stops.isNotEmpty) {
+        // A fix on the edge of the area is far from the trip: keep the first
+        // stop and let forward progress take over.
+        final nearest = _findNearestStopIndex(route.stops, location);
+        final nearestStop = route.stops[nearest];
+        final distance = _locationService.distanceBetween(
+          location.latitude,
+          location.longitude,
+          nearestStop.position.latitude,
+          nearestStop.position.longitude,
+        );
+        if (distance <= _config.offRouteThreshold) {
+          emit(_stateAtStop(route, nearest, location));
+        }
+      }
+    }
+
     // Check progress based on segment type
     if (state.segmentType == NavigationSegmentType.transit) {
       _checkTransitProgress(location);
@@ -269,6 +281,32 @@ class NavigationCubit extends Cubit<NavigationState> {
       _advanceToStop(state.currentStopIndex + 1);
     }
   }
+
+  /// [state] with the stop the rider is past at [stopIndex] and what the
+  /// instruction says about it.
+  NavigationState _stateAtStop(
+    NavigationRoute route,
+    int stopIndex,
+    LocationResult? location,
+  ) {
+    final remainingStops = route.stops.length - stopIndex - 1;
+    return state.copyWith(
+      currentStopIndex: stopIndex,
+      remainingStops: remainingStops,
+      currentInstruction: _buildTransitInstruction(
+        route,
+        stopIndex,
+        location: location,
+      ),
+      nextInstruction: remainingStops > 0 && _config.showStops
+          ? _buildNextStopPreview(route, stopIndex + 1)
+          : null,
+    );
+  }
+
+  bool _isOutsideServiceArea(LocationResult? location) =>
+      location != null &&
+      !_config.isInServiceArea(location.latitude, location.longitude);
 
   void _advanceToStop(int stopIndex) {
     final route = state.route;
@@ -382,6 +420,15 @@ class NavigationCubit extends Cubit<NavigationState> {
     final route = state.route;
     if (route == null || route.geometry.isEmpty) return;
 
+    // Outside the service area the notice replaces the off-route warning and
+    // its vibration: the rider is not on the route, and knows it.
+    if (_isOutsideServiceArea(location)) {
+      if (state.isOffRoute) {
+        emit(state.copyWith(isOffRoute: false, distanceFromRoute: null));
+      }
+      return;
+    }
+
     // Find minimum distance to any point on route
     double minDistance = double.infinity;
     for (final point in route.geometry) {
@@ -492,6 +539,18 @@ class NavigationCubit extends Cubit<NavigationState> {
       // is, never about them or how many are left (#1059).
       final legEndIndex = _legEndStopIndex(stops, stopIndex);
       final legEnd = stops[legEndIndex];
+      // From outside the service area the distance is meaningless (#12).
+      if (_isOutsideServiceArea(location)) {
+        return NavigationInstruction(
+          type: InstructionType.rideTransport,
+          primaryText: legEnd.name,
+          stopName: legEnd.name,
+          routeColor: route.backgroundColor != null
+              ? Color(route.backgroundColor!)
+              : null,
+          routeShortName: route.shortName,
+        );
+      }
       final distance = _distanceAlongStops(
         stops,
         stopIndex,
