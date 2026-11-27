@@ -40,6 +40,19 @@
   "@navOffRoute": {
     "description": "Warning when user is off the planned route"
   },
+  "navOutsideServiceArea": "You are outside {name}",
+  "@navOutsideServiceArea": {
+    "description": "Notice in navigation when the rider is outside the area the app serves",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "navOutsideServiceAreaUnnamed": "You are outside the service area",
+  "@navOutsideServiceAreaUnnamed": {
+    "description": "Same notice when the service area has no name"
+  },
   "navWeakGps": "GPS signal is weak",
   "@navWeakGps": {
     "description": "Warning when GPS signal is weak"

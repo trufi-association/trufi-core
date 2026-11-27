@@ -13,11 +13,16 @@ class NavigationBottomPanel extends StatelessWidget {
   /// [NavigationInstructionCard.showStops] of the instruction card (#1059).
   final bool showStops;
 
+  /// Notice for a rider outside the service area. When set, the card hides
+  /// the distance and the times that derive from the GPS fix.
+  final String? outsideAreaMessage;
+
   const NavigationBottomPanel({
     super.key,
     required this.state,
     required this.onExitNavigation,
     this.showStops = true,
+    this.outsideAreaMessage,
   });
 
   @override
@@ -25,11 +30,29 @@ class NavigationBottomPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final outsideAreaMessage = this.outsideAreaMessage;
     return SafeArea(
       top: false,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (outsideAreaMessage != null)
+            Container(
+              margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.location_off_rounded, color: colorScheme.error),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(outsideAreaMessage)),
+                ],
+              ),
+            ),
+
           // Instruction card
           if (state.currentInstruction != null)
             NavigationInstructionCard(
@@ -38,13 +61,19 @@ class NavigationBottomPanel extends StatelessWidget {
               remainingStops: state.remainingStops,
               totalStops: state.totalStops,
               currentStopIndex: state.currentStopIndex,
-              distanceToNextStop: state.distanceToNextStop,
-              etaToDestination: state.etaToDestination,
+              distanceToNextStop: outsideAreaMessage == null
+                  ? state.distanceToNextStop
+                  : null,
+              etaToDestination: outsideAreaMessage == null
+                  ? state.etaToDestination
+                  : null,
               isOffRoute: state.isOffRoute,
               isGpsWeak: state.isGpsWeak,
               legs: state.route?.legs ?? [],
               currentLeg: state.currentLeg,
-              totalDuration: state.etaToDestination,
+              totalDuration: outsideAreaMessage == null
+                  ? state.etaToDestination
+                  : null,
               showStops: showStops,
             ),
 

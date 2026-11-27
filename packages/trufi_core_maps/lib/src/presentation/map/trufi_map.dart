@@ -132,6 +132,10 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   // Spatial indices for marker picking
   final Map<String, MarkerIndex> _markerIndices = {};
 
+  // Content fingerprint of what each source last received; a layer whose
+  // fingerprint is unchanged is not sent again (trufi-lima#16).
+  final Map<String, int> _sentFingerprints = {};
+
   static const int _maxConcurrentImageLoads = 5;
 
   // ──────────────────────────────────────────────
@@ -167,7 +171,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       _moveCameraTo(widget.camera!);
     }
 
-    // Always schedule sync on rebuild — internally we check if work is needed
+    // Always schedule sync on rebuild; _updateLayerData skips unchanged layers
     _scheduleSync();
   }
 
@@ -391,6 +395,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
     _initializedSources.remove(sourceId);
     _initializedLayerLevels.remove(sourceId);
     _markerIndices.remove(sourceId);
+    _sentFingerprints.remove(sourceId);
   }
 
   Future<void> _ensureLayerInitialized(
@@ -521,6 +526,15 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
     TrufiLayer layer,
     MapLibreMapController ctl,
   ) async {
+    // The picking index holds the markers' callbacks (onTap, buildPanel),
+    // which a rebuild may replace without changing what is drawn: refresh it
+    // every time; only the GeoJSON send is skipped.
+    final index = _markerIndices.putIfAbsent(layer.id, () => MarkerIndex());
+    index.rebuild(layer.markers);
+
+    final fingerprint = _layerFingerprint(layer);
+    if (_sentFingerprints[layer.id] == fingerprint) return;
+
     final geojson = await _buildGeoJsonForLayer(layer, ctl);
 
     final features = geojson['features'] as List;
@@ -529,11 +543,37 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       await SchedulerBinding.instance.endOfFrame;
     }
     await ctl.setGeoJsonSource(layer.id, geojson);
-
-    // Rebuild spatial index for picking
-    final index = _markerIndices.putIfAbsent(layer.id, () => MarkerIndex());
-    index.rebuild(layer.markers);
+    _sentFingerprints[layer.id] = fingerprint;
   }
+
+  /// Hash of every field [_buildGeoJsonForLayer] writes, far cheaper than
+  /// building and sending the GeoJSON.
+  int _layerFingerprint(TrufiLayer layer) => Object.hash(
+    Object.hashAll([
+      for (final m in layer.markers)
+        Object.hash(
+          m.id,
+          m.position,
+          m.imageCacheKey ?? m.widget.hashCode,
+          m.alignment,
+          m.size,
+          m.rotation,
+          m.layerLevel,
+          m.allowOverlap,
+        ),
+    ]),
+    Object.hashAll([
+      for (final l in layer.lines)
+        Object.hash(
+          l.id,
+          Object.hashAll(l.position),
+          l.color,
+          l.lineWidth,
+          l.layerLevel,
+          l.activeDots,
+        ),
+    ]),
+  );
 
   // ──────────────────────────────────────────────
   // GeoJSON building
@@ -724,6 +764,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
         _imageLoaders.clear();
         _loadedImages.clear();
         _sourceInit.clear();
+        _sentFingerprints.clear();
         _scheduleSync();
         // Retry sync after a delay to handle race conditions in profile/release
         // where widget-to-image rasterization may fail on first attempt

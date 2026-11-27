@@ -40,6 +40,14 @@ class NavigationLocalizationsEn extends NavigationLocalizations {
   String get navOffRoute => 'You appear to be off the route';
 
   @override
+  String navOutsideServiceArea(String name) {
+    return 'You are outside $name';
+  }
+
+  @override
+  String get navOutsideServiceAreaUnnamed => 'You are outside the service area';
+
+  @override
   String get navWeakGps => 'GPS signal is weak';
 
   @override

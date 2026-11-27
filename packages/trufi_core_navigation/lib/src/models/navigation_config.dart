@@ -1,3 +1,5 @@
+import 'package:trufi_core_maps/trufi_core_maps.dart' show LatLngBounds;
+
 /// Configuration for navigation behavior.
 class NavigationConfig {
   /// Distance threshold to consider user "at" a stop (meters).
@@ -43,6 +45,15 @@ class NavigationConfig {
   /// trufi-sanaa#18) turns the three off together.
   final bool showStops;
 
+  /// Area the app serves. While the rider's position is outside it, the map
+  /// shows the trip's first leg instead of the GPS fix, a notice names the
+  /// area and the distance to the next stop (with the ETA) is hidden: both
+  /// are meaningless from far away (trufi-lima#12). Null: no such handling.
+  final LatLngBounds? serviceArea;
+
+  /// Name of [serviceArea] for the notice; null reads "the service area".
+  final String? serviceAreaName;
+
   const NavigationConfig({
     this.stopArrivalThreshold = 50.0,
     this.offRouteThreshold = 200.0,
@@ -53,7 +64,20 @@ class NavigationConfig {
     this.gpsAccuracyWarningThreshold = 100.0,
     this.backgroundDistanceFilter = 50,
     this.showStops = true,
+    this.serviceArea,
+    this.serviceAreaName,
   });
+
+  /// Whether a position is inside [serviceArea] (edges included); always
+  /// true without one.
+  bool isInServiceArea(double latitude, double longitude) {
+    final area = serviceArea;
+    if (area == null) return true;
+    return latitude >= area.southWest.latitude &&
+        latitude <= area.northEast.latitude &&
+        longitude >= area.southWest.longitude &&
+        longitude <= area.northEast.longitude;
+  }
 
   NavigationConfig copyWith({
     double? stopArrivalThreshold,
@@ -65,6 +89,8 @@ class NavigationConfig {
     double? gpsAccuracyWarningThreshold,
     int? backgroundDistanceFilter,
     bool? showStops,
+    LatLngBounds? serviceArea,
+    String? serviceAreaName,
   }) {
     return NavigationConfig(
       stopArrivalThreshold: stopArrivalThreshold ?? this.stopArrivalThreshold,
@@ -79,6 +105,8 @@ class NavigationConfig {
       backgroundDistanceFilter:
           backgroundDistanceFilter ?? this.backgroundDistanceFilter,
       showStops: showStops ?? this.showStops,
+      serviceArea: serviceArea ?? this.serviceArea,
+      serviceAreaName: serviceAreaName ?? this.serviceAreaName,
     );
   }
 }

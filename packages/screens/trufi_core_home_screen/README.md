@@ -232,8 +232,8 @@ HomeScreenConfig(
 ```
 
 With a `serviceArea`, "my location" does not move the camera to a fix outside
-it: a SnackBar says "You are outside Lima" and its action "See Lima" fits the
-camera to the area. Without `serviceAreaName` the texts read "the service
+it: a SnackBar says "You are outside Lima" and its action "See Lima" returns the
+camera to the startup view (the map engine's default centre and zoom). Without `serviceAreaName` the texts read "the service
 area". Without `serviceArea` nothing changes.
 
 ## Optional: Live vehicle ETA
