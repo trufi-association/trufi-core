@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:latlong2/latlong.dart';
 
 import '../models/search_location.dart';
 import 'search_location_service.dart';
@@ -47,16 +48,30 @@ class OfflineSearchDataService
   /// Upper bound on results per category, so a two-letter query doesn't
   /// return thousands of rows.
   ///
-  /// Which streets make the cut is a total order — the street named like
-  /// the query, then the best text match, then the street with more
-  /// corners, then name, municipality and ref — so it depends neither on
-  /// the index's order nor on the sort (#1054).
+  /// Which streets make the cut is a total order, so it depends neither on
+  /// the index's order nor on the sort (#1054): the street's type class
+  /// ([streetTypeRanks]), the street named like the query before one only
+  /// known by it, then — with a [focus] — the nearest one, or without it
+  /// the best text match and the street with more corners; name,
+  /// municipality and ref close the tie.
   final int limitPerCategory;
 
   /// Word used between two streets in this language ("y" in Spanish,
   /// "and" in English). Queries like `ayacucho y heroinas` are read as a
   /// junction lookup.
   final List<String> junctionSeparators;
+
+  /// A point of the city (its centre, say). Among streets of the same type
+  /// class and name kind, the nearest to it comes first; without it, the one
+  /// with more corners does.
+  final LatLng? focus;
+
+  /// Street types by class, as normalized prefixes (no accents, lowercase):
+  /// index 0 is listed first, the last class last. A name with no listed
+  /// type counts as the class of "calle". A query that starts with a type
+  /// ("avenida grau") only finds streets of that class. Defaults to
+  /// Spanish; another language simply never matches a type.
+  final List<List<String>> streetTypeRanks;
 
   _SearchData? _data;
   Future<_SearchData>? _loading;
@@ -65,7 +80,21 @@ class OfflineSearchDataService
     this.assetPath = 'assets/search/search.json',
     this.limitPerCategory = 10,
     this.junctionSeparators = const ['y', 'and', 'esq', 'esquina', 'con', '&'],
+    this.focus,
+    this.streetTypeRanks = defaultStreetTypeRanks,
   });
+
+  /// Spanish street types: avenues and main roads, then calles and jirones,
+  /// then pasajes.
+  static const defaultStreetTypeRanks = <List<String>>[
+    [
+      'avenida', 'av', 'av.', 'via expresa', 'carretera', 'autopista',
+      'ovalo', 'panamericana', 'boulevard', 'bulevar', 'alameda', 'malecon',
+      'paseo',
+    ],
+    ['calle', 'jiron', 'jr', 'jr.', 'prolongacion', 'camino', 'circunvalacion'],
+    ['pasaje', 'psje', 'psje.', 'pje', 'pje.', 'callejon', 'sendero'],
+  ];
 
   /// Loads (once) and keeps the parsed data in memory.
   Future<_SearchData> _ensureLoaded() {
@@ -91,7 +120,11 @@ class OfflineSearchDataService
     // the wrapper above is what keeps a missing asset from surfacing as
     // an unhandled async error and a spinner that never stops.
     final raw = await rootBundle.loadString(assetPath);
-    return _SearchData.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    return _SearchData.fromJson(
+      jsonDecode(raw) as Map<String, dynamic>,
+      types: _StreetTypes(streetTypeRanks),
+      focus: focus,
+    );
   }
 
   @override
@@ -193,6 +226,73 @@ String? _junctionAddress(_Street street, _Street other) {
   return '$region / $otherRegion';
 }
 
+/// A street name split into its type and the rest, once, at load time.
+class _ParsedName {
+  final String normalized;
+  final int typeClass;
+
+  /// [normalized] without its type ("avenida grau" → "grau").
+  final String base;
+  final List<String> baseWords;
+
+  _ParsedName(this.normalized, this.typeClass, this.base)
+    : baseWords = _wordsOf(base);
+}
+
+List<String> _wordsOf(String text) =>
+    text.replaceAll('.', ' ').split(' ').where((w) => w.isNotEmpty).toList();
+
+/// Reads the type at the start of a normalized name or query.
+class _StreetTypes {
+  /// Class of a name whose type is not listed: the one of "calle".
+  static const untypedClass = 1;
+
+  /// (prefix, class), longest prefix first so "via expresa" beats "via".
+  final List<(String, int)> _prefixes;
+
+  _StreetTypes(List<List<String>> ranks)
+    : _prefixes = [
+        for (var i = 0; i < ranks.length; i++)
+          for (final prefix in ranks[i]) (prefix, i),
+      ]..sort((a, b) => b.$1.length.compareTo(a.$1.length));
+
+  _ParsedName parse(String normalized) {
+    for (final (prefix, typeClass) in _prefixes) {
+      if (normalized.startsWith('$prefix ')) {
+        return _ParsedName(
+          normalized,
+          typeClass,
+          normalized.substring(prefix.length + 1),
+        );
+      }
+    }
+    return _ParsedName(normalized, untypedClass, normalized);
+  }
+}
+
+/// What the user typed, read once per search.
+class _Query {
+  final _ParsedName parsed;
+
+  /// The query starts with a street type: only that class matches.
+  final bool isTyped;
+
+  _Query._(this.parsed) : isTyped = parsed.base != parsed.normalized;
+
+  factory _Query(_StreetTypes types, String normalized) =>
+      _Query._(types.parse(normalized));
+
+  String get normalized => parsed.normalized;
+
+  bool matches(_ParsedName name) {
+    if (isTyped && name.typeClass != parsed.typeClass) return false;
+    final wordsMatch = parsed.baseWords.every(
+      (queryWord) => name.baseWords.any((w) => w.startsWith(queryWord)),
+    );
+    return wordsMatch || (!isTyped && name.normalized.contains(normalized));
+  }
+}
+
 class _Street {
   final String ref;
   final String name;
@@ -202,16 +302,13 @@ class _Street {
 
   /// Municipality the street lies in; null when the index has none.
   final String? region;
-  final String normalized;
 
-  /// [name] alone, normalized: tells the street named exactly like the
-  /// query, and orders streets that match equally well.
-  late final String normalizedName = _normalize(name);
+  /// [name] alone, normalized and split: tells the street named exactly
+  /// like the query, and orders streets that match equally well.
+  final _ParsedName parsedName;
 
-  /// [alternativeNames], normalized one by one.
-  late final List<String> normalizedAlternativeNames = [
-    for (final alternative in alternativeNames) _normalize(alternative),
-  ];
+  /// [alternativeNames], normalized and split one by one.
+  final List<_ParsedName> parsedAlternativeNames;
 
   _Street({
     required this.ref,
@@ -220,18 +317,106 @@ class _Street {
     required this.latitude,
     required this.longitude,
     required this.region,
-  }) : normalized = [name, ...alternativeNames].map(_normalize).join(' | ');
+    required _StreetTypes types,
+  }) : parsedName = types.parse(_normalize(name)),
+       parsedAlternativeNames = [
+         for (final alternative in alternativeNames)
+           types.parse(_normalize(alternative)),
+       ];
+
+  String get normalizedName => parsedName.normalized;
+
+  /// Name and alternative names joined, for the junction lookup.
+  late final String normalized = [
+    parsedName,
+    ...parsedAlternativeNames,
+  ].map((n) => n.normalized).join(' | ');
+}
+
+/// A street that answers a query, with what the order needs of it.
+class _Match {
+  /// Tier of a match that is no text of the main name (word match, or an
+  /// alternative name).
+  static const _farTier = 104;
+
+  final _Street street;
+
+  /// Type class of the name that matched; the main name when it does.
+  final int typeClass;
+
+  /// 0 when the query matches the street's own name, 1 when only an
+  /// alternative name does.
+  final int nameKind;
+
+  /// How well the name matches, lower first (no focus): named like the
+  /// query, only an alternative name is, starts with it, contains it.
+  final int tier;
+
+  /// Metres to the focus; null without one.
+  final double? distance;
+
+  _Match._(
+    this.street,
+    this.typeClass,
+    this.nameKind,
+    this.tier,
+    this.distance,
+  );
+
+  /// Null when [street] does not answer [query].
+  static _Match? of(_Street street, _Query query, LatLng? focus) {
+    final main = street.parsedName;
+    final matchingAlternative = street.parsedAlternativeNames
+        .where(query.matches)
+        .firstOrNull;
+    final byMainName = query.matches(main);
+    if (!byMainName && matchingAlternative == null) return null;
+
+    final text = query.normalized;
+    final index = main.normalized.indexOf(text);
+    final int tier = main.normalized == text
+        ? 0
+        : street.parsedAlternativeNames.any((n) => n.normalized == text)
+        ? 1
+        : index < 0
+        ? _farTier
+        : index == 0
+        ? 2
+        : 3 + math.min(index, 100);
+    final matching = byMainName ? main : matchingAlternative!;
+    return _Match._(
+      street,
+      matching.typeClass,
+      byMainName ? 0 : 1,
+      tier,
+      focus == null
+          ? null
+          : const Distance().as(
+              LengthUnit.Meter,
+              focus,
+              LatLng(street.latitude!, street.longitude!),
+            ),
+    );
+  }
 }
 
 class _SearchData {
   final Map<String, _Street> streets;
   final Map<String, List<(String ref, double lat, double lon)>> junctions;
+  final _StreetTypes types;
+  final LatLng? focus;
   _SearchData({
     required this.streets,
     required this.junctions,
+    required this.types,
+    required this.focus,
   });
 
-  factory _SearchData.fromJson(Map<String, dynamic> json) {
+  factory _SearchData.fromJson(
+    Map<String, dynamic> json, {
+    required _StreetTypes types,
+    required LatLng? focus,
+  }) {
     final streets = <String, _Street>{};
     (json['streets'] as Map<String, dynamic>? ?? {}).forEach((ref, value) {
       final row = value as List<dynamic>;
@@ -255,6 +440,7 @@ class _SearchData {
         region: region is String && region.trim().isNotEmpty
             ? region.trim()
             : null,
+        types: types,
       );
     });
 
@@ -280,24 +466,27 @@ class _SearchData {
       },
     );
 
-    return _SearchData(streets: streets, junctions: junctions);
+    return _SearchData(
+      streets: streets,
+      junctions: junctions,
+      types: types,
+      focus: focus,
+    );
   }
 
   Iterable<_Street> _matchingStreets(String normalizedQuery) => streets.values
       .where((s) => s.normalized.contains(normalizedQuery));
 
-  /// The [limit] best streets for [q]: by [_rankOf], then by
-  /// [_compareTied].
+  /// The [limit] best streets for [q]: by [_compare].
   List<SearchLocation> findStreets(String q, int limit) {
-    final matches = [
-      for (final street in _matchingStreets(q))
-        if (street.latitude != null && street.longitude != null)
-          (street: street, rank: _rankOf(street, q)),
-    ];
-    matches.sort((a, b) {
-      final byRank = a.rank.compareTo(b.rank);
-      return byRank != 0 ? byRank : _compareTied(a.street, b.street);
-    });
+    final query = _Query(types, q);
+    final matches = <_Match>[];
+    for (final street in streets.values) {
+      if (street.latitude == null || street.longitude == null) continue;
+      final match = _Match.of(street, query, focus);
+      if (match != null) matches.add(match);
+    }
+    matches.sort(_compare);
     return matches
         .take(limit)
         .map(
@@ -312,27 +501,44 @@ class _SearchData {
         .toList();
   }
 
-  /// Order of two streets that match the query equally well (#1054).
+  /// Order of two matches: a total order, so equal data gives equal
+  /// results (#1054).
+  ///
+  /// The type class decides first, so a jirón never takes the place of an
+  /// avenue with the same name; then the street named by the query before
+  /// one only known by it. With a focus the nearest comes next; without
+  /// one, the best text match and the street with more corners.
   ///
   /// Ties are the rule, not the exception: every "Avenida …" is a prefix
   /// match for "avenida", and a city has one "Avenida Circunvalación" per
   /// municipality. `List.sort` is not stable, so without a tie-break the
-  /// rows that survive the limit were whatever the sort left first — for
-  /// a short query, an arbitrary ten out of hundreds.
-  ///
-  /// The street with more corners goes first: it is the longer, better
-  /// connected one — the avenue a rider most likely means rather than its
-  /// three-block namesake two towns away — and the one whose corners and
-  /// lines are worth opening. Name, municipality and ref then make the
-  /// order total, so equal data always gives equal results.
-  int _compareTied(_Street a, _Street b) {
-    final byCorners = _cornerCount(b).compareTo(_cornerCount(a));
-    if (byCorners != 0) return byCorners;
-    final byName = a.normalizedName.compareTo(b.normalizedName);
+  /// rows that survive the limit were whatever the sort left first. The
+  /// street with more corners is the longer, better connected one — the
+  /// avenue a rider most likely means rather than its three-block namesake
+  /// two towns away. Name, municipality and ref close the order.
+  int _compare(_Match a, _Match b) {
+    final byClass = a.typeClass.compareTo(b.typeClass);
+    if (byClass != 0) return byClass;
+    final aDistance = a.distance;
+    final bDistance = b.distance;
+    if (aDistance != null && bDistance != null) {
+      final byKind = a.nameKind.compareTo(b.nameKind);
+      if (byKind != 0) return byKind;
+      final byDistance = aDistance.compareTo(bDistance);
+      if (byDistance != 0) return byDistance;
+    } else {
+      final byTier = a.tier.compareTo(b.tier);
+      if (byTier != 0) return byTier;
+      final byCorners = _cornerCount(
+        b.street,
+      ).compareTo(_cornerCount(a.street));
+      if (byCorners != 0) return byCorners;
+    }
+    final byName = a.street.normalizedName.compareTo(b.street.normalizedName);
     if (byName != 0) return byName;
-    final byRegion = (a.region ?? '').compareTo(b.region ?? '');
+    final byRegion = (a.street.region ?? '').compareTo(b.street.region ?? '');
     if (byRegion != 0) return byRegion;
-    return a.ref.compareTo(b.ref);
+    return a.street.ref.compareTo(b.street.ref);
   }
 
   int _cornerCount(_Street street) => junctions[street.ref]?.length ?? 0;
@@ -378,29 +584,5 @@ class _SearchData {
             longitude: junction.$3,
           ),
     ];
-  }
-
-  /// How well [street] answers [q], lower first: its name is the query;
-  /// one of its alternative names is; then [_rank] over all its names.
-  ///
-  /// A street is searched by its name and its alternative names joined,
-  /// and that text is never the query itself once there is an alternative
-  /// name. Ranked on it alone, "Camino a Lagunas" (also "Circuito Tunari")
-  /// was one more prefix match beside "Camino a Lagunas Entrando por
-  /// Tirani", and with corners breaking ties it lost the first row to it
-  /// (#1054). So the exact cases are read name by name — and a street
-  /// only also known by the query's name comes after the ones named so,
-  /// however many corners it has.
-  int _rankOf(_Street street, String q) {
-    if (street.normalizedName == q) return 0;
-    if (street.normalizedAlternativeNames.contains(q)) return 1;
-    return 2 + _rank(street.normalized, q);
-  }
-
-  /// Exact match first, then prefix, then anything containing the query.
-  int _rank(String candidate, String query) {
-    if (candidate == query) return 0;
-    if (candidate.startsWith(query)) return 1;
-    return 2 + math.min(candidate.indexOf(query), 100);
   }
 }
