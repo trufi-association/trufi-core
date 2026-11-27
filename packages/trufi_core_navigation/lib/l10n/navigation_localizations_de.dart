@@ -41,12 +41,12 @@ class NavigationLocalizationsDe extends NavigationLocalizations {
 
   @override
   String navOutsideServiceArea(String name) {
-    return 'Du bist außerhalb von $name';
+    return 'Sie sind außerhalb von $name';
   }
 
   @override
   String get navOutsideServiceAreaUnnamed =>
-      'Du bist außerhalb des Servicegebiets';
+      'Sie sind außerhalb des Servicegebiets';
 
   @override
   String get navWeakGps => 'GPS-Signal ist schwach';

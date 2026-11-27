@@ -91,6 +91,9 @@ class ScriptedPlanService implements RequestPlanService {
 class MapMoves {
   final List<TrufiCameraPosition> moves = [];
   final List<LatLngBounds> fits = [];
+
+  /// The map's own camera report, as when the user pans it.
+  ValueChanged<TrufiCameraPosition>? onCameraChanged;
 }
 
 class _RecordingEngine extends ITrufiMapEngine {
@@ -114,7 +117,10 @@ class _RecordingEngine extends ITrufiMapEngine {
     void Function(LatLng)? onMapLongClick,
     List<TrufiLayer> layers = const [],
     List<WidgetMarker> widgetMarkers = const [],
-  }) => _RecordingMap(controller: controller, moves: moves);
+  }) {
+    moves.onCameraChanged = onCameraChanged;
+    return _RecordingMap(controller: controller, moves: moves);
+  }
 }
 
 class _RecordingMap extends StatefulWidget {

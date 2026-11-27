@@ -1243,16 +1243,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   /// Returns the camera to the startup view through [_moveCameraTracked], so
   /// [_currentCamera] follows the move. Fitting the whole area zoomed out past
-  /// the offline tiles and left the map empty (trufi-lima#12).
-  void _showServiceArea() {
-    final mapEngineManager = MapEngineManager.read(context);
-    _moveCameraTracked(
-      TrufiCameraPosition(
-        target: mapEngineManager.defaultCenter,
-        zoom: mapEngineManager.defaultZoom,
-      ),
-    );
-  }
+  /// the offline tiles and left the map empty (trufi-lima#12). [_initialCamera]
+  /// holds the startup view, so a home disposed while its SnackBar was up
+  /// reads nothing from its context.
+  void _showServiceArea() => _moveCameraTracked(_initialCamera!);
 
   void _showOutsideServiceAreaMessage() {
     if (widget.config.serviceArea == null) return;

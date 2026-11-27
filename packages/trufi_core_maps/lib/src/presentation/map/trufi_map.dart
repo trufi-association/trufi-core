@@ -136,6 +136,10 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
   // fingerprint is unchanged is not sent again (trufi-lima#16).
   final Map<String, int> _sentFingerprints = {};
 
+  // Bumped on every style load; a send that started under an older style
+  // must not record its fingerprint (the new style's sources are empty).
+  int _styleGeneration = 0;
+
   static const int _maxConcurrentImageLoads = 5;
 
   // ──────────────────────────────────────────────
@@ -534,6 +538,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
 
     final fingerprint = _layerFingerprint(layer);
     if (_sentFingerprints[layer.id] == fingerprint) return;
+    final styleGeneration = _styleGeneration;
 
     final geojson = await _buildGeoJsonForLayer(layer, ctl);
 
@@ -543,8 +548,14 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
       await SchedulerBinding.instance.endOfFrame;
     }
     await ctl.setGeoJsonSource(layer.id, geojson);
-    _sentFingerprints[layer.id] = fingerprint;
+    if (styleGeneration == _styleGeneration) {
+      _sentFingerprints[layer.id] = fingerprint;
+    }
   }
+
+  /// `-1.0.hashCode == 0.0.hashCode`: Alignment.topCenter would hash like
+  /// center. The sign tells them apart.
+  int _hashDouble(double value) => Object.hash(value, value.isNegative);
 
   /// Hash of every field [_buildGeoJsonForLayer] writes, far cheaper than
   /// building and sending the GeoJSON.
@@ -555,9 +566,10 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           m.id,
           m.position,
           m.imageCacheKey ?? m.widget.hashCode,
-          m.alignment,
+          _hashDouble(m.alignment.x),
+          _hashDouble(m.alignment.y),
           m.size,
-          m.rotation,
+          _hashDouble(m.rotation),
           m.layerLevel,
           m.allowOverlap,
         ),
@@ -765,6 +777,7 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
         _loadedImages.clear();
         _sourceInit.clear();
         _sentFingerprints.clear();
+        _styleGeneration++;
         _scheduleSync();
         // Retry sync after a delay to handle race conditions in profile/release
         // where widget-to-image rasterization may fail on first attempt
@@ -772,6 +785,9 @@ class _TrufiMapState extends State<TrufiMap> implements TrufiMapDelegate {
           if (mounted && _mapReady) {
             _loadedImages.clear();
             _imageLoaders.clear();
+            // Unchanged layers must re-render the icons that failed to
+            // rasterize the first time.
+            _sentFingerprints.clear();
             _scheduleSync();
           }
         });

@@ -89,6 +89,8 @@ void main() {
   // harness, ~8.5 on a phone) left the map beige where the offline tiles end.
   // "See Lima" goes back to the startup camera, whatever zoom the map is at.
   const startCenter = LatLng(-12.10, -76.95);
+  // Where the user has panned to before tapping "See Lima".
+  const pannedTo = TrufiCameraPosition(target: LatLng(-12.30, -77.15), zoom: 10);
   for (final startZoom in [4.0, 16.0]) {
     testWidgets('"See Lima" from zoom ${startZoom.toInt()} goes to the '
         'startup camera (defaultCenter, defaultZoom)', (tester) async {
@@ -100,6 +102,8 @@ void main() {
         defaultCenter: startCenter,
         defaultZoom: startZoom,
       );
+      moves.onCameraChanged!(pannedTo);
+      await tester.pump();
 
       await tester.tap(find.byType(SnackBarAction));
       await tester.pumpAndSettle();

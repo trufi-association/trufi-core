@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core_navigation/trufi_core_navigation.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'support/navigation_fixtures.dart';

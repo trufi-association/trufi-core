@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -26,6 +25,12 @@ class _FakePlatform extends MapLibrePlatform {
 
   int sentCount(String id) => sent.where((s) => s == id).length;
 
+  /// Every `addImage`: image id, in call order.
+  final addedImages = <String>[];
+
+  /// When set, `setGeoJsonSource` waits for it (a send in flight).
+  Completer<void>? gate;
+
   @override
   Widget buildView(
     Map<String, dynamic> creationParams,
@@ -48,6 +53,12 @@ class _FakePlatform extends MapLibrePlatform {
     Map<String, dynamic> geojson,
   ) async {
     sent.add(sourceId);
+    await gate?.future;
+  }
+
+  @override
+  Future<void> addImage(String name, Uint8List bytes, [bool sdf = false]) async {
+    addedImages.add(name);
   }
 
   @override
@@ -107,11 +118,14 @@ class _Harness {
   final WidgetTester tester;
   final platform = _FakePlatform();
 
+  final controller = TrufiMapController();
+
   Widget _build(List<TrufiLayer> layers) => MaterialApp(
     home: TrufiMap(
       styleString: 'asset://style.json',
       initialCamera: _initial,
       layers: layers,
+      controller: controller,
     ),
   );
 
@@ -266,6 +280,181 @@ void main() {
         reason: 'the new style has empty sources',
       );
       expect(h.platform.sentCount('route') - routeBefore, greaterThanOrEqualTo(1));
+    });
+
+    testWidgets('the delayed 1 s retry sends every layer again and adds its '
+        'images again (rasterization may fail on the first pass)', (
+      tester,
+    ) async {
+      final h = _Harness(tester);
+      await tester.pumpWidget(h._build([_stops(count: 3), _route()]));
+      await tester.pump();
+      h.platform.onMapStyleLoadedPlatform(null);
+      await tester.pumpAndSettle(); // the 1 s retry has not fired yet
+      final stopsBefore = h.platform.sentCount('stops');
+      final routeBefore = h.platform.sentCount('route');
+      final imagesBefore = h.platform.addedImages.length;
+      expect(stopsBefore, 1);
+      expect(imagesBefore, 1);
+
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+
+      expect(h.platform.sentCount('stops') - stopsBefore, 1);
+      expect(h.platform.sentCount('route') - routeBefore, 1);
+      expect(h.platform.addedImages.length - imagesBefore, 1);
+    });
+
+    testWidgets('a style reload during a send in flight: the stale send does '
+        'not record its fingerprint, so the layer is sent again', (
+      tester,
+    ) async {
+      final h = _Harness(tester);
+      await tester.pumpWidget(h._build([_route()]));
+      await tester.pump();
+      h.platform.gate = Completer<void>();
+      h.platform.onMapStyleLoadedPlatform(null);
+      await tester.pump();
+      await tester.pump();
+      expect(h.platform.sentCount('route'), 1, reason: 'send in flight');
+
+      final gate = h.platform.gate!;
+      h.platform.gate = null;
+      h.platform.onMapStyleLoadedPlatform(null); // reload mid-send
+      await tester.pump();
+      gate.complete();
+      await tester.pumpAndSettle(); // before any 1 s retry
+
+      expect(
+        h.platform.sentCount('route'),
+        2,
+        reason: 'the new style has an empty source: it needs the data',
+      );
+
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('same content, new onTap/buildPanel: the picking index returns '
+        'the new marker without a new send', (tester) async {
+      final h = _Harness(tester);
+      TrufiLayer layer(WidgetBuilder panel) => TrufiLayer(
+        id: 'stops',
+        markers: [
+          TrufiMarker(
+            id: 'stop-0',
+            position: const latlng.LatLng(-12.0464, -77.0428),
+            widget: const SizedBox(width: 8, height: 8),
+            widgetBytes: _png,
+            imageCacheKey: 'stop',
+            buildPanel: panel,
+          ),
+        ],
+      );
+      Widget oldPanel(BuildContext _) => const SizedBox();
+      Widget newPanel(BuildContext _) => const SizedBox();
+      await h.mount([layer(oldPanel)]);
+      final before = h.platform.sentCount('stops');
+
+      await h.rebuild([layer(newPanel)]);
+
+      final picked = h.controller.pickMarkersAt(_initial.target);
+      expect(picked, hasLength(1));
+      expect(picked.single.buildPanel, same(newPanel));
+      expect(h.platform.sentCount('stops') - before, 0);
+    });
+
+    group('changing one fingerprinted field gives exactly 1 send', () {
+      TrufiMarker marker({
+        String imageCacheKey = 'stop',
+        Alignment alignment = Alignment.center,
+        Size size = const Size(30, 30),
+        double rotation = 0,
+        int layerLevel = 1,
+        bool allowOverlap = false,
+      }) => TrufiMarker(
+        id: 'm',
+        position: const latlng.LatLng(-12.0464, -77.0428),
+        widget: const SizedBox(width: 8, height: 8),
+        widgetBytes: _png,
+        imageCacheKey: imageCacheKey,
+        alignment: alignment,
+        size: size,
+        rotation: rotation,
+        layerLevel: layerLevel,
+        allowOverlap: allowOverlap,
+      );
+      TrufiLine line({
+        Color color = Colors.red,
+        double lineWidth = 2,
+        int layerLevel = 1,
+        bool activeDots = false,
+      }) => TrufiLine(
+        id: 'l',
+        position: const [
+          latlng.LatLng(-12.0464, -77.0428),
+          latlng.LatLng(-12.05, -77.03),
+        ],
+        color: color,
+        lineWidth: lineWidth,
+        layerLevel: layerLevel,
+        activeDots: activeDots,
+      );
+
+      final variants = <String, (TrufiLayer, TrufiLayer)>{
+        'imageCacheKey': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(imageCacheKey: 'other')]),
+        ),
+        'alignment': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(alignment: Alignment.topCenter)]),
+        ),
+        'size': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(size: const Size(40, 40))]),
+        ),
+        'rotation': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(rotation: 45)]),
+        ),
+        'marker layerLevel': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(layerLevel: 2)]),
+        ),
+        'allowOverlap': (
+          TrufiLayer(id: 'x', markers: [marker()]),
+          TrufiLayer(id: 'x', markers: [marker(allowOverlap: true)]),
+        ),
+        'line color': (
+          TrufiLayer(id: 'x', lines: [line()]),
+          TrufiLayer(id: 'x', lines: [line(color: Colors.blue)]),
+        ),
+        'lineWidth': (
+          TrufiLayer(id: 'x', lines: [line()]),
+          TrufiLayer(id: 'x', lines: [line(lineWidth: 5)]),
+        ),
+        'line layerLevel': (
+          TrufiLayer(id: 'x', lines: [line()]),
+          TrufiLayer(id: 'x', lines: [line(layerLevel: 2)]),
+        ),
+        'activeDots': (
+          TrufiLayer(id: 'x', lines: [line()]),
+          TrufiLayer(id: 'x', lines: [line(activeDots: true)]),
+        ),
+      };
+
+      for (final entry in variants.entries) {
+        testWidgets(entry.key, (tester) async {
+          final h = _Harness(tester);
+          await h.mount([entry.value.$1]);
+          final before = h.platform.sentCount('x');
+
+          await h.rebuild([entry.value.$2]);
+
+          expect(h.platform.sentCount('x') - before, 1);
+        });
+      }
     });
   });
 }

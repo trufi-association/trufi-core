@@ -34,9 +34,10 @@ void main() {
     expect(calls, isNotEmpty);
     for (final call in calls) {
       expect(
-        call.camera?.target,
-        isNot(rider),
-        reason: 'the controlled camera must not follow the GPS fix',
+        call.camera,
+        isNull,
+        reason: 'navigation gives the map no controlled camera: it only '
+            'starts somewhere',
       );
     }
     final target = calls.last.target;
@@ -80,7 +81,8 @@ void main() {
       expect(distanceFigure, findsNothing);
       expect(etaFigure, findsNothing);
       for (final call in run.maps.engine.calls) {
-        expect(call.camera?.target, isNot(farAway));
+        expect(call.camera, isNull);
+        expect(call.initialCamera.target, isNot(farAway));
       }
     });
 
@@ -108,14 +110,14 @@ void main() {
       expect(find.text("Estás fuera de Sana'a"), findsOneWidget);
     });
 
-    testWidgets('German: "Du bist außerhalb von Sana\'a"', (tester) async {
+    testWidgets('German: "Sie sind außerhalb von Sana\'a"', (tester) async {
       await startSanaaNavigation(
         tester,
         rider: farAway,
         config: named,
         locale: const Locale('de'),
       );
-      expect(find.text("Du bist außerhalb von Sana'a"), findsOneWidget);
+      expect(find.text("Sie sind außerhalb von Sana'a"), findsOneWidget);
     });
   });
 
@@ -164,10 +166,9 @@ void main() {
       expect(etaFigure, findsOneWidget);
       final last = run.maps.engine.calls.last;
       expect(
-        last.camera == null || last.camera!.target == SanaaTrip.origin,
-        isTrue,
-        reason: 'no pinned first-leg camera once the rider is inside: it '
-            'follows the fix (as it does today) or is left alone',
+        last.camera,
+        isNull,
+        reason: 'no pinned first-leg camera once the rider is inside',
       );
     });
   });
