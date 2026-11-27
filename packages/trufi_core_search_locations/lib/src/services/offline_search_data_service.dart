@@ -49,9 +49,10 @@ class OfflineSearchDataService
   /// return thousands of rows.
   ///
   /// Which streets make the cut is a total order, so it depends neither on
-  /// the index's order nor on the sort (#1054): the streets whose words
-  /// start with the query's before those that only contain it, then the
-  /// type class ([streetTypeRanks]), then — with a [focus] — the street named
+  /// the index's order nor on the sort (#1054): the streets with a word equal
+  /// to each query word, then those where a query word only starts a word
+  /// ("1" in "Calle 100"), then those that only contain it ("ica" in
+  /// "Arica"); inside each, the type class ([streetTypeRanks]), then — with a [focus] — the street named
   /// like the query before one only known by it and the nearest one, or
   /// without it the best text match, the street named like the query before
   /// one only known by it, and the one with more corners; name, municipality
@@ -65,14 +66,17 @@ class OfflineSearchDataService
 
   /// A point of the city (its centre, say). Among streets of the same match
   /// quality, type class and name kind, the nearest to it comes first;
-  /// without it, the one with more corners does.
+  /// without it, the text rank decides (the street named like the query
+  /// first), then the one with more corners.
   final LatLng? focus;
 
   /// Street types by class, as normalized prefixes (no accents, lowercase):
   /// index 0 is listed first, the last class last. A name with no listed
-  /// type counts as the class of "calle". A query that starts with a type
-  /// ("avenida grau") finds the streets of that class, and also the names
-  /// that contain every word of it ("Avenida Calle 26" for "calle 26").
+  /// type counts as the class at index 1 (where "calle" sits in the default).
+  /// Prefixes must be normalized, or they never match (asserted). A query
+  /// that starts with a type ("avenida grau") finds the streets of that
+  /// class, and also the names that contain every word of it, the type as a
+  /// whole word ("Avenida Calle 26" for "calle 26").
   /// Defaults to Spanish; another language simply never matches a type.
   final List<List<String>> streetTypeRanks;
 
@@ -251,9 +255,25 @@ final _wordSeparators = RegExp(r'[^\p{L}\p{M}\p{N}]+', unicode: true);
 List<String> _wordsOf(String text) =>
     text.split(_wordSeparators).where((w) => w.isNotEmpty).toList();
 
-/// Whether every one of [queryWords] starts some word of [nameWords].
-bool _startsWords(List<String> queryWords, List<String> nameWords) =>
-    queryWords.every((q) => nameWords.any((w) => w.startsWith(q)));
+/// How [queryWords] answer [nameWords]: [_Query.wholeWordMatch] when each
+/// equals a word of the name, [_Query.prefixMatch] when some only start one,
+/// null when one matches no word.
+int? _wordMatch(List<String> queryWords, List<String> nameWords) {
+  var level = _Query.wholeWordMatch;
+  for (final queryWord in queryWords) {
+    int? best;
+    for (final word in nameWords) {
+      if (word == queryWord) {
+        best = _Query.wholeWordMatch;
+        break;
+      }
+      if (word.startsWith(queryWord)) best = _Query.prefixMatch;
+    }
+    if (best == null) return null;
+    level = math.max(level, best);
+  }
+  return level;
+}
 
 /// Reads the type at the start of a normalized name or query.
 class _StreetTypes {
@@ -264,7 +284,11 @@ class _StreetTypes {
   final List<(String, int)> _prefixes;
 
   _StreetTypes(List<List<String>> ranks)
-    : _prefixes = [
+    : assert(
+        ranks.every((types) => types.every((p) => p == _normalize(p))),
+        'streetTypeRanks must be normalized: lowercase, no accents',
+      ),
+      _prefixes = [
         for (var i = 0; i < ranks.length; i++)
           for (final prefix in ranks[i]) (prefix, i),
       ]..sort((a, b) => b.$1.length.compareTo(a.$1.length));
@@ -291,31 +315,61 @@ class _Query {
   /// class, unless the whole name contains them.
   final bool isTyped;
 
-  _Query._(this.parsed) : isTyped = parsed.base != parsed.normalized;
+  /// The words of the typed type ("via expresa"); empty when untyped.
+  final List<String> typeWords;
+
+  _Query._(this.parsed)
+    : isTyped = parsed.base != parsed.normalized,
+      typeWords = _wordsOf(
+        parsed.normalized.substring(
+          0,
+          parsed.normalized.length - parsed.base.length,
+        ),
+      );
 
   factory _Query(_StreetTypes types, String normalized) =>
       _Query._(types.parse(normalized));
 
   String get normalized => parsed.normalized;
 
-  /// How [name] answers the query: [wordMatch], [substringMatch], or null.
+  /// Cheap test that leaves out most streets before any word is compared:
+  /// every match contains each query word as text.
+  bool canMatch(_Street street) =>
+      parsed.words.every(street.normalized.contains);
+
+  /// How [name] answers the query: [wholeWordMatch], [prefixMatch],
+  /// [substringMatch], or null.
   int? matchGroup(_ParsedName name) {
     final sameClass = !isTyped || name.typeClass == parsed.typeClass;
-    if (sameClass && _startsWords(parsed.baseWords, name.baseWords)) {
-      return wordMatch;
+    var best = sameClass ? _wordMatch(parsed.baseWords, name.baseWords) : null;
+    if (best != wholeWordMatch) {
+      final full = _fullNameMatch(name);
+      if (full != null && (best == null || full < best)) best = full;
     }
-    if (_startsWords(parsed.words, name.words)) return wordMatch;
+    if (best != null) return best;
     if (!isTyped && name.normalized.contains(normalized)) {
       return substringMatch;
     }
     return null;
   }
 
-  /// Every query word starts a word of the name.
-  static const wordMatch = 0;
+  /// The query against every word of the name, type included. A typed query
+  /// must find its type word whole ("calle" is no "Callejón").
+  int? _fullNameMatch(_ParsedName name) {
+    if (!isTyped) return _wordMatch(parsed.words, name.words);
+    if (_wordMatch(typeWords, name.words) != wholeWordMatch) return null;
+    return _wordMatch(parsed.baseWords, name.words);
+  }
+
+  /// Every query word equals a word of the name.
+  static const wholeWordMatch = 0;
+
+  /// Every query word starts a word of the name, some only start it
+  /// ("1" in "Calle 100").
+  static const prefixMatch = 1;
 
   /// The query only appears inside a word ("ica" in "Arica").
-  static const substringMatch = 1;
+  static const substringMatch = 2;
 }
 
 class _Street {
@@ -376,7 +430,8 @@ class _Match {
 
   final _Street street;
 
-  /// [_Query.wordMatch] or [_Query.substringMatch]: the best of its names.
+  /// [_Query.wholeWordMatch], [_Query.prefixMatch] or
+  /// [_Query.substringMatch]: the best of its names.
   final int group;
 
   /// Lowest type class among the names that match in [group].
@@ -394,21 +449,26 @@ class _Match {
 
   /// Null when [street] does not answer [query].
   static _Match? of(_Street street, _Query query) {
-    final names = [street.parsedName, ...street.parsedAlternativeNames];
-    final groups = [for (final name in names) query.matchGroup(name)];
-    final matched = groups.nonNulls;
-    if (matched.isEmpty) return null;
-    final group = matched.reduce(math.min);
-
-    final typeClass = [
-      for (var i = 0; i < names.length; i++)
-        if (groups[i] == group) names[i].typeClass,
-    ].reduce(math.min);
+    if (!query.canMatch(street)) return null;
+    final mainGroup = query.matchGroup(street.parsedName);
+    var group = mainGroup;
+    var typeClass = street.parsedName.typeClass;
+    for (final name in street.parsedAlternativeNames) {
+      final alternativeGroup = query.matchGroup(name);
+      if (alternativeGroup == null) continue;
+      if (group == null || alternativeGroup < group) {
+        group = alternativeGroup;
+        typeClass = name.typeClass;
+      } else if (alternativeGroup == group) {
+        typeClass = math.min(typeClass, name.typeClass);
+      }
+    }
+    if (group == null) return null;
     return _Match._(
       street,
       group,
       typeClass,
-      groups.first == group ? 0 : 1,
+      mainGroup == group ? 0 : 1,
       _tierOf(street, query),
     );
   }
